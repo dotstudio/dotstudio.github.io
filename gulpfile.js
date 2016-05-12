@@ -11,16 +11,16 @@ const json = JSON.parse(fs.readFileSync("./package.json"));
 const paths = {
   templates: './src/templates/*.ejs',
   scripts: './src/js/*.js',
-  images: 'client/img/**/*',
+  images: './src/img/**/*',
   styles: './src/scss/*.scss'
 };
 
 //EJS -> HTML
 gulp.task('templates', () => {
   return gulp.src(paths.templates)
-      .pipe(ejs(json,{'ext': '.html'})
-      .on('error', gutil.log))
-      .pipe(gulp.dest('./'));
+    .pipe(ejs(json,{'ext': '.html'})
+    .on('error', gutil.log))
+    .pipe(gulp.dest('./'));
 });
 
 //scss -> css
