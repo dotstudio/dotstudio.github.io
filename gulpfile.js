@@ -18,7 +18,7 @@ gulp.task('templates', () => {
       .pipe(ejs(json,{'ext': '.html'}))
       // .on('error', gutil.log))
       // .pipe(ejs(json, ))
-      .pipe(gulp.dest('./dist'));
+      .pipe(gulp.dest('./'));
 });
 
 gulp.task('watch', () => {
