@@ -10,6 +10,7 @@ const json = JSON.parse(fs.readFileSync("./package.json"));
 
 const paths = {
   templates: './src/templates/*.ejs',
+  // templates: './src/templates/*.ejs', '!' + './src/templates/_*.ejs',
   scripts: './src/js/*.js',
   images: './src/img/**/*',
   styles: './src/scss/*.scss'
