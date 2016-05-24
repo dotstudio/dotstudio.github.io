@@ -3,13 +3,14 @@
 const fs = require('fs');
 const gulp = require("gulp");
 const ejs = require('gulp-ejs');
+const plumber = require('gulp-plumber');
 const sass = require('gulp-sass');
 const gutil = require('gulp-util');
 const babel = require('gulp-babel');
-const json = JSON.parse(fs.readFileSync("./package.json"));
+const json = JSON.parse(fs.readFileSync("./src/templates/pages.json")); //ejs用
 
 const paths = {
-  templates: './src/templates/*.ejs',
+  templates: './src/templates/**/*.ejs',
   // templates: './src/templates/*.ejs', '!' + './src/templates/_*.ejs',
   scripts: './src/js/*.js',
   images: './src/img/**/*',
@@ -19,6 +20,7 @@ const paths = {
 //EJS -> HTML
 gulp.task('templates', () => {
   return gulp.src(paths.templates)
+    .pipe(plumber())
     .pipe(ejs(json,{'ext': '.html'})
     .on('error', gutil.log))
     .pipe(gulp.dest('./'));
