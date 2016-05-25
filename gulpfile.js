@@ -7,10 +7,11 @@ const plumber = require('gulp-plumber');
 const sass = require('gulp-sass');
 const gutil = require('gulp-util');
 const babel = require('gulp-babel');
+// const json = {};
 const json = JSON.parse(fs.readFileSync("./src/templates/pages.json")); //ejs用
 
 const paths = {
-  templates: './src/templates/**/*.ejs',
+  templates: ['./src/templates/**/*.ejs','!./src/templates/_partial/*.ejs'],
   // templates: './src/templates/*.ejs', '!' + './src/templates/_*.ejs',
   scripts: './src/js/*.js',
   images: './src/img/**/*',
@@ -41,7 +42,7 @@ gulp.task('scripts', () => {
 });
 
 gulp.task('watch', () => {
-  gulp.watch(paths.templates, ['templates']);
+  gulp.watch('./src/templates/**/*.ejs', ['templates']);
   gulp.watch(paths.styles, ['styles']);
   gulp.watch(paths.scripts, ['scripts']);
 });
