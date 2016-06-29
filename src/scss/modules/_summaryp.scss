@@ -1,0 +1,89 @@
+@charset "utf-8";
+
+@import "generals/types";
+@import "generals/clearfix";
+@import "generals/shadows";
+@import "generals/tags";
+@import "generals/author";
+
+.psum {
+  width: 375px;
+  height: 610px;
+
+  margin: 0 25px 50px 25px;
+  overflow: hidden;
+
+  @include shadow-base;
+
+  &-img {
+    height: 375px;
+    display: block;
+    text-decoration: none;
+  }
+
+  &-desc{
+    width: 315px;
+    height: 235px - 50px;
+    padding: 25px 30px;
+
+    position: absolute;
+
+    a {
+      text-decoration: none;
+    }
+
+    .row1 {
+      display: flex;
+      align-content: stretch;
+      margin-bottom: 15px;
+      .sub_date {
+        width: 315px;
+        display: flex;
+        justify-content: flex-start;
+        @include type-summary-s(left);
+      }
+      .sub_score {
+        width: 150px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-end;
+        &-icon {
+          width: 8.9px;
+          height: 16px;
+          margin-right: 2px;
+        }
+        &-num {
+          @include type-summary-s(right);
+        }
+      }
+    }
+
+    .sub_title {
+      display: block;
+      width: 315px;
+      @include type-summary-l;
+      text-decoration: none;
+    }
+
+    .row3 {
+      display: flex;
+      flex-direction: row;
+      // align-items: center;
+      align-content: stretch;
+      bottom: 25px;
+      position: absolute;
+
+      .sub_author {
+        width: 160px - 30px;
+        @include author;
+      }
+
+      .tags {
+        width: 215px - 30px;
+        @include tags;
+        @include type-summary-s(left);
+      }
+    }
+  }
+}
