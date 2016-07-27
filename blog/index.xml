@@ -7,8 +7,301 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Mon, 25 Jul 2016 18:34:09 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 26 Jul 2016 14:48:32 +0900</lastBuildDate>
     <atom:link href="https://dotstud.io/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>史上初!? NodeBotsの日本向けキットを作成しました！ #nodebots</title>
+      <link>https://dotstud.io/blog/nodebots-kit-guide-vol1/</link>
+      <pubDate>Tue, 26 Jul 2016 14:48:32 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nodebots-kit-guide-vol1/</guid>
+      <description>
+
+&lt;p&gt;こんにちは、dotstudio代表の&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。
+今日はNodeBotsで利用されている、&lt;a href=&#34;https://github.com/tableflip/nodebot-workshop&#34;&gt;NodeBot Workshop&lt;/a&gt;で実際に回路を組むときに準備する NodeBot Workshop Kitを作ったのでキットの紹介です。
+1問目の配線解説も行います。
+&lt;strong&gt;NodeBot Workshop向けにカスタマイズされたキットはおそらく世界初です！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;購入ページは&lt;a href=&#34;https://dotstud.io/projects/nodebots-seeeduino-for-beginners/&#34;&gt;こちら&lt;/a&gt;になります。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;iotやるときの-まずはじめに何を買えばいいか分からない-を解消:dc1da576efca5a669177fd29b47b0fd3&#34;&gt;IoTやるときの”まずはじめに何を買えばいいか分からない”を解消&lt;/h2&gt;
+
+&lt;p&gt;　入門者にとって最初に何を買えばいいのかって分からないんですよね。NodeBot Workshopでもプログラムまでは書くことができるけど、実際に電子工作をするフェーズで何を準備すればいいのか分からないという人がけっこういました。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://nodebots.io/&#34;&gt;http://nodebots.io/&lt;/a&gt; にも掲載されてますが、&amp;rdquo;最初にこれを買うといいよ&amp;rdquo;というキットは海外ではいくつか存在します。
+&lt;img src=&#34;https://dotstud.io/img/blog/004/01_nodebots_kit.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ただこれらは&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;国際輸送になるため、手元に届くまでにお金と時間がけっこうかかってしまう&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;利用されているマイコンボードは日本の電波法の認証(技摘)が通っていないものもある&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;などの問題点&lt;/strong&gt; がありました。そのため、日本国内でNodeBot WorkshopやJohnny-Fiveに対応しているマイコンボードやセンサーの代替品を探して利用するのが早いし確実なのですが、これも手間と時間が掛かります。&lt;/p&gt;
+
+&lt;p&gt;そこで僕たちの方でNodeBot WorkshopやJohnny-Fiveに対応しているキットを作ることにして、今回のキット開発に至りました。
+&lt;img src=&#34;https://dotstud.io/img/blog/004/02_kitpackage.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;今回用意したキットはプロトタイピングボードも含めてキット化してあるので、 &lt;strong&gt;とりあえずこれを買ってNodeBot Workshopをやれば入門できる&lt;/strong&gt;状態になります。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;試したい！&lt;/code&gt;と思った時にサクッと試せるキットになっています。&lt;/p&gt;
+
+&lt;h2 id=&#34;中身を解説:dc1da576efca5a669177fd29b47b0fd3&#34;&gt;中身を解説！&lt;/h2&gt;
+
+&lt;p&gt;実際に中身を見てみましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;nodebot-workshopの設問:dc1da576efca5a669177fd29b47b0fd3&#34;&gt;NodeBot Workshopの設問&lt;/h3&gt;
+
+&lt;p&gt;準備は&lt;a href=&#34;http://liginc.co.jp/283711&#34;&gt;こちらの記事&lt;/a&gt;を参考にしてください。&lt;/p&gt;
+
+&lt;p&gt;インストールするとNodeBot Workshopコマンドが使えるようになります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ nodebot-workshop
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/004/03_screenshot.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ここまで動くようにしておきましょう。
+各問題のタイトルと内容は以下になります。&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;left&#34;&gt;番号&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;タイトル&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;タイトル(日本語)&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;概要&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;1問&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Blink Blink&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Lチカ&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;LEDをチカチカ点滅させよう&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;2問&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Servo Wave&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;サーボウェーブ&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;サーボモータを動かそう&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;3問&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Spin Moter Spin&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;くるくるモーター回転&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;DCモータを動かそう&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;4問&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Light Switch&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;ライトスイッチ&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;スイッチとLEDを連動させよう&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;5問&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Street Lamp&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;ストリートランプ&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;照度センサとLEDを連動させよう&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;6問&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Ping Bell&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;ピングベル&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;メッセージを受信すると音が鳴るUDPサーバーを作ろう&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;7問&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Robot Arm&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;ロボットアーム&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;サーボモータとポテンショメータを連動させよう&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;8問&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Remote Temperature&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;遠隔地の温度&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;温度を教えてくれるRPCサーバーを作ろう&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;9問&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Fire Alarm&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;火災報知器&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;温度センサとブザーを使って火災報知器を作ろう&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&#34;キットの内容物:dc1da576efca5a669177fd29b47b0fd3&#34;&gt;キットの内容物&lt;/h3&gt;
+
+&lt;p&gt;こちらの写真がキットの中身です。パーツの名前と見た目が一致しない人は要確認です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/004/04_nodebotskit.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;各設問でどのパーツを利用するかを以下の表にまとめました。困ったときは確認しましょう。&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;left&#34;&gt;ID&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;NAME&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;利用する問題番号&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;a&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;a href=&#34;http://www.seeedstudio.com/wiki/Seeeduino_v4.2&#34;&gt;Seeeduino v4.2&lt;/a&gt;&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;1~9&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;b&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;USBmicroB ケーブル&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;1~9&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;c&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;ブレッドボード&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;1~9&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;d&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;ジャンプワイヤ&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;1~9&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;e&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;カーボン抵抗 330Ω&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;1,4,5,9&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;f&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;カーボン抵抗 10kΩ&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;4,5,9&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;g&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;LED&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;1,4,5,9&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;h&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;マイクロサーボモータ&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;2,7&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;i&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;小型DCモータ&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;3&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;j&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;タクトスイッチ&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;4,9&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;k&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;CdSセル 1MΩ(照度センサ)&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;5&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;l&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;半固定抵抗 (ポテンショメータ)&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;7&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;n&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;温度センサ&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;8,9&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;m&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;圧電ブザー&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;6,9&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&#34;1問目のlチカの回路図解説:dc1da576efca5a669177fd29b47b0fd3&#34;&gt;1問目のLチカの回路図解説&lt;/h3&gt;
+
+&lt;p&gt;1秒ごとにLチカさせるプログラムを書く問題です。問題文は&lt;a href=&#34;https://github.com/tableflip/nodebot-workshop/blob/master/exercises/blink_blink/problem.ja.md&#34;&gt;こちら&lt;/a&gt;をどうぞ。&lt;/p&gt;
+
+&lt;h4 id=&#34;準備物:dc1da576efca5a669177fd29b47b0fd3&#34;&gt;準備物&lt;/h4&gt;
+
+&lt;p&gt;先ほどの表のIDと照らし合わせて見てみましょう。
+ちなみにすべての問題でa~dは利用します。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;a: Seeeduino&lt;/li&gt;
+&lt;li&gt;b: USBmicroB ケーブル&lt;/li&gt;
+&lt;li&gt;c: ブレッドボード&lt;/li&gt;
+&lt;li&gt;d: ジャンプワイヤ x 2&lt;/li&gt;
+&lt;li&gt;e: カーボン抵抗 330Ω&lt;/li&gt;
+&lt;li&gt;g: LED&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&#34;配線:dc1da576efca5a669177fd29b47b0fd3&#34;&gt;配線&lt;/h4&gt;
+
+&lt;p&gt;1問目はLEDを点灯させることが目的です。SeeeduinoとLEDを線でつないでみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/004/05_fritzing.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;実行:dc1da576efca5a669177fd29b47b0fd3&#34;&gt;実行&lt;/h4&gt;
+
+&lt;p&gt;プログラムを作成し、配線も行ったら実際に&lt;code&gt;nodeコマンド&lt;/code&gt;で実行してみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/004/06_exec.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;プログラムと配線が成功していれば、こんな感じでLEDが点滅します。&lt;/p&gt;
+
+&lt;p&gt;どうでしょう、できましたか?&lt;/p&gt;
+
+&lt;h2 id=&#34;おわりに:dc1da576efca5a669177fd29b47b0fd3&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;NodeBotsでイベントを開催したり、こういった記事を書いたりしてますが、JavaScript Robotics界がもっと盛り上がって欲しいという気持ちがあります。
+ブラウザの実装はやはりJavaScriptなので、JavaScriptでハードウェア制御できるとWeb側もHW側も共通言語を使うことができて、JSerにはかなり楽しい世界になるのではないでしょうか？&lt;/p&gt;
+
+&lt;p&gt;今回のNodeBot Workshop Kitを使うことで、そういったJavaScript好きな人がハードウェアやセンサー選びでつまづかないためのものになればいいなと思っています。
+イベントなどでも販売していきますが、とりあえずはオンラインで買えるようにしてあります。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;まぁ僕がいたらせっかくのオフィスもダーツ仕様になりますよね &lt;a href=&#34;https://t.co/bej7l8QBCE&#34;&gt;pic.twitter.com/bej7l8QBCE&lt;/a&gt;&lt;/p&gt;&amp;mdash; chachamaru (@chachmaru) &lt;a href=&#34;https://twitter.com/chachmaru/status/757848176657260544&#34;&gt;2016年7月26日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;こんな感じ(笑)で丁寧に梱包してますのでご興味を持った方がいれば是非試してみてください！&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;購入ページは&lt;a href=&#34;https://dotstud.io/projects/nodebots-seeeduino-for-beginners/&#34;&gt;こちら&lt;/a&gt;になります。&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
+    </item>
     
     <item>
       <title>JS1行でリアルタイム通信ができる「milkcocoa」のLT大会で登壇してきた！</title>
@@ -24,7 +317,7 @@
 
 &lt;h2 id=&#34;男女対抗で戦う-紅白milkcocoa合戦:3fb3fa3e236a1afaee281d3523c9f345&#34;&gt;男女対抗で戦う「紅白milkcocoa合戦」&lt;/h2&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/004/01_milkcocoa.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/005/01_milkcocoa.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&#34;http://mlkcca.connpass.com/event/34936/&#34;&gt;【増枠】紅白 Milkcocoa 合戦！【祭り】&lt;/a&gt;&lt;/p&gt;
 
@@ -40,8 +333,7 @@
 &lt;p&gt;がじぇるねが制作しているマイコンボード「GR-COTTON」とmilkcocoaを組み合わせて、
 「&lt;strong&gt;パソコン上から部屋の温度がわかる&lt;/strong&gt;」という仕組みを作り発表しました。私はHTMLとCSSしかできないので、1990年代風のWebサイトにしてみました。&lt;/p&gt;
 
-&lt;p&gt;&amp;nbsp;
-&lt;script async class=&#34;speakerdeck-embed&#34; data-id=&#34;aa68f3d1934d480f9a3a26a6062ffa9b&#34; data-ratio=&#34;1.33333333333333&#34; src=&#34;//speakerdeck.com/assets/embed.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+&lt;script async class=&#34;speakerdeck-embed&#34; data-id=&#34;aa68f3d1934d480f9a3a26a6062ffa9b&#34; data-ratio=&#34;1.33333333333333&#34; src=&#34;//speakerdeck.com/assets/embed.js&#34;&gt;&lt;/script&gt;
 
 &lt;p&gt;当日発表したプレゼン資料はこちらです。作り方も書いてあるので是非試してみてください！&lt;/p&gt;
 
@@ -76,37 +368,37 @@
 &lt;h3 id=&#34;ほかにもいろいろなltが繰り広げられました:3fb3fa3e236a1afaee281d3523c9f345&#34;&gt;ほかにもいろいろなLTが繰り広げられました！&lt;/h3&gt;
 
 &lt;p&gt;&lt;center&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;マインクラフトでスライドを操作！ &lt;a href=&#34;https://twitter.com/hashtag/mlkcca?src=hash&#34;&gt;#mlkcca&lt;/a&gt; &lt;a href=&#34;https://t.co/1IE9OM1VAK&#34;&gt;pic.twitter.com/1IE9OM1VAK&lt;/a&gt;&lt;/p&gt;&amp;mdash; Milkcocoa girls (@milkcocoagirls) &lt;a href=&#34;https://twitter.com/milkcocoagirls/status/755717310984310784&#34;&gt;2016年7月20日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;&lt;br /&gt;
 世界中で大人気の箱庭ゲーム『Minecraft』からスライドをめくれる仕組みをつくったいわたんさん。&lt;/p&gt;
 
 &lt;p&gt;&amp;nbsp;
 &lt;center&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;&lt;a href=&#34;https://twitter.com/hashtag/mlkcca?src=hash&#34;&gt;#mlkcca&lt;/a&gt; しのはらさん！ &lt;a href=&#34;https://t.co/0Ld6KmS3l6&#34;&gt;pic.twitter.com/0Ld6KmS3l6&lt;/a&gt;&lt;/p&gt;&amp;mdash; やまちょ (@yamacho1111) &lt;a href=&#34;https://twitter.com/yamacho1111/status/755736609593503744&#34;&gt;2016年7月20日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;&lt;br /&gt;
 洗濯が終わったら通知がくるようなおうちハックに挑戦してみた、しのはらさん。&lt;/p&gt;
 
 &lt;p&gt;&amp;nbsp;
 &lt;center&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;ななにんめ！dopeなかんじや！ &lt;a href=&#34;https://twitter.com/hashtag/mlkcca?src=hash&#34;&gt;#mlkcca&lt;/a&gt; &lt;a href=&#34;https://t.co/eQ3vGwC574&#34;&gt;pic.twitter.com/eQ3vGwC574&lt;/a&gt;&lt;/p&gt;&amp;mdash; タカシにヒロシ (@bakuonboogie) &lt;a href=&#34;https://twitter.com/bakuonboogie/status/755729194827386880&#34;&gt;2016年7月20日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;&lt;br /&gt;
 いま一番ちゃらいらしいReact, redux, redux-sagaをつかってみたとのことです。&lt;/p&gt;
 
 &lt;p&gt;&amp;nbsp;
 &lt;center&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;はちにんめ！ &lt;a href=&#34;https://twitter.com/moshisora990&#34;&gt;@moshisora990&lt;/a&gt; さん！ &lt;a href=&#34;https://twitter.com/hashtag/mlkcca?src=hash&#34;&gt;#mlkcca&lt;/a&gt; golangのはなしか！ &lt;a href=&#34;https://t.co/RF5hkCJwF6&#34;&gt;pic.twitter.com/RF5hkCJwF6&lt;/a&gt;&lt;/p&gt;&amp;mdash; タカシにヒロシ (@bakuonboogie) &lt;a href=&#34;https://twitter.com/bakuonboogie/status/755731340188786688&#34;&gt;2016年7月20日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;&lt;br /&gt;
 milkcocoaでほしかったツールを追加した「bitter-coffee」をつくりあげたもしさん。&lt;/p&gt;
 
 &lt;p&gt;&amp;nbsp;
 &lt;center&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;なつみさん！ &lt;a href=&#34;https://twitter.com/natsumi_m31&#34;&gt;@natsumi_m31&lt;/a&gt; &lt;a href=&#34;https://twitter.com/hashtag/mlkcca?src=hash&#34;&gt;#mlkcca&lt;/a&gt; リアルタイム通信しないはなし！w &lt;a href=&#34;https://t.co/He0aBfQaUd&#34;&gt;pic.twitter.com/He0aBfQaUd&lt;/a&gt;&lt;/p&gt;&amp;mdash; タカシにヒロシ (@bakuonboogie) &lt;a href=&#34;https://twitter.com/bakuonboogie/status/755734344052842497&#34;&gt;2016年7月20日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;&lt;br /&gt;
 麻雀用のアプリを作り、裏側にmilkcocoaを入れたというなつみさん。&lt;/p&gt;
 
 &lt;p&gt;&amp;nbsp;
 &lt;center&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;へれんさんのLT！ &lt;a href=&#34;https://twitter.com/hashtag/mlkcca?src=hash&#34;&gt;#mlkcca&lt;/a&gt; &lt;a href=&#34;https://t.co/ozlb46HBKm&#34;&gt;pic.twitter.com/ozlb46HBKm&lt;/a&gt;&lt;/p&gt;&amp;mdash; タカシにヒロシ (@bakuonboogie) &lt;a href=&#34;https://twitter.com/bakuonboogie/status/755738353689956352&#34;&gt;2016年7月20日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;&lt;br /&gt;
 ハムスターのために、milkcocoaで室温を管理してみたお話。3時間経つと自動でエアコンが切れる部屋にいるそうな……。&lt;/p&gt;
 
 &lt;p&gt;&amp;nbsp;
 &lt;center&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;Milkcocoaで垂直に動くモーター！ &lt;a href=&#34;https://twitter.com/hashtag/mlkcca?src=hash&#34;&gt;#mlkcca&lt;/a&gt; &lt;a href=&#34;https://t.co/xrwUtRaHSu&#34;&gt;pic.twitter.com/xrwUtRaHSu&lt;/a&gt;&lt;/p&gt;&amp;mdash; Milkcocoa girls (@milkcocoagirls) &lt;a href=&#34;https://twitter.com/milkcocoagirls/status/755741501880082432&#34;&gt;2016年7月20日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;&lt;br /&gt;
 マグネットで壁にくっついて、垂直に走るラジコン「うぉーるぼっとESP」を作ったとのこと！&lt;/p&gt;
 
 &lt;h2 id=&#34;結果:3fb3fa3e236a1afaee281d3523c9f345&#34;&gt;結果&lt;/h2&gt;
@@ -133,11 +425,10 @@ milkcocoaでほしかったツールを追加した「bitter-coffee」をつく�
 &lt;p&gt;milkcocoaの次回開催予定は未定ですが、ほかにも &lt;strong&gt;IoTの勉強会やWebVRのイベントなどが開催予定&lt;/strong&gt; です！　特に &lt;strong&gt;Webエンジニアのみなさん&lt;/strong&gt; にとって実りのあるものがあると思うので、ぜひ参加してみてください！&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;p&gt;2016年8月8日（月）
-&lt;a href=&#34;http://web3dj.connpass.com/event/32568/&#34;&gt;WebVR入門者の会&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;2016年8月12日（金）
-&lt;a href=&#34;http://iotlt.connpass.com/event/35436/&#34;&gt;IoT縛りの勉強会! IoTLT vol.18 @ Amazon&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;2016年8月8日（月）
+&lt;a href=&#34;http://web3dj.connpass.com/event/32568/&#34;&gt;WebVR入門者の会&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;2016年8月12日（金）
+&lt;a href=&#34;http://iotlt.connpass.com/event/35436/&#34;&gt;IoT縛りの勉強会! IoTLT vol.18 @ Amazon&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;では！&lt;/p&gt;
