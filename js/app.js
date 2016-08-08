@@ -8,31 +8,39 @@ function addClassSelecet(){
   var tmp = location.href.split('/');
   var url = tmp[0]+'//'+tmp[1]+tmp[2]+'/'+tmp[3]+'/';
   var $current;
+  var type = tmp[3];
+  console.log(url, tmp);
+  if(url.indexOf('/legal/') != -1 || url.indexOf('/about/') != -1 || url.indexOf('/404.html/') != -1){
 
-  //プロジェクトページ
-  if (url.indexOf('/projects/') != -1 || url == location.href+'/' && url.indexOf('/404.html/') == -1){
-    $current = $('a[data-type="projects"]');
-    $current.attr('class', 'sub_text_selected');
-    //sp
-    $current = $('p[data-type="sp-nuv-main"] a');
-    $current.text('PROJECTS');
-    $current.attr('href', '/');
-    $current = $('p[data-type="sp-nuv-sub"] a');
-    $current.text('BLOG');
-    $current.attr('href', '/blog/');
   }
+  
   //ブログページ
-  else if(url.indexOf('/blog/') != -1){
+  else if(type === '' || type === 'blog'){
     $current = $('a[data-type="blog"]');
     $current.attr('class', 'sub_text_selected');
     //sp
     $current = $('p[data-type="sp-nuv-main"] a');
     $current.text('BLOG');
-    $current.attr('href', '/blog/');
+    $current.attr('href', '/');
     $current = $('p[data-type="sp-nuv-sub"] a');
-    $current.text('PROJECTS');
+    $current.text('SHOP');
+    $current.attr('href', '/projects');
+  }
+
+  //プロジェクトページ
+  if (type === 'projects'){
+    console.log(111);
+    $current = $('a[data-type="projects"]');
+    $current.attr('class', 'sub_text_selected');
+    //sp
+    $current = $('p[data-type="sp-nuv-main"] a');
+    $current.text('SHOP');
+    $current.attr('href', '/projects');
+    $current = $('p[data-type="sp-nuv-sub"] a');
+    $current.text('BLOG');
     $current.attr('href', '/');
   }
+
 }
 
 //ユーザーエージェントチェック
