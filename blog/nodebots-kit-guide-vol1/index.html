@@ -31,8 +31,8 @@
     
 
     <link rel="stylesheet" href="/css/loader.css"> 
-    <link rel="stylesheet" media='screen and (max-width: 767px)' href='/css/sp-master.css'> 
-    <link rel="stylesheet" media='screen and (min-width: 768px)' href='/css/master.css'> 
+    
+    <link rel="stylesheet" href='/css/master.css'> 
     
 
     <link rel="shortcut icon" type="image/png" href="/img/resources/favicon.png"/>
@@ -341,319 +341,24 @@
     
   </header>
 
-<article class="blogContent">
-  <div class="blogContent-date">2016.07.26</div>
-  <h1 class="blogContent-title">史上初!? NodeBotsの日本向けキットを作成しました！ #nodebots</h1>
-  <hr class="blogContent-hr">
-  <div class="author">
-    <img src="/img/members/n0bisuke/author.png" alt="" class="author--avatar">
-    <p class="author--name">のびすけ</p>
-  </div>
-  
-  <img src="/img/blog/004/00_eyecatch.png" alt="" width="100%" class="blogContent-eye">
-  <div class="blogContent-txt">
-
-<p>こんにちは、dotstudio代表の<a href="https://twitter.com/n0bisuke">のびすけ</a>です。
-今日は、世界で人気のNode.js/Johnny-Fiveのワークショップ「<a href="https://github.com/tableflip/nodebot-workshop">NodeBot Workshop</a>」で使うアイテムをまとめた、「<strong>NodeBot Workshop Kit JP ver</strong>」というキットを作ったのでその紹介をします。
-また、 NodeBot Workshopの1問目の配線解説も本記事で行いますので、ぜひ挑戦してみてください！</p>
-
-<p><strong>NodeBot Workshop向けにカスタマイズされたキットはおそらく世界初です！</strong></p>
-
-<p>NodeBotsの入門は<a href="http://liginc.co.jp/283711">こちらの記事(Webな人でもハードウェア制御が簡単に！Node.jsでJavaScript Roboticsを楽しもう #nodebots_jp)</a>を参照してください！</p>
-
-<blockquote>
-<p>購入ページは<a href="https://dotstud.io/projects/nodebots-seeeduino-for-beginners/">こちら</a>になります。</p>
-</blockquote>
-
-<h2 id="iotやるときの-まずはじめに何を買えばいいか分からない-を解消">IoTやるときの”まずはじめに何を買えばいいか分からない”を解消</h2>
-
-<p>　入門者にとって最初に何を買えばいいのかって分からないんですよね。NodeBot Workshopでもプログラムまでは書くことができるけど、実際に電子工作をするフェーズで何を準備すればいいのか分からないという人がけっこういました。</p>
-
-<p><a href="http://nodebots.io/">http://nodebots.io/</a> にも掲載されてますが、&rdquo;最初にこれを買うといいよ&rdquo;というキットは海外ではいくつか存在します。
-<img src="/img/blog/004/01_nodebots_kit.png" alt="" /></p>
-
-<p>ただこれらは</p>
-
-<ul>
-<li><strong>国際輸送になるため、手元に届くまでにお金と時間がけっこうかかってしまう</strong></li>
-<li><strong>利用されているマイコンボードは日本の電波法の認証(技摘)が通っていないものもある</strong></li>
-</ul>
-
-<p><strong>などの問題点</strong> がありました。そのため、日本国内でNodeBot WorkshopやJohnny-Fiveに対応しているマイコンボードやセンサーの代替品を探して利用するのが早いし確実なのですが、これも手間と時間が掛かります。</p>
-
-<p>そこで僕たちの方でNodeBot WorkshopやJohnny-Fiveに対応しているキットを作ることにして、今回のキット開発に至りました。
-<img src="/img/blog/004/02_kitpackage.png" alt="" /></p>
-
-<p>今回用意したキットはプロトタイピングボードも含めてキット化してあるので、 <strong>とりあえずこれを買ってNodeBot Workshopをやれば入門できる</strong>状態になります。</p>
-
-<p><code>試したい！</code>と思った時にサクッと試せるキットになっています。</p>
-
-<h2 id="nodebot-workshop-kit-jp-ver-の中身を解説">「NodeBot Workshop Kit JP ver」の中身を解説！</h2>
-
-<p>実際に中身を見てみましょう。</p>
-
-<h3 id="nodebot-workshopの設問">NodeBot Workshopの設問</h3>
-
-<p>準備は<a href="http://liginc.co.jp/283711">こちらの記事</a>を参考にしてください。</p>
-
-<p>インストールするとNodeBot Workshopコマンドが使えるようになります。</p>
-
-<pre><code class="language-bash">$ nodebot-workshop
-</code></pre>
-
-<p><img src="/img/blog/004/03_screenshot.png" alt="" /></p>
-
-<p>ここまで動くようにしておきましょう。
-各問題のタイトルと内容は以下になります。</p>
-
-<table>
-<thead>
-<tr>
-<th align="left">番号</th>
-<th align="left">タイトル</th>
-<th align="left">タイトル(日本語)</th>
-<th align="left">概要</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td align="left">1問</td>
-<td align="left">Blink Blink</td>
-<td align="left">Lチカ</td>
-<td align="left">LEDをチカチカ点滅させよう</td>
-</tr>
-
-<tr>
-<td align="left">2問</td>
-<td align="left">Servo Wave</td>
-<td align="left">サーボウェーブ</td>
-<td align="left">サーボモータを動かそう</td>
-</tr>
-
-<tr>
-<td align="left">3問</td>
-<td align="left">Spin Moter Spin</td>
-<td align="left">くるくるモーター回転</td>
-<td align="left">DCモータを動かそう</td>
-</tr>
-
-<tr>
-<td align="left">4問</td>
-<td align="left">Light Switch</td>
-<td align="left">ライトスイッチ</td>
-<td align="left">スイッチとLEDを連動させよう</td>
-</tr>
-
-<tr>
-<td align="left">5問</td>
-<td align="left">Street Lamp</td>
-<td align="left">ストリートランプ</td>
-<td align="left">照度センサとLEDを連動させよう</td>
-</tr>
-
-<tr>
-<td align="left">6問</td>
-<td align="left">Ping Bell</td>
-<td align="left">ピングベル</td>
-<td align="left">メッセージを受信すると音が鳴るUDPサーバーを作ろう</td>
-</tr>
-
-<tr>
-<td align="left">7問</td>
-<td align="left">Robot Arm</td>
-<td align="left">ロボットアーム</td>
-<td align="left">サーボモータとポテンショメータを連動させよう</td>
-</tr>
-
-<tr>
-<td align="left">8問</td>
-<td align="left">Remote Temperature</td>
-<td align="left">遠隔地の温度</td>
-<td align="left">温度を教えてくれるRPCサーバーを作ろう</td>
-</tr>
-
-<tr>
-<td align="left">9問</td>
-<td align="left">Fire Alarm</td>
-<td align="left">火災報知器</td>
-<td align="left">温度センサとブザーを使って火災報知器を作ろう</td>
-</tr>
-</tbody>
-</table>
-
-<h3 id="キットの内容物">キットの内容物</h3>
-
-<p>こちらの写真がキットの中身です。パーツの名前と見た目が一致しない人は要確認です。</p>
-
-<p><img src="/img/blog/004/04_nodebotskit.png" alt="" /></p>
-
-<p>各設問でどのパーツを利用するかを以下の表にまとめました。困ったときは確認しましょう。</p>
-
-<table>
-<thead>
-<tr>
-<th align="left">ID</th>
-<th align="left">NAME</th>
-<th align="left">利用する問題番号</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td align="left">a</td>
-<td align="left"><a href="http://www.seeedstudio.com/wiki/Seeeduino_v4.2">Seeeduino v4.2</a></td>
-<td align="left">1~9</td>
-</tr>
-
-<tr>
-<td align="left">b</td>
-<td align="left">USBmicroB ケーブル</td>
-<td align="left">1~9</td>
-</tr>
-
-<tr>
-<td align="left">c</td>
-<td align="left">ブレッドボード</td>
-<td align="left">1~9</td>
-</tr>
-
-<tr>
-<td align="left">d</td>
-<td align="left">ジャンプワイヤ</td>
-<td align="left">1~9</td>
-</tr>
-
-<tr>
-<td align="left">e</td>
-<td align="left">カーボン抵抗 330Ω</td>
-<td align="left">1,4,5,9</td>
-</tr>
-
-<tr>
-<td align="left">f</td>
-<td align="left">カーボン抵抗 10kΩ</td>
-<td align="left">4,5,9</td>
-</tr>
-
-<tr>
-<td align="left">g</td>
-<td align="left">LED</td>
-<td align="left">1,4,5,9</td>
-</tr>
-
-<tr>
-<td align="left">h</td>
-<td align="left">マイクロサーボモータ</td>
-<td align="left">2,7</td>
-</tr>
-
-<tr>
-<td align="left">i</td>
-<td align="left">小型DCモータ</td>
-<td align="left">3</td>
-</tr>
-
-<tr>
-<td align="left">j</td>
-<td align="left">タクトスイッチ</td>
-<td align="left">4,9</td>
-</tr>
-
-<tr>
-<td align="left">k</td>
-<td align="left">CdSセル 1MΩ(照度センサ)</td>
-<td align="left">5</td>
-</tr>
-
-<tr>
-<td align="left">l</td>
-<td align="left">半固定抵抗 (ポテンショメータ)</td>
-<td align="left">7</td>
-</tr>
-
-<tr>
-<td align="left">n</td>
-<td align="left">温度センサ</td>
-<td align="left">8,9</td>
-</tr>
-
-<tr>
-<td align="left">m</td>
-<td align="left">圧電ブザー</td>
-<td align="left">6,9</td>
-</tr>
-</tbody>
-</table>
-
-<h3 id="1問目のlチカの回路図解説">1問目のLチカの回路図解説</h3>
-
-<p>1秒ごとにLチカさせるプログラムを書く問題です。問題文は<a href="https://github.com/tableflip/nodebot-workshop/blob/master/exercises/blink_blink/problem.ja.md">こちら</a>をどうぞ。</p>
-
-<h4 id="準備物">準備物</h4>
-
-<p>先ほどの表のIDと照らし合わせて見てみましょう。
-ちなみにすべての問題でa~dは利用します。</p>
-
-<ul>
-<li>a: Seeeduino</li>
-<li>b: USBmicroB ケーブル</li>
-<li>c: ブレッドボード</li>
-<li>d: ジャンプワイヤ x 2</li>
-<li>e: カーボン抵抗 330Ω</li>
-<li>g: LED</li>
-</ul>
-
-<h4 id="配線">配線</h4>
-
-<p>1問目はLEDを点灯させることが目的です。SeeeduinoとLEDを線でつないでみましょう。</p>
-
-<p><img src="/img/blog/004/05_fritzing.png" alt="" /></p>
-
-<h4 id="実行">実行</h4>
-
-<p>プログラムを作成し、配線も行ったら実際に<code>nodeコマンド</code>で実行してみましょう。</p>
-
-<p><img src="/img/blog/004/06_exec.gif" alt="" /></p>
-
-<p>プログラムと配線が成功していれば、こんな感じでLEDが点滅します。</p>
-
-<p>どうでしょう、できましたか?</p>
-
-<h2 id="おわりに">おわりに</h2>
-
-<p>NodeBotsでイベントを開催したり、こういった記事を書いたりしてますが、JavaScript Robotics界がもっと盛り上がって欲しいという気持ちがあります。
-ブラウザの実装はやはりJavaScriptなので、JavaScriptでハードウェア制御できるとWeb側もHW側も共通言語を使うことができて、JSerにはかなり楽しい世界になるのではないでしょうか？</p>
-
-<p>今回のNodeBot Workshop Kitを使うことで、そういったJavaScript好きな人がハードウェアやセンサー選びでつまづかないためのものになればいいなと思っています。
-イベントなどでも販売していきますが、とりあえずはオンラインで買えるようにしてあります。</p>
-
-<p><center>
-<blockquote class="twitter-tweet" data-lang="ja"><p lang="ja" dir="ltr">まぁ僕がいたらせっかくのオフィスもダーツ仕様になりますよね <a href="https://t.co/bej7l8QBCE">pic.twitter.com/bej7l8QBCE</a></p>&mdash; chachamaru (@chachmaru) <a href="https://twitter.com/chachmaru/status/757848176657260544">2016年7月26日</a></blockquote>
-<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
-</center></p>
-
-<p>こんな感じ(笑)で丁寧に梱包してますのでご興味を持った方がいれば是非試してみてください！</p>
-
-<blockquote>
-<p>購入ページは<a href="https://dotstud.io/projects/nodebots-seeeduino-for-beginners/">こちら</a>になります。</p>
-</blockquote>
-</div>
-
-  
-</article>
-
-<article class="sp-singlep">
+<article class="blog-single">
   <div class="date">2016.07.26</div>
 
-  <div class="content-thumb">
-    <img src="/img/blog/004/00_eyecatch.png" alt="" width="100%" class="content-thumb--img">
-    <img src="/img/members/n0bisuke/author.png" alt="" class="author--avatar">
+  <img class="blog-single--eyecatch" src="/img/blog/004/00_eyecatch.png" alt="" width="710px">
+  
+  <h1 class="blog-single--title">史上初!? NodeBotsの日本向けキットを作成しました！ #nodebots</h1>
+
+  <div class="blog-single--row">
+    <a class="author" href="">
+      <img src="/img/members/n0bisuke/author.png" alt="" class="author--avatar">
+      <p class="author--name">のびすけ</p>
+    </a>
+    <a class="series" href="/series/nodejs">Node.js Magazine</a>
   </div>
   
-  <h1 class="content-title">史上初!? NodeBotsの日本向けキットを作成しました！ #nodebots</h1>
+  
 
-  <div class="content-text">
+  <div class="blog-single--content markdown">
 
 <p>こんにちは、dotstudio代表の<a href="https://twitter.com/n0bisuke">のびすけ</a>です。
 今日は、世界で人気のNode.js/Johnny-Fiveのワークショップ「<a href="https://github.com/tableflip/nodebot-workshop">NodeBot Workshop</a>」で使うアイテムをまとめた、「<strong>NodeBot Workshop Kit JP ver</strong>」というキットを作ったのでその紹介をします。
@@ -941,6 +646,8 @@
 <p>購入ページは<a href="https://dotstud.io/projects/nodebots-seeeduino-for-beginners/">こちら</a>になります。</p>
 </blockquote>
 </div>
+
+
 </article>
 
 <footer class="footer">

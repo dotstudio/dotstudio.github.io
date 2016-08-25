@@ -15,7 +15,7 @@ function addClassSelecet(){
   }
   
   //ブログページ
-  else if(type === '' || type === 'blog'){
+  else if(type === '' || type === 'blog' || type === 'series'){
     $current = $('a[data-type="blog"]');
     $current.attr('class', 'sub_text_selected');
     //sp
