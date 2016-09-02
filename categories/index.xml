@@ -1,0 +1,1952 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>dotstudio（ドットスタジオ）</title>
+    <link>https://dotstud.io/categories/</link>
+    <description>Recent content on dotstudio（ドットスタジオ）</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>© 2016 dotstudio inc.</copyright>
+    <lastBuildDate>Fri, 26 Aug 2016 11:00:00 +0900</lastBuildDate>
+    <atom:link href="https://dotstud.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>クラブで目立つ！Adafruit社のGemmaで光るピアスを作ってみよう</title>
+      <link>https://dotstud.io/blog/neopixel-ring-gemma-earrings/</link>
+      <pubDate>Fri, 26 Aug 2016 11:00:00 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/neopixel-ring-gemma-earrings/</guid>
+      <description>
+
+&lt;p&gt;みなさんこんにちわ！　dotstudioでインターンをしているマオと申します。今回から、dotstudioのブログにて電子工作についての連載していきたいと思います！  初回の本記事では、Adafruit社の「Gemma」というマイコンボードを使った『フープイヤリング』の作り方を紹介します！&lt;/p&gt;
+
+&lt;p&gt;こちらが完成の動画です＾＾&lt;/p&gt;
+
+&lt;iframe width=&#34;645&#34; height=&#34;363&#34; src=&#34;https://www.youtube.com/embed/30MlFUBgzQo&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;それではさっそく作っていきましょう！&lt;/p&gt;
+
+&lt;h2 id=&#34;必要な物&#34;&gt;必要な物&lt;/h2&gt;
+
+&lt;!-- ![](/img/blog/015/01_cs.png) --&gt;
+
+&lt;ul&gt;
+&lt;li&gt;光るフープイヤリングのキット（購入は&lt;a href=&#34;https://dotstud.io/projects/neopixel-ring-flora-earrings/&#34;&gt;こちら&lt;/a&gt;から）
+
+&lt;ul&gt;
+&lt;li&gt;NeoPixel Ring&lt;/li&gt;
+&lt;li&gt;Gemma&lt;/li&gt;
+&lt;li&gt;リチュウムイオンポリマー電池&lt;/li&gt;
+&lt;li&gt;フックアップワイヤー&lt;/li&gt;
+&lt;li&gt;ピアスフック&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;はんだごて、はんだ&lt;/li&gt;
+&lt;li&gt;両面テープ&lt;/li&gt;
+&lt;li&gt;マイクロUSBケーブル&lt;/li&gt;
+&lt;li&gt;パソコン&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;準備ができたらさっそく作っていきましょう！&lt;/p&gt;
+
+&lt;h2 id=&#34;1-neopixel-ringの配線をはんだ付けする&#34;&gt;1. NeoPixel Ringの配線をはんだ付けする&lt;/h2&gt;
+
+&lt;p&gt;まずはNeoPixel Ringの配線をはんだ付けしていきます。ここでは付属のフックアップワイヤーを使ってください。はんだ付け初心者の方は&lt;a href=&#34;http://www.murata.com/ja-jp/campaign/ads/japan/elekids/ele/craft/knack/soldering&#34;&gt;こちらのサイト&lt;/a&gt;などを参考にして練習するのをおすすめします。安全メガネなどの装着も心がけましょう。（目をまもろう！）&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/02_earring.png&#34; alt=&#34;&#34; /&gt;
+実際にはんだ付けをした後の写真はこちらです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/03_fritzing.png&#34; alt=&#34;&#34; /&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/015/04_graph.png&#34; alt=&#34;&#34; /&gt;
+はんだ付けの配線はこちらです。表に従って配線してください。&lt;/p&gt;
+
+&lt;h2 id=&#34;2-gemmaに書き込むプログラムを作る&#34;&gt;2. Gemmaに書き込むプログラムを作る&lt;/h2&gt;
+
+&lt;p&gt;今回は「Arduino IDE」というソフトウェアを使って、プログラムをGemmaに書いていきます。Arduino IDEをまだ持っていない方は、&lt;a href=&#34;https://www.arduino.cc/en/Main/Software&#34;&gt;公式サイト&lt;/a&gt;からソフトウェアをダウンロードしてください。&lt;/p&gt;
+
+&lt;p&gt;Windowsユーザーの方は Gemmaの開発元のAdafruit社による「Windows Driver」をインストールする必要があります。&lt;a href=&#34;https://learn.adafruit.com/getting-started-with-flora/windows-setup&#34;&gt;こちらのサイト&lt;/a&gt;を参照して進めてください。（Mac・Linuxのユーザーの方はインストールする必要はありません）&lt;/p&gt;
+
+&lt;h3 id=&#34;2-1-ボードのインストレーション&#34;&gt;2-1. ボードのインストレーション&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/05_arduino.png&#34; alt=&#34;&#34; /&gt;
+次にArduino IDEを立ち上げてボードをインストールします。Arduino &amp;gt; Preferences をクリックしてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/06_arduino.png&#34; alt=&#34;&#34; /&gt;
+&lt;strong&gt;&lt;a href=&#34;https://www.adafruit.com/package_adafruit_index.json&#34;&gt;https://www.adafruit.com/package_adafruit_index.json&lt;/a&gt;&lt;/strong&gt;&lt;br /&gt;
+上記のAdafruitのURLをコピーして、追加のボードマネージャーのURLに貼り、OKをクリックしてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/07_arduino.png&#34; alt=&#34;&#34; /&gt;
+コピー＆ペーストが完了したら、ツール &amp;gt; マイコンボード &amp;gt; ボードマネージャーをクリックします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/08_arduino.png&#34; alt=&#34;&#34; /&gt;
+すると、このような画面が表示されます。検索欄に「Adafruit AVR Boards」を入力し、インストールしましょう。ここまでで、ボードのインストレーションは終わりです。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-2-ライブラリのインストール&#34;&gt;2-2. ライブラリのインストール&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/09_arduino.png&#34; alt=&#34;&#34; /&gt;
+次に、NeoPixel Ring を光らせるために必要なライブラリをインストールします。スケッチ &amp;gt; ライブラリをインクルード &amp;gt; ライブラリを管理 をクリックしてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/10_arduino.png&#34; alt=&#34;&#34; /&gt;
+画面が表示されるので、検索欄に「Neopixel」と入力しましょう。上記のようになります。「Adafruit Neopixel by Adafruit」を選択してインストールしてください。&lt;/p&gt;
+
+&lt;p&gt;これでプログラムを書く準備ができました。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-3-プログラムをgemmaに書き込む&#34;&gt;2-3.プログラムをGemmaに書き込む&lt;/h3&gt;
+
+&lt;p&gt;ここではGemmaに書き込むための設定をおこないます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/11_arduino.png&#34; alt=&#34;&#34; /&gt;
+まずは、ボードを選択するためにツール＞ボード＞Arduino Gemma をクリックしてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/12_arduino.png&#34; alt=&#34;&#34; /&gt;
+次に書き込み装置を選択します。ツール＞書込装置＞USBtinyISPをクリックしてください。そして、以下のプログラムをスケッチにコピー&amp;amp;ペーストしてください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Adafruit_NeoPixel.h&amp;gt;
+
+#define PIN 0
+
+Adafruit_NeoPixel pixels = Adafruit_NeoPixel(32, PIN);
+
+uint8_t  mode   = 0, // 現在のアニメーション
+         offset = 0; // スピンするの位置
+uint32_t color  = 0xffae00; // 赤でスタート
+uint32_t prevTime;
+
+void setup() {
+  pixels.begin();
+  pixels.setBrightness(60); // １/３ 明るさ
+  prevTime = millis();
+}
+
+void loop() {
+  uint8_t  i;
+  uint32_t t;
+
+  switch(mode) {
+
+   case 0: // ランダムに光る - 一回１LED
+    i = random(32);
+    pixels.setPixelColor(i, color);
+    pixels.show();
+    delay(10);
+    pixels.setPixelColor(i, 0);
+    break;
+
+   case 1: // スピンする輪っか (一回に　８　LEDs )
+    for(i=0; i&amp;lt;16; i++) {
+      uint32_t c = 0;
+      if(((offset + i) &amp;amp; 7) &amp;lt; 2) c = color; // ４ピクセル
+      pixels.setPixelColor(   i, c); // 一回目
+      pixels.setPixelColor(31-i, c); // ２回目（裏返す）
+    }
+    pixels.show();
+    offset++;
+    delay(50);
+    break;
+  }
+
+  t = millis();
+  if((t - prevTime) &amp;gt; 8000) {      // 毎８秒
+    mode++;                        // 次のモード
+    if(mode &amp;gt; 1) {                 // モードの終わり
+      mode = 0;                    // モードスタート
+      color &amp;gt;&amp;gt;= 8;                 // 次の色 R-&amp;gt;G-&amp;gt;B
+      if(!color) color = 0xffae00; // 赤にリセット
+    }
+    for(i=0; i&amp;lt;32; i++) pixels.setPixelColor(i, 0);
+    prevTime = t;
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/13_gemma.gif&#34; alt=&#34;&#34; /&gt;
+その後、Gemmaにある小さなボタンを押すと、こちらのように赤いLEDが10秒間点滅します。赤いLEDが点滅している間に、スケッチ＞書込装置を使って書き込む をクリックしましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;※こちらのイメージにはNeoPixel Ringがついていませんが、NeoPixel Ringをはんだ付けしたあとのものへ書き込んでも問題ありません。&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/14_arduino.png&#34; alt=&#34;&#34; /&gt;
+赤いLEDの点滅が終わったら、Gemmaへのプログラムの書き込み完了となります。この状態になれば、MicroUSBを外しても大丈夫です。&lt;/p&gt;
+
+&lt;h2 id=&#34;3-バッテリー接続-ピアスのフック取り付け&#34;&gt;3. バッテリー接続＆ピアスのフック取り付け&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/15_hello.png&#34; alt=&#34;&#34; /&gt;
+最後に、NepPixel Ringとリチュームイオンポリマーバッテリーを接続します。Gemmaボード上に小さなON-OFFスイッチがあるので、スイッチをONにしてきちんと光るかどうかを確かめてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/16_world.png&#34; alt=&#34;&#34; /&gt;
+次にバッテリーを固定します。いろいろなやり方があるかと思いますが、私は両面テープを中央に貼り、ピアスフックとバッテリーの線を固定してみました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/17_hoge.png&#34; alt=&#34;&#34; /&gt;
+その上からまた両面テープを貼り、バッテリーを上から付けています。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/18_fuga.png&#34; alt=&#34;&#34; /&gt;
+最後にNeoPixel Ringとピアスフックを固定させて、ピアスフックの余った長さを切断すればできあがりです＾＾&lt;/p&gt;
+
+&lt;p&gt;バッテリーは充電可能なものとなっています。キットには充電機が含まれてないため、充電機がほしい方は&lt;a href=&#34;https://www.switch-science.com/catalog/1499/&#34;&gt;スイッチサイエンス&lt;/a&gt;さんのサイトでお求めください。&lt;/p&gt;
+
+&lt;h2 id=&#34;できあがり&#34;&gt;できあがり&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/23_mao.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/20_mao.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/19_mao.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;装着して写真を撮ってみました！&lt;br /&gt;
+結構ファッショナブルでかわいいですよね！　みなさんもぜひ作ってみてください＾＾&lt;/p&gt;
+
+&lt;p&gt;次回の記事もお楽しみにー！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>クラブで目立つ！Adafruit社のGemmaで光るピアスを作ってみよう</title>
+      <link>https://dotstud.io/blog/neopixel-ring-gemma-earrings/</link>
+      <pubDate>Fri, 26 Aug 2016 11:00:00 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/neopixel-ring-gemma-earrings/</guid>
+      <description>
+
+&lt;p&gt;みなさんこんにちわ！　dotstudioでインターンをしているマオと申します。今回から、dotstudioのブログにて電子工作についての連載していきたいと思います！  初回の本記事では、Adafruit社の「Gemma」というマイコンボードを使った『フープイヤリング』の作り方を紹介します！&lt;/p&gt;
+
+&lt;p&gt;こちらが完成の動画です＾＾&lt;/p&gt;
+
+&lt;iframe width=&#34;645&#34; height=&#34;363&#34; src=&#34;https://www.youtube.com/embed/30MlFUBgzQo&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;それではさっそく作っていきましょう！&lt;/p&gt;
+
+&lt;h2 id=&#34;必要な物&#34;&gt;必要な物&lt;/h2&gt;
+
+&lt;!-- ![](/img/blog/015/01_cs.png) --&gt;
+
+&lt;ul&gt;
+&lt;li&gt;光るフープイヤリングのキット（購入は&lt;a href=&#34;https://dotstud.io/projects/neopixel-ring-flora-earrings/&#34;&gt;こちら&lt;/a&gt;から）
+
+&lt;ul&gt;
+&lt;li&gt;NeoPixel Ring&lt;/li&gt;
+&lt;li&gt;Gemma&lt;/li&gt;
+&lt;li&gt;リチュウムイオンポリマー電池&lt;/li&gt;
+&lt;li&gt;フックアップワイヤー&lt;/li&gt;
+&lt;li&gt;ピアスフック&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;はんだごて、はんだ&lt;/li&gt;
+&lt;li&gt;両面テープ&lt;/li&gt;
+&lt;li&gt;マイクロUSBケーブル&lt;/li&gt;
+&lt;li&gt;パソコン&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;準備ができたらさっそく作っていきましょう！&lt;/p&gt;
+
+&lt;h2 id=&#34;1-neopixel-ringの配線をはんだ付けする&#34;&gt;1. NeoPixel Ringの配線をはんだ付けする&lt;/h2&gt;
+
+&lt;p&gt;まずはNeoPixel Ringの配線をはんだ付けしていきます。ここでは付属のフックアップワイヤーを使ってください。はんだ付け初心者の方は&lt;a href=&#34;http://www.murata.com/ja-jp/campaign/ads/japan/elekids/ele/craft/knack/soldering&#34;&gt;こちらのサイト&lt;/a&gt;などを参考にして練習するのをおすすめします。安全メガネなどの装着も心がけましょう。（目をまもろう！）&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/02_earring.png&#34; alt=&#34;&#34; /&gt;
+実際にはんだ付けをした後の写真はこちらです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/03_fritzing.png&#34; alt=&#34;&#34; /&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/015/04_graph.png&#34; alt=&#34;&#34; /&gt;
+はんだ付けの配線はこちらです。表に従って配線してください。&lt;/p&gt;
+
+&lt;h2 id=&#34;2-gemmaに書き込むプログラムを作る&#34;&gt;2. Gemmaに書き込むプログラムを作る&lt;/h2&gt;
+
+&lt;p&gt;今回は「Arduino IDE」というソフトウェアを使って、プログラムをGemmaに書いていきます。Arduino IDEをまだ持っていない方は、&lt;a href=&#34;https://www.arduino.cc/en/Main/Software&#34;&gt;公式サイト&lt;/a&gt;からソフトウェアをダウンロードしてください。&lt;/p&gt;
+
+&lt;p&gt;Windowsユーザーの方は Gemmaの開発元のAdafruit社による「Windows Driver」をインストールする必要があります。&lt;a href=&#34;https://learn.adafruit.com/getting-started-with-flora/windows-setup&#34;&gt;こちらのサイト&lt;/a&gt;を参照して進めてください。（Mac・Linuxのユーザーの方はインストールする必要はありません）&lt;/p&gt;
+
+&lt;h3 id=&#34;2-1-ボードのインストレーション&#34;&gt;2-1. ボードのインストレーション&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/05_arduino.png&#34; alt=&#34;&#34; /&gt;
+次にArduino IDEを立ち上げてボードをインストールします。Arduino &amp;gt; Preferences をクリックしてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/06_arduino.png&#34; alt=&#34;&#34; /&gt;
+&lt;strong&gt;&lt;a href=&#34;https://www.adafruit.com/package_adafruit_index.json&#34;&gt;https://www.adafruit.com/package_adafruit_index.json&lt;/a&gt;&lt;/strong&gt;&lt;br /&gt;
+上記のAdafruitのURLをコピーして、追加のボードマネージャーのURLに貼り、OKをクリックしてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/07_arduino.png&#34; alt=&#34;&#34; /&gt;
+コピー＆ペーストが完了したら、ツール &amp;gt; マイコンボード &amp;gt; ボードマネージャーをクリックします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/08_arduino.png&#34; alt=&#34;&#34; /&gt;
+すると、このような画面が表示されます。検索欄に「Adafruit AVR Boards」を入力し、インストールしましょう。ここまでで、ボードのインストレーションは終わりです。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-2-ライブラリのインストール&#34;&gt;2-2. ライブラリのインストール&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/09_arduino.png&#34; alt=&#34;&#34; /&gt;
+次に、NeoPixel Ring を光らせるために必要なライブラリをインストールします。スケッチ &amp;gt; ライブラリをインクルード &amp;gt; ライブラリを管理 をクリックしてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/10_arduino.png&#34; alt=&#34;&#34; /&gt;
+画面が表示されるので、検索欄に「Neopixel」と入力しましょう。上記のようになります。「Adafruit Neopixel by Adafruit」を選択してインストールしてください。&lt;/p&gt;
+
+&lt;p&gt;これでプログラムを書く準備ができました。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-3-プログラムをgemmaに書き込む&#34;&gt;2-3.プログラムをGemmaに書き込む&lt;/h3&gt;
+
+&lt;p&gt;ここではGemmaに書き込むための設定をおこないます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/11_arduino.png&#34; alt=&#34;&#34; /&gt;
+まずは、ボードを選択するためにツール＞ボード＞Arduino Gemma をクリックしてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/12_arduino.png&#34; alt=&#34;&#34; /&gt;
+次に書き込み装置を選択します。ツール＞書込装置＞USBtinyISPをクリックしてください。そして、以下のプログラムをスケッチにコピー&amp;amp;ペーストしてください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Adafruit_NeoPixel.h&amp;gt;
+
+#define PIN 0
+
+Adafruit_NeoPixel pixels = Adafruit_NeoPixel(32, PIN);
+
+uint8_t  mode   = 0, // 現在のアニメーション
+         offset = 0; // スピンするの位置
+uint32_t color  = 0xffae00; // 赤でスタート
+uint32_t prevTime;
+
+void setup() {
+  pixels.begin();
+  pixels.setBrightness(60); // １/３ 明るさ
+  prevTime = millis();
+}
+
+void loop() {
+  uint8_t  i;
+  uint32_t t;
+
+  switch(mode) {
+
+   case 0: // ランダムに光る - 一回１LED
+    i = random(32);
+    pixels.setPixelColor(i, color);
+    pixels.show();
+    delay(10);
+    pixels.setPixelColor(i, 0);
+    break;
+
+   case 1: // スピンする輪っか (一回に　８　LEDs )
+    for(i=0; i&amp;lt;16; i++) {
+      uint32_t c = 0;
+      if(((offset + i) &amp;amp; 7) &amp;lt; 2) c = color; // ４ピクセル
+      pixels.setPixelColor(   i, c); // 一回目
+      pixels.setPixelColor(31-i, c); // ２回目（裏返す）
+    }
+    pixels.show();
+    offset++;
+    delay(50);
+    break;
+  }
+
+  t = millis();
+  if((t - prevTime) &amp;gt; 8000) {      // 毎８秒
+    mode++;                        // 次のモード
+    if(mode &amp;gt; 1) {                 // モードの終わり
+      mode = 0;                    // モードスタート
+      color &amp;gt;&amp;gt;= 8;                 // 次の色 R-&amp;gt;G-&amp;gt;B
+      if(!color) color = 0xffae00; // 赤にリセット
+    }
+    for(i=0; i&amp;lt;32; i++) pixels.setPixelColor(i, 0);
+    prevTime = t;
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/13_gemma.gif&#34; alt=&#34;&#34; /&gt;
+その後、Gemmaにある小さなボタンを押すと、こちらのように赤いLEDが10秒間点滅します。赤いLEDが点滅している間に、スケッチ＞書込装置を使って書き込む をクリックしましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;※こちらのイメージにはNeoPixel Ringがついていませんが、NeoPixel Ringをはんだ付けしたあとのものへ書き込んでも問題ありません。&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/14_arduino.png&#34; alt=&#34;&#34; /&gt;
+赤いLEDの点滅が終わったら、Gemmaへのプログラムの書き込み完了となります。この状態になれば、MicroUSBを外しても大丈夫です。&lt;/p&gt;
+
+&lt;h2 id=&#34;3-バッテリー接続-ピアスのフック取り付け&#34;&gt;3. バッテリー接続＆ピアスのフック取り付け&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/15_hello.png&#34; alt=&#34;&#34; /&gt;
+最後に、NepPixel Ringとリチュームイオンポリマーバッテリーを接続します。Gemmaボード上に小さなON-OFFスイッチがあるので、スイッチをONにしてきちんと光るかどうかを確かめてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/16_world.png&#34; alt=&#34;&#34; /&gt;
+次にバッテリーを固定します。いろいろなやり方があるかと思いますが、私は両面テープを中央に貼り、ピアスフックとバッテリーの線を固定してみました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/17_hoge.png&#34; alt=&#34;&#34; /&gt;
+その上からまた両面テープを貼り、バッテリーを上から付けています。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/18_fuga.png&#34; alt=&#34;&#34; /&gt;
+最後にNeoPixel Ringとピアスフックを固定させて、ピアスフックの余った長さを切断すればできあがりです＾＾&lt;/p&gt;
+
+&lt;p&gt;バッテリーは充電可能なものとなっています。キットには充電機が含まれてないため、充電機がほしい方は&lt;a href=&#34;https://www.switch-science.com/catalog/1499/&#34;&gt;スイッチサイエンス&lt;/a&gt;さんのサイトでお求めください。&lt;/p&gt;
+
+&lt;h2 id=&#34;できあがり&#34;&gt;できあがり&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/23_mao.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/20_mao.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/19_mao.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;装着して写真を撮ってみました！&lt;br /&gt;
+結構ファッショナブルでかわいいですよね！　みなさんもぜひ作ってみてください＾＾&lt;/p&gt;
+
+&lt;p&gt;次回の記事もお楽しみにー！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>#MakerFaireTokyo2016 にウェアラブルな電子楽器を出展してきました！</title>
+      <link>https://dotstud.io/blog/uko-exhibited-at-mft2016/</link>
+      <pubDate>Mon, 08 Aug 2016 10:58:44 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/uko-exhibited-at-mft2016/</guid>
+      <description>
+
+&lt;p&gt;こんにちは！　dotstudioのメイカーエンジニア・うこです。&lt;br /&gt;
+去る8月6-7日の2日間にわたって開催された、国内最大級のモノづくりの祭典「&lt;a href=&#34;http://makezine.jp/event/mft2016/&#34;&gt;Maker Faire Tokyo 2016&lt;/a&gt;」(以下MFT)に作品を出展してきました。&lt;br /&gt;
+今回は個人メイカーとして制作したものを出しましたが、弊社エディターのうららがモデルとして一緒に参加してくれました。こちらの記事では、僕が出展した &lt;strong&gt;ウェアラブルなシンセサイザ「Cardiaction」&lt;/strong&gt; について紹介させていただきます。&lt;/p&gt;
+
+&lt;h2 id=&#34;ウェアラブルシンセサイザ-cardiaction-の紹介&#34;&gt;ウェアラブルシンセサイザ「Cardiaction」の紹介&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/011/01_cardiactionurara.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;「Cardiaction」とは、「心臓の〜」を意味する接頭辞cardiacと、様々な「動き」を意味するactionを組み合わせた造語です。&lt;br /&gt;
+着用することで着ている人の「心電図波形」をリアルタイムに読み取って音に変換し、服表面に描かれている鍵盤を押さえることで実際に演奏することができます。&lt;br /&gt;
+また、ボタンの代わりに配置したツマミによって音作りを行うことができます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/011/02_myproto.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;出展者応募時は、僕自身がプロトタイプを着てデモを行ったため、&lt;a href=&#34;http://makezine.jp/event/makers2016/u-kokolab/&#34;&gt;出展者紹介ページ&lt;/a&gt;ではこのような写真が紹介されています。&lt;br /&gt;
+制作段階において&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;MFT本番は最も暑い時期であるため、半袖またはノースリーブであることが望ましい&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;着用モデルはカワイイ女の子のほうが圧倒的にウケがよい(超重要)&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;以上の2点から、弊社エディターのうらら着用モデルとして、ダブルボタンのベストに近い形態のウェアラブルシンセサイザを開発することになりました。&lt;/p&gt;
+
+&lt;p&gt;また応募時には「チーム名」を求められましたが、個人出展予定だったため10秒ほどで思いついた「u.kokolab」という安易な名義で出展することとなりました(笑)。&lt;/p&gt;
+
+&lt;h3 id=&#34;コンセプト&#34;&gt;コンセプト&lt;/h3&gt;
+
+&lt;p&gt;少し哲学的な話になりますので、この節は適宜読み飛ばしてください。&lt;/p&gt;
+
+&lt;h4 id=&#34;1&#34;&gt;1.&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;古代より、ヒトの肉体を駆動させている中枢、もしくは「こころ」の核となる部分は &lt;strong&gt;「心臓」&lt;/strong&gt; であると考えられてきました。(&lt;a href=&#34;https://ja.wikipedia.org/wiki/%E5%BF%83&#34;&gt;Wikipedia:こころ&lt;/a&gt;)&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;シンセサイザを主とするあらゆるすべての電子楽器は、 &lt;strong&gt;「音源」&lt;/strong&gt; を持っており、これはリアルタイムに生成されるか、メモリにあらかじめ書き込まれた状態にあります。電子楽器類はこの音源を元にして、指定された音色・音程・音量に変換できるモジュールを介して発音されることで楽器としての機能を果たしています。つまり、 &lt;strong&gt;「音源は電子楽器における心臓」&lt;/strong&gt; であるといえます。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;以上2つの理由から、 &lt;strong&gt;「電子楽器における心臓をヒトの心臓に置き換える」&lt;/strong&gt; ことにより、機械である電子楽器とヒトが一体となることによって成立する新たな楽器という構想が生まれました。&lt;/p&gt;
+
+&lt;h4 id=&#34;2&#34;&gt;2.&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;心電図は各人が固有に持っていながら電気的に取り出せる生体信号のひとつで、指紋と同様に「同じパターンをもつ人はいない」という理由からセキュリティにも使われた例があります。(&lt;a href=&#34;https://threatpost.com/watch-like-heartbeat-monitor-seeks-to-replace-passwords/102192/&#34;&gt;関連リンク&lt;/a&gt;)&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;バイオリンのような、奏者が音の発生元である弦に触れるようなアコースティックな楽器では、奏者による微妙な音の表現の違いというものが存在します。しかしシンセサイザのような電子楽器では、同じモデルの機体で同じ音作りのパラメータさえ設定すれば、誰が弾いても基本的には同じ音が出ます。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;以上2つの理由から、&lt;strong&gt;「電気的に取得可能で個々人にユニークである心電図」&lt;/strong&gt; を、&lt;strong&gt;「誰が演奏しても音に違いの出ない電子楽器」&lt;/strong&gt; に適用することで、&lt;strong&gt;誰が演奏しても全く異なった音の出る電子楽器&lt;/strong&gt; を作ることができれば、との考えから「Cardiaction」の制作へとつながりました。&lt;/p&gt;
+
+&lt;h3 id=&#34;デザイン&#34;&gt;デザイン&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/011/03_design.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ベースとした衣服はダブルボタンの制服ベストで、ボタン部分はダブルではなく非対称のシングルとし、ボタンの代わりにツマミを配置しています。また、デザインの都合上レディースモデルながら右前となっています。&lt;br /&gt;
+「Cardiaction」の文字を元にしたロゴモチーフを左側に配置し、「C」の文字を電源マークにして心臓の直上に位置させています。&lt;br /&gt;
+残りの文字は波形の信号に似せた形をとり、特に「i」の文字を、心電図でよく見られる特徴的なQRS波(&lt;a href=&#34;http://www.geocities.jp/pinpinkorori100/sinzou-q-a/sindenzu.html&#34;&gt;参考:心電図の基本的なみかた&lt;/a&gt;)と同様の形状としています。&lt;/p&gt;
+
+&lt;h3 id=&#34;技術仕様&#34;&gt;技術仕様&lt;/h3&gt;
+
+&lt;p&gt;今回の出展時点での仕様となり、今後アップデートしてゆく予定です。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;同時発音数: 単音(モノフォニック)&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;鍵盤数: 13鍵&lt;/li&gt;
+&lt;li&gt;ピッチベンド・オクターブシフト対応&lt;/li&gt;
+&lt;li&gt;オシレーター: 3(標準四肢誘導心電図による第Ⅰ誘導・第Ⅱ誘導・第Ⅲ誘導の各波形からリアルタイムサンプリング)&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;音声合成方式: 筋電ノイズを含む心電図波形の減算合成とFM合成の併用&lt;/li&gt;
+&lt;li&gt;フィルタ: バンドパスフィルタ*2(24dB/Oct固定、中央周波数・Q値可変)&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;エンベローブ: なし&lt;/li&gt;
+&lt;li&gt;LFO: なし&lt;/li&gt;
+&lt;li&gt;ハードウェア(チップ): RaspberryPi3*1, Arduino Micro*2, AD8232単極誘導心電モニターモジュール*3&lt;/li&gt;
+&lt;li&gt;ハードウェア(出力): USB給電ステレオスピーカー4W*1, NeopixelフルカラーLEDモジュール*40, LEDφ10赤黄緑LED*各1&lt;/li&gt;
+&lt;li&gt;ハードウェア(入力): 圧力センサ*13, 可変抵抗*4, 接触位置センサ*1, スイッチ*4, 心電図計測用端子*4&lt;/li&gt;
+&lt;li&gt;服生地: T/Cツイル(ポリエステル65%,綿35%)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;発音に直接的には関わらない部分として、Cardiactionロゴ部分の発光があります。&lt;br /&gt;
+こちらは心拍1回に対してC文字部分から一番下までのLED点滅が2周期分光るようになっています。&lt;br /&gt;
+また、心起電力ベクトル(&lt;a href=&#34;http://www.udatsu.vs1.jp/axis.htm&#34;&gt;参考:「心電図：心臓電気軸」&lt;/a&gt;)を検出し、3次元ベクトルの各パラメータをそれぞれRGBの値に対応させて色を変化させるように設計しています。この色がそのまま音色の違いにも関連しています。&lt;/p&gt;
+
+&lt;h3 id=&#34;制作課程&#34;&gt;制作課程&lt;/h3&gt;
+
+&lt;p&gt;こちらはかなり長くなる予定ですので、別記事にして後ほどリンクを貼らせていただきたいと思います。&lt;br /&gt;
+MFT当日に問い合わせていただいた皆様につきましては、少々お待ち頂ければ幸いです。&lt;/p&gt;
+
+&lt;h2 id=&#34;デモンストレーションの様子&#34;&gt;デモンストレーションの様子&lt;/h2&gt;
+
+&lt;p&gt;当日2日間ともかなり忙しくあまり写真や動画を撮れなかったので、Twitterから以下にいくつか引用させていただきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;u.kokolabさんのウェアラブルシンセサイザー。パフォーマンスが楽しそう。かわいい。&lt;a href=&#34;https://twitter.com/hashtag/MakerFaireTokyo2016?src=hash&#34;&gt;#MakerFaireTokyo2016&lt;/a&gt; &lt;a href=&#34;https://t.co/J84vnaDYN7&#34;&gt;pic.twitter.com/J84vnaDYN7&lt;/a&gt;&lt;/p&gt;&amp;mdash; 五味@NT能登キャンプ (@GomiHgy) &lt;a href=&#34;https://twitter.com/GomiHgy/status/762150380448784385&#34;&gt;2016年8月7日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;うらら　うこ　お疲れ！&lt;a href=&#34;https://twitter.com/hashtag/mft2016?src=hash&#34;&gt;#mft2016&lt;/a&gt; &lt;a href=&#34;https://twitter.com/hashtag/makerfairetokyo2016?src=hash&#34;&gt;#makerfairetokyo2016&lt;/a&gt; @ 東京ビッグサイト西ホール &lt;a href=&#34;https://t.co/XQLaqqPnht&#34;&gt;https://t.co/XQLaqqPnht&lt;/a&gt;&lt;/p&gt;&amp;mdash; のびすけ / sugawara (@n0bisuke) &lt;a href=&#34;https://twitter.com/n0bisuke/status/762221932624371712&#34;&gt;2016年8月7日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;間も無くu.kokolabさんのウェアラブルシンセサイザーの&amp;quot;Cardiaction&amp;quot;のデモが始まります。心電図を使ってメロディーを奏でています！&lt;br&gt;D-02-12 ブース &lt;a href=&#34;https://twitter.com/hashtag/MakerFaireTokyo2016?src=hash&#34;&gt;#MakerFaireTokyo2016&lt;/a&gt; &lt;a href=&#34;https://t.co/0I6jDVoe32&#34;&gt;pic.twitter.com/0I6jDVoe32&lt;/a&gt;&lt;/p&gt;&amp;mdash; カサネタリウム ホリ@ NT東京 &lt;sup&gt;8&lt;/sup&gt;&amp;frasl;&lt;sub&gt;7&lt;/sub&gt; (@kasanetarium) &lt;a href=&#34;https://twitter.com/kasanetarium/status/762151112900096000&#34;&gt;2016年8月7日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;ウェアラブルシンセめっちゃかわい〜 &lt;a href=&#34;https://twitter.com/hashtag/MakerFaireTokyo2016?src=hash&#34;&gt;#MakerFaireTokyo2016&lt;/a&gt; &lt;a href=&#34;https://t.co/yViNlFDh9M&#34;&gt;pic.twitter.com/yViNlFDh9M&lt;/a&gt;&lt;/p&gt;&amp;mdash; Kunimi Ishii in 一条 (@141923) &lt;a href=&#34;https://twitter.com/141923/status/762193336534900736&#34;&gt;2016年8月7日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;ウェアラブルシンセだ。太ももと腕で取ってる心電波形を音源にする。鍵盤で演奏する。ツマミも効く。実はかなりこったものである。 &lt;a href=&#34;https://twitter.com/hashtag/MFT2016?src=hash&#34;&gt;#MFT2016&lt;/a&gt; &lt;a href=&#34;https://t.co/aibrwdmVp1&#34;&gt;pic.twitter.com/aibrwdmVp1&lt;/a&gt;&lt;/p&gt;&amp;mdash; 鷲谷憲樹 (@nwashy) &lt;a href=&#34;https://twitter.com/nwashy/status/761901762118688769&#34;&gt;2016年8月6日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;ウェアラブル・シンセサイザー『Cardiaction!』。服が鍵盤に、ってだけでなく、心電波形をオシレーターにして音を作っているらしい。&lt;a href=&#34;https://twitter.com/hashtag/MakerFaireTokyo2016?src=hash&#34;&gt;#MakerFaireTokyo2016&lt;/a&gt; &lt;a href=&#34;https://t.co/Zl5TDxRfm1&#34;&gt;https://t.co/Zl5TDxRfm1&lt;/a&gt;&lt;/p&gt;&amp;mdash; 布施雄一郎 (@MRYF1968) &lt;a href=&#34;https://twitter.com/MRYF1968/status/762389212708560896&#34;&gt;2016年8月7日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;&lt;a href=&#34;https://twitter.com/hashtag/MakerFaireTokyo2016?src=hash&#34;&gt;#MakerFaireTokyo2016&lt;/a&gt; で一番工口かった楽器。 &lt;a href=&#34;https://t.co/cGXqUuUNk9&#34;&gt;pic.twitter.com/cGXqUuUNk9&lt;/a&gt;&lt;/p&gt;&amp;mdash; クランケ (@kranke_t) &lt;a href=&#34;https://twitter.com/kranke_t/status/762296179438686208&#34;&gt;2016年8月7日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;楽しそうな顔してる笑&lt;a href=&#34;https://twitter.com/hashtag/MFT2016?src=hash&#34;&gt;#MFT2016&lt;/a&gt; &lt;a href=&#34;https://twitter.com/hashtag/MakerFaireTokyo2016?src=hash&#34;&gt;#MakerFaireTokyo2016&lt;/a&gt;&lt;a href=&#34;https://t.co/OOi2SZ0nWJ&#34;&gt;https://t.co/OOi2SZ0nWJ&lt;/a&gt;&lt;/p&gt;&amp;mdash; うらら #MFT2016 (@uraranbon) &lt;a href=&#34;https://twitter.com/uraranbon/status/762181686075416576&#34;&gt;2016年8月7日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;makerfaireでイケてるひとを発見&lt;a href=&#34;https://twitter.com/uraranbon&#34;&gt;@uraranbon&lt;/a&gt; &lt;a href=&#34;https://twitter.com/harmoniko&#34;&gt;@harmoniko&lt;/a&gt;  &lt;a href=&#34;https://twitter.com/hashtag/MFT2016?src=hash&#34;&gt;#MFT2016&lt;/a&gt; &lt;a href=&#34;https://t.co/Pk57XR43eo&#34;&gt;pic.twitter.com/Pk57XR43eo&lt;/a&gt;&lt;/p&gt;&amp;mdash; わみ@ものづくり (@wamisnet) &lt;a href=&#34;https://twitter.com/wamisnet/status/762174015167303680&#34;&gt;2016年8月7日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;うこ氏 &lt;a href=&#34;https://twitter.com/harmoniko&#34;&gt;@harmoniko&lt;/a&gt; プロデュースの&lt;br&gt;LifeSynthJacket　みたいなやつ&lt;br&gt;うらら氏 &lt;a href=&#34;https://twitter.com/uraranbon&#34;&gt;@uraranbon&lt;/a&gt; やばいかわいい &lt;a href=&#34;https://t.co/YKSzfoLl8N&#34;&gt;pic.twitter.com/YKSzfoLl8N&lt;/a&gt;&lt;/p&gt;&amp;mdash; えむにわ(社会の底辺) (@m2wasabi) &lt;a href=&#34;https://twitter.com/m2wasabi/status/762159724737368064&#34;&gt;2016年8月7日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;MFTへの出展は今回で2回目ですが、前回以上に余裕がなく、僕自身はあまり他の展示を見て回れなかったのが残念でした。&lt;br /&gt;
+そんな中でも手伝って頂いた知り合いの方々や、シンセを着たうららと共に音を出しながら会場を歩いて出しゃばっていったにも関わらず快く対応してくださったメイカーの皆様、本当にありがとうございました。&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;メーカーフェア、昨年以上に余裕がなくってあまりほかのブースまわれなかったり実況とか告知もできなくって大変だった……あとこの楽器、他人に触られそうになるっていうのを全く想定してなくてかなり焦った(だってギター弾いてる人のそれを触る他人なんていないでしょ)&lt;/p&gt;&amp;mdash; うこ@MFT2016 (@harmoniko) &lt;a href=&#34;https://twitter.com/harmoniko/status/762338479481065473&#34;&gt;2016年8月7日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;自分のブースに対する個人的な所感ですが……&lt;br /&gt;
+MFTにおいては多くの子供たちも見に来られます。&lt;br /&gt;
+前回、2015年に出した自身の作品「&lt;a href=&#34;http://ukokoras.tumblr.com/post/125635484342&#34;&gt;Vocaleaper&lt;/a&gt;」は、参加者が触りやすい形で展示をしてあり、また特に何も考えず手をかざすだけで音が鳴るというものでした。そのため、多くの子供たちに触っていただけたのですが、今回は展示の特性からもあまり子供が近寄りたいと思えるようなものでなかったと感じています。&lt;br /&gt;
+個人的には、小さな世代にものづくりの楽しさをもっと知ってもらいたいと考えているため、それが実現できるミニマルなプロダクトを追加で用意しておけばよかったかな、と考えております。&lt;/p&gt;
+
+&lt;p&gt;しかし、コンセプトだけでなく見た目にもこだわりを入れたことで、先述のツイートのように多くの方々の目に留めていただくことができました。&lt;br /&gt;
+&lt;strong&gt;自分の手で一から作り上げたモノを評価していただけるのは、何十回何百回となくやっていてもとても嬉しいものですね！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;次回出展予定&#34;&gt;次回出展予定&lt;/h2&gt;
+
+&lt;p&gt;ウェアラブルシンセサイザ「Cardiaction」は、次回は8月26日(金)にアスキーの主催による「&lt;a href=&#34;http://ascii.jp/elem/000/001/202/1202368/&#34;&gt;IoT＆H/W BIZ DAY 2 by ASCII STARTUP&lt;/a&gt;」に出展します。&lt;br /&gt;
+こちらではメイカー・うこの所属元であるdotstudio株式会社として出展の予定です。なお現時点では販売可能なプロダクトではありませんが、希望者が万が一いらっしゃったら……？ご期待くださいませ。&lt;br /&gt;
+ご来場のほどを一同お待ちしております！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>#MakerFaireTokyo2016 にウェアラブルな電子楽器を出展してきました！</title>
+      <link>https://dotstud.io/blog/uko-exhibited-at-mft2016/</link>
+      <pubDate>Mon, 08 Aug 2016 10:58:44 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/uko-exhibited-at-mft2016/</guid>
+      <description>
+
+&lt;p&gt;こんにちは！　dotstudioのメイカーエンジニア・うこです。&lt;br /&gt;
+去る8月6-7日の2日間にわたって開催された、国内最大級のモノづくりの祭典「&lt;a href=&#34;http://makezine.jp/event/mft2016/&#34;&gt;Maker Faire Tokyo 2016&lt;/a&gt;」(以下MFT)に作品を出展してきました。&lt;br /&gt;
+今回は個人メイカーとして制作したものを出しましたが、弊社エディターのうららがモデルとして一緒に参加してくれました。こちらの記事では、僕が出展した &lt;strong&gt;ウェアラブルなシンセサイザ「Cardiaction」&lt;/strong&gt; について紹介させていただきます。&lt;/p&gt;
+
+&lt;h2 id=&#34;ウェアラブルシンセサイザ-cardiaction-の紹介&#34;&gt;ウェアラブルシンセサイザ「Cardiaction」の紹介&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/011/01_cardiactionurara.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;「Cardiaction」とは、「心臓の〜」を意味する接頭辞cardiacと、様々な「動き」を意味するactionを組み合わせた造語です。&lt;br /&gt;
+着用することで着ている人の「心電図波形」をリアルタイムに読み取って音に変換し、服表面に描かれている鍵盤を押さえることで実際に演奏することができます。&lt;br /&gt;
+また、ボタンの代わりに配置したツマミによって音作りを行うことができます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/011/02_myproto.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;出展者応募時は、僕自身がプロトタイプを着てデモを行ったため、&lt;a href=&#34;http://makezine.jp/event/makers2016/u-kokolab/&#34;&gt;出展者紹介ページ&lt;/a&gt;ではこのような写真が紹介されています。&lt;br /&gt;
+制作段階において&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;MFT本番は最も暑い時期であるため、半袖またはノースリーブであることが望ましい&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;着用モデルはカワイイ女の子のほうが圧倒的にウケがよい(超重要)&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;以上の2点から、弊社エディターのうらら着用モデルとして、ダブルボタンのベストに近い形態のウェアラブルシンセサイザを開発することになりました。&lt;/p&gt;
+
+&lt;p&gt;また応募時には「チーム名」を求められましたが、個人出展予定だったため10秒ほどで思いついた「u.kokolab」という安易な名義で出展することとなりました(笑)。&lt;/p&gt;
+
+&lt;h3 id=&#34;コンセプト&#34;&gt;コンセプト&lt;/h3&gt;
+
+&lt;p&gt;少し哲学的な話になりますので、この節は適宜読み飛ばしてください。&lt;/p&gt;
+
+&lt;h4 id=&#34;1&#34;&gt;1.&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;古代より、ヒトの肉体を駆動させている中枢、もしくは「こころ」の核となる部分は &lt;strong&gt;「心臓」&lt;/strong&gt; であると考えられてきました。(&lt;a href=&#34;https://ja.wikipedia.org/wiki/%E5%BF%83&#34;&gt;Wikipedia:こころ&lt;/a&gt;)&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;シンセサイザを主とするあらゆるすべての電子楽器は、 &lt;strong&gt;「音源」&lt;/strong&gt; を持っており、これはリアルタイムに生成されるか、メモリにあらかじめ書き込まれた状態にあります。電子楽器類はこの音源を元にして、指定された音色・音程・音量に変換できるモジュールを介して発音されることで楽器としての機能を果たしています。つまり、 &lt;strong&gt;「音源は電子楽器における心臓」&lt;/strong&gt; であるといえます。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;以上2つの理由から、 &lt;strong&gt;「電子楽器における心臓をヒトの心臓に置き換える」&lt;/strong&gt; ことにより、機械である電子楽器とヒトが一体となることによって成立する新たな楽器という構想が生まれました。&lt;/p&gt;
+
+&lt;h4 id=&#34;2&#34;&gt;2.&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;心電図は各人が固有に持っていながら電気的に取り出せる生体信号のひとつで、指紋と同様に「同じパターンをもつ人はいない」という理由からセキュリティにも使われた例があります。(&lt;a href=&#34;https://threatpost.com/watch-like-heartbeat-monitor-seeks-to-replace-passwords/102192/&#34;&gt;関連リンク&lt;/a&gt;)&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;バイオリンのような、奏者が音の発生元である弦に触れるようなアコースティックな楽器では、奏者による微妙な音の表現の違いというものが存在します。しかしシンセサイザのような電子楽器では、同じモデルの機体で同じ音作りのパラメータさえ設定すれば、誰が弾いても基本的には同じ音が出ます。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;以上2つの理由から、&lt;strong&gt;「電気的に取得可能で個々人にユニークである心電図」&lt;/strong&gt; を、&lt;strong&gt;「誰が演奏しても音に違いの出ない電子楽器」&lt;/strong&gt; に適用することで、&lt;strong&gt;誰が演奏しても全く異なった音の出る電子楽器&lt;/strong&gt; を作ることができれば、との考えから「Cardiaction」の制作へとつながりました。&lt;/p&gt;
+
+&lt;h3 id=&#34;デザイン&#34;&gt;デザイン&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/011/03_design.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ベースとした衣服はダブルボタンの制服ベストで、ボタン部分はダブルではなく非対称のシングルとし、ボタンの代わりにツマミを配置しています。また、デザインの都合上レディースモデルながら右前となっています。&lt;br /&gt;
+「Cardiaction」の文字を元にしたロゴモチーフを左側に配置し、「C」の文字を電源マークにして心臓の直上に位置させています。&lt;br /&gt;
+残りの文字は波形の信号に似せた形をとり、特に「i」の文字を、心電図でよく見られる特徴的なQRS波(&lt;a href=&#34;http://www.geocities.jp/pinpinkorori100/sinzou-q-a/sindenzu.html&#34;&gt;参考:心電図の基本的なみかた&lt;/a&gt;)と同様の形状としています。&lt;/p&gt;
+
+&lt;h3 id=&#34;技術仕様&#34;&gt;技術仕様&lt;/h3&gt;
+
+&lt;p&gt;今回の出展時点での仕様となり、今後アップデートしてゆく予定です。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;同時発音数: 単音(モノフォニック)&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;鍵盤数: 13鍵&lt;/li&gt;
+&lt;li&gt;ピッチベンド・オクターブシフト対応&lt;/li&gt;
+&lt;li&gt;オシレーター: 3(標準四肢誘導心電図による第Ⅰ誘導・第Ⅱ誘導・第Ⅲ誘導の各波形からリアルタイムサンプリング)&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;音声合成方式: 筋電ノイズを含む心電図波形の減算合成とFM合成の併用&lt;/li&gt;
+&lt;li&gt;フィルタ: バンドパスフィルタ*2(24dB/Oct固定、中央周波数・Q値可変)&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;エンベローブ: なし&lt;/li&gt;
+&lt;li&gt;LFO: なし&lt;/li&gt;
+&lt;li&gt;ハードウェア(チップ): RaspberryPi3*1, Arduino Micro*2, AD8232単極誘導心電モニターモジュール*3&lt;/li&gt;
+&lt;li&gt;ハードウェア(出力): USB給電ステレオスピーカー4W*1, NeopixelフルカラーLEDモジュール*40, LEDφ10赤黄緑LED*各1&lt;/li&gt;
+&lt;li&gt;ハードウェア(入力): 圧力センサ*13, 可変抵抗*4, 接触位置センサ*1, スイッチ*4, 心電図計測用端子*4&lt;/li&gt;
+&lt;li&gt;服生地: T/Cツイル(ポリエステル65%,綿35%)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;発音に直接的には関わらない部分として、Cardiactionロゴ部分の発光があります。&lt;br /&gt;
+こちらは心拍1回に対してC文字部分から一番下までのLED点滅が2周期分光るようになっています。&lt;br /&gt;
+また、心起電力ベクトル(&lt;a href=&#34;http://www.udatsu.vs1.jp/axis.htm&#34;&gt;参考:「心電図：心臓電気軸」&lt;/a&gt;)を検出し、3次元ベクトルの各パラメータをそれぞれRGBの値に対応させて色を変化させるように設計しています。この色がそのまま音色の違いにも関連しています。&lt;/p&gt;
+
+&lt;h3 id=&#34;制作課程&#34;&gt;制作課程&lt;/h3&gt;
+
+&lt;p&gt;こちらはかなり長くなる予定ですので、別記事にして後ほどリンクを貼らせていただきたいと思います。&lt;br /&gt;
+MFT当日に問い合わせていただいた皆様につきましては、少々お待ち頂ければ幸いです。&lt;/p&gt;
+
+&lt;h2 id=&#34;デモンストレーションの様子&#34;&gt;デモンストレーションの様子&lt;/h2&gt;
+
+&lt;p&gt;当日2日間ともかなり忙しくあまり写真や動画を撮れなかったので、Twitterから以下にいくつか引用させていただきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;u.kokolabさんのウェアラブルシンセサイザー。パフォーマンスが楽しそう。かわいい。&lt;a href=&#34;https://twitter.com/hashtag/MakerFaireTokyo2016?src=hash&#34;&gt;#MakerFaireTokyo2016&lt;/a&gt; &lt;a href=&#34;https://t.co/J84vnaDYN7&#34;&gt;pic.twitter.com/J84vnaDYN7&lt;/a&gt;&lt;/p&gt;&amp;mdash; 五味@NT能登キャンプ (@GomiHgy) &lt;a href=&#34;https://twitter.com/GomiHgy/status/762150380448784385&#34;&gt;2016年8月7日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;うらら　うこ　お疲れ！&lt;a href=&#34;https://twitter.com/hashtag/mft2016?src=hash&#34;&gt;#mft2016&lt;/a&gt; &lt;a href=&#34;https://twitter.com/hashtag/makerfairetokyo2016?src=hash&#34;&gt;#makerfairetokyo2016&lt;/a&gt; @ 東京ビッグサイト西ホール &lt;a href=&#34;https://t.co/XQLaqqPnht&#34;&gt;https://t.co/XQLaqqPnht&lt;/a&gt;&lt;/p&gt;&amp;mdash; のびすけ / sugawara (@n0bisuke) &lt;a href=&#34;https://twitter.com/n0bisuke/status/762221932624371712&#34;&gt;2016年8月7日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;間も無くu.kokolabさんのウェアラブルシンセサイザーの&amp;quot;Cardiaction&amp;quot;のデモが始まります。心電図を使ってメロディーを奏でています！&lt;br&gt;D-02-12 ブース &lt;a href=&#34;https://twitter.com/hashtag/MakerFaireTokyo2016?src=hash&#34;&gt;#MakerFaireTokyo2016&lt;/a&gt; &lt;a href=&#34;https://t.co/0I6jDVoe32&#34;&gt;pic.twitter.com/0I6jDVoe32&lt;/a&gt;&lt;/p&gt;&amp;mdash; カサネタリウム ホリ@ NT東京 &lt;sup&gt;8&lt;/sup&gt;&amp;frasl;&lt;sub&gt;7&lt;/sub&gt; (@kasanetarium) &lt;a href=&#34;https://twitter.com/kasanetarium/status/762151112900096000&#34;&gt;2016年8月7日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;ウェアラブルシンセめっちゃかわい〜 &lt;a href=&#34;https://twitter.com/hashtag/MakerFaireTokyo2016?src=hash&#34;&gt;#MakerFaireTokyo2016&lt;/a&gt; &lt;a href=&#34;https://t.co/yViNlFDh9M&#34;&gt;pic.twitter.com/yViNlFDh9M&lt;/a&gt;&lt;/p&gt;&amp;mdash; Kunimi Ishii in 一条 (@141923) &lt;a href=&#34;https://twitter.com/141923/status/762193336534900736&#34;&gt;2016年8月7日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;ウェアラブルシンセだ。太ももと腕で取ってる心電波形を音源にする。鍵盤で演奏する。ツマミも効く。実はかなりこったものである。 &lt;a href=&#34;https://twitter.com/hashtag/MFT2016?src=hash&#34;&gt;#MFT2016&lt;/a&gt; &lt;a href=&#34;https://t.co/aibrwdmVp1&#34;&gt;pic.twitter.com/aibrwdmVp1&lt;/a&gt;&lt;/p&gt;&amp;mdash; 鷲谷憲樹 (@nwashy) &lt;a href=&#34;https://twitter.com/nwashy/status/761901762118688769&#34;&gt;2016年8月6日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;ウェアラブル・シンセサイザー『Cardiaction!』。服が鍵盤に、ってだけでなく、心電波形をオシレーターにして音を作っているらしい。&lt;a href=&#34;https://twitter.com/hashtag/MakerFaireTokyo2016?src=hash&#34;&gt;#MakerFaireTokyo2016&lt;/a&gt; &lt;a href=&#34;https://t.co/Zl5TDxRfm1&#34;&gt;https://t.co/Zl5TDxRfm1&lt;/a&gt;&lt;/p&gt;&amp;mdash; 布施雄一郎 (@MRYF1968) &lt;a href=&#34;https://twitter.com/MRYF1968/status/762389212708560896&#34;&gt;2016年8月7日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;&lt;a href=&#34;https://twitter.com/hashtag/MakerFaireTokyo2016?src=hash&#34;&gt;#MakerFaireTokyo2016&lt;/a&gt; で一番工口かった楽器。 &lt;a href=&#34;https://t.co/cGXqUuUNk9&#34;&gt;pic.twitter.com/cGXqUuUNk9&lt;/a&gt;&lt;/p&gt;&amp;mdash; クランケ (@kranke_t) &lt;a href=&#34;https://twitter.com/kranke_t/status/762296179438686208&#34;&gt;2016年8月7日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;楽しそうな顔してる笑&lt;a href=&#34;https://twitter.com/hashtag/MFT2016?src=hash&#34;&gt;#MFT2016&lt;/a&gt; &lt;a href=&#34;https://twitter.com/hashtag/MakerFaireTokyo2016?src=hash&#34;&gt;#MakerFaireTokyo2016&lt;/a&gt;&lt;a href=&#34;https://t.co/OOi2SZ0nWJ&#34;&gt;https://t.co/OOi2SZ0nWJ&lt;/a&gt;&lt;/p&gt;&amp;mdash; うらら #MFT2016 (@uraranbon) &lt;a href=&#34;https://twitter.com/uraranbon/status/762181686075416576&#34;&gt;2016年8月7日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;makerfaireでイケてるひとを発見&lt;a href=&#34;https://twitter.com/uraranbon&#34;&gt;@uraranbon&lt;/a&gt; &lt;a href=&#34;https://twitter.com/harmoniko&#34;&gt;@harmoniko&lt;/a&gt;  &lt;a href=&#34;https://twitter.com/hashtag/MFT2016?src=hash&#34;&gt;#MFT2016&lt;/a&gt; &lt;a href=&#34;https://t.co/Pk57XR43eo&#34;&gt;pic.twitter.com/Pk57XR43eo&lt;/a&gt;&lt;/p&gt;&amp;mdash; わみ@ものづくり (@wamisnet) &lt;a href=&#34;https://twitter.com/wamisnet/status/762174015167303680&#34;&gt;2016年8月7日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;うこ氏 &lt;a href=&#34;https://twitter.com/harmoniko&#34;&gt;@harmoniko&lt;/a&gt; プロデュースの&lt;br&gt;LifeSynthJacket　みたいなやつ&lt;br&gt;うらら氏 &lt;a href=&#34;https://twitter.com/uraranbon&#34;&gt;@uraranbon&lt;/a&gt; やばいかわいい &lt;a href=&#34;https://t.co/YKSzfoLl8N&#34;&gt;pic.twitter.com/YKSzfoLl8N&lt;/a&gt;&lt;/p&gt;&amp;mdash; えむにわ(社会の底辺) (@m2wasabi) &lt;a href=&#34;https://twitter.com/m2wasabi/status/762159724737368064&#34;&gt;2016年8月7日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;MFTへの出展は今回で2回目ですが、前回以上に余裕がなく、僕自身はあまり他の展示を見て回れなかったのが残念でした。&lt;br /&gt;
+そんな中でも手伝って頂いた知り合いの方々や、シンセを着たうららと共に音を出しながら会場を歩いて出しゃばっていったにも関わらず快く対応してくださったメイカーの皆様、本当にありがとうございました。&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;メーカーフェア、昨年以上に余裕がなくってあまりほかのブースまわれなかったり実況とか告知もできなくって大変だった……あとこの楽器、他人に触られそうになるっていうのを全く想定してなくてかなり焦った(だってギター弾いてる人のそれを触る他人なんていないでしょ)&lt;/p&gt;&amp;mdash; うこ@MFT2016 (@harmoniko) &lt;a href=&#34;https://twitter.com/harmoniko/status/762338479481065473&#34;&gt;2016年8月7日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;自分のブースに対する個人的な所感ですが……&lt;br /&gt;
+MFTにおいては多くの子供たちも見に来られます。&lt;br /&gt;
+前回、2015年に出した自身の作品「&lt;a href=&#34;http://ukokoras.tumblr.com/post/125635484342&#34;&gt;Vocaleaper&lt;/a&gt;」は、参加者が触りやすい形で展示をしてあり、また特に何も考えず手をかざすだけで音が鳴るというものでした。そのため、多くの子供たちに触っていただけたのですが、今回は展示の特性からもあまり子供が近寄りたいと思えるようなものでなかったと感じています。&lt;br /&gt;
+個人的には、小さな世代にものづくりの楽しさをもっと知ってもらいたいと考えているため、それが実現できるミニマルなプロダクトを追加で用意しておけばよかったかな、と考えております。&lt;/p&gt;
+
+&lt;p&gt;しかし、コンセプトだけでなく見た目にもこだわりを入れたことで、先述のツイートのように多くの方々の目に留めていただくことができました。&lt;br /&gt;
+&lt;strong&gt;自分の手で一から作り上げたモノを評価していただけるのは、何十回何百回となくやっていてもとても嬉しいものですね！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;次回出展予定&#34;&gt;次回出展予定&lt;/h2&gt;
+
+&lt;p&gt;ウェアラブルシンセサイザ「Cardiaction」は、次回は8月26日(金)にアスキーの主催による「&lt;a href=&#34;http://ascii.jp/elem/000/001/202/1202368/&#34;&gt;IoT＆H/W BIZ DAY 2 by ASCII STARTUP&lt;/a&gt;」に出展します。&lt;br /&gt;
+こちらではメイカー・うこの所属元であるdotstudio株式会社として出展の予定です。なお現時点では販売可能なプロダクトではありませんが、希望者が万が一いらっしゃったら……？ご期待くださいませ。&lt;br /&gt;
+ご来場のほどを一同お待ちしております！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>JS1行でリアルタイム通信ができる「milkcocoa」のLT大会で登壇してきた！</title>
+      <link>https://dotstud.io/blog/milkcocoa-battle-lightning-talk/</link>
+      <pubDate>Fri, 05 Aug 2016 09:57:09 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/milkcocoa-battle-lightning-talk/</guid>
+      <description>
+
+&lt;p&gt;こんにちは！　dotstudioのエディター、うららです。非エンジニアですが、先日バックエンドサービス「&lt;a href=&#34;https://mlkcca.com/&#34;&gt;milkcocoa&lt;/a&gt;」のLT大会「&lt;strong&gt;紅白milkcocoa合戦&lt;/strong&gt;」に参加してきました！&lt;/p&gt;
+
+&lt;p&gt;とても刺激的なイベントだったので、当日の様子をまとめます！&lt;/p&gt;
+
+&lt;h2 id=&#34;男女対抗で戦う-紅白milkcocoa合戦-とは&#34;&gt;男女対抗で戦う「紅白milkcocoa合戦」とは&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/005/01_milkcocoa.png&#34; alt=&#34;&#34; /&gt;
+&lt;a href=&#34;http://mlkcca.connpass.com/event/34936/&#34;&gt;【増枠】紅白 Milkcocoa 合戦！【祭り】&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;バックエンドサービス「milkcocoa」をテーマに、男女5名ずつが紅白チームに分かれて競ったのが「紅白milkcocoa合戦」というイベント。1人5分ずつライトニングトークを繰り広げるという内容でした。&lt;/p&gt;
+
+&lt;p&gt;簡単にmilkcocoaの説明をすると、&lt;strong&gt;JavaScriptのソースコードを1行挿入するだけで、リアルタイム通信ができるようになる&lt;/strong&gt; という感じです。Webサービス、特にリアルタイムな通信を必要とするWebサービスではバックエンドの構築が必要不可欠。そんなとき、milkcocoaを使えばバックエンド未経験の人でも簡単にリアルタイム通信ができるようになるという代物です。&lt;/p&gt;
+
+&lt;h2 id=&#34;わたしが発表したもの&#34;&gt;わたしが発表したもの&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/005/02_urara.png&#34; alt=&#34;&#34; /&gt;
+私が発表したのは、がじぇるねが制作しているマイコンボード「&lt;a href=&#34;http://gadget.renesas.com/ja/product/cotton.html&#34;&gt;GR-COTTON&lt;/a&gt;」とmilkcocoaを組み合わせて、
+「&lt;strong&gt;パソコン上から部屋の温度がわかる&lt;/strong&gt;」という仕組み。私はHTMLとCSSしかできないので、1990年代風のWebサイトにしてみました。&lt;/p&gt;
+
+&lt;script async class=&#34;speakerdeck-embed&#34; data-id=&#34;aa68f3d1934d480f9a3a26a6062ffa9b&#34; data-ratio=&#34;1.33333333333333&#34; src=&#34;//speakerdeck.com/assets/embed.js&#34;&gt;&lt;/script&gt;
+
+&lt;p&gt;当日発表したプレゼン資料はこちらです。作り方も書いてあるのでぜひ試してみてください。&lt;/p&gt;
+
+&lt;h2 id=&#34;イベントの様子&#34;&gt;イベントの様子&lt;/h2&gt;
+
+&lt;p&gt;「milkcocoa合戦」では、合計で11名の方が登壇しています。せっかくなので、その中から個人的なベスト3を紹介してみます。&lt;/p&gt;
+
+&lt;h3 id=&#34;たみーさんの-オンラインで名刺を交換できるサービス&#34;&gt;たみーさんの「オンラインで名刺を交換できるサービス」&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/005/03_pokemon.png&#34; alt=&#34;&#34; /&gt;
+エンジニアって紙文化ないのに、未だに紙の名刺を交換するのはどうなの……？　ということでたみーさんが作ったのは「&lt;strong&gt;オンラインで名刺を交換できる&lt;/strong&gt;」サービス。&lt;strong&gt;自身をポケモンにみたてて、友達になったらくっつく&lt;/strong&gt; というめちゃくちゃかわいいものでした。&lt;/p&gt;
+
+&lt;h3 id=&#34;かよこさんの-笑顔が減るとソウルジェムが濁るツール&#34;&gt;かよこさんの「笑顔が減るとソウルジェムが濁るツール」&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/005/04_souljem.png&#34; alt=&#34;&#34; /&gt;
+「エンジニアになってから笑っていない」というかよこさんは、&lt;strong&gt;表情を判定し、笑顔が減るとソウルジェムが濁り、笑うと綾野剛からメッセをくれる&lt;/strong&gt; という仕組みを作りました！　ソウルジェムは、アニメ『魔法少女まどかマギカ』で登場する重要なアイテム。アイデアが素晴らしすぎますし、悩みも解決されていて尊敬の念しかありません。&lt;/p&gt;
+
+&lt;h3 id=&#34;うこの-webから色を変えられるランタン&#34;&gt;うこの「Webから色を変えられるランタン」&lt;/h3&gt;
+
+&lt;!-- ![](/img/blog/005/05_lantern.png) --&gt;
+
+&lt;p&gt;&lt;center&gt;&lt;blockquote class=&#34;twitter-video&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;おー！すげえ！ webから操作 &lt;a href=&#34;https://twitter.com/hashtag/mlkcca?src=hash&#34;&gt;#mlkcca&lt;/a&gt; &lt;a href=&#34;https://t.co/RP2YBn7uOk&#34;&gt;pic.twitter.com/RP2YBn7uOk&lt;/a&gt;&lt;/p&gt;&amp;mdash; タカシにヒロシ (@bakuonboogie) &lt;a href=&#34;https://twitter.com/bakuonboogie/status/755728357258436608&#34;&gt;2016年7月20日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;dotstudioのメイカーであるうこは、100円ショップのランタンの光の色を、Webから操作できるという仕組みを作ってました。一斉にみんなで操作をしたので、ランタンが荒ぶる状態に。&lt;/p&gt;
+
+&lt;h3 id=&#34;ほかにもいろいろなltが繰り広げられました&#34;&gt;ほかにもいろいろなLTが繰り広げられました！&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;世界中で大人気の箱庭ゲーム『Minecraft』からスライドをめくれる仕組みをつくったいわたん（ &lt;a href=&#34;http://twitter.com/iwata_n&#34;&gt;@iwata_n&lt;/a&gt; ）さん&lt;/li&gt;
+&lt;li&gt;洗濯が終わったら通知がくるようなおうちハックに挑戦してみた、しのはら（ &lt;a href=&#34;https://twitter.com/shanonim&#34;&gt;@shanonim&lt;/a&gt; ）さん&lt;/li&gt;
+&lt;li&gt;いま一番ちゃらいらしいReact, redux, redux-sagaをつかってみたという &lt;a href=&#34;http://twitter.com/mookjp&#34;&gt;@mookjp&lt;/a&gt; さん&lt;/li&gt;
+&lt;li&gt;milkcocoaでほしかったツールを追加した「bitter-coffee」をつくりあげたもし（ &lt;a href=&#34;https://twitter.com/moshisora990&#34;&gt;@moshisora990&lt;/a&gt;）さん&lt;/li&gt;
+&lt;li&gt;麻雀用のアプリを作り、裏側にmilkcocoaを入れたというなつみ（&lt;a href=&#34;https://twitter.com/natsumi_m31&#34;&gt;@natsumi_m31&lt;/a&gt;）さん&lt;/li&gt;
+&lt;li&gt;ハムスターのために、milkcocoaで室温を管理してみたへれんさん（3時間経つと自動でエアコンが切れる部屋にいるそうな……）&lt;/li&gt;
+&lt;li&gt;マグネットで壁にくっついて、垂直に走るラジコン「うぉーるぼっとESP」を作ったという勝さん&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;結果&#34;&gt;結果&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/005/06_m2w.png&#34; alt=&#34;&#34; /&gt;
+女性陣の紅組と、男性陣の白組。どちらが勝つかは、えむにわ氏がつくった投票システムで決めました。結果、&lt;strong&gt;紅組（女性陣）の圧倒的な勝利&lt;/strong&gt; となったようです。やったー！&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/005/07_sticker.png&#34; alt=&#34;&#34; /&gt;
+勝利の記念にもらったのは、mbedステッカーと「GR-SAKURA」。&lt;/p&gt;
+
+&lt;p&gt;登壇だけで終わるのではなく、&lt;strong&gt;投票がおこなわれたり、景品をもらえたり&lt;/strong&gt; といった仕組みは久しぶりでした。ドキドキした。&lt;/p&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;milkcocoaの次回開催予定は未定ですが、ほかにも &lt;strong&gt;IoTの勉強会やWebVRのイベントなどが開催予定&lt;/strong&gt; です！　特に &lt;strong&gt;Webエンジニアのみなさん&lt;/strong&gt; にとって実りのあるものがあると思うので、ぜひ参加してみてください！&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;2016年8月8日（月）
+&lt;a href=&#34;http://web3dj.connpass.com/event/32568/&#34;&gt;WebVR入門者の会&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;2016年8月12日（金）
+&lt;a href=&#34;http://iotlt.connpass.com/event/35436/&#34;&gt;IoT縛りの勉強会! IoTLT vol.18 @ Amazon&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;center&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;今日はmilkcocoa紅白合戦にご参加くださりありがとうございました😂💫登壇者の方々の発表は全部新しい視点をもらえたり笑えるところがあったり、楽しませてもらいました。ありがとうございます。また次お会いしましょう🙋🍻&lt;a href=&#34;https://twitter.com/hashtag/mlkcca?src=hash&#34;&gt;#mlkcca&lt;/a&gt; &lt;a href=&#34;https://t.co/PdUrDdivbU&#34;&gt;pic.twitter.com/PdUrDdivbU&lt;/a&gt;&lt;/p&gt;&amp;mdash; Milkcocoa girls (@milkcocoagirls) &lt;a href=&#34;https://twitter.com/milkcocoagirls/status/755757758931095556&#34;&gt;2016年7月20日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;
+では！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>JS1行でリアルタイム通信ができる「milkcocoa」のLT大会で登壇してきた！</title>
+      <link>https://dotstud.io/blog/milkcocoa-battle-lightning-talk/</link>
+      <pubDate>Fri, 05 Aug 2016 09:57:09 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/milkcocoa-battle-lightning-talk/</guid>
+      <description>
+
+&lt;p&gt;こんにちは！　dotstudioのエディター、うららです。非エンジニアですが、先日バックエンドサービス「&lt;a href=&#34;https://mlkcca.com/&#34;&gt;milkcocoa&lt;/a&gt;」のLT大会「&lt;strong&gt;紅白milkcocoa合戦&lt;/strong&gt;」に参加してきました！&lt;/p&gt;
+
+&lt;p&gt;とても刺激的なイベントだったので、当日の様子をまとめます！&lt;/p&gt;
+
+&lt;h2 id=&#34;男女対抗で戦う-紅白milkcocoa合戦-とは&#34;&gt;男女対抗で戦う「紅白milkcocoa合戦」とは&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/005/01_milkcocoa.png&#34; alt=&#34;&#34; /&gt;
+&lt;a href=&#34;http://mlkcca.connpass.com/event/34936/&#34;&gt;【増枠】紅白 Milkcocoa 合戦！【祭り】&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;バックエンドサービス「milkcocoa」をテーマに、男女5名ずつが紅白チームに分かれて競ったのが「紅白milkcocoa合戦」というイベント。1人5分ずつライトニングトークを繰り広げるという内容でした。&lt;/p&gt;
+
+&lt;p&gt;簡単にmilkcocoaの説明をすると、&lt;strong&gt;JavaScriptのソースコードを1行挿入するだけで、リアルタイム通信ができるようになる&lt;/strong&gt; という感じです。Webサービス、特にリアルタイムな通信を必要とするWebサービスではバックエンドの構築が必要不可欠。そんなとき、milkcocoaを使えばバックエンド未経験の人でも簡単にリアルタイム通信ができるようになるという代物です。&lt;/p&gt;
+
+&lt;h2 id=&#34;わたしが発表したもの&#34;&gt;わたしが発表したもの&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/005/02_urara.png&#34; alt=&#34;&#34; /&gt;
+私が発表したのは、がじぇるねが制作しているマイコンボード「&lt;a href=&#34;http://gadget.renesas.com/ja/product/cotton.html&#34;&gt;GR-COTTON&lt;/a&gt;」とmilkcocoaを組み合わせて、
+「&lt;strong&gt;パソコン上から部屋の温度がわかる&lt;/strong&gt;」という仕組み。私はHTMLとCSSしかできないので、1990年代風のWebサイトにしてみました。&lt;/p&gt;
+
+&lt;script async class=&#34;speakerdeck-embed&#34; data-id=&#34;aa68f3d1934d480f9a3a26a6062ffa9b&#34; data-ratio=&#34;1.33333333333333&#34; src=&#34;//speakerdeck.com/assets/embed.js&#34;&gt;&lt;/script&gt;
+
+&lt;p&gt;当日発表したプレゼン資料はこちらです。作り方も書いてあるのでぜひ試してみてください。&lt;/p&gt;
+
+&lt;h2 id=&#34;イベントの様子&#34;&gt;イベントの様子&lt;/h2&gt;
+
+&lt;p&gt;「milkcocoa合戦」では、合計で11名の方が登壇しています。せっかくなので、その中から個人的なベスト3を紹介してみます。&lt;/p&gt;
+
+&lt;h3 id=&#34;たみーさんの-オンラインで名刺を交換できるサービス&#34;&gt;たみーさんの「オンラインで名刺を交換できるサービス」&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/005/03_pokemon.png&#34; alt=&#34;&#34; /&gt;
+エンジニアって紙文化ないのに、未だに紙の名刺を交換するのはどうなの……？　ということでたみーさんが作ったのは「&lt;strong&gt;オンラインで名刺を交換できる&lt;/strong&gt;」サービス。&lt;strong&gt;自身をポケモンにみたてて、友達になったらくっつく&lt;/strong&gt; というめちゃくちゃかわいいものでした。&lt;/p&gt;
+
+&lt;h3 id=&#34;かよこさんの-笑顔が減るとソウルジェムが濁るツール&#34;&gt;かよこさんの「笑顔が減るとソウルジェムが濁るツール」&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/005/04_souljem.png&#34; alt=&#34;&#34; /&gt;
+「エンジニアになってから笑っていない」というかよこさんは、&lt;strong&gt;表情を判定し、笑顔が減るとソウルジェムが濁り、笑うと綾野剛からメッセをくれる&lt;/strong&gt; という仕組みを作りました！　ソウルジェムは、アニメ『魔法少女まどかマギカ』で登場する重要なアイテム。アイデアが素晴らしすぎますし、悩みも解決されていて尊敬の念しかありません。&lt;/p&gt;
+
+&lt;h3 id=&#34;うこの-webから色を変えられるランタン&#34;&gt;うこの「Webから色を変えられるランタン」&lt;/h3&gt;
+
+&lt;!-- ![](/img/blog/005/05_lantern.png) --&gt;
+
+&lt;p&gt;&lt;center&gt;&lt;blockquote class=&#34;twitter-video&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;おー！すげえ！ webから操作 &lt;a href=&#34;https://twitter.com/hashtag/mlkcca?src=hash&#34;&gt;#mlkcca&lt;/a&gt; &lt;a href=&#34;https://t.co/RP2YBn7uOk&#34;&gt;pic.twitter.com/RP2YBn7uOk&lt;/a&gt;&lt;/p&gt;&amp;mdash; タカシにヒロシ (@bakuonboogie) &lt;a href=&#34;https://twitter.com/bakuonboogie/status/755728357258436608&#34;&gt;2016年7月20日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;dotstudioのメイカーであるうこは、100円ショップのランタンの光の色を、Webから操作できるという仕組みを作ってました。一斉にみんなで操作をしたので、ランタンが荒ぶる状態に。&lt;/p&gt;
+
+&lt;h3 id=&#34;ほかにもいろいろなltが繰り広げられました&#34;&gt;ほかにもいろいろなLTが繰り広げられました！&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;世界中で大人気の箱庭ゲーム『Minecraft』からスライドをめくれる仕組みをつくったいわたん（ &lt;a href=&#34;http://twitter.com/iwata_n&#34;&gt;@iwata_n&lt;/a&gt; ）さん&lt;/li&gt;
+&lt;li&gt;洗濯が終わったら通知がくるようなおうちハックに挑戦してみた、しのはら（ &lt;a href=&#34;https://twitter.com/shanonim&#34;&gt;@shanonim&lt;/a&gt; ）さん&lt;/li&gt;
+&lt;li&gt;いま一番ちゃらいらしいReact, redux, redux-sagaをつかってみたという &lt;a href=&#34;http://twitter.com/mookjp&#34;&gt;@mookjp&lt;/a&gt; さん&lt;/li&gt;
+&lt;li&gt;milkcocoaでほしかったツールを追加した「bitter-coffee」をつくりあげたもし（ &lt;a href=&#34;https://twitter.com/moshisora990&#34;&gt;@moshisora990&lt;/a&gt;）さん&lt;/li&gt;
+&lt;li&gt;麻雀用のアプリを作り、裏側にmilkcocoaを入れたというなつみ（&lt;a href=&#34;https://twitter.com/natsumi_m31&#34;&gt;@natsumi_m31&lt;/a&gt;）さん&lt;/li&gt;
+&lt;li&gt;ハムスターのために、milkcocoaで室温を管理してみたへれんさん（3時間経つと自動でエアコンが切れる部屋にいるそうな……）&lt;/li&gt;
+&lt;li&gt;マグネットで壁にくっついて、垂直に走るラジコン「うぉーるぼっとESP」を作ったという勝さん&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;結果&#34;&gt;結果&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/005/06_m2w.png&#34; alt=&#34;&#34; /&gt;
+女性陣の紅組と、男性陣の白組。どちらが勝つかは、えむにわ氏がつくった投票システムで決めました。結果、&lt;strong&gt;紅組（女性陣）の圧倒的な勝利&lt;/strong&gt; となったようです。やったー！&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/005/07_sticker.png&#34; alt=&#34;&#34; /&gt;
+勝利の記念にもらったのは、mbedステッカーと「GR-SAKURA」。&lt;/p&gt;
+
+&lt;p&gt;登壇だけで終わるのではなく、&lt;strong&gt;投票がおこなわれたり、景品をもらえたり&lt;/strong&gt; といった仕組みは久しぶりでした。ドキドキした。&lt;/p&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;milkcocoaの次回開催予定は未定ですが、ほかにも &lt;strong&gt;IoTの勉強会やWebVRのイベントなどが開催予定&lt;/strong&gt; です！　特に &lt;strong&gt;Webエンジニアのみなさん&lt;/strong&gt; にとって実りのあるものがあると思うので、ぜひ参加してみてください！&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;2016年8月8日（月）
+&lt;a href=&#34;http://web3dj.connpass.com/event/32568/&#34;&gt;WebVR入門者の会&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;2016年8月12日（金）
+&lt;a href=&#34;http://iotlt.connpass.com/event/35436/&#34;&gt;IoT縛りの勉強会! IoTLT vol.18 @ Amazon&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;center&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;今日はmilkcocoa紅白合戦にご参加くださりありがとうございました😂💫登壇者の方々の発表は全部新しい視点をもらえたり笑えるところがあったり、楽しませてもらいました。ありがとうございます。また次お会いしましょう🙋🍻&lt;a href=&#34;https://twitter.com/hashtag/mlkcca?src=hash&#34;&gt;#mlkcca&lt;/a&gt; &lt;a href=&#34;https://t.co/PdUrDdivbU&#34;&gt;pic.twitter.com/PdUrDdivbU&lt;/a&gt;&lt;/p&gt;&amp;mdash; Milkcocoa girls (@milkcocoagirls) &lt;a href=&#34;https://twitter.com/milkcocoagirls/status/755757758931095556&#34;&gt;2016年7月20日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;
+では！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>ウィッシュリスト届きました！開封の儀をします。</title>
+      <link>https://dotstud.io/blog/thanks-for-sending-whitems/</link>
+      <pubDate>Thu, 04 Aug 2016 09:59:47 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/thanks-for-sending-whitems/</guid>
+      <description>
+
+&lt;p&gt;こんにちは！　dotstudioのエディター、うららです。（⬆️こちらの写真は私ではなく、デザイナーのちゃちゃまる）&lt;br /&gt;
+先日公開した&lt;a href=&#34;https://docs.google.com/spreadsheets/u/1/d/1DD5TeMYgGpstDEwbUWsDFJJrvzEyGbcfEL7cqo3XzXs/edit#gid=0&#34;&gt;ウィッシュリスト&lt;/a&gt;の品が続々と届き始めました。ありがとうございます！&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/009/01_open.png&#34; alt=&#34;&#34; /&gt;
+せっかくなので、開封の儀の様子を本記事で紹介していきます！&lt;br /&gt;
+この日届いたのは5つのアイテムです。&lt;/p&gt;
+
+&lt;h2 id=&#34;1-モニターと目覚まし時計-by-さんぺー-たかあき&#34;&gt;1. モニターと目覚まし時計 by さんぺー＆たかあき&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/009/02_monitor.png&#34; alt=&#34;&#34; /&gt;
+まず届いたのは、モニターと目覚まし時計！&lt;br /&gt;
+モニターはさっそく、会議用の机へ。背丈がちょうどいい感じです！&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/009/03_clock.png&#34; alt=&#34;&#34; /&gt;
+ちなみに目覚まし時計はウィッシュリストに入れていません。なぜ。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/009/04_address.png&#34; alt=&#34;&#34; /&gt;
+株式会社LIGのデザイナーたかあき＆ライターさんぺーからいただきました。&lt;br /&gt;
+宛名をよく見ると……&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;「のびたかこめうららちゃちゃうこ 様」&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;おいおいまとめすぎだろ。個人的にツボでした。&lt;br /&gt;
+たかあき、さんぺー、ありがとうございます！！！！&lt;/p&gt;
+
+&lt;h2 id=&#34;2-プリンター-by-m2wasabi-さん&#34;&gt;2. プリンター by @m2wasabi さん&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/009/05_printer.png&#34; alt=&#34;&#34; /&gt;
+いつものびすけ主催のイベント「IoTLT」などでお世話になっているえむにわさん（ &lt;a href=&#34;https://twitter.com/m2wasabi&#34;&gt;@m2wasabi&lt;/a&gt; ）からは、プリンターをいただきました！　ちょうど印刷したいものがあったのですが、プリンタがなくて「コンビニで印刷するか……？」と困っていたところでした。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/009/06_printer.png&#34; alt=&#34;&#34; /&gt;
+シュッと配置。届いたその日に早速使わせてもらいました。えむにわさん、ありがとうございます！&lt;/p&gt;
+
+&lt;h2 id=&#34;3-シュレッダー-by-1ft-seabass-さん&#34;&gt;3. シュレッダー by @1ft-seabass さん&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/009/07_shredder.png&#34; alt=&#34;&#34; /&gt;
+普段から外部ライターさんとしてお世話になっている田中さん（ &lt;a href=&#34;https://twitter.com/1ft_seabass&#34;&gt;@1ft-seabass&lt;/a&gt; ）からは、シュレダーをプレゼントしていただきました！　これで機密書類を処分できる……。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/009/08_shredder.png&#34; alt=&#34;&#34; /&gt;
+代表ののびすけ。ちょっとにやけてますね。田中さん、ありがとうございます！&lt;/p&gt;
+
+&lt;h2 id=&#34;4-wii-by-iwata-n-さん&#34;&gt;4. Wii by @iwata_n さん&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/009/09_wii.png&#34; alt=&#34;&#34; /&gt;
+外部ライターとしても、イベント関係者としてもめっちゃくちゃお世話になっているいわたん（ &lt;a href=&#34;http://twitter.com/iwata_n&#34;&gt;@iwata_n&lt;/a&gt; ）さんからは、おさがりのWiiをいただきました！　&lt;strong&gt;テレビもつけてくれました&lt;/strong&gt;（！）。
+&lt;!-- ![](/img/blog/009/10_wii.png)（撮影） --&gt;
+みんなで夜な夜なスマブラしてます。ありがとうございます！&lt;/p&gt;
+
+&lt;h2 id=&#34;5-つくえ-by-isseium-さん&#34;&gt;5. つくえ by @isseium さん&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/009/11_desk.png&#34; alt=&#34;&#34; /&gt;
+い、IKEAのデスクです！！！！！！！　3つもいただきました。&lt;br /&gt;
+これまでは箱の上に木の板を乗せたものを使っていた（！）のですが、みんな腰痛が気になりだしていたところでした。作業効率がぐーーーーーんとアップ！！！&lt;strong&gt;「机って大事だね」と、改めて机に感謝する事態に&lt;/strong&gt; までなりました。&lt;a href=&#34;https://twitter.com/isseium&#34;&gt;@isseium&lt;/a&gt;さん、ありがとうございます！&lt;/p&gt;
+
+&lt;h2 id=&#34;まだまだ募集しています&#34;&gt;まだまだ募集しています&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/009/12_open.png&#34; alt=&#34;&#34; /&gt;
+&lt;em&gt;▲セッティングの様子&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;ということで、ウィッシュリストでいただいたものを紹介させてもらいました。&lt;a href=&#34;https://docs.google.com/spreadsheets/u/1/d/1DD5TeMYgGpstDEwbUWsDFJJrvzEyGbcfEL7cqo3XzXs/edit#gid=0&#34;&gt;ウィッシュリスト&lt;/a&gt; はまだまだ公開中です。もし送ってくださる方はご連絡ください〜！&lt;/p&gt;
+
+&lt;p&gt;会社として必要なものを続々と送っていただきました！　これで会社として存続できます。。。改めて、本当に本当にありがとうございます！＆これからもdotstudioをよろしくお願いしますm(_ _)m&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>ウィッシュリスト届きました！開封の儀をします。</title>
+      <link>https://dotstud.io/blog/thanks-for-sending-whitems/</link>
+      <pubDate>Thu, 04 Aug 2016 09:59:47 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/thanks-for-sending-whitems/</guid>
+      <description>
+
+&lt;p&gt;こんにちは！　dotstudioのエディター、うららです。（⬆️こちらの写真は私ではなく、デザイナーのちゃちゃまる）&lt;br /&gt;
+先日公開した&lt;a href=&#34;https://docs.google.com/spreadsheets/u/1/d/1DD5TeMYgGpstDEwbUWsDFJJrvzEyGbcfEL7cqo3XzXs/edit#gid=0&#34;&gt;ウィッシュリスト&lt;/a&gt;の品が続々と届き始めました。ありがとうございます！&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/009/01_open.png&#34; alt=&#34;&#34; /&gt;
+せっかくなので、開封の儀の様子を本記事で紹介していきます！&lt;br /&gt;
+この日届いたのは5つのアイテムです。&lt;/p&gt;
+
+&lt;h2 id=&#34;1-モニターと目覚まし時計-by-さんぺー-たかあき&#34;&gt;1. モニターと目覚まし時計 by さんぺー＆たかあき&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/009/02_monitor.png&#34; alt=&#34;&#34; /&gt;
+まず届いたのは、モニターと目覚まし時計！&lt;br /&gt;
+モニターはさっそく、会議用の机へ。背丈がちょうどいい感じです！&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/009/03_clock.png&#34; alt=&#34;&#34; /&gt;
+ちなみに目覚まし時計はウィッシュリストに入れていません。なぜ。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/009/04_address.png&#34; alt=&#34;&#34; /&gt;
+株式会社LIGのデザイナーたかあき＆ライターさんぺーからいただきました。&lt;br /&gt;
+宛名をよく見ると……&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;「のびたかこめうららちゃちゃうこ 様」&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;おいおいまとめすぎだろ。個人的にツボでした。&lt;br /&gt;
+たかあき、さんぺー、ありがとうございます！！！！&lt;/p&gt;
+
+&lt;h2 id=&#34;2-プリンター-by-m2wasabi-さん&#34;&gt;2. プリンター by @m2wasabi さん&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/009/05_printer.png&#34; alt=&#34;&#34; /&gt;
+いつものびすけ主催のイベント「IoTLT」などでお世話になっているえむにわさん（ &lt;a href=&#34;https://twitter.com/m2wasabi&#34;&gt;@m2wasabi&lt;/a&gt; ）からは、プリンターをいただきました！　ちょうど印刷したいものがあったのですが、プリンタがなくて「コンビニで印刷するか……？」と困っていたところでした。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/009/06_printer.png&#34; alt=&#34;&#34; /&gt;
+シュッと配置。届いたその日に早速使わせてもらいました。えむにわさん、ありがとうございます！&lt;/p&gt;
+
+&lt;h2 id=&#34;3-シュレッダー-by-1ft-seabass-さん&#34;&gt;3. シュレッダー by @1ft-seabass さん&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/009/07_shredder.png&#34; alt=&#34;&#34; /&gt;
+普段から外部ライターさんとしてお世話になっている田中さん（ &lt;a href=&#34;https://twitter.com/1ft_seabass&#34;&gt;@1ft-seabass&lt;/a&gt; ）からは、シュレダーをプレゼントしていただきました！　これで機密書類を処分できる……。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/009/08_shredder.png&#34; alt=&#34;&#34; /&gt;
+代表ののびすけ。ちょっとにやけてますね。田中さん、ありがとうございます！&lt;/p&gt;
+
+&lt;h2 id=&#34;4-wii-by-iwata-n-さん&#34;&gt;4. Wii by @iwata_n さん&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/009/09_wii.png&#34; alt=&#34;&#34; /&gt;
+外部ライターとしても、イベント関係者としてもめっちゃくちゃお世話になっているいわたん（ &lt;a href=&#34;http://twitter.com/iwata_n&#34;&gt;@iwata_n&lt;/a&gt; ）さんからは、おさがりのWiiをいただきました！　&lt;strong&gt;テレビもつけてくれました&lt;/strong&gt;（！）。
+&lt;!-- ![](/img/blog/009/10_wii.png)（撮影） --&gt;
+みんなで夜な夜なスマブラしてます。ありがとうございます！&lt;/p&gt;
+
+&lt;h2 id=&#34;5-つくえ-by-isseium-さん&#34;&gt;5. つくえ by @isseium さん&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/009/11_desk.png&#34; alt=&#34;&#34; /&gt;
+い、IKEAのデスクです！！！！！！！　3つもいただきました。&lt;br /&gt;
+これまでは箱の上に木の板を乗せたものを使っていた（！）のですが、みんな腰痛が気になりだしていたところでした。作業効率がぐーーーーーんとアップ！！！&lt;strong&gt;「机って大事だね」と、改めて机に感謝する事態に&lt;/strong&gt; までなりました。&lt;a href=&#34;https://twitter.com/isseium&#34;&gt;@isseium&lt;/a&gt;さん、ありがとうございます！&lt;/p&gt;
+
+&lt;h2 id=&#34;まだまだ募集しています&#34;&gt;まだまだ募集しています&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/009/12_open.png&#34; alt=&#34;&#34; /&gt;
+&lt;em&gt;▲セッティングの様子&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;ということで、ウィッシュリストでいただいたものを紹介させてもらいました。&lt;a href=&#34;https://docs.google.com/spreadsheets/u/1/d/1DD5TeMYgGpstDEwbUWsDFJJrvzEyGbcfEL7cqo3XzXs/edit#gid=0&#34;&gt;ウィッシュリスト&lt;/a&gt; はまだまだ公開中です。もし送ってくださる方はご連絡ください〜！&lt;/p&gt;
+
+&lt;p&gt;会社として必要なものを続々と送っていただきました！　これで会社として存続できます。。。改めて、本当に本当にありがとうございます！＆これからもdotstudioをよろしくお願いしますm(_ _)m&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>	もう、傘を失くさない！Bluetoothを搭載したスマート傘「HAZ」が世界を変えるかも？</title>
+      <link>https://dotstud.io/blog/haz-umbrella-remote-control/</link>
+      <pubDate>Wed, 03 Aug 2016 08:00:41 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/haz-umbrella-remote-control/</guid>
+      <description>
+
+&lt;p&gt;こんにちは〜！　dotstudioライターのおこめです。&lt;/p&gt;
+
+&lt;p&gt;最近雨の日が多くて、外に出ても傘を開けたり閉めたり面倒くさいですし、うっかり失くしてしまったりと最悪です……。そんなときに、画期的な傘を見つけました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/01_haz.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;スマート傘「HAZ」とは？&lt;/em&gt;
+&lt;em&gt;日本未上陸、片手で自動開閉できる傘。台湾のスタートアップが作り、現在はアメリカで話題になっています。Bluetoothが搭載されているため、どこで失くしたかをアプリから探知することもできるんです。詳細は&lt;a href=&#34;http://www.hazumbrella.com/&#34;&gt;こちら&lt;/a&gt;からどうぞ。&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;ところで、雨の日っていつもと違う雰囲気で、異世界みたいでいいですよね。伊坂幸太郎さんの著書『死神の精度』に登場する死神の千葉さんは、「雨の日しか人間界に出てこない」という設定ですし。&lt;/p&gt;
+
+&lt;p&gt;もし &lt;strong&gt;今生きている世界とは違う世界があるのだとしたら、どんな世界になるのでしょう？&lt;/strong&gt; 今いる世界とは違う世界、つまりパラレルワールドですね。ということで今回は、傘を使ったパラレルワールド……ならぬ「&lt;strong&gt;パラソルワールド&lt;/strong&gt;」を考えてみました。&lt;/p&gt;
+
+&lt;p&gt;それでは、スタートです！&lt;/p&gt;
+
+&lt;h2 id=&#34;片手で閉じられる傘-haz-がない世界&#34;&gt;片手で閉じられる傘「HAZ」がない世界&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/02_close1.png&#34; alt=&#34;&#34; /&gt;
+今日は彼氏とデートする日だぁ。あいにくの雨だけど、きっと大丈夫。だって大学院を受験する彼のためにダルマを買ってきてあげたんだもん。よしっ！　喜ばせちゃうぞう♪&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/03_close1.png&#34; alt=&#34;&#34; /&gt;
+軽く顎をひき、口角を45°上げたキラースマイル。ここでちょっと首をかしげるのも◎。大きなダルマとの対比で私の顔がちっちゃく見えてるはず。あとは両手で可愛らしくダルマをプレゼントしたら高ポイントだな。&lt;/p&gt;
+
+&lt;p&gt;さて、傘を閉じてっ……と……&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/04_close1.png&#34; alt=&#34;&#34; /&gt;
+&lt;strong&gt;ういっしょぉおおおおおおおおおおおおおおおおっっと！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/05_close1.png&#34; alt=&#34;&#34; /&gt;
+&lt;strong&gt;ボトッ&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/06_close1.png&#34; alt=&#34;&#34; /&gt;
+彼氏「目の前で落とすなんて……大学院にも落ちそうだよ！」&lt;br /&gt;
+私だって落としたくて落としたわけじゃないのに……。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/07_close1.png&#34; alt=&#34;&#34; /&gt;
+彼氏「ありえない。さよなら」&lt;br /&gt;
+おこめ「ちょっと待って！　行かないで！　私には貴方しかいないの！！」&lt;/p&gt;
+
+&lt;p&gt;キメ台詞も言ったのにフラれた……。最悪。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt; &lt;em&gt;〜BAD END〜&lt;/em&gt; &lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;・&lt;/p&gt;
+
+&lt;p&gt;・&lt;/p&gt;
+
+&lt;p&gt;・&lt;/p&gt;
+
+&lt;h2 id=&#34;片手で閉じられる傘-haz-がある世界&#34;&gt;片手で閉じられる傘「HAZ」がある世界&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/08_close2.png&#34; alt=&#34;&#34; /&gt;
+今日は彼氏とデートする日だぁ。あいにくの雨だけど、きっと大丈夫。この前買ったばかりの「HAZ」って傘だってあるし、大学院を受験する彼のためにダルマを買ってきてあげたんだもん。よしっ！　喜ばせちゃうぞう♪&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://cdn.liginc.co.jp/wp-content/uploads/2016/06/DSC_0150-1.gif&#34; alt=&#34;&#34; /&gt;
+早速ダルマを渡すために片手で傘を閉じよーっと！&lt;br /&gt;
+彼氏に会えて私、有頂天。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/10_close2.png&#34; alt=&#34;&#34; /&gt;
+小首をかしげながら、両手でしっかりとダルマ渡す。&lt;br /&gt;
+このとき、彼氏の目をしっかり見ることを忘れずに。うん可愛いぞ、私。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/11_close2.png&#34; alt=&#34;&#34; /&gt;
+彼氏「ありがとう！　早速だけど合格できるように目を書いておくね」&lt;br /&gt;
+真剣な彼、超絶かっこいい♡&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/12_close2.png&#34; alt=&#34;&#34; /&gt;
+相合傘で2人並んで帰ってる姿にダルマも微笑んでくれてるみたい。バリ楽しい！&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/13_close2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt; &lt;em&gt;〜HAPPY END〜&lt;/em&gt; &lt;/center&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;bluetoothで位置がわかる傘-haz-がない世界&#34;&gt;Bluetoothで位置がわかる傘「HAZ」がない世界&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/14_bluetooth1.png&#34; alt=&#34;&#34; /&gt;
+やっば。あのあと傘どっかに置いてきちゃったみたい〜。探しにいこ〜っと。&lt;br /&gt;
+私ってドジっ子ちゃん。&lt;/p&gt;
+
+&lt;p&gt;・&lt;/p&gt;
+
+&lt;p&gt;・&lt;/p&gt;
+
+&lt;p&gt;・&lt;/p&gt;
+
+&lt;h3 id=&#34;3日後&#34;&gt;3日後&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/15_bluetooth1.png&#34; alt=&#34;&#34; /&gt;
+傘がなくなっちゃったから、今日も傘を探してる。この前から3日間も探してるけど見つからないな。&lt;br /&gt;
+私ってドジっ子ちゃん。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/16_bluetooth1.png&#34; alt=&#34;&#34; /&gt;
+風邪で死んじゃった。&lt;br /&gt;
+私ってドジっ子ちゃん。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt; &lt;em&gt;〜BAD END〜&lt;/em&gt; &lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;・&lt;/p&gt;
+
+&lt;p&gt;・&lt;/p&gt;
+
+&lt;p&gt;・&lt;/p&gt;
+
+&lt;p&gt;・&lt;/p&gt;
+
+&lt;h2 id=&#34;bluetoothで位置がわかる傘-haz-がある世界&#34;&gt;Bluetoothで位置がわかる傘「HAZ」がある世界&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/14_bluetooth1.png&#34; alt=&#34;&#34; /&gt;
+やっば。あのあと傘どっかに置いてきちゃったみたい〜。&lt;br /&gt;
+私ってドジっ子ちゃん。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/17_bluetooth2.png&#34; alt=&#34;&#34; /&gt;
+でも大丈夫。「HAZ」はBluetoothで携帯のアプリと繋がるから、どの場所でBluetoothが切れたかをアプリで確認できるんだった。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/18_bluetooth2.png&#34; alt=&#34;&#34; /&gt;
+あっ！　神社で忘れたっぽい……。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/19_bluetooth2.png&#34; alt=&#34;&#34; /&gt;
+あっ！　あった〜。&lt;br /&gt;
+ふぅ、よかったぁ……&lt;strong&gt;ん？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/20_bluetooth2.png&#34; alt=&#34;&#34; /&gt;
+&lt;strong&gt;はぁぁああああああぁぁん！？&lt;/strong&gt;&lt;br /&gt;
+彼氏が他の女の子からダルマをもらってる！？！？！？&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/21_bluetooth2.png&#34; alt=&#34;&#34; /&gt;
+彼氏「だるまをもらえて幸せだよ。愛してる」&lt;br /&gt;
+女の子「私も♡」&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/22_bluetooth2.png&#34; alt=&#34;&#34; /&gt;
+（……きっと彼は今幸せな気分に浸ってるでしょう？　後ろから近づいてハンカチに染み込ませたクロロホルムを嗅がせるの。すぐにお休みできるから心配しないでね。起きた瞬間に感じるのは両手と両足につけられた鉄の重みだと思う。漏斗を口の中に入れ、喉の奥に水を入れ続ける。一気に飲ませちゃって呼吸困難で殺しちゃうのはだめ。毎日少しずつ水を入れ続ける。下からも水を垂れ流し続ける。彼は水膨れしてパンパンの水風船のようになる。それが末期に達すると激痛が走る。痛くて痛くて死にそうなのに、まだ水を飲まされ続ける。最期には身体に外傷が無い綺麗な遺体ができる。それをホルマリンに漬けて保存しとくんだ。すごく楽しそう……）&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/23_bluetooth2.png&#34; alt=&#34;&#34; /&gt;
+「まぁ、いっか。別にあいつのこと、そんなに好きじゃなかったし。&lt;strong&gt;&lt;a href=&#34;http://www.hazumbrella.com/&#34;&gt;HAZ&lt;/a&gt;帰ってきたし&lt;/strong&gt;」&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/24_bluetooth2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt; &lt;em&gt;〜HAPPY END〜&lt;/em&gt; &lt;/center&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>	もう、傘を失くさない！Bluetoothを搭載したスマート傘「HAZ」が世界を変えるかも？</title>
+      <link>https://dotstud.io/blog/haz-umbrella-remote-control/</link>
+      <pubDate>Wed, 03 Aug 2016 08:00:41 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/haz-umbrella-remote-control/</guid>
+      <description>
+
+&lt;p&gt;こんにちは〜！　dotstudioライターのおこめです。&lt;/p&gt;
+
+&lt;p&gt;最近雨の日が多くて、外に出ても傘を開けたり閉めたり面倒くさいですし、うっかり失くしてしまったりと最悪です……。そんなときに、画期的な傘を見つけました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/01_haz.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;スマート傘「HAZ」とは？&lt;/em&gt;
+&lt;em&gt;日本未上陸、片手で自動開閉できる傘。台湾のスタートアップが作り、現在はアメリカで話題になっています。Bluetoothが搭載されているため、どこで失くしたかをアプリから探知することもできるんです。詳細は&lt;a href=&#34;http://www.hazumbrella.com/&#34;&gt;こちら&lt;/a&gt;からどうぞ。&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;ところで、雨の日っていつもと違う雰囲気で、異世界みたいでいいですよね。伊坂幸太郎さんの著書『死神の精度』に登場する死神の千葉さんは、「雨の日しか人間界に出てこない」という設定ですし。&lt;/p&gt;
+
+&lt;p&gt;もし &lt;strong&gt;今生きている世界とは違う世界があるのだとしたら、どんな世界になるのでしょう？&lt;/strong&gt; 今いる世界とは違う世界、つまりパラレルワールドですね。ということで今回は、傘を使ったパラレルワールド……ならぬ「&lt;strong&gt;パラソルワールド&lt;/strong&gt;」を考えてみました。&lt;/p&gt;
+
+&lt;p&gt;それでは、スタートです！&lt;/p&gt;
+
+&lt;h2 id=&#34;片手で閉じられる傘-haz-がない世界&#34;&gt;片手で閉じられる傘「HAZ」がない世界&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/02_close1.png&#34; alt=&#34;&#34; /&gt;
+今日は彼氏とデートする日だぁ。あいにくの雨だけど、きっと大丈夫。だって大学院を受験する彼のためにダルマを買ってきてあげたんだもん。よしっ！　喜ばせちゃうぞう♪&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/03_close1.png&#34; alt=&#34;&#34; /&gt;
+軽く顎をひき、口角を45°上げたキラースマイル。ここでちょっと首をかしげるのも◎。大きなダルマとの対比で私の顔がちっちゃく見えてるはず。あとは両手で可愛らしくダルマをプレゼントしたら高ポイントだな。&lt;/p&gt;
+
+&lt;p&gt;さて、傘を閉じてっ……と……&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/04_close1.png&#34; alt=&#34;&#34; /&gt;
+&lt;strong&gt;ういっしょぉおおおおおおおおおおおおおおおおっっと！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/05_close1.png&#34; alt=&#34;&#34; /&gt;
+&lt;strong&gt;ボトッ&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/06_close1.png&#34; alt=&#34;&#34; /&gt;
+彼氏「目の前で落とすなんて……大学院にも落ちそうだよ！」&lt;br /&gt;
+私だって落としたくて落としたわけじゃないのに……。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/07_close1.png&#34; alt=&#34;&#34; /&gt;
+彼氏「ありえない。さよなら」&lt;br /&gt;
+おこめ「ちょっと待って！　行かないで！　私には貴方しかいないの！！」&lt;/p&gt;
+
+&lt;p&gt;キメ台詞も言ったのにフラれた……。最悪。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt; &lt;em&gt;〜BAD END〜&lt;/em&gt; &lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;・&lt;/p&gt;
+
+&lt;p&gt;・&lt;/p&gt;
+
+&lt;p&gt;・&lt;/p&gt;
+
+&lt;h2 id=&#34;片手で閉じられる傘-haz-がある世界&#34;&gt;片手で閉じられる傘「HAZ」がある世界&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/08_close2.png&#34; alt=&#34;&#34; /&gt;
+今日は彼氏とデートする日だぁ。あいにくの雨だけど、きっと大丈夫。この前買ったばかりの「HAZ」って傘だってあるし、大学院を受験する彼のためにダルマを買ってきてあげたんだもん。よしっ！　喜ばせちゃうぞう♪&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://cdn.liginc.co.jp/wp-content/uploads/2016/06/DSC_0150-1.gif&#34; alt=&#34;&#34; /&gt;
+早速ダルマを渡すために片手で傘を閉じよーっと！&lt;br /&gt;
+彼氏に会えて私、有頂天。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/10_close2.png&#34; alt=&#34;&#34; /&gt;
+小首をかしげながら、両手でしっかりとダルマ渡す。&lt;br /&gt;
+このとき、彼氏の目をしっかり見ることを忘れずに。うん可愛いぞ、私。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/11_close2.png&#34; alt=&#34;&#34; /&gt;
+彼氏「ありがとう！　早速だけど合格できるように目を書いておくね」&lt;br /&gt;
+真剣な彼、超絶かっこいい♡&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/12_close2.png&#34; alt=&#34;&#34; /&gt;
+相合傘で2人並んで帰ってる姿にダルマも微笑んでくれてるみたい。バリ楽しい！&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/13_close2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt; &lt;em&gt;〜HAPPY END〜&lt;/em&gt; &lt;/center&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;bluetoothで位置がわかる傘-haz-がない世界&#34;&gt;Bluetoothで位置がわかる傘「HAZ」がない世界&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/14_bluetooth1.png&#34; alt=&#34;&#34; /&gt;
+やっば。あのあと傘どっかに置いてきちゃったみたい〜。探しにいこ〜っと。&lt;br /&gt;
+私ってドジっ子ちゃん。&lt;/p&gt;
+
+&lt;p&gt;・&lt;/p&gt;
+
+&lt;p&gt;・&lt;/p&gt;
+
+&lt;p&gt;・&lt;/p&gt;
+
+&lt;h3 id=&#34;3日後&#34;&gt;3日後&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/15_bluetooth1.png&#34; alt=&#34;&#34; /&gt;
+傘がなくなっちゃったから、今日も傘を探してる。この前から3日間も探してるけど見つからないな。&lt;br /&gt;
+私ってドジっ子ちゃん。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/16_bluetooth1.png&#34; alt=&#34;&#34; /&gt;
+風邪で死んじゃった。&lt;br /&gt;
+私ってドジっ子ちゃん。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt; &lt;em&gt;〜BAD END〜&lt;/em&gt; &lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;・&lt;/p&gt;
+
+&lt;p&gt;・&lt;/p&gt;
+
+&lt;p&gt;・&lt;/p&gt;
+
+&lt;p&gt;・&lt;/p&gt;
+
+&lt;h2 id=&#34;bluetoothで位置がわかる傘-haz-がある世界&#34;&gt;Bluetoothで位置がわかる傘「HAZ」がある世界&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/14_bluetooth1.png&#34; alt=&#34;&#34; /&gt;
+やっば。あのあと傘どっかに置いてきちゃったみたい〜。&lt;br /&gt;
+私ってドジっ子ちゃん。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/17_bluetooth2.png&#34; alt=&#34;&#34; /&gt;
+でも大丈夫。「HAZ」はBluetoothで携帯のアプリと繋がるから、どの場所でBluetoothが切れたかをアプリで確認できるんだった。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/18_bluetooth2.png&#34; alt=&#34;&#34; /&gt;
+あっ！　神社で忘れたっぽい……。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/19_bluetooth2.png&#34; alt=&#34;&#34; /&gt;
+あっ！　あった〜。&lt;br /&gt;
+ふぅ、よかったぁ……&lt;strong&gt;ん？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/20_bluetooth2.png&#34; alt=&#34;&#34; /&gt;
+&lt;strong&gt;はぁぁああああああぁぁん！？&lt;/strong&gt;&lt;br /&gt;
+彼氏が他の女の子からダルマをもらってる！？！？！？&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/21_bluetooth2.png&#34; alt=&#34;&#34; /&gt;
+彼氏「だるまをもらえて幸せだよ。愛してる」&lt;br /&gt;
+女の子「私も♡」&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/22_bluetooth2.png&#34; alt=&#34;&#34; /&gt;
+（……きっと彼は今幸せな気分に浸ってるでしょう？　後ろから近づいてハンカチに染み込ませたクロロホルムを嗅がせるの。すぐにお休みできるから心配しないでね。起きた瞬間に感じるのは両手と両足につけられた鉄の重みだと思う。漏斗を口の中に入れ、喉の奥に水を入れ続ける。一気に飲ませちゃって呼吸困難で殺しちゃうのはだめ。毎日少しずつ水を入れ続ける。下からも水を垂れ流し続ける。彼は水膨れしてパンパンの水風船のようになる。それが末期に達すると激痛が走る。痛くて痛くて死にそうなのに、まだ水を飲まされ続ける。最期には身体に外傷が無い綺麗な遺体ができる。それをホルマリンに漬けて保存しとくんだ。すごく楽しそう……）&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/23_bluetooth2.png&#34; alt=&#34;&#34; /&gt;
+「まぁ、いっか。別にあいつのこと、そんなに好きじゃなかったし。&lt;strong&gt;&lt;a href=&#34;http://www.hazumbrella.com/&#34;&gt;HAZ&lt;/a&gt;帰ってきたし&lt;/strong&gt;」&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/006/24_bluetooth2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt; &lt;em&gt;〜HAPPY END〜&lt;/em&gt; &lt;/center&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>史上初!? NodeBotsの日本向けキットを作成しました！ #nodebots</title>
+      <link>https://dotstud.io/blog/nodebots-kit-guide-vol1/</link>
+      <pubDate>Tue, 26 Jul 2016 14:48:32 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nodebots-kit-guide-vol1/</guid>
+      <description>
+
+&lt;p&gt;こんにちは、dotstudio代表の&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。
+今日は、世界で人気のNode.js/Johnny-Fiveのワークショップ「&lt;a href=&#34;https://github.com/tableflip/nodebot-workshop&#34;&gt;NodeBot Workshop&lt;/a&gt;」で使うアイテムをまとめた、「&lt;strong&gt;NodeBot Workshop Kit JP ver&lt;/strong&gt;」というキットを作ったのでその紹介をします。
+また、 NodeBot Workshopの1問目の配線解説も本記事で行いますので、ぜひ挑戦してみてください！&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;NodeBot Workshop向けにカスタマイズされたキットはおそらく世界初です！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;NodeBotsの入門は&lt;a href=&#34;http://liginc.co.jp/283711&#34;&gt;こちらの記事(Webな人でもハードウェア制御が簡単に！Node.jsでJavaScript Roboticsを楽しもう #nodebots_jp)&lt;/a&gt;を参照してください！&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;購入ページは&lt;a href=&#34;https://dotstud.io/projects/nodebots-seeeduino-for-beginners/&#34;&gt;こちら&lt;/a&gt;になります。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;iotやるときの-まずはじめに何を買えばいいか分からない-を解消&#34;&gt;IoTやるときの”まずはじめに何を買えばいいか分からない”を解消&lt;/h2&gt;
+
+&lt;p&gt;　入門者にとって最初に何を買えばいいのかって分からないんですよね。NodeBot Workshopでもプログラムまでは書くことができるけど、実際に電子工作をするフェーズで何を準備すればいいのか分からないという人がけっこういました。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://nodebots.io/&#34;&gt;http://nodebots.io/&lt;/a&gt; にも掲載されてますが、&amp;rdquo;最初にこれを買うといいよ&amp;rdquo;というキットは海外ではいくつか存在します。
+&lt;img src=&#34;https://dotstud.io/img/blog/004/01_nodebots_kit.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ただこれらは&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;国際輸送になるため、手元に届くまでにお金と時間がけっこうかかってしまう&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;利用されているマイコンボードは日本の電波法の認証(技摘)が通っていないものもある&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;などの問題点&lt;/strong&gt; がありました。そのため、日本国内でNodeBot WorkshopやJohnny-Fiveに対応しているマイコンボードやセンサーの代替品を探して利用するのが早いし確実なのですが、これも手間と時間が掛かります。&lt;/p&gt;
+
+&lt;p&gt;そこで僕たちの方でNodeBot WorkshopやJohnny-Fiveに対応しているキットを作ることにして、今回のキット開発に至りました。
+&lt;img src=&#34;https://dotstud.io/img/blog/004/02_kitpackage.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;今回用意したキットはプロトタイピングボードも含めてキット化してあるので、 &lt;strong&gt;とりあえずこれを買ってNodeBot Workshopをやれば入門できる&lt;/strong&gt;状態になります。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;試したい！&lt;/code&gt;と思った時にサクッと試せるキットになっています。&lt;/p&gt;
+
+&lt;h2 id=&#34;nodebot-workshop-kit-jp-ver-の中身を解説&#34;&gt;「NodeBot Workshop Kit JP ver」の中身を解説！&lt;/h2&gt;
+
+&lt;p&gt;実際に中身を見てみましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;nodebot-workshopの設問&#34;&gt;NodeBot Workshopの設問&lt;/h3&gt;
+
+&lt;p&gt;準備は&lt;a href=&#34;http://liginc.co.jp/283711&#34;&gt;こちらの記事&lt;/a&gt;を参考にしてください。&lt;/p&gt;
+
+&lt;p&gt;インストールするとNodeBot Workshopコマンドが使えるようになります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ nodebot-workshop
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/004/03_screenshot.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ここまで動くようにしておきましょう。
+各問題のタイトルと内容は以下になります。&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;left&#34;&gt;番号&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;タイトル&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;タイトル(日本語)&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;概要&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;1問&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Blink Blink&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Lチカ&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;LEDをチカチカ点滅させよう&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;2問&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Servo Wave&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;サーボウェーブ&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;サーボモータを動かそう&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;3問&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Spin Moter Spin&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;くるくるモーター回転&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;DCモータを動かそう&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;4問&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Light Switch&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;ライトスイッチ&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;スイッチとLEDを連動させよう&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;5問&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Street Lamp&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;ストリートランプ&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;照度センサとLEDを連動させよう&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;6問&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Ping Bell&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;ピングベル&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;メッセージを受信すると音が鳴るUDPサーバーを作ろう&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;7問&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Robot Arm&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;ロボットアーム&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;サーボモータとポテンショメータを連動させよう&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;8問&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Remote Temperature&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;遠隔地の温度&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;温度を教えてくれるRPCサーバーを作ろう&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;9問&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Fire Alarm&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;火災報知器&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;温度センサとブザーを使って火災報知器を作ろう&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&#34;キットの内容物&#34;&gt;キットの内容物&lt;/h3&gt;
+
+&lt;p&gt;こちらの写真がキットの中身です。パーツの名前と見た目が一致しない人は要確認です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/004/04_nodebotskit.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;各設問でどのパーツを利用するかを以下の表にまとめました。困ったときは確認しましょう。&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;left&#34;&gt;ID&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;NAME&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;利用する問題番号&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;a&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;a href=&#34;http://www.seeedstudio.com/wiki/Seeeduino_v4.2&#34;&gt;Seeeduino v4.2&lt;/a&gt;&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;1~9&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;b&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;USBmicroB ケーブル&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;1~9&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;c&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;ブレッドボード&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;1~9&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;d&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;ジャンプワイヤ&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;1~9&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;e&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;カーボン抵抗 330Ω&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;1,4,5,9&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;f&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;カーボン抵抗 10kΩ&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;4,5,9&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;g&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;LED&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;1,4,5,9&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;h&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;マイクロサーボモータ&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;2,7&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;i&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;小型DCモータ&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;3&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;j&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;タクトスイッチ&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;4,9&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;k&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;CdSセル 1MΩ(照度センサ)&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;5&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;l&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;半固定抵抗 (ポテンショメータ)&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;7&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;n&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;温度センサ&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;8,9&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;m&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;圧電ブザー&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;6,9&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&#34;1問目のlチカの回路図解説&#34;&gt;1問目のLチカの回路図解説&lt;/h3&gt;
+
+&lt;p&gt;1秒ごとにLチカさせるプログラムを書く問題です。問題文は&lt;a href=&#34;https://github.com/tableflip/nodebot-workshop/blob/master/exercises/blink_blink/problem.ja.md&#34;&gt;こちら&lt;/a&gt;をどうぞ。&lt;/p&gt;
+
+&lt;h4 id=&#34;準備物&#34;&gt;準備物&lt;/h4&gt;
+
+&lt;p&gt;先ほどの表のIDと照らし合わせて見てみましょう。
+ちなみにすべての問題でa~dは利用します。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;a: Seeeduino&lt;/li&gt;
+&lt;li&gt;b: USBmicroB ケーブル&lt;/li&gt;
+&lt;li&gt;c: ブレッドボード&lt;/li&gt;
+&lt;li&gt;d: ジャンプワイヤ x 2&lt;/li&gt;
+&lt;li&gt;e: カーボン抵抗 330Ω&lt;/li&gt;
+&lt;li&gt;g: LED&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&#34;配線&#34;&gt;配線&lt;/h4&gt;
+
+&lt;p&gt;1問目はLEDを点灯させることが目的です。SeeeduinoとLEDを線でつないでみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/004/05_fritzing.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;実行&#34;&gt;実行&lt;/h4&gt;
+
+&lt;p&gt;プログラムを作成し、配線も行ったら実際に&lt;code&gt;nodeコマンド&lt;/code&gt;で実行してみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/004/06_exec.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;プログラムと配線が成功していれば、こんな感じでLEDが点滅します。&lt;/p&gt;
+
+&lt;p&gt;どうでしょう、できましたか?&lt;/p&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;NodeBotsでイベントを開催したり、こういった記事を書いたりしてますが、JavaScript Robotics界がもっと盛り上がって欲しいという気持ちがあります。
+ブラウザの実装はやはりJavaScriptなので、JavaScriptでハードウェア制御できるとWeb側もHW側も共通言語を使うことができて、JSerにはかなり楽しい世界になるのではないでしょうか？&lt;/p&gt;
+
+&lt;p&gt;今回のNodeBot Workshop Kitを使うことで、そういったJavaScript好きな人がハードウェアやセンサー選びでつまづかないためのものになればいいなと思っています。
+イベントなどでも販売していきますが、とりあえずはオンラインで買えるようにしてあります。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;まぁ僕がいたらせっかくのオフィスもダーツ仕様になりますよね &lt;a href=&#34;https://t.co/bej7l8QBCE&#34;&gt;pic.twitter.com/bej7l8QBCE&lt;/a&gt;&lt;/p&gt;&amp;mdash; chachamaru (@chachmaru) &lt;a href=&#34;https://twitter.com/chachmaru/status/757848176657260544&#34;&gt;2016年7月26日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;こんな感じ(笑)で丁寧に梱包してますのでご興味を持った方がいれば是非試してみてください！&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;購入ページは&lt;a href=&#34;https://dotstud.io/projects/nodebots-seeeduino-for-beginners/&#34;&gt;こちら&lt;/a&gt;になります。&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>今週末はInternational NodeBots Dayですよ！( #NodeBots vol2のイベレポと次回告知 )</title>
+      <link>https://dotstud.io/blog/nodebots-handson-report-vol2/</link>
+      <pubDate>Mon, 25 Jul 2016 15:31:20 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nodebots-handson-report-vol2/</guid>
+      <description>
+
+&lt;p&gt;こんにちは、のびすけです。&lt;/p&gt;
+
+&lt;p&gt;時間が経ってしまいましたが、NodeBotsハンズオンのレポートをします！ &lt;a href=&#34;http://nodebots.connpass.com/event/34073/&#34;&gt;明日もイベントがある&lt;/a&gt;のでその告知もさせてください（笑）&lt;/p&gt;
+
+&lt;h2 id=&#34;nodebotsって&#34;&gt;NodeBotsって?&lt;/h2&gt;
+
+&lt;p&gt;さて、みなさんは「NodeBots」という言葉を知ってますか？&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://nodebots.io/&#34;&gt;http://nodebots.io/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/003/01_nodebots.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;NodeBotsとは、Node.jsでハードウェアを制御するイベントやコミュニティの総称です。世界的に開催されています。&lt;/p&gt;
+
+&lt;p&gt;僕が以前書いた、&lt;a href=&#34;http://liginc.co.jp/283711&#34;&gt;Webな人でもハードウェア制御が簡単に！Node.jsでJavaScript Roboticsを楽しもう #nodebots_jp&lt;/a&gt;を読んでもらえると早いんですけど、いろんな場所でNodeBotsについては書き続けます（笑）&lt;/p&gt;
+
+&lt;h2 id=&#34;nodebots-johnny-fiveハンズオン&#34;&gt;NodeBots Johnny-Fiveハンズオン&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/003/02_op.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://johnny-five.io/&#34;&gt;Johnny-Five&lt;/a&gt;というNode.jsで、マイコンボード「Arduino」を制御するライブラリがあります。各国では、このライブラリを使ってNodeBotsのイベントを開催することが多いようです。&lt;/p&gt;
+
+&lt;h3 id=&#34;dmm-make-akibaを会場にvol2開催&#34;&gt;DMM.make AKIBAを会場にvol2開催&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/003/03_kamimura.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://nodebots.connpass.com/event/31580/&#34;&gt;vol2&lt;/a&gt;は&lt;a href=&#34;https://akiba.dmm-make.com/&#34;&gt;DMM.Make AKIBA&lt;/a&gt;を会場に実施しました。 DMMの上村さんからDMM.make AKIBAの会場説明でスタートです。大半の方が初めて来たとのことで、会場に興味持っている人も多い印象でした。&lt;/p&gt;
+
+&lt;p&gt;さて、&lt;strong&gt;ハンズオンでは人によって進捗が変わるため、ゴールをいくつか設定&lt;/strong&gt; するようにしました。&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;
+&lt;center&gt;
+&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;
+    &lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;今日の目標！ぞい！
+        &lt;a href=&#34;https://twitter.com/hashtag/nodebots_jp?src=hash&#34;&gt;#nodebots_jp&lt;/a&gt;
+        &lt;a href=&#34;https://t.co/k4Eky2Iz5E&#34;&gt;pic.twitter.com/k4Eky2Iz5E&lt;/a&gt;
+    &lt;/p&gt;&amp;mdash; ちゃんとく (@tokutoku393) &lt;a href=&#34;https://twitter.com/tokutoku393/status/742667503654961156&#34;&gt;2016年6月14日&lt;/a&gt;
+&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/tableflip/nodebot-workshop&#34;&gt;NodeBot Workshop&lt;/a&gt;というツールを用いてハンズオンを行うのですが、電子工作はプログラミングフェーズと工作フェーズに分かれるため&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;NodeBot Workshopの3問目（全9問）までクリア&lt;/li&gt;
+&lt;li&gt;用意したパーツを使って3問目までを工作してみる&lt;/li&gt;
+&lt;li&gt;4問目以降もチャレンジ&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;というような設定にしました。&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;
+&lt;img src=&#34;https://dotstud.io/img/blog/003/04_look.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;分からない方にはメンターの方がサポートをして、各々が進めるスタイルのもくもく会に近いタイプのハンズオンです。（ちなみにNodeSchool系のイベントはだいたいこんな感じです）&lt;/p&gt;
+
+&lt;p&gt;JavaScriptを使う前提+そこまでJavaScript分からなくても聞けばなんとかなるんじゃないかと思ってた節はあるのですが、参加者の方が書いてくれた&lt;a href=&#34;http://wp.pxdesign.jp/2016/06/15/nodebots-johnny-five-arduino-servo/&#34;&gt;レポート記事&lt;/a&gt;を見る限り、JavaScriptをほとんど触ったことのない初心者だと少しハードルが高かったようでした（苦笑）&lt;/p&gt;
+
+&lt;p&gt;これはなんとかしないといけないですね。もう少し丁寧な解説記事などを用意したほうが良さそうだなと思いつつ、とりあえず
+&lt;a href=&#34;https://www.github.com/sethvincent/javascripting&#34;&gt;NodeSchoolのJavaScriptカリキュラム&lt;/a&gt;をお勧めしておきます。&lt;/p&gt;
+
+&lt;p&gt;少しは敷居を下げてくれるかもしれません。&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;
+&lt;img src=&#34;https://dotstud.io/img/blog/003/05_toast.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;頭を使ったあとは、懇親会で感想などをわいわい言い合いました。&lt;/p&gt;
+
+&lt;h3 id=&#34;感想など&#34;&gt;感想など&lt;/h3&gt;
+
+&lt;p&gt;主催側の感触なのですが、だいたい2問目まではみんな動かすことができていました。「JSを初めて触った！」という人でも3問目には取り組めてた印象です。2時間弱程度の短い時間にしてはいい進み具合だった気もしてますが、もっと丁寧なサポートも必要だなと感じました。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Johnny-FiveのメリットはJavaScriptで書けてWebとの接続が行いやすい&lt;/strong&gt; ところだと思っているので、ハードウェア側だけではなく、 &lt;strong&gt;Milkcocoaを使ったりしてWebと繋げるやり方も紹介したらもっと楽しくなる&lt;/strong&gt; 気がしました。&lt;/p&gt;
+
+&lt;p&gt;とりあえず、みんな笑顔で終われていたので大満足です。（けっこう大事）&lt;/p&gt;
+
+&lt;h2 id=&#34;次回は-7-26-明日&#34;&gt;次回は &lt;sup&gt;7&lt;/sup&gt;&amp;frasl;&lt;sub&gt;26&lt;/sub&gt; （明日!）&lt;/h2&gt;
+
+&lt;p&gt;さて、こんなイベントを毎月やってるのですが、次回はなんと &lt;sup&gt;7&lt;/sup&gt;&amp;frasl;&lt;sub&gt;26&lt;/sub&gt; （明日）です（笑）&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/003/06_vol3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://nodebots.connpass.com/event/34073/&#34;&gt;connpassのページ&lt;/a&gt;から応募できるので是非今からでも参加登録してください！ :)&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Web界隈の人でハードウェアや電子工作が気になってる人&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ハードウェア界隈の人でJavaScriptが気になってる人&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;その他IoTとか興味ある人&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;が主な対象ですので、当てはまる！って人は是非お越しください!&lt;/p&gt;
+
+&lt;h2 id=&#34;そして週末-7-30-土-は全世界同時開催のinternational-nodebots-day&#34;&gt;そして週末 &lt;sup&gt;7&lt;/sup&gt;&amp;frasl;&lt;sub&gt;30&lt;/sub&gt; （土）は全世界同時開催のInternational NodeBots Day!!&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/003/07_nodebots_day.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;sup&gt;7&lt;/sup&gt;&amp;frasl;&lt;sub&gt;30&lt;/sub&gt; には全世界同時開催のイベントである&lt;a href=&#34;https://github.com/nodebots/nodebotsday&#34;&gt;NodeBots Day&lt;/a&gt;が開催されます。&lt;/p&gt;
+
+&lt;p&gt;東京イベントとしてNodeBots Day Tokyoも開催されますので、是非こちらもご参加ください!&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://nodebots.connpass.com/event/35559/&#34;&gt;http://nodebots.connpass.com/event/35559/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;それではイベントでお会いしましょう！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>今週末はInternational NodeBots Dayですよ！( #NodeBots vol2のイベレポと次回告知 )</title>
+      <link>https://dotstud.io/blog/nodebots-handson-report-vol2/</link>
+      <pubDate>Mon, 25 Jul 2016 15:31:20 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nodebots-handson-report-vol2/</guid>
+      <description>
+
+&lt;p&gt;こんにちは、のびすけです。&lt;/p&gt;
+
+&lt;p&gt;時間が経ってしまいましたが、NodeBotsハンズオンのレポートをします！ &lt;a href=&#34;http://nodebots.connpass.com/event/34073/&#34;&gt;明日もイベントがある&lt;/a&gt;のでその告知もさせてください（笑）&lt;/p&gt;
+
+&lt;h2 id=&#34;nodebotsって&#34;&gt;NodeBotsって?&lt;/h2&gt;
+
+&lt;p&gt;さて、みなさんは「NodeBots」という言葉を知ってますか？&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://nodebots.io/&#34;&gt;http://nodebots.io/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/003/01_nodebots.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;NodeBotsとは、Node.jsでハードウェアを制御するイベントやコミュニティの総称です。世界的に開催されています。&lt;/p&gt;
+
+&lt;p&gt;僕が以前書いた、&lt;a href=&#34;http://liginc.co.jp/283711&#34;&gt;Webな人でもハードウェア制御が簡単に！Node.jsでJavaScript Roboticsを楽しもう #nodebots_jp&lt;/a&gt;を読んでもらえると早いんですけど、いろんな場所でNodeBotsについては書き続けます（笑）&lt;/p&gt;
+
+&lt;h2 id=&#34;nodebots-johnny-fiveハンズオン&#34;&gt;NodeBots Johnny-Fiveハンズオン&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/003/02_op.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://johnny-five.io/&#34;&gt;Johnny-Five&lt;/a&gt;というNode.jsで、マイコンボード「Arduino」を制御するライブラリがあります。各国では、このライブラリを使ってNodeBotsのイベントを開催することが多いようです。&lt;/p&gt;
+
+&lt;h3 id=&#34;dmm-make-akibaを会場にvol2開催&#34;&gt;DMM.make AKIBAを会場にvol2開催&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/003/03_kamimura.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://nodebots.connpass.com/event/31580/&#34;&gt;vol2&lt;/a&gt;は&lt;a href=&#34;https://akiba.dmm-make.com/&#34;&gt;DMM.Make AKIBA&lt;/a&gt;を会場に実施しました。 DMMの上村さんからDMM.make AKIBAの会場説明でスタートです。大半の方が初めて来たとのことで、会場に興味持っている人も多い印象でした。&lt;/p&gt;
+
+&lt;p&gt;さて、&lt;strong&gt;ハンズオンでは人によって進捗が変わるため、ゴールをいくつか設定&lt;/strong&gt; するようにしました。&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;
+&lt;center&gt;
+&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;
+    &lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;今日の目標！ぞい！
+        &lt;a href=&#34;https://twitter.com/hashtag/nodebots_jp?src=hash&#34;&gt;#nodebots_jp&lt;/a&gt;
+        &lt;a href=&#34;https://t.co/k4Eky2Iz5E&#34;&gt;pic.twitter.com/k4Eky2Iz5E&lt;/a&gt;
+    &lt;/p&gt;&amp;mdash; ちゃんとく (@tokutoku393) &lt;a href=&#34;https://twitter.com/tokutoku393/status/742667503654961156&#34;&gt;2016年6月14日&lt;/a&gt;
+&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/tableflip/nodebot-workshop&#34;&gt;NodeBot Workshop&lt;/a&gt;というツールを用いてハンズオンを行うのですが、電子工作はプログラミングフェーズと工作フェーズに分かれるため&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;NodeBot Workshopの3問目（全9問）までクリア&lt;/li&gt;
+&lt;li&gt;用意したパーツを使って3問目までを工作してみる&lt;/li&gt;
+&lt;li&gt;4問目以降もチャレンジ&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;というような設定にしました。&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;
+&lt;img src=&#34;https://dotstud.io/img/blog/003/04_look.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;分からない方にはメンターの方がサポートをして、各々が進めるスタイルのもくもく会に近いタイプのハンズオンです。（ちなみにNodeSchool系のイベントはだいたいこんな感じです）&lt;/p&gt;
+
+&lt;p&gt;JavaScriptを使う前提+そこまでJavaScript分からなくても聞けばなんとかなるんじゃないかと思ってた節はあるのですが、参加者の方が書いてくれた&lt;a href=&#34;http://wp.pxdesign.jp/2016/06/15/nodebots-johnny-five-arduino-servo/&#34;&gt;レポート記事&lt;/a&gt;を見る限り、JavaScriptをほとんど触ったことのない初心者だと少しハードルが高かったようでした（苦笑）&lt;/p&gt;
+
+&lt;p&gt;これはなんとかしないといけないですね。もう少し丁寧な解説記事などを用意したほうが良さそうだなと思いつつ、とりあえず
+&lt;a href=&#34;https://www.github.com/sethvincent/javascripting&#34;&gt;NodeSchoolのJavaScriptカリキュラム&lt;/a&gt;をお勧めしておきます。&lt;/p&gt;
+
+&lt;p&gt;少しは敷居を下げてくれるかもしれません。&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;
+&lt;img src=&#34;https://dotstud.io/img/blog/003/05_toast.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;頭を使ったあとは、懇親会で感想などをわいわい言い合いました。&lt;/p&gt;
+
+&lt;h3 id=&#34;感想など&#34;&gt;感想など&lt;/h3&gt;
+
+&lt;p&gt;主催側の感触なのですが、だいたい2問目まではみんな動かすことができていました。「JSを初めて触った！」という人でも3問目には取り組めてた印象です。2時間弱程度の短い時間にしてはいい進み具合だった気もしてますが、もっと丁寧なサポートも必要だなと感じました。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Johnny-FiveのメリットはJavaScriptで書けてWebとの接続が行いやすい&lt;/strong&gt; ところだと思っているので、ハードウェア側だけではなく、 &lt;strong&gt;Milkcocoaを使ったりしてWebと繋げるやり方も紹介したらもっと楽しくなる&lt;/strong&gt; 気がしました。&lt;/p&gt;
+
+&lt;p&gt;とりあえず、みんな笑顔で終われていたので大満足です。（けっこう大事）&lt;/p&gt;
+
+&lt;h2 id=&#34;次回は-7-26-明日&#34;&gt;次回は &lt;sup&gt;7&lt;/sup&gt;&amp;frasl;&lt;sub&gt;26&lt;/sub&gt; （明日!）&lt;/h2&gt;
+
+&lt;p&gt;さて、こんなイベントを毎月やってるのですが、次回はなんと &lt;sup&gt;7&lt;/sup&gt;&amp;frasl;&lt;sub&gt;26&lt;/sub&gt; （明日）です（笑）&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/003/06_vol3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://nodebots.connpass.com/event/34073/&#34;&gt;connpassのページ&lt;/a&gt;から応募できるので是非今からでも参加登録してください！ :)&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Web界隈の人でハードウェアや電子工作が気になってる人&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ハードウェア界隈の人でJavaScriptが気になってる人&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;その他IoTとか興味ある人&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;が主な対象ですので、当てはまる！って人は是非お越しください!&lt;/p&gt;
+
+&lt;h2 id=&#34;そして週末-7-30-土-は全世界同時開催のinternational-nodebots-day&#34;&gt;そして週末 &lt;sup&gt;7&lt;/sup&gt;&amp;frasl;&lt;sub&gt;30&lt;/sub&gt; （土）は全世界同時開催のInternational NodeBots Day!!&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/003/07_nodebots_day.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;sup&gt;7&lt;/sup&gt;&amp;frasl;&lt;sub&gt;30&lt;/sub&gt; には全世界同時開催のイベントである&lt;a href=&#34;https://github.com/nodebots/nodebotsday&#34;&gt;NodeBots Day&lt;/a&gt;が開催されます。&lt;/p&gt;
+
+&lt;p&gt;東京イベントとしてNodeBots Day Tokyoも開催されますので、是非こちらもご参加ください!&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://nodebots.connpass.com/event/35559/&#34;&gt;http://nodebots.connpass.com/event/35559/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;それではイベントでお会いしましょう！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>三菱総合研究所編『ビジュアル解説 IoT入門』に「IoTLT」が取り上げられました！</title>
+      <link>https://dotstud.io/blog/iot-beginner-book-review/</link>
+      <pubDate>Thu, 21 Jul 2016 15:40:36 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/iot-beginner-book-review/</guid>
+      <description>
+
+&lt;p&gt;こんにちは、dotstudioエディターのうららです。&lt;/p&gt;
+
+&lt;p&gt;三菱総合研究所編『ビジュアル解説 IoT入門』に、のびすけ主催イベント「IoTLT」が取り上げられました！　せっかくなので本記事で紹介したいと思います。&lt;/p&gt;
+
+&lt;h2 id=&#34;どんな本なの&#34;&gt;どんな本なの？&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/002/01_book.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;IoTを全く知らない方でもIoTがわかるように、0から丁寧に解説されている本でした。住む・学ぶ・働くといったライフスタイルにはIoTをどのように取り入れられるか、はたまた農業・小売・エンターテインメントといった業界へのはどのようにIoTが応用できるのかなど、幅広い切り口でIoTが紹介されています！&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;
+&lt;img src=&#34;https://dotstud.io/img/blog/002/02_book.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;このようにレイアウトが固定され、各テーマが解説されています。各回におすすめの本も載っているので、より深く知りたい人の足がかりにもなりそうです。&lt;/p&gt;
+
+&lt;p&gt;そして、この本の P.30に…&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;
+&lt;img src=&#34;https://dotstud.io/img/blog/002/03_iotlt.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;「IoTLT」の文字が！！！&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;
+&lt;img src=&#34;https://dotstud.io/img/blog/002/04_iotlt.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;「IoTLT」を始めた当初は30人ほどしか集まらなかったそうですが、今や毎月開かれる勉強会には毎回200人以上が集まる大きなコミュニティとなりました。本に取り上げられる規模まで成長するコミュニティは、なかなか珍しいのではないでしょうか。&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;
+&lt;img src=&#34;https://dotstud.io/img/blog/002/05_n0bisuke.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;見つけたときののびさんはとても嬉しそうでした。このブログを読んでいるみなさんもぜひ本をチェックしてみてください！&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;本は日経ストアからゲットできるようです。：&lt;a href=&#34;https://eb.store.nikkei.com/asp/ShowItemDetailStart.do?itemId=D3-00032067C0&#34;&gt;日経ストア&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;この本を編集した三菱総合研究所は、約700名の研究員が所属するシンクタンクです。1970年の創業以来、幅広い分野で活躍しています。今回本を送ってくださった研究所所属・&lt;a href=&#34;http://www.mri.co.jp/company/staff/detail/profile_0405.html&#34;&gt;大川真史氏&lt;/a&gt;は、エンタープライズ向けIoTLT「&lt;a href=&#34;http://liginc.co.jp/269905&#34;&gt;EIoTLT&lt;/a&gt;」でも登壇いただいています。
+（本を送っていただきありがとうございます！）&lt;/p&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;dotstudioが設立されてから、早いもので半月が経ちました。
+今後も、IoTLTやdotstudioのECサイトを通してIoTを広めていくつもりです。
+よろしくお願いしますー！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>三菱総合研究所編『ビジュアル解説 IoT入門』に「IoTLT」が取り上げられました！</title>
+      <link>https://dotstud.io/blog/iot-beginner-book-review/</link>
+      <pubDate>Thu, 21 Jul 2016 15:40:36 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/iot-beginner-book-review/</guid>
+      <description>
+
+&lt;p&gt;こんにちは、dotstudioエディターのうららです。&lt;/p&gt;
+
+&lt;p&gt;三菱総合研究所編『ビジュアル解説 IoT入門』に、のびすけ主催イベント「IoTLT」が取り上げられました！　せっかくなので本記事で紹介したいと思います。&lt;/p&gt;
+
+&lt;h2 id=&#34;どんな本なの&#34;&gt;どんな本なの？&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/002/01_book.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;IoTを全く知らない方でもIoTがわかるように、0から丁寧に解説されている本でした。住む・学ぶ・働くといったライフスタイルにはIoTをどのように取り入れられるか、はたまた農業・小売・エンターテインメントといった業界へのはどのようにIoTが応用できるのかなど、幅広い切り口でIoTが紹介されています！&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;
+&lt;img src=&#34;https://dotstud.io/img/blog/002/02_book.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;このようにレイアウトが固定され、各テーマが解説されています。各回におすすめの本も載っているので、より深く知りたい人の足がかりにもなりそうです。&lt;/p&gt;
+
+&lt;p&gt;そして、この本の P.30に…&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;
+&lt;img src=&#34;https://dotstud.io/img/blog/002/03_iotlt.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;「IoTLT」の文字が！！！&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;
+&lt;img src=&#34;https://dotstud.io/img/blog/002/04_iotlt.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;「IoTLT」を始めた当初は30人ほどしか集まらなかったそうですが、今や毎月開かれる勉強会には毎回200人以上が集まる大きなコミュニティとなりました。本に取り上げられる規模まで成長するコミュニティは、なかなか珍しいのではないでしょうか。&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;
+&lt;img src=&#34;https://dotstud.io/img/blog/002/05_n0bisuke.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;見つけたときののびさんはとても嬉しそうでした。このブログを読んでいるみなさんもぜひ本をチェックしてみてください！&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;本は日経ストアからゲットできるようです。：&lt;a href=&#34;https://eb.store.nikkei.com/asp/ShowItemDetailStart.do?itemId=D3-00032067C0&#34;&gt;日経ストア&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;この本を編集した三菱総合研究所は、約700名の研究員が所属するシンクタンクです。1970年の創業以来、幅広い分野で活躍しています。今回本を送ってくださった研究所所属・&lt;a href=&#34;http://www.mri.co.jp/company/staff/detail/profile_0405.html&#34;&gt;大川真史氏&lt;/a&gt;は、エンタープライズ向けIoTLT「&lt;a href=&#34;http://liginc.co.jp/269905&#34;&gt;EIoTLT&lt;/a&gt;」でも登壇いただいています。
+（本を送っていただきありがとうございます！）&lt;/p&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;dotstudioが設立されてから、早いもので半月が経ちました。
+今後も、IoTLTやdotstudioのECサイトを通してIoTを広めていくつもりです。
+よろしくお願いしますー！&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
