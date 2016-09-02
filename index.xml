@@ -7,8 +7,271 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Fri, 26 Aug 2016 11:00:00 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 30 Aug 2016 17:41:27 +0900</lastBuildDate>
     <atom:link href="https://dotstud.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>CocoaBitをプログラミングしてみよう</title>
+      <link>https://dotstud.io/blog/cocoabit-littlebits-milkcocoa-nefry/</link>
+      <pubDate>Tue, 30 Aug 2016 17:41:27 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/cocoabit-littlebits-milkcocoa-nefry/</guid>
+      <description>
+
+&lt;p&gt;こんにちは、外部ライターのわみと申します。愛知県でネットワークの勉強をしている学生です。磁石で電子工作ができる「&lt;a href=&#34;http://jp.littlebits.com/&#34;&gt;littleBits&lt;/a&gt;」のモジュールとして、「&lt;strong&gt;CocoaBit&lt;/strong&gt;」というものを開発しています。&lt;/p&gt;
+
+&lt;p&gt;CocoaBitを使えばlittleBitsを簡単にインターネットへ接続できます。すでにlittleBitsをもっている方や、IoTに興味があるけれど「何から始めていいかわからない」「難しそう……」と思っている方はぜひご一読ください！&lt;/p&gt;
+
+&lt;h2 id=&#34;cocoabitって&#34;&gt;CocoaBitって？&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/09_littlebits.png&#34; alt=&#34;&#34; /&gt;
+磁石でつなげるだけで電子工作ができるデバイス「littleBits」。これの拡張モジュールとして「CocoaBit」を開発しています。真ん中にがあるのがCocoaBitです。&lt;/p&gt;
+
+&lt;p&gt;CocoaBitは次のような特徴を持っています。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;littleBitsをインターネットに接続できる&lt;/li&gt;
+&lt;li&gt;バックエンドサービス「Milkcocoa」と簡単に連携できる&lt;/li&gt;
+&lt;li&gt;Arduinoの開発環境（ArduinoIDE）でプログラミングができる&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/01_cocoabit.png&#34; alt=&#34;&#34; /&gt;
+CocoaBitを使えばlittleBitsを簡単にインターネットとつなげられるので、データをアップロードしたり、インターネットからCocoaBitを制御したり、はたまたIFTTT連携なんかも試せたりできます。&lt;/p&gt;
+
+&lt;p&gt;「Nefry」というFRISKサイズのIoT向けデバイスをベースにして作っていますが、これも自分が自作しています。また、LIGブログでlittleBitsの連載をしている田中さんと共同開発をしています。私がNefryを作っていたことや、純粋に面白そう！という背景からCocoaBitが生まれました。（より詳しい背景は&lt;a href=&#34;http://www.1ft-seabass.jp/memo/2016/04/13/cocobit-first-contact/&#34;&gt;こちらの記事&lt;/a&gt;をどうぞ）&lt;/p&gt;
+
+&lt;h2 id=&#34;さっそくcocoabitでプログラミングしてみよう&#34;&gt;さっそくCocoaBitでプログラミングしてみよう&lt;/h2&gt;
+
+&lt;p&gt;ArduinoIDEを使って、CocoaBitのプログラムを作る流れを紹介します！　まずはArduinoIDEにCocoaBitをインストールするのですが、ArduinoIDEのダウンロード方法などについては&lt;a href=&#34;http://qiita.com/wamisnet/private/15062b2e7b23969797aa&#34;&gt;LIGブログ&lt;/a&gt;の記事で紹介されています。&lt;/p&gt;
+
+&lt;p&gt;Nefryとライブラリーが共通なのでNefryの名前が出てきますが、気にせずに読み進めてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/02_arduino.png&#34; alt=&#34;&#34; /&gt;
+まずは、ArduinoIDEの環境設定を開きます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/03_arduino.png&#34; alt=&#34;&#34; /&gt;
+環境設定の &lt;strong&gt;追加のボードマネージャーのURL&lt;/strong&gt; に次のURL を入力します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;http://wamisnet.github.io/package_nefry_index.json
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/04_arduino.png&#34; alt=&#34;&#34; /&gt;
+入力が終わったら OK をクリックし、ツール内にあるボード選択のボードマネージャーをクリックします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/05_arduino.png&#34; alt=&#34;&#34; /&gt;
+すると、ボードマネージャーの一覧の下部にNefryが追加されます。検索欄もあるのでそこに &lt;strong&gt;Nefry&lt;/strong&gt; と入力すると簡単に見つけられます。インストールをクリックすると、必要なファイルをダウンロードできます。（2016年8月現在の最新バージョンは2.0.1です）&lt;/p&gt;
+
+&lt;p&gt;インストールが完了すると &lt;strong&gt;INSTALLED&lt;/strong&gt; と表示されます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/08_arduino.png&#34; alt=&#34;&#34; /&gt;
+すると、ツール内にあるボードからCocoaBitが選択できるようになっているはずです！　これでボードのインストールも完了です！&lt;/p&gt;
+
+&lt;p&gt;ここまでで開発環境が整いましたので次はプログラムを書いていきます。&lt;/p&gt;
+
+&lt;h2 id=&#34;cocoabitのスイッチを押した時にledを光らせてみよう&#34;&gt;CocoaBitのスイッチを押した時にLEDを光らせてみよう&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/09_littlebits.png&#34; alt=&#34;&#34; /&gt;
+CocoaBitに写真のようにlittleBitsのボタンとLEDを繋げて、ボタンを押したらLEDが光るプログラムを書いてみましょう！　以下はプログラムの全体図です。&lt;/p&gt;
+
+&lt;h3 id=&#34;pushsw-ino&#34;&gt;pushSW.ino&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;void setup() {
+  pinMode(D0, OUTPUT); //CocoaBitのD0を出力モードにする
+}
+void loop() {
+  //SWを押した時にLEDが点灯する
+  if (analogRead(A0) &amp;gt; 500) {//7(押してない)or970(押されてる)中間で分岐します
+    //押した時
+    digitalWrite(D0, HIGH); //LED点灯
+  } else {
+    //離した時
+    digitalWrite(D0, LOW); //LED消灯
+  }
+  delay(100);//0.1秒待つ
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;プログラムの解説&#34;&gt;プログラムの解説&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;setup()&lt;/strong&gt; の{}で囲まれている箇所は、CocoaBitが起動時に &lt;strong&gt;一度のみおこなう処理&lt;/strong&gt; です。今回はLEDを光らせるためにD0の入出力を使うので、それぞれが入力モードなのか、出力モードなのかを設定しています。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;void setup() {
+  pinMode(D0, OUTPUT); //CocoaBitのD0を出力モードにする
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;loop()&lt;/strong&gt; の{}かっこで囲まれている箇所、CocoaBitが起動中に &lt;strong&gt;繰り返しおこなう処理&lt;/strong&gt; です。littleBitsのボタンの状態をanalogRead(A0)というもので取得します。このanalogReadという関数で、0v-5vの電圧の変化を0-1023の範囲でA0から取得できます。&lt;/p&gt;
+
+&lt;p&gt;ボタンを押すとおおよそ970程度、押していないときは7程度になります。これをif文と呼ばれる条件式で処理を分岐します。digitalWriteでピンをHIGHかLOWに変更することができますので、スイッチの状態によりHIGHかLOWに変更していきます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;void loop() {
+  //SWを押した時にLEDが点灯する
+  if (analogRead(A0) &amp;gt; 500) {//7(押してない)or970(押されてる)中間で分岐します
+    //押した時
+    digitalWrite(D0, HIGH); //LED点灯
+  } else {
+    //離した時
+    digitalWrite(D0, LOW); //LED消灯
+  }
+  delay(100);//0.1秒待つ
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;プログラムをcocoabitに書いてみよう&#34;&gt;プログラムをCocoaBitに書いてみよう&lt;/h3&gt;
+
+&lt;p&gt;上記のプログラムをArduinoIDEに貼り、CocoaBitで実行してみましょう。CocoaBitにプログラムを書き込んでいく流れを簡単に解説しますが、より詳しい書き込み方は&lt;a href=&#34;http://qiita.com/wamisnet/private/15062b2e7b23969797aa&#34;&gt;LIGブログ&lt;/a&gt;の記事をご覧ください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/10_cocoabit.png&#34; alt=&#34;&#34; /&gt;
+まずは、CocoaBitを写真を参考にしてpowerモジュールに繋いでください。しばらくしてWi-Fiを検索すると &lt;strong&gt;CocoaBit-○○○○&lt;/strong&gt; という名前があると思うので、そのWi-Fiに接続してください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/11_wifi.png&#34; alt=&#34;&#34; /&gt;
+接続すると自動的にこのページに移動します。時にうまくいかないときがあるのでその時はこちらのURLを入力してください。CocoaBitのメインページです。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;http://192.168.4.1&#34;&gt;http://192.168.4.1&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;このページから、さまざまな設定をおこなえます。プログラムを書き込むためには、CocoaBitを書き込みモードにします。（書き込みモードとは、CocoaBitのCoreプログラムだけ動作し、ユーザが書き込んだプログラムを実行しないモードです）&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/12_nefry.png&#34; alt=&#34;&#34; /&gt;
+書き込みモードに変更するには、&lt;strong&gt;setup Module&lt;/strong&gt; をクリックし、&lt;strong&gt;Write mode&lt;/strong&gt; を選択してください。すると、CocoaBitが再起動します。再起動が終わったら書き込みモードになっています。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/13_nefry.png&#34; alt=&#34;&#34; /&gt;
+CocoaBitが書き込みモードになったところでプログラムを書き込んでいきましょう。メインページの &lt;strong&gt;upload Sketch&lt;/strong&gt; をクリックしてこのページを開きます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/14_nefry.png&#34; alt=&#34;&#34; /&gt;
+開いたらページ中央にある &lt;strong&gt;参照&lt;/strong&gt; となっているボタンをクリックしてファイルを選びます。（Chromeなどブラウザによっては表示が異なることがあります）&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/15_nefry.png&#34; alt=&#34;&#34; /&gt;
+先ほどプログラムを保存した場所を開き、&lt;strong&gt;arduino.bin&lt;/strong&gt; となっているファイルを選びます。（きちんと確認してアップデートしてください。もし間違えてしまうと、最悪の場合起動しなくなります）&lt;/p&gt;
+
+&lt;p&gt;きちんとファイルを選べると、ファイルの場所を示す表示が出ます。あとは &lt;strong&gt;Upload&lt;/strong&gt; をクリックするだけです！　アップロードが完了すると自動的にCocoaBitが再起動してプログラムが更新されます。&lt;/p&gt;
+
+&lt;p&gt;これでCocoaBitのプログラムを書きかえることができました！　SWを押したときにLEDが光っているはずです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/17_cocoabit.gif&#34; alt=&#34;&#34; /&gt;
+LEDは上手く点滅しましたか？　これでCocoaBitから出力できたので、次はCocoaBitに入力をしてみようと思います。&lt;/p&gt;
+
+&lt;h2 id=&#34;cocoabitにスライダーを繋いでみる&#34;&gt;CocoaBitにスライダーを繋いでみる&lt;/h2&gt;
+
+&lt;p&gt;それでは次はCocoaBitを入力モードにして、入力された値をWebページで表示してみようと思います。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/18_littlebits.png&#34; alt=&#34;&#34; /&gt;
+今回は入力データを手軽に変更ができるlittleBitsのスライダーを使ってみようと思います。他にもボタンモジュールや明るさセンサーモジュールを繋ぐことも可能です。写真を参考に接続してみてください。&lt;/p&gt;
+
+&lt;p&gt;接続できたら、プログラムを書いていきましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;read-ino&#34;&gt;read.ino&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+int sensorValue;
+void setup() {
+}
+void loop() {
+  sensorValue = analogRead(A0);//アナログの入力を読みます。
+  Nefry.print(&amp;quot;sensor = &amp;quot; );
+  Nefry.println(sensorValue);//センサーデータを表示します。
+  Nefry.ndelay(500);//0.5秒待ちます
+  Nefry.setLed(sensorValue/4,255,0);//Red(sensorValue/4),Green(255),Blue(0)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;プログラムの解説-1&#34;&gt;プログラムの解説&lt;/h3&gt;
+
+&lt;p&gt;analogReadという関数で、0v-5vの電圧の変化を0-1023の範囲でA0から取得することができます。その値をNefry.print関数で表示するようにしています。そのデータはWeb Consoleで見られます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/19_nefry.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Nefry.ndelay関数は、指定されたミリ秒処理を止めます。1000ミリ秒で1秒となります。
+Nefry.setLed関数は、CocoaBitについているLEDの光る色を指定することができ、赤・緑・青を0（消灯）から255（フル点灯）の範囲で光らせることができます。&lt;/p&gt;
+
+&lt;p&gt;また、例えば赤（255）と緑（255）を選ぶと黄色になるなど、光らせる色と強さの組み合わせによって色を変えられます。今回は、赤色をセンサーの入力により変更（sensorValue/4）、緑色を（255）、Blue（0）にして光らせてみます。Nefryの関数については&lt;a href=&#34;http://qiita.com/wamisnet/items/e44812eb6d6fded7af26&#34;&gt;こちら&lt;/a&gt;を参照してください。&lt;/p&gt;
+
+&lt;p&gt;このプログラムは、0.5秒ごとにA0ピンの状態を取得して、sensor = A0ピンの状態をweb consoleで表示、LEDの色がスライダによって緑から黄色に変化していくプログラムになります。こちらがプログラムの全体になります。&lt;/p&gt;
+
+&lt;h3 id=&#34;実際に動かしてみよう&#34;&gt;実際に動かしてみよう&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/20_cocoabit.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/21_nefry.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;成功するとこのように数値が変わります。&lt;/p&gt;
+
+&lt;p&gt;さて、最後に今のセンサーデータをMilkcocoaに送ってみようと思います。&lt;/p&gt;
+
+&lt;h2 id=&#34;cocoabitにmilkcocoaをつなげてみる&#34;&gt;CocoaBitにMilkcocoaをつなげてみる&lt;/h2&gt;
+
+&lt;p&gt;今度はセンサーの値を表示するだけではなくMilkcocoaの方に送ってみようと思います。&lt;/p&gt;
+
+&lt;h3 id=&#34;milkcocoaとは&#34;&gt;Milkcocoaとは？&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/22_milkcocoa.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://mlkcca.com&#34;&gt;Milkcocoa&lt;/a&gt;とは、デバイス・スマートフォン・PC間で簡単にリアルタイム通信ができるWebサービスです。リアルタイム通信では複雑なプログラミングが必要ですが、MilkcocoaではJavaScriptを1行追記するだけでデータの保存＆やり取りができるようになるんです。&lt;/p&gt;
+
+&lt;p&gt;さて、Milkcocoaにセンサーの値を送れるようにするため、CocoaBitにWi-Fiを教えてあげましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;wi-fiの設定&#34;&gt;Wi-Fiの設定&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/23_nefry.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;この項目は、一度設定すればアクセスするWi-Fiが変わらない限り再設定する必要はありません。 &lt;a href=&#34;http://192.168.4.1&#34;&gt;http://192.168.4.1&lt;/a&gt; に接続し、Setup WiFiのリンクをクリックします。&lt;/p&gt;
+
+&lt;p&gt;SSIDの入力欄をクリックすると、検出されたWi-Fiを選べます。Passがある場合はそちらも入力して、Saveをクリックします。Saveを押すと再起動するのでしばらく待ちましょう。&lt;/p&gt;
+
+&lt;p&gt;Wi-Fiの設定が完了したところでプログラムを書いていきます。&lt;/p&gt;
+
+&lt;h4 id=&#34;milkcocoabit-ino&#34;&gt;milkcocoabit.ino&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+#include &amp;lt;Nefry_Milkcocoa.h&amp;gt;
+
+Nefry_Milkcocoa *milkcocoa;
+
+char *datastore;
+int sensorValue;
+
+void setup() {
+  milkcocoa-&amp;gt;print();//Setup ModuleページにAPPIDの表示をする
+  milkcocoa = Nefry_Milkcocoa::begin();//milkcocoaと接続に必要になる処理をします。
+  datastore = Nefry.getConfStr(3);//Setup Moduleページに入力されたデータストア名を保存します。
+ }
+
+void loop() {
+  sensorValue = analogRead(A0);//アナログの入力を読みます。
+  Nefry.print(&amp;quot;sensor = &amp;quot; );
+  Nefry.println(sensorValue);//センサーデータを表示します。
+  Nefry.println( milkcocoa-&amp;gt;loop(10000) ? &amp;quot;Milkcocoa Connect OK&amp;quot; : &amp;quot;Milkcocoa Connect NG&amp;quot; ); //10秒以内にMilkcocoaに接続できればokと表示されます。
+  DataElement elem = DataElement();
+  elem.setValue(&amp;quot;sensor&amp;quot;, sensorValue);//センサーの状態を送信できる形に変換
+  milkcocoa-&amp;gt;push(datastore, &amp;amp;elem);//Milkcocoaに送信
+  Nefry.setLed(sensorValue/4,255,0);//Red(sensorValue/4),Green(255),Blue(0)
+  Nefry.ndelay(2000);//2秒待つ
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;実際にプログラムを書き込み、Web Consoleを確認すると &lt;strong&gt;Milkcocoa Send Data Lack&lt;/strong&gt; と表示されます。Milkcocoaに接続するために、必要な情報が足りないという意味なので、必要な情報を集める必要があります。詳しく知りたい方は&lt;a href=&#34;http://liginc.co.jp/282918&#34;&gt;こちらの記事&lt;/a&gt;をご覧ください。&lt;/p&gt;
+
+&lt;p&gt;MilkcocoaのサイトにアクセスしてそれぞれAPPID、APIKey、APISecretを取得します。その3つが分かったら、今度はCocoaBitのSetup ModuleでAPPID、APIKey、APISecretの入力欄に先ほどのIDとKeyを入力します。もう一つDataStoreという入力欄がありますので、そこには &lt;strong&gt;CocoaBit&lt;/strong&gt; と入力します。&lt;/p&gt;
+
+&lt;p&gt;入力が完了しSaveボタンをクリックすると、自動的に再起動してMilkcocoaにセンサーの値を送ってくれるはずです。うまく送れない場合、CocoaBitがインターネットに繋がっていないか、先ほどの入力が間違っていないかが原因として挙げられます。&lt;/p&gt;
+
+&lt;h3 id=&#34;実際に動かしてみよう-1&#34;&gt;実際に動かしてみよう&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/24_cocoabit.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/25_milkcocoa.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Milkcocoaのデータストアを確認するとlittleBitsで取得した数値が表示されているはずです。このデータを使い、Web連携をすると面白くなるのではないでしょうか。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/01_cocoabit.png&#34; alt=&#34;&#34; /&gt;
+ということで今回はCocoaBitについてを紹介しました。CocoaBitを使えば、これくらい簡単にlittleBitsをインターネットとつなげられます。&lt;/p&gt;
+
+&lt;p&gt;CocoaBitはまだ開発中ではありますが、進展があればまたこちらで報告しようと思っております。応援よろしくお願いします！&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>クラブで目立つ！Adafruit社のGemmaで光るピアスを作ってみよう</title>
@@ -1785,15 +2048,6 @@ MFTにおいては多くの子供たちも見に来られます。&lt;br /&gt;
       <guid>https://dotstud.io/projects/wionode-social-remote-control/</guid>
       <description>&lt;p&gt;ここから本文を記述&lt;/p&gt;
 </description>
-    </item>
-    
-    <item>
-      <title>NodeBot kit for Beginners ver. JP</title>
-      <link>https://dotstud.io/projects/nodebots-seeeduino-for-beginners/</link>
-      <pubDate>Fri, 01 Jul 2016 00:00:03 +0900</pubDate>
-      
-      <guid>https://dotstud.io/projects/nodebots-seeeduino-for-beginners/</guid>
-      <description></description>
     </item>
     
   </channel>
