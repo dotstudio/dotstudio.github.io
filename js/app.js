@@ -29,7 +29,6 @@ function addClassSelecet(){
 
   //プロジェクトページ
   if (type === 'projects'){
-    console.log(111);
     $current = $('a[data-type="projects"]');
     $current.attr('class', 'sub_text_selected');
     //sp
@@ -39,6 +38,11 @@ function addClassSelecet(){
     $current = $('p[data-type="sp-nuv-sub"] a');
     $current.text('BLOG');
     $current.attr('href', '/');
+  }
+
+  if (type === 'events'){
+    $current = $('a[data-type="events"]');
+    $current.attr('class', 'sub_text_selected');
   }
 
 }
