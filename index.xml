@@ -7,8 +7,233 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Mon, 05 Sep 2016 10:41:27 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 06 Sep 2016 15:09:30 +0900</lastBuildDate>
     <atom:link href="https://dotstud.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Pokemon GOで近くにポケモンが出たらPepperが教えてくれる仕組みをNode.jsだけで作る</title>
+      <link>https://dotstud.io/blog/pepper-pokemon-go-notice/</link>
+      <pubDate>Tue, 06 Sep 2016 15:09:30 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/pepper-pokemon-go-notice/</guid>
+      <description>
+
+&lt;p&gt;こんにちは、dotstduio代表ののびすけです。&lt;/p&gt;
+
+&lt;p&gt;みなさん、Pokemon GOやってますか?　僕はけっこう作業ゲーな気がしていて、最近飽き気味だったんですよね。現在だとLv.18で止まってしまっている中途半端組です。&lt;/p&gt;
+
+&lt;p&gt;そんな感じなので、僕は「ポケモンが出てきたら教えてくれる仕組み」があるといいなって思い、PepperとPokemon GOを繋げて &lt;strong&gt;近くにポケモンが出現したら通知する&lt;/strong&gt; 仕組みを作ってみました。&lt;/p&gt;
+
+&lt;p&gt;Slack通知とかはたまに記事で見かけたんですけど、たまたまPepperが部屋にいたので活用することにしました。なかなかPepperが手元にないかと思いますが、試せる人は試してみてください（笑）&lt;/p&gt;
+
+&lt;h2 id=&#34;全体像と開発手順&#34;&gt;全体像と開発手順&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/017/01_structure.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;やったことは次の3つです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;1. Node.jsを使い、Pokemon GOのAPIから近くのポケモンを探す&lt;/li&gt;
+&lt;li&gt;2. ポケモンを見つけたら、ポケモン名を日本語変換する&lt;/li&gt;
+&lt;li&gt;3. Nightmareを使い、Pepperを制御するブラウザアプリを自動制御して喋らせる&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;このときはMac OS 10.11のNode.js6.3.1で試しました。ポイントは Choregraphe（Pepperのアプリ開発者向けアプリ）を使わずに &lt;strong&gt;Node.jsだけで完結する&lt;/strong&gt; ところだと思います。単純に喋らせるだけならChoregraphe使わなくてもなんとかなりますね。&lt;/p&gt;
+
+&lt;p&gt;※きちんと開発をするならChoregrapheが必須です。&lt;/p&gt;
+
+&lt;script async class=&#34;speakerdeck-embed&#34; data-id=&#34;93daabf2deac4ac68cb016ee2d2109d9&#34; data-ratio=&#34;1.33333333333333&#34; src=&#34;//speakerdeck.com/assets/embed.js&#34;&gt;&lt;/script&gt;
+
+&lt;p&gt;先日Amazonで開催したIoTの勉強会「IoTLT」で話した内容をまとめました。そのときのスライドも貼っておくので、参考までにご覧ください。完全にLT駆動開発です（笑）&lt;/p&gt;
+
+&lt;h2 id=&#34;作り方&#34;&gt;作り方&lt;/h2&gt;
+
+&lt;h3 id=&#34;1-pokemon-g0のapiをnode-jsで使う&#34;&gt;1. Pokemon G0のAPIをNode.jsで使う&lt;/h3&gt;
+
+&lt;p&gt;npmでPokemon G0を調べるとちょくちょくモジュールが見つかります。中でもメンテナンスされていそうな&lt;a href=&#34;https://www.npmjs.com/package/pokemon-go-node-api&#34;&gt;node-pokemon-go-api&lt;/a&gt;を使いました。&lt;/p&gt;
+
+&lt;p&gt;まずは&lt;code&gt;ポケモンが出たら〇〇する&lt;/code&gt;トリガーを作ります。以下のコマンドでインストールしましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;npm install pokemon-go-node-api --save
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;実際に使う部分は、以下の僕のQiitaの記事を参考に進めてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://qiita.com/n0bisuke/items/31daa590056d3d5d8336&#34;&gt;Pokemon GOで近くにポケモンが出たら〇〇するトリガーをNode.jsで作る&lt;/a&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;index-js&#34;&gt;index.js&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
+
+const PokemonGO = require(&#39;pokemon-go-node-api&#39;);
+
+// using var so you can login with multiple users
+let a = new PokemonGO.Pokeio();
+
+//Set environment variables or replace placeholder text
+let location = {
+    type: &#39;name&#39;,
+    name: &#39;Tokyo/Taito-ku&#39; //東京都台東区
+};
+
+let username = &#39;登録したGoogleアカウントのメールアドレス&#39;;
+let password = &#39;登録したGoogleアカウントのパスワード&#39;;
+let provider = &#39;google&#39;;
+
+a.init(username, password, location, provider, (err) =&amp;gt; {
+    if (err) throw err;
+
+    console.log(&#39;1[i] Current location: &#39; + a.playerInfo.locationName);
+    console.log(&#39;1[i] lat/long/alt: : &#39; + a.playerInfo.latitude + &#39; &#39; + a.playerInfo.longitude + &#39; &#39; + a.playerInfo.altitude);
+
+    a.GetProfile((err, profile) =&amp;gt; {
+        if (err) throw err;
+
+        console.log(&#39;1[i] Username: &#39; + profile.username);
+        console.log(&#39;1[i] Poke Storage: &#39; + profile.poke_storage);
+        console.log(&#39;1[i] Item Storage: &#39; + profile.item_storage);
+
+        let poke = 0;
+        if (profile.currency[0].amount) {
+            poke = profile.currency[0].amount;
+        }
+
+        console.log(&#39;1[i] Pokecoin: &#39; + poke);
+        console.log(&#39;1[i] Stardust: &#39; + profile.currency[1].amount);
+
+        setInterval(() =&amp;gt; {
+            a.Heartbeat((err,hb)=&amp;gt;{
+                if(err) {
+                    console.log(err);
+                }
+
+                let texts = &#39;&#39;;
+                for (var i = hb.cells.length - 1; i &amp;gt;= 0; i--) {
+                    if(hb.cells[i].NearbyPokemon[0]) {
+                        //console.log(a.pokemonlist[0])
+                        let pokemon = a.pokemonlist[parseInt(hb.cells[i].NearbyPokemon[0].PokedexNumber)-1];
+                        console.log(&#39;1[+] There is a &#39; + pokemon.name + &#39; near.&#39;);
+                        //この辺にWebhookとか噛ませればSlack通知とかも余裕ですね。
+                    }
+                }
+            });
+        }, 5000);
+
+    });
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これを実行してみると、&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/017/02_result.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;一番下に &lt;strong&gt;There is a Pinsir near.&lt;/strong&gt; と表示されているのがわかると思います。
+どうやらPinsirが近くにいるようです。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-気になる人は-ポケモン名を日本語化する&#34;&gt;2. （気になる人は）ポケモン名を日本語化する&lt;/h3&gt;
+
+&lt;p&gt;ここで「Pinsirってなんだ」という話になるんですけど、ググったらカイロスの英語名らしいですね。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/017/03_pinsir.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://gist.github.com/PonDad/93922f63c3143489e30c3716d3d176d2&#34;&gt;GitHubGistのPonDad氏&lt;/a&gt;が、ポケモンの英語名と日本語名を変換するデータをJSONとして公開していたので、ありがたく使いましょう。index.jsの&lt;a href=&#34;https://github.com/n0bisuke/pepper_pokemon_go/blob/master/index.js#L54-L56&#34;&gt;ここ&lt;/a&gt;で使ってます。&lt;/p&gt;
+
+&lt;h3 id=&#34;3-nightmareでpepperを喋らせる&#34;&gt;3. NightmareでPepperを喋らせる&lt;/h3&gt;
+
+&lt;p&gt;Nightmareはブラウザの自動テストをおこなうツールです。ログイン処理や、ボタンを押した際の挙動などを自動テストする際に使います。PhantomJSが有名ですが、そのラッパーライブラリでかなり使いやすいです。&lt;/p&gt;
+
+&lt;p&gt;サンプルなどを見ると、Nightmareを使うときは&lt;a href=&#34;https://www.npmjs.com/package/vo&#34;&gt;vo&lt;/a&gt;というモジュールを使ってGeneratorで書くのが主流っぽいです。以下のコマンドでインストールしてください。Nightmareはv2からElectronベースになったということもあり、インストールには結構時間がかかります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;npm i nightmare vo --save
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;以下のQiitaの記事も参考にしてみてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://qiita.com/n0bisuke/items/8a7a52321380e5cf0379&#34;&gt;Nightmareがv2(Electronベース)になり、使いやすく感動したのでLIGブログのPV/UUデータ取得を自動化してみた。
+&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/017/04_pepper_controller.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;接続先は&lt;a href=&#34;https://github.com/kuetsuhara&#34;&gt;kuetsuharaさん&lt;/a&gt;の&lt;a href=&#34;http://kuetsuhara.github.io/pepperConnect.html&#34;&gt;ペッパーコントローラーブラウザアプリ&lt;/a&gt;です。このブラウザアプリは同じIP内にあるPCからなら、ブラウザだけでPepperをある程度操作できるかなり便利なものです。&lt;/p&gt;
+
+&lt;h4 id=&#34;pepper-connect-js&#34;&gt;pepper_connect.js&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;
+
+const Nightmare = require(&#39;nightmare&#39;);
+const vo = require(&#39;vo&#39;);
+const IP = &#39;192.168.179.29&#39;;
+
+function pepper(text) {
+    vo(function* () {
+    const nightmare = Nightmare({ show: true });
+    const link = yield nightmare
+        .goto(&#39;http://kuetsuhara.github.io/pepperConnect.html&#39;)
+        .insert(&#39;input#pepperIP&#39;,&#39;&#39;)
+        .type(&#39;input#pepperIP&#39;, ip)
+        .click(&#39;button[onclick=&amp;quot;connect()&amp;quot;]&#39;)
+        .wait(4000)
+        .type(&#39;input#sayText&#39;, text)
+        .click(&#39;button[onclick=&amp;quot;say()&amp;quot;]&#39;)
+        .evaluate(() =&amp;gt; {
+            return document.getElementsByClassName(&#39;ac-21th&#39;)[0].href;
+        });
+    yield nightmare.end();
+        return link;
+    })((err, result) =&amp;gt; {
+        if (err) return console.log(err);
+        console.log(result);
+    });   
+}
+
+pepper(&amp;quot;こんばんわ&amp;quot;);
+
+//モジュール化する場合
+//module.exports = pepper;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;こんな感じで記述しました。192.168.179.29がPepperのIPになります。&lt;/p&gt;
+
+&lt;p&gt;ちなみにPepperのIPアドレスは、タブレットの裏側の胸にあるボタンを押すとPepperが喋って教えてくれます。&lt;/p&gt;
+
+&lt;h3 id=&#34;実行して試してみる&#34;&gt;実行して試してみる&lt;/h3&gt;
+
+&lt;p&gt;ちなみに、このときはMac OS 10.11上のNode.js6.3系で試しました。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;node pepper_connect.js
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;この時点で実行すると、Nightmare経由でPepperに自動接続して、「こんばんわ」と喋ってくれると思います。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/017/05_result.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://goo.gl/photos/6GKXDMMbTGPtXf3A6&#34;&gt;こちら&lt;/a&gt;で実際に動いている動画を見られます。&lt;/p&gt;
+
+&lt;h3 id=&#34;コードのまとめとデモ&#34;&gt;コードのまとめとデモ&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/n0bisuke/pepper_pokemon_go&#34;&gt;こちら&lt;/a&gt;に今回使ったコードをまとめておきました。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git clone git@github.com:n0bisuke/pepper_pokemon_go.git
+cd pepper_pokemon_go
+npm i
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;のあと、index.jsのユーザー名とパスワードを入力したのち&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;node index.js
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;で動作すると思います。動かない場合は&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;@n0bisuke&lt;/a&gt;まで！&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;Nightmareを使えば、Node.jsだけでも、ブラウザコントロールが可能なロボットやハードウェアの簡単な接続はできそうだなと感じました。&lt;/p&gt;
+
+&lt;p&gt;実際のところ、Pepperと同じネットワークにNode.js（とNightmare）が動く環境が必要なので、運用などは難しそうです。しかし、喋ってくれること自体は通知として気づきやすいので、かなりアリだと思っています。&lt;/p&gt;
+
+&lt;p&gt;試せる方はぜひ試してみてください！　それでは。&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>電子回路を簡単に学べるlittleBitsをインターネットに繋げよう！「CocoaBit」を開発中</title>
@@ -814,79 +1039,6 @@ MFTにおいては多くの子供たちも見に来られます。&lt;br /&gt;
 &lt;p&gt;&lt;center&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;今日はmilkcocoa紅白合戦にご参加くださりありがとうございました😂💫登壇者の方々の発表は全部新しい視点をもらえたり笑えるところがあったり、楽しませてもらいました。ありがとうございます。また次お会いしましょう🙋🍻&lt;a href=&#34;https://twitter.com/hashtag/mlkcca?src=hash&#34;&gt;#mlkcca&lt;/a&gt; &lt;a href=&#34;https://t.co/PdUrDdivbU&#34;&gt;pic.twitter.com/PdUrDdivbU&lt;/a&gt;&lt;/p&gt;&amp;mdash; Milkcocoa girls (@milkcocoagirls) &lt;a href=&#34;https://twitter.com/milkcocoagirls/status/755757758931095556&#34;&gt;2016年7月20日&lt;/a&gt;&lt;/blockquote&gt;
 &lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;
 では！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>ウィッシュリスト届きました！開封の儀をします。</title>
-      <link>https://dotstud.io/blog/thanks-for-sending-whitems/</link>
-      <pubDate>Thu, 04 Aug 2016 09:59:47 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/thanks-for-sending-whitems/</guid>
-      <description>
-
-&lt;p&gt;こんにちは！　dotstudioのエディター、うららです。（⬆️こちらの写真は私ではなく、デザイナーのちゃちゃまる）&lt;br /&gt;
-先日公開した&lt;a href=&#34;https://docs.google.com/spreadsheets/u/1/d/1DD5TeMYgGpstDEwbUWsDFJJrvzEyGbcfEL7cqo3XzXs/edit#gid=0&#34;&gt;ウィッシュリスト&lt;/a&gt;の品が続々と届き始めました。ありがとうございます！&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/009/01_open.png&#34; alt=&#34;&#34; /&gt;
-せっかくなので、開封の儀の様子を本記事で紹介していきます！&lt;br /&gt;
-この日届いたのは5つのアイテムです。&lt;/p&gt;
-
-&lt;h2 id=&#34;1-モニターと目覚まし時計-by-さんぺー-たかあき&#34;&gt;1. モニターと目覚まし時計 by さんぺー＆たかあき&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/009/02_monitor.png&#34; alt=&#34;&#34; /&gt;
-まず届いたのは、モニターと目覚まし時計！&lt;br /&gt;
-モニターはさっそく、会議用の机へ。背丈がちょうどいい感じです！&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/009/03_clock.png&#34; alt=&#34;&#34; /&gt;
-ちなみに目覚まし時計はウィッシュリストに入れていません。なぜ。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/009/04_address.png&#34; alt=&#34;&#34; /&gt;
-株式会社LIGのデザイナーたかあき＆ライターさんぺーからいただきました。&lt;br /&gt;
-宛名をよく見ると……&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;「のびたかこめうららちゃちゃうこ 様」&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;おいおいまとめすぎだろ。個人的にツボでした。&lt;br /&gt;
-たかあき、さんぺー、ありがとうございます！！！！&lt;/p&gt;
-
-&lt;h2 id=&#34;2-プリンター-by-m2wasabi-さん&#34;&gt;2. プリンター by @m2wasabi さん&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/009/05_printer.png&#34; alt=&#34;&#34; /&gt;
-いつものびすけ主催のイベント「IoTLT」などでお世話になっているえむにわさん（ &lt;a href=&#34;https://twitter.com/m2wasabi&#34;&gt;@m2wasabi&lt;/a&gt; ）からは、プリンターをいただきました！　ちょうど印刷したいものがあったのですが、プリンタがなくて「コンビニで印刷するか……？」と困っていたところでした。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/009/06_printer.png&#34; alt=&#34;&#34; /&gt;
-シュッと配置。届いたその日に早速使わせてもらいました。えむにわさん、ありがとうございます！&lt;/p&gt;
-
-&lt;h2 id=&#34;3-シュレッダー-by-1ft-seabass-さん&#34;&gt;3. シュレッダー by @1ft-seabass さん&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/009/07_shredder.png&#34; alt=&#34;&#34; /&gt;
-普段から外部ライターさんとしてお世話になっている田中さん（ &lt;a href=&#34;https://twitter.com/1ft_seabass&#34;&gt;@1ft-seabass&lt;/a&gt; ）からは、シュレダーをプレゼントしていただきました！　これで機密書類を処分できる……。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/009/08_shredder.png&#34; alt=&#34;&#34; /&gt;
-代表ののびすけ。ちょっとにやけてますね。田中さん、ありがとうございます！&lt;/p&gt;
-
-&lt;h2 id=&#34;4-wii-by-iwata-n-さん&#34;&gt;4. Wii by @iwata_n さん&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/009/09_wii.png&#34; alt=&#34;&#34; /&gt;
-外部ライターとしても、イベント関係者としてもめっちゃくちゃお世話になっているいわたん（ &lt;a href=&#34;http://twitter.com/iwata_n&#34;&gt;@iwata_n&lt;/a&gt; ）さんからは、おさがりのWiiをいただきました！　&lt;strong&gt;テレビもつけてくれました&lt;/strong&gt;（！）。
-&lt;!-- ![](/img/blog/009/10_wii.png)（撮影） --&gt;
-みんなで夜な夜なスマブラしてます。ありがとうございます！&lt;/p&gt;
-
-&lt;h2 id=&#34;5-つくえ-by-isseium-さん&#34;&gt;5. つくえ by @isseium さん&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/009/11_desk.png&#34; alt=&#34;&#34; /&gt;
-い、IKEAのデスクです！！！！！！！　3つもいただきました。&lt;br /&gt;
-これまでは箱の上に木の板を乗せたものを使っていた（！）のですが、みんな腰痛が気になりだしていたところでした。作業効率がぐーーーーーんとアップ！！！&lt;strong&gt;「机って大事だね」と、改めて机に感謝する事態に&lt;/strong&gt; までなりました。&lt;a href=&#34;https://twitter.com/isseium&#34;&gt;@isseium&lt;/a&gt;さん、ありがとうございます！&lt;/p&gt;
-
-&lt;h2 id=&#34;まだまだ募集しています&#34;&gt;まだまだ募集しています&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/009/12_open.png&#34; alt=&#34;&#34; /&gt;
-&lt;em&gt;▲セッティングの様子&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;ということで、ウィッシュリストでいただいたものを紹介させてもらいました。&lt;a href=&#34;https://docs.google.com/spreadsheets/u/1/d/1DD5TeMYgGpstDEwbUWsDFJJrvzEyGbcfEL7cqo3XzXs/edit#gid=0&#34;&gt;ウィッシュリスト&lt;/a&gt; はまだまだ公開中です。もし送ってくださる方はご連絡ください〜！&lt;/p&gt;
-
-&lt;p&gt;会社として必要なものを続々と送っていただきました！　これで会社として存続できます。。。改めて、本当に本当にありがとうございます！＆これからもdotstudioをよろしくお願いしますm(_ _)m&lt;/p&gt;
 </description>
     </item>
     
