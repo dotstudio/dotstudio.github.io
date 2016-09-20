@@ -7,10 +7,402 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Fri, 16 Sep 2016 10:00:01 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 21 Sep 2016 10:00:40 +0900</lastBuildDate>
     <atom:link href="https://dotstud.io/categories/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>デザイナーの僕がHugoを使ってポートフォリオサイトを作ってみる #1【準備編】</title>
+      <link>https://dotstud.io/blog/hugo-for-designers-vol1/</link>
+      <pubDate>Wed, 21 Sep 2016 10:00:40 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/hugo-for-designers-vol1/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudioのデザイナー・ちゃちゃまるです。&lt;/p&gt;
+
+&lt;p&gt;僕はまだ自分のポートフォリオサイトを持っていません。TumblrやPortfolioboxなどのサービスを使って作ろうと色々試してみましたが、自分のほしい機能がなかったり料金がかかったりしてしまい、結局挫折していました。&lt;/p&gt;
+
+&lt;p&gt;そこで、重い腰を上げて、外部サービスに頼らず自分だけでポートフォリオサイトを作ってみようと思います。&lt;/p&gt;
+
+&lt;h2 id=&#34;本連載のミッション&#34;&gt;本連載のミッション&lt;/h2&gt;
+
+&lt;p&gt;とりあえず僕がイメージしているポートフォリオサイトを書き起こしてみます。&lt;/p&gt;
+
+&lt;p&gt;まず機能面でほしいのは&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ブログのような投稿形式がいい（時系列に投稿を並べたい）&lt;/li&gt;
+&lt;li&gt;投稿をいくつかのジャンルにわけたい（作品、お知らせ、など）&lt;/li&gt;
+&lt;li&gt;作品には、それを作るにあたって使ったソフトウェア等をタグ付けしたい（#illustrator、 #photoshop、など）&lt;/li&gt;
+&lt;li&gt;作品の投稿には、作品の画像とともに作成した日付や説明文なども書きたい&lt;/li&gt;
+&lt;li&gt;コードはGithubで管理したい&lt;/li&gt;
+&lt;li&gt;Github Pages（&lt;a href=&#34;https://chachmaru.github.io&#34;&gt;https://chachmaru.github.io&lt;/a&gt;）で公開したい&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;ぐらいです。ジャンルは増やす可能性もあるので、その増えたジャンルに対しても違うレイアウトが組めるような自由度もほしいですね。&lt;/p&gt;
+
+&lt;p&gt;次にデザイン面。あくまでも作品がメインであって欲しいので、サイドバーなどはつけず、シンプルなデザインにしてみます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/021/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;また、勉強のため、テンプレート等は使わず自分でコードを書きたいと思います。&lt;/p&gt;
+
+&lt;p&gt;それでは一からやっていきましょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;動的サイトと静的サイト&#34;&gt;動的サイトと静的サイト&lt;/h2&gt;
+
+&lt;p&gt;ウェブサイトには実は「動的」と「静的」の二種類あることをご存知でしょうか？僕はなんとなく「JavaScriptを使ってアニメーションを施していれば動的、CSSだけなら静的なんじゃないかなー」と思っていたのですが、実は全く違いました。&lt;/p&gt;
+
+&lt;p&gt;「動的」と「静的」の大きな違いは、&lt;strong&gt;どのタイミングでHTMLが生成されるか&lt;/strong&gt;です。&lt;strong&gt;動的ウェブサイトでは、ページにアクセスがあったタイミング&lt;/strong&gt;でPHPやNode.jsなどのサーバーサイドのプログラムでHTML(場合によってはCSSやJavaScriptも)を生成します。例えば会員登録が必要なサイトの場合は会員情報などのデータを扱いますが、そういったデータベースを利用する必要がある場合は、ページにアクセスがあったタイミングでデータベースからデータを引っ張ってきて表示させています。一方、&lt;strong&gt;静的ウェブサイトの場合はユーザーがページにアクセスする前&lt;/strong&gt;の、管理者側がサーバーにファイルをアップロードするタイミングで既にHTMLが生成されています。ページアクセスより前にコンテンツ内容がHTMLに書かれていて、ブラウザがそのHTMLファイルを読み込んでいます。&lt;/p&gt;
+
+&lt;!-- 動的サイト：ページが表示されるタイミングでコンテンツが生成される
+動的サイト：もともとHTMLに書かれているコンテンツがそのまま表示される --&gt;
+
+&lt;p&gt;動的サイトではアクセスしたタイミングでデータを取ってきたり、HTML生成が行われるため静的サイトにくらべて時間がかかります。静的サイトの方がページの表示速度は早いです。しかし静的サイトでは、例えばユーザーログインなど、見る人によって異なるようなウェブサイトを構築することは難しいです。&lt;/p&gt;
+
+&lt;p&gt;今回のポートフォリオは画像をたくさん載せたいため表示速度はなるべく速い方がいいのと、個人のサイトなのでユーザーログインなどは特に考えないとすると、静的ウェブサイトがなんとなく良さそうだな、という感じですね。&lt;/p&gt;
+
+&lt;h2 id=&#34;静的サイトジェネレーター-hugo&#34;&gt;静的サイトジェネレーター Hugo&lt;/h2&gt;
+
+&lt;p&gt;静的サイトを作るといっても、全てのページのHTMLをベタ書きしていくのは効率が悪すぎます。ここで活躍するのが&lt;strong&gt;静的サイトジェネレーター&lt;/strong&gt;というもの。名前のとおり、自動的にHTMLを書き出してウェブサイトを作ってくれる便利なものです。&lt;/p&gt;
+
+&lt;p&gt;僕が使おうと思っている静的サイトジェネレーターは、最近話題らしい&lt;strong&gt;&lt;a href=&#34;http://gohugo.io/&#34;&gt;Hugo&lt;/a&gt;&lt;/strong&gt;です。Hugoの特徴はスピードと簡潔さで、僕のような初心者にもわかりやすそうですね。実はこのdotstudioのウェブサイトもHugoで出来ています。Hugoでは記事をマークダウン方式（詳しくは&lt;a href=&#34;http://www.markdown.jp/what-is-markdown/&#34;&gt;こちら&lt;/a&gt;）で書けるようになっているので、効率よく記事を書けるようになります。&lt;/p&gt;
+
+&lt;p&gt;僕の環境はこんな感じです。OSやバージョンによって動作が違う場合もありますのでご了承ください。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;macOS El Capitan (10.11.6)&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;Hugo Static Site Generator v0.16&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;とりあえずhugoを使ってみる&#34;&gt;とりあえずHugoを使ってみる&lt;/h2&gt;
+
+&lt;p&gt;早速Hugoをインストールして使ってみましょう。イラストレーターやフォトショップなどのインストール手順とは少し違い、コマンドラインから実行します。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Homebrew（ソフトウェアのインストールを単純化してくれる管理システム）をインストール&lt;/li&gt;
+&lt;li&gt;Homebrewを使ってHugoをインストール&lt;/li&gt;
+&lt;li&gt;Hugoを使ってウェブサイトを生成する&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;ちなみにHugoのインストールまでは代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;が書いた&lt;a href=&#34;https://dotstud.io/blog/setup-new-mac-app/&#34;&gt;僕がMacを買い換えてすぐにいれるツール&amp;amp;すぐにする初期設定【2016年9月版&lt;/a&gt;にも載っています。&lt;/p&gt;
+
+&lt;h3 id=&#34;1-homebrewのインストール&#34;&gt;1. Homebrewのインストール&lt;/h3&gt;
+
+&lt;p&gt;HomebrewはmacOSのソフトウェアをインストール・管理してくれるものです。Hugo以外にも色々なものに使えると思うので、まだの方はぜひインストールをしてみてください。&lt;/p&gt;
+
+&lt;p&gt;ターミナル（アプリケーション＞ユーティリティ＞ターミナル.app）を開きます。そして&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ ruby -e &amp;quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;をコピペしてEnterを押すだけで完了です。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;$マークはコマンドであることを示す文字なので、$マーク以降の文字からコピーしてください&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;ついでに&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ brew update
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;も実行して、最新バージョンにアップデートしておきましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-hugoのインストール&#34;&gt;2. Hugoのインストール&lt;/h3&gt;
+
+&lt;p&gt;Homebrewでのインストールは基本&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ brew install xxxxx
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;です。&lt;/p&gt;
+
+&lt;p&gt;Hugoの場合&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ brew install hugo
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;で出来ます。簡単ですね！&lt;/p&gt;
+
+&lt;p&gt;きちんと作動しているかどうかは&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ hugo version
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;を実行してみて、&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Hugo Static Site Generator v0.16 BuildDate: 20xx-xx-xxTxx:xx:xx+09:00
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;のような結果が返ってきたかどうかで確認できます。&lt;/p&gt;
+
+&lt;h3 id=&#34;3-ウェブサイトを生成&#34;&gt;3. ウェブサイトを生成&lt;/h3&gt;
+
+&lt;p&gt;ウェブサイトを構成するファイル（HTMLやCSSなど）が入る場所を選びます。僕の場合ホームディレクトリ（アプリケーション、ドキュメント、写真フォルダなどがある場所）に新しく「dev」などの名前をつけたディレクトリを作って、その中を開発用にしています。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/021/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ここからはターミナルでの作業が多くなるので、コマンドの意味が分からない場合は&lt;a href=&#34;#&#34;&gt;UNIXコマンド一覧&lt;/a&gt;などと照らしあわせながら進めてみてください。&lt;/p&gt;
+
+&lt;p&gt;さて、まずはさきほどの&lt;code&gt;dev&lt;/code&gt;ディレクトリ内にターミナルで移動します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cd dev
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;次に、Hugoの雛形を生成します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;hugo new site chachamaru
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/021/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;このようになったら成功です！&lt;/p&gt;
+
+&lt;h2 id=&#34;hugoディレクトリ内を軽く説明&#34;&gt;Hugoディレクトリ内を軽く説明&lt;/h2&gt;
+
+&lt;p&gt;Finderからdevディレクトリ内を見てみましょう。ターミナルのいるディレクトリをFinderで開くには&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ open .
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;と実行するのが便利です。&lt;/p&gt;
+
+&lt;p&gt;こんな感じになっていると思います。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/021/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Hugo内のディレクトリ/ファイルを軽く説明していきます。実際に作業をするタイミングで更に詳しく解説するので、斜め読みで大丈夫です。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;archetypes&lt;br /&gt;
+archetypesは「原型、典型」という意味で、各ジャンルの記事のベースをここに入れます。詳しくは後ほど。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;config.toml&lt;br /&gt;
+ウェブサイトの設定をするファイルです。&lt;code&gt;.toml&lt;/code&gt;はTOML（Tom&amp;rsquo;s Obvious, Minimal Language）ファイルの拡張子で、設定ファイルを記述する言語です。Tom Preston-Wernerさんが作った言語なので、「Tom’s」となってるんですね。そのまんまですね。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;content&lt;br /&gt;
+マークダウンで書いた記事を入れる場所です。ジャンルが複数ある場合、&lt;code&gt;content/ジャンル名/記事.md&lt;/code&gt;のようなディレクトリ構成になります。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;data&lt;br /&gt;
+様々なデータを管理しておく場所です。今回ポートフォリオサイトを作るにあたって必要は（今のところ）ないので、消してしまっても大丈夫です。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;layouts&lt;br /&gt;
+HTMLファイルを入れる場所です。&lt;code&gt;index.html&lt;/code&gt;や、各ジャンルの個別ページ、ヘッダーやフッターなどのパーツなども全てここに入れます。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;static&lt;br /&gt;
+「静的」という意味で、CSSや画像などを入れておく場所です。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;themes&lt;br /&gt;
+Hugoのテーマを入れておく場所です。ただし今回は全部自分でCSSを書きたいので、このディレクトリも使いません。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;次回予告&#34;&gt;次回予告&lt;/h2&gt;
+
+&lt;p&gt;今回は「準備編」ということで、少し長め＆詳しめに書いてみました。初心者の僕でも分かるように書いているので、解説や参考用外部リンクを多めに入れていこうと思います。&lt;/p&gt;
+
+&lt;p&gt;次回は「制作編」。HTMLとCSSを書いて、記事を書いて、ローカルサーバーを立ち上げてみるまでをやっていきたいと思います。&lt;/p&gt;
+
+&lt;p&gt;それではまた！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>デザイナーの僕がHugoを使ってポートフォリオサイトを作ってみる #1【準備編】</title>
+      <link>https://dotstud.io/blog/hugo-for-designers-vol1/</link>
+      <pubDate>Wed, 21 Sep 2016 10:00:40 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/hugo-for-designers-vol1/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudioのデザイナー・ちゃちゃまるです。&lt;/p&gt;
+
+&lt;p&gt;僕はまだ自分のポートフォリオサイトを持っていません。TumblrやPortfolioboxなどのサービスを使って作ろうと色々試してみましたが、自分のほしい機能がなかったり料金がかかったりしてしまい、結局挫折していました。&lt;/p&gt;
+
+&lt;p&gt;そこで、重い腰を上げて、外部サービスに頼らず自分だけでポートフォリオサイトを作ってみようと思います。&lt;/p&gt;
+
+&lt;h2 id=&#34;本連載のミッション&#34;&gt;本連載のミッション&lt;/h2&gt;
+
+&lt;p&gt;とりあえず僕がイメージしているポートフォリオサイトを書き起こしてみます。&lt;/p&gt;
+
+&lt;p&gt;まず機能面でほしいのは&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ブログのような投稿形式がいい（時系列に投稿を並べたい）&lt;/li&gt;
+&lt;li&gt;投稿をいくつかのジャンルにわけたい（作品、お知らせ、など）&lt;/li&gt;
+&lt;li&gt;作品には、それを作るにあたって使ったソフトウェア等をタグ付けしたい（#illustrator、 #photoshop、など）&lt;/li&gt;
+&lt;li&gt;作品の投稿には、作品の画像とともに作成した日付や説明文なども書きたい&lt;/li&gt;
+&lt;li&gt;コードはGithubで管理したい&lt;/li&gt;
+&lt;li&gt;Github Pages（&lt;a href=&#34;https://chachmaru.github.io&#34;&gt;https://chachmaru.github.io&lt;/a&gt;）で公開したい&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;ぐらいです。ジャンルは増やす可能性もあるので、その増えたジャンルに対しても違うレイアウトが組めるような自由度もほしいですね。&lt;/p&gt;
+
+&lt;p&gt;次にデザイン面。あくまでも作品がメインであって欲しいので、サイドバーなどはつけず、シンプルなデザインにしてみます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/021/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;また、勉強のため、テンプレート等は使わず自分でコードを書きたいと思います。&lt;/p&gt;
+
+&lt;p&gt;それでは一からやっていきましょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;動的サイトと静的サイト&#34;&gt;動的サイトと静的サイト&lt;/h2&gt;
+
+&lt;p&gt;ウェブサイトには実は「動的」と「静的」の二種類あることをご存知でしょうか？僕はなんとなく「JavaScriptを使ってアニメーションを施していれば動的、CSSだけなら静的なんじゃないかなー」と思っていたのですが、実は全く違いました。&lt;/p&gt;
+
+&lt;p&gt;「動的」と「静的」の大きな違いは、&lt;strong&gt;どのタイミングでHTMLが生成されるか&lt;/strong&gt;です。&lt;strong&gt;動的ウェブサイトでは、ページにアクセスがあったタイミング&lt;/strong&gt;でPHPやNode.jsなどのサーバーサイドのプログラムでHTML(場合によってはCSSやJavaScriptも)を生成します。例えば会員登録が必要なサイトの場合は会員情報などのデータを扱いますが、そういったデータベースを利用する必要がある場合は、ページにアクセスがあったタイミングでデータベースからデータを引っ張ってきて表示させています。一方、&lt;strong&gt;静的ウェブサイトの場合はユーザーがページにアクセスする前&lt;/strong&gt;の、管理者側がサーバーにファイルをアップロードするタイミングで既にHTMLが生成されています。ページアクセスより前にコンテンツ内容がHTMLに書かれていて、ブラウザがそのHTMLファイルを読み込んでいます。&lt;/p&gt;
+
+&lt;!-- 動的サイト：ページが表示されるタイミングでコンテンツが生成される
+動的サイト：もともとHTMLに書かれているコンテンツがそのまま表示される --&gt;
+
+&lt;p&gt;動的サイトではアクセスしたタイミングでデータを取ってきたり、HTML生成が行われるため静的サイトにくらべて時間がかかります。静的サイトの方がページの表示速度は早いです。しかし静的サイトでは、例えばユーザーログインなど、見る人によって異なるようなウェブサイトを構築することは難しいです。&lt;/p&gt;
+
+&lt;p&gt;今回のポートフォリオは画像をたくさん載せたいため表示速度はなるべく速い方がいいのと、個人のサイトなのでユーザーログインなどは特に考えないとすると、静的ウェブサイトがなんとなく良さそうだな、という感じですね。&lt;/p&gt;
+
+&lt;h2 id=&#34;静的サイトジェネレーター-hugo&#34;&gt;静的サイトジェネレーター Hugo&lt;/h2&gt;
+
+&lt;p&gt;静的サイトを作るといっても、全てのページのHTMLをベタ書きしていくのは効率が悪すぎます。ここで活躍するのが&lt;strong&gt;静的サイトジェネレーター&lt;/strong&gt;というもの。名前のとおり、自動的にHTMLを書き出してウェブサイトを作ってくれる便利なものです。&lt;/p&gt;
+
+&lt;p&gt;僕が使おうと思っている静的サイトジェネレーターは、最近話題らしい&lt;strong&gt;&lt;a href=&#34;http://gohugo.io/&#34;&gt;Hugo&lt;/a&gt;&lt;/strong&gt;です。Hugoの特徴はスピードと簡潔さで、僕のような初心者にもわかりやすそうですね。実はこのdotstudioのウェブサイトもHugoで出来ています。Hugoでは記事をマークダウン方式（詳しくは&lt;a href=&#34;http://www.markdown.jp/what-is-markdown/&#34;&gt;こちら&lt;/a&gt;）で書けるようになっているので、効率よく記事を書けるようになります。&lt;/p&gt;
+
+&lt;p&gt;僕の環境はこんな感じです。OSやバージョンによって動作が違う場合もありますのでご了承ください。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;macOS El Capitan (10.11.6)&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;Hugo Static Site Generator v0.16&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;とりあえずhugoを使ってみる&#34;&gt;とりあえずHugoを使ってみる&lt;/h2&gt;
+
+&lt;p&gt;早速Hugoをインストールして使ってみましょう。イラストレーターやフォトショップなどのインストール手順とは少し違い、コマンドラインから実行します。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Homebrew（ソフトウェアのインストールを単純化してくれる管理システム）をインストール&lt;/li&gt;
+&lt;li&gt;Homebrewを使ってHugoをインストール&lt;/li&gt;
+&lt;li&gt;Hugoを使ってウェブサイトを生成する&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;ちなみにHugoのインストールまでは代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;が書いた&lt;a href=&#34;https://dotstud.io/blog/setup-new-mac-app/&#34;&gt;僕がMacを買い換えてすぐにいれるツール&amp;amp;すぐにする初期設定【2016年9月版&lt;/a&gt;にも載っています。&lt;/p&gt;
+
+&lt;h3 id=&#34;1-homebrewのインストール&#34;&gt;1. Homebrewのインストール&lt;/h3&gt;
+
+&lt;p&gt;HomebrewはmacOSのソフトウェアをインストール・管理してくれるものです。Hugo以外にも色々なものに使えると思うので、まだの方はぜひインストールをしてみてください。&lt;/p&gt;
+
+&lt;p&gt;ターミナル（アプリケーション＞ユーティリティ＞ターミナル.app）を開きます。そして&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ ruby -e &amp;quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;をコピペしてEnterを押すだけで完了です。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;$マークはコマンドであることを示す文字なので、$マーク以降の文字からコピーしてください&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;ついでに&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ brew update
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;も実行して、最新バージョンにアップデートしておきましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-hugoのインストール&#34;&gt;2. Hugoのインストール&lt;/h3&gt;
+
+&lt;p&gt;Homebrewでのインストールは基本&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ brew install xxxxx
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;です。&lt;/p&gt;
+
+&lt;p&gt;Hugoの場合&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ brew install hugo
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;で出来ます。簡単ですね！&lt;/p&gt;
+
+&lt;p&gt;きちんと作動しているかどうかは&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ hugo version
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;を実行してみて、&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Hugo Static Site Generator v0.16 BuildDate: 20xx-xx-xxTxx:xx:xx+09:00
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;のような結果が返ってきたかどうかで確認できます。&lt;/p&gt;
+
+&lt;h3 id=&#34;3-ウェブサイトを生成&#34;&gt;3. ウェブサイトを生成&lt;/h3&gt;
+
+&lt;p&gt;ウェブサイトを構成するファイル（HTMLやCSSなど）が入る場所を選びます。僕の場合ホームディレクトリ（アプリケーション、ドキュメント、写真フォルダなどがある場所）に新しく「dev」などの名前をつけたディレクトリを作って、その中を開発用にしています。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/021/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ここからはターミナルでの作業が多くなるので、コマンドの意味が分からない場合は&lt;a href=&#34;#&#34;&gt;UNIXコマンド一覧&lt;/a&gt;などと照らしあわせながら進めてみてください。&lt;/p&gt;
+
+&lt;p&gt;さて、まずはさきほどの&lt;code&gt;dev&lt;/code&gt;ディレクトリ内にターミナルで移動します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cd dev
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;次に、Hugoの雛形を生成します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;hugo new site chachamaru
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/021/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;このようになったら成功です！&lt;/p&gt;
+
+&lt;h2 id=&#34;hugoディレクトリ内を軽く説明&#34;&gt;Hugoディレクトリ内を軽く説明&lt;/h2&gt;
+
+&lt;p&gt;Finderからdevディレクトリ内を見てみましょう。ターミナルのいるディレクトリをFinderで開くには&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ open .
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;と実行するのが便利です。&lt;/p&gt;
+
+&lt;p&gt;こんな感じになっていると思います。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/021/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Hugo内のディレクトリ/ファイルを軽く説明していきます。実際に作業をするタイミングで更に詳しく解説するので、斜め読みで大丈夫です。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;archetypes&lt;br /&gt;
+archetypesは「原型、典型」という意味で、各ジャンルの記事のベースをここに入れます。詳しくは後ほど。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;config.toml&lt;br /&gt;
+ウェブサイトの設定をするファイルです。&lt;code&gt;.toml&lt;/code&gt;はTOML（Tom&amp;rsquo;s Obvious, Minimal Language）ファイルの拡張子で、設定ファイルを記述する言語です。Tom Preston-Wernerさんが作った言語なので、「Tom’s」となってるんですね。そのまんまですね。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;content&lt;br /&gt;
+マークダウンで書いた記事を入れる場所です。ジャンルが複数ある場合、&lt;code&gt;content/ジャンル名/記事.md&lt;/code&gt;のようなディレクトリ構成になります。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;data&lt;br /&gt;
+様々なデータを管理しておく場所です。今回ポートフォリオサイトを作るにあたって必要は（今のところ）ないので、消してしまっても大丈夫です。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;layouts&lt;br /&gt;
+HTMLファイルを入れる場所です。&lt;code&gt;index.html&lt;/code&gt;や、各ジャンルの個別ページ、ヘッダーやフッターなどのパーツなども全てここに入れます。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;static&lt;br /&gt;
+「静的」という意味で、CSSや画像などを入れておく場所です。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;themes&lt;br /&gt;
+Hugoのテーマを入れておく場所です。ただし今回は全部自分でCSSを書きたいので、このディレクトリも使いません。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;次回予告&#34;&gt;次回予告&lt;/h2&gt;
+
+&lt;p&gt;今回は「準備編」ということで、少し長め＆詳しめに書いてみました。初心者の僕でも分かるように書いているので、解説や参考用外部リンクを多めに入れていこうと思います。&lt;/p&gt;
+
+&lt;p&gt;次回は「制作編」。HTMLとCSSを書いて、記事を書いて、ローカルサーバーを立ち上げてみるまでをやっていきたいと思います。&lt;/p&gt;
+
+&lt;p&gt;それではまた！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>僕がMacを買い換えてすぐにいれるツール&amp;すぐにする初期設定【2016年9月版】</title>
       <link>https://dotstud.io/blog/setup-new-mac-app/</link>
       <pubDate>Fri, 16 Sep 2016 10:00:01 +0900</pubDate>
@@ -2219,347 +2611,6 @@ void loop() {
 結構ファッショナブルでかわいいですよね！　みなさんもぜひ作ってみてください＾＾&lt;/p&gt;
 
 &lt;p&gt;次回の記事もお楽しみにー！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>クラブで目立つ！Adafruit社のGemmaで光るピアスを作ってみよう</title>
-      <link>https://dotstud.io/blog/neopixel-ring-gemma-earrings/</link>
-      <pubDate>Fri, 26 Aug 2016 11:00:00 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/neopixel-ring-gemma-earrings/</guid>
-      
-      <description>
-
-&lt;p&gt;みなさんこんにちわ！　dotstudioでインターンをしているマオと申します。今回から、dotstudioのブログにて電子工作についての連載していきたいと思います！  初回の本記事では、Adafruit社の「Gemma」というマイコンボードを使った『フープイヤリング』の作り方を紹介します！&lt;/p&gt;
-
-&lt;p&gt;こちらが完成の動画です＾＾&lt;/p&gt;
-
-&lt;iframe width=&#34;645&#34; height=&#34;363&#34; src=&#34;https://www.youtube.com/embed/30MlFUBgzQo&#34; frameborder=&#34;0&#34; &gt;&lt;/iframe&gt;
-
-&lt;p&gt;それではさっそく作っていきましょう！&lt;/p&gt;
-
-&lt;h2 id=&#34;必要な物&#34;&gt;必要な物&lt;/h2&gt;
-
-&lt;!-- ![](/img/blog/015/01_cs.png) --&gt;
-
-&lt;ul&gt;
-&lt;li&gt;光るフープイヤリングのキット（購入は&lt;a href=&#34;https://dotstud.io/projects/neopixel-ring-flora-earrings/&#34;&gt;こちら&lt;/a&gt;から）
-
-&lt;ul&gt;
-&lt;li&gt;NeoPixel Ring&lt;/li&gt;
-&lt;li&gt;Gemma&lt;/li&gt;
-&lt;li&gt;リチュウムイオンポリマー電池&lt;/li&gt;
-&lt;li&gt;フックアップワイヤー&lt;/li&gt;
-&lt;li&gt;ピアスフック&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;はんだごて、はんだ&lt;/li&gt;
-&lt;li&gt;両面テープ&lt;/li&gt;
-&lt;li&gt;マイクロUSBケーブル&lt;/li&gt;
-&lt;li&gt;パソコン&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;準備ができたらさっそく作っていきましょう！&lt;/p&gt;
-
-&lt;h2 id=&#34;1-neopixel-ringの配線をはんだ付けする&#34;&gt;1. NeoPixel Ringの配線をはんだ付けする&lt;/h2&gt;
-
-&lt;p&gt;まずはNeoPixel Ringの配線をはんだ付けしていきます。ここでは付属のフックアップワイヤーを使ってください。はんだ付け初心者の方は&lt;a href=&#34;http://www.murata.com/ja-jp/campaign/ads/japan/elekids/ele/craft/knack/soldering&#34;&gt;こちらのサイト&lt;/a&gt;などを参考にして練習するのをおすすめします。安全メガネなどの装着も心がけましょう。（目をまもろう！）&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/02_earring.png&#34; alt=&#34;&#34; /&gt;
-実際にはんだ付けをした後の写真はこちらです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/03_fritzing.png&#34; alt=&#34;&#34; /&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/015/04_graph.png&#34; alt=&#34;&#34; /&gt;
-はんだ付けの配線はこちらです。表に従って配線してください。&lt;/p&gt;
-
-&lt;h2 id=&#34;2-gemmaに書き込むプログラムを作る&#34;&gt;2. Gemmaに書き込むプログラムを作る&lt;/h2&gt;
-
-&lt;p&gt;今回は「Arduino IDE」というソフトウェアを使って、プログラムをGemmaに書いていきます。Arduino IDEをまだ持っていない方は、&lt;a href=&#34;https://www.arduino.cc/en/Main/Software&#34;&gt;公式サイト&lt;/a&gt;からソフトウェアをダウンロードしてください。&lt;/p&gt;
-
-&lt;p&gt;Windowsユーザーの方は Gemmaの開発元のAdafruit社による「Windows Driver」をインストールする必要があります。&lt;a href=&#34;https://learn.adafruit.com/getting-started-with-flora/windows-setup&#34;&gt;こちらのサイト&lt;/a&gt;を参照して進めてください。（Mac・Linuxのユーザーの方はインストールする必要はありません）&lt;/p&gt;
-
-&lt;h3 id=&#34;2-1-ボードのインストレーション&#34;&gt;2-1. ボードのインストレーション&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/05_arduino.png&#34; alt=&#34;&#34; /&gt;
-次にArduino IDEを立ち上げてボードをインストールします。Arduino &amp;gt; Preferences をクリックしてください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/06_arduino.png&#34; alt=&#34;&#34; /&gt;
-&lt;strong&gt;&lt;a href=&#34;https://www.adafruit.com/package_adafruit_index.json&#34;&gt;https://www.adafruit.com/package_adafruit_index.json&lt;/a&gt;&lt;/strong&gt;&lt;br /&gt;
-上記のAdafruitのURLをコピーして、追加のボードマネージャーのURLに貼り、OKをクリックしてください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/07_arduino.png&#34; alt=&#34;&#34; /&gt;
-コピー＆ペーストが完了したら、ツール &amp;gt; マイコンボード &amp;gt; ボードマネージャーをクリックします。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/08_arduino.png&#34; alt=&#34;&#34; /&gt;
-すると、このような画面が表示されます。検索欄に「Adafruit AVR Boards」を入力し、インストールしましょう。ここまでで、ボードのインストレーションは終わりです。&lt;/p&gt;
-
-&lt;h3 id=&#34;2-2-ライブラリのインストール&#34;&gt;2-2. ライブラリのインストール&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/09_arduino.png&#34; alt=&#34;&#34; /&gt;
-次に、NeoPixel Ring を光らせるために必要なライブラリをインストールします。スケッチ &amp;gt; ライブラリをインクルード &amp;gt; ライブラリを管理 をクリックしてください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/10_arduino.png&#34; alt=&#34;&#34; /&gt;
-画面が表示されるので、検索欄に「Neopixel」と入力しましょう。上記のようになります。「Adafruit Neopixel by Adafruit」を選択してインストールしてください。&lt;/p&gt;
-
-&lt;p&gt;これでプログラムを書く準備ができました。&lt;/p&gt;
-
-&lt;h3 id=&#34;2-3-プログラムをgemmaに書き込む&#34;&gt;2-3.プログラムをGemmaに書き込む&lt;/h3&gt;
-
-&lt;p&gt;ここではGemmaに書き込むための設定をおこないます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/11_arduino.png&#34; alt=&#34;&#34; /&gt;
-まずは、ボードを選択するためにツール＞ボード＞Arduino Gemma をクリックしてください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/12_arduino.png&#34; alt=&#34;&#34; /&gt;
-次に書き込み装置を選択します。ツール＞書込装置＞USBtinyISPをクリックしてください。そして、以下のプログラムをスケッチにコピー&amp;amp;ペーストしてください。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;#include &amp;lt;Adafruit_NeoPixel.h&amp;gt;
-
-#define PIN 0
-
-Adafruit_NeoPixel pixels = Adafruit_NeoPixel(32, PIN);
-
-uint8_t  mode   = 0, // 現在のアニメーション
-         offset = 0; // スピンするの位置
-uint32_t color  = 0xffae00; // 赤でスタート
-uint32_t prevTime;
-
-void setup() {
-  pixels.begin();
-  pixels.setBrightness(60); // １/３ 明るさ
-  prevTime = millis();
-}
-
-void loop() {
-  uint8_t  i;
-  uint32_t t;
-
-  switch(mode) {
-
-   case 0: // ランダムに光る - 一回１LED
-    i = random(32);
-    pixels.setPixelColor(i, color);
-    pixels.show();
-    delay(10);
-    pixels.setPixelColor(i, 0);
-    break;
-
-   case 1: // スピンする輪っか (一回に　８　LEDs )
-    for(i=0; i&amp;lt;16; i++) {
-      uint32_t c = 0;
-      if(((offset + i) &amp;amp; 7) &amp;lt; 2) c = color; // ４ピクセル
-      pixels.setPixelColor(   i, c); // 一回目
-      pixels.setPixelColor(31-i, c); // ２回目（裏返す）
-    }
-    pixels.show();
-    offset++;
-    delay(50);
-    break;
-  }
-
-  t = millis();
-  if((t - prevTime) &amp;gt; 8000) {      // 毎８秒
-    mode++;                        // 次のモード
-    if(mode &amp;gt; 1) {                 // モードの終わり
-      mode = 0;                    // モードスタート
-      color &amp;gt;&amp;gt;= 8;                 // 次の色 R-&amp;gt;G-&amp;gt;B
-      if(!color) color = 0xffae00; // 赤にリセット
-    }
-    for(i=0; i&amp;lt;32; i++) pixels.setPixelColor(i, 0);
-    prevTime = t;
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/13_gemma.gif&#34; alt=&#34;&#34; /&gt;
-その後、Gemmaにある小さなボタンを押すと、こちらのように赤いLEDが10秒間点滅します。赤いLEDが点滅している間に、スケッチ＞書込装置を使って書き込む をクリックしましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;※こちらのイメージにはNeoPixel Ringがついていませんが、NeoPixel Ringをはんだ付けしたあとのものへ書き込んでも問題ありません。&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/14_arduino.png&#34; alt=&#34;&#34; /&gt;
-赤いLEDの点滅が終わったら、Gemmaへのプログラムの書き込み完了となります。この状態になれば、MicroUSBを外しても大丈夫です。&lt;/p&gt;
-
-&lt;h2 id=&#34;3-バッテリー接続-ピアスのフック取り付け&#34;&gt;3. バッテリー接続＆ピアスのフック取り付け&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/15_hello.png&#34; alt=&#34;&#34; /&gt;
-最後に、NepPixel Ringとリチュームイオンポリマーバッテリーを接続します。Gemmaボード上に小さなON-OFFスイッチがあるので、スイッチをONにしてきちんと光るかどうかを確かめてください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/16_world.png&#34; alt=&#34;&#34; /&gt;
-次にバッテリーを固定します。いろいろなやり方があるかと思いますが、私は両面テープを中央に貼り、ピアスフックとバッテリーの線を固定してみました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/17_hoge.png&#34; alt=&#34;&#34; /&gt;
-その上からまた両面テープを貼り、バッテリーを上から付けています。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/18_fuga.png&#34; alt=&#34;&#34; /&gt;
-最後にNeoPixel Ringとピアスフックを固定させて、ピアスフックの余った長さを切断すればできあがりです＾＾&lt;/p&gt;
-
-&lt;p&gt;バッテリーは充電可能なものとなっています。キットには充電機が含まれてないため、充電機がほしい方は&lt;a href=&#34;https://www.switch-science.com/catalog/1499/&#34;&gt;スイッチサイエンス&lt;/a&gt;さんのサイトでお求めください。&lt;/p&gt;
-
-&lt;h2 id=&#34;できあがり&#34;&gt;できあがり&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/23_mao.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/20_mao.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/19_mao.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;装着して写真を撮ってみました！&lt;br /&gt;
-結構ファッショナブルでかわいいですよね！　みなさんもぜひ作ってみてください＾＾&lt;/p&gt;
-
-&lt;p&gt;次回の記事もお楽しみにー！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>#MakerFaireTokyo2016 にウェアラブルな電子楽器を出展してきました！</title>
-      <link>https://dotstud.io/blog/uko-exhibited-at-mft2016/</link>
-      <pubDate>Mon, 08 Aug 2016 10:58:44 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/uko-exhibited-at-mft2016/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは！　dotstudioのメイカーエンジニア・うこです。&lt;br /&gt;
-去る8月6-7日の2日間にわたって開催された、国内最大級のモノづくりの祭典「&lt;a href=&#34;http://makezine.jp/event/mft2016/&#34;&gt;Maker Faire Tokyo 2016&lt;/a&gt;」(以下MFT)に作品を出展してきました。&lt;br /&gt;
-今回は個人メイカーとして制作したものを出しましたが、弊社エディターのうららがモデルとして一緒に参加してくれました。こちらの記事では、僕が出展した &lt;strong&gt;ウェアラブルなシンセサイザ「Cardiaction」&lt;/strong&gt; について紹介させていただきます。&lt;/p&gt;
-
-&lt;h2 id=&#34;ウェアラブルシンセサイザ-cardiaction-の紹介&#34;&gt;ウェアラブルシンセサイザ「Cardiaction」の紹介&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/011/01_cardiactionurara.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;「Cardiaction」とは、「心臓の〜」を意味する接頭辞cardiacと、様々な「動き」を意味するactionを組み合わせた造語です。&lt;br /&gt;
-着用することで着ている人の「心電図波形」をリアルタイムに読み取って音に変換し、服表面に描かれている鍵盤を押さえることで実際に演奏することができます。&lt;br /&gt;
-また、ボタンの代わりに配置したツマミによって音作りを行うことができます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/011/02_myproto.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;出展者応募時は、僕自身がプロトタイプを着てデモを行ったため、&lt;a href=&#34;http://makezine.jp/event/makers2016/u-kokolab/&#34;&gt;出展者紹介ページ&lt;/a&gt;ではこのような写真が紹介されています。&lt;br /&gt;
-制作段階において&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;MFT本番は最も暑い時期であるため、半袖またはノースリーブであることが望ましい&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;着用モデルはカワイイ女の子のほうが圧倒的にウケがよい(超重要)&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;以上の2点から、弊社エディターのうらら着用モデルとして、ダブルボタンのベストに近い形態のウェアラブルシンセサイザを開発することになりました。&lt;/p&gt;
-
-&lt;p&gt;また応募時には「チーム名」を求められましたが、個人出展予定だったため10秒ほどで思いついた「u.kokolab」という安易な名義で出展することとなりました(笑)。&lt;/p&gt;
-
-&lt;h3 id=&#34;コンセプト&#34;&gt;コンセプト&lt;/h3&gt;
-
-&lt;p&gt;少し哲学的な話になりますので、この節は適宜読み飛ばしてください。&lt;/p&gt;
-
-&lt;h4 id=&#34;1&#34;&gt;1.&lt;/h4&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;古代より、ヒトの肉体を駆動させている中枢、もしくは「こころ」の核となる部分は &lt;strong&gt;「心臓」&lt;/strong&gt; であると考えられてきました。(&lt;a href=&#34;https://ja.wikipedia.org/wiki/%E5%BF%83&#34;&gt;Wikipedia:こころ&lt;/a&gt;)&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;シンセサイザを主とするあらゆるすべての電子楽器は、 &lt;strong&gt;「音源」&lt;/strong&gt; を持っており、これはリアルタイムに生成されるか、メモリにあらかじめ書き込まれた状態にあります。電子楽器類はこの音源を元にして、指定された音色・音程・音量に変換できるモジュールを介して発音されることで楽器としての機能を果たしています。つまり、 &lt;strong&gt;「音源は電子楽器における心臓」&lt;/strong&gt; であるといえます。&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;以上2つの理由から、 &lt;strong&gt;「電子楽器における心臓をヒトの心臓に置き換える」&lt;/strong&gt; ことにより、機械である電子楽器とヒトが一体となることによって成立する新たな楽器という構想が生まれました。&lt;/p&gt;
-
-&lt;h4 id=&#34;2&#34;&gt;2.&lt;/h4&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;心電図は各人が固有に持っていながら電気的に取り出せる生体信号のひとつで、指紋と同様に「同じパターンをもつ人はいない」という理由からセキュリティにも使われた例があります。(&lt;a href=&#34;https://threatpost.com/watch-like-heartbeat-monitor-seeks-to-replace-passwords/102192/&#34;&gt;関連リンク&lt;/a&gt;)&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;バイオリンのような、奏者が音の発生元である弦に触れるようなアコースティックな楽器では、奏者による微妙な音の表現の違いというものが存在します。しかしシンセサイザのような電子楽器では、同じモデルの機体で同じ音作りのパラメータさえ設定すれば、誰が弾いても基本的には同じ音が出ます。&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;以上2つの理由から、&lt;strong&gt;「電気的に取得可能で個々人にユニークである心電図」&lt;/strong&gt; を、&lt;strong&gt;「誰が演奏しても音に違いの出ない電子楽器」&lt;/strong&gt; に適用することで、&lt;strong&gt;誰が演奏しても全く異なった音の出る電子楽器&lt;/strong&gt; を作ることができれば、との考えから「Cardiaction」の制作へとつながりました。&lt;/p&gt;
-
-&lt;h3 id=&#34;デザイン&#34;&gt;デザイン&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/011/03_design.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ベースとした衣服はダブルボタンの制服ベストで、ボタン部分はダブルではなく非対称のシングルとし、ボタンの代わりにツマミを配置しています。また、デザインの都合上レディースモデルながら右前となっています。&lt;br /&gt;
-「Cardiaction」の文字を元にしたロゴモチーフを左側に配置し、「C」の文字を電源マークにして心臓の直上に位置させています。&lt;br /&gt;
-残りの文字は波形の信号に似せた形をとり、特に「i」の文字を、心電図でよく見られる特徴的なQRS波(&lt;a href=&#34;http://www.geocities.jp/pinpinkorori100/sinzou-q-a/sindenzu.html&#34;&gt;参考:心電図の基本的なみかた&lt;/a&gt;)と同様の形状としています。&lt;/p&gt;
-
-&lt;h3 id=&#34;技術仕様&#34;&gt;技術仕様&lt;/h3&gt;
-
-&lt;p&gt;今回の出展時点での仕様となり、今後アップデートしてゆく予定です。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;同時発音数: 単音(モノフォニック)&lt;br /&gt;&lt;/li&gt;
-&lt;li&gt;鍵盤数: 13鍵&lt;/li&gt;
-&lt;li&gt;ピッチベンド・オクターブシフト対応&lt;/li&gt;
-&lt;li&gt;オシレーター: 3(標準四肢誘導心電図による第Ⅰ誘導・第Ⅱ誘導・第Ⅲ誘導の各波形からリアルタイムサンプリング)&lt;br /&gt;&lt;/li&gt;
-&lt;li&gt;音声合成方式: 筋電ノイズを含む心電図波形の減算合成とFM合成の併用&lt;/li&gt;
-&lt;li&gt;フィルタ: バンドパスフィルタ*2(24dB/Oct固定、中央周波数・Q値可変)&lt;br /&gt;&lt;/li&gt;
-&lt;li&gt;エンベローブ: なし&lt;/li&gt;
-&lt;li&gt;LFO: なし&lt;/li&gt;
-&lt;li&gt;ハードウェア(チップ): RaspberryPi3*1, Arduino Micro*2, AD8232単極誘導心電モニターモジュール*3&lt;/li&gt;
-&lt;li&gt;ハードウェア(出力): USB給電ステレオスピーカー4W*1, NeopixelフルカラーLEDモジュール*40, LEDφ10赤黄緑LED*各1&lt;/li&gt;
-&lt;li&gt;ハードウェア(入力): 圧力センサ*13, 可変抵抗*4, 接触位置センサ*1, スイッチ*4, 心電図計測用端子*4&lt;/li&gt;
-&lt;li&gt;服生地: T/Cツイル(ポリエステル65%,綿35%)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;発音に直接的には関わらない部分として、Cardiactionロゴ部分の発光があります。&lt;br /&gt;
-こちらは心拍1回に対してC文字部分から一番下までのLED点滅が2周期分光るようになっています。&lt;br /&gt;
-また、心起電力ベクトル(&lt;a href=&#34;http://www.udatsu.vs1.jp/axis.htm&#34;&gt;参考:「心電図：心臓電気軸」&lt;/a&gt;)を検出し、3次元ベクトルの各パラメータをそれぞれRGBの値に対応させて色を変化させるように設計しています。この色がそのまま音色の違いにも関連しています。&lt;/p&gt;
-
-&lt;h3 id=&#34;制作課程&#34;&gt;制作課程&lt;/h3&gt;
-
-&lt;p&gt;こちらはかなり長くなる予定ですので、別記事にして後ほどリンクを貼らせていただきたいと思います。&lt;br /&gt;
-MFT当日に問い合わせていただいた皆様につきましては、少々お待ち頂ければ幸いです。&lt;/p&gt;
-
-&lt;h2 id=&#34;デモンストレーションの様子&#34;&gt;デモンストレーションの様子&lt;/h2&gt;
-
-&lt;p&gt;当日2日間ともかなり忙しくあまり写真や動画を撮れなかったので、Twitterから以下にいくつか引用させていただきます。&lt;/p&gt;
-
-&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;u.kokolabさんのウェアラブルシンセサイザー。パフォーマンスが楽しそう。かわいい。&lt;a href=&#34;https://twitter.com/hashtag/MakerFaireTokyo2016?src=hash&#34;&gt;#MakerFaireTokyo2016&lt;/a&gt; &lt;a href=&#34;https://t.co/J84vnaDYN7&#34;&gt;pic.twitter.com/J84vnaDYN7&lt;/a&gt;&lt;/p&gt; 五味@NT能登キャンプ (@GomiHgy) &lt;a href=&#34;https://twitter.com/GomiHgy/status/762150380448784385&#34;&gt;2016年8月7日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;うらら　うこ　お疲れ！&lt;a href=&#34;https://twitter.com/hashtag/mft2016?src=hash&#34;&gt;#mft2016&lt;/a&gt; &lt;a href=&#34;https://twitter.com/hashtag/makerfairetokyo2016?src=hash&#34;&gt;#makerfairetokyo2016&lt;/a&gt; @ 東京ビッグサイト西ホール &lt;a href=&#34;https://t.co/XQLaqqPnht&#34;&gt;https://t.co/XQLaqqPnht&lt;/a&gt;&lt;/p&gt; のびすけ / sugawara (@n0bisuke) &lt;a href=&#34;https://twitter.com/n0bisuke/status/762221932624371712&#34;&gt;2016年8月7日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;間も無くu.kokolabさんのウェアラブルシンセサイザーの&amp;quot;Cardiaction&amp;quot;のデモが始まります。心電図を使ってメロディーを奏でています！&lt;br&gt;D-02-12 ブース &lt;a href=&#34;https://twitter.com/hashtag/MakerFaireTokyo2016?src=hash&#34;&gt;#MakerFaireTokyo2016&lt;/a&gt; &lt;a href=&#34;https://t.co/0I6jDVoe32&#34;&gt;pic.twitter.com/0I6jDVoe32&lt;/a&gt;&lt;/p&gt; カサネタリウム ホリ@ NT東京 &lt;sup&gt;8&lt;/sup&gt;&amp;frasl;&lt;sub&gt;7&lt;/sub&gt; (@kasanetarium) &lt;a href=&#34;https://twitter.com/kasanetarium/status/762151112900096000&#34;&gt;2016年8月7日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;ウェアラブルシンセめっちゃかわい〜 &lt;a href=&#34;https://twitter.com/hashtag/MakerFaireTokyo2016?src=hash&#34;&gt;#MakerFaireTokyo2016&lt;/a&gt; &lt;a href=&#34;https://t.co/yViNlFDh9M&#34;&gt;pic.twitter.com/yViNlFDh9M&lt;/a&gt;&lt;/p&gt; Kunimi Ishii in 一条 (@141923) &lt;a href=&#34;https://twitter.com/141923/status/762193336534900736&#34;&gt;2016年8月7日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;ウェアラブルシンセだ。太ももと腕で取ってる心電波形を音源にする。鍵盤で演奏する。ツマミも効く。実はかなりこったものである。 &lt;a href=&#34;https://twitter.com/hashtag/MFT2016?src=hash&#34;&gt;#MFT2016&lt;/a&gt; &lt;a href=&#34;https://t.co/aibrwdmVp1&#34;&gt;pic.twitter.com/aibrwdmVp1&lt;/a&gt;&lt;/p&gt; 鷲谷憲樹 (@nwashy) &lt;a href=&#34;https://twitter.com/nwashy/status/761901762118688769&#34;&gt;2016年8月6日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;ウェアラブル・シンセサイザー『Cardiaction!』。服が鍵盤に、ってだけでなく、心電波形をオシレーターにして音を作っているらしい。&lt;a href=&#34;https://twitter.com/hashtag/MakerFaireTokyo2016?src=hash&#34;&gt;#MakerFaireTokyo2016&lt;/a&gt; &lt;a href=&#34;https://t.co/Zl5TDxRfm1&#34;&gt;https://t.co/Zl5TDxRfm1&lt;/a&gt;&lt;/p&gt; 布施雄一郎 (@MRYF1968) &lt;a href=&#34;https://twitter.com/MRYF1968/status/762389212708560896&#34;&gt;2016年8月7日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;&lt;a href=&#34;https://twitter.com/hashtag/MakerFaireTokyo2016?src=hash&#34;&gt;#MakerFaireTokyo2016&lt;/a&gt; で一番工口かった楽器。 &lt;a href=&#34;https://t.co/cGXqUuUNk9&#34;&gt;pic.twitter.com/cGXqUuUNk9&lt;/a&gt;&lt;/p&gt; クランケ (@kranke_t) &lt;a href=&#34;https://twitter.com/kranke_t/status/762296179438686208&#34;&gt;2016年8月7日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;楽しそうな顔してる笑&lt;a href=&#34;https://twitter.com/hashtag/MFT2016?src=hash&#34;&gt;#MFT2016&lt;/a&gt; &lt;a href=&#34;https://twitter.com/hashtag/MakerFaireTokyo2016?src=hash&#34;&gt;#MakerFaireTokyo2016&lt;/a&gt;&lt;a href=&#34;https://t.co/OOi2SZ0nWJ&#34;&gt;https://t.co/OOi2SZ0nWJ&lt;/a&gt;&lt;/p&gt; うらら #MFT2016 (@uraranbon) &lt;a href=&#34;https://twitter.com/uraranbon/status/762181686075416576&#34;&gt;2016年8月7日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;makerfaireでイケてるひとを発見&lt;a href=&#34;https://twitter.com/uraranbon&#34;&gt;@uraranbon&lt;/a&gt; &lt;a href=&#34;https://twitter.com/harmoniko&#34;&gt;@harmoniko&lt;/a&gt;  &lt;a href=&#34;https://twitter.com/hashtag/MFT2016?src=hash&#34;&gt;#MFT2016&lt;/a&gt; &lt;a href=&#34;https://t.co/Pk57XR43eo&#34;&gt;pic.twitter.com/Pk57XR43eo&lt;/a&gt;&lt;/p&gt; わみ@ものづくり (@wamisnet) &lt;a href=&#34;https://twitter.com/wamisnet/status/762174015167303680&#34;&gt;2016年8月7日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;うこ氏 &lt;a href=&#34;https://twitter.com/harmoniko&#34;&gt;@harmoniko&lt;/a&gt; プロデュースの&lt;br&gt;LifeSynthJacket　みたいなやつ&lt;br&gt;うらら氏 &lt;a href=&#34;https://twitter.com/uraranbon&#34;&gt;@uraranbon&lt;/a&gt; やばいかわいい &lt;a href=&#34;https://t.co/YKSzfoLl8N&#34;&gt;pic.twitter.com/YKSzfoLl8N&lt;/a&gt;&lt;/p&gt; えむにわ(社会の底辺) (@m2wasabi) &lt;a href=&#34;https://twitter.com/m2wasabi/status/762159724737368064&#34;&gt;2016年8月7日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;MFTへの出展は今回で2回目ですが、前回以上に余裕がなく、僕自身はあまり他の展示を見て回れなかったのが残念でした。&lt;br /&gt;
-そんな中でも手伝って頂いた知り合いの方々や、シンセを着たうららと共に音を出しながら会場を歩いて出しゃばっていったにも関わらず快く対応してくださったメイカーの皆様、本当にありがとうございました。&lt;/p&gt;
-
-&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;メーカーフェア、昨年以上に余裕がなくってあまりほかのブースまわれなかったり実況とか告知もできなくって大変だった……あとこの楽器、他人に触られそうになるっていうのを全く想定してなくてかなり焦った(だってギター弾いてる人のそれを触る他人なんていないでしょ)&lt;/p&gt; うこ@MFT2016 (@harmoniko) &lt;a href=&#34;https://twitter.com/harmoniko/status/762338479481065473&#34;&gt;2016年8月7日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;自分のブースに対する個人的な所感ですが……&lt;br /&gt;
-MFTにおいては多くの子供たちも見に来られます。&lt;br /&gt;
-前回、2015年に出した自身の作品「&lt;a href=&#34;http://ukokoras.tumblr.com/post/125635484342&#34;&gt;Vocaleaper&lt;/a&gt;」は、参加者が触りやすい形で展示をしてあり、また特に何も考えず手をかざすだけで音が鳴るというものでした。そのため、多くの子供たちに触っていただけたのですが、今回は展示の特性からもあまり子供が近寄りたいと思えるようなものでなかったと感じています。&lt;br /&gt;
-個人的には、小さな世代にものづくりの楽しさをもっと知ってもらいたいと考えているため、それが実現できるミニマルなプロダクトを追加で用意しておけばよかったかな、と考えております。&lt;/p&gt;
-
-&lt;p&gt;しかし、コンセプトだけでなく見た目にもこだわりを入れたことで、先述のツイートのように多くの方々の目に留めていただくことができました。&lt;br /&gt;
-&lt;strong&gt;自分の手で一から作り上げたモノを評価していただけるのは、何十回何百回となくやっていてもとても嬉しいものですね！&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;次回出展予定&#34;&gt;次回出展予定&lt;/h2&gt;
-
-&lt;p&gt;ウェアラブルシンセサイザ「Cardiaction」は、次回は8月26日(金)にアスキーの主催による「&lt;a href=&#34;http://ascii.jp/elem/000/001/202/1202368/&#34;&gt;IoT＆H/W BIZ DAY 2 by ASCII STARTUP&lt;/a&gt;」に出展します。&lt;br /&gt;
-こちらではメイカー・うこの所属元であるdotstudio株式会社として出展の予定です。なお現時点では販売可能なプロダクトではありませんが、希望者が万が一いらっしゃったら……？ご期待くださいませ。&lt;br /&gt;
-ご来場のほどを一同お待ちしております！&lt;/p&gt;
 </description>
     </item>
     

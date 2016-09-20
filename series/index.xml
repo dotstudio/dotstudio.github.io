@@ -7,8 +7,204 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Fri, 16 Sep 2016 10:00:01 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 21 Sep 2016 10:00:40 +0900</lastBuildDate>
     <atom:link href="https://dotstud.io/series/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>デザイナーの僕がHugoを使ってポートフォリオサイトを作ってみる #1【準備編】</title>
+      <link>https://dotstud.io/blog/hugo-for-designers-vol1/</link>
+      <pubDate>Wed, 21 Sep 2016 10:00:40 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/hugo-for-designers-vol1/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudioのデザイナー・ちゃちゃまるです。&lt;/p&gt;
+
+&lt;p&gt;僕はまだ自分のポートフォリオサイトを持っていません。TumblrやPortfolioboxなどのサービスを使って作ろうと色々試してみましたが、自分のほしい機能がなかったり料金がかかったりしてしまい、結局挫折していました。&lt;/p&gt;
+
+&lt;p&gt;そこで、重い腰を上げて、外部サービスに頼らず自分だけでポートフォリオサイトを作ってみようと思います。&lt;/p&gt;
+
+&lt;h2 id=&#34;本連載のミッション&#34;&gt;本連載のミッション&lt;/h2&gt;
+
+&lt;p&gt;とりあえず僕がイメージしているポートフォリオサイトを書き起こしてみます。&lt;/p&gt;
+
+&lt;p&gt;まず機能面でほしいのは&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ブログのような投稿形式がいい（時系列に投稿を並べたい）&lt;/li&gt;
+&lt;li&gt;投稿をいくつかのジャンルにわけたい（作品、お知らせ、など）&lt;/li&gt;
+&lt;li&gt;作品には、それを作るにあたって使ったソフトウェア等をタグ付けしたい（#illustrator、 #photoshop、など）&lt;/li&gt;
+&lt;li&gt;作品の投稿には、作品の画像とともに作成した日付や説明文なども書きたい&lt;/li&gt;
+&lt;li&gt;コードはGithubで管理したい&lt;/li&gt;
+&lt;li&gt;Github Pages（&lt;a href=&#34;https://chachmaru.github.io&#34;&gt;https://chachmaru.github.io&lt;/a&gt;）で公開したい&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;ぐらいです。ジャンルは増やす可能性もあるので、その増えたジャンルに対しても違うレイアウトが組めるような自由度もほしいですね。&lt;/p&gt;
+
+&lt;p&gt;次にデザイン面。あくまでも作品がメインであって欲しいので、サイドバーなどはつけず、シンプルなデザインにしてみます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/021/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;また、勉強のため、テンプレート等は使わず自分でコードを書きたいと思います。&lt;/p&gt;
+
+&lt;p&gt;それでは一からやっていきましょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;動的サイトと静的サイト&#34;&gt;動的サイトと静的サイト&lt;/h2&gt;
+
+&lt;p&gt;ウェブサイトには実は「動的」と「静的」の二種類あることをご存知でしょうか？僕はなんとなく「JavaScriptを使ってアニメーションを施していれば動的、CSSだけなら静的なんじゃないかなー」と思っていたのですが、実は全く違いました。&lt;/p&gt;
+
+&lt;p&gt;「動的」と「静的」の大きな違いは、&lt;strong&gt;どのタイミングでHTMLが生成されるか&lt;/strong&gt;です。&lt;strong&gt;動的ウェブサイトでは、ページにアクセスがあったタイミング&lt;/strong&gt;でPHPやNode.jsなどのサーバーサイドのプログラムでHTML(場合によってはCSSやJavaScriptも)を生成します。例えば会員登録が必要なサイトの場合は会員情報などのデータを扱いますが、そういったデータベースを利用する必要がある場合は、ページにアクセスがあったタイミングでデータベースからデータを引っ張ってきて表示させています。一方、&lt;strong&gt;静的ウェブサイトの場合はユーザーがページにアクセスする前&lt;/strong&gt;の、管理者側がサーバーにファイルをアップロードするタイミングで既にHTMLが生成されています。ページアクセスより前にコンテンツ内容がHTMLに書かれていて、ブラウザがそのHTMLファイルを読み込んでいます。&lt;/p&gt;
+
+&lt;!-- 動的サイト：ページが表示されるタイミングでコンテンツが生成される
+動的サイト：もともとHTMLに書かれているコンテンツがそのまま表示される --&gt;
+
+&lt;p&gt;動的サイトではアクセスしたタイミングでデータを取ってきたり、HTML生成が行われるため静的サイトにくらべて時間がかかります。静的サイトの方がページの表示速度は早いです。しかし静的サイトでは、例えばユーザーログインなど、見る人によって異なるようなウェブサイトを構築することは難しいです。&lt;/p&gt;
+
+&lt;p&gt;今回のポートフォリオは画像をたくさん載せたいため表示速度はなるべく速い方がいいのと、個人のサイトなのでユーザーログインなどは特に考えないとすると、静的ウェブサイトがなんとなく良さそうだな、という感じですね。&lt;/p&gt;
+
+&lt;h2 id=&#34;静的サイトジェネレーター-hugo&#34;&gt;静的サイトジェネレーター Hugo&lt;/h2&gt;
+
+&lt;p&gt;静的サイトを作るといっても、全てのページのHTMLをベタ書きしていくのは効率が悪すぎます。ここで活躍するのが&lt;strong&gt;静的サイトジェネレーター&lt;/strong&gt;というもの。名前のとおり、自動的にHTMLを書き出してウェブサイトを作ってくれる便利なものです。&lt;/p&gt;
+
+&lt;p&gt;僕が使おうと思っている静的サイトジェネレーターは、最近話題らしい&lt;strong&gt;&lt;a href=&#34;http://gohugo.io/&#34;&gt;Hugo&lt;/a&gt;&lt;/strong&gt;です。Hugoの特徴はスピードと簡潔さで、僕のような初心者にもわかりやすそうですね。実はこのdotstudioのウェブサイトもHugoで出来ています。Hugoでは記事をマークダウン方式（詳しくは&lt;a href=&#34;http://www.markdown.jp/what-is-markdown/&#34;&gt;こちら&lt;/a&gt;）で書けるようになっているので、効率よく記事を書けるようになります。&lt;/p&gt;
+
+&lt;p&gt;僕の環境はこんな感じです。OSやバージョンによって動作が違う場合もありますのでご了承ください。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;macOS El Capitan (10.11.6)&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;Hugo Static Site Generator v0.16&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;とりあえずhugoを使ってみる&#34;&gt;とりあえずHugoを使ってみる&lt;/h2&gt;
+
+&lt;p&gt;早速Hugoをインストールして使ってみましょう。イラストレーターやフォトショップなどのインストール手順とは少し違い、コマンドラインから実行します。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Homebrew（ソフトウェアのインストールを単純化してくれる管理システム）をインストール&lt;/li&gt;
+&lt;li&gt;Homebrewを使ってHugoをインストール&lt;/li&gt;
+&lt;li&gt;Hugoを使ってウェブサイトを生成する&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;ちなみにHugoのインストールまでは代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;が書いた&lt;a href=&#34;https://dotstud.io/blog/setup-new-mac-app/&#34;&gt;僕がMacを買い換えてすぐにいれるツール&amp;amp;すぐにする初期設定【2016年9月版&lt;/a&gt;にも載っています。&lt;/p&gt;
+
+&lt;h3 id=&#34;1-homebrewのインストール&#34;&gt;1. Homebrewのインストール&lt;/h3&gt;
+
+&lt;p&gt;HomebrewはmacOSのソフトウェアをインストール・管理してくれるものです。Hugo以外にも色々なものに使えると思うので、まだの方はぜひインストールをしてみてください。&lt;/p&gt;
+
+&lt;p&gt;ターミナル（アプリケーション＞ユーティリティ＞ターミナル.app）を開きます。そして&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ ruby -e &amp;quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;をコピペしてEnterを押すだけで完了です。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;$マークはコマンドであることを示す文字なので、$マーク以降の文字からコピーしてください&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;ついでに&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ brew update
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;も実行して、最新バージョンにアップデートしておきましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-hugoのインストール&#34;&gt;2. Hugoのインストール&lt;/h3&gt;
+
+&lt;p&gt;Homebrewでのインストールは基本&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ brew install xxxxx
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;です。&lt;/p&gt;
+
+&lt;p&gt;Hugoの場合&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ brew install hugo
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;で出来ます。簡単ですね！&lt;/p&gt;
+
+&lt;p&gt;きちんと作動しているかどうかは&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ hugo version
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;を実行してみて、&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Hugo Static Site Generator v0.16 BuildDate: 20xx-xx-xxTxx:xx:xx+09:00
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;のような結果が返ってきたかどうかで確認できます。&lt;/p&gt;
+
+&lt;h3 id=&#34;3-ウェブサイトを生成&#34;&gt;3. ウェブサイトを生成&lt;/h3&gt;
+
+&lt;p&gt;ウェブサイトを構成するファイル（HTMLやCSSなど）が入る場所を選びます。僕の場合ホームディレクトリ（アプリケーション、ドキュメント、写真フォルダなどがある場所）に新しく「dev」などの名前をつけたディレクトリを作って、その中を開発用にしています。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/021/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ここからはターミナルでの作業が多くなるので、コマンドの意味が分からない場合は&lt;a href=&#34;#&#34;&gt;UNIXコマンド一覧&lt;/a&gt;などと照らしあわせながら進めてみてください。&lt;/p&gt;
+
+&lt;p&gt;さて、まずはさきほどの&lt;code&gt;dev&lt;/code&gt;ディレクトリ内にターミナルで移動します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cd dev
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;次に、Hugoの雛形を生成します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;hugo new site chachamaru
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/021/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;このようになったら成功です！&lt;/p&gt;
+
+&lt;h2 id=&#34;hugoディレクトリ内を軽く説明&#34;&gt;Hugoディレクトリ内を軽く説明&lt;/h2&gt;
+
+&lt;p&gt;Finderからdevディレクトリ内を見てみましょう。ターミナルのいるディレクトリをFinderで開くには&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ open .
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;と実行するのが便利です。&lt;/p&gt;
+
+&lt;p&gt;こんな感じになっていると思います。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/021/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Hugo内のディレクトリ/ファイルを軽く説明していきます。実際に作業をするタイミングで更に詳しく解説するので、斜め読みで大丈夫です。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;archetypes&lt;br /&gt;
+archetypesは「原型、典型」という意味で、各ジャンルの記事のベースをここに入れます。詳しくは後ほど。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;config.toml&lt;br /&gt;
+ウェブサイトの設定をするファイルです。&lt;code&gt;.toml&lt;/code&gt;はTOML（Tom&amp;rsquo;s Obvious, Minimal Language）ファイルの拡張子で、設定ファイルを記述する言語です。Tom Preston-Wernerさんが作った言語なので、「Tom’s」となってるんですね。そのまんまですね。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;content&lt;br /&gt;
+マークダウンで書いた記事を入れる場所です。ジャンルが複数ある場合、&lt;code&gt;content/ジャンル名/記事.md&lt;/code&gt;のようなディレクトリ構成になります。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;data&lt;br /&gt;
+様々なデータを管理しておく場所です。今回ポートフォリオサイトを作るにあたって必要は（今のところ）ないので、消してしまっても大丈夫です。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;layouts&lt;br /&gt;
+HTMLファイルを入れる場所です。&lt;code&gt;index.html&lt;/code&gt;や、各ジャンルの個別ページ、ヘッダーやフッターなどのパーツなども全てここに入れます。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;static&lt;br /&gt;
+「静的」という意味で、CSSや画像などを入れておく場所です。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;themes&lt;br /&gt;
+Hugoのテーマを入れておく場所です。ただし今回は全部自分でCSSを書きたいので、このディレクトリも使いません。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;次回予告&#34;&gt;次回予告&lt;/h2&gt;
+
+&lt;p&gt;今回は「準備編」ということで、少し長め＆詳しめに書いてみました。初心者の僕でも分かるように書いているので、解説や参考用外部リンクを多めに入れていこうと思います。&lt;/p&gt;
+
+&lt;p&gt;次回は「制作編」。HTMLとCSSを書いて、記事を書いて、ローカルサーバーを立ち上げてみるまでをやっていきたいと思います。&lt;/p&gt;
+
+&lt;p&gt;それではまた！&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>僕がMacを買い換えてすぐにいれるツール&amp;すぐにする初期設定【2016年9月版】</title>
