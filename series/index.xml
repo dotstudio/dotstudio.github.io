@@ -1548,5 +1548,193 @@ URL: &lt;a href=&#34;https://www.arduino.cc/&#34;&gt;https://www.arduino.cc/&lt;
 </description>
     </item>
     
+    <item>
+      <title>クラブで目立つ！Adafruit社のGemmaで光るピアスを作ってみよう</title>
+      <link>https://dotstud.io/blog/neopixel-ring-gemma-earrings/</link>
+      <pubDate>Fri, 26 Aug 2016 11:00:00 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/neopixel-ring-gemma-earrings/</guid>
+      
+      <description>
+
+&lt;p&gt;みなさんこんにちわ！　dotstudioでインターンをしているマオと申します。今回から、dotstudioのブログにて電子工作についての連載していきたいと思います！  初回の本記事では、Adafruit社の「Gemma」というマイコンボードを使った『フープイヤリング』の作り方を紹介します！&lt;/p&gt;
+
+&lt;p&gt;こちらが完成の動画です＾＾&lt;/p&gt;
+
+&lt;iframe width=&#34;645&#34; height=&#34;363&#34; src=&#34;https://www.youtube.com/embed/30MlFUBgzQo&#34; frameborder=&#34;0&#34; &gt;&lt;/iframe&gt;
+
+&lt;p&gt;それではさっそく作っていきましょう！&lt;/p&gt;
+
+&lt;h2 id=&#34;必要な物&#34;&gt;必要な物&lt;/h2&gt;
+
+&lt;!-- ![](/img/blog/015/01_cs.png) --&gt;
+
+&lt;ul&gt;
+&lt;li&gt;光るフープイヤリングのキット（購入は&lt;a href=&#34;https://dotstud.io/projects/neopixel-ring-flora-earrings/&#34;&gt;こちら&lt;/a&gt;から）
+
+&lt;ul&gt;
+&lt;li&gt;NeoPixel Ring&lt;/li&gt;
+&lt;li&gt;Gemma&lt;/li&gt;
+&lt;li&gt;リチュウムイオンポリマー電池&lt;/li&gt;
+&lt;li&gt;フックアップワイヤー&lt;/li&gt;
+&lt;li&gt;ピアスフック&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;はんだごて、はんだ&lt;/li&gt;
+&lt;li&gt;両面テープ&lt;/li&gt;
+&lt;li&gt;マイクロUSBケーブル&lt;/li&gt;
+&lt;li&gt;パソコン&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;準備ができたらさっそく作っていきましょう！&lt;/p&gt;
+
+&lt;h2 id=&#34;1-neopixel-ringの配線をはんだ付けする&#34;&gt;1. NeoPixel Ringの配線をはんだ付けする&lt;/h2&gt;
+
+&lt;p&gt;まずはNeoPixel Ringの配線をはんだ付けしていきます。ここでは付属のフックアップワイヤーを使ってください。はんだ付け初心者の方は&lt;a href=&#34;http://www.murata.com/ja-jp/campaign/ads/japan/elekids/ele/craft/knack/soldering&#34;&gt;こちらのサイト&lt;/a&gt;などを参考にして練習するのをおすすめします。安全メガネなどの装着も心がけましょう。（目をまもろう！）&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/02_earring.png&#34; alt=&#34;&#34; /&gt;
+実際にはんだ付けをした後の写真はこちらです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/03_fritzing.png&#34; alt=&#34;&#34; /&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/015/04_graph.png&#34; alt=&#34;&#34; /&gt;
+はんだ付けの配線はこちらです。表に従って配線してください。&lt;/p&gt;
+
+&lt;h2 id=&#34;2-gemmaに書き込むプログラムを作る&#34;&gt;2. Gemmaに書き込むプログラムを作る&lt;/h2&gt;
+
+&lt;p&gt;今回は「Arduino IDE」というソフトウェアを使って、プログラムをGemmaに書いていきます。Arduino IDEをまだ持っていない方は、&lt;a href=&#34;https://www.arduino.cc/en/Main/Software&#34;&gt;公式サイト&lt;/a&gt;からソフトウェアをダウンロードしてください。&lt;/p&gt;
+
+&lt;p&gt;Windowsユーザーの方は Gemmaの開発元のAdafruit社による「Windows Driver」をインストールする必要があります。&lt;a href=&#34;https://learn.adafruit.com/getting-started-with-flora/windows-setup&#34;&gt;こちらのサイト&lt;/a&gt;を参照して進めてください。（Mac・Linuxのユーザーの方はインストールする必要はありません）&lt;/p&gt;
+
+&lt;h3 id=&#34;2-1-ボードのインストレーション&#34;&gt;2-1. ボードのインストレーション&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/05_arduino.png&#34; alt=&#34;&#34; /&gt;
+次にArduino IDEを立ち上げてボードをインストールします。Arduino &amp;gt; Preferences をクリックしてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/06_arduino.png&#34; alt=&#34;&#34; /&gt;
+&lt;strong&gt;&lt;a href=&#34;https://www.adafruit.com/package_adafruit_index.json&#34;&gt;https://www.adafruit.com/package_adafruit_index.json&lt;/a&gt;&lt;/strong&gt;&lt;br /&gt;
+上記のAdafruitのURLをコピーして、追加のボードマネージャーのURLに貼り、OKをクリックしてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/07_arduino.png&#34; alt=&#34;&#34; /&gt;
+コピー＆ペーストが完了したら、ツール &amp;gt; マイコンボード &amp;gt; ボードマネージャーをクリックします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/08_arduino.png&#34; alt=&#34;&#34; /&gt;
+すると、このような画面が表示されます。検索欄に「Adafruit AVR Boards」を入力し、インストールしましょう。ここまでで、ボードのインストレーションは終わりです。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-2-ライブラリのインストール&#34;&gt;2-2. ライブラリのインストール&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/09_arduino.png&#34; alt=&#34;&#34; /&gt;
+次に、NeoPixel Ring を光らせるために必要なライブラリをインストールします。スケッチ &amp;gt; ライブラリをインクルード &amp;gt; ライブラリを管理 をクリックしてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/10_arduino.png&#34; alt=&#34;&#34; /&gt;
+画面が表示されるので、検索欄に「Neopixel」と入力しましょう。上記のようになります。「Adafruit Neopixel by Adafruit」を選択してインストールしてください。&lt;/p&gt;
+
+&lt;p&gt;これでプログラムを書く準備ができました。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-3-プログラムをgemmaに書き込む&#34;&gt;2-3.プログラムをGemmaに書き込む&lt;/h3&gt;
+
+&lt;p&gt;ここではGemmaに書き込むための設定をおこないます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/11_arduino.png&#34; alt=&#34;&#34; /&gt;
+まずは、ボードを選択するためにツール＞ボード＞Arduino Gemma をクリックしてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/12_arduino.png&#34; alt=&#34;&#34; /&gt;
+次に書き込み装置を選択します。ツール＞書込装置＞USBtinyISPをクリックしてください。そして、以下のプログラムをスケッチにコピー&amp;amp;ペーストしてください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Adafruit_NeoPixel.h&amp;gt;
+
+#define PIN 0
+
+Adafruit_NeoPixel pixels = Adafruit_NeoPixel(32, PIN);
+
+uint8_t  mode   = 0, // 現在のアニメーション
+         offset = 0; // スピンするの位置
+uint32_t color  = 0xffae00; // 赤でスタート
+uint32_t prevTime;
+
+void setup() {
+  pixels.begin();
+  pixels.setBrightness(60); // １/３ 明るさ
+  prevTime = millis();
+}
+
+void loop() {
+  uint8_t  i;
+  uint32_t t;
+
+  switch(mode) {
+
+   case 0: // ランダムに光る - 一回１LED
+    i = random(32);
+    pixels.setPixelColor(i, color);
+    pixels.show();
+    delay(10);
+    pixels.setPixelColor(i, 0);
+    break;
+
+   case 1: // スピンする輪っか (一回に　８　LEDs )
+    for(i=0; i&amp;lt;16; i++) {
+      uint32_t c = 0;
+      if(((offset + i) &amp;amp; 7) &amp;lt; 2) c = color; // ４ピクセル
+      pixels.setPixelColor(   i, c); // 一回目
+      pixels.setPixelColor(31-i, c); // ２回目（裏返す）
+    }
+    pixels.show();
+    offset++;
+    delay(50);
+    break;
+  }
+
+  t = millis();
+  if((t - prevTime) &amp;gt; 8000) {      // 毎８秒
+    mode++;                        // 次のモード
+    if(mode &amp;gt; 1) {                 // モードの終わり
+      mode = 0;                    // モードスタート
+      color &amp;gt;&amp;gt;= 8;                 // 次の色 R-&amp;gt;G-&amp;gt;B
+      if(!color) color = 0xffae00; // 赤にリセット
+    }
+    for(i=0; i&amp;lt;32; i++) pixels.setPixelColor(i, 0);
+    prevTime = t;
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/13_gemma.gif&#34; alt=&#34;&#34; /&gt;
+その後、Gemmaにある小さなボタンを押すと、こちらのように赤いLEDが10秒間点滅します。赤いLEDが点滅している間に、スケッチ＞書込装置を使って書き込む をクリックしましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;※こちらのイメージにはNeoPixel Ringがついていませんが、NeoPixel Ringをはんだ付けしたあとのものへ書き込んでも問題ありません。&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/14_arduino.png&#34; alt=&#34;&#34; /&gt;
+赤いLEDの点滅が終わったら、Gemmaへのプログラムの書き込み完了となります。この状態になれば、MicroUSBを外しても大丈夫です。&lt;/p&gt;
+
+&lt;h2 id=&#34;3-バッテリー接続-ピアスのフック取り付け&#34;&gt;3. バッテリー接続＆ピアスのフック取り付け&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/15_hello.png&#34; alt=&#34;&#34; /&gt;
+最後に、NepPixel Ringとリチュームイオンポリマーバッテリーを接続します。Gemmaボード上に小さなON-OFFスイッチがあるので、スイッチをONにしてきちんと光るかどうかを確かめてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/16_world.png&#34; alt=&#34;&#34; /&gt;
+次にバッテリーを固定します。いろいろなやり方があるかと思いますが、私は両面テープを中央に貼り、ピアスフックとバッテリーの線を固定してみました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/17_hoge.png&#34; alt=&#34;&#34; /&gt;
+その上からまた両面テープを貼り、バッテリーを上から付けています。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/18_fuga.png&#34; alt=&#34;&#34; /&gt;
+最後にNeoPixel Ringとピアスフックを固定させて、ピアスフックの余った長さを切断すればできあがりです＾＾&lt;/p&gt;
+
+&lt;p&gt;バッテリーは充電可能なものとなっています。キットには充電機が含まれてないため、充電機がほしい方は&lt;a href=&#34;https://www.switch-science.com/catalog/1499/&#34;&gt;スイッチサイエンス&lt;/a&gt;さんのサイトでお求めください。&lt;/p&gt;
+
+&lt;h2 id=&#34;できあがり&#34;&gt;できあがり&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/23_mao.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/20_mao.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/19_mao.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;装着して写真を撮ってみました！&lt;br /&gt;
+結構ファッショナブルでかわいいですよね！　みなさんもぜひ作ってみてください＾＾&lt;/p&gt;
+
+&lt;p&gt;次回の記事もお楽しみにー！&lt;/p&gt;
+</description>
+    </item>
+    
   </channel>
 </rss>
