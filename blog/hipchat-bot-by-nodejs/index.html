@@ -463,10 +463,9 @@
 
 <p>先日のLINE DEVELOPER DAYでのLINEのAPIの盛り上がりがありましたが、2016年はチャットボットが各所ですごく盛り上がっています。そんな話題に乗り遅れないようにチャットボットを作っていこうと思います。</p>
 
-<p>dotstudioでは社内チャットにHipChatを利用しています。</p>
+<p>dotstudioでは社内チャットにAtlasssian社の「HipChat」を利用しています。2010年に登場したツールですが、僕が愛用している（メッセンジャー管理アプリの）「Franz」に登録されているので選びました。</p>
 
-<p>業界的にSlackじゃないの？ってなりそうですが、Slackのユーザー課金
-は金銭的にけっこう辛くなっていくのが目に見えるので早期からSlackをやめました。まだSlackで消耗してるの?って言いたいです(強がり)。</p>
+<p>「業界的にSlackじゃないの？」ってなりそうですが、Slackのユーザー課金は金銭的にけっこう辛くなっていくのが目に見えるので早期からSlackをやめました。まだSlackで消耗してるの?って言いたいです（強がり）。</p>
 
 <p>HipChatもSlack同様にインテグレーション追加やBot作成のAPIがかなり豊富です。</p>
 
@@ -487,8 +486,7 @@
 
 <p><img src="/img/blog/030/03.png" alt="" /></p>
 
-<p><strong>プルダウンメニューからBOTを作るROOMを選択</strong>して <strong>Name your integration</strong>にBOTの名前を入れましょう。 一部room名を黒塗りにしてま
-すが察してください(笑)</p>
+<p><strong>プルダウンメニューからBOTを作るROOMを選択</strong>して <strong>Name your integration</strong>にBOTの名前を入れましょう。 一部room名を黒塗りにしてますが察してください（笑）</p>
 
 <p><img src="/img/blog/030/04.png" alt="" />
 作成するとアクセストークンなどが生成されます。</p>
@@ -507,18 +505,16 @@
 <pre><code>curl -d '{&quot;color&quot;:&quot;green&quot;,&quot;message&quot;:&quot;My first notification (yey)&quot;,&quot;notify&quot;:false,&quot;message_format&quot;:&quot;text&quot;}' -H 'Content-Type: application/json' https://xxxxxx.hipchat.com/v2/room/XXXXXXX/notification?auth_token=XXXXXXXXXXXXXXXXXXXXXXXXXXXX
 </code></pre>
 
-<p>ご自身の情報に置き換えて(むしろページのものをコピペして)ターミナ
+<p>ご自身の情報に置き換えて（むしろページのものをコピペして）ターミナ
 ルから実行すると先ほどの<strong>Try it!ボタン</strong>を押した際と同じ挙動をしてくれます。</p>
 
 <h2 id="node-jsからpostリクエストしてみる">Node.jsからPOSTリクエストしてみる</h2>
 
-<p>実際にBotとして活用するにあたり、他の処理と連携させる必要があるのでプログラム経由でPOSTしてみます。dotstudioではNode.jsをよく利用
-しているのでNode.jsから先ほどのAPIにアクセスしてます。</p>
+<p>実際にBotとして活用するにあたり、他の処理と連携させる必要があるのでプログラム経由でPOSTしてみます。dotstudioではNode.jsをよく利用しているのでNode.jsから先ほどのAPIにアクセスしてます。</p>
 
 <p><code>request</code>や<code>SuperAgent</code>などHTTPリクエストをいい感じにしてくれる外部モジュールはいくつもありますが、今回は<a href="http://qiita.com/n0bisuke/items/33a6a6da1d6f455105f9">Node.jsでJSONデータをHTTP POSTするメモ</a>にもまとめたように外部モジュールに依存せずにNode.jsに組み込まれてる<code>http</code>のみで実装してみます。</p>
 
-<p>app.jsは以下のようになります。HOSTやPATHを先ほどの情報に置き換え
-て実行して見ましょう。</p>
+<p>app.jsは以下のようになります。HOSTやPATHを先ほどの情報に置き換えて実行して見ましょう。</p>
 
 <pre><code>'use strict'
 
@@ -578,11 +574,9 @@ req.end();
 
 <p>今回の背景色の変更もですが、<a href="https://www.hipchat.com/docs/apiv2">API Reference</a>を見るとAPI経由で色々な機能が用意されていることがわかります。</p>
 
-<p>他のチャットツールだと通常利用の機能をAPIで再現できない場合などもありますが、HipChatは通常の利用以上にAPI経由の方が自由度が高い設
-計になっている気がします。</p>
+<p>他のチャットツールだと通常利用の機能をAPIで再現できない場合などもありますが、HipChatは通常の利用以上にAPI経由の方が自由度が高い設計になっている気がします。</p>
 
-<p>Node.jsからもこんな形で簡単にBOT投稿ができるのでとりあえず簡単な
-通知などから作っていき、その様子もまたまとめていく予定です。</p>
+<p>Node.jsからもこんな形で簡単にBOT投稿ができるのでとりあえず簡単な通知などから作っていき、その様子もまたまとめていく予定です。</p>
 
 <p>乞うご期待 ￣ー￣)／</p>
 </div>

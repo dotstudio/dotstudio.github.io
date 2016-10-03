@@ -23,10 +23,9 @@
 
 &lt;p&gt;先日のLINE DEVELOPER DAYでのLINEのAPIの盛り上がりがありましたが、2016年はチャットボットが各所ですごく盛り上がっています。そんな話題に乗り遅れないようにチャットボットを作っていこうと思います。&lt;/p&gt;
 
-&lt;p&gt;dotstudioでは社内チャットにHipChatを利用しています。&lt;/p&gt;
+&lt;p&gt;dotstudioでは社内チャットにAtlasssian社の「HipChat」を利用しています。2010年に登場したツールですが、僕が愛用している（メッセンジャー管理アプリの）「Franz」に登録されているので選びました。&lt;/p&gt;
 
-&lt;p&gt;業界的にSlackじゃないの？ってなりそうですが、Slackのユーザー課金
-は金銭的にけっこう辛くなっていくのが目に見えるので早期からSlackをやめました。まだSlackで消耗してるの?って言いたいです(強がり)。&lt;/p&gt;
+&lt;p&gt;「業界的にSlackじゃないの？」ってなりそうですが、Slackのユーザー課金は金銭的にけっこう辛くなっていくのが目に見えるので早期からSlackをやめました。まだSlackで消耗してるの?って言いたいです（強がり）。&lt;/p&gt;
 
 &lt;p&gt;HipChatもSlack同様にインテグレーション追加やBot作成のAPIがかなり豊富です。&lt;/p&gt;
 
@@ -47,8 +46,7 @@
 
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/030/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;プルダウンメニューからBOTを作るROOMを選択&lt;/strong&gt;して &lt;strong&gt;Name your integration&lt;/strong&gt;にBOTの名前を入れましょう。 一部room名を黒塗りにしてま
-すが察してください(笑)&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;プルダウンメニューからBOTを作るROOMを選択&lt;/strong&gt;して &lt;strong&gt;Name your integration&lt;/strong&gt;にBOTの名前を入れましょう。 一部room名を黒塗りにしてますが察してください（笑）&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/030/04.png&#34; alt=&#34;&#34; /&gt;
 作成するとアクセストークンなどが生成されます。&lt;/p&gt;
@@ -67,18 +65,16 @@
 &lt;pre&gt;&lt;code&gt;curl -d &#39;{&amp;quot;color&amp;quot;:&amp;quot;green&amp;quot;,&amp;quot;message&amp;quot;:&amp;quot;My first notification (yey)&amp;quot;,&amp;quot;notify&amp;quot;:false,&amp;quot;message_format&amp;quot;:&amp;quot;text&amp;quot;}&#39; -H &#39;Content-Type: application/json&#39; https://xxxxxx.hipchat.com/v2/room/XXXXXXX/notification?auth_token=XXXXXXXXXXXXXXXXXXXXXXXXXXXX
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;ご自身の情報に置き換えて(むしろページのものをコピペして)ターミナ
+&lt;p&gt;ご自身の情報に置き換えて（むしろページのものをコピペして）ターミナ
 ルから実行すると先ほどの&lt;strong&gt;Try it!ボタン&lt;/strong&gt;を押した際と同じ挙動をしてくれます。&lt;/p&gt;
 
 &lt;h2 id=&#34;node-jsからpostリクエストしてみる&#34;&gt;Node.jsからPOSTリクエストしてみる&lt;/h2&gt;
 
-&lt;p&gt;実際にBotとして活用するにあたり、他の処理と連携させる必要があるのでプログラム経由でPOSTしてみます。dotstudioではNode.jsをよく利用
-しているのでNode.jsから先ほどのAPIにアクセスしてます。&lt;/p&gt;
+&lt;p&gt;実際にBotとして活用するにあたり、他の処理と連携させる必要があるのでプログラム経由でPOSTしてみます。dotstudioではNode.jsをよく利用しているのでNode.jsから先ほどのAPIにアクセスしてます。&lt;/p&gt;
 
 &lt;p&gt;&lt;code&gt;request&lt;/code&gt;や&lt;code&gt;SuperAgent&lt;/code&gt;などHTTPリクエストをいい感じにしてくれる外部モジュールはいくつもありますが、今回は&lt;a href=&#34;http://qiita.com/n0bisuke/items/33a6a6da1d6f455105f9&#34;&gt;Node.jsでJSONデータをHTTP POSTするメモ&lt;/a&gt;にもまとめたように外部モジュールに依存せずにNode.jsに組み込まれてる&lt;code&gt;http&lt;/code&gt;のみで実装してみます。&lt;/p&gt;
 
-&lt;p&gt;app.jsは以下のようになります。HOSTやPATHを先ほどの情報に置き換え
-て実行して見ましょう。&lt;/p&gt;
+&lt;p&gt;app.jsは以下のようになります。HOSTやPATHを先ほどの情報に置き換えて実行して見ましょう。&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;&#39;use strict&#39;
 
@@ -138,11 +134,9 @@ req.end();
 
 &lt;p&gt;今回の背景色の変更もですが、&lt;a href=&#34;https://www.hipchat.com/docs/apiv2&#34;&gt;API Reference&lt;/a&gt;を見るとAPI経由で色々な機能が用意されていることがわかります。&lt;/p&gt;
 
-&lt;p&gt;他のチャットツールだと通常利用の機能をAPIで再現できない場合などもありますが、HipChatは通常の利用以上にAPI経由の方が自由度が高い設
-計になっている気がします。&lt;/p&gt;
+&lt;p&gt;他のチャットツールだと通常利用の機能をAPIで再現できない場合などもありますが、HipChatは通常の利用以上にAPI経由の方が自由度が高い設計になっている気がします。&lt;/p&gt;
 
-&lt;p&gt;Node.jsからもこんな形で簡単にBOT投稿ができるのでとりあえず簡単な
-通知などから作っていき、その様子もまたまとめていく予定です。&lt;/p&gt;
+&lt;p&gt;Node.jsからもこんな形で簡単にBOT投稿ができるのでとりあえず簡単な通知などから作っていき、その様子もまたまとめていく予定です。&lt;/p&gt;
 
 &lt;p&gt;乞うご期待 ￣ー￣)／&lt;/p&gt;
 </description>
