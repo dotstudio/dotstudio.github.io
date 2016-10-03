@@ -7,8 +7,144 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Mon, 03 Oct 2016 10:00:57 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 04 Oct 2016 10:00:39 +0900</lastBuildDate>
     <atom:link href="https://dotstud.io/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Node.jsからHipChatに投稿してみる</title>
+      <link>https://dotstud.io/blog/hipchat-bot-by-nodejs/</link>
+      <pubDate>Tue, 04 Oct 2016 10:00:39 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/hipchat-bot-by-nodejs/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudio代表の&lt;a href=&#34;http://qiita.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。
+dotstudioでは社内チャットにHipChatを利用しています。&lt;/p&gt;
+
+&lt;p&gt;業界的にSlackじゃないの？ってなりそうですが、Slackのユーザー課金
+は金銭的にけっこう辛くなっていくのが目に見えるので早期からSlackをやめました。まだSlackで消耗してるの?って言いたいです(強がり)。&lt;/p&gt;
+
+&lt;p&gt;HipChatもSlack同様にインテグレーション追加やBot作成のAPIがかなり
+豊富です。&lt;/p&gt;
+
+&lt;p&gt;今日はNode.jsからHipChatに投稿する方法を紹介します。&lt;/p&gt;
+
+&lt;h2 id=&#34;hipchatのインテグレーション追加をする&#34;&gt;HipChatのインテグレーション追加をする&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.hipchat.com/&#34;&gt;https://www.hipchat.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;HipChatでご自身のチームにログインしましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/030/01.png&#34; alt=&#34;&#34; /&gt;
+メニューから &lt;strong&gt;インテグレーション&lt;/strong&gt;を選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/030/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Build your own integration&lt;/strong&gt;を選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/030/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;プルダウンメニューからBOTを作るROOMを選択&lt;/strong&gt;して &lt;strong&gt;Name your integration&lt;/strong&gt;にBOTの名前を入れましょう。 一部room名を黒塗りにしてま
+すが察してください(笑)&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/030/04.png&#34; alt=&#34;&#34; /&gt;
+作成するとアクセストークンなどが生成されます。&lt;/p&gt;
+
+&lt;p&gt;ひとまず&lt;strong&gt;Try it!ボタン&lt;/strong&gt;を押してみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/030/05.png&#34; alt=&#34;&#34; /&gt;
+指定したROOMにメッセージが流れたら成功です。&lt;/p&gt;
+
+&lt;p&gt;それにしてもこの絵文字のセンスいいですよね。&lt;/p&gt;
+
+&lt;h2 id=&#34;curlコマンドでの実行を試す&#34;&gt;curlコマンドでの実行を試す&lt;/h2&gt;
+
+&lt;p&gt;先ほどの画面の &lt;strong&gt;Try it out&lt;/strong&gt;の項目に書いてあるcurlコマンドを実行することでAPI経由のPOSTを再現できます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;curl -d &#39;{&amp;quot;color&amp;quot;:&amp;quot;green&amp;quot;,&amp;quot;message&amp;quot;:&amp;quot;My first notification (yey)&amp;quot;,&amp;quot;notify&amp;quot;:false,&amp;quot;message_format&amp;quot;:&amp;quot;text&amp;quot;}&#39; -H &#39;Content-Type: application/json&#39; https://xxxxxx.hipchat.com/v2/room/XXXXXXX/notification?auth_token=XXXXXXXXXXXXXXXXXXXXXXXXXXXX
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ご自身の情報に置き換えて(むしろページのものをコピペして)ターミナ
+ルから実行すると先ほどの&lt;strong&gt;Try it!ボタン&lt;/strong&gt;を押した際と同じ挙動をしてくれます。&lt;/p&gt;
+
+&lt;h2 id=&#34;node-jsからpostリクエストしてみる&#34;&gt;Node.jsからPOSTリクエストしてみる&lt;/h2&gt;
+
+&lt;p&gt;実際にBotとして活用するにあたり、他の処理と連携させる必要があるのでプログラム経由でPOSTしてみます。dotstudioではNode.jsをよく利用
+しているのでNode.jsから先ほどのAPIにアクセスしてます。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;request&lt;/code&gt;や&lt;code&gt;SuperAgent&lt;/code&gt;などHTTPリクエストをいい感じにしてくれる外部モジュールはいくつもありますが、今回は&lt;a href=&#34;http://qiita.com/n0bisuke/items/33a6a6da1d6f455105f9&#34;&gt;Node.jsでJSONデータをHTTP POSTするメモ&lt;/a&gt;にもまとめたように外部モジュールに依存せずにNode.jsに組み込まれてる&lt;code&gt;http&lt;/code&gt;のみで実装してみます。&lt;/p&gt;
+
+&lt;p&gt;app.jsは以下のようになります。HOSTやPATHを先ほどの情報に置き換え
+て実行して見ましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;
+
+const http = require(&#39;http&#39;);
+const HOST = `xxxxx.hipchat.com`;
+const PATH = `/v2/room/XXXXXXX/notification?auth_token=XXXXXXXXXXXXXXXXXXXXXXXXXXXX`;
+
+let postData = {
+    &amp;quot;color&amp;quot;: &amp;quot;yellow&amp;quot;,
+    &amp;quot;message&amp;quot;: &amp;quot;test&amp;quot;,
+    &amp;quot;notify&amp;quot;: false,
+    &amp;quot;message_format&amp;quot;:&amp;quot;text&amp;quot;
+};
+
+let postDataStr = JSON.stringify(postData);
+let options = {
+    host: HOST,
+    port: 80,
+    path: PATH,
+    method: &#39;POST&#39;,
+    headers: {
+        &#39;Content-Type&#39;: &#39;application/json&#39;,
+        &#39;Content-Length&#39;: postDataStr.length
+    }
+};
+
+let req = http.request(options, (res) =&amp;gt; {
+  console.log(&#39;STATUS: &#39; + res.statusCode);
+  console.log(&#39;HEADERS: &#39; + JSON.stringify(res.headers));
+  res.setEncoding(&#39;utf8&#39;);
+  res.on(&#39;data&#39;, (chunk) =&amp;gt; {
+    console.log(&#39;BODY: &#39; + chunk);
+  });
+});
+req.on(&#39;error&#39;, (e) =&amp;gt; {
+  console.log(&#39;problem with request: &#39; + e.message);
+});
+req.write(postDataStr);
+req.end();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;7~12行目のPOSTデータのパラメーターは&lt;a href=&#34;https://www.hipchat.com/docs/apiv2/method/send_room_notification&#34;&gt;Send room notificationのリファレンス&lt;/a&gt;を確認しましょう。&lt;/p&gt;
+
+&lt;p&gt;けっこう細かく設定できるので詳細はまた別記事などで紹介したいです。&lt;/p&gt;
+
+&lt;p&gt;それでは、app.jsを実行してみます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;node app
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/030/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;さっきまでは&lt;code&gt;&amp;quot;color&amp;quot;: &amp;quot;green&amp;quot;&lt;/code&gt;でしたが&lt;code&gt;&amp;quot;color&amp;quot;: &amp;quot;yellow&amp;quot;&lt;/code&gt;にしてみました。
+背景が黄色になりますね。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;今回の背景色の変更もですが、&lt;a href=&#34;https://www.hipchat.com/docs/apiv2&#34;&gt;API Reference&lt;/a&gt;を見るとAPI経由で色々な機能が用意されていることがわかります。&lt;/p&gt;
+
+&lt;p&gt;他のチャットツールだと通常利用の機能をAPIで再現できない場合などもありますが、HipChatは通常の利用以上にAPI経由の方が自由度が高い設
+計になっている気がします。&lt;/p&gt;
+
+&lt;p&gt;Node.jsからもこんな形で簡単にBOT投稿ができるのでとりあえず簡単な
+通知などから作っていき、その様子もまたまとめていく予定です。&lt;/p&gt;
+
+&lt;p&gt;乞うご期待 ￣ー￣)／&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>秋はモノづくりの聖地、中国・深センへいこう！ #MakerFaireShenzhen に参加したい日本人向けまとめ</title>
@@ -3112,98 +3248,6 @@ MFTにおいては多くの子供たちも見に来られます。&lt;br /&gt;
 &lt;p&gt;ウェアラブルシンセサイザ「Cardiaction」は、次回は8月26日(金)にアスキーの主催による「&lt;a href=&#34;http://ascii.jp/elem/000/001/202/1202368/&#34;&gt;IoT＆H/W BIZ DAY 2 by ASCII STARTUP&lt;/a&gt;」に出展します。&lt;br /&gt;
 こちらではメイカー・うこの所属元であるdotstudio株式会社として出展の予定です。なお現時点では販売可能なプロダクトではありませんが、希望者が万が一いらっしゃったら……？ご期待くださいませ。&lt;br /&gt;
 ご来場のほどを一同お待ちしております！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>JS1行でリアルタイム通信ができる「milkcocoa」のLT大会で登壇してきた！</title>
-      <link>https://dotstud.io/blog/milkcocoa-battle-lightning-talk/</link>
-      <pubDate>Fri, 05 Aug 2016 09:57:09 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/milkcocoa-battle-lightning-talk/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは！　dotstudioのエディター、うららです。非エンジニアですが、先日バックエンドサービス「&lt;a href=&#34;https://mlkcca.com/&#34;&gt;milkcocoa&lt;/a&gt;」のLT大会「&lt;strong&gt;紅白milkcocoa合戦&lt;/strong&gt;」に参加してきました！&lt;/p&gt;
-
-&lt;p&gt;とても刺激的なイベントだったので、当日の様子をまとめます！&lt;/p&gt;
-
-&lt;h2 id=&#34;男女対抗で戦う-紅白milkcocoa合戦-とは&#34;&gt;男女対抗で戦う「紅白milkcocoa合戦」とは&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/005/01_milkcocoa.png&#34; alt=&#34;&#34; /&gt;
-&lt;a href=&#34;http://mlkcca.connpass.com/event/34936/&#34;&gt;【増枠】紅白 Milkcocoa 合戦！【祭り】&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;バックエンドサービス「milkcocoa」をテーマに、男女5名ずつが紅白チームに分かれて競ったのが「紅白milkcocoa合戦」というイベント。1人5分ずつライトニングトークを繰り広げるという内容でした。&lt;/p&gt;
-
-&lt;p&gt;簡単にmilkcocoaの説明をすると、&lt;strong&gt;JavaScriptのソースコードを1行挿入するだけで、リアルタイム通信ができるようになる&lt;/strong&gt; という感じです。Webサービス、特にリアルタイムな通信を必要とするWebサービスではバックエンドの構築が必要不可欠。そんなとき、milkcocoaを使えばバックエンド未経験の人でも簡単にリアルタイム通信ができるようになるという代物です。&lt;/p&gt;
-
-&lt;h2 id=&#34;わたしが発表したもの&#34;&gt;わたしが発表したもの&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/005/02_urara.png&#34; alt=&#34;&#34; /&gt;
-私が発表したのは、がじぇるねが制作しているマイコンボード「&lt;a href=&#34;http://gadget.renesas.com/ja/product/cotton.html&#34;&gt;GR-COTTON&lt;/a&gt;」とmilkcocoaを組み合わせて、
-「&lt;strong&gt;パソコン上から部屋の温度がわかる&lt;/strong&gt;」という仕組み。私はHTMLとCSSしかできないので、1990年代風のWebサイトにしてみました。&lt;/p&gt;
-
-&lt;script async class=&#34;speakerdeck-embed&#34; data-id=&#34;aa68f3d1934d480f9a3a26a6062ffa9b&#34; data-ratio=&#34;1.33333333333333&#34; src=&#34;//speakerdeck.com/assets/embed.js&#34;&gt;&lt;/script&gt;
-
-&lt;p&gt;当日発表したプレゼン資料はこちらです。作り方も書いてあるのでぜひ試してみてください。&lt;/p&gt;
-
-&lt;h2 id=&#34;イベントの様子&#34;&gt;イベントの様子&lt;/h2&gt;
-
-&lt;p&gt;「milkcocoa合戦」では、合計で11名の方が登壇しています。せっかくなので、その中から個人的なベスト3を紹介してみます。&lt;/p&gt;
-
-&lt;h3 id=&#34;たみーさんの-オンラインで名刺を交換できるサービス&#34;&gt;たみーさんの「オンラインで名刺を交換できるサービス」&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/005/03_pokemon.png&#34; alt=&#34;&#34; /&gt;
-エンジニアって紙文化ないのに、未だに紙の名刺を交換するのはどうなの……？　ということでたみーさんが作ったのは「&lt;strong&gt;オンラインで名刺を交換できる&lt;/strong&gt;」サービス。&lt;strong&gt;自身をポケモンにみたてて、友達になったらくっつく&lt;/strong&gt; というめちゃくちゃかわいいものでした。&lt;/p&gt;
-
-&lt;h3 id=&#34;かよこさんの-笑顔が減るとソウルジェムが濁るツール&#34;&gt;かよこさんの「笑顔が減るとソウルジェムが濁るツール」&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/005/04_souljem.png&#34; alt=&#34;&#34; /&gt;
-「エンジニアになってから笑っていない」というかよこさんは、&lt;strong&gt;表情を判定し、笑顔が減るとソウルジェムが濁り、笑うと綾野剛からメッセをくれる&lt;/strong&gt; という仕組みを作りました！　ソウルジェムは、アニメ『魔法少女まどかマギカ』で登場する重要なアイテム。アイデアが素晴らしすぎますし、悩みも解決されていて尊敬の念しかありません。&lt;/p&gt;
-
-&lt;h3 id=&#34;うこの-webから色を変えられるランタン&#34;&gt;うこの「Webから色を変えられるランタン」&lt;/h3&gt;
-
-&lt;!-- ![](/img/blog/005/05_lantern.png) --&gt;
-
-&lt;p&gt;&lt;center&gt;&lt;blockquote class=&#34;twitter-video&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;おー！すげえ！ webから操作 &lt;a href=&#34;https://twitter.com/hashtag/mlkcca?src=hash&#34;&gt;#mlkcca&lt;/a&gt; &lt;a href=&#34;https://t.co/RP2YBn7uOk&#34;&gt;pic.twitter.com/RP2YBn7uOk&lt;/a&gt;&lt;/p&gt; タカシにヒロシ (@bakuonboogie) &lt;a href=&#34;https://twitter.com/bakuonboogie/status/755728357258436608&#34;&gt;2016年7月20日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;dotstudioのメイカーであるうこは、100円ショップのランタンの光の色を、Webから操作できるという仕組みを作ってました。一斉にみんなで操作をしたので、ランタンが荒ぶる状態に。&lt;/p&gt;
-
-&lt;h3 id=&#34;ほかにもいろいろなltが繰り広げられました&#34;&gt;ほかにもいろいろなLTが繰り広げられました！&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;世界中で大人気の箱庭ゲーム『Minecraft』からスライドをめくれる仕組みをつくったいわたん（ &lt;a href=&#34;http://twitter.com/iwata_n&#34;&gt;@iwata_n&lt;/a&gt; ）さん&lt;/li&gt;
-&lt;li&gt;洗濯が終わったら通知がくるようなおうちハックに挑戦してみた、しのはら（ &lt;a href=&#34;https://twitter.com/shanonim&#34;&gt;@shanonim&lt;/a&gt; ）さん&lt;/li&gt;
-&lt;li&gt;いま一番ちゃらいらしいReact, redux, redux-sagaをつかってみたという &lt;a href=&#34;http://twitter.com/mookjp&#34;&gt;@mookjp&lt;/a&gt; さん&lt;/li&gt;
-&lt;li&gt;milkcocoaでほしかったツールを追加した「bitter-coffee」をつくりあげたもし（ &lt;a href=&#34;https://twitter.com/moshisora990&#34;&gt;@moshisora990&lt;/a&gt;）さん&lt;/li&gt;
-&lt;li&gt;麻雀用のアプリを作り、裏側にmilkcocoaを入れたというなつみ（&lt;a href=&#34;https://twitter.com/natsumi_m31&#34;&gt;@natsumi_m31&lt;/a&gt;）さん&lt;/li&gt;
-&lt;li&gt;ハムスターのために、milkcocoaで室温を管理してみたへれんさん（3時間経つと自動でエアコンが切れる部屋にいるそうな……）&lt;/li&gt;
-&lt;li&gt;マグネットで壁にくっついて、垂直に走るラジコン「うぉーるぼっとESP」を作ったという勝さん&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;結果&#34;&gt;結果&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/005/06_m2w.png&#34; alt=&#34;&#34; /&gt;
-女性陣の紅組と、男性陣の白組。どちらが勝つかは、えむにわ氏がつくった投票システムで決めました。結果、&lt;strong&gt;紅組（女性陣）の圧倒的な勝利&lt;/strong&gt; となったようです。やったー！&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/005/07_sticker.png&#34; alt=&#34;&#34; /&gt;
-勝利の記念にもらったのは、mbedステッカーと「GR-SAKURA」。&lt;/p&gt;
-
-&lt;p&gt;登壇だけで終わるのではなく、&lt;strong&gt;投票がおこなわれたり、景品をもらえたり&lt;/strong&gt; といった仕組みは久しぶりでした。ドキドキした。&lt;/p&gt;
-
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-
-&lt;p&gt;milkcocoaの次回開催予定は未定ですが、ほかにも &lt;strong&gt;IoTの勉強会やWebVRのイベントなどが開催予定&lt;/strong&gt; です！　特に &lt;strong&gt;Webエンジニアのみなさん&lt;/strong&gt; にとって実りのあるものがあると思うので、ぜひ参加してみてください！&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;2016年8月8日（月）&lt;a href=&#34;http://web3dj.connpass.com/event/32568/&#34;&gt;WebVR入門者の会&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;2016年8月12日（金）&lt;a href=&#34;http://iotlt.connpass.com/event/35436/&#34;&gt;IoT縛りの勉強会! IoTLT vol.18 @ Amazon&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;center&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;今日はmilkcocoa紅白合戦にご参加くださりありがとうございました😂💫登壇者の方々の発表は全部新しい視点をもらえたり笑えるところがあったり、楽しませてもらいました。ありがとうございます。また次お会いしましょう🙋🍻&lt;a href=&#34;https://twitter.com/hashtag/mlkcca?src=hash&#34;&gt;#mlkcca&lt;/a&gt; &lt;a href=&#34;https://t.co/PdUrDdivbU&#34;&gt;pic.twitter.com/PdUrDdivbU&lt;/a&gt;&lt;/p&gt; Milkcocoa girls (@milkcocoagirls) &lt;a href=&#34;https://twitter.com/milkcocoagirls/status/755757758931095556&#34;&gt;2016年7月20日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;
-では！&lt;/p&gt;
 </description>
     </item>
     

@@ -7,10 +7,282 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Mon, 03 Oct 2016 10:00:57 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 04 Oct 2016 10:00:39 +0900</lastBuildDate>
     <atom:link href="https://dotstud.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Node.jsからHipChatに投稿してみる</title>
+      <link>https://dotstud.io/blog/hipchat-bot-by-nodejs/</link>
+      <pubDate>Tue, 04 Oct 2016 10:00:39 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/hipchat-bot-by-nodejs/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudio代表の&lt;a href=&#34;http://qiita.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。
+dotstudioでは社内チャットにHipChatを利用しています。&lt;/p&gt;
+
+&lt;p&gt;業界的にSlackじゃないの？ってなりそうですが、Slackのユーザー課金
+は金銭的にけっこう辛くなっていくのが目に見えるので早期からSlackをやめました。まだSlackで消耗してるの?って言いたいです(強がり)。&lt;/p&gt;
+
+&lt;p&gt;HipChatもSlack同様にインテグレーション追加やBot作成のAPIがかなり
+豊富です。&lt;/p&gt;
+
+&lt;p&gt;今日はNode.jsからHipChatに投稿する方法を紹介します。&lt;/p&gt;
+
+&lt;h2 id=&#34;hipchatのインテグレーション追加をする&#34;&gt;HipChatのインテグレーション追加をする&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.hipchat.com/&#34;&gt;https://www.hipchat.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;HipChatでご自身のチームにログインしましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/030/01.png&#34; alt=&#34;&#34; /&gt;
+メニューから &lt;strong&gt;インテグレーション&lt;/strong&gt;を選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/030/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Build your own integration&lt;/strong&gt;を選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/030/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;プルダウンメニューからBOTを作るROOMを選択&lt;/strong&gt;して &lt;strong&gt;Name your integration&lt;/strong&gt;にBOTの名前を入れましょう。 一部room名を黒塗りにしてま
+すが察してください(笑)&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/030/04.png&#34; alt=&#34;&#34; /&gt;
+作成するとアクセストークンなどが生成されます。&lt;/p&gt;
+
+&lt;p&gt;ひとまず&lt;strong&gt;Try it!ボタン&lt;/strong&gt;を押してみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/030/05.png&#34; alt=&#34;&#34; /&gt;
+指定したROOMにメッセージが流れたら成功です。&lt;/p&gt;
+
+&lt;p&gt;それにしてもこの絵文字のセンスいいですよね。&lt;/p&gt;
+
+&lt;h2 id=&#34;curlコマンドでの実行を試す&#34;&gt;curlコマンドでの実行を試す&lt;/h2&gt;
+
+&lt;p&gt;先ほどの画面の &lt;strong&gt;Try it out&lt;/strong&gt;の項目に書いてあるcurlコマンドを実行することでAPI経由のPOSTを再現できます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;curl -d &#39;{&amp;quot;color&amp;quot;:&amp;quot;green&amp;quot;,&amp;quot;message&amp;quot;:&amp;quot;My first notification (yey)&amp;quot;,&amp;quot;notify&amp;quot;:false,&amp;quot;message_format&amp;quot;:&amp;quot;text&amp;quot;}&#39; -H &#39;Content-Type: application/json&#39; https://xxxxxx.hipchat.com/v2/room/XXXXXXX/notification?auth_token=XXXXXXXXXXXXXXXXXXXXXXXXXXXX
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ご自身の情報に置き換えて(むしろページのものをコピペして)ターミナ
+ルから実行すると先ほどの&lt;strong&gt;Try it!ボタン&lt;/strong&gt;を押した際と同じ挙動をしてくれます。&lt;/p&gt;
+
+&lt;h2 id=&#34;node-jsからpostリクエストしてみる&#34;&gt;Node.jsからPOSTリクエストしてみる&lt;/h2&gt;
+
+&lt;p&gt;実際にBotとして活用するにあたり、他の処理と連携させる必要があるのでプログラム経由でPOSTしてみます。dotstudioではNode.jsをよく利用
+しているのでNode.jsから先ほどのAPIにアクセスしてます。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;request&lt;/code&gt;や&lt;code&gt;SuperAgent&lt;/code&gt;などHTTPリクエストをいい感じにしてくれる外部モジュールはいくつもありますが、今回は&lt;a href=&#34;http://qiita.com/n0bisuke/items/33a6a6da1d6f455105f9&#34;&gt;Node.jsでJSONデータをHTTP POSTするメモ&lt;/a&gt;にもまとめたように外部モジュールに依存せずにNode.jsに組み込まれてる&lt;code&gt;http&lt;/code&gt;のみで実装してみます。&lt;/p&gt;
+
+&lt;p&gt;app.jsは以下のようになります。HOSTやPATHを先ほどの情報に置き換え
+て実行して見ましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;
+
+const http = require(&#39;http&#39;);
+const HOST = `xxxxx.hipchat.com`;
+const PATH = `/v2/room/XXXXXXX/notification?auth_token=XXXXXXXXXXXXXXXXXXXXXXXXXXXX`;
+
+let postData = {
+    &amp;quot;color&amp;quot;: &amp;quot;yellow&amp;quot;,
+    &amp;quot;message&amp;quot;: &amp;quot;test&amp;quot;,
+    &amp;quot;notify&amp;quot;: false,
+    &amp;quot;message_format&amp;quot;:&amp;quot;text&amp;quot;
+};
+
+let postDataStr = JSON.stringify(postData);
+let options = {
+    host: HOST,
+    port: 80,
+    path: PATH,
+    method: &#39;POST&#39;,
+    headers: {
+        &#39;Content-Type&#39;: &#39;application/json&#39;,
+        &#39;Content-Length&#39;: postDataStr.length
+    }
+};
+
+let req = http.request(options, (res) =&amp;gt; {
+  console.log(&#39;STATUS: &#39; + res.statusCode);
+  console.log(&#39;HEADERS: &#39; + JSON.stringify(res.headers));
+  res.setEncoding(&#39;utf8&#39;);
+  res.on(&#39;data&#39;, (chunk) =&amp;gt; {
+    console.log(&#39;BODY: &#39; + chunk);
+  });
+});
+req.on(&#39;error&#39;, (e) =&amp;gt; {
+  console.log(&#39;problem with request: &#39; + e.message);
+});
+req.write(postDataStr);
+req.end();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;7~12行目のPOSTデータのパラメーターは&lt;a href=&#34;https://www.hipchat.com/docs/apiv2/method/send_room_notification&#34;&gt;Send room notificationのリファレンス&lt;/a&gt;を確認しましょう。&lt;/p&gt;
+
+&lt;p&gt;けっこう細かく設定できるので詳細はまた別記事などで紹介したいです。&lt;/p&gt;
+
+&lt;p&gt;それでは、app.jsを実行してみます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;node app
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/030/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;さっきまでは&lt;code&gt;&amp;quot;color&amp;quot;: &amp;quot;green&amp;quot;&lt;/code&gt;でしたが&lt;code&gt;&amp;quot;color&amp;quot;: &amp;quot;yellow&amp;quot;&lt;/code&gt;にしてみました。
+背景が黄色になりますね。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;今回の背景色の変更もですが、&lt;a href=&#34;https://www.hipchat.com/docs/apiv2&#34;&gt;API Reference&lt;/a&gt;を見るとAPI経由で色々な機能が用意されていることがわかります。&lt;/p&gt;
+
+&lt;p&gt;他のチャットツールだと通常利用の機能をAPIで再現できない場合などもありますが、HipChatは通常の利用以上にAPI経由の方が自由度が高い設
+計になっている気がします。&lt;/p&gt;
+
+&lt;p&gt;Node.jsからもこんな形で簡単にBOT投稿ができるのでとりあえず簡単な
+通知などから作っていき、その様子もまたまとめていく予定です。&lt;/p&gt;
+
+&lt;p&gt;乞うご期待 ￣ー￣)／&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Node.jsからHipChatに投稿してみる</title>
+      <link>https://dotstud.io/blog/hipchat-bot-by-nodejs/</link>
+      <pubDate>Tue, 04 Oct 2016 10:00:39 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/hipchat-bot-by-nodejs/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudio代表の&lt;a href=&#34;http://qiita.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。
+dotstudioでは社内チャットにHipChatを利用しています。&lt;/p&gt;
+
+&lt;p&gt;業界的にSlackじゃないの？ってなりそうですが、Slackのユーザー課金
+は金銭的にけっこう辛くなっていくのが目に見えるので早期からSlackをやめました。まだSlackで消耗してるの?って言いたいです(強がり)。&lt;/p&gt;
+
+&lt;p&gt;HipChatもSlack同様にインテグレーション追加やBot作成のAPIがかなり
+豊富です。&lt;/p&gt;
+
+&lt;p&gt;今日はNode.jsからHipChatに投稿する方法を紹介します。&lt;/p&gt;
+
+&lt;h2 id=&#34;hipchatのインテグレーション追加をする&#34;&gt;HipChatのインテグレーション追加をする&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.hipchat.com/&#34;&gt;https://www.hipchat.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;HipChatでご自身のチームにログインしましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/030/01.png&#34; alt=&#34;&#34; /&gt;
+メニューから &lt;strong&gt;インテグレーション&lt;/strong&gt;を選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/030/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Build your own integration&lt;/strong&gt;を選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/030/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;プルダウンメニューからBOTを作るROOMを選択&lt;/strong&gt;して &lt;strong&gt;Name your integration&lt;/strong&gt;にBOTの名前を入れましょう。 一部room名を黒塗りにしてま
+すが察してください(笑)&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/030/04.png&#34; alt=&#34;&#34; /&gt;
+作成するとアクセストークンなどが生成されます。&lt;/p&gt;
+
+&lt;p&gt;ひとまず&lt;strong&gt;Try it!ボタン&lt;/strong&gt;を押してみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/030/05.png&#34; alt=&#34;&#34; /&gt;
+指定したROOMにメッセージが流れたら成功です。&lt;/p&gt;
+
+&lt;p&gt;それにしてもこの絵文字のセンスいいですよね。&lt;/p&gt;
+
+&lt;h2 id=&#34;curlコマンドでの実行を試す&#34;&gt;curlコマンドでの実行を試す&lt;/h2&gt;
+
+&lt;p&gt;先ほどの画面の &lt;strong&gt;Try it out&lt;/strong&gt;の項目に書いてあるcurlコマンドを実行することでAPI経由のPOSTを再現できます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;curl -d &#39;{&amp;quot;color&amp;quot;:&amp;quot;green&amp;quot;,&amp;quot;message&amp;quot;:&amp;quot;My first notification (yey)&amp;quot;,&amp;quot;notify&amp;quot;:false,&amp;quot;message_format&amp;quot;:&amp;quot;text&amp;quot;}&#39; -H &#39;Content-Type: application/json&#39; https://xxxxxx.hipchat.com/v2/room/XXXXXXX/notification?auth_token=XXXXXXXXXXXXXXXXXXXXXXXXXXXX
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ご自身の情報に置き換えて(むしろページのものをコピペして)ターミナ
+ルから実行すると先ほどの&lt;strong&gt;Try it!ボタン&lt;/strong&gt;を押した際と同じ挙動をしてくれます。&lt;/p&gt;
+
+&lt;h2 id=&#34;node-jsからpostリクエストしてみる&#34;&gt;Node.jsからPOSTリクエストしてみる&lt;/h2&gt;
+
+&lt;p&gt;実際にBotとして活用するにあたり、他の処理と連携させる必要があるのでプログラム経由でPOSTしてみます。dotstudioではNode.jsをよく利用
+しているのでNode.jsから先ほどのAPIにアクセスしてます。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;request&lt;/code&gt;や&lt;code&gt;SuperAgent&lt;/code&gt;などHTTPリクエストをいい感じにしてくれる外部モジュールはいくつもありますが、今回は&lt;a href=&#34;http://qiita.com/n0bisuke/items/33a6a6da1d6f455105f9&#34;&gt;Node.jsでJSONデータをHTTP POSTするメモ&lt;/a&gt;にもまとめたように外部モジュールに依存せずにNode.jsに組み込まれてる&lt;code&gt;http&lt;/code&gt;のみで実装してみます。&lt;/p&gt;
+
+&lt;p&gt;app.jsは以下のようになります。HOSTやPATHを先ほどの情報に置き換え
+て実行して見ましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;
+
+const http = require(&#39;http&#39;);
+const HOST = `xxxxx.hipchat.com`;
+const PATH = `/v2/room/XXXXXXX/notification?auth_token=XXXXXXXXXXXXXXXXXXXXXXXXXXXX`;
+
+let postData = {
+    &amp;quot;color&amp;quot;: &amp;quot;yellow&amp;quot;,
+    &amp;quot;message&amp;quot;: &amp;quot;test&amp;quot;,
+    &amp;quot;notify&amp;quot;: false,
+    &amp;quot;message_format&amp;quot;:&amp;quot;text&amp;quot;
+};
+
+let postDataStr = JSON.stringify(postData);
+let options = {
+    host: HOST,
+    port: 80,
+    path: PATH,
+    method: &#39;POST&#39;,
+    headers: {
+        &#39;Content-Type&#39;: &#39;application/json&#39;,
+        &#39;Content-Length&#39;: postDataStr.length
+    }
+};
+
+let req = http.request(options, (res) =&amp;gt; {
+  console.log(&#39;STATUS: &#39; + res.statusCode);
+  console.log(&#39;HEADERS: &#39; + JSON.stringify(res.headers));
+  res.setEncoding(&#39;utf8&#39;);
+  res.on(&#39;data&#39;, (chunk) =&amp;gt; {
+    console.log(&#39;BODY: &#39; + chunk);
+  });
+});
+req.on(&#39;error&#39;, (e) =&amp;gt; {
+  console.log(&#39;problem with request: &#39; + e.message);
+});
+req.write(postDataStr);
+req.end();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;7~12行目のPOSTデータのパラメーターは&lt;a href=&#34;https://www.hipchat.com/docs/apiv2/method/send_room_notification&#34;&gt;Send room notificationのリファレンス&lt;/a&gt;を確認しましょう。&lt;/p&gt;
+
+&lt;p&gt;けっこう細かく設定できるので詳細はまた別記事などで紹介したいです。&lt;/p&gt;
+
+&lt;p&gt;それでは、app.jsを実行してみます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;node app
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/030/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;さっきまでは&lt;code&gt;&amp;quot;color&amp;quot;: &amp;quot;green&amp;quot;&lt;/code&gt;でしたが&lt;code&gt;&amp;quot;color&amp;quot;: &amp;quot;yellow&amp;quot;&lt;/code&gt;にしてみました。
+背景が黄色になりますね。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;今回の背景色の変更もですが、&lt;a href=&#34;https://www.hipchat.com/docs/apiv2&#34;&gt;API Reference&lt;/a&gt;を見るとAPI経由で色々な機能が用意されていることがわかります。&lt;/p&gt;
+
+&lt;p&gt;他のチャットツールだと通常利用の機能をAPIで再現できない場合などもありますが、HipChatは通常の利用以上にAPI経由の方が自由度が高い設
+計になっている気がします。&lt;/p&gt;
+
+&lt;p&gt;Node.jsからもこんな形で簡単にBOT投稿ができるのでとりあえず簡単な
+通知などから作っていき、その様子もまたまとめていく予定です。&lt;/p&gt;
+
+&lt;p&gt;乞うご期待 ￣ー￣)／&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>秋はモノづくりの聖地、中国・深センへいこう！ #MakerFaireShenzhen に参加したい日本人向けまとめ</title>
       <link>https://dotstud.io/blog/maker-faire-shenzhen-2016/</link>
       <pubDate>Mon, 03 Oct 2016 10:00:57 +0900</pubDate>
@@ -3335,557 +3607,6 @@ Hugoのテーマを入れておく場所です。ただし今回は全部自分�
 &lt;p&gt;次回は「制作編」。HTMLとCSSを書いて、記事を書いて、ローカルサーバーを立ち上げてみるまでをやっていきたいと思います。&lt;/p&gt;
 
 &lt;p&gt;それではまた！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>デザイナーの僕がHugoを使ってポートフォリオサイトを作ってみる #1【準備編】</title>
-      <link>https://dotstud.io/blog/hugo-for-designers-vol1/</link>
-      <pubDate>Wed, 21 Sep 2016 10:00:40 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/hugo-for-designers-vol1/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、dotstudioのデザイナー・&lt;a href=&#34;https://dotstud.io/members/chachmaru/&#34;&gt;ちゃちゃまる&lt;/a&gt;です。&lt;/p&gt;
-
-&lt;p&gt;僕はまだ自分のポートフォリオサイトを持っていません。TumblrやPortfolioboxなどのサービスを使って作ろうと色々試してみましたが、自分のほしい機能がなかったり料金がかかったりしてしまい、結局挫折していました。&lt;/p&gt;
-
-&lt;p&gt;そこで、重い腰を上げて、外部サービスに頼らず自分だけでポートフォリオサイトを作ってみようと思います。&lt;/p&gt;
-
-&lt;h2 id=&#34;本連載のミッション&#34;&gt;本連載のミッション&lt;/h2&gt;
-
-&lt;p&gt;とりあえず僕がイメージしているポートフォリオサイトを書き起こしてみます。&lt;/p&gt;
-
-&lt;p&gt;まず機能面でほしいのは&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;ブログのような投稿形式がいい（時系列に投稿を並べたい）&lt;/li&gt;
-&lt;li&gt;投稿をいくつかのジャンルにわけたい（作品、お知らせ、など）&lt;/li&gt;
-&lt;li&gt;作品には、それを作るにあたって使ったソフトウェア等をタグ付けしたい（#illustrator、 #photoshop、など）&lt;/li&gt;
-&lt;li&gt;作品の投稿には、作品の画像とともに作成した日付や説明文なども書きたい&lt;/li&gt;
-&lt;li&gt;コードはGithubで管理したい&lt;/li&gt;
-&lt;li&gt;Github Pages（&lt;a href=&#34;https://chachmaru.github.io&#34;&gt;https://chachmaru.github.io&lt;/a&gt;）で公開したい&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;ぐらいです。ジャンルは増やす可能性もあるので、その増えたジャンルに対しても違うレイアウトが組めるような自由度もほしいですね。&lt;/p&gt;
-
-&lt;p&gt;次にデザイン面。あくまでも作品がメインであって欲しいので、サイドバーなどはつけず、シンプルなデザインにしてみます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/021/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;また、勉強のため、テンプレート等は使わず自分でコードを書きたいと思います。&lt;/p&gt;
-
-&lt;p&gt;それでは一からやっていきましょう。&lt;/p&gt;
-
-&lt;h2 id=&#34;動的サイトと静的サイト&#34;&gt;動的サイトと静的サイト&lt;/h2&gt;
-
-&lt;p&gt;ウェブサイトには実は「動的」と「静的」の二種類あることをご存知でしょうか？僕はなんとなく「JavaScriptを使ってアニメーションを施していれば動的、CSSだけなら静的なんじゃないかなー」と思っていたのですが、実は全く違いました。&lt;/p&gt;
-
-&lt;p&gt;「動的」と「静的」の大きな違いは、&lt;strong&gt;どのタイミングでHTMLが生成されるか&lt;/strong&gt;です。&lt;strong&gt;動的ウェブサイトでは、ページにアクセスがあったタイミング&lt;/strong&gt;でPHPやNode.jsなどのサーバーサイドのプログラムでHTML(場合によってはCSSやJavaScriptも)を生成します。例えば会員登録が必要なサイトの場合は会員情報などのデータを扱いますが、そういったデータベースを利用する必要がある場合は、ページにアクセスがあったタイミングでデータベースからデータを引っ張ってきて表示させています。一方、&lt;strong&gt;静的ウェブサイトの場合はユーザーがページにアクセスする前&lt;/strong&gt;の、管理者側がサーバーにファイルをアップロードするタイミングで既にHTMLが生成されています。ページアクセスより前にコンテンツ内容がHTMLに書かれていて、ブラウザがそのHTMLファイルを読み込んでいます。&lt;/p&gt;
-
-&lt;!-- 動的サイト：ページが表示されるタイミングでコンテンツが生成される
-動的サイト：もともとHTMLに書かれているコンテンツがそのまま表示される --&gt;
-
-&lt;p&gt;動的サイトではアクセスしたタイミングでデータを取ってきたり、HTML生成が行われるため静的サイトにくらべて時間がかかります。静的サイトの方がページの表示速度は早いです。しかし静的サイトでは、例えばユーザーログインなど、見る人によって異なるようなウェブサイトを構築することは難しいです。&lt;/p&gt;
-
-&lt;p&gt;今回のポートフォリオは画像をたくさん載せたいため表示速度はなるべく速い方がいいのと、個人のサイトなのでユーザーログインなどは特に考えないとすると、静的ウェブサイトがなんとなく良さそうだな、という感じですね。&lt;/p&gt;
-
-&lt;h2 id=&#34;静的サイトジェネレーター-hugo&#34;&gt;静的サイトジェネレーター Hugo&lt;/h2&gt;
-
-&lt;p&gt;静的サイトを作るといっても、全てのページのHTMLをベタ書きしていくのは効率が悪すぎます。ここで活躍するのが&lt;strong&gt;静的サイトジェネレーター&lt;/strong&gt;というもの。名前のとおり、自動的にHTMLを書き出してウェブサイトを作ってくれる便利なものです。&lt;/p&gt;
-
-&lt;p&gt;僕が使おうと思っている静的サイトジェネレーターは、最近話題らしい&lt;strong&gt;&lt;a href=&#34;http://gohugo.io/&#34;&gt;Hugo&lt;/a&gt;&lt;/strong&gt;です。Hugoの特徴はスピードと簡潔さで、僕のような初心者にもわかりやすそうですね。実はこのdotstudioのウェブサイトもHugoで出来ています。Hugoでは記事をマークダウン方式（詳しくは&lt;a href=&#34;http://www.markdown.jp/what-is-markdown/&#34;&gt;こちら&lt;/a&gt;）で書けるようになっているので、効率よく記事を書けるようになります。&lt;/p&gt;
-
-&lt;p&gt;僕の環境はこんな感じです。OSやバージョンによって動作が違う場合もありますのでご了承ください。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Mac OS X El Capitan (10.11.6)&lt;br /&gt;&lt;/li&gt;
-&lt;li&gt;Hugo Static Site Generator v0.16&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;とりあえずhugoを使ってみる&#34;&gt;とりあえずHugoを使ってみる&lt;/h2&gt;
-
-&lt;p&gt;早速Hugoをインストールして使ってみましょう。イラストレーターやフォトショップなどのインストール手順とは少し違い、コマンドラインから実行します。&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Homebrew（ソフトウェアのインストールを単純化してくれる管理システム）をインストール&lt;/li&gt;
-&lt;li&gt;Homebrewを使ってHugoをインストール&lt;/li&gt;
-&lt;li&gt;Hugoを使ってウェブサイトを生成する&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;ちなみにHugoのインストールまでは代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;が書いた&lt;a href=&#34;https://dotstud.io/blog/setup-new-mac-app/&#34;&gt;僕がMacを買い換えてすぐにいれるツール&amp;amp;すぐにする初期設定【2016年9月版】&lt;/a&gt;にも載っています。&lt;/p&gt;
-
-&lt;h3 id=&#34;1-homebrewのインストール&#34;&gt;1. Homebrewのインストール&lt;/h3&gt;
-
-&lt;p&gt;HomebrewはmacOSのソフトウェアをインストール・管理してくれるものです。Hugo以外にも色々なものに使えると思うので、まだの方はぜひインストールをしてみてください。&lt;/p&gt;
-
-&lt;p&gt;ターミナル（アプリケーション＞ユーティリティ＞ターミナル.app）を開きます。そして&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ ruby -e &amp;quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;をコピペしてEnterを押すだけで完了です。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;$マークはコマンドであることを示す文字なので、$マーク以降の文字からコピーしてください&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;ついでに&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ brew update
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;も実行して、最新バージョンにアップデートしておきましょう。&lt;/p&gt;
-
-&lt;h3 id=&#34;2-hugoのインストール&#34;&gt;2. Hugoのインストール&lt;/h3&gt;
-
-&lt;p&gt;Homebrewでのインストールは基本&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ brew install xxxxx
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;です。&lt;/p&gt;
-
-&lt;p&gt;Hugoの場合&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ brew install hugo
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;で出来ます。簡単ですね！&lt;/p&gt;
-
-&lt;p&gt;きちんと作動しているかどうかは&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ hugo version
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;を実行してみて、&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;Hugo Static Site Generator v0.16 BuildDate: 20xx-xx-xxTxx:xx:xx+09:00
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;のような結果が返ってきたかどうかで確認できます。&lt;/p&gt;
-
-&lt;h3 id=&#34;3-ウェブサイトを生成&#34;&gt;3. ウェブサイトを生成&lt;/h3&gt;
-
-&lt;p&gt;ウェブサイトを構成するファイル（HTMLやCSSなど）が入る場所を選びます。僕の場合ホームディレクトリ（アプリケーション、ドキュメント、写真フォルダなどがある場所）に新しく「dev」などの名前をつけたディレクトリを作って、その中を開発用にしています。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/021/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ここからはターミナルでの作業が多くなるので、コマンドの意味が分からない場合は&lt;a href=&#34;#&#34;&gt;UNIXコマンド一覧&lt;/a&gt;などと照らしあわせながら進めてみてください。&lt;/p&gt;
-
-&lt;p&gt;さて、まずはさきほどの&lt;code&gt;dev&lt;/code&gt;ディレクトリ内にターミナルで移動します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;cd dev
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;次に、Hugoの雛形を生成します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;hugo new site chachamaru
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/021/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;このようになったら成功です！&lt;/p&gt;
-
-&lt;h2 id=&#34;hugoディレクトリ内を軽く説明&#34;&gt;Hugoディレクトリ内を軽く説明&lt;/h2&gt;
-
-&lt;p&gt;Finderからdevディレクトリ内を見てみましょう。ターミナルのいるディレクトリをFinderで開くには&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ open .
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;と実行するのが便利です。&lt;/p&gt;
-
-&lt;p&gt;こんな感じになっていると思います。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/021/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Hugo内のディレクトリ/ファイルを軽く説明していきます。実際に作業をするタイミングで更に詳しく解説するので、斜め読みで大丈夫です。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;archetypes&lt;br /&gt;
-archetypesは「原型、典型」という意味で、各ジャンルの記事のベースをここに入れます。詳しくは後ほど。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;config.toml&lt;br /&gt;
-ウェブサイトの設定をするファイルです。&lt;code&gt;.toml&lt;/code&gt;はTOML（Tom&amp;rsquo;s Obvious, Minimal Language）ファイルの拡張子で、設定ファイルを記述する言語です。Tom Preston-Wernerさんが作った言語なので、「Tom’s」となってるんですね。そのまんまですね。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;content&lt;br /&gt;
-マークダウンで書いた記事を入れる場所です。ジャンルが複数ある場合、&lt;code&gt;content/ジャンル名/記事.md&lt;/code&gt;のようなディレクトリ構成になります。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;data&lt;br /&gt;
-様々なデータを管理しておく場所です。今回ポートフォリオサイトを作るにあたって必要は（今のところ）ないので、消してしまっても大丈夫です。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;layouts&lt;br /&gt;
-HTMLファイルを入れる場所です。&lt;code&gt;index.html&lt;/code&gt;や、各ジャンルの個別ページ、ヘッダーやフッターなどのパーツなども全てここに入れます。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;static&lt;br /&gt;
-「静的」という意味で、CSSや画像などを入れておく場所です。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;themes&lt;br /&gt;
-Hugoのテーマを入れておく場所です。ただし今回は全部自分でCSSを書きたいので、このディレクトリも使いません。&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;次回予告&#34;&gt;次回予告&lt;/h2&gt;
-
-&lt;p&gt;今回は「準備編」ということで、少し長め＆詳しめに書いてみました。初心者の僕でも分かるように書いているので、解説や参考用外部リンクを多めに入れていこうと思います。&lt;/p&gt;
-
-&lt;p&gt;次回は「制作編」。HTMLとCSSを書いて、記事を書いて、ローカルサーバーを立ち上げてみるまでをやっていきたいと思います。&lt;/p&gt;
-
-&lt;p&gt;それではまた！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>僕がMacを買い換えてすぐにいれるツール&amp;すぐにする初期設定【2016年9月版】</title>
-      <link>https://dotstud.io/blog/setup-new-mac-app/</link>
-      <pubDate>Fri, 16 Sep 2016 10:00:01 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/setup-new-mac-app/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは！　dotstudio代表の&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
-
-&lt;p&gt;最近Macを新しくしたんですけど、最初にインストールしたアプリケーションや設定した項目を自分用にメモしたので公開します。&lt;/p&gt;
-
-&lt;p&gt;「Time Machineでバックアップとれよ！」みたいな話はあると思うんですけど、僕は基本的にパソコンを買い換えるタイミングで、使ってないアプリなどを断捨離したい性格なのでご理解ください。&lt;/p&gt;
-
-&lt;p&gt;僕は職種的には &lt;strong&gt;Webエンジニア / テクニカルライター / エバンジェリスト&lt;/strong&gt; あたりです。Web開発しつつ、記事執筆しつつみたいなスタイルの人は共感してくれるかも。&lt;/p&gt;
-
-&lt;h2 id=&#34;ことわり&#34;&gt;ことわり&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;スペックは Mac Book Pro 13 インチ / Retina / US配列 / OSX 10.11 El Capitan となっています。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Macを買って初日にいれたアプリケーションと設定のみを紹介しています。2日目以降にインストールするアプリは、多分自分にとって優先順位が低いので今回は省略です。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;自分用メモに近いのであしからず。&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;アプリケーション&#34;&gt;アプリケーション&lt;/h2&gt;
-
-&lt;h3 id=&#34;google-chrome&#34;&gt;Google Chrome&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/01_chrome.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;URL: &lt;a href=&#34;https://www.google.co.jp/chrome/browser/desktop/index.html&#34;&gt;https://www.google.co.jp/chrome/browser/desktop/index.html&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;言わずと知れたGoogle製のブラウザです。
-MacのデフォルトブラウザはSafariなので、SafariからGoogle Chromeをダウンロードします。&lt;/p&gt;
-
-&lt;p&gt;さらばSafari。&lt;/p&gt;
-
-&lt;h3 id=&#34;gyazo-gyazo-gif&#34;&gt;Gyazo &amp;amp; Gyazo GIF&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/02_gyazo.png&#34; alt=&#34;&#34; /&gt;
-URL: &lt;a href=&#34;https://gyazo.com/&#34;&gt;https://gyazo.com/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;スクリーンショット撮影をしてくれるアプリケーションです。撮影したスクリーンショットをすぐさまサーバーにアップロードしてくれてURLを発行してくれます。&lt;/p&gt;
-
-&lt;p&gt;Gyazo GIFという画面録画をしてGIF画像にしてくれるアプリケーションも同時に使えるのですがこちらもよく使います。この記事も、Gyazoでキャプチャを撮りながら作っています。&lt;/p&gt;
-
-&lt;h3 id=&#34;kobito&#34;&gt;Kobito&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/03_kobito.png&#34; alt=&#34;&#34; /&gt;
-URL: &lt;a href=&#34;http://kobito.qiita.com/&#34;&gt;http://kobito.qiita.com/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Qiitaユーザーなら誰しもが使ってると思われる&lt;a href=&#34;http://qiita.com/&#34;&gt;Qiita&lt;/a&gt;連携の &lt;strong&gt;マークダウンエディタ&lt;/strong&gt; です。だいたいGyazoでスクリーンショットを撮影しつつ、発行された画像リンクをマークダウンで読み込んで記事を書く、というスタイルで作業してます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/04_kobito.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;そしてそのままQiitaの限定公開にアップロードすれば、レビューまでのスピードがかなり速くなるので &lt;strong&gt;Gyazo+Kobito+Qiitaの組み合わせはけっこうオススメ&lt;/strong&gt; です。&lt;/p&gt;
-
-&lt;h4 id=&#34;kobitoのデータ移行&#34;&gt;Kobitoのデータ移行&lt;/h4&gt;
-
-&lt;p&gt;KobitoでPC内に保存されてる下書き記事などを新しく買ったMacに移行する方法も合わせて紹介します。&lt;a href=&#34;http://qiita.com/nekoallergie/items/1cdc943252bd3cd90c37&#34;&gt;こちらのリンクを参考に（Kobitoのデータを新しい環境に手動で移行する）&lt;/a&gt;、古いMac側で以下のパスを開きます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;~/Library/Containers/com.qiita.Kobito/
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/05_kobito.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;Data&lt;/code&gt;と&lt;code&gt;Container.plist&lt;/code&gt;をコピーして、USBメモリ経由で新規Macの同じディレクトリに放り込み、Kobitoを再起動すれば、下書きなどのデータも全て引き継がれます。&lt;/p&gt;
-
-&lt;h3 id=&#34;google-drive&#34;&gt;Google Drive&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/06_drive.png&#34; alt=&#34;&#34; /&gt;
-URL: &lt;a href=&#34;https://www.google.com/intl/ja_jp/drive/download/&#34;&gt;https://www.google.com/intl/ja_jp/drive/download/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;無料で使えるオンラインストレージです。チームメンバーでのファイル共有に使ってます。
-ちょっと前までDropBox派だったのですが、会社を立ち上げるにあたりGoogle Apps for Workを登録してから、Googleアカウントでまとめられるものはまとめようって思ってます。&lt;/p&gt;
-
-&lt;p&gt;「ツールって意外とお金がかかる」ことを起業してから知って、使うようになりました……。&lt;/p&gt;
-
-&lt;h3 id=&#34;franz&#34;&gt;Franz&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/07_franz.png&#34; alt=&#34;&#34; /&gt;
-URL: &lt;a href=&#34;http://meetfranz.com/&#34;&gt;http://meetfranz.com/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;デザイナーの&lt;a href=&#34;https://dotstud.io/members/chachmaru&#34;&gt;ちゃちゃまる&lt;/a&gt;が教えてくれたアプリです。複数のチャットツールを一元管理できます。これがめちゃ便利で、上記のようなよく使うツールはもちろんですが、海外では話題ですが国内ではマイナーなツールにも対応してます。&lt;/p&gt;
-
-&lt;p&gt;個人的には、SlackのMacアプリケーションが複数チームになってくるとかなり管理しにくい+動作が重いという難点があったのですが、Franzにすることで一気に解決しました。&lt;strong&gt;Slackアプリはインストールしなくなりました（笑）&lt;/strong&gt;　Franzがなかった生活には戻れないって思うくらいかなり捗ります。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/08_franz.png&#34; alt=&#34;&#34; /&gt;
-ちなみにこれが僕が使ってるFranz画面です。&lt;/p&gt;
-
-&lt;h2 id=&#34;macの環境設定&#34;&gt;Macの環境設定&lt;/h2&gt;
-
-&lt;p&gt;ここからはMacの環境設定です。
-僕が不便に思っている点を解消する設定をしています。&lt;/p&gt;
-
-&lt;h3 id=&#34;キーリピートを最速に&#34;&gt;キーリピートを最速に&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/09_key.png&#34; alt=&#34;&#34; /&gt;
-キーリピートとは、&lt;strong&gt;同じキーを押し続けて同じ文字をタイプしたときの速さ&lt;/strong&gt; です。簡単に言うと「キーボード入力の速さ」ですね。個人的に感じていることですが、この設定はエンジニアやライターは必須な設定なのではないかと思っています。キーリピート速度が遅いと、カーソル移動がしんどいですからね……（苦笑）&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;システム環境設定&lt;/code&gt; -&amp;gt; &lt;code&gt;キーボード&lt;/code&gt;から&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;キーのリピート&lt;/code&gt;を速い&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;リピート入力認識までの時間&lt;/code&gt;を短い&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;で設定ができます。&lt;/p&gt;
-
-&lt;h3 id=&#34;usキーボードのかな変換時のキーマッピングを変える&#34;&gt;USキーボードのかな変換時のキーマッピングを変える&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/10_key.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Macのキーボード配列の変更方法です。&lt;/p&gt;
-
-&lt;p&gt;JIS配列だと、日本語&amp;lt;-&amp;gt;英語の変換はスペース隣の「かな」キーと「英数」キーでできます。ところがUS配列だとこのキーがなく、「command+スペース」で切り替えます。JIS配列をもともと使っていてUSに途中から切り替えた人は、この操作が面倒臭くなる人が多いのではないでしょうか。&lt;/p&gt;
-
-&lt;p&gt;そこで、US配列でもJIS配列と同じように使うために「キーマッピング」へ変更します。&lt;a href=&#34;https://pqrs.org/osx/karabiner/index.html.ja&#34;&gt;Karabiner&lt;/a&gt;をインストールして、「左右のコマンドキー（⌘）を「英数／かな」の設定を「コマンドキーの動作を優先モード」にすればOKです。&lt;/p&gt;
-
-&lt;p&gt;参考リンク: &lt;a href=&#34;http://heyhojournal.com/us-keyboard/&#34;&gt;MacのUSキーボードで日本語⇔英語切替を簡単に行う為の設定&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;caps-lockキーとcontrolキーの入れ替え&#34;&gt;Caps LockキーとControlキーの入れ替え&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/11_key.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;これもMacのキーボード配列を変更する方法です。&lt;/p&gt;
-
-&lt;p&gt;JIS配列だと、Controlキーが左手の小指のあたりに来ます。この位置はすごく使い易いのですが、US配列ではJIS配列でいうCaps Lockという、ほぼ使わないキーが来てしまいます……（苦笑）&lt;/p&gt;
-
-&lt;p&gt;キーマッピングは、&lt;code&gt;システム環境設定&lt;/code&gt; -&amp;gt; &lt;code&gt;キーボード&lt;/code&gt;から右下の&lt;code&gt;修飾キー&lt;/code&gt;ボタンを選択することで変更できます。&lt;/p&gt;
-
-&lt;p&gt;参考リンク: &lt;a href=&#34;http://inforati.jp/apple/mac-tips-techniques/system-hints/how-to-convert-the-control-key-and-the-caps-lock-key-in-macos.html&#34;&gt;US仕様のキーボードのMacでControlキーとCaps Lockキーを入れ替える方法&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;ライブ変換を無効に&#34;&gt;ライブ変換を無効に&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/12_live.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;MacにはEl Capitanになってから、文字を自動で変換してくれる「ライブ変換」機能が追加されたのですが、個人的には邪魔な気がしたので変えます。これは完全に趣味というか慣れなんだと思います。&lt;/p&gt;
-
-&lt;p&gt;メニューバー右上の文字入力方式切り替えの項目からチェックを外せばライブ変換が無効になります。&lt;/p&gt;
-
-&lt;h3 id=&#34;コンピュータ名を変える&#34;&gt;コンピュータ名を変える&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/13_pcname.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;↑こちらのスクショで分かるとおり、「sugawararyousuke-no-MacBook-Pro」という、謎のマシン名になっているので変えます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/14_pcname.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;環境設定 &amp;gt; 共有 &amp;gt; コンピュータ名&lt;/code&gt; にそのまま入力すればOKです。なんとなくですが、「CentOSで動いてるんだぞ」って感じの名前をつけています。&lt;/p&gt;
-
-&lt;h3 id=&#34;ディスプレイ設定を変更&#34;&gt;ディスプレイ設定を変更&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/15_display.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Retinaだとこの辺の設定も必須ですよね。作業領域確保です。&lt;/p&gt;
-
-&lt;h2 id=&#34;開発環境&#34;&gt;開発環境&lt;/h2&gt;
-
-&lt;h3 id=&#34;iterm2&#34;&gt;iTerm2&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/16_iterm2.png&#34; alt=&#34;&#34; /&gt;
-URL: &lt;a href=&#34;https://www.iterm2.com/downloads.html&#34;&gt;https://www.iterm2.com/downloads.html&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;つぎは開発ツールの「iTerm2」です。
-まずはデフォルトのターミナルより高機能なiTerm2に変更します。&lt;/p&gt;
-
-&lt;p&gt;いろいろな機能がありますが、Command+Dで画面分割できるところが地味にお気に入りです。&lt;/p&gt;
-
-&lt;h3 id=&#34;git&#34;&gt;Git&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/17_git.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Gitは実は最初からインストールされてないんですよね。長くMac使ってると忘れがちです。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ git
-xcode-select: note: no developer tools were found at &#39;/Applications/Xcode.app&#39;, requesting install. Choose an option in the dialog to download the command line developer tools.
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;gitコマンドを実行しようとすると、ウィンドウが表示されるのでインストールしましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/18_git.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;インストールが完了するとgitコマンドが使えるようになります。&lt;/p&gt;
-
-&lt;h3 id=&#34;visual-studio-code&#34;&gt;Visual Studio Code&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/19_code.png&#34; alt=&#34;&#34; /&gt;
-URL: &lt;a href=&#34;https://www.visualstudio.com/ja-jp/products/code-vs.aspx&#34;&gt;https://www.visualstudio.com/ja-jp/products/code-vs.aspx&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;だいたいのエディタは、プラグインをいれると似たような性能になりますが、Visual Studio Codeは初期設定でかなり優秀です。最近メインで使っています。&lt;/p&gt;
-
-&lt;p&gt;ただ、Sublime TextやAtomを使ってた時代もありましたし、時代が変わればAtom優勢になるときもあると思います。タイミングによって使い分けたいです。&lt;/p&gt;
-
-&lt;h4 id=&#34;コマンドラインから実行できるようにする&#34;&gt;コマンドラインから実行できるようにする&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/20_code.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;コマンドラインから実行するには、command+shift+pでコマンドパレッドを開いてcodeと打ち、PATH内に「codeコマンドをインストール項目」と表示されるのでそれを実行しましょう。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-zsh&#34;&gt;n0bisuke-centos% code -h
-Visual Studio Code v1.3.1
-
-Usage: code [arguments] [paths...]
-
-Options:
-  -d, --diff
-      Open a diff editor. Requires to pass two file paths as arguments.
-  --disable-extensions
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;こんな感じで&lt;code&gt;codeコマンド&lt;/code&gt;が使えるようになります。&lt;/p&gt;
-
-&lt;h2 id=&#34;oh-my-zsh&#34;&gt;oh-my-zsh&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/21_ohmyzsh.png&#34; alt=&#34;&#34; /&gt;
-URL: &lt;a href=&#34;http://ohmyz.sh/&#34;&gt;http://ohmyz.sh/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;ざっくりいうとターミナル（zsh）が便利になるツールです。
-zshの設定を追加したり拡張しやすくしてくれます。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;まずはログインシェルをzshを設定&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;参考リンク: &lt;a href=&#34;http://mollifier.hatenablog.com/entry/2013/02/22/025415&#34;&gt;初めて Mac で zsh を使う人のためのチュートリアル&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;僕の場合oh-my-zshが使いたいだけなのですがzshにしておきます。この設定を間違えると最悪ログインできなくなってしまうので注意しましょう。一旦参考リンクのやり方を確認してから以下を実行するのをお勧めします。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;chsh -s /bin/zsh
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;これでログインシェルがzshになりました。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;oh-my-zshのインストール&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;pre&gt;&lt;code&gt;sh -c &amp;quot;$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;これでインストールされます。
-テーマ変更とかもできるんですけど僕はデフォルトテーマのままでつかっちゃってます。&lt;/p&gt;
-
-&lt;p&gt;オススメテーマあったら教えてください。&lt;/p&gt;
-
-&lt;h2 id=&#34;homebrew&#34;&gt;homebrew&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/22_brew.png&#34; alt=&#34;&#34; /&gt;
-URL: &lt;a href=&#34;http://brew.sh/&#34;&gt;http://brew.sh/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Macで使う主に開発ツールのインストールを管理してくれるパッケージ管理ツールです。&lt;code&gt;brew install&lt;/code&gt;はよく使うので、初日にいれておきます。以下でインストールできます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;/usr/bin/ruby -e &amp;quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;確認で以下を実行します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;brew help
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;エラーが出ずにヘルプが表示されればokです。&lt;/p&gt;
-
-&lt;h3 id=&#34;node-js環境整備&#34;&gt;Node.js環境整備&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/23_node.png&#34; alt=&#34;&#34; /&gt;
-URL: &lt;a href=&#34;https://nodejs.org/en/&#34;&gt;https://nodejs.org/en/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;この辺は僕がNode.jsユーザーということもあるので優先度があがります。&lt;/p&gt;
-
-&lt;h4 id=&#34;nodebrewのインストール&#34;&gt;nodebrewのインストール&lt;/h4&gt;
-
-&lt;p&gt;URL: &lt;a href=&#34;https://github.com/hokaccha/nodebrew&#34;&gt;https://github.com/hokaccha/nodebrew&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;nodebrewは先ほどのhomebrewとは別物です。Node.jsのバージョン管理をしてくれるバージョンマネジメントツールです。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://github.com/creationix/nvm&#34;&gt;NVM&lt;/a&gt;や&lt;a href=&#34;https://github.com/tj/n&#34;&gt;N&lt;/a&gt;などもありますが最近はnodebrewを使っています。&lt;/p&gt;
-
-&lt;p&gt;インストール&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-zsh&#34;&gt;curl -L git.io/nodebrew | perl - setup
-echo &amp;quot;export PATH=$HOME/.nodebrew/current/bin:$PATH&amp;quot; &amp;gt;&amp;gt; .zshrc
-source .zshrc
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;これでnodebrewコマンドが使える様になります。&lt;/p&gt;
-
-&lt;h4 id=&#34;node-jsのインストール&#34;&gt;Node.jsのインストール&lt;/h4&gt;
-
-&lt;p&gt;通常は以下でインストールできるのですが&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;nodebrew install-binary 6.5.0
-nodebrew use 6.5.0
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;参考リンクを見て高速にいれてみました&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;MAKE_OPTS=&amp;quot;-j 2&amp;quot; nodebrew install-binary v6.5.0
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;確かに速い……!&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;node -v
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;でバージョンが表示されれば無事にインストール完了です。&lt;/p&gt;
-
-&lt;p&gt;参考リンク: &lt;a href=&#34;http://qiita.com/yn-misaki/items/e92a47c662ea6d1236c1&#34;&gt;Nodebrewを使ってNode.jsを超高速にインストールする方法&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;sshfs-fuse-for-osx&#34;&gt;SSHFS / FUSE for OSX&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/24_fuse.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;SSH接続でリモートファイルをローカルにあるかのように編集できます。&lt;/p&gt;
-
-&lt;p&gt;ローカルマシンのFinderから操作したり、Visual Studio Codeなどのエディタでも編集できるのでサーバー側でVimを使うのが苦手な僕みたいなタイプにはオススメです。RaspberryPiでの開発のときにもラズパイ上のファイルをローカルファイルのように扱えるので重宝します。&lt;/p&gt;
-
-&lt;p&gt;参考リンク: &lt;a href=&#34;http://qiita.com/ysk24ok/items/bb148530a55a4e55d99b&#34;&gt;Macでsshfsを使ってローカルからリモートのファイルを触る&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;hugo&#34;&gt;Hugo&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/25_hugo.png&#34; alt=&#34;&#34; /&gt;
-URL: &lt;a href=&#34;https://gohugo.io/&#34;&gt;https://gohugo.io/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;最近人気上昇中の静的サイトジェネレーターです。一昔前はJekyllが主流でしたが記事数が多くなるとビルド速度が遅くなるというところもあり人気が伸び悩んでました。&lt;/p&gt;
-
-&lt;p&gt;Golang製のHugoは記事が増えても爆速ビルドなので最近ユーザーが増えてるイメージです。実はdotstudioのブログはHugoでできているので開発環境として必須です。インストールはbrew経由で一発ですね。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;brew install hugo
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Hugo系ナレッジもそのうち発信すると思います！&lt;/p&gt;
-
-&lt;h3 id=&#34;arduino-ide&#34;&gt;Arduino IDE&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/26_arduino.png&#34; alt=&#34;&#34; /&gt;
-URL: &lt;a href=&#34;https://www.arduino.cc/&#34;&gt;https://www.arduino.cc/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Arduino開発に必須のツールです。デバイスのデバッグなどでもよく使うので、dotstudioの事業の性質上必須です（笑）&lt;/p&gt;
-
-&lt;h2 id=&#34;終わりに-よたばなし&#34;&gt;終わりに＆よたばなし&lt;/h2&gt;
-
-&lt;p&gt;ということで紹介しました。自分の中で重要度の高いアプリケーションがまとまった気がします。誰かの役に立てば幸いです :)　&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/27_mac.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;関係ないけど今回Mac買うときに、ものすごく「MacBook12インチ」か「MacBook Pro 13インチ」かを迷ってましたが、表参道のApple Storeで鼻ピアスの女性店員に勧められてMac Book Pro 13インチに落ち着きました。&lt;strong&gt;「Mac Book Pro の方が買って後悔はしないですよ」&lt;/strong&gt; と言われたのが決め手ですね。&lt;/p&gt;
-
-&lt;p&gt;確かに後悔はない……はず。&lt;/p&gt;
 </description>
     </item>
     
