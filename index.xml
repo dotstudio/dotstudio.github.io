@@ -7,8 +7,171 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Tue, 04 Oct 2016 10:00:39 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 05 Oct 2016 10:00:00 +0900</lastBuildDate>
     <atom:link href="https://dotstud.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Node.jsでコマンドラインツール作るときに使いやすいreadline-sync</title>
+      <link>https://dotstud.io/blog/nodejs-npm-readline-sync/</link>
+      <pubDate>Wed, 05 Oct 2016 10:00:00 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nodejs-npm-readline-sync/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke/&#34;&gt;のびすけ&lt;/a&gt;です。
+&lt;a href=&#34;https://dotstud.io/series/nodejs/&#34;&gt;Node.js Magazine&lt;/a&gt;という連載を作ったのでNode.js系のTipsを紹介していく予定です。&lt;/p&gt;
+
+&lt;p&gt;今日はNode.jsでコマンドラインツールを作る際に役立つreadline-syncというパッケージを紹介します。&lt;/p&gt;
+
+&lt;p&gt;実際にサンプルを動かして見ましょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;執筆時点のマシンスペック&#34;&gt;執筆時点のマシンスペック&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;macOS Sierra (v10.12)&lt;/li&gt;
+&lt;li&gt;Node.js v6.6.0&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;何か不具合があったときに参照してください。&lt;/p&gt;
+
+&lt;h2 id=&#34;インストール&#34;&gt;インストール&lt;/h2&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://www.npmjs.com/package/readline-sync&#34;&gt;https://www.npmjs.com/package/readline-sync&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;npm i readline-sync
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;サンプルを動かしてみる&#34;&gt;サンプルを動かしてみる&lt;/h2&gt;
+
+&lt;p&gt;まずは基本的なサンプルです。&lt;code&gt;.question()&lt;/code&gt;で質問して入力結果をそのまま変数に入れ込めます。このサンプルでいうと&lt;code&gt;userName&lt;/code&gt;と&lt;code&gt;favFood&lt;/code&gt;の変数に入力した値が入ります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//app.js
+const readlineSync = require(&#39;readline-sync&#39;);
+
+let userName = readlineSync.question(&#39;あなたの名前は? &#39;);
+console.log(`-&amp;gt;こんにちは ${userName}!`);
+
+let favFood = readlineSync.question(&#39;好きな食べ物は? &#39;, {hideEchoBack: true});
+console.log(`-&amp;gt;${userName}は${favFood}が好きなんだね!`);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;{hideEchoBack: true}&lt;/code&gt;というオプションをつけると入力時は&lt;code&gt;*&lt;/code&gt;で表示されます。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;実行&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/024/01_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;選択肢を出して選ばせる&#34;&gt;選択肢を出して選ばせる&lt;/h2&gt;
+
+&lt;p&gt;選択肢を提示してユーザーに選ばせる方法もよく使われます。&lt;/p&gt;
+
+&lt;p&gt;keyInSelectメソッドを使います。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//app.js
+const readlineSync = require(&#39;readline-sync&#39;);
+
+let animals = [&#39;のびすけ&#39;, &#39;うらら&#39;, &#39;ちゃちゃまる&#39;, &#39;うこ&#39;, &#39;ギャル電&#39;];
+let index = readlineSync.keyInSelect(animals, &#39;誰に連絡しますか?&#39;);
+console.log(`${animals[index]}に連絡します。`);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;実行してみる&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/024/02_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;人の名前を選択肢して、その人に連絡をする&lt;/strong&gt;みたいなインターフェイスを作って見ました。変数がanimalsなのは気にしません。&lt;/p&gt;
+
+&lt;h2 id=&#34;cliループでサブコマンドを作る&#34;&gt;CLIループでサブコマンドを作る&lt;/h2&gt;
+
+&lt;p&gt;コマンド終了のタイミングをユーザーに委ねたいときに使えます。&lt;/p&gt;
+
+&lt;p&gt;promptCLLoopメソッドで関数を引数に渡すと関数をループ実行してくれます。&lt;/p&gt;
+
+&lt;p&gt;このサンプルだと&lt;code&gt;bye&lt;/code&gt;というサブコマンドを入力すると終了します。&lt;/p&gt;
+
+&lt;p&gt;逆に言えば&lt;code&gt;bye&lt;/code&gt;を入力するまではずっとその他コマンドの入力を待ち受けます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//app.js
+
+const readlineSync = require(&#39;readline-sync&#39;);
+readlineSync.promptCLLoop({
+  add: (target, into) =&amp;gt; {
+    console.log(`${target}を${into}に追加します。`);
+    // Do something...
+  },
+  remove: (target) =&amp;gt; {
+    console.log(`${target}を削除します。`);
+    // Do something...
+  },
+  bye: () =&amp;gt; { return true; }
+});
+console.log(&#39;終了します。&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;実行してみる&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/024/03_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;こんな感じで&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt; コマンド名 変数1 変数2 ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;という入力を受け付けて紐づけられている関数の引数として変数が渡されます。&lt;/p&gt;
+
+&lt;h2 id=&#34;キー入力でメモリから値を選んでもらう&#34;&gt;キー入力でメモリから値を選んでもらう&lt;/h2&gt;
+
+&lt;p&gt;この表現がいいのか分からないですけど、、、見ればわかります。&lt;/p&gt;
+
+&lt;p&gt;keyInメソッドでキー入力の待ち受けを実現しています。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//app.js
+
+const readlineSync = require(&#39;readline-sync&#39;);
+
+const MAX = 60, MIN = 0;
+let value = 30, key;
+console.log(`\n\n${(new Array(20)).join(&#39; &#39;)}[Z] &amp;lt;- -&amp;gt; [X]  決定: [SPACE]\n`);
+while (true) {
+  console.log(&#39;\x1B[1A\x1B[K|&#39; +
+    (new Array(value + 1)).join(&#39;-&#39;) + &#39;O&#39; +
+    (new Array(MAX - value + 1)).join(&#39;-&#39;) + &#39;| &#39; + value);
+  key = readlineSync.keyIn(&#39;&#39;,
+    {hideEchoBack: true, mask: &#39;&#39;, limit: &#39;zx &#39;});
+  if (key === &#39;z&#39;) { if (value &amp;gt; MIN) { value--; } }
+  else if (key === &#39;x&#39;) { if (value &amp;lt; MAX) { value++; } }
+  else { break; }
+}
+console.log(`\nあなたが決めた値: ${value}`);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;実行してみる&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/024/04_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;zとxで値を調節してスペースで決定です。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;簡単でしたが以上になります。&lt;/p&gt;
+
+&lt;p&gt;いかがでしたでしょうか。
+非同期が基本になっているJavaScriptでコマンドラインからの入力受付を同期的にやる場合にはかなり使いやすいパッケージだと思います。&lt;/p&gt;
+
+&lt;p&gt;readline-syncでコマンドラインツールを作って見ましょう！&lt;/p&gt;
+
+&lt;p&gt;もっとこっちの方がオススメだよ！ってものがあれば是非&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;@n0bisuke&lt;/a&gt;に教えてください :)&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>話題のチャットボット開発。Node.jsでHipChatに投稿してみよう。</title>
@@ -2915,17 +3078,6 @@ void loop() {
       
       <description>&lt;p&gt;6歳でネットサーフィンを覚え、中学時代をネトゲに費やし、大学でなぜか法学を学んだのち、晴れてWebエンジニアに。「作れる系エンジニア」に憧れて電子工作を勉強中。普段はPHPのLaravelや、かじった程度のJQueryを書いています。
 Milkcocoa Girlsやdots女子部などをちょこっと運営中。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>わみのプロフィール</title>
-      <link>https://dotstud.io/members/wami/</link>
-      <pubDate>Thu, 01 Sep 2016 01:02:48 +0900</pubDate>
-      
-      <guid>https://dotstud.io/members/wami/</guid>
-      
-      <description>&lt;p&gt;愛知県でネットワークを勉強している学生のわみです。ハードウエアを作成したり、Arduinoやmbedのプログラムしたりしてます。最近では、ハードウエアとWebを繋げたり、ハードウエアとスマートフォンを繋いだり、ハードウエア×異種のものを繋ぐことを目標に様々なものを作っています。&lt;/p&gt;
 </description>
     </item>
     
