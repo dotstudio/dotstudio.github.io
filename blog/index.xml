@@ -7,8 +7,207 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Wed, 05 Oct 2016 10:00:00 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 06 Oct 2016 10:40:04 +0900</lastBuildDate>
     <atom:link href="https://dotstud.io/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>デザイナーの僕がHugoを使ってポートフォリオサイトを作ってみる #2【制作:基本編】</title>
+      <link>https://dotstud.io/blog/hugo-for-designers-vol2/</link>
+      <pubDate>Thu, 06 Oct 2016 10:40:04 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/hugo-for-designers-vol2/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudioのデザイナー・ちゃちゃまる（&lt;a href=&#34;https://twitter.com/chachmaru&#34;&gt;@chachmaru&lt;/a&gt;）です！&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/hugo-for-designers-vol1/&#34;&gt;第一回目&lt;/a&gt;では&lt;br /&gt;
+- 動的サイトと静的サイトの違い&lt;br /&gt;
+- Hugoの使い方&lt;br /&gt;
+- Hugoディレクトリの中身&lt;br /&gt;
+を説明しました。&lt;/p&gt;
+
+&lt;p&gt;本連載の第二回目では、とりあえずトップページに記事を表示させ、ローカル環境でテストしてみるところまで進めていきたいと思います！なお、この記事ではHugoに直接関係のない部分（基本的なHTMLやCSSの記述など）の解説は省いていきますのでご了承ください。&lt;/p&gt;
+
+&lt;p&gt;また、僕自身も手探りのため、コードや理解に間違っている部分や改善すべき点など多数あると思います。お気づきの方は、こっそりGithub issueの方で報告していただけたら幸いです。&lt;/p&gt;
+
+&lt;p&gt;それでは早速やっていきましょう！&lt;/p&gt;
+
+&lt;h2 id=&#34;記事を作成する&#34;&gt;記事を作成する&lt;/h2&gt;
+
+&lt;p&gt;Hugoを使った操作は、基本前回と同じようにターミナル内で行います。&lt;code&gt;アプリケーション &amp;gt; ユーティリティ &amp;gt; ターミナル.app&lt;/code&gt;から起動して、前回生成したHugoディレクトリまで移動しましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;hugo-newコマンド&#34;&gt;hugo newコマンド&lt;/h3&gt;
+
+&lt;p&gt;前回は&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ hugo new site chachamaru
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;というコマンドを使ってHugoディレクトリを生成しました。実はこの&lt;code&gt;hugo new&lt;/code&gt;コマンドの一部分を置き換えて&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;hugo new ジャンル/記事名（アルファベット）.md
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;とすることで、かんたんに記事もつくることができるのです。&lt;/p&gt;
+
+&lt;p&gt;最後の拡張子&lt;code&gt;.md&lt;/code&gt;は、マークダウンのファイルであることを表しています。Hugoは記事をマークダウン方式で書くことができるので、最後に&lt;code&gt;.md&lt;/code&gt;をつけるようにしましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;ジャンルを決める&#34;&gt;ジャンルを決める&lt;/h3&gt;
+
+&lt;p&gt;さて、ここで記事にどんなジャンルが欲しいかを考えます。もちろん後から新しいジャンルを追加することもできるので、今は「Works」（作品）と「Announcements」（お知らせ）の2つにします。&lt;/p&gt;
+
+&lt;p&gt;この場合、&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ hugo new works/my-first-work.md
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;と&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ hugo new announcements/my-new-website.md
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;などとすれば二種類のジャンルが作成されます。&lt;/p&gt;
+
+&lt;h3 id=&#34;記事の場所&#34;&gt;記事の場所&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;hugo new&lt;/code&gt;コマンドでつくられた記事は&lt;code&gt;content&lt;/code&gt;ディレクトリ内にあります。ジャンルが指定されている場合、ジャンル名がサブディレクトリ名になります。&lt;/p&gt;
+
+&lt;p&gt;今回の場合、&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/029/01.png&#34; alt=&#34;ディレクトリ構成&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;のような構成になっているはずです。&lt;/p&gt;
+
+&lt;p&gt;※&lt;code&gt;hugo new&lt;/code&gt;で生成したジャンル名や記事タイトルは、Finderなどからでも名称変更可能です。スペルミスなどをしてしまった場合は普段どおり名前を変更すれば大丈夫です。&lt;/p&gt;
+
+&lt;h3 id=&#34;フロントマター&#34;&gt;フロントマター&lt;/h3&gt;
+
+&lt;p&gt;作成した&lt;code&gt;my-first-work.md&lt;/code&gt;をテキストエディタで開いてみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/029/02.png&#34; alt=&#34;マークダウンファイル&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;開くと空のファイルではなく、&lt;code&gt;+++&lt;/code&gt;に囲まれて&lt;code&gt;date&lt;/code&gt;、&lt;code&gt;draft&lt;/code&gt;、&lt;code&gt;title&lt;/code&gt;の3つが書かれています。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;+++&lt;/code&gt;で囲まれている部分は、TOML（設定ファイルを記述する小さい言語）で書かれたこの&lt;code&gt;my-first-work.md&lt;/code&gt;の記事に関するデータであり、&lt;strong&gt;フロントマター&lt;/strong&gt;と呼びます。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;date&lt;/code&gt;には記事が作成された日にちと時間、&lt;code&gt;draft&lt;/code&gt;にはこの記事が下書き状態か否か、そして&lt;code&gt;title&lt;/code&gt;にはファイル名と同じ名前がデフォルトでつけられています。詳しくは後ほど。&lt;/p&gt;
+
+&lt;h3 id=&#34;記事を書く&#34;&gt;記事を書く&lt;/h3&gt;
+
+&lt;p&gt;本文は&lt;code&gt;+++&lt;/code&gt;で閉じた後の行に記述します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/029/03.png&#34; alt=&#34;マークダウンファイル&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;このファイルの名前&lt;code&gt;my-first-work.md&lt;/code&gt;は、この記事のページのURL（例: chachmaru.github.io/works/my-first-work）になります（ファイル名とURLを別々に設定することも可能）。実際にウェブサイトに表示されるタイトルはフロントマターの&lt;code&gt;title&lt;/code&gt;で指定されたものなので、好きな文言に書き換えておきましょう。&lt;/p&gt;
+
+&lt;p&gt;これで一旦記事作成は終わりです。次はHTMLを書いていきます。&lt;/p&gt;
+
+&lt;h2 id=&#34;トップページに記事一覧を表示させる&#34;&gt;トップページに記事一覧を表示させる&lt;/h2&gt;
+
+&lt;h3 id=&#34;index-htmlをつくる&#34;&gt;index.htmlをつくる&lt;/h3&gt;
+
+&lt;p&gt;前回のおさらいで、HUGOでは&lt;code&gt;layouts&lt;/code&gt;内にHTMLファイルを置きます。&lt;code&gt;index.html&lt;/code&gt;を作り、とりあえず「hello world」などと入れ、保存しましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;ブラウザでテストしてみる&#34;&gt;ブラウザでテストしてみる&lt;/h3&gt;
+
+&lt;p&gt;いよいよHUGOをブラウザで表示させてみます。テスト用のサーバーをたてるのは非常にかんたんで、&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ hugo server
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;とターミナルに入れるだけです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/029/04.png&#34; alt=&#34;ターミナルスクリーンショット&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Hugoはデフォルトで&lt;a href=&#34;localhost:1313&#34;&gt;localhost:1313&lt;/a&gt;にサーバーをたてるので、ブラウザでアクセスしてみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/029/05.png&#34; alt=&#34;ブラウザ&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;さきほど&lt;code&gt;index.html&lt;/code&gt;に入れた文字が表示されましたか？&lt;/p&gt;
+
+&lt;h3 id=&#34;コマンドにオプションをつける&#34;&gt;コマンドにオプションをつける&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;hugo server&lt;/code&gt;コマンドは、Hugoディレクトリ内のファイルを更新したあと一旦サーバーを停止させてもう一度起動しなければいけないので、非常にめんどうです。&lt;/p&gt;
+
+&lt;p&gt;そこで、一旦サーバーを停止して、次から&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ hugo server --watch --buildDrafts
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;としてください。&lt;/p&gt;
+
+&lt;p&gt;2つのハイフンから始まる文字は&lt;code&gt;hugo server&lt;/code&gt;コマンドのオプションです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;--watch&lt;/code&gt;&lt;br /&gt;
+Hugoディレクトリ内に変更があったとき自動でブラウザをリロードしてくれます。これでいちいちサーバーを再起動しなくても大丈夫です。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;code&gt;--buildDrafts&lt;/code&gt;&lt;br /&gt;
+フロントマターの&lt;code&gt;draft&lt;/code&gt;欄が&lt;code&gt;true&lt;/code&gt;になっている記事を、Hugoはデフォルトでテストサーバーに反映させません。本番には向いているのですが、今はテスト段階のため、このオプションをつけて下書き記事も反映させます。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;これでずっと走らせておきながら開発ができます。&lt;/p&gt;
+
+&lt;h3 id=&#34;トップページに記事を表示させる&#34;&gt;トップページに記事を表示させる&lt;/h3&gt;
+
+&lt;p&gt;まずは以下を&lt;code&gt;index.html&lt;/code&gt;にコピペして保存してください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;!DOCTYPE html&amp;gt;
+
+&amp;lt;html&amp;gt;
+  &amp;lt;body&amp;gt;
+
+      {{ range first 10 .Data.Pages }}
+        &amp;lt;div&amp;gt;
+          &amp;lt;a href=&amp;quot;#&amp;quot;&amp;gt;{{ .Title }}&amp;lt;/a&amp;gt;
+        &amp;lt;/div&amp;gt;
+      {{ end }}
+
+  &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;すると、ブラウザ側では&lt;br /&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/029/06.png&#34; alt=&#34;ブラウザ&#34; /&gt;&lt;br /&gt;
+のように、さきほど作成した&lt;code&gt;content&lt;/code&gt;ディレクトリ内の2つの記事タイトルが並べられていると思います！&lt;/p&gt;
+
+&lt;h2 id=&#34;goテンプレートを活用する&#34;&gt;Goテンプレートを活用する&lt;/h2&gt;
+
+&lt;p&gt;なぜ上記のようなコードだけで、こんなにもかんたんに記事一覧を表示させることができるのでしょうか。秘密は&lt;code&gt;{{ }}&lt;/code&gt;内のコードにあります。&lt;/p&gt;
+
+&lt;h3 id=&#34;hugoのテンプレートエンジン&#34;&gt;Hugoのテンプレートエンジン&lt;/h3&gt;
+
+&lt;p&gt;テンプレートエンジンとは、雛形（テンプレート）とデータを合成・出力することができるソフトウェアを指します。HugoはHTMLにかんたんなロジックを組みこむことができる軽量の「Go html/template」ライブラリを、テンプレートエンジンとして使用しています。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{{ range first 10 .Data.Pages}}
+
+{{ end }}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;は、全記事から最新の10記事分の、カッコ内に書かれたHTMLを用意しています。今回は全体で2つしか記事がないため、2つ分のみ用意されています。&lt;/p&gt;
+
+&lt;p&gt;また、&lt;code&gt;{{ .Title }}&lt;/code&gt;はその記事のタイトルを取得してくれます。つまり今回の場合、&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div&amp;gt;
+  &amp;lt;a href=&amp;quot;#&amp;quot;&amp;gt;ポートフォリオサイトを作りました。&amp;lt;/a&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div&amp;gt;
+  &amp;lt;a href=&amp;quot;#&amp;quot;&amp;gt;初めての作品&amp;lt;/a&amp;gt;
+&amp;lt;/div&amp;gt;    
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;とテンプレートエンジンにより変換されます。&lt;/p&gt;
+
+&lt;h2 id=&#34;次回予告&#34;&gt;次回予告&lt;/h2&gt;
+
+&lt;p&gt;今回は自分が書いた記事の一覧をトップページに表示させることができました。しかし、現時点だとタイトルをクリックしても記事ページには飛べません。Hugoでポートフォリオサイトを作るには、もう少しこの&lt;code&gt;{{ }}&lt;/code&gt;をうまく活用する必要がありそうです。&lt;/p&gt;
+
+&lt;p&gt;次回は個別記事のページ作成や、ジャンル、タグなどの仕組みをつくっていきたいと思います。&lt;/p&gt;
+
+&lt;p&gt;それではまた次回お会いしましょう！&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Node.jsでコマンドラインツール作るときに使いやすいreadline-sync</title>
@@ -126,7 +325,7 @@ console.log(&#39;終了します。&#39;);
 
 &lt;p&gt;という入力を受け付けて紐づけられている関数の引数として変数が渡されます。&lt;/p&gt;
 
-&lt;h2 id=&#34;キー入力でメモリから値を選んでもらう&#34;&gt;キー入力でメモリから値を選んでもらう&lt;/h2&gt;
+&lt;h2 id=&#34;キー入力で値を選んでもらう&#34;&gt;キー入力で値を選んでもらう&lt;/h2&gt;
 
 &lt;p&gt;この表現がいいのか分からないですけど、、、見ればわかります。&lt;/p&gt;
 
@@ -3066,194 +3265,6 @@ void loop() {
 ということで今回はCocoaBitについてを紹介しました。CocoaBitを使えば、これくらい簡単にlittleBitsをインターネットと繋げられます。&lt;/p&gt;
 
 &lt;p&gt;CocoaBitはまだ開発中ではありますが、進展があればまたこちらで報告しようと思っております。応援よろしくお願いします！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>クラブで目立つ！Adafruit社のGemmaで光るピアスを作ってみよう</title>
-      <link>https://dotstud.io/blog/neopixel-ring-gemma-earrings/</link>
-      <pubDate>Fri, 26 Aug 2016 11:00:00 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/neopixel-ring-gemma-earrings/</guid>
-      
-      <description>
-
-&lt;p&gt;みなさんこんにちわ！　dotstudioでインターンをしているマオと申します。今回から、dotstudioのブログにて電子工作についての連載していきたいと思います！  初回の本記事では、Adafruit社の「Gemma」というマイコンボードを使った『フープイヤリング』の作り方を紹介します！&lt;/p&gt;
-
-&lt;p&gt;こちらが完成の動画です＾＾&lt;/p&gt;
-
-&lt;iframe width=&#34;645&#34; height=&#34;363&#34; src=&#34;https://www.youtube.com/embed/30MlFUBgzQo&#34; frameborder=&#34;0&#34; &gt;&lt;/iframe&gt;
-
-&lt;p&gt;それではさっそく作っていきましょう！&lt;/p&gt;
-
-&lt;h2 id=&#34;必要な物&#34;&gt;必要な物&lt;/h2&gt;
-
-&lt;!-- ![](/img/blog/015/01_cs.png) --&gt;
-
-&lt;ul&gt;
-&lt;li&gt;光るフープイヤリングのキット（購入は&lt;a href=&#34;https://dotstud.io/projects/neopixel-ring-flora-earrings/&#34;&gt;こちら&lt;/a&gt;から）
-
-&lt;ul&gt;
-&lt;li&gt;NeoPixel Ring&lt;/li&gt;
-&lt;li&gt;Gemma&lt;/li&gt;
-&lt;li&gt;リチュウムイオンポリマー電池&lt;/li&gt;
-&lt;li&gt;フックアップワイヤー&lt;/li&gt;
-&lt;li&gt;ピアスフック&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;はんだごて、はんだ&lt;/li&gt;
-&lt;li&gt;両面テープ&lt;/li&gt;
-&lt;li&gt;マイクロUSBケーブル&lt;/li&gt;
-&lt;li&gt;パソコン&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;準備ができたらさっそく作っていきましょう！&lt;/p&gt;
-
-&lt;h2 id=&#34;1-neopixel-ringの配線をはんだ付けする&#34;&gt;1. NeoPixel Ringの配線をはんだ付けする&lt;/h2&gt;
-
-&lt;p&gt;まずはNeoPixel Ringの配線をはんだ付けしていきます。ここでは付属のフックアップワイヤーを使ってください。はんだ付け初心者の方は&lt;a href=&#34;http://www.murata.com/ja-jp/campaign/ads/japan/elekids/ele/craft/knack/soldering&#34;&gt;こちらのサイト&lt;/a&gt;などを参考にして練習するのをおすすめします。安全メガネなどの装着も心がけましょう。（目をまもろう！）&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/02_earring.png&#34; alt=&#34;&#34; /&gt;
-実際にはんだ付けをした後の写真はこちらです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/03_fritzing.png&#34; alt=&#34;&#34; /&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/015/04_graph.png&#34; alt=&#34;&#34; /&gt;
-はんだ付けの配線はこちらです。表に従って配線してください。&lt;/p&gt;
-
-&lt;h2 id=&#34;2-gemmaに書き込むプログラムを作る&#34;&gt;2. Gemmaに書き込むプログラムを作る&lt;/h2&gt;
-
-&lt;p&gt;今回は「Arduino IDE」というソフトウェアを使って、プログラムをGemmaに書いていきます。Arduino IDEをまだ持っていない方は、&lt;a href=&#34;https://www.arduino.cc/en/Main/Software&#34;&gt;公式サイト&lt;/a&gt;からソフトウェアをダウンロードしてください。&lt;/p&gt;
-
-&lt;p&gt;Windowsユーザーの方は Gemmaの開発元のAdafruit社による「Windows Driver」をインストールする必要があります。&lt;a href=&#34;https://learn.adafruit.com/getting-started-with-flora/windows-setup&#34;&gt;こちらのサイト&lt;/a&gt;を参照して進めてください。（Mac・Linuxのユーザーの方はインストールする必要はありません）&lt;/p&gt;
-
-&lt;h3 id=&#34;2-1-ボードのインストレーション&#34;&gt;2-1. ボードのインストレーション&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/05_arduino.png&#34; alt=&#34;&#34; /&gt;
-次にArduino IDEを立ち上げてボードをインストールします。Arduino &amp;gt; Preferences をクリックしてください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/06_arduino.png&#34; alt=&#34;&#34; /&gt;
-&lt;strong&gt;&lt;a href=&#34;https://www.adafruit.com/package_adafruit_index.json&#34;&gt;https://www.adafruit.com/package_adafruit_index.json&lt;/a&gt;&lt;/strong&gt;&lt;br /&gt;
-上記のAdafruitのURLをコピーして、追加のボードマネージャーのURLに貼り、OKをクリックしてください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/07_arduino.png&#34; alt=&#34;&#34; /&gt;
-コピー＆ペーストが完了したら、ツール &amp;gt; マイコンボード &amp;gt; ボードマネージャーをクリックします。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/08_arduino.png&#34; alt=&#34;&#34; /&gt;
-すると、このような画面が表示されます。検索欄に「Adafruit AVR Boards」を入力し、インストールしましょう。ここまでで、ボードのインストレーションは終わりです。&lt;/p&gt;
-
-&lt;h3 id=&#34;2-2-ライブラリのインストール&#34;&gt;2-2. ライブラリのインストール&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/09_arduino.png&#34; alt=&#34;&#34; /&gt;
-次に、NeoPixel Ring を光らせるために必要なライブラリをインストールします。スケッチ &amp;gt; ライブラリをインクルード &amp;gt; ライブラリを管理 をクリックしてください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/10_arduino.png&#34; alt=&#34;&#34; /&gt;
-画面が表示されるので、検索欄に「Neopixel」と入力しましょう。上記のようになります。「Adafruit Neopixel by Adafruit」を選択してインストールしてください。&lt;/p&gt;
-
-&lt;p&gt;これでプログラムを書く準備ができました。&lt;/p&gt;
-
-&lt;h3 id=&#34;2-3-プログラムをgemmaに書き込む&#34;&gt;2-3.プログラムをGemmaに書き込む&lt;/h3&gt;
-
-&lt;p&gt;ここではGemmaに書き込むための設定をおこないます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/11_arduino.png&#34; alt=&#34;&#34; /&gt;
-まずは、ボードを選択するためにツール＞ボード＞Arduino Gemma をクリックしてください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/12_arduino.png&#34; alt=&#34;&#34; /&gt;
-次に書き込み装置を選択します。ツール＞書込装置＞USBtinyISPをクリックしてください。そして、以下のプログラムをスケッチにコピー&amp;amp;ペーストしてください。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;#include &amp;lt;Adafruit_NeoPixel.h&amp;gt;
-
-#define PIN 0
-
-Adafruit_NeoPixel pixels = Adafruit_NeoPixel(32, PIN);
-
-uint8_t  mode   = 0, // 現在のアニメーション
-         offset = 0; // スピンするの位置
-uint32_t color  = 0xffae00; // 赤でスタート
-uint32_t prevTime;
-
-void setup() {
-  pixels.begin();
-  pixels.setBrightness(60); // １/３ 明るさ
-  prevTime = millis();
-}
-
-void loop() {
-  uint8_t  i;
-  uint32_t t;
-
-  switch(mode) {
-
-   case 0: // ランダムに光る - 一回１LED
-    i = random(32);
-    pixels.setPixelColor(i, color);
-    pixels.show();
-    delay(10);
-    pixels.setPixelColor(i, 0);
-    break;
-
-   case 1: // スピンする輪っか (一回に　８　LEDs )
-    for(i=0; i&amp;lt;16; i++) {
-      uint32_t c = 0;
-      if(((offset + i) &amp;amp; 7) &amp;lt; 2) c = color; // ４ピクセル
-      pixels.setPixelColor(   i, c); // 一回目
-      pixels.setPixelColor(31-i, c); // ２回目（裏返す）
-    }
-    pixels.show();
-    offset++;
-    delay(50);
-    break;
-  }
-
-  t = millis();
-  if((t - prevTime) &amp;gt; 8000) {      // 毎８秒
-    mode++;                        // 次のモード
-    if(mode &amp;gt; 1) {                 // モードの終わり
-      mode = 0;                    // モードスタート
-      color &amp;gt;&amp;gt;= 8;                 // 次の色 R-&amp;gt;G-&amp;gt;B
-      if(!color) color = 0xffae00; // 赤にリセット
-    }
-    for(i=0; i&amp;lt;32; i++) pixels.setPixelColor(i, 0);
-    prevTime = t;
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/13_gemma.gif&#34; alt=&#34;&#34; /&gt;
-その後、Gemmaにある小さなボタンを押すと、こちらのように赤いLEDが10秒間点滅します。赤いLEDが点滅している間に、スケッチ＞書込装置を使って書き込む をクリックしましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;※こちらのイメージにはNeoPixel Ringがついていませんが、NeoPixel Ringをはんだ付けしたあとのものへ書き込んでも問題ありません。&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/14_arduino.png&#34; alt=&#34;&#34; /&gt;
-赤いLEDの点滅が終わったら、Gemmaへのプログラムの書き込み完了となります。この状態になれば、MicroUSBを外しても大丈夫です。&lt;/p&gt;
-
-&lt;h2 id=&#34;3-バッテリー接続-ピアスのフック取り付け&#34;&gt;3. バッテリー接続＆ピアスのフック取り付け&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/15_hello.png&#34; alt=&#34;&#34; /&gt;
-最後に、NepPixel Ringとリチュームイオンポリマーバッテリーを接続します。Gemmaボード上に小さなON-OFFスイッチがあるので、スイッチをONにしてきちんと光るかどうかを確かめてください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/16_world.png&#34; alt=&#34;&#34; /&gt;
-次にバッテリーを固定します。いろいろなやり方があるかと思いますが、私は両面テープを中央に貼り、ピアスフックとバッテリーの線を固定してみました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/17_hoge.png&#34; alt=&#34;&#34; /&gt;
-その上からまた両面テープを貼り、バッテリーを上から付けています。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/18_fuga.png&#34; alt=&#34;&#34; /&gt;
-最後にNeoPixel Ringとピアスフックを固定させて、ピアスフックの余った長さを切断すればできあがりです＾＾&lt;/p&gt;
-
-&lt;p&gt;バッテリーは充電可能なものとなっています。キットには充電機が含まれてないため、充電機がほしい方は&lt;a href=&#34;https://www.switch-science.com/catalog/1499/&#34;&gt;スイッチサイエンス&lt;/a&gt;さんのサイトでお求めください。&lt;/p&gt;
-
-&lt;h2 id=&#34;できあがり&#34;&gt;できあがり&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/23_mao.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/20_mao.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/015/19_mao.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;装着して写真を撮ってみました！&lt;br /&gt;
-結構ファッショナブルでかわいいですよね！　みなさんもぜひ作ってみてください＾＾&lt;/p&gt;
-
-&lt;p&gt;次回の記事もお楽しみにー！&lt;/p&gt;
 </description>
     </item>
     

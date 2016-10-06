@@ -7,10 +7,408 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Wed, 05 Oct 2016 10:00:00 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 06 Oct 2016 10:40:04 +0900</lastBuildDate>
     <atom:link href="https://dotstud.io/categories/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>デザイナーの僕がHugoを使ってポートフォリオサイトを作ってみる #2【制作:基本編】</title>
+      <link>https://dotstud.io/blog/hugo-for-designers-vol2/</link>
+      <pubDate>Thu, 06 Oct 2016 10:40:04 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/hugo-for-designers-vol2/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudioのデザイナー・ちゃちゃまる（&lt;a href=&#34;https://twitter.com/chachmaru&#34;&gt;@chachmaru&lt;/a&gt;）です！&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/hugo-for-designers-vol1/&#34;&gt;第一回目&lt;/a&gt;では&lt;br /&gt;
+- 動的サイトと静的サイトの違い&lt;br /&gt;
+- Hugoの使い方&lt;br /&gt;
+- Hugoディレクトリの中身&lt;br /&gt;
+を説明しました。&lt;/p&gt;
+
+&lt;p&gt;本連載の第二回目では、とりあえずトップページに記事を表示させ、ローカル環境でテストしてみるところまで進めていきたいと思います！なお、この記事ではHugoに直接関係のない部分（基本的なHTMLやCSSの記述など）の解説は省いていきますのでご了承ください。&lt;/p&gt;
+
+&lt;p&gt;また、僕自身も手探りのため、コードや理解に間違っている部分や改善すべき点など多数あると思います。お気づきの方は、こっそりGithub issueの方で報告していただけたら幸いです。&lt;/p&gt;
+
+&lt;p&gt;それでは早速やっていきましょう！&lt;/p&gt;
+
+&lt;h2 id=&#34;記事を作成する&#34;&gt;記事を作成する&lt;/h2&gt;
+
+&lt;p&gt;Hugoを使った操作は、基本前回と同じようにターミナル内で行います。&lt;code&gt;アプリケーション &amp;gt; ユーティリティ &amp;gt; ターミナル.app&lt;/code&gt;から起動して、前回生成したHugoディレクトリまで移動しましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;hugo-newコマンド&#34;&gt;hugo newコマンド&lt;/h3&gt;
+
+&lt;p&gt;前回は&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ hugo new site chachamaru
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;というコマンドを使ってHugoディレクトリを生成しました。実はこの&lt;code&gt;hugo new&lt;/code&gt;コマンドの一部分を置き換えて&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;hugo new ジャンル/記事名（アルファベット）.md
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;とすることで、かんたんに記事もつくることができるのです。&lt;/p&gt;
+
+&lt;p&gt;最後の拡張子&lt;code&gt;.md&lt;/code&gt;は、マークダウンのファイルであることを表しています。Hugoは記事をマークダウン方式で書くことができるので、最後に&lt;code&gt;.md&lt;/code&gt;をつけるようにしましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;ジャンルを決める&#34;&gt;ジャンルを決める&lt;/h3&gt;
+
+&lt;p&gt;さて、ここで記事にどんなジャンルが欲しいかを考えます。もちろん後から新しいジャンルを追加することもできるので、今は「Works」（作品）と「Announcements」（お知らせ）の2つにします。&lt;/p&gt;
+
+&lt;p&gt;この場合、&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ hugo new works/my-first-work.md
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;と&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ hugo new announcements/my-new-website.md
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;などとすれば二種類のジャンルが作成されます。&lt;/p&gt;
+
+&lt;h3 id=&#34;記事の場所&#34;&gt;記事の場所&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;hugo new&lt;/code&gt;コマンドでつくられた記事は&lt;code&gt;content&lt;/code&gt;ディレクトリ内にあります。ジャンルが指定されている場合、ジャンル名がサブディレクトリ名になります。&lt;/p&gt;
+
+&lt;p&gt;今回の場合、&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/029/01.png&#34; alt=&#34;ディレクトリ構成&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;のような構成になっているはずです。&lt;/p&gt;
+
+&lt;p&gt;※&lt;code&gt;hugo new&lt;/code&gt;で生成したジャンル名や記事タイトルは、Finderなどからでも名称変更可能です。スペルミスなどをしてしまった場合は普段どおり名前を変更すれば大丈夫です。&lt;/p&gt;
+
+&lt;h3 id=&#34;フロントマター&#34;&gt;フロントマター&lt;/h3&gt;
+
+&lt;p&gt;作成した&lt;code&gt;my-first-work.md&lt;/code&gt;をテキストエディタで開いてみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/029/02.png&#34; alt=&#34;マークダウンファイル&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;開くと空のファイルではなく、&lt;code&gt;+++&lt;/code&gt;に囲まれて&lt;code&gt;date&lt;/code&gt;、&lt;code&gt;draft&lt;/code&gt;、&lt;code&gt;title&lt;/code&gt;の3つが書かれています。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;+++&lt;/code&gt;で囲まれている部分は、TOML（設定ファイルを記述する小さい言語）で書かれたこの&lt;code&gt;my-first-work.md&lt;/code&gt;の記事に関するデータであり、&lt;strong&gt;フロントマター&lt;/strong&gt;と呼びます。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;date&lt;/code&gt;には記事が作成された日にちと時間、&lt;code&gt;draft&lt;/code&gt;にはこの記事が下書き状態か否か、そして&lt;code&gt;title&lt;/code&gt;にはファイル名と同じ名前がデフォルトでつけられています。詳しくは後ほど。&lt;/p&gt;
+
+&lt;h3 id=&#34;記事を書く&#34;&gt;記事を書く&lt;/h3&gt;
+
+&lt;p&gt;本文は&lt;code&gt;+++&lt;/code&gt;で閉じた後の行に記述します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/029/03.png&#34; alt=&#34;マークダウンファイル&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;このファイルの名前&lt;code&gt;my-first-work.md&lt;/code&gt;は、この記事のページのURL（例: chachmaru.github.io/works/my-first-work）になります（ファイル名とURLを別々に設定することも可能）。実際にウェブサイトに表示されるタイトルはフロントマターの&lt;code&gt;title&lt;/code&gt;で指定されたものなので、好きな文言に書き換えておきましょう。&lt;/p&gt;
+
+&lt;p&gt;これで一旦記事作成は終わりです。次はHTMLを書いていきます。&lt;/p&gt;
+
+&lt;h2 id=&#34;トップページに記事一覧を表示させる&#34;&gt;トップページに記事一覧を表示させる&lt;/h2&gt;
+
+&lt;h3 id=&#34;index-htmlをつくる&#34;&gt;index.htmlをつくる&lt;/h3&gt;
+
+&lt;p&gt;前回のおさらいで、HUGOでは&lt;code&gt;layouts&lt;/code&gt;内にHTMLファイルを置きます。&lt;code&gt;index.html&lt;/code&gt;を作り、とりあえず「hello world」などと入れ、保存しましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;ブラウザでテストしてみる&#34;&gt;ブラウザでテストしてみる&lt;/h3&gt;
+
+&lt;p&gt;いよいよHUGOをブラウザで表示させてみます。テスト用のサーバーをたてるのは非常にかんたんで、&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ hugo server
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;とターミナルに入れるだけです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/029/04.png&#34; alt=&#34;ターミナルスクリーンショット&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Hugoはデフォルトで&lt;a href=&#34;localhost:1313&#34;&gt;localhost:1313&lt;/a&gt;にサーバーをたてるので、ブラウザでアクセスしてみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/029/05.png&#34; alt=&#34;ブラウザ&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;さきほど&lt;code&gt;index.html&lt;/code&gt;に入れた文字が表示されましたか？&lt;/p&gt;
+
+&lt;h3 id=&#34;コマンドにオプションをつける&#34;&gt;コマンドにオプションをつける&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;hugo server&lt;/code&gt;コマンドは、Hugoディレクトリ内のファイルを更新したあと一旦サーバーを停止させてもう一度起動しなければいけないので、非常にめんどうです。&lt;/p&gt;
+
+&lt;p&gt;そこで、一旦サーバーを停止して、次から&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ hugo server --watch --buildDrafts
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;としてください。&lt;/p&gt;
+
+&lt;p&gt;2つのハイフンから始まる文字は&lt;code&gt;hugo server&lt;/code&gt;コマンドのオプションです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;--watch&lt;/code&gt;&lt;br /&gt;
+Hugoディレクトリ内に変更があったとき自動でブラウザをリロードしてくれます。これでいちいちサーバーを再起動しなくても大丈夫です。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;code&gt;--buildDrafts&lt;/code&gt;&lt;br /&gt;
+フロントマターの&lt;code&gt;draft&lt;/code&gt;欄が&lt;code&gt;true&lt;/code&gt;になっている記事を、Hugoはデフォルトでテストサーバーに反映させません。本番には向いているのですが、今はテスト段階のため、このオプションをつけて下書き記事も反映させます。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;これでずっと走らせておきながら開発ができます。&lt;/p&gt;
+
+&lt;h3 id=&#34;トップページに記事を表示させる&#34;&gt;トップページに記事を表示させる&lt;/h3&gt;
+
+&lt;p&gt;まずは以下を&lt;code&gt;index.html&lt;/code&gt;にコピペして保存してください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;!DOCTYPE html&amp;gt;
+
+&amp;lt;html&amp;gt;
+  &amp;lt;body&amp;gt;
+
+      {{ range first 10 .Data.Pages }}
+        &amp;lt;div&amp;gt;
+          &amp;lt;a href=&amp;quot;#&amp;quot;&amp;gt;{{ .Title }}&amp;lt;/a&amp;gt;
+        &amp;lt;/div&amp;gt;
+      {{ end }}
+
+  &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;すると、ブラウザ側では&lt;br /&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/029/06.png&#34; alt=&#34;ブラウザ&#34; /&gt;&lt;br /&gt;
+のように、さきほど作成した&lt;code&gt;content&lt;/code&gt;ディレクトリ内の2つの記事タイトルが並べられていると思います！&lt;/p&gt;
+
+&lt;h2 id=&#34;goテンプレートを活用する&#34;&gt;Goテンプレートを活用する&lt;/h2&gt;
+
+&lt;p&gt;なぜ上記のようなコードだけで、こんなにもかんたんに記事一覧を表示させることができるのでしょうか。秘密は&lt;code&gt;{{ }}&lt;/code&gt;内のコードにあります。&lt;/p&gt;
+
+&lt;h3 id=&#34;hugoのテンプレートエンジン&#34;&gt;Hugoのテンプレートエンジン&lt;/h3&gt;
+
+&lt;p&gt;テンプレートエンジンとは、雛形（テンプレート）とデータを合成・出力することができるソフトウェアを指します。HugoはHTMLにかんたんなロジックを組みこむことができる軽量の「Go html/template」ライブラリを、テンプレートエンジンとして使用しています。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{{ range first 10 .Data.Pages}}
+
+{{ end }}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;は、全記事から最新の10記事分の、カッコ内に書かれたHTMLを用意しています。今回は全体で2つしか記事がないため、2つ分のみ用意されています。&lt;/p&gt;
+
+&lt;p&gt;また、&lt;code&gt;{{ .Title }}&lt;/code&gt;はその記事のタイトルを取得してくれます。つまり今回の場合、&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div&amp;gt;
+  &amp;lt;a href=&amp;quot;#&amp;quot;&amp;gt;ポートフォリオサイトを作りました。&amp;lt;/a&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div&amp;gt;
+  &amp;lt;a href=&amp;quot;#&amp;quot;&amp;gt;初めての作品&amp;lt;/a&amp;gt;
+&amp;lt;/div&amp;gt;    
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;とテンプレートエンジンにより変換されます。&lt;/p&gt;
+
+&lt;h2 id=&#34;次回予告&#34;&gt;次回予告&lt;/h2&gt;
+
+&lt;p&gt;今回は自分が書いた記事の一覧をトップページに表示させることができました。しかし、現時点だとタイトルをクリックしても記事ページには飛べません。Hugoでポートフォリオサイトを作るには、もう少しこの&lt;code&gt;{{ }}&lt;/code&gt;をうまく活用する必要がありそうです。&lt;/p&gt;
+
+&lt;p&gt;次回は個別記事のページ作成や、ジャンル、タグなどの仕組みをつくっていきたいと思います。&lt;/p&gt;
+
+&lt;p&gt;それではまた次回お会いしましょう！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>デザイナーの僕がHugoを使ってポートフォリオサイトを作ってみる #2【制作:基本編】</title>
+      <link>https://dotstud.io/blog/hugo-for-designers-vol2/</link>
+      <pubDate>Thu, 06 Oct 2016 10:40:04 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/hugo-for-designers-vol2/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudioのデザイナー・ちゃちゃまる（&lt;a href=&#34;https://twitter.com/chachmaru&#34;&gt;@chachmaru&lt;/a&gt;）です！&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/hugo-for-designers-vol1/&#34;&gt;第一回目&lt;/a&gt;では&lt;br /&gt;
+- 動的サイトと静的サイトの違い&lt;br /&gt;
+- Hugoの使い方&lt;br /&gt;
+- Hugoディレクトリの中身&lt;br /&gt;
+を説明しました。&lt;/p&gt;
+
+&lt;p&gt;本連載の第二回目では、とりあえずトップページに記事を表示させ、ローカル環境でテストしてみるところまで進めていきたいと思います！なお、この記事ではHugoに直接関係のない部分（基本的なHTMLやCSSの記述など）の解説は省いていきますのでご了承ください。&lt;/p&gt;
+
+&lt;p&gt;また、僕自身も手探りのため、コードや理解に間違っている部分や改善すべき点など多数あると思います。お気づきの方は、こっそりGithub issueの方で報告していただけたら幸いです。&lt;/p&gt;
+
+&lt;p&gt;それでは早速やっていきましょう！&lt;/p&gt;
+
+&lt;h2 id=&#34;記事を作成する&#34;&gt;記事を作成する&lt;/h2&gt;
+
+&lt;p&gt;Hugoを使った操作は、基本前回と同じようにターミナル内で行います。&lt;code&gt;アプリケーション &amp;gt; ユーティリティ &amp;gt; ターミナル.app&lt;/code&gt;から起動して、前回生成したHugoディレクトリまで移動しましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;hugo-newコマンド&#34;&gt;hugo newコマンド&lt;/h3&gt;
+
+&lt;p&gt;前回は&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ hugo new site chachamaru
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;というコマンドを使ってHugoディレクトリを生成しました。実はこの&lt;code&gt;hugo new&lt;/code&gt;コマンドの一部分を置き換えて&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;hugo new ジャンル/記事名（アルファベット）.md
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;とすることで、かんたんに記事もつくることができるのです。&lt;/p&gt;
+
+&lt;p&gt;最後の拡張子&lt;code&gt;.md&lt;/code&gt;は、マークダウンのファイルであることを表しています。Hugoは記事をマークダウン方式で書くことができるので、最後に&lt;code&gt;.md&lt;/code&gt;をつけるようにしましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;ジャンルを決める&#34;&gt;ジャンルを決める&lt;/h3&gt;
+
+&lt;p&gt;さて、ここで記事にどんなジャンルが欲しいかを考えます。もちろん後から新しいジャンルを追加することもできるので、今は「Works」（作品）と「Announcements」（お知らせ）の2つにします。&lt;/p&gt;
+
+&lt;p&gt;この場合、&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ hugo new works/my-first-work.md
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;と&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ hugo new announcements/my-new-website.md
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;などとすれば二種類のジャンルが作成されます。&lt;/p&gt;
+
+&lt;h3 id=&#34;記事の場所&#34;&gt;記事の場所&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;hugo new&lt;/code&gt;コマンドでつくられた記事は&lt;code&gt;content&lt;/code&gt;ディレクトリ内にあります。ジャンルが指定されている場合、ジャンル名がサブディレクトリ名になります。&lt;/p&gt;
+
+&lt;p&gt;今回の場合、&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/029/01.png&#34; alt=&#34;ディレクトリ構成&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;のような構成になっているはずです。&lt;/p&gt;
+
+&lt;p&gt;※&lt;code&gt;hugo new&lt;/code&gt;で生成したジャンル名や記事タイトルは、Finderなどからでも名称変更可能です。スペルミスなどをしてしまった場合は普段どおり名前を変更すれば大丈夫です。&lt;/p&gt;
+
+&lt;h3 id=&#34;フロントマター&#34;&gt;フロントマター&lt;/h3&gt;
+
+&lt;p&gt;作成した&lt;code&gt;my-first-work.md&lt;/code&gt;をテキストエディタで開いてみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/029/02.png&#34; alt=&#34;マークダウンファイル&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;開くと空のファイルではなく、&lt;code&gt;+++&lt;/code&gt;に囲まれて&lt;code&gt;date&lt;/code&gt;、&lt;code&gt;draft&lt;/code&gt;、&lt;code&gt;title&lt;/code&gt;の3つが書かれています。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;+++&lt;/code&gt;で囲まれている部分は、TOML（設定ファイルを記述する小さい言語）で書かれたこの&lt;code&gt;my-first-work.md&lt;/code&gt;の記事に関するデータであり、&lt;strong&gt;フロントマター&lt;/strong&gt;と呼びます。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;date&lt;/code&gt;には記事が作成された日にちと時間、&lt;code&gt;draft&lt;/code&gt;にはこの記事が下書き状態か否か、そして&lt;code&gt;title&lt;/code&gt;にはファイル名と同じ名前がデフォルトでつけられています。詳しくは後ほど。&lt;/p&gt;
+
+&lt;h3 id=&#34;記事を書く&#34;&gt;記事を書く&lt;/h3&gt;
+
+&lt;p&gt;本文は&lt;code&gt;+++&lt;/code&gt;で閉じた後の行に記述します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/029/03.png&#34; alt=&#34;マークダウンファイル&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;このファイルの名前&lt;code&gt;my-first-work.md&lt;/code&gt;は、この記事のページのURL（例: chachmaru.github.io/works/my-first-work）になります（ファイル名とURLを別々に設定することも可能）。実際にウェブサイトに表示されるタイトルはフロントマターの&lt;code&gt;title&lt;/code&gt;で指定されたものなので、好きな文言に書き換えておきましょう。&lt;/p&gt;
+
+&lt;p&gt;これで一旦記事作成は終わりです。次はHTMLを書いていきます。&lt;/p&gt;
+
+&lt;h2 id=&#34;トップページに記事一覧を表示させる&#34;&gt;トップページに記事一覧を表示させる&lt;/h2&gt;
+
+&lt;h3 id=&#34;index-htmlをつくる&#34;&gt;index.htmlをつくる&lt;/h3&gt;
+
+&lt;p&gt;前回のおさらいで、HUGOでは&lt;code&gt;layouts&lt;/code&gt;内にHTMLファイルを置きます。&lt;code&gt;index.html&lt;/code&gt;を作り、とりあえず「hello world」などと入れ、保存しましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;ブラウザでテストしてみる&#34;&gt;ブラウザでテストしてみる&lt;/h3&gt;
+
+&lt;p&gt;いよいよHUGOをブラウザで表示させてみます。テスト用のサーバーをたてるのは非常にかんたんで、&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ hugo server
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;とターミナルに入れるだけです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/029/04.png&#34; alt=&#34;ターミナルスクリーンショット&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Hugoはデフォルトで&lt;a href=&#34;localhost:1313&#34;&gt;localhost:1313&lt;/a&gt;にサーバーをたてるので、ブラウザでアクセスしてみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/029/05.png&#34; alt=&#34;ブラウザ&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;さきほど&lt;code&gt;index.html&lt;/code&gt;に入れた文字が表示されましたか？&lt;/p&gt;
+
+&lt;h3 id=&#34;コマンドにオプションをつける&#34;&gt;コマンドにオプションをつける&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;hugo server&lt;/code&gt;コマンドは、Hugoディレクトリ内のファイルを更新したあと一旦サーバーを停止させてもう一度起動しなければいけないので、非常にめんどうです。&lt;/p&gt;
+
+&lt;p&gt;そこで、一旦サーバーを停止して、次から&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ hugo server --watch --buildDrafts
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;としてください。&lt;/p&gt;
+
+&lt;p&gt;2つのハイフンから始まる文字は&lt;code&gt;hugo server&lt;/code&gt;コマンドのオプションです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;--watch&lt;/code&gt;&lt;br /&gt;
+Hugoディレクトリ内に変更があったとき自動でブラウザをリロードしてくれます。これでいちいちサーバーを再起動しなくても大丈夫です。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;code&gt;--buildDrafts&lt;/code&gt;&lt;br /&gt;
+フロントマターの&lt;code&gt;draft&lt;/code&gt;欄が&lt;code&gt;true&lt;/code&gt;になっている記事を、Hugoはデフォルトでテストサーバーに反映させません。本番には向いているのですが、今はテスト段階のため、このオプションをつけて下書き記事も反映させます。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;これでずっと走らせておきながら開発ができます。&lt;/p&gt;
+
+&lt;h3 id=&#34;トップページに記事を表示させる&#34;&gt;トップページに記事を表示させる&lt;/h3&gt;
+
+&lt;p&gt;まずは以下を&lt;code&gt;index.html&lt;/code&gt;にコピペして保存してください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;!DOCTYPE html&amp;gt;
+
+&amp;lt;html&amp;gt;
+  &amp;lt;body&amp;gt;
+
+      {{ range first 10 .Data.Pages }}
+        &amp;lt;div&amp;gt;
+          &amp;lt;a href=&amp;quot;#&amp;quot;&amp;gt;{{ .Title }}&amp;lt;/a&amp;gt;
+        &amp;lt;/div&amp;gt;
+      {{ end }}
+
+  &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;すると、ブラウザ側では&lt;br /&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/029/06.png&#34; alt=&#34;ブラウザ&#34; /&gt;&lt;br /&gt;
+のように、さきほど作成した&lt;code&gt;content&lt;/code&gt;ディレクトリ内の2つの記事タイトルが並べられていると思います！&lt;/p&gt;
+
+&lt;h2 id=&#34;goテンプレートを活用する&#34;&gt;Goテンプレートを活用する&lt;/h2&gt;
+
+&lt;p&gt;なぜ上記のようなコードだけで、こんなにもかんたんに記事一覧を表示させることができるのでしょうか。秘密は&lt;code&gt;{{ }}&lt;/code&gt;内のコードにあります。&lt;/p&gt;
+
+&lt;h3 id=&#34;hugoのテンプレートエンジン&#34;&gt;Hugoのテンプレートエンジン&lt;/h3&gt;
+
+&lt;p&gt;テンプレートエンジンとは、雛形（テンプレート）とデータを合成・出力することができるソフトウェアを指します。HugoはHTMLにかんたんなロジックを組みこむことができる軽量の「Go html/template」ライブラリを、テンプレートエンジンとして使用しています。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{{ range first 10 .Data.Pages}}
+
+{{ end }}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;は、全記事から最新の10記事分の、カッコ内に書かれたHTMLを用意しています。今回は全体で2つしか記事がないため、2つ分のみ用意されています。&lt;/p&gt;
+
+&lt;p&gt;また、&lt;code&gt;{{ .Title }}&lt;/code&gt;はその記事のタイトルを取得してくれます。つまり今回の場合、&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div&amp;gt;
+  &amp;lt;a href=&amp;quot;#&amp;quot;&amp;gt;ポートフォリオサイトを作りました。&amp;lt;/a&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div&amp;gt;
+  &amp;lt;a href=&amp;quot;#&amp;quot;&amp;gt;初めての作品&amp;lt;/a&amp;gt;
+&amp;lt;/div&amp;gt;    
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;とテンプレートエンジンにより変換されます。&lt;/p&gt;
+
+&lt;h2 id=&#34;次回予告&#34;&gt;次回予告&lt;/h2&gt;
+
+&lt;p&gt;今回は自分が書いた記事の一覧をトップページに表示させることができました。しかし、現時点だとタイトルをクリックしても記事ページには飛べません。Hugoでポートフォリオサイトを作るには、もう少しこの&lt;code&gt;{{ }}&lt;/code&gt;をうまく活用する必要がありそうです。&lt;/p&gt;
+
+&lt;p&gt;次回は個別記事のページ作成や、ジャンル、タグなどの仕組みをつくっていきたいと思います。&lt;/p&gt;
+
+&lt;p&gt;それではまた次回お会いしましょう！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Node.jsでコマンドラインツール作るときに使いやすいreadline-sync</title>
       <link>https://dotstud.io/blog/nodejs-npm-readline-sync/</link>
       <pubDate>Wed, 05 Oct 2016 10:00:00 +0900</pubDate>
@@ -126,7 +524,7 @@ console.log(&#39;終了します。&#39;);
 
 &lt;p&gt;という入力を受け付けて紐づけられている関数の引数として変数が渡されます。&lt;/p&gt;
 
-&lt;h2 id=&#34;キー入力でメモリから値を選んでもらう&#34;&gt;キー入力でメモリから値を選んでもらう&lt;/h2&gt;
+&lt;h2 id=&#34;キー入力で値を選んでもらう&#34;&gt;キー入力で値を選んでもらう&lt;/h2&gt;
 
 &lt;p&gt;この表現がいいのか分からないですけど、、、見ればわかります。&lt;/p&gt;
 
@@ -289,7 +687,7 @@ console.log(&#39;終了します。&#39;);
 
 &lt;p&gt;という入力を受け付けて紐づけられている関数の引数として変数が渡されます。&lt;/p&gt;
 
-&lt;h2 id=&#34;キー入力でメモリから値を選んでもらう&#34;&gt;キー入力でメモリから値を選んでもらう&lt;/h2&gt;
+&lt;h2 id=&#34;キー入力で値を選んでもらう&#34;&gt;キー入力で値を選んでもらう&lt;/h2&gt;
 
 &lt;p&gt;この表現がいいのか分からないですけど、、、見ればわかります。&lt;/p&gt;
 
@@ -3212,330 +3610,6 @@ RaspberryPiやArduinoは「電子工作初心者向け」だと世間では言�
 &lt;p&gt;&lt;a href=&#34;http://iotlt.connpass.com/event/38815/?utm_campaign=event_publish_to_follower&amp;amp;utm_medium=facebook&amp;amp;utm_source=notifications&#34; title=&#34;IoT縛りの勉強会! IoTLT vol.20 @ ウフル&#34;&gt;IoT縛りの勉強会! IoTLT vol.20 @ ウフル&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;私たちギャル電のTwitter（&lt;a href=&#34;https://twitter.com/GALDEN999&#34;&gt;@GALDEN999&lt;/a&gt;）もチェックしてみてくださーい！　では❤︎&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>IoTLT vol.19で「ギャル電」デビューしてきました！</title>
-      <link>https://dotstud.io/blog/iotlt-gbvol19-galden-report/</link>
-      <pubDate>Mon, 26 Sep 2016 20:00:00 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/iotlt-gbvol19-galden-report/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは！　dotstudioテクニカルライターの&lt;a href=&#34;https://dotstud.io/members/mao/&#34; title=&#34;まお&#34;&gt;まお&lt;/a&gt;です。先日おこなわれた国内最大のIoT縛りの勉強会「IoTLT」で登壇してきました〜！&lt;/p&gt;
-
-&lt;p&gt;私は「ギャル電」というユニットを組み、今回のIoTLTにてLTデビューを果たしました😄　ということも含めて、当日の様子をレポートしていきたいと思います！&lt;/p&gt;
-
-&lt;h2 id=&#34;iot縛りの勉強会-iotltとは&#34;&gt;IoT縛りの勉強会！IoTLTとは？&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/025/01_iotlt.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;IoTLTとは、毎回200名以上が集まるIoT（Internet of Things）縛りのライトニングトークイベントです。リレーションズ株式会社の土屋とdotstuidio代表、のびすけが主催しています。今回は第19回目を迎え、三菱総研にておこなわれました！&lt;/p&gt;
-
-&lt;h2 id=&#34;ギャル電-デビュー-登壇してきました&#34;&gt;「ギャル電」デビュー&amp;amp;登壇してきました&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/025/02_galden.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;今回のIoTLTにて私はギャルが電子工作する「ギャル電」というユニットでLTデビューしました🎀　メンバーは、dotstudioインターン大学生マオと、元ポールダンサーのアニポールきょうこの2人です。&lt;/p&gt;
-
-&lt;p&gt;私（マオ）はプレゼンテーションを、アニポールきょうこはデバイスの製作を担当しました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/025/03_galden.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ドンキでマイコンボードのアルドゥイーノを買える時代を夢見ています。基本的には2人でやっていきますが、将来的に電子工作ギャルサーをやろうと思うので、興味がある方はぜひ声をかけてください😆　&lt;/p&gt;
-
-&lt;h3 id=&#34;発表したもの-会いたくて震える1号&#34;&gt;発表したもの「会いたくて震える1号」&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/025/04_panda.png&#34; alt=&#34;&#34; /&gt;
-私たちが紹介したものは、会いたくて震えちゃうデバイス「会いたくて震える1号」になります。ウェブブラウザ上からリモートでぬいぐるみを震わせられるというIoTデバイスです。&lt;/p&gt;
-
-&lt;p&gt;強弱の段階は次の3パターンです。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;「aitai（会いたい）」ボタン（振動パターン1）&lt;/li&gt;
-&lt;li&gt;「sugokuaitai（すごく会いたい）」ボタン（振動パターン2）&lt;/li&gt;
-&lt;li&gt;「aitakuteshinu（会いたくて死ぬ）」ボタン（振動パターン3）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;script async class=&#34;speakerdeck-embed&#34; data-id=&#34;b54ef1ca72ca4b0cb737d12c9e9b42b2&#34; data-ratio=&#34;1.33333333333333&#34; src=&#34;//speakerdeck.com/assets/embed.js&#34;&gt;&lt;/script&gt;
-
-&lt;p&gt;詳しい作り方や材料などはこのスライドに書いたので、よかったら見てください〜😊&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/025/07_charai.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;また、dotstudio代表、のびすけさんもチャラ男役で登場してくれました（笑）&lt;/p&gt;
-
-&lt;h2 id=&#34;ギャル電への反応&#34;&gt;ギャル電への反応♡&lt;/h2&gt;
-
-&lt;p&gt;&lt;center&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;今のギャルは電子工作する時代「ギャル電」&lt;br&gt;いい時代！&lt;a href=&#34;https://t.co/rO3ZqhavmD&#34;&gt;https://t.co/rO3ZqhavmD&lt;/a&gt; &lt;a href=&#34;https://t.co/zCwzLG3BDl&#34;&gt;https://t.co/zCwzLG3BDl&lt;/a&gt;&lt;/p&gt; 福野泰介 (@taisukef) &lt;a href=&#34;https://twitter.com/taisukef/status/776212412987047936&#34;&gt;2016年9月15日&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;ギャル電ファンになりそう笑 &lt;a href=&#34;https://twitter.com/hashtag/iotlt?src=hash&#34;&gt;#iotlt&lt;/a&gt;&lt;/p&gt; Noriyuki (@ronsum) &lt;a href=&#34;https://twitter.com/ronsum/status/776027733876801536&#34;&gt;2016年9月14日&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;このほかにもさまざまな反応をいただきました。SNS上でいろんな方から応援してもらえてめちゃくちゃ嬉しいです！&lt;/p&gt;
-
-&lt;h3 id=&#34;がじぇるね賞もいただきました&#34;&gt;がじぇるね賞もいただきました♡&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/025/06_sakura.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;また、がじぇるねの鈴木さんが気に入ったプレゼン登壇者にルネサスのマイコンボードを配布する「がじぇるね賞」もいただきましたー！　鈴木さんありがとうございます！&lt;/p&gt;
-
-&lt;h2 id=&#34;イベントの様子&#34;&gt;イベントの様子&lt;/h2&gt;
-
-&lt;p&gt;今回のIoTLTはとても個性的な発表が多いなと感じました。そこで私的に面白いと思った発表をいくつか取り上げたいと思います！&lt;/p&gt;
-
-&lt;h3 id=&#34;thingsから頑張った話-by-hepppoさん&#34;&gt;Thingsから頑張った話 by hepppoさん&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/025/08_face.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;サーボモーターで目や表情筋を動かせるロボットについて発表していました！　Lチカの次にロボット製作に挑戦したそうです（爆笑）&lt;/p&gt;
-
-&lt;p&gt;私はこの日本髪ロボを見た瞬間、「この人マジやべぇ」と思いました（笑）&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;生皮剥かれた &lt;a href=&#34;https://twitter.com/hashtag/iotlt?src=hash&#34;&gt;#iotlt&lt;/a&gt; &lt;a href=&#34;https://t.co/N2bf33Ttyx&#34;&gt;pic.twitter.com/N2bf33Ttyx&lt;/a&gt;&lt;/p&gt; むらまさ (@muramasa2764) &lt;a href=&#34;https://twitter.com/muramasa2764/status/776046225078353921&#34;&gt;2016年9月14日&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;最高に面白かったです。これからのhepppoさんの作品が楽しみすぎです！&lt;/p&gt;
-
-&lt;h3 id=&#34;ﾀﾞｧｼｴﾘｲｪｽなiot-by-ポキオさん&#34;&gt;ﾀﾞｧｼｴﾘｲｪｽなIoT by ポキオさん&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/025/10_door.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ポキオさんは京急の運行情報監視ガジェットを紹介していました！　定期的にインターネットの運行情報を確認して、京急が遅延しそうだったらLEDをチカチカさせるというシステムです。&lt;/p&gt;
-
-&lt;script async class=&#34;speakerdeck-embed&#34; data-slide=&#34;14&#34; data-id=&#34;d1c17f3f09d641a7b02b146e53958753&#34; data-ratio=&#34;1.33333333333333&#34; src=&#34;//speakerdeck.com/assets/embed.js&#34;&gt;&lt;/script&gt;
-
-&lt;p&gt;スライドに「クソコード」が登場するのですがめちゃくちゃ爆笑しました！　皆さんもぜひご覧ください！&lt;/p&gt;
-
-&lt;h3 id=&#34;iotで美味しい漬け物を作る-by-shinoharaさん-モンスターラボ&#34;&gt;IoTで美味しい漬け物を作る by Shinoharaさん@モンスターラボ&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/025/11_bege.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;「IoTで漬物を漬ける」というとても斬新な発表でしたー！　塩分濃度センサーで塩分濃度を測り、その値をインターネットに送って最適な塩分濃度を測定。漬物がいつ食べごろなのかを教えてくれるのだそうです。熱意がすごいですね！&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;&lt;blockquote class=&#34;instagram-media&#34; data-instgrm-captioned data-instgrm-version=&#34;7&#34; style=&#34; background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);&#34;&gt;&lt;div style=&#34;padding:8px;&#34;&gt; &lt;div style=&#34; background:#F8F8F8; line-height:0; margin-top:40px; padding:50.0% 0; text-align:center; width:100%;&#34;&gt; &lt;div style=&#34; background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;&#34;&gt;&lt;/div&gt;&lt;/div&gt; &lt;p style=&#34; margin:8px 0 0 0; padding:0 4px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/BKVWUusjKsH/&#34; style=&#34; color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;&#34; target=&#34;_blank&#34;&gt;漬け物の話をするカンボジアの人　#iotlt&lt;/a&gt;&lt;/p&gt; &lt;p style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;&#34;&gt;A photo posted by n0bisuke (@n0bisuke) on &lt;time style=&#34; font-family:Arial,sans-serif; font-size:14px; line-height:17px;&#34; datetime=&#34;2016-09-14T10:49:18+00:00&#34;&gt;Sep 14, 2016 at 3:49am PDT&lt;/time&gt;&lt;/p&gt;&lt;/div&gt;&lt;/blockquote&gt; &lt;script async defer src=&#34;//platform.instagram.com/en_US/embeds.js&#34;&gt;&lt;/script&gt;&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;ちなみにShinoharaさんは日本人なのですが、カンボジア人だといじられていました（笑）&lt;/p&gt;
-
-&lt;h3 id=&#34;貧困のiot-by-ちゃんとくさん&#34;&gt;貧困のIoT by ちゃんとくさん&lt;/h3&gt;
-
-&lt;p&gt;&lt;center&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;BOCCOもどきと言うか完全にダンボー &lt;a href=&#34;https://twitter.com/hashtag/iotlt?src=hash&#34;&gt;#iotlt&lt;/a&gt; &lt;a href=&#34;https://t.co/4XZOY9hhp0&#34;&gt;pic.twitter.com/4XZOY9hhp0&lt;/a&gt;&lt;/p&gt; Koshiro (@koshiro1979) &lt;a href=&#34;https://twitter.com/koshiro1979/status/776025204917100544&#34;&gt;2016年9月14日&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;ちゃんとくさんは、家にいる家族と気軽なメッセージのやりとりができるコミュニケーションロボット「&lt;a href=&#34;http://www.ux-xu.com/product/bocco&#34;&gt;BOCCO&lt;/a&gt;」を自作しようとしたとのこと。最終的にダンボーくんになってしまったそうです（笑）&lt;/p&gt;
-
-&lt;h3 id=&#34;他にもいろいろなltが繰り広げられましたー&#34;&gt;他にもいろいろなLTが繰り広げられましたー！&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;IoTの仕事で面白かったいくつかの出来事について語ってくれた オオカワさん@三菱総研&lt;/li&gt;
-&lt;li&gt;レーザー加工機のすすめでいくつかレーザー加工機で作ったものを持参してくれた 鈴木さん@がじぇるね&lt;/li&gt;
-&lt;li&gt;機械学習のフレームワーク「ReNom」について語ってくれた 角 知亮さん@GRID&lt;/li&gt;
-&lt;li&gt;IoTで5daysインターンする学生たちのレポートをしてくれた 福本さん@ニフティ&lt;/li&gt;
-&lt;li&gt;ヒガンバナIoTで球根を育てるためのガジェットを紹介してくれた 河野さん@秘密結社オープンフォース&lt;/li&gt;
-&lt;li&gt;Android専用IoTガジェットWaffleでPokemon Goライフハック例を話してくれた のびすけさん @ dotstudio / TOLABL&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/025/12_sakura.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ということでIoTLT vol.19を紹介しましたー！　勉強会なのに、笑いどころが満載でめっちゃ楽しかったです。次のIoTLTは10月11日（火）に株式会社ウフルにて開催します！　みなさんもIoTLTに参加してみてはいかがでしょうか？　お申し込みは以下のリンクからどうぞ😄&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://iotlt.connpass.com/event/38815/?utm_campaign=event_publish_to_follower&amp;amp;utm_medium=facebook&amp;amp;utm_source=notifications&#34; title=&#34;IoT縛りの勉強会! IoTLT vol.20 @ ウフル&#34;&gt;IoT縛りの勉強会! IoTLT vol.20 @ ウフル&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;私たちギャル電のTwitter（&lt;a href=&#34;https://twitter.com/GALDEN999&#34;&gt;@GALDEN999&lt;/a&gt;）もチェックしてみてくださーい！　では❤︎&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>人柱覚悟でさっそくmacOS Sierraにしてみました。</title>
-      <link>https://dotstud.io/blog/macos-sierra-update-process/</link>
-      <pubDate>Fri, 23 Sep 2016 10:00:39 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/macos-sierra-update-process/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、dotstudio代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。macOS Sierraが出ましたね。まだ早いんじゃないかと思いつつ試しにアップデートしてみたのでレポートします。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;ちなみに今回は「実際にmacOS Sierraにアップデートしてみたレポート」ですので、試す際にもしトラブルが発生しても当メディアでは責任は負いません。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;macos-sierra-v10-12&#34;&gt;macOS Sierra （v10.12）&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/01_image.png&#34; alt=&#34;&#34; /&gt;
-&lt;a href=&#34;http://www.apple.com/jp/macos/sierra/&#34;&gt;macOS Sierra&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;シエラって読むみたいです。OS X El Capitan（v10.11）の後続版にあたります。
-バージョンは10.12でコードネームがSierraです。&lt;/p&gt;
-
-&lt;p&gt;ちなみに10.11までは「Mac OS X」という表記でしたが、Sierraからは「macOS」へ変わり最初のmが小文字になりました。デザイン的な理由がありそうですね（笑）&lt;/p&gt;
-
-&lt;p&gt;既に色々なメディアが記事を書いていますので、何が変わったかや新機能などの詳細についてはそちらからキャッチアップして下さい。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;（http://www.itmedia.co.jp/news/articles/1609/20/news119.html&#34;&gt;「Adobe CS6」は「macOS Sierra」で必要システム構成外に　Java 6サポート終了で&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;（http://www.gizmodo.jp/2016/09/mac-os-sierra-released.html&#34;&gt;OS X…ではなく「macOS Sierra」が正式リリース。MacにSiriがやってきた！&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://applech2.com/archives/macos-10-12-sierra-upgrade-check.html&#34;&gt;macOS Sierraへアップグレードする前の注意点まとめ。&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;アップデートする僕のmacbookのマシンスペック&#34;&gt;アップデートする僕のMacBookのマシンスペック&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;MacBook Pro （Retina 13-inch、 Early2015）&lt;/li&gt;
-&lt;li&gt;OS X El Capitan／v10.11.6&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;ちなみに&lt;a href=&#34;https://dotstud.io/blog/setup-new-mac-app/&#34;&gt;先日の記事&lt;/a&gt;で新しく買ったMacです。&lt;/p&gt;
-
-&lt;h2 id=&#34;手順&#34;&gt;手順&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/02_image.png&#34; alt=&#34;&#34; /&gt;
-&lt;a href=&#34;https://itunes.apple.com/jp/app/macos-sierra/id1127487414?mt=12&#34;&gt;App Store&lt;/a&gt;からSierraのインストーラを落とします。&lt;/p&gt;
-
-&lt;p&gt;インストーラだけで4.78GBもあるので、ダウンロードには少し時間がかかると思います。&lt;/p&gt;
-
-&lt;h3 id=&#34;インストール&#34;&gt;インストール&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/03_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;DLが終わるとアプリケーションフォルダにインストーラがあるので動させます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/04_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;インストーラの手順に従って以下を進めましょう。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;続ける&lt;/strong&gt; を選択&lt;/li&gt;
-&lt;li&gt;ソフトウェア使用許諾の表示になるので &lt;strong&gt;同意する&lt;/strong&gt; を選択&lt;/li&gt;
-&lt;li&gt;ソフトウェア使用許諾のポップアップが出たら更に &lt;strong&gt;同意する&lt;/strong&gt; を選択&lt;/li&gt;
-&lt;li&gt;インストール先のディスク選択画面が出るので &lt;strong&gt;インストール&lt;/strong&gt; を選択&lt;/li&gt;
-&lt;li&gt;パスワードを求められるのでMacの &lt;strong&gt;パスワードを入力&lt;/strong&gt; し &lt;strong&gt;ヘルパーを追加&lt;/strong&gt; を選択&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;ここまで終わるとインストールの準備が開始されます。
-&lt;img src=&#34;https://dotstud.io/img/blog/022/05_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;再起動を求められるので再起動しましょう。起動してるアプリケーションはすべて閉じます。編集中のファイルはちゃんと保存しておきましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/06_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;再起動するとMacの起動時にこのような画面になりインストールが進みます。この画面はMac起動前なのでここだけスマホ撮影です（笑）
-&lt;img src=&#34;https://dotstud.io/img/blog/022/07_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ここも時間がかかるので、ご飯でも食べに行くのがちょうどいいかもしれません。インストールが完了すると起動します。&lt;/p&gt;
-
-&lt;h3 id=&#34;sierraの初期設定&#34;&gt;Sierraの初期設定&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/08_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;起動するとMacの初期設定っぽいウィザードになります。AppleIDでサインインします。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;ソフトウェア使用許諾／プライバシーポリシー／利用規約の表示になるので &lt;strong&gt;同意する&lt;/strong&gt; を選択&lt;/li&gt;
-&lt;li&gt;ポップアップが出たら更に &lt;strong&gt;同意する&lt;/strong&gt; を選択&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;アカウント設定がされます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/09_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;iCloundキーチェーンの設定ですが、使っている人は設定しても良いと思います。僕はスキップしました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/10_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;次にSierraの新機能のiCloud Drive（MacのファイルをiCloudに保存する／Apple版のGoogle DriveやDropBoxみたいなもの）の設定です。この設定は後からでもできますが、僕はチェックをいれました。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;書類フォルダ&lt;/strong&gt; と &lt;strong&gt;デスクトップ&lt;/strong&gt; 内のファイルが自動的にアップロードされるので、書類やデスクトップが汚い人はアレなファイルがアップされちゃうかもしれないので気をつけましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/11_image.png&#34; alt=&#34;&#34; /&gt;
-次にSiriの設定です。これもSierraからの新機能です。iOSだけでしか使えなかったSiriですが、Macでも使えるようになります。目玉機能なのでオンにしておきます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/12_image.png&#34; alt=&#34;&#34; /&gt;
-これで無事に起動しました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/13_image.png&#34; alt=&#34;&#34; /&gt;
-&lt;strong&gt;このMacについて&lt;/strong&gt; からスペック確認をするとmacOS Sierraの表記になっていますね。&lt;/p&gt;
-
-&lt;h2 id=&#34;新機能を試してみる&#34;&gt;新機能を試してみる&lt;/h2&gt;
-
-&lt;p&gt;新機能の全ては&lt;a href=&#34;http://applech2.com/archives/20160614-macos-10-12-sierra-new-features.html&#34;&gt;macOS 10.12 Sierraの新機能まとめ。&lt;/a&gt;などをチェックしてみてください。&lt;/p&gt;
-
-&lt;p&gt;僕が実際に使ってみたかったものや手元で試せるものを紹介します。&lt;/p&gt;
-
-&lt;h3 id=&#34;複数ウィンドウをまとめてくる-タブ&#34;&gt;複数ウィンドウをまとめてくる「タブ」&lt;/h3&gt;
-
-&lt;p&gt;アプリケーションを複数開いても、タブでひとつのウィンドウにまとめてくれる機能です。Keynoteでよくスライドを複数開くので、個人的には今回のアップデートで一番便利さを感じています。&lt;/p&gt;
-
-&lt;p&gt;サードパーティ製のアプリケーションでも可能みたいですが、まだ対応してるアプリは少なそうです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/14.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Keynoteでは &lt;strong&gt;ウィンドウ-&amp;gt;すべてのウィンドウを結合&lt;/strong&gt; で結合できます。他のアプリでも同じような表示になると思います。&lt;/p&gt;
-
-&lt;p&gt;タブ機能と言っていますが、どちらかというと &lt;strong&gt;一つのウィンドウにまとめてくれる機能&lt;/strong&gt; という感じです。&lt;/p&gt;
-
-&lt;h3 id=&#34;siri-がmacでも使えるようになった&#34;&gt;「Siri」がMacでも使えるようになった&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/15.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;iOSでしか使えなかった音声アシスタント機能の「Siri」をMacでも使えるようになりました。&lt;/p&gt;
-
-&lt;p&gt;アイコンクリックか &lt;strong&gt;Command+スペース&lt;/strong&gt; で起動できます。&lt;/p&gt;
-
-&lt;h3 id=&#34;macのストレージを自動で最適化してくれる-optimized-storage&#34;&gt;Macのストレージを自動で最適化してくれる「Optimized Storage」&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/16_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ストレージの空きがなくなってくると、iCloudにファイルを逃がしてストレージを最適化してくれます。まだ僕のMacは買ったばかりなので恩恵は受けていないですが期待できます。&lt;/p&gt;
-
-&lt;p&gt;ちなみに、新機能の「Optimized Storage」（後述）を使うにはiCloud設定が必要です。iCloud設定から &lt;strong&gt;Macストレージを最適化&lt;/strong&gt; をチェックしましょう。&lt;/p&gt;
-
-&lt;h3 id=&#34;画像や動画を切り離せる-ピクチャ-イン-ピクチャ-pinp&#34;&gt;画像や動画を切り離せる「ピクチャ・イン・ピクチャ （PinP）」&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/17.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;YouTubeやiTunesで見ている動画や画像などを&lt;code&gt;切り離せる&lt;/code&gt;機能です。ちなみに、ブラウザだとSafariしか使えないようです。早くChromeにも欲しいですね……。&lt;/p&gt;
-
-&lt;p&gt;Youtube動画の上などで右クリックを2回（コンテキストメニューをダブルクリック）すると &lt;strong&gt;ピクチャ・イン・ピクチャにする&lt;/strong&gt; という項目があるので、それを選択しましょう。&lt;/p&gt;
-
-&lt;h4 id=&#34;ちなみにchromeエクステンションがありました&#34;&gt;ちなみにChromeエクステンションがありました。&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/18.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://chrome.google.com/webstore/detail/picture-in-picture-viewer/efaagmolahogmekmnmkigonhfcdiemnl/related&#34;&gt;Picture in Picture Viewer&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Chromeのメニューバーにアイコンが追加されるので、そのアイコンをYoutubeなどを開いてるときに押すと切り離せます。ちなみに、初回だけ&lt;code&gt;chrome://flags/#enable-panels&lt;/code&gt;というフラグからパネルを有効にする必要があります。&lt;/p&gt;
-
-&lt;h2 id=&#34;気になる不具合など&#34;&gt;気になる不具合など&lt;/h2&gt;
-
-&lt;h3 id=&#34;karabinerが使えない問題&#34;&gt;karabinerが使えない問題&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/19_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/setup-new-mac-app/&#34;&gt;先日の記事&lt;/a&gt;でも紹介した&lt;a href=&#34;https://pqrs.org/osx/karabiner/index.html.ja&#34;&gt;Karabiner&lt;/a&gt;が、執筆した時点（2016年9月21日）だと対応していませんでした。&lt;/p&gt;
-
-&lt;p&gt;US配列キーボードで英数&amp;lt;-&amp;gt;かなのモード変換を、JIS配列のようにボタンひとつでやりたいという僕みたいな人には必須ツールだったので残念です。&lt;/p&gt;
-
-&lt;p&gt;……と思いきや&lt;a href=&#34;https://ei-kana.appspot.com/&#34;&gt;⌘英かな&lt;/a&gt;というアプリで代替できたので、こちらをインストールすると &lt;strong&gt;US配列の英数&amp;lt;-&amp;gt;かなのモード変換問題&lt;/strong&gt; は解決します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/20_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;インストールはリンク先を参照して下さい。&lt;/p&gt;
-
-&lt;h3 id=&#34;macos-sierraにしたらgitコマンドが動かなくなった&#34;&gt;macOS Sierraにしたらgitコマンドが動かなくなった……&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/21_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;これにハマる人はけっこういる気がします（笑）&lt;/p&gt;
-
-&lt;p&gt;こちらのQiitaの記事「&lt;a href=&#34;http://qiita.com/n0bisuke/items/0ad33fa466c3de5ac763&#34;&gt;macOS SierraにしたらGitコマンドが動かなくなった&lt;/a&gt;」にまとめましたが最初焦りますね。&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめと雑感&#34;&gt;まとめと雑感&lt;/h2&gt;
-
-&lt;p&gt;今のところ、Sierraにしてから不具合は特に起きてないです。性能が上がったという実感も無いので、現時点（2016年9月21日）ではまだ必要がなければアップデートしなくても良いかもしれません。&lt;/p&gt;
-
-&lt;p&gt;ちなみにSierraにアップデートしたと同時にKeynoteがv7にアップデートしたんですけど、&lt;strong&gt;リアルタイム共同編集機能&lt;/strong&gt; というものが付いてて、こちらの方が気になっています（笑）&lt;/p&gt;
-
-&lt;p&gt;僕は問題ありませんでしたが、ハードウェア的な問題などでデータが消えてしまうとかもあるかもしれないので、アップデートする方はくれぐれもお気をつけて！&lt;/p&gt;
 </description>
     </item>
     
