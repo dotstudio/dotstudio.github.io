@@ -2,13 +2,13 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Bot on dotstudio（ドットスタジオ）</title>
-    <link>https://dotstud.io/series/bot/</link>
+    <link>https://dotstud.io/tags/bot/</link>
     <description>Recent content in Bot on dotstudio（ドットスタジオ）</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
     <lastBuildDate>Fri, 07 Oct 2016 10:00:57 +0900</lastBuildDate>
-    <atom:link href="https://dotstud.io/series/bot/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://dotstud.io/tags/bot/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>ノンプログラミングで今話題のLINE Botを開発できる「hachidori」を試してみた</title>
@@ -227,138 +227,6 @@ LINE Business Centerに登録していなかったので登録しました。ち
 &lt;p&gt;ということでサクッと触ってみたのですが、思った以上に便利そうで椅子から転げ落ちそうです。「&lt;strong&gt;初期登録の作業はひとくせありそうだけど、簡単にボット作れそう&lt;/strong&gt;」ってことが伝わったかなと思います。&lt;/p&gt;
 
 &lt;p&gt;現場からは以上です。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>話題のチャットボット開発。Node.jsでHipChatに投稿してみよう。</title>
-      <link>https://dotstud.io/blog/hipchat-bot-by-nodejs/</link>
-      <pubDate>Tue, 04 Oct 2016 10:00:39 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/hipchat-bot-by-nodejs/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、dotstudio代表の&lt;a href=&#34;http://qiita.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
-
-&lt;p&gt;先日のLINE DEVELOPER DAYでのLINEのAPIの盛り上がりがありましたが、2016年はチャットボットが各所ですごく盛り上がっています。そんな話題に乗り遅れないようにチャットボットを作っていこうと思います。&lt;/p&gt;
-
-&lt;p&gt;dotstudioでは社内チャットにAtlasssian社の「HipChat」を利用しています。2010年に登場したツールですが、僕が愛用している（メッセンジャー管理アプリの）「Franz」に登録されているので選びました。&lt;/p&gt;
-
-&lt;p&gt;「業界的にSlackじゃないの？」ってなりそうですが、Slackのユーザー課金は金銭的にけっこう辛くなっていくのが目に見えるので早期からSlackをやめました。まだSlackで消耗してるの?って言いたいです（強がり）。&lt;/p&gt;
-
-&lt;p&gt;HipChatもSlack同様にインテグレーション追加やBot作成のAPIがかなり豊富です。&lt;/p&gt;
-
-&lt;p&gt;今日はNode.jsからHipChatに投稿する方法を紹介します。&lt;/p&gt;
-
-&lt;h2 id=&#34;hipchatのインテグレーション追加をする&#34;&gt;HipChatのインテグレーション追加をする&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://www.hipchat.com/&#34;&gt;https://www.hipchat.com/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;HipChatでご自身のチームにログインしましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/030/01.png&#34; alt=&#34;&#34; /&gt;
-メニューから &lt;strong&gt;インテグレーション&lt;/strong&gt;を選択します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/030/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Build your own integration&lt;/strong&gt;を選択します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/030/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;プルダウンメニューからBOTを作るROOMを選択&lt;/strong&gt;して &lt;strong&gt;Name your integration&lt;/strong&gt;にBOTの名前を入れましょう。 一部room名を黒塗りにしてますが察してください（笑）&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/030/04.png&#34; alt=&#34;&#34; /&gt;
-作成するとアクセストークンなどが生成されます。&lt;/p&gt;
-
-&lt;p&gt;ひとまず&lt;strong&gt;Try it!ボタン&lt;/strong&gt;を押してみましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/030/05.png&#34; alt=&#34;&#34; /&gt;
-指定したROOMにメッセージが流れたら成功です。&lt;/p&gt;
-
-&lt;p&gt;それにしてもこの絵文字のセンスいいですよね。&lt;/p&gt;
-
-&lt;h2 id=&#34;curlコマンドでの実行を試す&#34;&gt;curlコマンドでの実行を試す&lt;/h2&gt;
-
-&lt;p&gt;先ほどの画面の &lt;strong&gt;Try it out&lt;/strong&gt;の項目に書いてあるcurlコマンドを実行することでAPI経由のPOSTを再現できます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;curl -d &#39;{&amp;quot;color&amp;quot;:&amp;quot;green&amp;quot;,&amp;quot;message&amp;quot;:&amp;quot;My first notification (yey)&amp;quot;,&amp;quot;notify&amp;quot;:false,&amp;quot;message_format&amp;quot;:&amp;quot;text&amp;quot;}&#39; -H &#39;Content-Type: application/json&#39; https://xxxxxx.hipchat.com/v2/room/XXXXXXX/notification?auth_token=XXXXXXXXXXXXXXXXXXXXXXXXXXXX
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;ご自身の情報に置き換えて（むしろページのものをコピペして）ターミナ
-ルから実行すると先ほどの&lt;strong&gt;Try it!ボタン&lt;/strong&gt;を押した際と同じ挙動をしてくれます。&lt;/p&gt;
-
-&lt;h2 id=&#34;node-jsからpostリクエストしてみる&#34;&gt;Node.jsからPOSTリクエストしてみる&lt;/h2&gt;
-
-&lt;p&gt;実際にBotとして活用するにあたり、他の処理と連携させる必要があるのでプログラム経由でPOSTしてみます。dotstudioではNode.jsをよく利用しているのでNode.jsから先ほどのAPIにアクセスしてます。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;request&lt;/code&gt;や&lt;code&gt;SuperAgent&lt;/code&gt;などHTTPリクエストをいい感じにしてくれる外部モジュールはいくつもありますが、今回は&lt;a href=&#34;http://qiita.com/n0bisuke/items/33a6a6da1d6f455105f9&#34;&gt;Node.jsでJSONデータをHTTP POSTするメモ&lt;/a&gt;にもまとめたように外部モジュールに依存せずにNode.jsに組み込まれてる&lt;code&gt;http&lt;/code&gt;のみで実装してみます。&lt;/p&gt;
-
-&lt;p&gt;app.jsは以下のようになります。HOSTやPATHを先ほどの情報に置き換えて実行して見ましょう。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;
-
-const http = require(&#39;http&#39;);
-const HOST = `xxxxx.hipchat.com`;
-const PATH = `/v2/room/XXXXXXX/notification?auth_token=XXXXXXXXXXXXXXXXXXXXXXXXXXXX`;
-
-let postData = {
-    &amp;quot;color&amp;quot;: &amp;quot;yellow&amp;quot;,
-    &amp;quot;message&amp;quot;: &amp;quot;test&amp;quot;,
-    &amp;quot;notify&amp;quot;: false,
-    &amp;quot;message_format&amp;quot;:&amp;quot;text&amp;quot;
-};
-
-let postDataStr = JSON.stringify(postData);
-let options = {
-    host: HOST,
-    port: 80,
-    path: PATH,
-    method: &#39;POST&#39;,
-    headers: {
-        &#39;Content-Type&#39;: &#39;application/json&#39;,
-        &#39;Content-Length&#39;: postDataStr.length
-    }
-};
-
-let req = http.request(options, (res) =&amp;gt; {
-  console.log(&#39;STATUS: &#39; + res.statusCode);
-  console.log(&#39;HEADERS: &#39; + JSON.stringify(res.headers));
-  res.setEncoding(&#39;utf8&#39;);
-  res.on(&#39;data&#39;, (chunk) =&amp;gt; {
-    console.log(&#39;BODY: &#39; + chunk);
-  });
-});
-req.on(&#39;error&#39;, (e) =&amp;gt; {
-  console.log(&#39;problem with request: &#39; + e.message);
-});
-req.write(postDataStr);
-req.end();
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;7~12行目のPOSTデータのパラメーターは&lt;a href=&#34;https://www.hipchat.com/docs/apiv2/method/send_room_notification&#34;&gt;Send room notificationのリファレンス&lt;/a&gt;を確認しましょう。&lt;/p&gt;
-
-&lt;p&gt;けっこう細かく設定できるので詳細はまた別記事などで紹介したいです。&lt;/p&gt;
-
-&lt;p&gt;それでは、app.jsを実行してみます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;node app
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/030/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;さっきまでは&lt;code&gt;&amp;quot;color&amp;quot;: &amp;quot;green&amp;quot;&lt;/code&gt;でしたが&lt;code&gt;&amp;quot;color&amp;quot;: &amp;quot;yellow&amp;quot;&lt;/code&gt;にしてみました。
-背景が黄色になりますね。&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;今回の背景色の変更もですが、&lt;a href=&#34;https://www.hipchat.com/docs/apiv2&#34;&gt;API Reference&lt;/a&gt;を見るとAPI経由で色々な機能が用意されていることがわかります。&lt;/p&gt;
-
-&lt;p&gt;他のチャットツールだと通常利用の機能をAPIで再現できない場合などもありますが、HipChatは通常の利用以上にAPI経由の方が自由度が高い設計になっている気がします。&lt;/p&gt;
-
-&lt;p&gt;Node.jsからもこんな形で簡単にBOT投稿ができるのでとりあえず簡単な通知などから作っていき、その様子もまたまとめていく予定です。&lt;/p&gt;
-
-&lt;p&gt;乞うご期待 ￣ー￣)／&lt;/p&gt;
 </description>
     </item>
     
