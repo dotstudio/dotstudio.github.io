@@ -7,8 +7,170 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Fri, 07 Oct 2016 10:00:57 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 11 Oct 2016 10:00:49 +0900</lastBuildDate>
     <atom:link href="https://dotstud.io/series/bot/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>地味に便利！Raspberry Piが起動したらIPアドレスを通知するチャットボットを作る</title>
+      <link>https://dotstud.io/blog/raspberry-pi-ip-notification/</link>
+      <pubDate>Tue, 11 Oct 2016 10:00:49 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/raspberry-pi-ip-notification/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、代表の&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;Raspberry Piは起動するたびにIPアドレスが変わってしまうことがありますよね。
+だいたいの人はSSH接続していると思うのでIPアドレスが変わると再確認をしないといけませんが、 &lt;strong&gt;RaspberryPiは基本的にディスプレイとキーボードを接続しないとIPアドレスの確認できないのがめんどくさいですね&lt;/strong&gt;。 （FTDIとかはありますがこれも手間はあります。）&lt;/p&gt;
+
+&lt;p&gt;そこで今回は、&lt;strong&gt;Raspberry Piの起動時に自身のIPアドレスをHipChatに通知する仕組みを作ります。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;ちなみに、ここでいうチャットボットは「会話をする」というより「チャットに通知するプログラム」っていう意味合いです。&lt;/p&gt;
+
+&lt;h2 id=&#34;環境&#34;&gt;環境&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Raspberry Pi 2 ModelB&lt;/li&gt;
+&lt;li&gt;Raspbian 8.0 Jessie&lt;/li&gt;
+&lt;li&gt;Node.js 4.4.2&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;node-jsでipアドレスを知る&#34;&gt;Node.jsでIPアドレスを知る&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;os.networkInterfaces()&lt;/code&gt;でネットワーク情報を取得し、&lt;code&gt;os.hostname()&lt;/code&gt;でマシン名を取得できます。
+「&lt;a href=&#34;http://qiita.com/_shimizu/items/b38d1459abf8436f7f1f&#34;&gt;node.jsでローカルIPアドレスの取得&lt;/a&gt;」を参考にさせて頂きました。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//app.js
+&#39;use strict&#39;
+
+const os = require(&#39;os&#39;);
+let interfaces = os.networkInterfaces();
+let mes = &#39;&#39;;
+
+for (let dev in interfaces) {
+    interfaces[dev].forEach((details) =&amp;gt; {
+        if (details.internal || details.family !== &#39;IPv4&#39;) return;
+
+        mes = `${os.hostname()}:${details.address} (standup)`;
+        console.log(mes);
+    });
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;実行してみましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ node app.js
+
+raspberrypi:192.168.43.70 (standup)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これでホスト名とIPアドレスを取得することができました。&lt;/p&gt;
+
+&lt;h2 id=&#34;hipchatにポストする&#34;&gt;HipChatにポストする&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/hipchat-bot-by-nodejs/&#34;&gt;話題のチャットボット開発。Node.jsでHipChatに投稿してみよう。&lt;/a&gt;の記事でHipChatに投稿している部分を外部モジュール化しておきます。
+&lt;code&gt;libs/hcPost.js&lt;/code&gt;としました。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//app.js
+&#39;use strict&#39;
+
+const os = require(&#39;os&#39;);
+const hcPost = require(&#39;./libs/hcPost&#39;);
+let interfaces = os.networkInterfaces();
+let mes = &#39;&#39;;
+
+for (let dev in interfaces) {
+    interfaces[dev].forEach((details) =&amp;gt; {
+        if (details.internal || details.family !== &#39;IPv4&#39;) return;
+
+        mes = `${os.hostname()}:${details.address} (standup)`;
+        let postData = {
+            &amp;quot;color&amp;quot;: &amp;quot;yellow&amp;quot;,
+            &amp;quot;message&amp;quot;: mes,
+            &amp;quot;notify&amp;quot;: false,
+            &amp;quot;message_format&amp;quot;:&amp;quot;text&amp;quot;
+        };
+        hcPost(postData);
+    });
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これで実行するとホスト名とIPアドレスがHipChatに投稿されます。&lt;/p&gt;
+
+&lt;p&gt;ソースコードは&lt;a href=&#34;https://github.com/n0bisuke/raspi-j5-hue/blob/master/ip.js&#34;&gt;GitHub&lt;/a&gt;にも載せてあります。&lt;/p&gt;
+
+&lt;h2 id=&#34;raspberry-piの起動時にnode-jsアプリケーションの起動を設定する&#34;&gt;Raspberry Piの起動時にNode.jsアプリケーションの起動を設定する&lt;/h2&gt;
+
+&lt;p&gt;Node.jsのアプリケーションはRaspberry Piを再起動させたタイミングで完全にプロセスが落ちてしまうので、起動時に実行されるように設定します。
+「&lt;a href=&#34;http://qiita.com/n0bisuke/items/781eac201a907a524f8e&#34;&gt;RaspberryPiの起動時にNode.jsを実行&amp;amp;PM2で永続化するメモ&lt;/a&gt;」にもあるように、&lt;code&gt;/etc/rc.local&lt;/code&gt;に処理を書き込むことで起動時に処理をしてくれます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo vim /etc/rc.local
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;などでファイルを開くと、デフォルトで以下の内容が記載されています。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# Print the IP address
+_IP=$(hostname -I) || true
+if [ &amp;quot;$_IP&amp;quot; ]; then
+  printf &amp;quot;My IP address is %s\n&amp;quot; &amp;quot;$_IP&amp;quot;
+fi
+
+exit 0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ここにNode.jsアプリケーションの実行処理を記述しましょう。&lt;code&gt;/etc/rc.local&lt;/code&gt;に以下を書き込みます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo -u pi /home/pi/.nvm/versions/node/v4.4.2/bin/node /home/pi/app.js
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ちなみにこの&lt;code&gt;sudo -u pi &amp;lt;nodeコマンドの絶対パス&amp;gt; &amp;lt;起動するスクリプトの絶対パス&amp;gt;&lt;/code&gt;となります。
+パスが分からない人は、whichコマンドでパスを見つけましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ which node
+
+/home/pi/.nvm/versions/node/v4.4.2/bin/node
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最終的にこうなりました。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# Print the IP address
+_IP=$(hostname -I) || true
+if [ &amp;quot;$_IP&amp;quot; ]; then
+  printf &amp;quot;My IP address is %s\n&amp;quot; &amp;quot;$_IP&amp;quot;
+fi
+
+sudo -u pi /home/pi/.nvm/versions/node/v4.4.2/bin/node /home/pi/app.js
+
+exit 0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;この状態で上手く動作するか確認してみます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo /etc/rc.local
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ここでエラーが出る場合はパスの指定などが間違ってる可能性が高いです。&lt;/p&gt;
+
+&lt;p&gt;こんな感じの表示がHipChat側にされたら成功です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/033/01.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ちなみに&lt;a href=&#34;http://japan.blogs.atlassian.com/2014/12/goodnews-new-and-improved-emoticons/&#34;&gt;HipChatの絵文字&lt;/a&gt;は種類が豊富で&lt;code&gt;(standup)&lt;/code&gt;を指定すると画像のように人が立ち上がる絵文字になります。&lt;/p&gt;
+
+&lt;p&gt;最後に設定が出来たらRaspberry Piの電源を再起動してみましょう。
+起動直後にHipChatにRaspberry PiのIPアドレスが通知されたら、起動設定が成功している証拠です。&lt;/p&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;これで「Raspberry PiのIPが変わってしまいSSHログインがしにくい問題」が解決しそうです。
+起動した際に通知が来るので通常起動してるかどうかの監視にも使えそうです。&lt;/p&gt;
+
+&lt;p&gt;Raspberry Piからチャットへの一方通行な通信なので、Raspberry Piが何らかの原因で動作していない場合はMilkcocoaなどで双方向の通信を入れれば死活監視もできそうですね。&lt;/p&gt;
+
+&lt;p&gt;皆さんも是非活用してみて下さい。&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>ノンプログラミングで今話題のLINE Botを開発できる「hachidori」を試してみた</title>

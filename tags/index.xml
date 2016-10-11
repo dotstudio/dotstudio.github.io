@@ -7,10 +7,334 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Thu, 06 Oct 2016 10:40:04 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 11 Oct 2016 10:00:49 +0900</lastBuildDate>
     <atom:link href="https://dotstud.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>地味に便利！Raspberry Piが起動したらIPアドレスを通知するチャットボットを作る</title>
+      <link>https://dotstud.io/blog/raspberry-pi-ip-notification/</link>
+      <pubDate>Tue, 11 Oct 2016 10:00:49 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/raspberry-pi-ip-notification/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、代表の&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;Raspberry Piは起動するたびにIPアドレスが変わってしまうことがありますよね。
+だいたいの人はSSH接続していると思うのでIPアドレスが変わると再確認をしないといけませんが、 &lt;strong&gt;RaspberryPiは基本的にディスプレイとキーボードを接続しないとIPアドレスの確認できないのがめんどくさいですね&lt;/strong&gt;。 （FTDIとかはありますがこれも手間はあります。）&lt;/p&gt;
+
+&lt;p&gt;そこで今回は、&lt;strong&gt;Raspberry Piの起動時に自身のIPアドレスをHipChatに通知する仕組みを作ります。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;ちなみに、ここでいうチャットボットは「会話をする」というより「チャットに通知するプログラム」っていう意味合いです。&lt;/p&gt;
+
+&lt;h2 id=&#34;環境&#34;&gt;環境&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Raspberry Pi 2 ModelB&lt;/li&gt;
+&lt;li&gt;Raspbian 8.0 Jessie&lt;/li&gt;
+&lt;li&gt;Node.js 4.4.2&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;node-jsでipアドレスを知る&#34;&gt;Node.jsでIPアドレスを知る&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;os.networkInterfaces()&lt;/code&gt;でネットワーク情報を取得し、&lt;code&gt;os.hostname()&lt;/code&gt;でマシン名を取得できます。
+「&lt;a href=&#34;http://qiita.com/_shimizu/items/b38d1459abf8436f7f1f&#34;&gt;node.jsでローカルIPアドレスの取得&lt;/a&gt;」を参考にさせて頂きました。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//app.js
+&#39;use strict&#39;
+
+const os = require(&#39;os&#39;);
+let interfaces = os.networkInterfaces();
+let mes = &#39;&#39;;
+
+for (let dev in interfaces) {
+    interfaces[dev].forEach((details) =&amp;gt; {
+        if (details.internal || details.family !== &#39;IPv4&#39;) return;
+
+        mes = `${os.hostname()}:${details.address} (standup)`;
+        console.log(mes);
+    });
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;実行してみましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ node app.js
+
+raspberrypi:192.168.43.70 (standup)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これでホスト名とIPアドレスを取得することができました。&lt;/p&gt;
+
+&lt;h2 id=&#34;hipchatにポストする&#34;&gt;HipChatにポストする&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/hipchat-bot-by-nodejs/&#34;&gt;話題のチャットボット開発。Node.jsでHipChatに投稿してみよう。&lt;/a&gt;の記事でHipChatに投稿している部分を外部モジュール化しておきます。
+&lt;code&gt;libs/hcPost.js&lt;/code&gt;としました。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//app.js
+&#39;use strict&#39;
+
+const os = require(&#39;os&#39;);
+const hcPost = require(&#39;./libs/hcPost&#39;);
+let interfaces = os.networkInterfaces();
+let mes = &#39;&#39;;
+
+for (let dev in interfaces) {
+    interfaces[dev].forEach((details) =&amp;gt; {
+        if (details.internal || details.family !== &#39;IPv4&#39;) return;
+
+        mes = `${os.hostname()}:${details.address} (standup)`;
+        let postData = {
+            &amp;quot;color&amp;quot;: &amp;quot;yellow&amp;quot;,
+            &amp;quot;message&amp;quot;: mes,
+            &amp;quot;notify&amp;quot;: false,
+            &amp;quot;message_format&amp;quot;:&amp;quot;text&amp;quot;
+        };
+        hcPost(postData);
+    });
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これで実行するとホスト名とIPアドレスがHipChatに投稿されます。&lt;/p&gt;
+
+&lt;p&gt;ソースコードは&lt;a href=&#34;https://github.com/n0bisuke/raspi-j5-hue/blob/master/ip.js&#34;&gt;GitHub&lt;/a&gt;にも載せてあります。&lt;/p&gt;
+
+&lt;h2 id=&#34;raspberry-piの起動時にnode-jsアプリケーションの起動を設定する&#34;&gt;Raspberry Piの起動時にNode.jsアプリケーションの起動を設定する&lt;/h2&gt;
+
+&lt;p&gt;Node.jsのアプリケーションはRaspberry Piを再起動させたタイミングで完全にプロセスが落ちてしまうので、起動時に実行されるように設定します。
+「&lt;a href=&#34;http://qiita.com/n0bisuke/items/781eac201a907a524f8e&#34;&gt;RaspberryPiの起動時にNode.jsを実行&amp;amp;PM2で永続化するメモ&lt;/a&gt;」にもあるように、&lt;code&gt;/etc/rc.local&lt;/code&gt;に処理を書き込むことで起動時に処理をしてくれます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo vim /etc/rc.local
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;などでファイルを開くと、デフォルトで以下の内容が記載されています。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# Print the IP address
+_IP=$(hostname -I) || true
+if [ &amp;quot;$_IP&amp;quot; ]; then
+  printf &amp;quot;My IP address is %s\n&amp;quot; &amp;quot;$_IP&amp;quot;
+fi
+
+exit 0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ここにNode.jsアプリケーションの実行処理を記述しましょう。&lt;code&gt;/etc/rc.local&lt;/code&gt;に以下を書き込みます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo -u pi /home/pi/.nvm/versions/node/v4.4.2/bin/node /home/pi/app.js
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ちなみにこの&lt;code&gt;sudo -u pi &amp;lt;nodeコマンドの絶対パス&amp;gt; &amp;lt;起動するスクリプトの絶対パス&amp;gt;&lt;/code&gt;となります。
+パスが分からない人は、whichコマンドでパスを見つけましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ which node
+
+/home/pi/.nvm/versions/node/v4.4.2/bin/node
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最終的にこうなりました。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# Print the IP address
+_IP=$(hostname -I) || true
+if [ &amp;quot;$_IP&amp;quot; ]; then
+  printf &amp;quot;My IP address is %s\n&amp;quot; &amp;quot;$_IP&amp;quot;
+fi
+
+sudo -u pi /home/pi/.nvm/versions/node/v4.4.2/bin/node /home/pi/app.js
+
+exit 0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;この状態で上手く動作するか確認してみます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo /etc/rc.local
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ここでエラーが出る場合はパスの指定などが間違ってる可能性が高いです。&lt;/p&gt;
+
+&lt;p&gt;こんな感じの表示がHipChat側にされたら成功です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/033/01.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ちなみに&lt;a href=&#34;http://japan.blogs.atlassian.com/2014/12/goodnews-new-and-improved-emoticons/&#34;&gt;HipChatの絵文字&lt;/a&gt;は種類が豊富で&lt;code&gt;(standup)&lt;/code&gt;を指定すると画像のように人が立ち上がる絵文字になります。&lt;/p&gt;
+
+&lt;p&gt;最後に設定が出来たらRaspberry Piの電源を再起動してみましょう。
+起動直後にHipChatにRaspberry PiのIPアドレスが通知されたら、起動設定が成功している証拠です。&lt;/p&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;これで「Raspberry PiのIPが変わってしまいSSHログインがしにくい問題」が解決しそうです。
+起動した際に通知が来るので通常起動してるかどうかの監視にも使えそうです。&lt;/p&gt;
+
+&lt;p&gt;Raspberry Piからチャットへの一方通行な通信なので、Raspberry Piが何らかの原因で動作していない場合はMilkcocoaなどで双方向の通信を入れれば死活監視もできそうですね。&lt;/p&gt;
+
+&lt;p&gt;皆さんも是非活用してみて下さい。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>地味に便利！Raspberry Piが起動したらIPアドレスを通知するチャットボットを作る</title>
+      <link>https://dotstud.io/blog/raspberry-pi-ip-notification/</link>
+      <pubDate>Tue, 11 Oct 2016 10:00:49 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/raspberry-pi-ip-notification/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、代表の&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;Raspberry Piは起動するたびにIPアドレスが変わってしまうことがありますよね。
+だいたいの人はSSH接続していると思うのでIPアドレスが変わると再確認をしないといけませんが、 &lt;strong&gt;RaspberryPiは基本的にディスプレイとキーボードを接続しないとIPアドレスの確認できないのがめんどくさいですね&lt;/strong&gt;。 （FTDIとかはありますがこれも手間はあります。）&lt;/p&gt;
+
+&lt;p&gt;そこで今回は、&lt;strong&gt;Raspberry Piの起動時に自身のIPアドレスをHipChatに通知する仕組みを作ります。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;ちなみに、ここでいうチャットボットは「会話をする」というより「チャットに通知するプログラム」っていう意味合いです。&lt;/p&gt;
+
+&lt;h2 id=&#34;環境&#34;&gt;環境&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Raspberry Pi 2 ModelB&lt;/li&gt;
+&lt;li&gt;Raspbian 8.0 Jessie&lt;/li&gt;
+&lt;li&gt;Node.js 4.4.2&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;node-jsでipアドレスを知る&#34;&gt;Node.jsでIPアドレスを知る&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;os.networkInterfaces()&lt;/code&gt;でネットワーク情報を取得し、&lt;code&gt;os.hostname()&lt;/code&gt;でマシン名を取得できます。
+「&lt;a href=&#34;http://qiita.com/_shimizu/items/b38d1459abf8436f7f1f&#34;&gt;node.jsでローカルIPアドレスの取得&lt;/a&gt;」を参考にさせて頂きました。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//app.js
+&#39;use strict&#39;
+
+const os = require(&#39;os&#39;);
+let interfaces = os.networkInterfaces();
+let mes = &#39;&#39;;
+
+for (let dev in interfaces) {
+    interfaces[dev].forEach((details) =&amp;gt; {
+        if (details.internal || details.family !== &#39;IPv4&#39;) return;
+
+        mes = `${os.hostname()}:${details.address} (standup)`;
+        console.log(mes);
+    });
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;実行してみましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ node app.js
+
+raspberrypi:192.168.43.70 (standup)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これでホスト名とIPアドレスを取得することができました。&lt;/p&gt;
+
+&lt;h2 id=&#34;hipchatにポストする&#34;&gt;HipChatにポストする&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/hipchat-bot-by-nodejs/&#34;&gt;話題のチャットボット開発。Node.jsでHipChatに投稿してみよう。&lt;/a&gt;の記事でHipChatに投稿している部分を外部モジュール化しておきます。
+&lt;code&gt;libs/hcPost.js&lt;/code&gt;としました。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//app.js
+&#39;use strict&#39;
+
+const os = require(&#39;os&#39;);
+const hcPost = require(&#39;./libs/hcPost&#39;);
+let interfaces = os.networkInterfaces();
+let mes = &#39;&#39;;
+
+for (let dev in interfaces) {
+    interfaces[dev].forEach((details) =&amp;gt; {
+        if (details.internal || details.family !== &#39;IPv4&#39;) return;
+
+        mes = `${os.hostname()}:${details.address} (standup)`;
+        let postData = {
+            &amp;quot;color&amp;quot;: &amp;quot;yellow&amp;quot;,
+            &amp;quot;message&amp;quot;: mes,
+            &amp;quot;notify&amp;quot;: false,
+            &amp;quot;message_format&amp;quot;:&amp;quot;text&amp;quot;
+        };
+        hcPost(postData);
+    });
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これで実行するとホスト名とIPアドレスがHipChatに投稿されます。&lt;/p&gt;
+
+&lt;p&gt;ソースコードは&lt;a href=&#34;https://github.com/n0bisuke/raspi-j5-hue/blob/master/ip.js&#34;&gt;GitHub&lt;/a&gt;にも載せてあります。&lt;/p&gt;
+
+&lt;h2 id=&#34;raspberry-piの起動時にnode-jsアプリケーションの起動を設定する&#34;&gt;Raspberry Piの起動時にNode.jsアプリケーションの起動を設定する&lt;/h2&gt;
+
+&lt;p&gt;Node.jsのアプリケーションはRaspberry Piを再起動させたタイミングで完全にプロセスが落ちてしまうので、起動時に実行されるように設定します。
+「&lt;a href=&#34;http://qiita.com/n0bisuke/items/781eac201a907a524f8e&#34;&gt;RaspberryPiの起動時にNode.jsを実行&amp;amp;PM2で永続化するメモ&lt;/a&gt;」にもあるように、&lt;code&gt;/etc/rc.local&lt;/code&gt;に処理を書き込むことで起動時に処理をしてくれます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo vim /etc/rc.local
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;などでファイルを開くと、デフォルトで以下の内容が記載されています。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# Print the IP address
+_IP=$(hostname -I) || true
+if [ &amp;quot;$_IP&amp;quot; ]; then
+  printf &amp;quot;My IP address is %s\n&amp;quot; &amp;quot;$_IP&amp;quot;
+fi
+
+exit 0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ここにNode.jsアプリケーションの実行処理を記述しましょう。&lt;code&gt;/etc/rc.local&lt;/code&gt;に以下を書き込みます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo -u pi /home/pi/.nvm/versions/node/v4.4.2/bin/node /home/pi/app.js
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ちなみにこの&lt;code&gt;sudo -u pi &amp;lt;nodeコマンドの絶対パス&amp;gt; &amp;lt;起動するスクリプトの絶対パス&amp;gt;&lt;/code&gt;となります。
+パスが分からない人は、whichコマンドでパスを見つけましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ which node
+
+/home/pi/.nvm/versions/node/v4.4.2/bin/node
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最終的にこうなりました。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# Print the IP address
+_IP=$(hostname -I) || true
+if [ &amp;quot;$_IP&amp;quot; ]; then
+  printf &amp;quot;My IP address is %s\n&amp;quot; &amp;quot;$_IP&amp;quot;
+fi
+
+sudo -u pi /home/pi/.nvm/versions/node/v4.4.2/bin/node /home/pi/app.js
+
+exit 0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;この状態で上手く動作するか確認してみます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo /etc/rc.local
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ここでエラーが出る場合はパスの指定などが間違ってる可能性が高いです。&lt;/p&gt;
+
+&lt;p&gt;こんな感じの表示がHipChat側にされたら成功です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/033/01.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ちなみに&lt;a href=&#34;http://japan.blogs.atlassian.com/2014/12/goodnews-new-and-improved-emoticons/&#34;&gt;HipChatの絵文字&lt;/a&gt;は種類が豊富で&lt;code&gt;(standup)&lt;/code&gt;を指定すると画像のように人が立ち上がる絵文字になります。&lt;/p&gt;
+
+&lt;p&gt;最後に設定が出来たらRaspberry Piの電源を再起動してみましょう。
+起動直後にHipChatにRaspberry PiのIPアドレスが通知されたら、起動設定が成功している証拠です。&lt;/p&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;これで「Raspberry PiのIPが変わってしまいSSHログインがしにくい問題」が解決しそうです。
+起動した際に通知が来るので通常起動してるかどうかの監視にも使えそうです。&lt;/p&gt;
+
+&lt;p&gt;Raspberry Piからチャットへの一方通行な通信なので、Raspberry Piが何らかの原因で動作していない場合はMilkcocoaなどで双方向の通信を入れれば死活監視もできそうですね。&lt;/p&gt;
+
+&lt;p&gt;皆さんも是非活用してみて下さい。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>デザイナーの僕がHugoを使ってポートフォリオサイトを作ってみる #2【制作:基本編】</title>
       <link>https://dotstud.io/blog/hugo-for-designers-vol2/</link>
       <pubDate>Thu, 06 Oct 2016 10:40:04 +0900</pubDate>
@@ -2957,659 +3281,6 @@ RaspberryPiやArduinoは「電子工作初心者向け」だと世間では言�
 &lt;p&gt;ぜひ、みなさんもNefryとMilkcocoaを使ってIoTに入門してみて下さい。&lt;/p&gt;
 
 &lt;p&gt;それでは :)&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>MilkcocoaとNefryでIoT体験！リモートでカラーLチカをしてみよう！</title>
-      <link>https://dotstud.io/blog/milkcocoa-nefry-iot-handson/</link>
-      <pubDate>Tue, 27 Sep 2016 10:00:27 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/milkcocoa-nefry-iot-handson/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、dotstudio代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
-
-&lt;p&gt;IoTな開発をしようとしても、Webやネットワーク、デバイスの知識などが必要になり、始めるまでですでに大変だという場合が多いと思います。&lt;/p&gt;
-
-&lt;p&gt;そんな方でも、ネットワークに接続しやすく初心者にも易しいデバイスである「Nefry」と、サーバーやネットワーク側の知識がなくてもデバイスやWebを連携できるサービス「Milkcocoa」を使うことで、手軽にIoT開発の入り口に立てます。&lt;/p&gt;
-
-&lt;p&gt;ということで今日はMilkcocoaとNefryを使い、&lt;strong&gt;Web上のドット絵の色とリアルなLEDを連携させてみましょう&lt;/strong&gt;！（ちなみに、この記事は&lt;a href=&#34;http://mlkcca.connpass.com/event/40292/&#34;&gt;IoT初心者向けハンズオン！ Milkcocoa Meetup vol 13 #mlkcca&lt;/a&gt;のハンズオン資料にもなっています）&lt;/p&gt;
-
-&lt;h2 id=&#34;今回やること-ledの色をブラウザ上から変える&#34;&gt;今回やること「LEDの色をブラウザ上から変える」&lt;/h2&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;blockquote class=&#34;instagram-media&#34; data-instgrm-captioned data-instgrm-version=&#34;7&#34; style=&#34; background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px); text-align:center;&#34;&gt;&lt;div style=&#34;padding:8px;&#34;&gt; &lt;div style=&#34; background:#F8F8F8; line-height:0; margin-top:40px; padding:28.1944444444% 0; text-align:center; width:100%;&#34;&gt; &lt;div style=&#34; background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;&#34;&gt;&lt;/div&gt;&lt;/div&gt; &lt;p style=&#34; margin:8px 0 0 0; padding:0 4px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/BKyHEcljEZS/&#34; style=&#34; color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;&#34; target=&#34;_blank&#34;&gt;#Nefry と #mlkcca のサンプル強化&lt;/a&gt;&lt;/p&gt; &lt;p style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;&#34;&gt;n0bisukeさん(@n0bisuke)が投稿した動画 - &lt;time style=&#34; font-family:Arial,sans-serif; font-size:14px; line-height:17px;&#34; datetime=&#34;2016-09-25T14:53:59+00:00&#34;&gt;2016 9月 25 7:53午前 PDT&lt;/time&gt;&lt;/p&gt;&lt;/div&gt;&lt;/blockquote&gt; &lt;script async defer src=&#34;//platform.instagram.com/en_US/embeds.js&#34;&gt;&lt;/script&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;今回作るものはこちら。&lt;strong&gt;Milkcocoaのドット絵で色を塗ると、NefryのLEDの色（&amp;amp;作成したWebサイト上のLED）が変わる&lt;/strong&gt; という仕組みです！　次の4ステップを通して開発していきます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;STEP1：自前のWebサイトを作る&lt;/li&gt;
-&lt;li&gt;STEP2：ドット絵とWebサイトをMilkcocoa経由で繋げる&lt;/li&gt;
-&lt;li&gt;STEP3：NefryでLチカする&lt;/li&gt;
-&lt;li&gt;STEP4：ドット絵と自前のWebサイトとNefryを繋げてLチカする&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;今回はこれにチャレンジしてみましょう。&lt;/p&gt;
-
-&lt;h2 id=&#34;今回使うもの-開発環境&#34;&gt;今回使うもの&amp;amp;開発環境&lt;/h2&gt;
-
-&lt;h3 id=&#34;milkcocoa&#34;&gt;Milkcocoa&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/01.png&#34; alt=&#34;&#34; /&gt;
-URL：&lt;a href=&#34;https://mlkcca.com/&#34;&gt;https://mlkcca.com/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;WebとWebや、Webとモバイルアプリなどをリアルタイムに繋げるリアルタイム通信ができるIoTのバックエンドサービスです。IoTデバイス間を繋げるハブになってくれます。&lt;/p&gt;
-
-&lt;p&gt;余談ですが、僕がエバンジェリストをしています。&lt;/p&gt;
-
-&lt;h3 id=&#34;nefry&#34;&gt;Nefry&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/02.png&#34; alt=&#34;&#34; /&gt;
-URL：&lt;a href=&#34;https://dotstud.io/projects/nefry-connect-internet/&#34;&gt;https://dotstud.io/projects/nefry-connect-internet/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;ESP8266をベースとしたArduino互換の開発ボードです。Wi-Fiの接続が簡単で、Milkcocoaとの連携もしやすいので、Web界隈の人に易しくIoTの入門におすすめです。青い基盤がversion1で、赤い基盤がversion2になります。&lt;/p&gt;
-
-&lt;p&gt;名古屋のメイカーである&lt;a href=&#34;https://twitter.com/wamisnet&#34;&gt;わみさん&lt;/a&gt;が制作していてdotstudioで販売しています。CodeZineの記事（&lt;a href=&#34;http://codezine.jp/article/detail/9653&#34;&gt;Arduino IDEで開発できるFRISKサイズのIoTデバイス「Nefry」&lt;/a&gt;）に概要説明がありますので参照してください。&lt;/p&gt;
-
-&lt;h3 id=&#34;筆者の環境&#34;&gt;筆者の環境&lt;/h3&gt;
-
-&lt;p&gt;僕の環境はこんな感じです。&lt;a href=&#34;https://dotstud.io/blog/macos-sierra-update-process/&#34;&gt;macOS Sierraにしたばかり&lt;/a&gt;ですが、今回の開発には問題はありませんでした。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;MacBook Pro（Retina 13-inch、 Early2015）&lt;/li&gt;
-&lt;li&gt;macOS Sierra / v10.12 ←アップデートしたばかりです（笑）&lt;/li&gt;
-&lt;li&gt;Arduino IDE v1.16.11&lt;/li&gt;
-&lt;li&gt;Nefry v2&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;事前確認&#34;&gt;事前確認&lt;/h3&gt;
-
-&lt;p&gt;開発にあたり必要なものがいくつかあります。問題のない方は「実際に作ってみよう」まで読み飛ばして下さい。&lt;/p&gt;
-
-&lt;h4 id=&#34;wi-fi環境はありますか&#34;&gt;Wi-Fi環境はありますか?&lt;/h4&gt;
-
-&lt;p&gt;Nefryの開発にはWi-Fiが必須になります。スマートフォンのテザリングなどでも問題ないです。&lt;/p&gt;
-
-&lt;h4 id=&#34;gitコマンドは使えますか&#34;&gt;gitコマンドは使えますか？&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Macの場合はターミナルでgitコマンドを打つとインストールを促されます。Mac以外の方でGitが使えない場合は&lt;a href=&#34;https://git-scm.com/&#34;&gt;公式サイト&lt;/a&gt;などの手順をもとにインストールしてください。&lt;/p&gt;
-
-&lt;h4 id=&#34;webサーバーを立ち上げられますか&#34;&gt;Webサーバーを立ち上げられますか？&lt;/h4&gt;
-
-&lt;p&gt;ブラウザからlocalhostにアクセスできる状態にできればOKです。
-XAMPや&lt;a href=&#34;https://www.npmjs.com/package/koko&#34;&gt;koko&lt;/a&gt;など他の方法でも大丈夫です。
-&lt;a href=&#34;http://qiita.com/higuma/items/b23ca9d96dac49999ab9&#34;&gt;開発用ローカルサーバを立ち上げる方法&lt;/a&gt;が参考になります。&lt;/p&gt;
-
-&lt;p&gt;今回はPythonのSimpleHTTPServerを使ってみます。Macの人なら特に何も設定してなくても使えるので便利です。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;python -m SimpleHTTPServer
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;サーバーの終了はCtrl+Cです。&lt;/p&gt;
-
-&lt;h4 id=&#34;milkcocoaのアカウント-appidはありますか-無料&#34;&gt;Milkcocoaのアカウント &amp;amp; AppIDはありますか？ (無料)&lt;/h4&gt;
-
-&lt;p&gt;アカウント登録がまだの場合は&lt;a href=&#34;https://mlkcca.com/&#34;&gt;公式サイト&lt;/a&gt;から、アカウント登録&amp;amp;アプリ作成をしてAppIDを取得しましょう。&lt;/p&gt;
-
-&lt;h4 id=&#34;nefryが手元にありますか&#34;&gt;Nefryが手元にありますか？&lt;/h4&gt;
-
-&lt;p&gt;持っていない場合は&lt;a href=&#34;https://dotstud.io/projects/nefry-connect-internet/&#34;&gt;こちら&lt;/a&gt;から購入できます。&lt;/p&gt;
-
-&lt;h4 id=&#34;arduino-ideはインストールされてますか&#34;&gt;Arduino IDEはインストールされてますか？&lt;/h4&gt;
-
-&lt;p&gt;こちらも持っていない場合は&lt;a href=&#34;https://www.arduino.cc/en/Main/Software&#34;&gt;公式サイト&lt;/a&gt;からDL&amp;amp;インストールしてください。&lt;/p&gt;
-
-&lt;h2 id=&#34;実際に作ってみよう&#34;&gt;実際に作ってみよう&lt;/h2&gt;
-
-&lt;p&gt;ここから実際に作っていきましょう。
-ソースコードのリポジトリは以下になります。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://github.com/n0bisuke/milkcocoa-nefry-handson&#34;&gt;https://github.com/n0bisuke/milkcocoa-nefry-handson&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;ちなみにフロント部分で利用しているWeb LEDはDenny Kuさんの&lt;a href=&#34;http://codepen.io/abalone0204/pen/RWgeJY&#34;&gt;Pure CSS Led Bulb&lt;/a&gt;をフォークして作っています。&lt;/p&gt;
-
-&lt;h3 id=&#34;step1-利用するwebサイト-web-led-を手元で立ち上げてみる&#34;&gt;STEP1：利用するWebサイト（Web LED）を手元で立ち上げてみる&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;git cloneしてソースコードをDLしましょう。このリポジトリにはSTEP1~4までの完成ソースコードがSTEP毎にブランチを分けて置いてあります。
-途中で分からなくなったら各ブランチに移動して確認してみましょう。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;git clone https://github.com/n0bisuke/milkcocoa-nefry-handson
-cd milkcocoa-nefry-handson
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;step1ブランチにチェックアウトします。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;git checkout step1
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;チェックアウトしたらサーバーを起動させてみましょう。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;python -m SimpleHTTPServer
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://localhost:8000&#34;&gt;http://localhost:8000&lt;/a&gt; にブラウザでアクセスすると↑のGIFのような状態になると思います。&lt;/p&gt;
-
-&lt;p&gt;POWERボタンを押すとLEDが光ります。この記事ではこのサイトをWeb LEDと呼んでいきます。&lt;/p&gt;
-
-&lt;h3 id=&#34;step2-ドット絵とweb-ledを繋げてみよう&#34;&gt;STEP2：ドット絵とWeb LEDを繋げてみよう&lt;/h3&gt;
-
-&lt;h4 id=&#34;milkcocoa-sdkを読み込む&#34;&gt;Milkcocoa SDKを読み込む&lt;/h4&gt;
-
-&lt;p&gt;milkcocoa-nefry-handsonディレクトリの中には&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;app.js&lt;/li&gt;
-&lt;li&gt;index.html&lt;/li&gt;
-&lt;li&gt;readme.md&lt;/li&gt;
-&lt;li&gt;style.css&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;の4つのファイルがあります。まずはindex.htmlを編集します。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;index.html&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;script src=&amp;quot;https://cdn.mlkcca.com/v0.6.0/milkcocoa.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;この行をapp.jsの読み込み直前に記述しましょう。&lt;/p&gt;
-
-&lt;h4 id=&#34;milkcocoaのコードを追記&#34;&gt;Milkcocoaのコードを追記&lt;/h4&gt;
-
-&lt;p&gt;app.jsの末尾に追記しましょう。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;app.js&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;pre&gt;&lt;code&gt;const milkcocoa = new MilkCocoa(`dogi9jz8c16.mlkcca.com`);
-const dot_ds = milkcocoa.dataStore(&#39;dots&#39;);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;dogi9jz8c16&lt;/strong&gt; の部分がドット絵のApp ID、&lt;strong&gt;dots&lt;/strong&gt; がドット絵のデータストア名になります。&lt;/p&gt;
-
-&lt;p&gt;また以下を追記します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;let flag = 0;
-dot_ds.on(&#39;push&#39;,(pushed) =&amp;gt; {
-	//ドット絵に色が塗られると実行される部分
-    addClass(pushed.value.color);
-    flag = 1;
-});
-
-setInterval(()=&amp;gt;{
-    removeClass();
-    flag = 0;
-},5000);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;.on&lt;/code&gt;メソッドで&lt;code&gt;pushイベント&lt;/code&gt;を監視しています。ドット絵に色が塗られると、onメソッドのコールバック関数が発火してaddClass関数が実行されます。（ここの行数でいうと4行目）&lt;/p&gt;
-
-&lt;p&gt;ドット絵では塗られた色のカラーコードが送られて来るので色の情報をaddClass関数に渡しています。&lt;/p&gt;
-
-&lt;h4 id=&#34;step2の確認&#34;&gt;STEP2の確認&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;STEP1と同様に &lt;a href=&#34;http://localhost:8000&#34;&gt;http://localhost:8000&lt;/a&gt; にブラウザでアクセスして動作を確認しましょう。同時に &lt;a href=&#34;https://mlkcca.com/sample.html&#34;&gt;https://mlkcca.com/sample.html&lt;/a&gt; も開いてドット絵で色を塗るとLEDの色が変わることを確認してください。&lt;/p&gt;
-
-&lt;p&gt;ここまでの完成ソースコードは&lt;a href=&#34;https://github.com/n0bisuke/milkcocoa-nefry-handson/tree/step2&#34;&gt;STEP2ブランチ&lt;/a&gt;にまとめてあります。&lt;/p&gt;
-
-&lt;h3 id=&#34;step3-nefryでlチカしてみよう&#34;&gt;STEP3：NefryでLチカしてみよう&lt;/h3&gt;
-
-&lt;p&gt;いよいよNefryを触ります。Nefryの関連リンクもあるので参考にしましょう。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://codezine.jp/article/detail/9653&#34;&gt;Arduino IDEで開発できるFRISKサイズのIoTデバイス「Nefry」&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://qiita.com/wamisnet/items/d07c3c22e2bf5ab628ef&#34;&gt;Nefryの情報まとめ&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&#34;arduino-ideにnefryのボードマネージャを追加する&#34;&gt;Arduino IDEにNefryのボードマネージャを追加する&lt;/h4&gt;
-
-&lt;p&gt;Arduino IDEでNefryの開発ができるのですが、いくつかの設定が必要になります。Arduino IDEのメニューの &lt;strong&gt;環境設定 &amp;gt; 追加のボードマネージャのURL&lt;/strong&gt; のフォームに以下をURLを貼り付けてOKを押しましょう。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;http://wamisnet.github.io/package_nefry_index.json
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;次にArduino IDEの &lt;strong&gt;ツール &amp;gt; ボード &amp;gt;ボードマネージャ&lt;/strong&gt; からNefryを検索します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/08.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Nefryの項目が出てくるのでインストールしましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/09.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;コードの準備&#34;&gt;コードの準備&lt;/h4&gt;
-
-&lt;p&gt;それではいよいよLチカです。ハローワールドですね。Nefryには最初からフルカラーLEDがついているのでカラフルなLチカが試せます。&lt;/p&gt;
-
-&lt;p&gt;以下がLチカのサンプルコードです。 &lt;strong&gt;新規ファイル&lt;/strong&gt; から新規のスケッチファイルを作成し、コードをとりあえずコピペしてみましょう。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
-//フルカラーLED　ランダムにカラーが変わります。
-void setup() {
-  Nefry.println(&amp;quot;フルカラーLED!&amp;quot;);
-  randomSeed(analogRead(A0));
-}
-int red,green,blue;
-void loop() {
-  red=random(255);//random関数は0-255の数値をランダムに返します。
-  green=random(255);
-  blue=random(255);
-  Nefry.setLed(red,green,blue);//LEDがランダムに点灯します。
-  String color=&amp;quot;Red:&amp;quot;;color+=red;
-  color+=&amp;quot; Green:&amp;quot;;color+=green;
-  color+=&amp;quot; Blue:&amp;quot;;color+=blue;
-  Nefry.println(color);//Nefry consoleで色を表示
-  Nefry.ndelay(1000);//1秒待つ
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Arduino開発をしたことがある人は、&lt;strong&gt;これを書いたら書き込みたくなりますが一旦待ちましょう。&lt;/strong&gt; Nefryではこのコードを直接書き込むのではなく、一旦 &lt;strong&gt;.bin&lt;/strong&gt; 形式にコンパイルしてからWebブラウザ経由で書き込みます。&lt;/p&gt;
-
-&lt;h4 id=&#34;ソースコードを-bin形式にコンパイル&#34;&gt;ソースコードを.bin形式にコンパイル&lt;/h4&gt;
-
-&lt;p&gt;まずはメニューの&lt;strong&gt;ツール &amp;gt; ボード&lt;/strong&gt;から&lt;strong&gt;Nefry&lt;/strong&gt;を選択しましょう。この時、赤い基盤のNefryの場合は&lt;strong&gt;Nefry V2&lt;/strong&gt;を選択してください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;次にメニューの &lt;strong&gt;スケッチ &amp;gt; コンパイルしたバイナリを出力&lt;/strong&gt; を選択します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;コンパイルが開始され、プログラム的なエラーがあればここで表示されます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/12.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;特にエラーが出なければ&lt;strong&gt;arduino.bin&lt;/strong&gt;というファイルがスケッチファイル（.ino）と同じディレクトリ内にできます。&lt;/p&gt;
-
-&lt;h4 id=&#34;nefryとpcをwi-fi経由で接続してプログラムを書き込む&#34;&gt;NefryとPCをWi-Fi経由で接続してプログラムを書き込む&lt;/h4&gt;
-
-&lt;p&gt;ここからはNefryとの接続ですので &lt;strong&gt;Nefryの電源をつけましょう。&lt;/strong&gt; NefryとPCの接続はWi-Fi経由で行います。そのためNefryはWi-Fi環境さえあれば &lt;strong&gt;PCと物理的に接続しなくとも開発ができる&lt;/strong&gt; デバイスです。&lt;/p&gt;
-
-&lt;p&gt;ちなみにNefryは &lt;strong&gt;PCに直挿しもできますが、USBで給電しているだけ&lt;/strong&gt; です。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/13.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;まずはPCでWi-FiのSSIDを探します。Nefryが起動していると、&lt;strong&gt;Nefry_xxxx&lt;/strong&gt; というアクセスポイントが表示されるはずなので探して接続しましょう。&lt;/p&gt;
-
-&lt;p&gt;ちなみに、この&amp;rdquo;NefryのWi-Fi&amp;rdquo;に接続している段階ではWebサイトなどは見れないのでこのページを開いたまま進めることをオススメします。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/14.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;接続できたらブラウザで &lt;a href=&#34;http://192.168.4.1&#34;&gt;http://192.168.4.1&lt;/a&gt; にアクセスします。「Hello from Nefry!」と表示されるのNefryの管理画面が表示されます。&lt;/p&gt;
-
-&lt;p&gt;メニューの &lt;strong&gt;Upload Sketch&lt;/strong&gt; を選択すると、アップローダが表示されるので先ほどの &lt;strong&gt;arduino.bin&lt;/strong&gt; をアップロードします。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/15.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;これで先ほどのLチカプログラムがNefryに書き込まれます。&lt;/p&gt;
-
-&lt;h4 id=&#34;lチカ完成&#34;&gt;Lチカ完成&lt;/h4&gt;
-
-&lt;p&gt;プログラムの書き込みなどで数秒掛かるので少し待ちます。すると……&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/16.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ランダムな色でLEDがチカチカしたかと思います。うまくいきましたか？&lt;/p&gt;
-
-&lt;p&gt;ここまでできたら一安心です。ソースコードの&lt;code&gt;Nefry.ndelay(1000);&lt;/code&gt;の1000の数値を変えて、同じ手順でNefryに書き込んでチカチカする間隔が変わることを試してみましょう。&lt;/p&gt;
-
-&lt;p&gt;ここまでの完成ソースコードは&lt;a href=&#34;https://github.com/n0bisuke/milkcocoa-nefry-handson/tree/step3&#34;&gt;STEP3ブランチ&lt;/a&gt;にまとめてあります。&lt;/p&gt;
-
-&lt;h3 id=&#34;step4-nefryとmilkcocoaを繋げる&#34;&gt;STEP4：NefryとMilkcocoaを繋げる&lt;/h3&gt;
-
-&lt;p&gt;それでは本題であるMilkcocoaとNefryを繋げてみます。&lt;/p&gt;
-
-&lt;h4 id=&#34;nefryをネットワークに繋げる&#34;&gt;Nefryをネットワークに繋げる&lt;/h4&gt;
-
-&lt;p&gt;先ほどはNefryをホストにしてPCから直接Nefryに接続しました。&lt;/p&gt;
-
-&lt;p&gt;この状態だとローカルLAN接続しかできず、インターネットの世界にNefryを繋げることができません。
-今度はNefry自体をネットワークに接続しましょう。作業している部屋などで、普段使っているWi-FiにNefryを接続します。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Nefry_xxxx&lt;/strong&gt; という&amp;rdquo;NefryのWi-Fi&amp;rdquo;に接続されていることを確認してください。また &lt;a href=&#34;http://192.168.4.1&#34;&gt;http://192.168.4.1&lt;/a&gt; にアクセスし、メニューの &lt;strong&gt;Setup WiFi&lt;/strong&gt; を選択すると近くのSSIDとPASSを入力する画面が表示されます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/17.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;SSID（近くにあればプルダウンで選択できます）とパスワードを入力して、セーブしましょう。ポップアップで確認がでるのでOKを選択してください。SSIDが出てこない場合はリロードしてください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/18.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;これでNefryがネットワークに繋がりました。&lt;/p&gt;
-
-&lt;h4 id=&#34;nefryのip-adressを調べる&#34;&gt;NefryのIP Adressを調べる&lt;/h4&gt;
-
-&lt;p&gt;Nefryがネットワークに繋がるとリスタートがかかってWi-Fi接続が途切れる場合があります。一度　&lt;strong&gt;Nefry_xxxx&lt;/strong&gt;　という&amp;rdquo;NefryのWi-Fi&amp;rdquo;に繋がっているか確認してください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/19.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://192.168.4.1&#34;&gt;http://192.168.4.1&lt;/a&gt; にアクセスしましょう。 &lt;strong&gt;IP Address&lt;/strong&gt;　の項目にNefryのIPアドレスが表示されています。表示されない場合はNefryを再起動して再度試してみましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/20.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;これでNefryのIPが　&lt;strong&gt;192.168.43.56&lt;/strong&gt;　ということが分かりました。人によって変わるので各自の値で置き換えて見てください。IPアドレスが分かったらWi-Fiを繋ぎなおしましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/21.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;繋ぎなおしてから &lt;a href=&#34;http://192.168.43.56/&#34;&gt;http://192.168.43.56/&lt;/a&gt; にアクセスすると先ほどと同様のメニュー画面になります。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/22.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&amp;ldquo;NefryのWi-Fi&amp;rdquo;でアクセスしてた際の 192.168.4.1 ではないIPでもNefryにアクセスできたことがわかります。&lt;/p&gt;
-
-&lt;p&gt;これでPCとNefryの両方がネットワークに接続することができました。(僕の場合はu-sen-lan)&lt;/p&gt;
-
-&lt;p&gt;&amp;ldquo;NefryのWi-Fi&amp;rdquo;に繋いだままだとサイトを見に行けなかったですが、これでWebサイトなどを通常に見ることができます。&lt;/p&gt;
-
-&lt;h4 id=&#34;milkcocoaのkeyを取得してnefryに設定&#34;&gt;MilkcocoaのKeyを取得してNefryに設定&lt;/h4&gt;
-
-&lt;p&gt;PCが通常のネットワークに繋がったので、Milkcocoaのウェブサイトを見にいきましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://mlkcca.com/edit/&#34;&gt;Milkcocoaの管理画面&lt;/a&gt;から &lt;strong&gt;認証 &amp;gt; 新しいAPI KeyとAPI Secretのペアを生成する&lt;/strong&gt; を選択しAPI KeyとAPI Secretを作ります。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/23.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;App ID&lt;/li&gt;
-&lt;li&gt;API Key&lt;/li&gt;
-&lt;li&gt;API Secret&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;この三つの値を後ほど使います。&lt;/p&gt;
-
-&lt;h4 id=&#34;コーディング&#34;&gt;コーディング&lt;/h4&gt;
-
-&lt;ul&gt;
-&lt;li&gt;app.jsの変更&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;app.js&lt;/strong&gt; に変更と追記をしていきます。&lt;/p&gt;
-
-&lt;p&gt;主に今回の変更は、ドット絵のデータとNefryに流すデータを繋げるための変更です。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;・
-・(省略)
-・
-//ドット絵側のアプリ&amp;amp;データストア
-let milkcocoa = new MilkCocoa(`dogi9jz8c16.mlkcca.com`);
-const dot_ds = milkcocoa.dataStore(&#39;dots&#39;);
-//Nefry側のアプリ&amp;amp;データストア
-milkcocoa = new MilkCocoa(`your-app-id.mlkcca.com`);
-const nefry_ds = milkcocoa.dataStore(&#39;nefry&#39;);
-
-let flag = 0, red = 0, green = 0, blue = 0;
-dot_ds.on(&#39;push&#39;,(pushed) =&amp;gt; {
-    //ドット絵から送られてくるカラーコードをRGBに変換
-    let color = pushed.value.color;
-    red = parseInt(color.substr(1,2), 16);
-    green = parseInt(color.substr(3,2), 16);
-    blue = parseInt(color.substr(5,2), 16);
-
-    addClass(color);
-    flag = 1;
-
-    //ドット絵から受け取ったデータをNefryに流す
-    nefry_ds.send({r:red,g:green,b:blue},(err,pushed) =&amp;gt; {
-        console.log(pushed);
-    });
-});
-・
-・(省略)
-・
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;変数 &lt;strong&gt;nefry_ds&lt;/strong&gt; としてNefry側のデータストアを新たに読み込みます。&lt;strong&gt;dot_ds.on()&lt;/strong&gt; の中では&lt;strong&gt;pushed.value.color&lt;/strong&gt;にカラーコード（#ce071bのような値）が送られてくるので、RGB（206,7,27のような値）に変換して、&lt;strong&gt;nefry_ds.send()&lt;/strong&gt; でNefry側に送信しています。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Nefry側&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Milkcocoaからのデータを受け取り、LEDを光らせるコードにしましょう。&lt;/p&gt;
-
-&lt;p&gt;以下のスケッチを作成し、STEP3の時と同様に &lt;strong&gt;arduino.bin&lt;/strong&gt; にコンパイルして出力します。先ほどの手順と同様にNefryのメニューから &lt;strong&gt;Upload Sketch&lt;/strong&gt; を選択してアップロードしましょう。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
-#include &amp;lt;Nefry_Milkcocoa.h&amp;gt;
-
-Nefry_Milkcocoa *milkcocoa;
-
-char *datastore;
-int red,green,blue;
-void onsend(DataElement *elem) {//MilkcocoaのOn関数と同一
-    //データストアにデータが届いたときに呼び出される
-    red = elem-&amp;gt;getInt(&amp;quot;r&amp;quot;);
-    green = elem-&amp;gt;getInt(&amp;quot;g&amp;quot;);
-    blue = elem-&amp;gt;getInt(&amp;quot;b&amp;quot;);
-    Nefry.setLed(red,green,blue);//LEDがランダムに点灯します。
-    String color=&amp;quot;Red:&amp;quot;;color+=red;color+=&amp;quot; Green:&amp;quot;;color+=green;color+=&amp;quot; Blue:&amp;quot;;color+=blue;
-    Nefry.println(color);//Nefry consoleで色を表示
-}
-
-void setup() {
-  milkcocoa-&amp;gt;print();//Setup ModuleページにAPPIDの表示をする
-  milkcocoa = Nefry_Milkcocoa::begin();//milkcocoaと接続に必要になる処理をします。
-  datastore = Nefry.getConfStr(3);//Setup Moduleページに入力されたデータストア名を保存します。
-  Nefry.println( milkcocoa-&amp;gt;on( datastore, &amp;quot;send&amp;quot;, onsend) ? &amp;quot;Milkcocoa onSend OK&amp;quot; : &amp;quot;Milkcocoa onSend NG&amp;quot; );//on関数を有効にします。
-}
-
-void loop() {
-  Nefry.println( milkcocoa-&amp;gt;loop(10000)? &amp;quot;Milkcocoa Connect OK&amp;quot; : &amp;quot;Milkcocoa Connect NG&amp;quot; );//10秒以内にMilkcocoaに接続できればokと表示されます。
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;setup()&lt;/strong&gt; 内ではMilkcocoaに接続するための準備をしています。 &lt;strong&gt;milkcocoa-&amp;gt;on( datastore, &amp;ldquo;send&amp;rdquo;, onsend)&lt;/strong&gt; の部分でsendイベントの監視が有効になります。&lt;strong&gt;onsend()&lt;/strong&gt; 内がsendイベントが送られてきたときに呼び出されます。&lt;/p&gt;
-
-&lt;p&gt;先ほどのapp.js側では &lt;strong&gt;{r:red,g:green,b:blue}&lt;/strong&gt; という形でRGBの値を送っていましたが、Nefry側では &lt;strong&gt;elem-&amp;gt;getInt(&amp;ldquo;r&amp;rdquo;)&lt;/strong&gt; とすることでrの値を取得できます。取得した値を &lt;strong&gt;Nefry.setLed()&lt;/strong&gt; に渡してあげることでLEDの色を変えられます。&lt;/p&gt;
-
-&lt;h4 id=&#34;nefryにmilkcocoaのkeyを設定していく&#34;&gt;NefryにMilkcocoaのKeyを設定していく&lt;/h4&gt;
-
-&lt;p&gt;最後にNefryのメニュー（この時点で僕の場合は &lt;a href=&#34;http://192.168.43.56/&#34;&gt;http://192.168.43.56/&lt;/a&gt; ）から &lt;strong&gt;Setup Module&lt;/strong&gt; のメニューから、取得した以下の値を入力し保存します。&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;先に上記コードをNefryに書き込まないとこのAPI Keyなどの項目が表示されませんので気をつけましょう。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/24.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;また、DataStoreの値は任意ですが今回は &lt;strong&gt;nefry&lt;/strong&gt; にします。&lt;/p&gt;
-
-&lt;h4 id=&#34;試してみる&#34;&gt;試してみる&lt;/h4&gt;
-
-&lt;p&gt;ここまでが終わるとカラーLEDの色をドット絵に同期させることができます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/25.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;以下の状態にしてドット絵を操作してみましょう。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;ブラウザで &lt;a href=&#34;http://localhost:8000&#34;&gt;http://localhost:8000&lt;/a&gt; にアクセス（写真のMac画面の右側）&lt;/li&gt;
-&lt;li&gt;同時に&lt;a href=&#34;https://mlkcca.com/sample.html&#34;&gt;ドット絵&lt;/a&gt;にアクセス（写真のMac画面の左側）&lt;/li&gt;
-&lt;li&gt;Nefryの電源を起動させておく（写真右側）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;前述したとおり、NefryはPCに直挿しでも大丈夫ですが、給電のみをおこなっているため別電源で起動しても問題ないです。写真（動画）ではスタンドアロン感を出すために、あえてPCでなくモバイルバッテリーに挿しています。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://www.instagram.com/p/BKyHEcljEZS/&#34;&gt;最初に載せた結果&lt;/a&gt;のようになっていれば成功です！&lt;/p&gt;
-
-&lt;p&gt;ここまでの完成ソースコードは&lt;a href=&#34;https://github.com/n0bisuke/milkcocoa-nefry-handson/tree/step4&#34;&gt;STEP4ブランチ&lt;/a&gt;にまとめてあります。&lt;/p&gt;
-
-&lt;p&gt;お疲れ様でした。&lt;/p&gt;
-
-&lt;h2 id=&#34;ハンズオンの様子など&#34;&gt;ハンズオンの様子など&lt;/h2&gt;
-
-&lt;p&gt;当日は&lt;a href=&#34;https://akiba.dmm-make.com/&#34;&gt;DMM.make AKIBA&lt;/a&gt;の会場をお借りして開催しました。
-&lt;a href=&#34;http://togetter.com/li/1029940&#34;&gt;MilkcocoaとNefryをつなげたハンズオン! Milkcocoa Meetup vol13 #mlkcca&lt;/a&gt;にもまとめましたが概ねSTEP4までを1.5時間くらいで完成させられていたのでハンズオンとしてはかなりよかったと思います。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;Nefry祭り始まるよ！😆 &lt;a href=&#34;https://twitter.com/hashtag/mlkcca?src=hash&#34;&gt;#mlkcca&lt;/a&gt; &lt;a href=&#34;https://t.co/ZrCMdMAy3R&#34;&gt;pic.twitter.com/ZrCMdMAy3R&lt;/a&gt;&lt;/p&gt; えむにわ(クオリティの低いツイート) (@m2wasabi) &lt;a href=&#34;https://twitter.com/m2wasabi/status/780717318955339776&#34;&gt;2016年9月27日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;当日はNefry開発者の&lt;a href=&#34;http://twitter.com/wamisnet&#34;&gt;わみさん&lt;/a&gt;、Milkcocoaの&lt;a href=&#34;http://twitter.com/bakuonboogie&#34;&gt;川野くん&lt;/a&gt;も参戦してくれて、かなり豪華な布陣になりました。&lt;/p&gt;
-
-&lt;p&gt;ちなみに、ハンズオンだと会場がNefry名のSSIDに溢れかえってしまい、自分のNefryがどれかが分からない問題があります。
-Nefryが発信するWiFiのSSIDはNefry_xxxxという形式になりますが、設定画面から名前を変更できるので、今回はあらかじめ名前を変更して配ることで対応しました。&lt;/p&gt;
-
-&lt;p&gt;今回のハンズオンで使った&lt;a href=&#34;https://github.com/n0bisuke/milkcocoa-nefry-handson&#34;&gt;ソースコード&lt;/a&gt;はGitHubにおいてありますのでどなたでも自由に使ってください。&lt;/p&gt;
-
-&lt;p&gt;無断でも大丈夫ですが使うときに&lt;a href=&#34;http://twitter.com/n0bisuke&#34;&gt;@n0bisuke&lt;/a&gt;に声かけてくれるとうれしかったりします笑&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;NefryとMilkcocoaを使って、リアルタイムにWebとモノを繋げるIoTな体験ができたと思います。&lt;/p&gt;
-
-&lt;p&gt;IoTな開発をやろうとした際に、開発環境の構築とネットワークへの接続が課題になるケースが多いです。
-RaspberryPiやArduinoは「電子工作初心者向け」だと世間では言われていますが、RaspberryPiはOS書き込みなど初期設定の内容が重く、Arduinoはネットワーク接続に課題があるように感じています。&lt;/p&gt;
-
-&lt;p&gt;またWebと接続しようとした際に必要となる知識がすごく多く、知識の深さに加えて幅広さも求められます。Nefry+Milkcocoaはその課題を解決するデバイス&amp;amp;サービスだと思います。「ちょっとIoT入門してみたい」という欲求を満たしやすいです。&lt;/p&gt;
-
-&lt;p&gt;ぜひ、みなさんもNefryとMilkcocoaを使ってIoTに入門してみて下さい。&lt;/p&gt;
-
-&lt;p&gt;それでは :)&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>IoTLT vol.19で「ギャル電」デビューしてきました！</title>
-      <link>https://dotstud.io/blog/iotlt-gbvol19-galden-report/</link>
-      <pubDate>Mon, 26 Sep 2016 20:00:00 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/iotlt-gbvol19-galden-report/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは！　dotstudioテクニカルライターの&lt;a href=&#34;https://dotstud.io/members/mao/&#34; title=&#34;まお&#34;&gt;まお&lt;/a&gt;です。先日おこなわれた国内最大のIoT縛りの勉強会「IoTLT」で登壇してきました〜！&lt;/p&gt;
-
-&lt;p&gt;私は「ギャル電」というユニットを組み、今回のIoTLTにてLTデビューを果たしました😄　ということも含めて、当日の様子をレポートしていきたいと思います！&lt;/p&gt;
-
-&lt;h2 id=&#34;iot縛りの勉強会-iotltとは&#34;&gt;IoT縛りの勉強会！IoTLTとは？&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/025/01_iotlt.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;IoTLTとは、毎回200名以上が集まるIoT（Internet of Things）縛りのライトニングトークイベントです。リレーションズ株式会社の土屋とdotstuidio代表、のびすけが主催しています。今回は第19回目を迎え、三菱総研にておこなわれました！&lt;/p&gt;
-
-&lt;h2 id=&#34;ギャル電-デビュー-登壇してきました&#34;&gt;「ギャル電」デビュー&amp;amp;登壇してきました&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/025/02_galden.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;今回のIoTLTにて私はギャルが電子工作する「ギャル電」というユニットでLTデビューしました🎀　メンバーは、dotstudioインターン大学生マオと、元ポールダンサーのアニポールきょうこの2人です。&lt;/p&gt;
-
-&lt;p&gt;私（マオ）はプレゼンテーションを、アニポールきょうこはデバイスの製作を担当しました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/025/03_galden.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ドンキでマイコンボードのアルドゥイーノを買える時代を夢見ています。基本的には2人でやっていきますが、将来的に電子工作ギャルサーをやろうと思うので、興味がある方はぜひ声をかけてください😆　&lt;/p&gt;
-
-&lt;h3 id=&#34;発表したもの-会いたくて震える1号&#34;&gt;発表したもの「会いたくて震える1号」&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/025/04_panda.png&#34; alt=&#34;&#34; /&gt;
-私たちが紹介したものは、会いたくて震えちゃうデバイス「会いたくて震える1号」になります。ウェブブラウザ上からリモートでぬいぐるみを震わせられるというIoTデバイスです。&lt;/p&gt;
-
-&lt;p&gt;強弱の段階は次の3パターンです。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;「aitai（会いたい）」ボタン（振動パターン1）&lt;/li&gt;
-&lt;li&gt;「sugokuaitai（すごく会いたい）」ボタン（振動パターン2）&lt;/li&gt;
-&lt;li&gt;「aitakuteshinu（会いたくて死ぬ）」ボタン（振動パターン3）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;script async class=&#34;speakerdeck-embed&#34; data-id=&#34;b54ef1ca72ca4b0cb737d12c9e9b42b2&#34; data-ratio=&#34;1.33333333333333&#34; src=&#34;//speakerdeck.com/assets/embed.js&#34;&gt;&lt;/script&gt;
-
-&lt;p&gt;詳しい作り方や材料などはこのスライドに書いたので、よかったら見てください〜😊&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/025/07_charai.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;また、dotstudio代表、のびすけさんもチャラ男役で登場してくれました（笑）&lt;/p&gt;
-
-&lt;h2 id=&#34;ギャル電への反応&#34;&gt;ギャル電への反応♡&lt;/h2&gt;
-
-&lt;p&gt;&lt;center&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;今のギャルは電子工作する時代「ギャル電」&lt;br&gt;いい時代！&lt;a href=&#34;https://t.co/rO3ZqhavmD&#34;&gt;https://t.co/rO3ZqhavmD&lt;/a&gt; &lt;a href=&#34;https://t.co/zCwzLG3BDl&#34;&gt;https://t.co/zCwzLG3BDl&lt;/a&gt;&lt;/p&gt; 福野泰介 (@taisukef) &lt;a href=&#34;https://twitter.com/taisukef/status/776212412987047936&#34;&gt;2016年9月15日&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;ギャル電ファンになりそう笑 &lt;a href=&#34;https://twitter.com/hashtag/iotlt?src=hash&#34;&gt;#iotlt&lt;/a&gt;&lt;/p&gt; Noriyuki (@ronsum) &lt;a href=&#34;https://twitter.com/ronsum/status/776027733876801536&#34;&gt;2016年9月14日&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;このほかにもさまざまな反応をいただきました。SNS上でいろんな方から応援してもらえてめちゃくちゃ嬉しいです！&lt;/p&gt;
-
-&lt;h3 id=&#34;がじぇるね賞もいただきました&#34;&gt;がじぇるね賞もいただきました♡&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/025/06_sakura.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;また、がじぇるねの鈴木さんが気に入ったプレゼン登壇者にルネサスのマイコンボードを配布する「がじぇるね賞」もいただきましたー！　鈴木さんありがとうございます！&lt;/p&gt;
-
-&lt;h2 id=&#34;イベントの様子&#34;&gt;イベントの様子&lt;/h2&gt;
-
-&lt;p&gt;今回のIoTLTはとても個性的な発表が多いなと感じました。そこで私的に面白いと思った発表をいくつか取り上げたいと思います！&lt;/p&gt;
-
-&lt;h3 id=&#34;thingsから頑張った話-by-hepppoさん&#34;&gt;Thingsから頑張った話 by hepppoさん&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/025/08_face.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;サーボモーターで目や表情筋を動かせるロボットについて発表していました！　Lチカの次にロボット製作に挑戦したそうです（爆笑）&lt;/p&gt;
-
-&lt;p&gt;私はこの日本髪ロボを見た瞬間、「この人マジやべぇ」と思いました（笑）&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;生皮剥かれた &lt;a href=&#34;https://twitter.com/hashtag/iotlt?src=hash&#34;&gt;#iotlt&lt;/a&gt; &lt;a href=&#34;https://t.co/N2bf33Ttyx&#34;&gt;pic.twitter.com/N2bf33Ttyx&lt;/a&gt;&lt;/p&gt; むらまさ (@muramasa2764) &lt;a href=&#34;https://twitter.com/muramasa2764/status/776046225078353921&#34;&gt;2016年9月14日&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;最高に面白かったです。これからのhepppoさんの作品が楽しみすぎです！&lt;/p&gt;
-
-&lt;h3 id=&#34;ﾀﾞｧｼｴﾘｲｪｽなiot-by-ポキオさん&#34;&gt;ﾀﾞｧｼｴﾘｲｪｽなIoT by ポキオさん&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/025/10_door.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ポキオさんは京急の運行情報監視ガジェットを紹介していました！　定期的にインターネットの運行情報を確認して、京急が遅延しそうだったらLEDをチカチカさせるというシステムです。&lt;/p&gt;
-
-&lt;script async class=&#34;speakerdeck-embed&#34; data-slide=&#34;14&#34; data-id=&#34;d1c17f3f09d641a7b02b146e53958753&#34; data-ratio=&#34;1.33333333333333&#34; src=&#34;//speakerdeck.com/assets/embed.js&#34;&gt;&lt;/script&gt;
-
-&lt;p&gt;スライドに「クソコード」が登場するのですがめちゃくちゃ爆笑しました！　皆さんもぜひご覧ください！&lt;/p&gt;
-
-&lt;h3 id=&#34;iotで美味しい漬け物を作る-by-shinoharaさん-モンスターラボ&#34;&gt;IoTで美味しい漬け物を作る by Shinoharaさん@モンスターラボ&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/025/11_bege.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;「IoTで漬物を漬ける」というとても斬新な発表でしたー！　塩分濃度センサーで塩分濃度を測り、その値をインターネットに送って最適な塩分濃度を測定。漬物がいつ食べごろなのかを教えてくれるのだそうです。熱意がすごいですね！&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;&lt;blockquote class=&#34;instagram-media&#34; data-instgrm-captioned data-instgrm-version=&#34;7&#34; style=&#34; background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);&#34;&gt;&lt;div style=&#34;padding:8px;&#34;&gt; &lt;div style=&#34; background:#F8F8F8; line-height:0; margin-top:40px; padding:50.0% 0; text-align:center; width:100%;&#34;&gt; &lt;div style=&#34; background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;&#34;&gt;&lt;/div&gt;&lt;/div&gt; &lt;p style=&#34; margin:8px 0 0 0; padding:0 4px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/BKVWUusjKsH/&#34; style=&#34; color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;&#34; target=&#34;_blank&#34;&gt;漬け物の話をするカンボジアの人　#iotlt&lt;/a&gt;&lt;/p&gt; &lt;p style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;&#34;&gt;A photo posted by n0bisuke (@n0bisuke) on &lt;time style=&#34; font-family:Arial,sans-serif; font-size:14px; line-height:17px;&#34; datetime=&#34;2016-09-14T10:49:18+00:00&#34;&gt;Sep 14, 2016 at 3:49am PDT&lt;/time&gt;&lt;/p&gt;&lt;/div&gt;&lt;/blockquote&gt; &lt;script async defer src=&#34;//platform.instagram.com/en_US/embeds.js&#34;&gt;&lt;/script&gt;&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;ちなみにShinoharaさんは日本人なのですが、カンボジア人だといじられていました（笑）&lt;/p&gt;
-
-&lt;h3 id=&#34;貧困のiot-by-ちゃんとくさん&#34;&gt;貧困のIoT by ちゃんとくさん&lt;/h3&gt;
-
-&lt;p&gt;&lt;center&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;BOCCOもどきと言うか完全にダンボー &lt;a href=&#34;https://twitter.com/hashtag/iotlt?src=hash&#34;&gt;#iotlt&lt;/a&gt; &lt;a href=&#34;https://t.co/4XZOY9hhp0&#34;&gt;pic.twitter.com/4XZOY9hhp0&lt;/a&gt;&lt;/p&gt; Koshiro (@koshiro1979) &lt;a href=&#34;https://twitter.com/koshiro1979/status/776025204917100544&#34;&gt;2016年9月14日&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;ちゃんとくさんは、家にいる家族と気軽なメッセージのやりとりができるコミュニケーションロボット「&lt;a href=&#34;http://www.ux-xu.com/product/bocco&#34;&gt;BOCCO&lt;/a&gt;」を自作しようとしたとのこと。最終的にダンボーくんになってしまったそうです（笑）&lt;/p&gt;
-
-&lt;h3 id=&#34;他にもいろいろなltが繰り広げられましたー&#34;&gt;他にもいろいろなLTが繰り広げられましたー！&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;IoTの仕事で面白かったいくつかの出来事について語ってくれた オオカワさん@三菱総研&lt;/li&gt;
-&lt;li&gt;レーザー加工機のすすめでいくつかレーザー加工機で作ったものを持参してくれた 鈴木さん@がじぇるね&lt;/li&gt;
-&lt;li&gt;機械学習のフレームワーク「ReNom」について語ってくれた 角 知亮さん@GRID&lt;/li&gt;
-&lt;li&gt;IoTで5daysインターンする学生たちのレポートをしてくれた 福本さん@ニフティ&lt;/li&gt;
-&lt;li&gt;ヒガンバナIoTで球根を育てるためのガジェットを紹介してくれた 河野さん@秘密結社オープンフォース&lt;/li&gt;
-&lt;li&gt;Android専用IoTガジェットWaffleでPokemon Goライフハック例を話してくれた のびすけさん @ dotstudio / TOLABL&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/025/12_sakura.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ということでIoTLT vol.19を紹介しましたー！　勉強会なのに、笑いどころが満載でめっちゃ楽しかったです。次のIoTLTは10月11日（火）に株式会社ウフルにて開催します！　みなさんもIoTLTに参加してみてはいかがでしょうか？　お申し込みは以下のリンクからどうぞ😄&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://iotlt.connpass.com/event/38815/?utm_campaign=event_publish_to_follower&amp;amp;utm_medium=facebook&amp;amp;utm_source=notifications&#34; title=&#34;IoT縛りの勉強会! IoTLT vol.20 @ ウフル&#34;&gt;IoT縛りの勉強会! IoTLT vol.20 @ ウフル&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;私たちギャル電のTwitter（&lt;a href=&#34;https://twitter.com/GALDEN999&#34;&gt;@GALDEN999&lt;/a&gt;）もチェックしてみてくださーい！　では❤︎&lt;/p&gt;
 </description>
     </item>
     
