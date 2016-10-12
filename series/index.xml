@@ -7,8 +7,170 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Tue, 11 Oct 2016 10:00:49 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 12 Oct 2016 10:00:16 +0900</lastBuildDate>
     <atom:link href="https://dotstud.io/series/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>本ブログにもページネーション機能が付きました！Hugoでページネーション機能を作ろう。</title>
+      <link>https://dotstud.io/blog/hugo-howto-create-pagination/</link>
+      <pubDate>Wed, 12 Oct 2016 10:00:16 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/hugo-howto-create-pagination/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、 dotstudio代表の&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;このブログはページネーション機能が無かったのですが、そろそろコンテンツ数も増えてきたのでページネーション機能を実装しました。 888888&lt;/p&gt;
+
+&lt;p&gt;実際に作る方法を紹介します。&lt;/p&gt;
+
+&lt;h2 id=&#34;hugoでページネーション機能を作る&#34;&gt;Hugoでページネーション機能を作る&lt;/h2&gt;
+
+&lt;p&gt;今回はblogセクションにページネーションを実装します。&lt;/p&gt;
+
+&lt;p&gt;Hugoのページネーションで調べるとまずは&lt;a href=&#34;https://gohugo.io/extras/pagination/&#34;&gt;ドキュメントページのここ&lt;/a&gt;がヒットします。&lt;/p&gt;
+
+&lt;p&gt;もともとも&lt;code&gt;section/blog.html&lt;/code&gt;は以下のようなコードでした。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{{ partial &amp;quot;header.html&amp;quot; . }}
+    &amp;lt;!-- Main Content --&amp;gt;
+    &amp;lt;div id=&amp;quot;blog-card--container&amp;quot;&amp;gt;
+    {{ range first 12 (where .Data.Pages &amp;quot;Type&amp;quot; &amp;quot;blog&amp;quot;) }}
+      {{ .Render &amp;quot;summary&amp;quot;}}
+    {{ end }}
+    &amp;lt;/div&amp;gt;
+{{ partial &amp;quot;footer.html&amp;quot; . }}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ドキュメントページを参照しながら以下のように変更します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{{ partial &amp;quot;header.html&amp;quot; . }}
+
+    {{ $paginator := .Paginate (where .Data.Pages &amp;quot;Type&amp;quot; &amp;quot;blog&amp;quot;) 12 }}
+    &amp;lt;!-- Main Content --&amp;gt;
+    &amp;lt;div id=&amp;quot;blog-card--container&amp;quot;&amp;gt;
+       {{ range $paginator.Pages }}
+            {{ .Render &amp;quot;summary&amp;quot; }}
+        {{ end }}
+    &amp;lt;/div&amp;gt;
+    
+    {{ template &amp;quot;_internal/pagination.html&amp;quot; . }}
+
+{{ partial &amp;quot;footer.html&amp;quot; . }}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これだけでページネーション機能はとりあえず完成です。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;めちゃ簡単ですね！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;確認してみるとページの下の方に何かいる&amp;hellip;&amp;hellip;！&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/032/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;これがページネーションのメニューです。&lt;/p&gt;
+
+&lt;p&gt;勝手に生成されていてびっくりしますが、&lt;code&gt;{{ template &amp;quot;_internal/pagination.html&amp;quot; . }}&lt;/code&gt;の部分でこのメニューが生成されています。&lt;/p&gt;
+
+&lt;p&gt;だけどここから先で割と詰まりました苦笑&lt;/p&gt;
+
+&lt;h2 id=&#34;見た目とメニューの自由度を上げたい&#34;&gt;見た目とメニューの自由度を上げたい&lt;/h2&gt;
+
+&lt;p&gt;このままだとどこでHTMLが生成されているか不明です。&lt;code&gt;_internal/~~~.html&lt;/code&gt;はHugoの組み込みテンプレートになっていて、通常は変更することが出来ません。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.kakunaga.net/post/160517pagination/&#34;&gt;pagination の見た目&lt;/a&gt;の記事を見ると、&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;class=&amp;ldquo;pagination&amp;rdquo;&lt;/li&gt;
+&lt;li&gt;class=&amp;ldquo;active&amp;rdquo;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;が生成されているからCSSを指定すればいいみたいです。ただ、メニュー項目の自由度は無いので自分で定義してみたいと思います。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/spf13/hugo/blob/master/tpl/template_embedded.go#L116-L142&#34;&gt;Hugoのソース&lt;/a&gt;を覗き見ると対象箇所が分かります。&lt;/p&gt;
+
+&lt;p&gt;ここを元に&lt;code&gt;layouts/partials/paginator.html&lt;/code&gt;を作成します。以下ではコメントも入れておきました。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{{ $pag := $.Paginator }}
+{{ if gt $pag.TotalPages 1 }}
+    &amp;lt;ul class=&amp;quot;pagination&amp;quot;&amp;gt;
+        {{/*最初へ*/}}
+        {{ with $pag.First }}
+            &amp;lt;li&amp;gt;
+                &amp;lt;a href=&amp;quot;{{ .URL }}&amp;quot; aria-label=&amp;quot;First&amp;quot;&amp;gt;&amp;lt;span aria-hidden=&amp;quot;true&amp;quot;&amp;gt;最初へ&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+            &amp;lt;/li&amp;gt;
+        {{ end }}
+
+        {{/*前ページ*/}}
+        &amp;lt;li{{ if not $pag.HasPrev }}class=&amp;quot;disabled&amp;quot;{{ end }}&amp;gt;
+            &amp;lt;a href=&amp;quot;{{ if $pag.HasPrev }}{{ $pag.Prev.URL }}{{ end }}&amp;quot; aria-label=&amp;quot;Previous&amp;quot;&amp;gt;
+                &amp;lt;span aria-hidden=&amp;quot;true&amp;quot;&amp;gt;前へ&amp;lt;/span&amp;gt;
+            &amp;lt;/a&amp;gt;
+        &amp;lt;/li&amp;gt;
+
+        {{/*番号*/}}
+        {{ range $pag.Pagers }}
+            &amp;lt;li{{ if eq . $pag }}class=&amp;quot;active&amp;quot;{{ end }}&amp;gt;
+                &amp;lt;a href=&amp;quot;{{ .URL }}&amp;quot;&amp;gt;{{ .PageNumber }}&amp;lt;/a&amp;gt;
+            &amp;lt;/li&amp;gt;
+        {{ end }}
+        
+        {{/*次ページ*/}}
+        &amp;lt;li{{ if not $pag.HasNext }}class=&amp;quot;disabled&amp;quot;{{ end }}&amp;gt;
+            &amp;lt;a href=&amp;quot;{{ if $pag.HasNext }}{{ $pag.Next.URL }}{{ end }}&amp;quot; aria-label=&amp;quot;Next&amp;quot;&amp;gt;
+                &amp;lt;span aria-hidden=&amp;quot;true&amp;quot;&amp;gt;次へ&amp;lt;/span&amp;gt;
+            &amp;lt;/a&amp;gt;
+        &amp;lt;/li&amp;gt;
+
+        {{/*最後へ*/}}
+        {{ with $pag.Last }}
+            &amp;lt;li&amp;gt;
+                &amp;lt;a href=&amp;quot;{{ .URL }}&amp;quot; aria-label=&amp;quot;Last&amp;quot;&amp;gt;&amp;lt;span aria-hidden=&amp;quot;true&amp;quot;&amp;gt;最後へ&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+            &amp;lt;/li&amp;gt;
+        {{ end }}
+    &amp;lt;/ul&amp;gt;
+{{ end }}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;section/blog.html&lt;/code&gt;を以下に修正します。
+&lt;code&gt;_internal&lt;/code&gt;で組み込みテンプレートを呼び出していた行を今作成した&lt;code&gt;paginator.html&lt;/code&gt;を呼び出すように変更です。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{{ partial &amp;quot;header.html&amp;quot; . }}
+
+    {{ $paginator := .Paginate (where .Data.Pages &amp;quot;Type&amp;quot; &amp;quot;blog&amp;quot;) 12 }}
+    &amp;lt;!-- Main Content --&amp;gt;
+    &amp;lt;div id=&amp;quot;blog-card--container&amp;quot;&amp;gt;
+       {{ range $paginator.Pages }}
+            {{ .Render &amp;quot;summary&amp;quot; }}
+        {{ end }}
+    &amp;lt;/div&amp;gt;
+    
+    {{ partial &amp;quot;paginator.html&amp;quot; . }}
+
+{{ partial &amp;quot;footer.html&amp;quot; . }}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これで完成です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/032/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ビルドするとこのような形になりました。&lt;/p&gt;
+
+&lt;p&gt;あとは&lt;a href=&#34;https://dotstud.io/members/chachmaru/&#34;&gt;ちゃちゃまる先生&lt;/a&gt;にCSSをあててもらえば終了です。&lt;/p&gt;
+
+&lt;h2 id=&#34;出来上がったものがこちらです&#34;&gt;出来上がったものがこちらです&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/032/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;いい感じですね。&lt;/p&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;こちら(&lt;a href=&#34;http://wdkk.co.jp/note/2015/0915-hugo-pagination/&#34;&gt;Hugoでwebサイト構築(9) リストのページネーション(Pagination)&lt;/a&gt;)も参考にさせていただきました。&lt;/p&gt;
+
+&lt;p&gt;なかなか公式ドキュメントも調べづらいので参考になれば幸いです。&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>地味に便利！Raspberry Piが起動したらIPアドレスを通知するチャットボットを作る</title>
@@ -2976,199 +3138,6 @@ RaspberryPiやArduinoは「電子工作初心者向け」だと世間では言�
 &lt;p&gt;&lt;a href=&#34;http://iotlt.connpass.com/event/38815/?utm_campaign=event_publish_to_follower&amp;amp;utm_medium=facebook&amp;amp;utm_source=notifications&#34; title=&#34;IoT縛りの勉強会! IoTLT vol.20 @ ウフル&#34;&gt;IoT縛りの勉強会! IoTLT vol.20 @ ウフル&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;私たちギャル電のTwitter（&lt;a href=&#34;https://twitter.com/GALDEN999&#34;&gt;@GALDEN999&lt;/a&gt;）もチェックしてみてくださーい！　では❤︎&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>人柱覚悟でさっそくmacOS Sierraにしてみました。</title>
-      <link>https://dotstud.io/blog/macos-sierra-update-process/</link>
-      <pubDate>Fri, 23 Sep 2016 10:00:39 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/macos-sierra-update-process/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、dotstudio代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。macOS Sierraが出ましたね。まだ早いんじゃないかと思いつつ試しにアップデートしてみたのでレポートします。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;ちなみに今回は「実際にmacOS Sierraにアップデートしてみたレポート」ですので、試す際にもしトラブルが発生しても当メディアでは責任は負いません。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;macos-sierra-v10-12&#34;&gt;macOS Sierra （v10.12）&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/01_image.png&#34; alt=&#34;&#34; /&gt;
-&lt;a href=&#34;http://www.apple.com/jp/macos/sierra/&#34;&gt;macOS Sierra&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;シエラって読むみたいです。OS X El Capitan（v10.11）の後続版にあたります。
-バージョンは10.12でコードネームがSierraです。&lt;/p&gt;
-
-&lt;p&gt;ちなみに10.11までは「Mac OS X」という表記でしたが、Sierraからは「macOS」へ変わり最初のmが小文字になりました。デザイン的な理由がありそうですね（笑）&lt;/p&gt;
-
-&lt;p&gt;既に色々なメディアが記事を書いていますので、何が変わったかや新機能などの詳細についてはそちらからキャッチアップして下さい。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;（http://www.itmedia.co.jp/news/articles/1609/20/news119.html&#34;&gt;「Adobe CS6」は「macOS Sierra」で必要システム構成外に　Java 6サポート終了で&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;（http://www.gizmodo.jp/2016/09/mac-os-sierra-released.html&#34;&gt;OS X…ではなく「macOS Sierra」が正式リリース。MacにSiriがやってきた！&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://applech2.com/archives/macos-10-12-sierra-upgrade-check.html&#34;&gt;macOS Sierraへアップグレードする前の注意点まとめ。&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;アップデートする僕のmacbookのマシンスペック&#34;&gt;アップデートする僕のMacBookのマシンスペック&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;MacBook Pro （Retina 13-inch、 Early2015）&lt;/li&gt;
-&lt;li&gt;OS X El Capitan／v10.11.6&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;ちなみに&lt;a href=&#34;https://dotstud.io/blog/setup-new-mac-app/&#34;&gt;先日の記事&lt;/a&gt;で新しく買ったMacです。&lt;/p&gt;
-
-&lt;h2 id=&#34;手順&#34;&gt;手順&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/02_image.png&#34; alt=&#34;&#34; /&gt;
-&lt;a href=&#34;https://itunes.apple.com/jp/app/macos-sierra/id1127487414?mt=12&#34;&gt;App Store&lt;/a&gt;からSierraのインストーラを落とします。&lt;/p&gt;
-
-&lt;p&gt;インストーラだけで4.78GBもあるので、ダウンロードには少し時間がかかると思います。&lt;/p&gt;
-
-&lt;h3 id=&#34;インストール&#34;&gt;インストール&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/03_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;DLが終わるとアプリケーションフォルダにインストーラがあるので動させます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/04_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;インストーラの手順に従って以下を進めましょう。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;続ける&lt;/strong&gt; を選択&lt;/li&gt;
-&lt;li&gt;ソフトウェア使用許諾の表示になるので &lt;strong&gt;同意する&lt;/strong&gt; を選択&lt;/li&gt;
-&lt;li&gt;ソフトウェア使用許諾のポップアップが出たら更に &lt;strong&gt;同意する&lt;/strong&gt; を選択&lt;/li&gt;
-&lt;li&gt;インストール先のディスク選択画面が出るので &lt;strong&gt;インストール&lt;/strong&gt; を選択&lt;/li&gt;
-&lt;li&gt;パスワードを求められるのでMacの &lt;strong&gt;パスワードを入力&lt;/strong&gt; し &lt;strong&gt;ヘルパーを追加&lt;/strong&gt; を選択&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;ここまで終わるとインストールの準備が開始されます。
-&lt;img src=&#34;https://dotstud.io/img/blog/022/05_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;再起動を求められるので再起動しましょう。起動してるアプリケーションはすべて閉じます。編集中のファイルはちゃんと保存しておきましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/06_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;再起動するとMacの起動時にこのような画面になりインストールが進みます。この画面はMac起動前なのでここだけスマホ撮影です（笑）
-&lt;img src=&#34;https://dotstud.io/img/blog/022/07_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ここも時間がかかるので、ご飯でも食べに行くのがちょうどいいかもしれません。インストールが完了すると起動します。&lt;/p&gt;
-
-&lt;h3 id=&#34;sierraの初期設定&#34;&gt;Sierraの初期設定&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/08_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;起動するとMacの初期設定っぽいウィザードになります。AppleIDでサインインします。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;ソフトウェア使用許諾／プライバシーポリシー／利用規約の表示になるので &lt;strong&gt;同意する&lt;/strong&gt; を選択&lt;/li&gt;
-&lt;li&gt;ポップアップが出たら更に &lt;strong&gt;同意する&lt;/strong&gt; を選択&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;アカウント設定がされます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/09_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;iCloundキーチェーンの設定ですが、使っている人は設定しても良いと思います。僕はスキップしました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/10_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;次にSierraの新機能のiCloud Drive（MacのファイルをiCloudに保存する／Apple版のGoogle DriveやDropBoxみたいなもの）の設定です。この設定は後からでもできますが、僕はチェックをいれました。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;書類フォルダ&lt;/strong&gt; と &lt;strong&gt;デスクトップ&lt;/strong&gt; 内のファイルが自動的にアップロードされるので、書類やデスクトップが汚い人はアレなファイルがアップされちゃうかもしれないので気をつけましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/11_image.png&#34; alt=&#34;&#34; /&gt;
-次にSiriの設定です。これもSierraからの新機能です。iOSだけでしか使えなかったSiriですが、Macでも使えるようになります。目玉機能なのでオンにしておきます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/12_image.png&#34; alt=&#34;&#34; /&gt;
-これで無事に起動しました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/13_image.png&#34; alt=&#34;&#34; /&gt;
-&lt;strong&gt;このMacについて&lt;/strong&gt; からスペック確認をするとmacOS Sierraの表記になっていますね。&lt;/p&gt;
-
-&lt;h2 id=&#34;新機能を試してみる&#34;&gt;新機能を試してみる&lt;/h2&gt;
-
-&lt;p&gt;新機能の全ては&lt;a href=&#34;http://applech2.com/archives/20160614-macos-10-12-sierra-new-features.html&#34;&gt;macOS 10.12 Sierraの新機能まとめ。&lt;/a&gt;などをチェックしてみてください。&lt;/p&gt;
-
-&lt;p&gt;僕が実際に使ってみたかったものや手元で試せるものを紹介します。&lt;/p&gt;
-
-&lt;h3 id=&#34;複数ウィンドウをまとめてくる-タブ&#34;&gt;複数ウィンドウをまとめてくる「タブ」&lt;/h3&gt;
-
-&lt;p&gt;アプリケーションを複数開いても、タブでひとつのウィンドウにまとめてくれる機能です。Keynoteでよくスライドを複数開くので、個人的には今回のアップデートで一番便利さを感じています。&lt;/p&gt;
-
-&lt;p&gt;サードパーティ製のアプリケーションでも可能みたいですが、まだ対応してるアプリは少なそうです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/14.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Keynoteでは &lt;strong&gt;ウィンドウ-&amp;gt;すべてのウィンドウを結合&lt;/strong&gt; で結合できます。他のアプリでも同じような表示になると思います。&lt;/p&gt;
-
-&lt;p&gt;タブ機能と言っていますが、どちらかというと &lt;strong&gt;一つのウィンドウにまとめてくれる機能&lt;/strong&gt; という感じです。&lt;/p&gt;
-
-&lt;h3 id=&#34;siri-がmacでも使えるようになった&#34;&gt;「Siri」がMacでも使えるようになった&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/15.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;iOSでしか使えなかった音声アシスタント機能の「Siri」をMacでも使えるようになりました。&lt;/p&gt;
-
-&lt;p&gt;アイコンクリックか &lt;strong&gt;Command+スペース&lt;/strong&gt; で起動できます。&lt;/p&gt;
-
-&lt;h3 id=&#34;macのストレージを自動で最適化してくれる-optimized-storage&#34;&gt;Macのストレージを自動で最適化してくれる「Optimized Storage」&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/16_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ストレージの空きがなくなってくると、iCloudにファイルを逃がしてストレージを最適化してくれます。まだ僕のMacは買ったばかりなので恩恵は受けていないですが期待できます。&lt;/p&gt;
-
-&lt;p&gt;ちなみに、新機能の「Optimized Storage」（後述）を使うにはiCloud設定が必要です。iCloud設定から &lt;strong&gt;Macストレージを最適化&lt;/strong&gt; をチェックしましょう。&lt;/p&gt;
-
-&lt;h3 id=&#34;画像や動画を切り離せる-ピクチャ-イン-ピクチャ-pinp&#34;&gt;画像や動画を切り離せる「ピクチャ・イン・ピクチャ （PinP）」&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/17.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;YouTubeやiTunesで見ている動画や画像などを&lt;code&gt;切り離せる&lt;/code&gt;機能です。ちなみに、ブラウザだとSafariしか使えないようです。早くChromeにも欲しいですね……。&lt;/p&gt;
-
-&lt;p&gt;Youtube動画の上などで右クリックを2回（コンテキストメニューをダブルクリック）すると &lt;strong&gt;ピクチャ・イン・ピクチャにする&lt;/strong&gt; という項目があるので、それを選択しましょう。&lt;/p&gt;
-
-&lt;h4 id=&#34;ちなみにchromeエクステンションがありました&#34;&gt;ちなみにChromeエクステンションがありました。&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/18.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://chrome.google.com/webstore/detail/picture-in-picture-viewer/efaagmolahogmekmnmkigonhfcdiemnl/related&#34;&gt;Picture in Picture Viewer&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Chromeのメニューバーにアイコンが追加されるので、そのアイコンをYoutubeなどを開いてるときに押すと切り離せます。ちなみに、初回だけ&lt;code&gt;chrome://flags/#enable-panels&lt;/code&gt;というフラグからパネルを有効にする必要があります。&lt;/p&gt;
-
-&lt;h2 id=&#34;気になる不具合など&#34;&gt;気になる不具合など&lt;/h2&gt;
-
-&lt;h3 id=&#34;karabinerが使えない問題&#34;&gt;karabinerが使えない問題&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/19_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/setup-new-mac-app/&#34;&gt;先日の記事&lt;/a&gt;でも紹介した&lt;a href=&#34;https://pqrs.org/osx/karabiner/index.html.ja&#34;&gt;Karabiner&lt;/a&gt;が、執筆した時点（2016年9月21日）だと対応していませんでした。&lt;/p&gt;
-
-&lt;p&gt;US配列キーボードで英数&amp;lt;-&amp;gt;かなのモード変換を、JIS配列のようにボタンひとつでやりたいという僕みたいな人には必須ツールだったので残念です。&lt;/p&gt;
-
-&lt;p&gt;……と思いきや&lt;a href=&#34;https://ei-kana.appspot.com/&#34;&gt;⌘英かな&lt;/a&gt;というアプリで代替できたので、こちらをインストールすると &lt;strong&gt;US配列の英数&amp;lt;-&amp;gt;かなのモード変換問題&lt;/strong&gt; は解決します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/20_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;インストールはリンク先を参照して下さい。&lt;/p&gt;
-
-&lt;h3 id=&#34;macos-sierraにしたらgitコマンドが動かなくなった&#34;&gt;macOS Sierraにしたらgitコマンドが動かなくなった……&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/21_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;これにハマる人はけっこういる気がします（笑）&lt;/p&gt;
-
-&lt;p&gt;こちらのQiitaの記事「&lt;a href=&#34;http://qiita.com/n0bisuke/items/0ad33fa466c3de5ac763&#34;&gt;macOS SierraにしたらGitコマンドが動かなくなった&lt;/a&gt;」にまとめましたが最初焦りますね。&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめと雑感&#34;&gt;まとめと雑感&lt;/h2&gt;
-
-&lt;p&gt;今のところ、Sierraにしてから不具合は特に起きてないです。性能が上がったという実感も無いので、現時点（2016年9月21日）ではまだ必要がなければアップデートしなくても良いかもしれません。&lt;/p&gt;
-
-&lt;p&gt;ちなみにSierraにアップデートしたと同時にKeynoteがv7にアップデートしたんですけど、&lt;strong&gt;リアルタイム共同編集機能&lt;/strong&gt; というものが付いてて、こちらの方が気になっています（笑）&lt;/p&gt;
-
-&lt;p&gt;僕は問題ありませんでしたが、ハードウェア的な問題などでデータが消えてしまうとかもあるかもしれないので、アップデートする方はくれぐれもお気をつけて！&lt;/p&gt;
 </description>
     </item>
     

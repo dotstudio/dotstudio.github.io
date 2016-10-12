@@ -57,32 +57,32 @@
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="時間が経ってしまいましたが、NodeBotsハンズオンのレポートをします！ 明日も土曜日もNodeBotsイベントがあり、今週はNodeBots週間だと思うので皆さん盛り上がりましょ！">
+    <meta name="description" content="dotstudioでHugoを使ってページネーション機能を実装したのでお知らせします。">
     <meta name="author" content="dotstudio Inc.">
-    <meta content="https://dotstud.io/img/blog/003/00_eyecatch.png">
+    <meta content="https://dotstud.io/img/blog/032/00_eyecatch.png">
     
-    <meta property="og:title" content="" />
+    <meta property="og:title" content="本ブログにもページネーション機能が付きました！Hugoでページネーション機能を作ろう。 | dotstudio" />
     <meta property="og:locale" content="ja_JP" />
     <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://dotstud.io/blog/nodebots-handson-report-vol2/" />
+    <meta property="og:url" content="https://dotstud.io/blog/hugo-howto-create-pagination/" />
     <meta property="og:site_name" content="dotstudio（ドットスタジオ）" />
-    <meta property="og:image" content="https://dotstud.io/img/blog/003/00_eyecatch.png" />
-    <meta property="og:image:secure_url" content="https://dotstud.io/img/blog/003/00_eyecatch.png" />
-    <meta property="og:description" content="時間が経ってしまいましたが、NodeBotsハンズオンのレポートをします！ 明日も土曜日もNodeBotsイベントがあり、今週はNodeBots週間だと思うので皆さん盛り上がりましょ！" />
+    <meta property="og:image" content="https://dotstud.io/img/blog/032/00_eyecatch.png" />
+    <meta property="og:image:secure_url" content="https://dotstud.io/img/blog/032/00_eyecatch.png" />
+    <meta property="og:description" content="dotstudioでHugoを使ってページネーション機能を実装したのでお知らせします。" />
     <meta property="article:author" content="https://www.facebook.com/dotstud10/" /> 
     <meta property="fb:app_id" content="296336307370435" />
     <meta property="fb:pages" content="1013196712108753" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image:src" content="https://dotstud.io/img/blog/003/00_eyecatch.png">
+    <meta name="twitter:image:src" content="https://dotstud.io/img/blog/032/00_eyecatch.png">
     <meta name="twitter:site" content="@dotstud_io" />
-    <meta name="twitter:url" content="https://dotstud.io/blog/nodebots-handson-report-vol2/">
-    <meta name="twitter:description" content="時間が経ってしまいましたが、NodeBotsハンズオンのレポートをします！ 明日も土曜日もNodeBotsイベントがあり、今週はNodeBots週間だと思うので皆さん盛り上がりましょ！">
-    <meta name="twitter:title" content="Node.js Magazine">
+    <meta name="twitter:url" content="https://dotstud.io/blog/hugo-howto-create-pagination/">
+    <meta name="twitter:description" content="dotstudioでHugoを使ってページネーション機能を実装したのでお知らせします。">
+    <meta name="twitter:title" content="本ブログにもページネーション機能が付きました！Hugoでページネーション機能を作ろう。 | dotstudio">
     <meta name="twitter:creator" content="@dotstud_io" />
 
     
     <meta name="google-site-verification" content="oW2fcSG1fFnkDoRCGFJ0IGGebtBr8FjV2twoFMd7Skc" />
-    <title>Node.js Magazine</title>
+    <title>本ブログにもページネーション機能が付きました！Hugoでページネーション機能を作ろう。 | dotstudio</title>
     
 
     <link rel="stylesheet" href="/css/loader.css"> 
@@ -412,14 +412,16 @@
     
   
 
+  
 
+
+
+  
+
+  
 
   
     
-  
-
-  
-
   
 
   
@@ -437,11 +439,11 @@
 }(document, 'script', 'facebook-jssdk'));</script>
 
 <article class="blog-single">
-  <div class="date">2016.07.25</div>
+  <div class="date">2016.10.12</div>
 
-  <img class="blog-single--eyecatch" src="/img/blog/003/00_eyecatch.png" alt="" width="710px">
+  <img class="blog-single--eyecatch" src="/img/blog/032/00_eyecatch.png" alt="" width="710px">
   
-  <h1 class="blog-single--title">今週末はInternational NodeBots Dayですよ！( #NodeBots vol2のイベレポと次回告知 )</h1>
+  <h1 class="blog-single--title">本ブログにもページネーション機能が付きました！Hugoでページネーション機能を作ろう。</h1>
   <div class="blog-single--row">
     <a class="author" href="/members/n0bisuke">
       <img src="/img/members/n0bisuke/author.png" alt="" class="author--avatar">
@@ -449,8 +451,8 @@
     </a>
 
     
-    <a class="series" href="/series/nodejs">
-        Node.js Magazine
+    <a class="series" href="/series/hugojuku">
+        HUGO塾
     </a>
     
 
@@ -458,109 +460,156 @@
   
   <div class="blog-single--content markdown">
 
-<p>こんにちは、のびすけです。</p>
+<p>こんにちは、 dotstudio代表の<a href="https://twitter.com/n0bisuke">のびすけ</a>です。</p>
 
-<p>時間が経ってしまいましたが、NodeBotsハンズオンのレポートをします！ <a href="http://nodebots.connpass.com/event/34073/">明日もイベントがある</a>のでその告知もさせてください（笑）</p>
+<p>このブログはページネーション機能が無かったのですが、そろそろコンテンツ数も増えてきたのでページネーション機能を実装しました。 888888</p>
 
-<h2 id="nodebotsって">NodeBotsって?</h2>
+<p>実際に作る方法を紹介します。</p>
 
-<p>さて、みなさんは「NodeBots」という言葉を知ってますか？</p>
+<h2 id="hugoでページネーション機能を作る">Hugoでページネーション機能を作る</h2>
 
-<p><a href="http://nodebots.io/">http://nodebots.io/</a></p>
+<p>今回はblogセクションにページネーションを実装します。</p>
 
-<p><img src="/img/blog/003/01_nodebots.png" alt="" /></p>
+<p>Hugoのページネーションで調べるとまずは<a href="https://gohugo.io/extras/pagination/">ドキュメントページのここ</a>がヒットします。</p>
 
-<p>NodeBotsとは、Node.jsでハードウェアを制御するイベントやコミュニティの総称です。世界的に開催されています。</p>
+<p>もともとも<code>section/blog.html</code>は以下のようなコードでした。</p>
 
-<p>僕が以前書いた、<a href="http://liginc.co.jp/283711">Webな人でもハードウェア制御が簡単に！Node.jsでJavaScript Roboticsを楽しもう #nodebots_jp</a>を読んでもらえると早いんですけど、いろんな場所でNodeBotsについては書き続けます（笑）</p>
+<pre><code>{{ partial &quot;header.html&quot; . }}
+    &lt;!-- Main Content --&gt;
+    &lt;div id=&quot;blog-card--container&quot;&gt;
+    {{ range first 12 (where .Data.Pages &quot;Type&quot; &quot;blog&quot;) }}
+      {{ .Render &quot;summary&quot;}}
+    {{ end }}
+    &lt;/div&gt;
+{{ partial &quot;footer.html&quot; . }}
+</code></pre>
 
-<h2 id="nodebots-johnny-fiveハンズオン">NodeBots Johnny-Fiveハンズオン</h2>
+<p>ドキュメントページを参照しながら以下のように変更します。</p>
 
-<p><img src="/img/blog/003/02_op.png" alt="" /></p>
+<pre><code>{{ partial &quot;header.html&quot; . }}
 
-<p><a href="http://johnny-five.io/">Johnny-Five</a>というNode.jsで、マイコンボード「Arduino」を制御するライブラリがあります。各国では、このライブラリを使ってNodeBotsのイベントを開催することが多いようです。</p>
+    {{ $paginator := .Paginate (where .Data.Pages &quot;Type&quot; &quot;blog&quot;) 12 }}
+    &lt;!-- Main Content --&gt;
+    &lt;div id=&quot;blog-card--container&quot;&gt;
+       {{ range $paginator.Pages }}
+            {{ .Render &quot;summary&quot; }}
+        {{ end }}
+    &lt;/div&gt;
+    
+    {{ template &quot;_internal/pagination.html&quot; . }}
 
-<h3 id="dmm-make-akibaを会場にvol2開催">DMM.make AKIBAを会場にvol2開催</h3>
+{{ partial &quot;footer.html&quot; . }}
+</code></pre>
 
-<p><img src="/img/blog/003/03_kamimura.png" alt="" /></p>
+<p>これだけでページネーション機能はとりあえず完成です。</p>
 
-<p><a href="http://nodebots.connpass.com/event/31580/">vol2</a>は<a href="https://akiba.dmm-make.com/">DMM.Make AKIBA</a>を会場に実施しました。 DMMの上村さんからDMM.make AKIBAの会場説明でスタートです。大半の方が初めて来たとのことで、会場に興味持っている人も多い印象でした。</p>
+<p><strong>めちゃ簡単ですね！</strong></p>
 
-<p>さて、<strong>ハンズオンでは人によって進捗が変わるため、ゴールをいくつか設定</strong> するようにしました。</p>
+<p>確認してみるとページの下の方に何かいる&hellip;&hellip;！</p>
 
-<p>&nbsp;
-<center>
-<blockquote class="twitter-tweet" data-lang="ja">
-    <p lang="ja" dir="ltr">今日の目標！ぞい！
-        <a href="https://twitter.com/hashtag/nodebots_jp?src=hash">#nodebots_jp</a>
-        <a href="https://t.co/k4Eky2Iz5E">pic.twitter.com/k4Eky2Iz5E</a>
-    </p>&mdash; ちゃんとく (@tokutoku393) <a href="https://twitter.com/tokutoku393/status/742667503654961156">2016年6月14日</a>
-</blockquote>
-<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
-</center></p>
+<p><img src="/img/blog/032/01.png" alt="" /></p>
 
-<p><a href="https://github.com/tableflip/nodebot-workshop">NodeBot Workshop</a>というツールを用いてハンズオンを行うのですが、電子工作はプログラミングフェーズと工作フェーズに分かれるため</p>
+<p>これがページネーションのメニューです。</p>
 
-<ul>
-<li>NodeBot Workshopの3問目（全9問）までクリア</li>
-<li>用意したパーツを使って3問目までを工作してみる</li>
-<li>4問目以降もチャレンジ</li>
-</ul>
+<p>勝手に生成されていてびっくりしますが、<code>{{ template &quot;_internal/pagination.html&quot; . }}</code>の部分でこのメニューが生成されています。</p>
 
-<p>というような設定にしました。</p>
+<p>だけどここから先で割と詰まりました苦笑</p>
 
-<p>&nbsp;
-<img src="/img/blog/003/04_look.png" alt="" /></p>
+<h2 id="見た目とメニューの自由度を上げたい">見た目とメニューの自由度を上げたい</h2>
 
-<p>分からない方にはメンターの方がサポートをして、各々が進めるスタイルのもくもく会に近いタイプのハンズオンです。（ちなみにNodeSchool系のイベントはだいたいこんな感じです）</p>
+<p>このままだとどこでHTMLが生成されているか不明です。<code>_internal/~~~.html</code>はHugoの組み込みテンプレートになっていて、通常は変更することが出来ません。</p>
 
-<p>JavaScriptを使う前提+そこまでJavaScript分からなくても聞けばなんとかなるんじゃないかと思ってた節はあるのですが、参加者の方が書いてくれた<a href="http://wp.pxdesign.jp/2016/06/15/nodebots-johnny-five-arduino-servo/">レポート記事</a>を見る限り、JavaScriptをほとんど触ったことのない初心者だと少しハードルが高かったようでした（苦笑）</p>
-
-<p>これはなんとかしないといけないですね。もう少し丁寧な解説記事などを用意したほうが良さそうだなと思いつつ、とりあえず
-<a href="https://www.github.com/sethvincent/javascripting">NodeSchoolのJavaScriptカリキュラム</a>をお勧めしておきます。</p>
-
-<p>少しは敷居を下げてくれるかもしれません。</p>
-
-<p>&nbsp;
-<img src="/img/blog/003/05_toast.png" alt="" /></p>
-
-<p>頭を使ったあとは、懇親会で感想などをわいわい言い合いました。</p>
-
-<h3 id="感想など">感想など</h3>
-
-<p>主催側の感触なのですが、だいたい2問目まではみんな動かすことができていました。「JSを初めて触った！」という人でも3問目には取り組めてた印象です。2時間弱程度の短い時間にしてはいい進み具合だった気もしてますが、もっと丁寧なサポートも必要だなと感じました。</p>
-
-<p><strong>Johnny-FiveのメリットはJavaScriptで書けてWebとの接続が行いやすい</strong> ところだと思っているので、ハードウェア側だけではなく、 <strong>Milkcocoaを使ったりしてWebと繋げるやり方も紹介したらもっと楽しくなる</strong> 気がしました。</p>
-
-<p>とりあえず、みんな笑顔で終われていたので大満足です。（けっこう大事）</p>
-
-<h2 id="次回は-7-26-明日">次回は <sup>7</sup>&frasl;<sub>26</sub> （明日!）</h2>
-
-<p>さて、こんなイベントを毎月やってるのですが、次回はなんと <sup>7</sup>&frasl;<sub>26</sub> （明日）です（笑）</p>
-
-<p><img src="/img/blog/003/06_vol3.png" alt="" /></p>
-
-<p><a href="http://nodebots.connpass.com/event/34073/">connpassのページ</a>から応募できるので是非今からでも参加登録してください！ :)</p>
+<p><a href="https://www.kakunaga.net/post/160517pagination/">pagination の見た目</a>の記事を見ると、</p>
 
 <ul>
-<li><strong>Web界隈の人でハードウェアや電子工作が気になってる人</strong></li>
-<li><strong>ハードウェア界隈の人でJavaScriptが気になってる人</strong></li>
-<li><strong>その他IoTとか興味ある人</strong></li>
+<li>class=&ldquo;pagination&rdquo;</li>
+<li>class=&ldquo;active&rdquo;</li>
 </ul>
 
-<p>が主な対象ですので、当てはまる！って人は是非お越しください!</p>
+<p>が生成されているからCSSを指定すればいいみたいです。ただ、メニュー項目の自由度は無いので自分で定義してみたいと思います。</p>
 
-<h2 id="そして週末-7-30-土-は全世界同時開催のinternational-nodebots-day">そして週末 <sup>7</sup>&frasl;<sub>30</sub> （土）は全世界同時開催のInternational NodeBots Day!!</h2>
+<p><a href="https://github.com/spf13/hugo/blob/master/tpl/template_embedded.go#L116-L142">Hugoのソース</a>を覗き見ると対象箇所が分かります。</p>
 
-<p><img src="/img/blog/003/07_nodebots_day.png" alt="" /></p>
+<p>ここを元に<code>layouts/partials/paginator.html</code>を作成します。以下ではコメントも入れておきました。</p>
 
-<p><sup>7</sup>&frasl;<sub>30</sub> には全世界同時開催のイベントである<a href="https://github.com/nodebots/nodebotsday">NodeBots Day</a>が開催されます。</p>
+<pre><code>{{ $pag := $.Paginator }}
+{{ if gt $pag.TotalPages 1 }}
+    &lt;ul class=&quot;pagination&quot;&gt;
+        {{/*最初へ*/}}
+        {{ with $pag.First }}
+            &lt;li&gt;
+                &lt;a href=&quot;{{ .URL }}&quot; aria-label=&quot;First&quot;&gt;&lt;span aria-hidden=&quot;true&quot;&gt;最初へ&lt;/span&gt;&lt;/a&gt;
+            &lt;/li&gt;
+        {{ end }}
 
-<p>東京イベントとしてNodeBots Day Tokyoも開催されますので、是非こちらもご参加ください!</p>
+        {{/*前ページ*/}}
+        &lt;li{{ if not $pag.HasPrev }}class=&quot;disabled&quot;{{ end }}&gt;
+            &lt;a href=&quot;{{ if $pag.HasPrev }}{{ $pag.Prev.URL }}{{ end }}&quot; aria-label=&quot;Previous&quot;&gt;
+                &lt;span aria-hidden=&quot;true&quot;&gt;前へ&lt;/span&gt;
+            &lt;/a&gt;
+        &lt;/li&gt;
 
-<p><a href="http://nodebots.connpass.com/event/35559/">http://nodebots.connpass.com/event/35559/</a></p>
+        {{/*番号*/}}
+        {{ range $pag.Pagers }}
+            &lt;li{{ if eq . $pag }}class=&quot;active&quot;{{ end }}&gt;
+                &lt;a href=&quot;{{ .URL }}&quot;&gt;{{ .PageNumber }}&lt;/a&gt;
+            &lt;/li&gt;
+        {{ end }}
+        
+        {{/*次ページ*/}}
+        &lt;li{{ if not $pag.HasNext }}class=&quot;disabled&quot;{{ end }}&gt;
+            &lt;a href=&quot;{{ if $pag.HasNext }}{{ $pag.Next.URL }}{{ end }}&quot; aria-label=&quot;Next&quot;&gt;
+                &lt;span aria-hidden=&quot;true&quot;&gt;次へ&lt;/span&gt;
+            &lt;/a&gt;
+        &lt;/li&gt;
 
-<p>それではイベントでお会いしましょう！</p>
+        {{/*最後へ*/}}
+        {{ with $pag.Last }}
+            &lt;li&gt;
+                &lt;a href=&quot;{{ .URL }}&quot; aria-label=&quot;Last&quot;&gt;&lt;span aria-hidden=&quot;true&quot;&gt;最後へ&lt;/span&gt;&lt;/a&gt;
+            &lt;/li&gt;
+        {{ end }}
+    &lt;/ul&gt;
+{{ end }}
+</code></pre>
+
+<p><code>section/blog.html</code>を以下に修正します。
+<code>_internal</code>で組み込みテンプレートを呼び出していた行を今作成した<code>paginator.html</code>を呼び出すように変更です。</p>
+
+<pre><code>{{ partial &quot;header.html&quot; . }}
+
+    {{ $paginator := .Paginate (where .Data.Pages &quot;Type&quot; &quot;blog&quot;) 12 }}
+    &lt;!-- Main Content --&gt;
+    &lt;div id=&quot;blog-card--container&quot;&gt;
+       {{ range $paginator.Pages }}
+            {{ .Render &quot;summary&quot; }}
+        {{ end }}
+    &lt;/div&gt;
+    
+    {{ partial &quot;paginator.html&quot; . }}
+
+{{ partial &quot;footer.html&quot; . }}
+</code></pre>
+
+<p>これで完成です。</p>
+
+<p><img src="/img/blog/032/02.png" alt="" /></p>
+
+<p>ビルドするとこのような形になりました。</p>
+
+<p>あとは<a href="https://dotstud.io/members/chachmaru/">ちゃちゃまる先生</a>にCSSをあててもらえば終了です。</p>
+
+<h2 id="出来上がったものがこちらです">出来上がったものがこちらです</h2>
+
+<p><img src="/img/blog/032/03.png" alt="" /></p>
+
+<p>いい感じですね。</p>
+
+<h2 id="おわりに">おわりに</h2>
+
+<p>こちら(<a href="http://wdkk.co.jp/note/2015/0915-hugo-pagination/">Hugoでwebサイト構築(9) リストのページネーション(Pagination)</a>)も参考にさせていただきました。</p>
+
+<p>なかなか公式ドキュメントも調べづらいので参考になれば幸いです。</p>
 </div>
 
   
@@ -570,7 +619,7 @@
     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 
     &nbsp;
-    <div class="fb-like" data-href="https://dotstud.io/blog/nodebots-handson-report-vol2/" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
+    <div class="fb-like" data-href="https://dotstud.io/blog/hugo-howto-create-pagination/" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
     
   </div>
 
