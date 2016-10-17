@@ -7,10 +7,132 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Wed, 12 Oct 2016 10:00:16 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 18 Oct 2016 10:00:30 +0900</lastBuildDate>
     <atom:link href="https://dotstud.io/categories/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Azure WebAppsにGitLab連携でデプロイしてみよう</title>
+      <link>https://dotstud.io/blog/azure-webapps-gitlab-connect/</link>
+      <pubDate>Tue, 18 Oct 2016 10:00:30 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/azure-webapps-gitlab-connect/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudio代表の&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;最近&lt;a href=&#34;https://azure.microsoft.com/ja-jp/documentation/articles/app-service-web-overview/&#34;&gt;Azure WebApps&lt;/a&gt;を使って開発をしています。dotstudioではGitLabを利用してソースコード管理をしているのでGitLabとWebAppsを連携し自動デプロイをする方法を紹介します。&lt;/p&gt;
+
+&lt;p&gt;「&lt;a href=&#34;https://christianliebel.com/2016/05/auto-deploying-to-azure-app-services-from-gitlab/&#34;&gt;Auto-Deploying to Azure App Services from GitLab&lt;/a&gt;」を参考にしましたが、調べても英語記事しかなかったので日本語記事は初めてだと思います！&lt;/p&gt;
+
+&lt;h2 id=&#34;今回やること&#34;&gt;今回やること&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://gitlab.com/&#34;&gt;GitLab&lt;/a&gt;はGitHubやBitbucketのようなGitのホスティングサービスです。
+GitHubとBitbucketはWebAppsが公式対応しているため簡単に設定できますが、GitLabは公式対応していないため少しやり方が特殊です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;やりたいことはこの図の通りで、作業者がGitLabにPushしたら自動的にWebAppsにデプロイされる仕組みを作ります。&lt;/p&gt;
+
+&lt;h2 id=&#34;事前準備&#34;&gt;事前準備&lt;/h2&gt;
+
+&lt;p&gt;以下の内容を事前に済ませておきましょう。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;WebAppsのアプリケーションを作成しておく&lt;/li&gt;
+&lt;li&gt;GitLabでリポジトリを作成しておく&lt;/li&gt;
+&lt;li&gt;GitLabに手元のマシンからPushできる状態にしておく&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;設定してみよう&#34;&gt;設定してみよう&lt;/h2&gt;
+
+&lt;h3 id=&#34;1-webappsにgitlabのurlを紐づける&#34;&gt;1. WebAppsにGitLabのURLを紐づける&lt;/h3&gt;
+
+&lt;p&gt;WebAppsのデプロイ設定をします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;アプリのデプロイ &amp;gt; デプロイオプション &amp;gt; ソースの選択 &amp;gt; 外部リポジトリ&lt;/strong&gt;を選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;GitLabのリポジトリURLを入力しましょう。 https形式とSSH形式のどちらでも大丈夫です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;無事に設定が完了すると、メニューの &lt;strong&gt;概要 &amp;gt; 外部リポジトリプロジェクト&lt;/strong&gt;にリポジトリのURLが設定されます。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-webappsのデプロイ用ssh公開鍵を取得する&#34;&gt;2. WebAppsのデプロイ用SSH公開鍵を取得する&lt;/h3&gt;
+
+&lt;p&gt;WebAppsに外部からアクセスするためにWebAppsのSSH公開鍵を取得します。&lt;/p&gt;
+
+&lt;p&gt;通常WebAppsの公開URLにアクセスする場合&lt;code&gt;http://アプリケーション名.azurewebsites.net&lt;/code&gt;というドメインにアクセスしますが、ここでは通常のURLに&lt;code&gt;.scm&lt;/code&gt;が追加されたドメインにアクセスします。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;https://アプリケーション名.scm.azurewebsites.net/api/sshkey?ensurePublicKey=1&lt;/code&gt; にアクセスしてみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ここのssh-rsaから始まるダブルクォートで囲まれている部分が公開鍵になります。&lt;/p&gt;
+
+&lt;p&gt;ちなみに、アプリケーション名がn0bisukeの場合は&lt;code&gt;https://n0bisuke.scm.azurewebsites.net/api/sshkey?ensurePublicKey=1&lt;/code&gt;になります。&lt;/p&gt;
+
+&lt;h3 id=&#34;3-gitlabの対象リポジトリにデプロイ用ssh公開鍵を設定する&#34;&gt;3. GitLabの対象リポジトリにデプロイ用SSH公開鍵を設定する&lt;/h3&gt;
+
+&lt;p&gt;先程のSSH公開鍵をGitLabに設定します。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;https://gitlab.com/ユーザー名/リポジトリ名/deploy_keys&lt;/code&gt;にアクセスしましょう。
+リポジトリの &lt;strong&gt;設定(歯車マーク) &amp;gt; Deploy Keys&lt;/strong&gt;からもアクセスできます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Titleに任意の名前をつけてKeyの項目に先ほどのSSH公開鍵を貼りましょう。&lt;/p&gt;
+
+&lt;p&gt;これでGitLabのリポジトリに鍵を紐付けられ、GitLabからWebAppsにデプロイすることが出来るようになります。&lt;/p&gt;
+
+&lt;h3 id=&#34;4-webappsのwebhookアドレスをgitlabに紐付ける&#34;&gt;4. WebAppsのWebhookアドレスをGitLabに紐付ける&lt;/h3&gt;
+
+&lt;p&gt;ここまででWebAppsとGitLabの連携は一旦出来ているのですが、今回は作業者がGitLabにPushしたらデプロイされるようにしたいため、Pushを検知する部分を設定します。&lt;/p&gt;
+
+&lt;p&gt;WebAppsのメニューから &lt;strong&gt;設定 &amp;gt; プロパティ &amp;gt; デプロイ開始のURL&lt;/strong&gt;の項目にあるURLをコピーしましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;https://$アプリケーション名:パスワード@アプリケーション名.scm.azurewebsites.net/deploy&lt;/code&gt;というURLが設定されているはずです。&lt;/p&gt;
+
+&lt;p&gt;GitLab側に移動し、 &lt;code&gt;https://gitlab.com/ユーザー名/リポジトリ名/hooks&lt;/code&gt;にアクセスしましょう。
+リポジトリの &lt;strong&gt;設定(歯車マーク) &amp;gt; Webhooks&lt;/strong&gt;からもアクセスできます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/08.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;URLの項目に先ほどのWebAppsのWebHookアドレス(&lt;code&gt;https://$アプリケーション名:パスワード@アプリケーション名.scm.azurewebsites.net/deploy&lt;/code&gt;)を貼り付けます。 他の項目は特に変更せずに&lt;code&gt;Add Webhook&lt;/code&gt;で追加します。&lt;/p&gt;
+
+&lt;p&gt;これで設定は完了です。&lt;/p&gt;
+
+&lt;h3 id=&#34;5-試してみる&#34;&gt;5. 試してみる&lt;/h3&gt;
+
+&lt;p&gt;Gitで適当にPushしてみましょう。するとWebAppsのデプロイオプションの項目で同期が確認できます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/09.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;http://アプリケーション名.azurewebsites.net&lt;/code&gt;にアクセスしてみるとソースコードが反映されていることが分かると思います。&lt;/p&gt;
+
+&lt;p&gt;お疲れ様でした！&lt;/p&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;イメージのしやすさから「GitLabからWebAppsにデプロイ」という表現を使いましたが、実際には「WebAppsがGitLab上のソースコードをPullしている」という表現の方が正しいと思います。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;GitLab側はPushがあったことをWebhookでWebAppsに声を掛けてあげて、WebApps側はGitLabから声が掛かったらPullしにいく、という流れです。&lt;/p&gt;
+
+&lt;p&gt;ちなみに今回はWebhookの設定でかなりハマって、「&lt;a href=&#34;https://github.com/projectkudu/kudu/wiki/Continuous-deployment&#34;&gt;projectkudu/kudu&lt;/a&gt;」や「&lt;a href=&#34;http://stackoverflow.com/questions/31538152/publishing-to-azure-web-apps-from-gitlab-repository-on-trigger&#34;&gt;Publishing to Azure Web Apps from GitLab repository on trigger&lt;/a&gt;」に&lt;code&gt;https://$mysite:BigRandomPassword@mysite.scm.azurewebsites.net/deploy&lt;/code&gt;がWebhookのURLだという記載があるのですが、&lt;code&gt;BigRandomPassword&lt;/code&gt;が謎すぎてかなり詰んでました。 WebApps側で「デプロイ開始のURL」という表現になってるのも分かりにくい気がしますね（苦笑）。&lt;/p&gt;
+
+&lt;p&gt;WebAppsとGitLabの仕様が変わるまではしばらくこの手順が生きるはずですので、参考になれば幸いです。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>本ブログにもページネーション機能が付きました！Hugoでページネーション機能を作ろう</title>
       <link>https://dotstud.io/blog/hugo-howto-create-pagination/</link>
       <pubDate>Wed, 12 Oct 2016 10:00:16 +0900</pubDate>
@@ -2919,129 +3041,6 @@ req.end();
 &lt;p&gt;dotstudioメンバーの渡航のためにまとめてみた情報ですので、文量が多くなってしまいました。&lt;/p&gt;
 
 &lt;p&gt;MFSZまで1ヶ月を切っていますが、まだ宿も飛行機も間に合います。意外と安く楽しむことができますので、ご興味を持たれた方はぜひ深センへ遊びに行ってみてくださいね！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>IoTの情報が集まるサイトまとめ【プランナー、ディレクター向け】</title>
-      <link>https://dotstud.io/blog/iot-news-media-matome/</link>
-      <pubDate>Fri, 30 Sep 2016 10:00:16 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/iot-news-media-matome/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは。dotstudioの岩上です。&lt;/p&gt;
-
-&lt;p&gt;IoT分野はまだまだ可能性が多く、黎明期のweb業界と同じ雰囲気を感じています。10年近くWeb業界にどっぷりいるのですが、ソフトウェアとハードウェアで関わる人数もスケジュールも扱う単位も違うことに戸惑いながらも楽しく動いています。&lt;/p&gt;
-
-&lt;p&gt;今回は、IoT業界で情報を探しているプランナー、ディレクター向けにチェックしておきたいサイトをまとめてみました。&lt;/p&gt;
-
-&lt;h2 id=&#34;iotnews&#34;&gt;IoTNEWS&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/028/01_IoTNEWS.png&#34; alt=&#34;&#34; /&gt;
-&lt;a href=&#34;https://iotnews.jp/&#34;&gt;https://iotnews.jp/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;dotstudioのCEO・のびすけが主催しているIoTLTにも参加して頂いているIoTNEWSさん。dotstudioの設立時にもインタビューで取り上げて頂きました（記事は&lt;a href=&#34;https://iotnews.jp/archives/26459&#34;&gt;こちら&lt;/a&gt;）。&lt;/p&gt;
-
-&lt;p&gt;人工知能からスマートホーム、コネクテッドカー、ドローン、要素技術など、1日10記事前後の更新。IoTに特化した、月間25万PVの専門メディアです。&lt;/p&gt;
-
-&lt;h2 id=&#34;gigazine&#34;&gt;Gigazine&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/028/02_Gigazine.png&#34; alt=&#34;&#34; /&gt;
-&lt;a href=&#34;http://gigazine.net/&#34;&gt;http://gigazine.net/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;ガジェットからスマホ、マンガ、アプリ、インタビューやイベントレポートまで幅広いジャンルの記事を扱っています。安定のiPhone7や、テスラ、AI、VR、IoT系の記事も多く、見ていて飽きません。&lt;/p&gt;
-
-&lt;p&gt;何より情報が早く、2000年から運営している老舗メディア。サイト名の由来がオンラインマガジンとしてギガバイト級のサイトという意味で、「GIGA」＋「MAGAZINE」＝Gigazineのようです。（Wikipedia参照）&lt;/p&gt;
-
-&lt;h2 id=&#34;engadget&#34;&gt;engadget&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/028/03_engadget.png&#34; alt=&#34;&#34; /&gt;
-&lt;a href=&#34;http://japanese.engadget.com/&#34;&gt;http://japanese.engadget.com/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;AOL運営でUS、UK、スペイン、ドイツ、中国で展開しているengadget。2004年3月にアメリカでスタートした老舗メディア。日本では月間1,500万PV。タイアップ記事は2,000,000円〜。媒体資料がわかりやすくかっこいいです。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;媒体資料はこちら：&lt;a href=&#34;http://o.aolcdn.com/os/japan/mediaguide/Engadget_201607-09_new2.pdf&#34;&gt;ダウンロード用媒体資料&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;ガジェット通信&#34;&gt;ガジェット通信&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/028/04_getnews.png&#34; alt=&#34;&#34; /&gt;
-&lt;a href=&#34;http://getnews.jp/&#34;&gt;http://getnews.jp/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;2チャンネル検索などを提供している、（有）未来検索ブラジルが2008年に立ち上げたメディア。現在は東京産業新聞社に運営が移管されています。ゲームからグルメ、ガジェット、AI、VRと幅広いです。エンタメ系が強い印象。&lt;/p&gt;
-
-&lt;h2 id=&#34;アスキー&#34;&gt;アスキー&lt;/h2&gt;
-
-&lt;h3 id=&#34;週刊アスキー&#34;&gt;週刊アスキー&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/028/05_weeklyascii.png&#34; alt=&#34;&#34; /&gt;
-&lt;a href=&#34;http://weekly.ascii.jp/&#34;&gt;http://weekly.ascii.jp/&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;ascii-jp-ascii-start-up&#34;&gt;ASCII.jp×ASCII START UP&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/028/06_ASCIIjp.png&#34; alt=&#34;&#34; /&gt;
-&lt;a href=&#34;http://ascii.jp/startup/&#34;&gt;http://ascii.jp/startup/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;1997年から運営開始。技術者向けのコンテンツ、デジタル家電、ゲーム、IoTと幅広くIT情報総合サイトとして運営している老舗メディアです。&lt;/p&gt;
-
-&lt;p&gt;紙媒体は2015年6月に惜しまれながらも休刊しましたが……紙媒体の時から見ています。2015年4月時点で月間4,000万PV／タイアップ記事は1,500,000円〜。&lt;/p&gt;
-
-&lt;p&gt;IoT＆H/W BIZ DAY 2ではお世話になりました。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://dotstud.io/blog/aascii-startup-event-report/&#34;&gt;ASCII主催のIoTイベント！IoT＆H/W BIZ DAY 2に出展しました&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;lyve&#34;&gt;LYVE&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/028/07_LYVE.png&#34; alt=&#34;&#34; /&gt;
-&lt;a href=&#34;http://hashlyve.com/&#34;&gt;http://hashlyve.com/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;シリコンバレーから最新のガジェットやIoTプロダクトを動画で発信する分散メディア。昨年、サンフランシスコでお世話になった&lt;a href=&#34;http://scrum.vc/ja/&#34;&gt;SCRUMVENTURESさん&lt;/a&gt;の出資先の1つとなっています。毎日数本動画として情報発信する体制づくりもスゴイ。最近はFacebookでの更新が多いです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/028/08_LYVEFB.png&#34; alt=&#34;&#34; /&gt;
-&lt;a href=&#34;https://www.facebook.com/hashlyve/&#34;&gt;https://www.facebook.com/hashlyve/&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;kickstarter-fan&#34;&gt;Kickstarter fan！&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/028/09_Kickstarterfan.png&#34; alt=&#34;&#34; /&gt;
-&lt;a href=&#34;http://www.kickstarterfan.com/&#34;&gt;http://www.kickstarterfan.com/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;その名の通り、キックスターターでおすすめの商品をわかりやすくまとめてくれるメディアです。英語が苦手な人はおすすめ。&lt;a href=&#34;http://www.kickstarterfan.com/archives/21568&#34;&gt;まくらで1億円のファンディング&lt;/a&gt;とかスゴイ。&lt;/p&gt;
-
-&lt;p&gt;本家Kickstarterはこちら。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/028/10_Kickstarter.png&#34; alt=&#34;&#34; /&gt;
-&lt;a href=&#34;https://www.kickstarter.com/&#34;&gt;https://www.kickstarter.com/&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;techable&#34;&gt;Techable&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/028/11_Techable.png&#34; alt=&#34;&#34; /&gt;
-&lt;a href=&#34;http://techable.jp/&#34;&gt;http://techable.jp/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;以前はマーケティングよりだった気がしますが、現在はガジェットやIoTコンテンツが多めです。AdGangやISUTAを運営するMashMediaさん運営しているTechメディア。&lt;/p&gt;
-
-&lt;p&gt;Startupタブがおすすめです。&lt;/p&gt;
-
-&lt;h2 id=&#34;補足-海外サイト&#34;&gt;【補足】海外サイト&lt;/h2&gt;
-
-&lt;h3 id=&#34;hacker-io&#34;&gt;hacker.io&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/028/12_hacksterio.png&#34; alt=&#34;&#34; /&gt;
-&lt;a href=&#34;https://www.hackster.io/&#34;&gt;https://www.hackster.io/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;画像、動画、テキストで開発事例や実際の作り方を無料公開するサイトです。RaspberryPiやArduino、Edison、Tesselなど、幅広くノウハウを提供している。プロダクトの工程がわかって楽しい。&lt;/p&gt;
-
-&lt;p&gt;ソースコードも公開されているので、IoT開発しているエンジニアは何かヒントになるかも。&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;IoTは分野的に広いので、効率よく情報をキャッチしながら新しいアイディアや企画のモトにしていきたいですね。気になるサイトは是非feed登録してください。&lt;/p&gt;
-
-&lt;p&gt;（&lt;a href=&#34;dotstud.io&#34;&gt;dotstudio&lt;/a&gt;も合わせて登録してもらえたら嬉しいです）&lt;/p&gt;
 </description>
     </item>
     

@@ -7,10 +7,132 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Wed, 12 Oct 2016 10:00:16 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 18 Oct 2016 10:00:30 +0900</lastBuildDate>
     <atom:link href="https://dotstud.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Azure WebAppsにGitLab連携でデプロイしてみよう</title>
+      <link>https://dotstud.io/blog/azure-webapps-gitlab-connect/</link>
+      <pubDate>Tue, 18 Oct 2016 10:00:30 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/azure-webapps-gitlab-connect/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudio代表の&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;最近&lt;a href=&#34;https://azure.microsoft.com/ja-jp/documentation/articles/app-service-web-overview/&#34;&gt;Azure WebApps&lt;/a&gt;を使って開発をしています。dotstudioではGitLabを利用してソースコード管理をしているのでGitLabとWebAppsを連携し自動デプロイをする方法を紹介します。&lt;/p&gt;
+
+&lt;p&gt;「&lt;a href=&#34;https://christianliebel.com/2016/05/auto-deploying-to-azure-app-services-from-gitlab/&#34;&gt;Auto-Deploying to Azure App Services from GitLab&lt;/a&gt;」を参考にしましたが、調べても英語記事しかなかったので日本語記事は初めてだと思います！&lt;/p&gt;
+
+&lt;h2 id=&#34;今回やること&#34;&gt;今回やること&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://gitlab.com/&#34;&gt;GitLab&lt;/a&gt;はGitHubやBitbucketのようなGitのホスティングサービスです。
+GitHubとBitbucketはWebAppsが公式対応しているため簡単に設定できますが、GitLabは公式対応していないため少しやり方が特殊です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;やりたいことはこの図の通りで、作業者がGitLabにPushしたら自動的にWebAppsにデプロイされる仕組みを作ります。&lt;/p&gt;
+
+&lt;h2 id=&#34;事前準備&#34;&gt;事前準備&lt;/h2&gt;
+
+&lt;p&gt;以下の内容を事前に済ませておきましょう。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;WebAppsのアプリケーションを作成しておく&lt;/li&gt;
+&lt;li&gt;GitLabでリポジトリを作成しておく&lt;/li&gt;
+&lt;li&gt;GitLabに手元のマシンからPushできる状態にしておく&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;設定してみよう&#34;&gt;設定してみよう&lt;/h2&gt;
+
+&lt;h3 id=&#34;1-webappsにgitlabのurlを紐づける&#34;&gt;1. WebAppsにGitLabのURLを紐づける&lt;/h3&gt;
+
+&lt;p&gt;WebAppsのデプロイ設定をします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;アプリのデプロイ &amp;gt; デプロイオプション &amp;gt; ソースの選択 &amp;gt; 外部リポジトリ&lt;/strong&gt;を選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;GitLabのリポジトリURLを入力しましょう。 https形式とSSH形式のどちらでも大丈夫です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;無事に設定が完了すると、メニューの &lt;strong&gt;概要 &amp;gt; 外部リポジトリプロジェクト&lt;/strong&gt;にリポジトリのURLが設定されます。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-webappsのデプロイ用ssh公開鍵を取得する&#34;&gt;2. WebAppsのデプロイ用SSH公開鍵を取得する&lt;/h3&gt;
+
+&lt;p&gt;WebAppsに外部からアクセスするためにWebAppsのSSH公開鍵を取得します。&lt;/p&gt;
+
+&lt;p&gt;通常WebAppsの公開URLにアクセスする場合&lt;code&gt;http://アプリケーション名.azurewebsites.net&lt;/code&gt;というドメインにアクセスしますが、ここでは通常のURLに&lt;code&gt;.scm&lt;/code&gt;が追加されたドメインにアクセスします。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;https://アプリケーション名.scm.azurewebsites.net/api/sshkey?ensurePublicKey=1&lt;/code&gt; にアクセスしてみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ここのssh-rsaから始まるダブルクォートで囲まれている部分が公開鍵になります。&lt;/p&gt;
+
+&lt;p&gt;ちなみに、アプリケーション名がn0bisukeの場合は&lt;code&gt;https://n0bisuke.scm.azurewebsites.net/api/sshkey?ensurePublicKey=1&lt;/code&gt;になります。&lt;/p&gt;
+
+&lt;h3 id=&#34;3-gitlabの対象リポジトリにデプロイ用ssh公開鍵を設定する&#34;&gt;3. GitLabの対象リポジトリにデプロイ用SSH公開鍵を設定する&lt;/h3&gt;
+
+&lt;p&gt;先程のSSH公開鍵をGitLabに設定します。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;https://gitlab.com/ユーザー名/リポジトリ名/deploy_keys&lt;/code&gt;にアクセスしましょう。
+リポジトリの &lt;strong&gt;設定(歯車マーク) &amp;gt; Deploy Keys&lt;/strong&gt;からもアクセスできます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Titleに任意の名前をつけてKeyの項目に先ほどのSSH公開鍵を貼りましょう。&lt;/p&gt;
+
+&lt;p&gt;これでGitLabのリポジトリに鍵を紐付けられ、GitLabからWebAppsにデプロイすることが出来るようになります。&lt;/p&gt;
+
+&lt;h3 id=&#34;4-webappsのwebhookアドレスをgitlabに紐付ける&#34;&gt;4. WebAppsのWebhookアドレスをGitLabに紐付ける&lt;/h3&gt;
+
+&lt;p&gt;ここまででWebAppsとGitLabの連携は一旦出来ているのですが、今回は作業者がGitLabにPushしたらデプロイされるようにしたいため、Pushを検知する部分を設定します。&lt;/p&gt;
+
+&lt;p&gt;WebAppsのメニューから &lt;strong&gt;設定 &amp;gt; プロパティ &amp;gt; デプロイ開始のURL&lt;/strong&gt;の項目にあるURLをコピーしましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;https://$アプリケーション名:パスワード@アプリケーション名.scm.azurewebsites.net/deploy&lt;/code&gt;というURLが設定されているはずです。&lt;/p&gt;
+
+&lt;p&gt;GitLab側に移動し、 &lt;code&gt;https://gitlab.com/ユーザー名/リポジトリ名/hooks&lt;/code&gt;にアクセスしましょう。
+リポジトリの &lt;strong&gt;設定(歯車マーク) &amp;gt; Webhooks&lt;/strong&gt;からもアクセスできます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/08.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;URLの項目に先ほどのWebAppsのWebHookアドレス(&lt;code&gt;https://$アプリケーション名:パスワード@アプリケーション名.scm.azurewebsites.net/deploy&lt;/code&gt;)を貼り付けます。 他の項目は特に変更せずに&lt;code&gt;Add Webhook&lt;/code&gt;で追加します。&lt;/p&gt;
+
+&lt;p&gt;これで設定は完了です。&lt;/p&gt;
+
+&lt;h3 id=&#34;5-試してみる&#34;&gt;5. 試してみる&lt;/h3&gt;
+
+&lt;p&gt;Gitで適当にPushしてみましょう。するとWebAppsのデプロイオプションの項目で同期が確認できます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/09.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;http://アプリケーション名.azurewebsites.net&lt;/code&gt;にアクセスしてみるとソースコードが反映されていることが分かると思います。&lt;/p&gt;
+
+&lt;p&gt;お疲れ様でした！&lt;/p&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;イメージのしやすさから「GitLabからWebAppsにデプロイ」という表現を使いましたが、実際には「WebAppsがGitLab上のソースコードをPullしている」という表現の方が正しいと思います。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;GitLab側はPushがあったことをWebhookでWebAppsに声を掛けてあげて、WebApps側はGitLabから声が掛かったらPullしにいく、という流れです。&lt;/p&gt;
+
+&lt;p&gt;ちなみに今回はWebhookの設定でかなりハマって、「&lt;a href=&#34;https://github.com/projectkudu/kudu/wiki/Continuous-deployment&#34;&gt;projectkudu/kudu&lt;/a&gt;」や「&lt;a href=&#34;http://stackoverflow.com/questions/31538152/publishing-to-azure-web-apps-from-gitlab-repository-on-trigger&#34;&gt;Publishing to Azure Web Apps from GitLab repository on trigger&lt;/a&gt;」に&lt;code&gt;https://$mysite:BigRandomPassword@mysite.scm.azurewebsites.net/deploy&lt;/code&gt;がWebhookのURLだという記載があるのですが、&lt;code&gt;BigRandomPassword&lt;/code&gt;が謎すぎてかなり詰んでました。 WebApps側で「デプロイ開始のURL」という表現になってるのも分かりにくい気がしますね（苦笑）。&lt;/p&gt;
+
+&lt;p&gt;WebAppsとGitLabの仕様が変わるまではしばらくこの手順が生きるはずですので、参考になれば幸いです。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>本ブログにもページネーション機能が付きました！Hugoでページネーション機能を作ろう</title>
       <link>https://dotstud.io/blog/hugo-howto-create-pagination/</link>
       <pubDate>Wed, 12 Oct 2016 10:00:16 +0900</pubDate>
@@ -2725,185 +2847,6 @@ req.end();
 &lt;p&gt;IoTは分野的に広いので、効率よく情報をキャッチしながら新しいアイディアや企画のモトにしていきたいですね。気になるサイトは是非feed登録してください。&lt;/p&gt;
 
 &lt;p&gt;（&lt;a href=&#34;dotstud.io&#34;&gt;dotstudio&lt;/a&gt;も合わせて登録してもらえたら嬉しいです）&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>単三電池をIoT化できるMabeeeで心霊現象をおこしてみた！</title>
-      <link>https://dotstud.io/blog/mabeee-summer-horror-comic/</link>
-      <pubDate>Wed, 28 Sep 2016 10:00:00 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/mabeee-summer-horror-comic/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、ロボット女子のおこめです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/026/01_ocome.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/026/01.png&#34; alt=&#34;&#34; /&gt;
-突然ですが、&lt;strong&gt;夏は暑くて嫌&lt;/strong&gt;って思いますよね、うららさん？&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/026/02_urara.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;
-&lt;img src=&#34;https://dotstud.io/img/blog/026/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;このオフィスにはクーラーがありませんし、&lt;strong&gt;とにかく涼しくなりたい&lt;/strong&gt;って思いますよね、うららさん？&lt;/p&gt;
-
-&lt;p&gt;あー、私の大好きで大好きで大好きなうららさんを &lt;strong&gt;オフィスで涼しく快適に過ごせるようにしてあげたい&lt;/strong&gt;。それでオフィスラブを繰り広げるんだ。夜になって、「みんな帰ったね？　これからは私たちの時間だよ」 なんてね。そこから……（ここでは書けない）。快適なオフィスから、うららさんは逃れることができないし、もう逃さないから。&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;
-&lt;img src=&#34;https://dotstud.io/img/blog/026/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;そんな風に涼しくしたいので、単三電池をIoT化できる「MaBeeee」というものを用意しました。これを使って、&lt;strong&gt;背筋が冷えるような心霊現象を起こしたいと思います。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;
-&lt;img src=&#34;https://dotstud.io/img/blog/026/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;「&lt;a href=&#34;http://mabeee.mobi/&#34;&gt;MaBeee&lt;/a&gt;」は単四電池に取り付けて使うアイテム。ものをスマートフォンアプリから操作できるようになるんです！　「かたむき」「ふる」「こえ」「とけい」「でんぱ」「ればー」「すいっち」といったものをスイッチにして制御できちゃいます。&lt;/p&gt;
-
-&lt;p&gt;大好きなうららさんがオフィスで涼しく過ごせるよう、背筋を冷やしてみせますよ〜！&lt;/p&gt;
-
-&lt;h2 id=&#34;第一夜&#34;&gt;第一夜&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/026/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ということで早速やっていきましょう。まずは「&lt;strong&gt;玄関のドアを開けたら人形が光る&lt;/strong&gt;」というドッキリをやりたいと思います。&lt;/p&gt;
-
-&lt;p&gt;玄関に人形を吊るし、その下にMabeeeをいれた懐中電灯を置きます。&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;
-&lt;img src=&#34;https://dotstud.io/img/blog/026/07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;こちらが実際のアプリ画面です。今回は「こえ」の機能を使ってみます。私が声をだしたら懐中電灯のスイッチがオンになるようにします！&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;
-&lt;img src=&#34;https://dotstud.io/img/blog/026/08.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;今回は、大きさが80を超えたらONにするよう、設定してみました！&lt;/p&gt;
-
-&lt;p&gt;あ、うららさんが帰ってきたようです。&lt;/p&gt;
-
-&lt;h2 id=&#34;こえ-を利用して人形を照らす&#34;&gt;〜「こえ」を利用して人形を照らす〜&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/026/09_voice1.png&#34; alt=&#34;&#34; /&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/026/10_voice2.png&#34; alt=&#34;&#34; /&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/026/11_voice3.png&#34; alt=&#34;&#34; /&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/026/12_voice4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;（うまくいきました……！）&lt;/p&gt;
-
-&lt;h2 id=&#34;第二夜&#34;&gt;第二夜&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/026/13.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;一つ目のドッキリは成功。まだ足りない気がするので、次は「&lt;strong&gt;スマホを持ち上げると突然ラジオが鳴りだす&lt;/strong&gt;」というどっきりをしようと思います。&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;
-&lt;img src=&#34;https://dotstud.io/img/blog/026/14.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ラジオにMabeeeを入れておいて、横に寝かせたスマホを立てたらスイッチがオンになるようにします！　&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;
-&lt;img src=&#34;https://dotstud.io/img/blog/026/15.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;MaBeeeでは、反対に「起きているものを寝かせる」のをスイッチにするのも可能です。&lt;/p&gt;
-
-&lt;h2 id=&#34;かたむき-を利用してラジオを鳴らす&#34;&gt;〜「かたむき」を利用してラジオを鳴らす〜&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/026/16_slope.png&#34; alt=&#34;&#34; /&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/026/17_slope.png&#34; alt=&#34;&#34; /&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/026/18_slope.png&#34; alt=&#34;&#34; /&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/026/19_slope.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;（今度も成功しました……！）&lt;/p&gt;
-
-&lt;h2 id=&#34;第三夜&#34;&gt;第三夜&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/026/20.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;最後にもう1つだけどっきりをしておきましょう。「&lt;strong&gt;ドアを開けようとすると、ドアが勝手に開く&lt;/strong&gt;」ということをします。使うのは、スマホで電源のON・OFFができる「すいっち」という機能。&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;
-&lt;img src=&#34;https://dotstud.io/img/blog/026/21.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Mabeeeを入れたミニ四駆をドアと繋いでおいて、「すいっち」で、遠隔でもスイッチを入れられるようにします！&lt;/p&gt;
-
-&lt;h3 id=&#34;すいっち-を利用してドアを開ける&#34;&gt;〜「すいっち」を利用してドアを開ける〜&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/026/22_switch.png&#34; alt=&#34;&#34; /&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/026/23_switch.png&#34; alt=&#34;&#34; /&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/026/24_switch.png&#34; alt=&#34;&#34; /&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/026/25_switch.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;（完璧です……！）&lt;/p&gt;
-
-&lt;p&gt;・&lt;/p&gt;
-
-&lt;p&gt;・&lt;/p&gt;
-
-&lt;p&gt;・&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/026/26.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;お〜〜〜こ〜〜〜め〜〜〜！&lt;/p&gt;
-
-&lt;p&gt;覚えてろよ〜〜〜〜〜！&lt;/p&gt;
-
-&lt;h2 id=&#34;後日&#34;&gt;後日&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/026/27.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;うららさんから「最近ポケモンが流行ってるらしいから、おこめちゃんも流行りに乗りなよ」と言われてゲームボーイアドバンスを渡されました。&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;
-&lt;img src=&#34;https://dotstud.io/img/blog/026/28.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;今まではポケモンを一匹も知らなかったのですが、今では何匹かポケモンが分かるようになりました。このようにうららさんから学ぶことが沢山あります。やっぱり尊敬する先輩です。好き。&lt;/p&gt;
-
-&lt;p&gt;・&lt;/p&gt;
-
-&lt;p&gt;・&lt;/p&gt;
-
-&lt;p&gt;・&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/026/29.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;（スッ……）&lt;/p&gt;
-
-&lt;p&gt;・&lt;/p&gt;
-
-&lt;p&gt;・&lt;/p&gt;
-
-&lt;p&gt;・&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/026/30.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;おこめ「きたぁあああああああ！！！！　やっとピカチュウゲットぉおおおおおお！！！」&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;
-&lt;img src=&#34;https://dotstud.io/img/blog/026/31.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;うらら「いけ、MaBeeeの必殺技！『&lt;strong&gt;スイッチを切る&lt;/strong&gt;』」&lt;/p&gt;
-
-&lt;p&gt;おこめ「は？？？　な、なんだ？」&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;
-&lt;img src=&#34;https://dotstud.io/img/blog/026/32.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;うらら「なんだかんだと言われたら、答えてあげるが世の情け。おこめのポケモンデータは私が消したっ！」&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;
-&lt;img src=&#34;https://dotstud.io/img/blog/026/33.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;おこめ（……仕返しが地味すぎる……！）&lt;/p&gt;
-
-&lt;p&gt;このとき私は思った。&lt;strong&gt;心霊現象よりも怖いのは「中途半端なオチ」&lt;/strong&gt; だと……。&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;〜FIN〜&lt;/center&gt;&lt;/p&gt;
 </description>
     </item>
     
