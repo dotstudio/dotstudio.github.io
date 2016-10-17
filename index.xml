@@ -46,7 +46,7 @@ GitHubとBitbucketはWebAppsが公式対応しているため簡単に設定で�
 
 &lt;h2 id=&#34;設定してみよう&#34;&gt;設定してみよう&lt;/h2&gt;
 
-&lt;h3 id=&#34;1-webappsにgitlabのurlを紐づける&#34;&gt;1. WebAppsにGitLabのURLを紐づける&lt;/h3&gt;
+&lt;h3 id=&#34;1-webappsにgitlabのurlを紐付ける&#34;&gt;1. WebAppsにGitLabのURLを紐付ける&lt;/h3&gt;
 
 &lt;p&gt;WebAppsのデプロイ設定をします。&lt;/p&gt;
 
@@ -72,26 +72,26 @@ GitHubとBitbucketはWebAppsが公式対応しているため簡単に設定で�
 
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;ここのssh-rsaから始まるダブルクォートで囲まれている部分が公開鍵になります。&lt;/p&gt;
+&lt;p&gt;このssh-rsaから始まるダブルクォートで囲まれている部分が公開鍵になります。&lt;/p&gt;
 
 &lt;p&gt;ちなみに、アプリケーション名がn0bisukeの場合は&lt;code&gt;https://n0bisuke.scm.azurewebsites.net/api/sshkey?ensurePublicKey=1&lt;/code&gt;になります。&lt;/p&gt;
 
 &lt;h3 id=&#34;3-gitlabの対象リポジトリにデプロイ用ssh公開鍵を設定する&#34;&gt;3. GitLabの対象リポジトリにデプロイ用SSH公開鍵を設定する&lt;/h3&gt;
 
-&lt;p&gt;先程のSSH公開鍵をGitLabに設定します。&lt;/p&gt;
+&lt;p&gt;先ほどのSSH公開鍵をGitLabに設定します。&lt;/p&gt;
 
 &lt;p&gt;&lt;code&gt;https://gitlab.com/ユーザー名/リポジトリ名/deploy_keys&lt;/code&gt;にアクセスしましょう。
 リポジトリの &lt;strong&gt;設定(歯車マーク) &amp;gt; Deploy Keys&lt;/strong&gt;からもアクセスできます。&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Titleに任意の名前をつけてKeyの項目に先ほどのSSH公開鍵を貼りましょう。&lt;/p&gt;
+&lt;p&gt;Titleの項目に任意の名前を入力し、Keyの項目に先ほどのSSH公開鍵を貼りましょう。&lt;/p&gt;
 
 &lt;p&gt;これでGitLabのリポジトリに鍵を紐付けられ、GitLabからWebAppsにデプロイすることが出来るようになります。&lt;/p&gt;
 
 &lt;h3 id=&#34;4-webappsのwebhookアドレスをgitlabに紐付ける&#34;&gt;4. WebAppsのWebhookアドレスをGitLabに紐付ける&lt;/h3&gt;
 
-&lt;p&gt;ここまででWebAppsとGitLabの連携は一旦出来ているのですが、今回は作業者がGitLabにPushしたらデプロイされるようにしたいため、Pushを検知する部分を設定します。&lt;/p&gt;
+&lt;p&gt;ここまでの作業でWebAppsとGitLabの連携は出来ているのですが、今回は作業者がGitLabにPushしたらデプロイされる仕組みにしたいため、Pushを検知するための設定をします。&lt;/p&gt;
 
 &lt;p&gt;WebAppsのメニューから &lt;strong&gt;設定 &amp;gt; プロパティ &amp;gt; デプロイ開始のURL&lt;/strong&gt;の項目にあるURLをコピーしましょう。&lt;/p&gt;
 
