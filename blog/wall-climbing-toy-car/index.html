@@ -65,32 +65,32 @@
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Raspberry Piの動的IPアドレスをNode.js経由でHipChatに通知してみたいと思います。">
+    <meta name="description" content="">
     <meta name="author" content="dotstudio Inc.">
-    <meta content="https://dotstud.io/img/blog/033/00_eyecatch.png">
+    <meta content="https://dotstud.io/img/blog/040/00_eyecatch.png">
     
-    <meta property="og:title" content="地味に便利！Raspberry Piが起動したらIPアドレスを通知するチャットボットを作る | dotstudio" />
+    <meta property="og:title" content="ラジコンが壁を登る？WALL CLIMBERを試してみた | dotstudio" />
     <meta property="og:locale" content="ja_JP" />
     <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://dotstud.io/blog/raspberry-pi-ip-notification/" />
+    <meta property="og:url" content="https://dotstud.io/blog/wall-climbing-toy-car/" />
     <meta property="og:site_name" content="dotstudio（ドットスタジオ）" />
-    <meta property="og:image" content="https://dotstud.io/img/blog/033/00_eyecatch.png" />
-    <meta property="og:image:secure_url" content="https://dotstud.io/img/blog/033/00_eyecatch.png" />
-    <meta property="og:description" content="Raspberry Piの動的IPアドレスをNode.js経由でHipChatに通知してみたいと思います。" />
+    <meta property="og:image" content="https://dotstud.io/img/blog/040/00_eyecatch.png" />
+    <meta property="og:image:secure_url" content="https://dotstud.io/img/blog/040/00_eyecatch.png" />
+    <meta property="og:description" content="" />
     <meta property="article:author" content="https://www.facebook.com/dotstud10/" /> 
     <meta property="fb:app_id" content="296336307370435" />
     <meta property="fb:pages" content="1013196712108753" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image:src" content="https://dotstud.io/img/blog/033/00_eyecatch.png">
+    <meta name="twitter:image:src" content="https://dotstud.io/img/blog/040/00_eyecatch.png">
     <meta name="twitter:site" content="@dotstud_io" />
-    <meta name="twitter:url" content="https://dotstud.io/blog/raspberry-pi-ip-notification/">
-    <meta name="twitter:description" content="Raspberry Piの動的IPアドレスをNode.js経由でHipChatに通知してみたいと思います。">
-    <meta name="twitter:title" content="地味に便利！Raspberry Piが起動したらIPアドレスを通知するチャットボットを作る | dotstudio">
+    <meta name="twitter:url" content="https://dotstud.io/blog/wall-climbing-toy-car/">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:title" content="ラジコンが壁を登る？WALL CLIMBERを試してみた | dotstudio">
     <meta name="twitter:creator" content="@dotstud_io" />
 
     
     <meta name="google-site-verification" content="oW2fcSG1fFnkDoRCGFJ0IGGebtBr8FjV2twoFMd7Skc" />
-    <title>地味に便利！Raspberry Piが起動したらIPアドレスを通知するチャットボットを作る | dotstudio</title>
+    <title>ラジコンが壁を登る？WALL CLIMBERを試してみた | dotstudio</title>
     
 
     <link rel="stylesheet" href="/css/loader.css"> 
@@ -425,8 +425,6 @@
   
 
   
-    
-  
 
   
 
@@ -453,177 +451,93 @@
 }(document, 'script', 'facebook-jssdk'));</script>
 
 <article class="blog-single">
-  <div class="date">2016.10.11</div>
+  <div class="date">2016.10.21</div>
 
-  <img class="blog-single--eyecatch" src="/img/blog/033/00_eyecatch.png" alt="" width="710px">
+  <img class="blog-single--eyecatch" src="/img/blog/040/00_eyecatch.png" alt="" width="710px">
   
-  <h1 class="blog-single--title">地味に便利！Raspberry Piが起動したらIPアドレスを通知するチャットボットを作る</h1>
+  <h1 class="blog-single--title">ラジコンが壁を登る？WALL CLIMBERを試してみた</h1>
   <div class="blog-single--row">
-    <a class="author" href="/members/n0bisuke">
-      <img src="/img/members/n0bisuke/author.png" alt="" class="author--avatar">
-      <p class="author--name">のびすけ</p>
+    <a class="author" href="/members/urara">
+      <img src="/img/members/urara/author.png" alt="" class="author--avatar">
+      <p class="author--name">うらら</p>
     </a>
 
-    
-    <a class="series" href="/series/bot">
-        BOTstudio
-    </a>
     
 
   </div>
   
   <div class="blog-single--content markdown">
 
-<p>こんにちは、代表の<a href="https://twitter.com/n0bisuke">のびすけ</a>です。</p>
+<p>こんにちは、dotstudioエディターのうらら（@uraranbon）です。
+普段は日本を拠点にしていますが、今は中国の深センにいます。</p>
 
-<p>Raspberry Piは起動するたびにIPアドレスが変わってしまうことがありますよね。
-だいたいの人はSSH接続していると思うのでIPアドレスが変わると再確認をしないといけませんが、 <strong>RaspberryPiは基本的にディスプレイとキーボードを接続しないとIPアドレスの確認できないのがめんどくさいですね</strong>。 （FTDIとかはありますがこれも手間はあります。）</p>
+<p>中国で2016/10/22-23にておこなわれるものづくりイベント「<a href="www.makerfaireshenzhen.com">Maker Faire Shenzhen 2016</a>」に出るためです。</p>
 
-<p>そこで今回は、<strong>Raspberry Piの起動時に自身のIPアドレスをHipChatに通知する仕組みを作ります。</strong></p>
+<p>さて、そんな深センには「中国の秋葉原」と呼ばれる電気街があり、さっそく昨日遊びに行ってきました。</p>
 
-<p>ちなみに、ここでいうチャットボットは「会話をする」というより「チャットに通知するプログラム」っていう意味合いです。</p>
+<p><img src="/img/blog/040/01.png" alt="" /></p>
 
-<h2 id="環境">環境</h2>
+<p>こちらが電気街の一角です。1日では回れないほどの小売店やデパートなどが集まっています。
+そんな電気街で見つけたのがこちら。</p>
 
-<ul>
-<li>Raspberry Pi 2 ModelB</li>
-<li>Raspbian 8.0 Jessie</li>
-<li>Node.js 4.4.2</li>
-</ul>
+<p><img src="/img/blog/040/02.png" alt="" /></p>
 
-<h2 id="node-jsでipアドレスを知る">Node.jsでIPアドレスを知る</h2>
+<p>&ldquo;WALL CLIMBER”という名のラジコンです。直訳すると「壁登り」。
+もし本当なら、完全に重力を無視してますよね？　</p>
 
-<p><code>os.networkInterfaces()</code>でネットワーク情報を取得し、<code>os.hostname()</code>でマシン名を取得できます。
-「<a href="http://qiita.com/_shimizu/items/b38d1459abf8436f7f1f">node.jsでローカルIPアドレスの取得</a>」を参考にさせて頂きました。</p>
+<p>怪しすぎる。</p>
 
-<pre><code>//app.js
-'use strict'
+<p><img src="/img/blog/040/03.png" alt="" /></p>
 
-const os = require('os');
-let interfaces = os.networkInterfaces();
-let mes = '';
+<p>側面を見てみると「水平にも垂直にも、天井も走れる」と書いています。</p>
 
-for (let dev in interfaces) {
-    interfaces[dev].forEach((details) =&gt; {
-        if (details.internal || details.family !== 'IPv4') return;
+<p>「壁走んの？！　天井も？！」「さすがに釣りじゃないの」「嘘だろ」とdotstudioメンバー全員が半信半疑だったので、さっそく買って試してみました。</p>
 
-        mes = `${os.hostname()}:${details.address} (standup)`;
-        console.log(mes);
-    });
-}
-</code></pre>
+<p>その動画がこちらです。</p>
 
-<p>実行してみましょう。</p>
+<h2 id="試してみた">試してみた</h2>
 
-<pre><code>$ node app.js
+<p>[動画をここに入れる]</p>
 
-raspberrypi:192.168.43.70 (standup)
-</code></pre>
+<p><img src="/img/blog/040/04.png" alt="" /></p>
 
-<p>これでホスト名とIPアドレスを取得することができました。</p>
+<p>操作は付属していたラジコンでおこないます。
+地面は綺麗に走りました。</p>
 
-<h2 id="hipchatにポストする">HipChatにポストする</h2>
+<p><img src="/img/blog/040/05.png" alt="" /></p>
 
-<p><a href="https://dotstud.io/blog/hipchat-bot-by-nodejs/">話題のチャットボット開発。Node.jsでHipChatに投稿してみよう。</a>の記事でHipChatに投稿している部分を外部モジュール化しておきます。
-<code>libs/hcPost.js</code>としました。</p>
+<p>壁は……ラジコンが壁にくっつきました！？
+どうやら、掃除機のように風を吸い込んで、壁に吸い付いているようです。</p>
 
-<pre><code>//app.js
-'use strict'
+<p><img src="/img/blog/040/06.png" alt="" /></p>
 
-const os = require('os');
-const hcPost = require('./libs/hcPost');
-let interfaces = os.networkInterfaces();
-let mes = '';
+<p>壁も上方向に進みます。ただ、登りは若干苦手なようです。</p>
 
-for (let dev in interfaces) {
-    interfaces[dev].forEach((details) =&gt; {
-        if (details.internal || details.family !== 'IPv4') return;
+<p><img src="/img/blog/040/07.png" alt="" /></p>
 
-        mes = `${os.hostname()}:${details.address} (standup)`;
-        let postData = {
-            &quot;color&quot;: &quot;yellow&quot;,
-            &quot;message&quot;: mes,
-            &quot;notify&quot;: false,
-            &quot;message_format&quot;:&quot;text&quot;
-        };
-        hcPost(postData);
-    });
-}
-</code></pre>
+<p>天井にもくっつきました。</p>
 
-<p>これで実行するとホスト名とIPアドレスがHipChatに投稿されます。</p>
+<p><img src="/img/blog/040/08.png" alt="" /></p>
 
-<p>ソースコードは<a href="https://github.com/n0bisuke/raspi-j5-hue/blob/master/ip.js">GitHub</a>にも載せてあります。</p>
+<p>すごい、天井も普通に走る。</p>
 
-<h2 id="raspberry-piの起動時にnode-jsアプリケーションの起動を設定する">Raspberry Piの起動時にNode.jsアプリケーションの起動を設定する</h2>
+<h2 id="結論-wall-climberは壁も天井も走った">結論：WALL CLIMBERは壁も天井も走った</h2>
 
-<p>Node.jsのアプリケーションはRaspberry Piを再起動させたタイミングで完全にプロセスが落ちてしまうので、起動時に実行されるように設定します。
-「<a href="http://qiita.com/n0bisuke/items/781eac201a907a524f8e">RaspberryPiの起動時にNode.jsを実行&amp;PM2で永続化するメモ</a>」にもあるように、<code>/etc/rc.local</code>に処理を書き込むことで起動時に処理をしてくれます。</p>
+<p><img src="/img/blog/040/09.png" alt="" /></p>
 
-<pre><code>sudo vim /etc/rc.local
-</code></pre>
+<p>疑いの目で見ていた &ldquo;WALL CLIMBER” ですが、期待を裏切るかのように（？！）見事天井を走ってくれました。中国すごい～～～～。</p>
 
-<p>などでファイルを開くと、デフォルトで以下の内容が記載されています。</p>
+<p>深センでは他にもさまざまなガジェットを購入したので、記事で紹介する予定です。
+次回もお楽しみに！</p>
 
-<pre><code># Print the IP address
-_IP=$(hostname -I) || true
-if [ &quot;$_IP&quot; ]; then
-  printf &quot;My IP address is %s\n&quot; &quot;$_IP&quot;
-fi
+<h3 id="おまけ-買わなかったけれど紹介したい-pxp-3-slim-station">おまけ：買わなかったけれど紹介したい「PXP 3 Slim station」</h3>
 
-exit 0
-</code></pre>
+<p><img src="/img/blog/040/10.png" alt="" /></p>
 
-<p>ここにNode.jsアプリケーションの実行処理を記述しましょう。<code>/etc/rc.local</code>に以下を書き込みます。</p>
+<p>画面からマリオが飛び出している「PXP 3」というゲームを見つけました。
+でもパッケージの右側には「16 Bit」と書かれてる～～～～？！（ソニック付き）</p>
 
-<pre><code>sudo -u pi /home/pi/.nvm/versions/node/v4.4.2/bin/node /home/pi/app.js
-</code></pre>
-
-<p>ちなみにこの<code>sudo -u pi &lt;nodeコマンドの絶対パス&gt; &lt;起動するスクリプトの絶対パス&gt;</code>となります。
-パスが分からない人は、whichコマンドでパスを見つけましょう。</p>
-
-<pre><code>$ which node
-
-/home/pi/.nvm/versions/node/v4.4.2/bin/node
-</code></pre>
-
-<p>最終的にこうなりました。</p>
-
-<pre><code># Print the IP address
-_IP=$(hostname -I) || true
-if [ &quot;$_IP&quot; ]; then
-  printf &quot;My IP address is %s\n&quot; &quot;$_IP&quot;
-fi
-
-sudo -u pi /home/pi/.nvm/versions/node/v4.4.2/bin/node /home/pi/app.js
-
-exit 0
-</code></pre>
-
-<p>この状態で上手く動作するか確認してみます。</p>
-
-<pre><code>sudo /etc/rc.local
-</code></pre>
-
-<p>ここでエラーが出る場合はパスの指定などが間違ってる可能性が高いです。</p>
-
-<p>こんな感じの表示がHipChat側にされたら成功です。</p>
-
-<p><img src="/img/blog/033/01.gif" alt="" /></p>
-
-<p>ちなみに<a href="http://japan.blogs.atlassian.com/2014/12/goodnews-new-and-improved-emoticons/">HipChatの絵文字</a>は種類が豊富で<code>(standup)</code>を指定すると画像のように人が立ち上がる絵文字になります。</p>
-
-<p>最後に設定が出来たらRaspberry Piの電源を再起動してみましょう。
-起動直後にHipChatにRaspberry PiのIPアドレスが通知されたら、起動設定が成功している証拠です。</p>
-
-<h2 id="おわりに">おわりに</h2>
-
-<p>これで「Raspberry PiのIPが変わってしまいSSHログインがしにくい問題」が解決しそうです。
-起動した際に通知が来るので通常起動してるかどうかの監視にも使えそうです。</p>
-
-<p>Raspberry Piからチャットへの一方通行な通信なので、Raspberry Piが何らかの原因で動作していない場合はMilkcocoaなどで双方向の通信を入れれば死活監視もできそうですね。</p>
-
-<p>皆さんも是非活用してみて下さい。</p>
+<p>では！</p>
 </div>
 
   
@@ -644,23 +558,11 @@ exit 0
           
           
           
-        
-          
-          
-          
-        
-          
-          
-          
-        
-          
-          
-          
           <li class="js-items">
             <article class="card-related">
-              <a class="" href="https://dotstud.io/blog/line-bot-with-hachidori/">
-                <img class="card-related--thumbnail" src="/img/blog/031/00_thumbnail.png" alt="">
-                <h3 class="card-related--title">ノンプログラミングで今話題のLINE Botを開発できる「hachidori」を試してみた</h3>
+              <a class="" href="https://dotstud.io/blog/azure-webapps-gitlab-connect/">
+                <img class="card-related--thumbnail" src="/img/blog/038/00_thumbnail.png" alt="">
+                <h3 class="card-related--title">Azure WebAppsにGitLab連携でデプロイしてみよう</h3>
               </a>
               
             </article>
@@ -678,16 +580,18 @@ exit 0
           
           
           
-          <li class="js-items">
-            <article class="card-related">
-              <a class="" href="https://dotstud.io/blog/hipchat-bot-by-nodejs/">
-                <img class="card-related--thumbnail" src="/img/blog/030/00_thumbnail.png" alt="">
-                <h3 class="card-related--title">話題のチャットボット開発。Node.jsでHipChatに投稿してみよう。</h3>
-              </a>
-              
-            </article>
-          </li>
         
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
         
           
           
@@ -855,7 +759,7 @@ exit 0
     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 
     &nbsp;
-    <div class="fb-like" data-href="https://dotstud.io/blog/raspberry-pi-ip-notification/" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
+    <div class="fb-like" data-href="https://dotstud.io/blog/wall-climbing-toy-car/" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
     
   </div>
 
