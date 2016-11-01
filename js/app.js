@@ -40,8 +40,8 @@ function addClassSelecet(){
     $current.attr('href', '/');
   }
 
-  if (type === 'events'){
-    $current = $('a[data-type="events"]');
+  if (type === 'about'){
+    $current = $('a[data-type="about"]');
     $current.attr('class', 'sub_text_selected');
   }
 
