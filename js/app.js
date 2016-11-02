@@ -9,7 +9,7 @@ function addClassSelecet(){
   var url = tmp[0]+'//'+tmp[1]+tmp[2]+'/'+tmp[3]+'/';
   var $current;
   var type = tmp[3];
-  console.log(url, tmp);
+  // console.log(url, tmp);
   if(url.indexOf('/legal/') != -1 || url.indexOf('/about/') != -1 || url.indexOf('/404.html/') != -1){
 
   }
