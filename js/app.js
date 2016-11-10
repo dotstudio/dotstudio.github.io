@@ -10,7 +10,10 @@ function addClassSelecet(){
   var $current;
   var type = tmp[3];
   // console.log(url, tmp);
-  if(url.indexOf('/legal/') != -1 || url.indexOf('/about/') != -1 || url.indexOf('/404.html/') != -1){
+  if(url.indexOf('/legal/') != -1 || 
+    url.indexOf('/about/') != -1 ||
+    url.indexOf('/docs/') != -1 ||
+    url.indexOf('/404.html/') != -1){
 
   }
   
@@ -40,8 +43,15 @@ function addClassSelecet(){
     $current.attr('href', '/');
   }
 
+  //About
   if (type === 'about'){
     $current = $('a[data-type="about"]');
+    $current.attr('class', 'sub_text_selected');
+  }
+
+  //docs
+  if (type === 'docs'){
+    $current = $('a[data-type="docs"]');
     $current.attr('class', 'sub_text_selected');
   }
 
