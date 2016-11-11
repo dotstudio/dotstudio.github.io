@@ -10,6 +10,120 @@
     <atom:link href="/series/bot/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>LINE NotifyとGitHubを連携してSlackから移行してみました。</title>
+      <link>https://dotstud.io/blog/line-notify-chat-bot/</link>
+      <pubDate>Fri, 11 Nov 2016 11:30:54 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/line-notify-chat-bot/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudio代表の&lt;a href=&#34;http://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;この記事を見ている人は大半がLINEは使ってると思います。
+今日は&lt;a href=&#34;http://linedevday.linecorp.com/jp/2016/&#34;&gt;LINE DEVELOPER DAY 2016&lt;/a&gt;で発表があったLINEの新機能であるLINE Notifyを使ってみようと思います。&lt;/p&gt;
+
+&lt;h2 id=&#34;line-notify&#34;&gt;LINE Notify&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://notify-bot.line.me/ja/&#34;&gt;https://notify-bot.line.me/ja/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;様々なWebサービスなどと連携することで、LINEが提供する公式アカウント&amp;rdquo;LINE Notify&amp;rdquo;から通知させることができる機能です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/054/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;プログラミング不要-実際に使ってみましょう&#34;&gt;プログラミング不要！実際に使ってみましょう&lt;/h2&gt;
+
+&lt;h3 id=&#34;line-notfyと友達になる&#34;&gt;LINE Notfyと友達になる&lt;/h3&gt;
+
+&lt;p&gt;まずは&lt;a href=&#34;https://notify-bot.line.me/ja/&#34;&gt;LINE Notifyのサイト&lt;/a&gt;からLINE Notifyと友達になります。&lt;/p&gt;
+
+&lt;p&gt;サイトに掲載してあるQRコードをスマートフォンアプリのLINEから読み込みましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/054/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;githubリポジトリ作成&#34;&gt;GitHubリポジトリ作成&lt;/h3&gt;
+
+&lt;p&gt;今回は僕がメンターとして入っている&lt;a href=&#34;http://gsacademy.tokyo/&#34;&gt;G&amp;rsquo;s ACADEMY TOKYO&lt;/a&gt;の学生さんたちとのやりとりに使ってみます。
+今回は5期目なのでgs5thというリポジトリを作りました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/054/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;lineのトークルームにline-notifyアカウントを追加&#34;&gt;LINEのトークルームにLINE Notifyアカウントを追加&lt;/h3&gt;
+
+&lt;p&gt;トークルームを作成し、通知を受けるトークルームにLINE Notifyアカウントを追加しましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/054/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;連携作業&#34;&gt;連携作業&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://notify-bot.line.me/github/repos/select&#34;&gt;https://notify-bot.line.me/github/repos/select&lt;/a&gt; からGitHub連携ができます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/054/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;GitHubのアカウント（Organization）とリポジトリ、LINEのトークルームを先ほど作成したものを指定します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/054/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;最後に&lt;code&gt;「同意して連携する」&lt;/code&gt;を選択しましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;完了&#34;&gt;完了&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/054/07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;LINE Notifyから通知が来ます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/054/08.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;連携を試してみる&#34;&gt;連携を試してみる&lt;/h2&gt;
+
+&lt;p&gt;GitHubにPushすると&amp;hellip;&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/054/09.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;issueが追加されると&amp;hellip;&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/054/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;このようにLINEのトークルームにGitHubの通知が流れます。&lt;/p&gt;
+
+&lt;h2 id=&#34;実際に少し使ってみて&#34;&gt;実際に少し使ってみて&lt;/h2&gt;
+
+&lt;p&gt;今までSlack+GitHubを使ってました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/054/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;学生さんたちはエンジアリングは初心者の方が大半で、Slackを使ったことがないという人も多いです。
+エンジニア界だとSlackとGitHubはよくある組み合わせなので今まで採用してましたが、実際の連携は通知くらいにしか使ってなかったため今回のLINE連携で代用できそうです。&lt;/p&gt;
+
+&lt;h3 id=&#34;アカウント作ってくださいやりとり-が発生しない&#34;&gt;「アカウント作ってくださいやりとり」が発生しない&lt;/h3&gt;
+
+&lt;p&gt;やはりアカウントはデフォルトでみんな持っているんだなぁと感じました。
+逆に友達追加やりとりが少し手間でした。&lt;/p&gt;
+
+&lt;h3 id=&#34;通知を見逃さない&#34;&gt;通知を見逃さない&lt;/h3&gt;
+
+&lt;p&gt;Slackだとスマートフォンアプリもいれないと細かな通知には気づけないですが、LINEはみんな利用しているため問題なく通知に気付けます。&lt;/p&gt;
+
+&lt;h3 id=&#34;既読が分かる&#34;&gt;既読が分かる&lt;/h3&gt;
+
+&lt;p&gt;よくも悪くも既読が分かります。連絡をしたときに全員が確認できてるか分かるのは大きいです。&lt;/p&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;最近は、「Slackを使えば正義」みたいな文化は少し崩れて来た気もしています。
+LINEなど、エンジニア以外にも使われているツールだとプログラミング初心者がいるときにはいいのかもしれません。&lt;/p&gt;
+
+&lt;p&gt;GitHubとの連携はサイト上の操作のみでできましたが、LINE Notifyは独自にトークンを発行してプログラム経由で通知させることもできます。&lt;/p&gt;
+
+&lt;p&gt;結構自由度が効いて使い勝手は良さそうです。&lt;/p&gt;
+
+&lt;p&gt;今後も利用してみて感想など、応用などを発信できたらと思います。&lt;/p&gt;
+
+&lt;p&gt;それでは。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>地味に便利！Raspberry Piが起動したらIPアドレスを通知するチャットボットを作る</title>
       <link>https://dotstud.io/blog/raspberry-pi-ip-notification/</link>
       <pubDate>Tue, 11 Oct 2016 10:00:49 +0900</pubDate>
