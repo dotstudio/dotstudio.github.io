@@ -10,392 +10,140 @@
     <atom:link href="/series/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>IoTって結局なに？世界のIoT実例 - 赤ちゃん・子育て編（5選）</title>
-      <link>https://dotstud.io/blog/internet-of-things-baby/</link>
-      <pubDate>Tue, 22 Nov 2016 11:00:00 +0900</pubDate>
+      <title>littleBits Arduinoモジュールでより細かく値を入出力して状況を伝えよう</title>
+      <link>https://dotstud.io/blog/littlebits-arduino-analog-number/</link>
+      <pubDate>Thu, 15 Dec 2016 08:00:00 +0900</pubDate>
       
-      <guid>https://dotstud.io/blog/internet-of-things-baby/</guid>
+      <guid>https://dotstud.io/blog/littlebits-arduino-analog-number/</guid>
       
       <description>
 
-&lt;p&gt;モノのインターネットを繋げる「IoT」という用語や技術が話題になっていますが、子育てには役立つのでしょうか？　日本ではまだあまり見かけないデザインやコンセプトのIoT製品を独断で選んで紹介します。&lt;/p&gt;
+&lt;p&gt;こんにちは、dotstudioライターの田中正吾です。電子回路のパーツを磁石でパチパチとつなげるだけで電子工作ができる「littleBits」の連載をLIGブログでおこなっています。&lt;/p&gt;
 
-&lt;h2 id=&#34;sproutling-赤ちゃんのステータスを把握できる足首バンド型デバイス&#34;&gt;Sproutling：赤ちゃんのステータスを把握できる足首バンド型デバイス&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/235644&#34;&gt;littleBitsのArduinoモジュールで簡単にプログラミングをはじめてみよう&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/259378&#34;&gt;ArduinoモジュールでLチカしてみた（Windows・Mac）&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/268909&#34;&gt;ArduinoモジュールでON・OFFの入力値を取得してみよう&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/280761&#34;&gt;Arduinoモジュールで入出力の連携をしてみよう&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/295334&#34;&gt;シリアルモニタとNode.jsでlittleBits Arduinoモジュールを動かしてみよう&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/315934&#34;&gt;littleBitsのボタンを押すとIFTTT経由でLINEにメッセージが飛ぶ仕組みを作ってみよう&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/slyXHix8hLg&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+&lt;p&gt;本記事では、これでの連載とは少し視点を変えて、 &lt;strong&gt;littleBits Arduinoモジュールでより細かく値を入出力するアナログ入出力&lt;/strong&gt; をご紹介します。では、さっそく始めていきましょう！&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://sproutling.com/&#34;&gt;Sproutling&lt;/a&gt;は赤ちゃんの足首につけるバンド型のデバイスです。スマートフォンで、赤ちゃんが今「寝ている」「泣いている」かといった状態や、心拍数や体温なども確認できます。「あなたの子育てを少し楽にしてくれる」ようです。&lt;/p&gt;
+&lt;h2 id=&#34;より細かく状況を伝えるアナログ値&#34;&gt;より細かく状況を伝えるアナログ値&lt;/h2&gt;
 
-&lt;p&gt;泣いているかどうかがすぐにわからないくらい大きめの家（特に海外など）に住んでいる方におすすめのガジェットかなと思いました。&lt;/p&gt;
+&lt;p&gt;いままで、ボタンを押すと何かが起こるON/OFFの反応で説明していましたが、実は&lt;a href=&#34;http://jp.littlebits.com/kits/arduino-coding-kit/&#34;&gt;ARDUINO CODING KIT&lt;/a&gt;には、より細かく状況を伝えるアナログ値を扱う入出力モジュールがあります。&lt;/p&gt;
 
-&lt;h2 id=&#34;owlet-きちんと呼吸をしているかを確認するための足首バンド型デバイス&#34;&gt;Owlet：きちんと呼吸をしているかを確認するための足首バンド型デバイス&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
-&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/MJj_TNrIFdU&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+&lt;p&gt;たとえば、DIMMERモジュール（真ん中にあるダイヤル状のツマミのモジュール）は、ツマミを回すことで電気の流れが0～100%と変わります。またBAR GRAPHモジュール（右）は流れる電気によって光るLEDの数が変わります。&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;http://www.owletcare.com/&#34;&gt;Owlet&lt;/a&gt;も足首につけるタイプのデバイスです。心拍数をリアルタイムで確認できて、&lt;strong&gt;万が一呼吸が止まったらアラートが出ます&lt;/strong&gt; 。また、体温や睡眠の質、睡眠の体制などもアプリが教えてくれるそうです。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;病院で心拍数を計る際につける医療器具に使われているパーツを、バンドの中に入れています。&lt;/p&gt;
+&lt;p&gt;つまみを回しきったとき。&lt;/p&gt;
 
-&lt;p&gt;YouTubeの紹介動画に登場する製作メンバーらにも子供がいて、実際に器具を使って役に立ったと語っている姿が印象的でした。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
-&lt;h2 id=&#34;mimo-赤ちゃんがきちんと眠れているかを確認できるウェアラブルデバイス&#34;&gt;mimo：赤ちゃんがきちんと眠れているかを確認できるウェアラブルデバイス&lt;/h2&gt;
+&lt;p&gt;半分ぐらいまでひねったとき。電流50%のときですね。&lt;/p&gt;
 
-&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/7vPt0V2yYmo&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;赤ちゃんがよく眠れるように作られたのが&lt;a href=&#34;http://mimobaby.com/&#34;&gt;mimo&lt;/a&gt;です。小さな緑のカメ型のアイテムで、専用の服（綿）かベッドのマットに取り付けることができます。&lt;/p&gt;
+&lt;p&gt;ON/OFFではセンサーが「反応した」「反応していない」という2つの情報しか伝えられませんでした。しかし、このように電流の量によって度合いを伝えることができると、たとえば光センサーモジュールを使ったときに明るさを「暗い」「やや暗い」「やや明るい」「とても明るい」といったように、より細かく伝えることができます。&lt;/p&gt;
 
-&lt;p&gt;Bluetooth/WiFi経由でスマートフォンと接続して、赤ちゃんのステータスや部屋の温度をアプリから確認できます。また、睡眠データもタイムラインで表示。何時間起きていた/眠っていたかを一目で把握できます。自動で記録できるのがいいですね。&lt;/p&gt;
+&lt;h2 id=&#34;アナログ値をarduinoモジュールで計測してみる&#34;&gt;アナログ値をArduinoモジュールで計測してみる&lt;/h2&gt;
 
-&lt;h2 id=&#34;withings-成長をアプリで把握できる体重計&#34;&gt;Withings：成長をアプリで把握できる体重計&lt;/h2&gt;
+&lt;p&gt;それでは早速アナログ値をArduinoモジュールで計測してみましょう。&lt;/p&gt;
 
-&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/FZjewfWfhzg&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Withingsは子供用の成長記録ツールです。赤ちゃんの体重を計測したり、ミルクや食べ物などを登録してどれくらい栄養を摂取したかを記録できます。&lt;/p&gt;
+&lt;p&gt;DIMMERモジュールをArduinoモジュールの入力2番目のA0に取り付けます。&lt;/p&gt;
 
-&lt;p&gt;今では大人用の健康管理ができる体重計が続々と登場していますが、子供用の体重計は2012年に登場したこのWithingsが提供しているもののみのようです。&lt;/p&gt;
+&lt;p&gt;Arduinoモジュールでアナログ値を計測するには &lt;code&gt;analogRead&lt;/code&gt; 関数を使います。Arduinoモジュールで計測できるアナログ値は0%は0として、100%は1023として計測できます。&lt;/p&gt;
 
-&lt;h2 id=&#34;osmo-フリーハンドで絵を描けるようになるカメラ&#34;&gt;Osmo：フリーハンドで絵を描けるようになるカメラ&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;void setup() {
+  Serial.begin(9600);
+}
 
-&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/UjLM5GFcut4&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+void loop() {
+  int sensorValue = analogRead(A0);
+  if(sensorValue&amp;gt;0){
+    Serial.println(sensorValue);
+  }
+  delay(1);
+}
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Osmoと呼ばれる小さなデバイスをiPadのカメラに取り付けると、自分の手元と絵がiPadの画面に映し出されます。そしてトレースしたい絵や写真をiPadに表示させると、ガイド線を見ながら紙に絵を描けるようになるというもの。アルファベットを認識して文字当てゲームなんかもできます。&lt;/p&gt;
+&lt;p&gt;このコードを書き込んで、シリアルモニタで数値を見てみます。&lt;/p&gt;
 
-&lt;p&gt;簡単に「絵が描ける」という成功体験を得られそうです。昔、少女漫画の付録についてきた、プラスチックに絵を反射させて紙に描けるものを思い出しました。（説明が難しい）&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;DIMMERをひねると値が変わります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;シリアルプロッタのほうがよりわかりやすいですね。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/08.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/09.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;dimmerモジュールのツマミにあわせて点滅を変えてみる&#34;&gt;DIMMERモジュールのツマミにあわせて点滅を変えてみる&lt;/h2&gt;
+
+&lt;p&gt;DIMMERモジュールのツマミの度合いが取れるようになったので、ツマミに合わせてBARGRAPHモジュールの点滅の仕方を変えてみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;このように、さきほどのDIMMERモジュールとArduinoモジュールをつないだものに、BAR GRAPHモジュールも加えます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;void setup() {
+  Serial.begin(9600);
+  pinMode(5,OUTPUT);
+}
+
+void loop() {
+  int sensorValue = analogRead(A0);
+  if(sensorValue&amp;gt;0){
+    Serial.println(sensorValue);
+    digitalWrite(5,HIGH);
+    delay(sensorValue);
+    digitalWrite(5,LOW);
+  }
+  delay(sensorValue);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;このように書いたコードをArduinoモジュールに書き込みます。&lt;/p&gt;
+
+&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/PircFP-OsQY&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;DIMMERモジュールのつまみに対応して、点滅の仕方が変わるようになりました。&lt;/p&gt;
+
+&lt;h2 id=&#34;さらにサーボに変えてみる&#34;&gt;さらにサーボに変えてみる&lt;/h2&gt;
+
+&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/FVonwS3pb-E&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://jp.littlebits.com/kits/arduino-coding-kit/&#34;&gt;ARDUINO CODING KIT&lt;/a&gt;のサーボに変えてみました。LEDよりもわかりやすくなりますね。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;サーボに顔をつけてみます。&lt;/p&gt;
+
+&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/coAm51UmCo0&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;ツマミに合わせて顔がビクビクするものに早変わりします！　&lt;a href=&#34;https://liginc.co.jp/280761&#34;&gt;磁石で電子工作できる「littleBits」のArduinoモジュールで、入出力の連携をしてみよう&lt;/a&gt;で試した「三三七拍子するパンダ」はまだ動物らしい動きに見えましたが、この顔ネタはなかなかに気持ち悪いです。夢に出そう。&lt;/p&gt;
 
 &lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
 
-&lt;p&gt;子育てに役立つIoT製品は世界で続々と登場しています。これからも赤ちゃんの役にたつ製品が生まれ、テクノロジーが子育てのちょっとしたサポートになってくれそうです。&lt;/p&gt;
+&lt;p&gt;今回はlittleBits Arduinoモジュールで &lt;strong&gt;より細かく値を入出力するアナログ入出力&lt;/strong&gt; をお伝えしました。ネタはひとつなのに、モジュールを付け替えるだけで光から動力へと変化します。工作物によって伝わる印象も変わるのがlittleBitsの面白いところです。&lt;/p&gt;
 
-&lt;p&gt;自分の生活の範囲であれば、マイコンボード（小さなコンピュータ）やセンサーといった電子パーツを使って、IoTを自作することもできます。dotstudioではそういったIoTに興味のある方向けに、パーツを集めたキットも販売しているので、自作IoTに挑戦してみたい方は利用してみてください。&lt;/p&gt;
+&lt;p&gt;そして、アナログ値を扱うとON/OFFよりも細かく状況を伝えることができたり、動きにもアクセントを持たせるたりすることができます。&lt;/p&gt;
 
-&lt;ul&gt;
-&lt;li&gt;センサーなどを使ってみたい方向け：&lt;a href=&#34;https://dotstud.io/projects/nefry-connect-internet/&#34;&gt;Nefry&lt;/a&gt;、&lt;a href=&#34;https://dotstud.io/projects/wionode-social-remote-control/&#34;&gt;Wio Node&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;はんだづけを練習したい方向け：&lt;a href=&#34;https://dotstud.io/projects/led-keychain-original-handa/&#34;&gt;光るキーホルダー制作キット&lt;/a&gt;・&lt;a href=&#34;https://dotstud.io/projects/neopixel-ring-gemma-earrings/&#34;&gt;光るイヤリング制作キット&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;JavaScriptでモータなどを動かしてみたい方向け：&lt;a href=&#34;https://dotstud.io/projects/nodebots-seeeduino-for-beginners/&#34;&gt;Node.jsキット&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;みなさんも、ぜひいろいろなことを試してみてはいかがでしょうか。&lt;/p&gt;
 
-&lt;p&gt;それではまた。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>URLを入れるだけ！REST APIでNefryを簡単に制御してみよう！</title>
-      <link>https://dotstud.io/blog/nefry-rest-api-tutorial/</link>
-      <pubDate>Mon, 21 Nov 2016 15:00:00 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/nefry-rest-api-tutorial/</guid>
-      
-      <description>
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/12.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;こんにちは、外部ライターのわみ（&lt;a href=&#34;[http://twitter.com/wamisnet&#34;&gt;@wamisnet&lt;/a&gt;）と申します。愛知県でネットワークの勉強をしている学生です。2014年ごろから電子工作を始め、FRISKサイズのIoT向けデバイス「Nefry（ねふりー）」を自作しました。&lt;/p&gt;
-
-&lt;p&gt;そんな「Nefry」をWeb系のエンジニアでも触れられるように、REST APIでハードウエアをいじれるようにしてみました。C言語を使わずに、JavaScriptやC#から簡単に試せるのでぜひ遊んでみてください。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;※Nefry library version 2.2.2以上の場合使用できます。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;nefryとは&#34;&gt;Nefryとは&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/059/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;「Nefry（ねふりー）」は手軽にIoTに挑戦できるFRISKサイズのデバイスです。Wi-Fiを搭載しておりインターネットに接続しやすいため、接続に時間をとられることなくあなたのアイデア実現に集中できます。&lt;em&gt;日本の技適に通ったESP-WROOM-02を使っています。&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;また、スマートフォンで使うようなモバイルバッテリーで動作するので、場所を選ばずに使えるという優れものです！　Groveセンサー対応しており、はんだ付け不要で楽しめます。（&lt;strong&gt;&lt;a href=&#34;https://dotstud.io/projects/nefry-connect-internet/&#34;&gt;dotstudioのECサイト&lt;/a&gt;にて販売中です！！&lt;/strong&gt;）&lt;/p&gt;
-
-&lt;p&gt;LIGブログにいくつか記事を載せていますのでご覧ください。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://liginc.co.jp/236620&#34;&gt;自作したオリジナルIoTデバイス「Nefry」とインターネットを繋いでみた&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://liginc.co.jp/263899&#34;&gt;Webサービス同士を連携できる「IFTTT」と自作IoTデバイスを繋いで生活を便利にしてみた&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;rest-apiとは&#34;&gt;REST APIとは&lt;/h2&gt;
-
-&lt;p&gt;REST APIとは、簡単なURLを叩くだけでそこにある情報や資源にアクセスできる仕組みのことです。TwitterのREST APIで例えてみましょう！&lt;/p&gt;
-
-&lt;p&gt;Twitterでフォロワーの一覧を取得したい場合はこちらのREST API&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;api.twitter.com/1.1/&lt;strong&gt;followers/list&lt;/strong&gt;.json&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;ツイートを検索したい場合はこちらのREST API&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;api.twitter.com/1.1/&lt;strong&gt;search/tweets&lt;/strong&gt;.json&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;認証情報など必要な引数を渡せばTwitterにアクセスできるのです。URLを見るだけで、何ができるかがわかるのがREST APIのよさの一つだと思います。&lt;/p&gt;
-
-&lt;p&gt;そんなREST APIにNefryも対応し、より簡単にいろんなことを試せるようにしてみました。以下で、どんなことができるのかを簡単に紹介します。&lt;/p&gt;
-
-&lt;h2 id=&#34;nefryのおすすめrest-api&#34;&gt;NefryのおすすめREST API&lt;/h2&gt;
-
-&lt;p&gt;今回紹介するのは、今実装されている機能の一部のみです。実装されているすべての機能は&lt;a href=&#34;http://qiita.com/wamisnet/private/5483d14bf21cd3193ae0&#34;&gt;こちらのQiitaの記事&lt;/a&gt;にまとめていますので興味があればご覧ください。&lt;/p&gt;
-
-&lt;p&gt;デフォルトのままのREST APIであると、URLさえわかれば別の人も簡単に制御できてしまうので、基本的にはPasswordをかけて使用してください。（かけ方は後ほど紹介します）&lt;/p&gt;
-
-&lt;h3 id=&#34;gpio-入出力ピン&#34;&gt;GPIO（入出力ピン）&lt;/h3&gt;
-
-&lt;p&gt;Nefryについている入出力ピンを制御することができるAPIのまとめです。&lt;/p&gt;
-
-&lt;h3 id=&#34;入力&#34;&gt;入力&lt;/h3&gt;
-
-&lt;p&gt;Nefryの入力ピンがどうなっているかを取得できます。スイッチや明るさセンサーのような簡単なセンサーを手軽に試すことができます。&lt;/p&gt;
-
-&lt;h4 id=&#34;デジタル&#34;&gt;デジタル&lt;/h4&gt;
-
-&lt;p&gt;NefryのD0-D5の入力を取得できます。&lt;/p&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th align=&#34;left&#34;&gt;項目&lt;/th&gt;
-&lt;th align=&#34;left&#34;&gt;内容&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;URL&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;/api/1.0/digitalRead&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;引数&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;pin(範囲：D0-D5)&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;具体例&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;/api/1.0/digitalRead?pin=D1&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;返り値&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;{&amp;ldquo;mode&amp;rdquo;:&amp;ldquo;digitalRead&amp;rdquo;,&amp;ldquo;pin&amp;rdquo;:&amp;ldquo;D1&amp;rdquo;,&amp;ldquo;value&amp;rdquo;:0}&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;pin名と状態がvalueに含まれて返答されます。valueの範囲は0(low)-1(high)となります。 &lt;strong&gt;スイッチの状態を取得するのに向いています。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;アナログ&#34;&gt;アナログ&lt;/h4&gt;
-
-&lt;p&gt;NefryのA0の入力を取得できます。&lt;/p&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th align=&#34;left&#34;&gt;項目&lt;/th&gt;
-&lt;th align=&#34;left&#34;&gt;内容&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;URL&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;/api/1.0/analogRead&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;引数&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;なし&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;具体例&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;/api/1.0/analogRead&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;返り値&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;{&amp;ldquo;mode&amp;rdquo;:&amp;ldquo;analogRead&amp;rdquo;,&amp;ldquo;&amp;ldquo;value&amp;rdquo;:0}&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;状態がvalueに含まれて返答されます。valueの範囲は0-255となります。&lt;strong&gt;明るさセンサーを取得するのに向いています。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;出力&#34;&gt;出力&lt;/h3&gt;
-
-&lt;h4 id=&#34;デジタル-1&#34;&gt;デジタル&lt;/h4&gt;
-
-&lt;p&gt;NefryのD0-D5ピンの出力を制御できます。HIGH(3.3v)かLOW(0v)のどちらかを出力します。&lt;/p&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th align=&#34;left&#34;&gt;項目&lt;/th&gt;
-&lt;th align=&#34;left&#34;&gt;内容&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;URL&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;/api/1.0/digitalWrite&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;引数&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;pin(範囲：D0-D5)　state(範囲：HIGH(1)-LOW(0))&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;具体例&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;/api/1.0/digitalWrite?pin=D1&amp;amp;state=HIGH&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;返り値&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;{&amp;ldquo;mode&amp;rdquo;:&amp;ldquo;digitalWrite&amp;rdquo;,&amp;ldquo;pin&amp;rdquo;:&amp;ldquo;D1&amp;rdquo;,&amp;ldquo;value&amp;rdquo;:1}&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;pin名と状態がvalueに含まれて返答されます。&lt;strong&gt;LEDを点滅させることができます。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;アナログ-pwm&#34;&gt;アナログ(PWM)&lt;/h4&gt;
-
-&lt;p&gt;NefryのD0-D5ピンの出力を制御できます。1023(3.3v)から0(0v)の指定された出力します。&lt;/p&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th align=&#34;left&#34;&gt;項目&lt;/th&gt;
-&lt;th align=&#34;left&#34;&gt;内容&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;URL&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;/api/1.0/analogWrite&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;引数&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;pin(範囲：D0-D5)　state(範囲：0-1023)&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;具体例&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;/api/1.0/analogWrite?pin=D1&amp;amp;state=500&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;返り値&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;{&amp;ldquo;mode&amp;rdquo;:&amp;ldquo;analogWrite&amp;rdquo;,&amp;ldquo;pin&amp;rdquo;:&amp;ldquo;D1&amp;rdquo;,&amp;ldquo;value&amp;rdquo;:500}&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;pin名と状態がvalueに含まれて返答されます。&lt;strong&gt;LEDを徐々に明るくしたり、暗くしたりできます。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;nefry関数&#34;&gt;Nefry関数&lt;/h2&gt;
-
-&lt;h3 id=&#34;nefry-led&#34;&gt;Nefry LED&lt;/h3&gt;
-
-&lt;p&gt;NefryについているLEDの色を変更することができます。&lt;/p&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th align=&#34;left&#34;&gt;項目&lt;/th&gt;
-&lt;th align=&#34;left&#34;&gt;内容&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;URL&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;/api/1.0/NefrysetLed&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;引数&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;r (範囲：0-255) g (範囲：0-255) b (範囲：0-255)&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;具体例&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;/api/1.0/NefrysetLed?r=255&amp;amp;g=0&amp;amp;b=0&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;返り値&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;{&amp;ldquo;mode&amp;rdquo;:&amp;ldquo;NefrysetLed&amp;rdquo;,&amp;ldquo;r&amp;rdquo;:255,&amp;ldquo;g&amp;rdquo;:0,&amp;ldquo;b&amp;rdquo;:0}&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;設定した値が返答されます。&lt;strong&gt;NefryについているLEDを制御することができます。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;使い方&#34;&gt;使い方&lt;/h2&gt;
-
-&lt;p&gt;NefryでREST APIを使う際には、前もってプログラムを書き込んでおく必要があります。
-Nefryにプログラムを書き込む際に必要な環境については、下の記事をご覧ください。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/298161&#34;&gt;さくっと生活を便利にする！FRISKサイズのIoT向けデバイス「Nefry」を使ってみよう【環境構築編】&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;環境ができたところで、Nefryのプログラムを紹介していきます。まずはシンプルなパスワード &lt;strong&gt;なし&lt;/strong&gt; から。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;NefryRESTAPI.h&amp;gt;
-void setup() {
-  NefryRESTAPI.begin();//RES TAPIを使うのに必要な初期化をおこないます。
-}
-
-void loop() {
-
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;ものすごくシンプルですね、&lt;code&gt;#include&amp;lt;NefryRESTAPI.h&amp;gt;&lt;/code&gt;こちらでライブラリーを読み込み、&lt;code&gt;NefryRESTAPI.begin();&lt;/code&gt;にてライブラリーを使うのに必要な処理をするための関数を呼び出すだけでREST APIを使用できるようになります。&lt;/p&gt;
-
-&lt;h3 id=&#34;パスワードをつけてみる&#34;&gt;パスワードをつけてみる&lt;/h3&gt;
-
-&lt;p&gt;次にパスワード &lt;strong&gt;あり&lt;/strong&gt; のプログラムを紹介します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;NefryRESTAPI.h&amp;gt;
-void setup() {
-  NefryRESTAPI.begin();//REST APIを使うのに必要な初期化をおこないます。
-  NefryRESTAPI.setPassword(&amp;quot;Nefry&amp;quot;);//接続時にパスワードが必要になります。
-}
-
-void loop() {
-
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;先ほどのプログラムに&lt;code&gt;NefryRESTAPI.setPassword(&amp;quot;Nefry&amp;quot;);&lt;/code&gt;この一行をプラスするだけです。この場合のパスワードは、&lt;strong&gt;Nefry&lt;/strong&gt; となります。&lt;/p&gt;
-
-&lt;p&gt;ダブルクォーテーションの間にパスワードを入力して、Nefryに書き込めば準備完了です！　パスワードありはAPIを使用する際にURLにpass=(プログラム内のパスワード)を追記してください。&lt;/p&gt;
-
-&lt;p&gt;具体例1：　/api/1.0/NefrysetLed?r=255&amp;amp;g=0&amp;amp;b=255&amp;amp;pass=Nefry&lt;br /&gt;
-具体例2：　/api/1.0/analogRead?pass=Nefry&lt;/p&gt;
-
-&lt;h3 id=&#34;実際に動かしてみる&#34;&gt;実際に動かしてみる&lt;/h3&gt;
-
-&lt;p&gt;&lt;blockquote class=&#34;twitter-video&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;NefryにRESTAPIぽいものを実装してみた！&lt;br&gt;&lt;br&gt;APIを叩くとNefryにもともとついているledが青から緑に変化して、そのあとD5ピンに繋がってる赤色のledが点灯します &lt;a href=&#34;https://t.co/2Pe4yWuF1I&#34;&gt;pic.twitter.com/2Pe4yWuF1I&lt;/a&gt;&lt;/p&gt; わみ (@wamisnet) &lt;a href=&#34;https://twitter.com/wamisnet/status/796955915966525441&#34;&gt;2016年11月11日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;AndroidのchromeでNefryのREST APIを叩いてみました。初めにNefryついているLEDが青から緑になり、次のAPIの指示でD5ピンに接続されているLEDが点灯する流れを撮影しました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/059/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;私の環境では、はじめに&lt;strong&gt;&lt;a href=&#34;http://192.168.4.1/api/1.0/NefrysetLed?g=255&#34;&gt;http://192.168.4.1/api/1.0/NefrysetLed?g=255&lt;/a&gt;&lt;/strong&gt;でNefryのLEDの色を変更して、&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/059/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;つぎに&lt;strong&gt;&lt;a href=&#34;http://192.168.4.1/api/1.0/digitalWrite?pin=d5&amp;amp;state=high&#34;&gt;http://192.168.4.1/api/1.0/digitalWrite?pin=d5&amp;amp;state=high&lt;/a&gt;&lt;/strong&gt;で赤色のLEDを光らせています。URLを送信すると驚くくらい即反応します。&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;ブラウザさえあれば、REST APIで明るさセンサーの値が取れたり、NefryのLEDをいじったりとハードウエアを簡単にいじることができます。また、ArduinoIDEでプログラムが書けなくても手軽に触れるのでちょっと試したいことがあるときなんかにもいいです。&lt;/p&gt;
-
-&lt;p&gt;REST APIはJavaScriptやC#から制御できます。既存のものにハードウエアを制御させることもできるのでぜひ遊んでみてください。&lt;/p&gt;
+&lt;p&gt;littleBitsのハックには、LIGブログの&lt;a href=&#34;https://liginc.co.jp/series/littlebits&#34;&gt;littleBitsではじめるArduino&lt;/a&gt;連載、ならびに拙著『&lt;a href=&#34;http://www.1ft-seabass.jp/memo/2016/10/11/littlebits-book-release/?utm_content=bufferec8bb&amp;amp;utm_medium=social&amp;amp;utm_source=twitter.com&amp;amp;utm_campaign=buffer&#34;&gt;「littleBits」ではじめる電子工作&lt;/a&gt;』もぜひご参照ください。&lt;/p&gt;
 </description>
     </item>
     
