@@ -10,6 +10,241 @@
     <atom:link href="/series/nodejs/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>2016年12月版　Node.jsをホスティング出来るPaaSまとめ </title>
+      <link>https://dotstud.io/blog/nodejs-hosting-services-2016/</link>
+      <pubDate>Sun, 25 Dec 2016 02:19:41 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nodejs-hosting-services-2016/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudio代表の&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;年の瀬ですね。というかクリスマスですね。
+今回の記事は&lt;a href=&#34;http://qiita.com/advent-calendar/2016/ipu&#34;&gt;岩手県立大学アドベントカレンダー2016&lt;/a&gt;に登録しています。&lt;/p&gt;
+
+&lt;p&gt;僕が学生時代(2014年1月)に書いた記事「&lt;a href=&#34;http://offsidenow.phpapps.jp/archives/1671&#34;&gt;GUMBY + NODE.JS(EXPRESS) +APPFOGでペライチページを作ったので解説&lt;/a&gt;」を見つけて、この中で&lt;a href=&#34;https://www.ctl.io/appfog&#34;&gt;AppFog&lt;/a&gt;を利用してNode.jsのホスティングを行なっていました。
+最近になって「AppFogって今どうなってるんだろう」とか「もっと他のPaaSは無いのか」とか思ったので改めて調べてみたのでまとめてみます。&lt;/p&gt;
+
+&lt;p&gt;（ちなみに、この記事内で触れている盛岡TSUTAYAのカフェCulfeは&lt;a href=&#34;http://www.recomtank.com/entry/moriokatsutaya&#34;&gt;電源とWi-Fi完備&lt;/a&gt;で頻繁に利用していましたが、&lt;a href=&#34;http://morioka-tsutaya.net/news/morioka-tsutaya-%E3%82%AB%E3%83%95%E3%82%A7%E3%80%80culfe%E3%80%80%E9%96%89%E5%BA%97%E3%81%AE%E3%81%8A%E7%9F%A5%E3%82%89%E3%81%9B/&#34;&gt;2016年3月で閉店してしまっていた&lt;/a&gt;みたいです……）&lt;/p&gt;
+
+&lt;h2 id=&#34;前置き&#34;&gt;前置き&lt;/h2&gt;
+
+&lt;p&gt;まとめを読むにあたり、この辺を把握してもらえると嬉しいです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;AWS、GCP、Azure、Bluemixなどの大手ベンダーは今回は対象外としました。&lt;/li&gt;
+&lt;li&gt;全てを使ってみている訳ではないのでPaaSじゃないのも混ざってるかもしれないですけどご容赦下さい。&lt;/li&gt;
+&lt;li&gt;こんなサービスあるんだ、くらいで&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;また、今回参考にしたのは以下のサイトです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.appdynamics.com/product/battle-of-the-paas-node-js-apps-in-the-cloud/&#34;&gt;Battle of the PaaS: Node.js Apps in the Cloud&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.axlight.com/mt/sundayhacking/2015/07/nodejspaas.html&#34;&gt;node.jsアプリをデプロイするためのPaaSのクラウドサービスを探した&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://matome.naver.jp/odai/2133923360659821201&#34;&gt;今アツいWeb開発者向けクラウドプラットフォームまとめ&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/nodejs/node-v0.x-archive/wiki/Node-Hosting&#34;&gt;Hosting compatible with Node&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;node-jsのホスティングで使えそうなサービスたち&#34;&gt;Node.jsのホスティングで使えそうなサービスたち&lt;/h2&gt;
+
+&lt;h3 id=&#34;heroku&#34;&gt;Heroku&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://www.heroku.com&#34;&gt;https://www.heroku.com&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;昔から安定のHerokuです。Node.js以外にもRuby/Java/PHP/Python/Go/Scala/Clojureが利用できます。&lt;/p&gt;
+
+&lt;h3 id=&#34;modulus&#34;&gt;Modulus&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://modulus.io&#34;&gt;https://modulus.io&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;npm install -g modulus&lt;/code&gt;でCLIツールをインストールして利用できます。
+Node.js/PHP/Java/Python/&lt;a href=&#34;https://www.meteor.com&#34;&gt;Meteor&lt;/a&gt;(Node.jsのフレームワーク)が利用できます。&lt;/p&gt;
+
+&lt;h3 id=&#34;cloudnode&#34;&gt;cloudnode&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://cloudno.de/&#34;&gt;https://cloudno.de/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Node.js向けのPaaSです。&lt;code&gt;npm install -g cloudnode-cli&lt;/code&gt;で&lt;code&gt;cloudnodeコマンド&lt;/code&gt;を利用してデプロイします。
+CouchDB、MongoDB、Redisなども利用できます。&lt;/p&gt;
+
+&lt;h3 id=&#34;evennode&#34;&gt;evennode&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://www.evennode.com/&#34;&gt;https://www.evennode.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Node.js(とPython)向けのPaaSです。他のPaaSと違いアプリを作成すると「&lt;code&gt;git@git.evennode.com:xxxxxxxx.git&lt;/code&gt;」という感じのGitリポジトリのURLが発行され、そこにプッシュすることでデプロイできます。
+CLIツールのインストールも不要なのは手軽ですね。&lt;/p&gt;
+
+&lt;h3 id=&#34;nodechef&#34;&gt;NodeChef&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://nodechef.com/&#34;&gt;https://nodechef.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;こちらもNode.js向けのPaaSです。コマンドラインからデプロイができます。
+MongoDBやMeteorなどにも対応していてNode.js開発者が好むミドルウェアをサポートしてくれています。&lt;/p&gt;
+
+&lt;h3 id=&#34;nodejs-in-the-cloud-by-clever-cloud&#34;&gt;Nodejs in the cloud （by Clever Cloud）&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;http://nodejs-cloud.com/en&#34;&gt;http://nodejs-cloud.com/en&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;「A cloud for Node.js HOST YOUR WEB APPS IN THE CLOUD WITHOUT HASSLE」とあるように、Node.jsを簡単にデプロイできるPaaSです。
+中身は&lt;a href=&#34;https://www.clever-cloud.com/&#34;&gt;Clever Cloud&lt;/a&gt;が提供しているもののようです。&lt;/p&gt;
+
+&lt;h3 id=&#34;flow-app-engine&#34;&gt;FLOW APP ENGINE&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://flow.ch/appengine/&#34;&gt;https://flow.ch/appengine/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Node.jsのデプロイだけでなく、WebサーバーでのバランシングやDBの用意なども簡単なボタン操作で設定できます。
+NginxやApache、MongoDBやMySQLなどの有名なミドルウェアだけでなくかなり多くのミドルウェアをサポートしてくれています。&lt;/p&gt;
+
+&lt;h3 id=&#34;nodejitsu&#34;&gt;Nodejitsu&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://nodejitsu.com/&#34;&gt;https://nodejitsu.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/08.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Node.js専用のPaaSです。今は新規のアカウント登録はできず前述したModulus経由で扱うことができるようです。&lt;/p&gt;
+
+&lt;h3 id=&#34;joyent&#34;&gt;Joyent&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://www.joyent.com/&#34;&gt;https://www.joyent.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/09.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;IaaS提供もありますが、Dockerコンテナに最適化したクラウドサービス「&lt;a href=&#34;https://www.joyent.com/triton&#34;&gt;Triton&lt;/a&gt;」やオブジェクトストレージの「&lt;a href=&#34;https://www.joyent.com/manta&#34;&gt;Manta&lt;/a&gt;」を提供しています。
+Manta FUNCTIONSという機能ではNode.jsやPython、Rubyなど様々な言語を実行できます。&lt;/p&gt;
+
+&lt;h3 id=&#34;appfog&#34;&gt;AppFog&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;http://appfog.com&#34;&gt;http://appfog.com&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;冒頭でも触れたPaaSです。二年前くらいは無料でそこそこ使えて学生時代の僕にはすごくいいサービスだったのですが、今は有料化してしまったみたいです。&lt;/p&gt;
+
+&lt;h2 id=&#34;解説いれるくらい試せて無いサービスたち&#34;&gt;解説いれるくらい試せて無いサービスたち&lt;/h2&gt;
+
+&lt;p&gt;試せて無いですがNode.jsホスティングで調べて出てきたサービスたちです。
+中にはVPSっぽいのもあるのでPaaSって感じでは無いのもあると思います。&lt;/p&gt;
+
+&lt;p&gt;あとで試してみて解説が書けそうだったら別途まとめたいと思います。&lt;/p&gt;
+
+&lt;h3 id=&#34;platform-sh&#34;&gt;platform.sh&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://platform.sh/hosting/nodejs/&#34;&gt;https://platform.sh/hosting/nodejs/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;engine-yard&#34;&gt;Engine Yard&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://www.engineyard.com/&#34;&gt;https://www.engineyard.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/12.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;iclickandhost&#34;&gt;iClickAndHost&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://iclickandhost.com/website-hosting/&#34;&gt;https://iclickandhost.com/website-hosting/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/13.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;scalingo&#34;&gt;Scalingo&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://scalingo.com/&#34;&gt;https://scalingo.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/14.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;rosehosting&#34;&gt;RoseHosting&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://www.rosehosting.com/&#34;&gt;https://www.rosehosting.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/15.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;exoscale-apps&#34;&gt;exoscale apps&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://www.exoscale.ch/add-on/apps/&#34;&gt;https://www.exoscale.ch/add-on/apps/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/16.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;clerve-cloud&#34;&gt;clerve cloud&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://www.clever-cloud.com/nodejs&#34;&gt;https://www.clever-cloud.com/nodejs&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/17.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;linode&#34;&gt;Linode&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://www.linode.com/&#34;&gt;https://www.linode.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/18.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;cloud-foundry&#34;&gt;Cloud Foundry&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://www.cloudfoundry.org/&#34;&gt;https://www.cloudfoundry.org/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/19.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;redhat-open-shift&#34;&gt;RedHat Open Shift&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://www.openshift.com/&#34;&gt;https://www.openshift.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/20.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;pogodan&#34;&gt;Pogodan&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;http://www.pogodan.com/&#34;&gt;http://www.pogodan.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/21.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;おまけ&#34;&gt;おまけ&lt;/h2&gt;
+
+&lt;p&gt;今回の記事を書く上で探してて惜しかったサービスをその他枠として挙げておきます。&lt;/p&gt;
+
+&lt;h3 id=&#34;commando-io-by-nodesocket&#34;&gt;Commando.io （by nodesocket）&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://commando.io/&#34;&gt;https://commando.io/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/22.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://nodesocket.com/&#34;&gt;nodeSocket&lt;/a&gt;というサービス名かと思いきや会社名でした。
+Command.ioというサービスでおそらくVPSサービスです。なのでNode.jsももちろん使えます。PaaSでは無いっぽいのでおまけ枠です。&lt;/p&gt;
+
+&lt;h3 id=&#34;c4sa&#34;&gt;C4SA&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;http://c4sa.nifty.com/&#34;&gt;http://c4sa.nifty.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/23.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Niftyが運営しているサービスです。残念ながらNode.jsには対応してませんでしたがPHPやRubyなどは利用できるみたいです。&lt;/p&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;いかがでしたでしょうか。
+思った以上にいっぱいあるなぁという感想です。&lt;/p&gt;
+
+&lt;p&gt;色々と調べててやはりHerokuが使い勝手や情報の調べやすさ的に圧倒的だなと感じました。&lt;/p&gt;
+
+&lt;p&gt;特にこだわりなどが無く、「通常利用で無料である程度試したい」くらいであればHerokuを使うのが良いかと思います。
+ちょっと気分を変えたいときや、何かの理由でHerokuが厳しいと感じた際の参考になれば幸いです。&lt;/p&gt;
+
+&lt;p&gt;それでは。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Node.jsでコマンドラインツール作るときに使いやすいreadline-sync</title>
       <link>https://dotstud.io/blog/nodejs-npm-readline-sync/</link>
       <pubDate>Wed, 05 Oct 2016 10:00:00 +0900</pubDate>

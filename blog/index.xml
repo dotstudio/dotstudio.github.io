@@ -7,8 +7,243 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Thu, 15 Dec 2016 10:00:00 +0900</lastBuildDate>
+    <lastBuildDate>Sun, 25 Dec 2016 02:19:41 +0900</lastBuildDate>
     <atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>2016年12月版　Node.jsをホスティング出来るPaaSまとめ </title>
+      <link>https://dotstud.io/blog/nodejs-hosting-services-2016/</link>
+      <pubDate>Sun, 25 Dec 2016 02:19:41 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nodejs-hosting-services-2016/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudio代表の&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;年の瀬ですね。というかクリスマスですね。
+今回の記事は&lt;a href=&#34;http://qiita.com/advent-calendar/2016/ipu&#34;&gt;岩手県立大学アドベントカレンダー2016&lt;/a&gt;に登録しています。&lt;/p&gt;
+
+&lt;p&gt;僕が学生時代(2014年1月)に書いた記事「&lt;a href=&#34;http://offsidenow.phpapps.jp/archives/1671&#34;&gt;GUMBY + NODE.JS(EXPRESS) +APPFOGでペライチページを作ったので解説&lt;/a&gt;」を見つけて、この中で&lt;a href=&#34;https://www.ctl.io/appfog&#34;&gt;AppFog&lt;/a&gt;を利用してNode.jsのホスティングを行なっていました。
+最近になって「AppFogって今どうなってるんだろう」とか「もっと他のPaaSは無いのか」とか思ったので改めて調べてみたのでまとめてみます。&lt;/p&gt;
+
+&lt;p&gt;（ちなみに、この記事内で触れている盛岡TSUTAYAのカフェCulfeは&lt;a href=&#34;http://www.recomtank.com/entry/moriokatsutaya&#34;&gt;電源とWi-Fi完備&lt;/a&gt;で頻繁に利用していましたが、&lt;a href=&#34;http://morioka-tsutaya.net/news/morioka-tsutaya-%E3%82%AB%E3%83%95%E3%82%A7%E3%80%80culfe%E3%80%80%E9%96%89%E5%BA%97%E3%81%AE%E3%81%8A%E7%9F%A5%E3%82%89%E3%81%9B/&#34;&gt;2016年3月で閉店してしまっていた&lt;/a&gt;みたいです……）&lt;/p&gt;
+
+&lt;h2 id=&#34;前置き&#34;&gt;前置き&lt;/h2&gt;
+
+&lt;p&gt;まとめを読むにあたり、この辺を把握してもらえると嬉しいです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;AWS、GCP、Azure、Bluemixなどの大手ベンダーは今回は対象外としました。&lt;/li&gt;
+&lt;li&gt;全てを使ってみている訳ではないのでPaaSじゃないのも混ざってるかもしれないですけどご容赦下さい。&lt;/li&gt;
+&lt;li&gt;こんなサービスあるんだ、くらいで&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;また、今回参考にしたのは以下のサイトです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.appdynamics.com/product/battle-of-the-paas-node-js-apps-in-the-cloud/&#34;&gt;Battle of the PaaS: Node.js Apps in the Cloud&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.axlight.com/mt/sundayhacking/2015/07/nodejspaas.html&#34;&gt;node.jsアプリをデプロイするためのPaaSのクラウドサービスを探した&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://matome.naver.jp/odai/2133923360659821201&#34;&gt;今アツいWeb開発者向けクラウドプラットフォームまとめ&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/nodejs/node-v0.x-archive/wiki/Node-Hosting&#34;&gt;Hosting compatible with Node&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;node-jsのホスティングで使えそうなサービスたち&#34;&gt;Node.jsのホスティングで使えそうなサービスたち&lt;/h2&gt;
+
+&lt;h3 id=&#34;heroku&#34;&gt;Heroku&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://www.heroku.com&#34;&gt;https://www.heroku.com&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;昔から安定のHerokuです。Node.js以外にもRuby/Java/PHP/Python/Go/Scala/Clojureが利用できます。&lt;/p&gt;
+
+&lt;h3 id=&#34;modulus&#34;&gt;Modulus&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://modulus.io&#34;&gt;https://modulus.io&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;npm install -g modulus&lt;/code&gt;でCLIツールをインストールして利用できます。
+Node.js/PHP/Java/Python/&lt;a href=&#34;https://www.meteor.com&#34;&gt;Meteor&lt;/a&gt;(Node.jsのフレームワーク)が利用できます。&lt;/p&gt;
+
+&lt;h3 id=&#34;cloudnode&#34;&gt;cloudnode&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://cloudno.de/&#34;&gt;https://cloudno.de/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Node.js向けのPaaSです。&lt;code&gt;npm install -g cloudnode-cli&lt;/code&gt;で&lt;code&gt;cloudnodeコマンド&lt;/code&gt;を利用してデプロイします。
+CouchDB、MongoDB、Redisなども利用できます。&lt;/p&gt;
+
+&lt;h3 id=&#34;evennode&#34;&gt;evennode&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://www.evennode.com/&#34;&gt;https://www.evennode.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Node.js(とPython)向けのPaaSです。他のPaaSと違いアプリを作成すると「&lt;code&gt;git@git.evennode.com:xxxxxxxx.git&lt;/code&gt;」という感じのGitリポジトリのURLが発行され、そこにプッシュすることでデプロイできます。
+CLIツールのインストールも不要なのは手軽ですね。&lt;/p&gt;
+
+&lt;h3 id=&#34;nodechef&#34;&gt;NodeChef&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://nodechef.com/&#34;&gt;https://nodechef.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;こちらもNode.js向けのPaaSです。コマンドラインからデプロイができます。
+MongoDBやMeteorなどにも対応していてNode.js開発者が好むミドルウェアをサポートしてくれています。&lt;/p&gt;
+
+&lt;h3 id=&#34;nodejs-in-the-cloud-by-clever-cloud&#34;&gt;Nodejs in the cloud （by Clever Cloud）&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;http://nodejs-cloud.com/en&#34;&gt;http://nodejs-cloud.com/en&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;「A cloud for Node.js HOST YOUR WEB APPS IN THE CLOUD WITHOUT HASSLE」とあるように、Node.jsを簡単にデプロイできるPaaSです。
+中身は&lt;a href=&#34;https://www.clever-cloud.com/&#34;&gt;Clever Cloud&lt;/a&gt;が提供しているもののようです。&lt;/p&gt;
+
+&lt;h3 id=&#34;flow-app-engine&#34;&gt;FLOW APP ENGINE&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://flow.ch/appengine/&#34;&gt;https://flow.ch/appengine/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Node.jsのデプロイだけでなく、WebサーバーでのバランシングやDBの用意なども簡単なボタン操作で設定できます。
+NginxやApache、MongoDBやMySQLなどの有名なミドルウェアだけでなくかなり多くのミドルウェアをサポートしてくれています。&lt;/p&gt;
+
+&lt;h3 id=&#34;nodejitsu&#34;&gt;Nodejitsu&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://nodejitsu.com/&#34;&gt;https://nodejitsu.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/08.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Node.js専用のPaaSです。今は新規のアカウント登録はできず前述したModulus経由で扱うことができるようです。&lt;/p&gt;
+
+&lt;h3 id=&#34;joyent&#34;&gt;Joyent&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://www.joyent.com/&#34;&gt;https://www.joyent.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/09.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;IaaS提供もありますが、Dockerコンテナに最適化したクラウドサービス「&lt;a href=&#34;https://www.joyent.com/triton&#34;&gt;Triton&lt;/a&gt;」やオブジェクトストレージの「&lt;a href=&#34;https://www.joyent.com/manta&#34;&gt;Manta&lt;/a&gt;」を提供しています。
+Manta FUNCTIONSという機能ではNode.jsやPython、Rubyなど様々な言語を実行できます。&lt;/p&gt;
+
+&lt;h3 id=&#34;appfog&#34;&gt;AppFog&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;http://appfog.com&#34;&gt;http://appfog.com&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;冒頭でも触れたPaaSです。二年前くらいは無料でそこそこ使えて学生時代の僕にはすごくいいサービスだったのですが、今は有料化してしまったみたいです。&lt;/p&gt;
+
+&lt;h2 id=&#34;解説いれるくらい試せて無いサービスたち&#34;&gt;解説いれるくらい試せて無いサービスたち&lt;/h2&gt;
+
+&lt;p&gt;試せて無いですがNode.jsホスティングで調べて出てきたサービスたちです。
+中にはVPSっぽいのもあるのでPaaSって感じでは無いのもあると思います。&lt;/p&gt;
+
+&lt;p&gt;あとで試してみて解説が書けそうだったら別途まとめたいと思います。&lt;/p&gt;
+
+&lt;h3 id=&#34;platform-sh&#34;&gt;platform.sh&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://platform.sh/hosting/nodejs/&#34;&gt;https://platform.sh/hosting/nodejs/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;engine-yard&#34;&gt;Engine Yard&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://www.engineyard.com/&#34;&gt;https://www.engineyard.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/12.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;iclickandhost&#34;&gt;iClickAndHost&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://iclickandhost.com/website-hosting/&#34;&gt;https://iclickandhost.com/website-hosting/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/13.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;scalingo&#34;&gt;Scalingo&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://scalingo.com/&#34;&gt;https://scalingo.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/14.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;rosehosting&#34;&gt;RoseHosting&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://www.rosehosting.com/&#34;&gt;https://www.rosehosting.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/15.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;exoscale-apps&#34;&gt;exoscale apps&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://www.exoscale.ch/add-on/apps/&#34;&gt;https://www.exoscale.ch/add-on/apps/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/16.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;clerve-cloud&#34;&gt;clerve cloud&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://www.clever-cloud.com/nodejs&#34;&gt;https://www.clever-cloud.com/nodejs&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/17.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;linode&#34;&gt;Linode&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://www.linode.com/&#34;&gt;https://www.linode.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/18.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;cloud-foundry&#34;&gt;Cloud Foundry&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://www.cloudfoundry.org/&#34;&gt;https://www.cloudfoundry.org/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/19.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;redhat-open-shift&#34;&gt;RedHat Open Shift&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://www.openshift.com/&#34;&gt;https://www.openshift.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/20.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;pogodan&#34;&gt;Pogodan&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;http://www.pogodan.com/&#34;&gt;http://www.pogodan.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/21.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;おまけ&#34;&gt;おまけ&lt;/h2&gt;
+
+&lt;p&gt;今回の記事を書く上で探してて惜しかったサービスをその他枠として挙げておきます。&lt;/p&gt;
+
+&lt;h3 id=&#34;commando-io-by-nodesocket&#34;&gt;Commando.io （by nodesocket）&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://commando.io/&#34;&gt;https://commando.io/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/22.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://nodesocket.com/&#34;&gt;nodeSocket&lt;/a&gt;というサービス名かと思いきや会社名でした。
+Command.ioというサービスでおそらくVPSサービスです。なのでNode.jsももちろん使えます。PaaSでは無いっぽいのでおまけ枠です。&lt;/p&gt;
+
+&lt;h3 id=&#34;c4sa&#34;&gt;C4SA&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;http://c4sa.nifty.com/&#34;&gt;http://c4sa.nifty.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/23.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Niftyが運営しているサービスです。残念ながらNode.jsには対応してませんでしたがPHPやRubyなどは利用できるみたいです。&lt;/p&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;いかがでしたでしょうか。
+思った以上にいっぱいあるなぁという感想です。&lt;/p&gt;
+
+&lt;p&gt;色々と調べててやはりHerokuが使い勝手や情報の調べやすさ的に圧倒的だなと感じました。&lt;/p&gt;
+
+&lt;p&gt;特にこだわりなどが無く、「通常利用で無料である程度試したい」くらいであればHerokuを使うのが良いかと思います。
+ちょっと気分を変えたいときや、何かの理由でHerokuが厳しいと感じた際の参考になれば幸いです。&lt;/p&gt;
+
+&lt;p&gt;それでは。&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>littleBits Arduinoモジュールでより細かく値を入出力して状況を伝えよう</title>
@@ -2255,128 +2490,6 @@ npm i serialport milkcocoa
 &lt;/ul&gt;
 
 &lt;p&gt;ドタキャン問題と向き合って、皆さんが主催するイベントも楽しいイベントになるといいですね！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>レポート！ギャル電❤︎初めての電子工作ハンズオンvol.1開催</title>
-      <link>https://dotstud.io/blog/gyaruden-handson-mao-report/</link>
-      <pubDate>Mon, 31 Oct 2016 08:47:33 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/gyaruden-handson-mao-report/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、テクニカルライターのまおです！&lt;br /&gt;
-先日、私が所属する&lt;a href=&#34;”https://dotstud.io/blog/iotlt-gbvol19-galden-report/&#34;&gt;ギャル電&lt;/a&gt;とdotstudioが合同主催して「初めての電子工作ハンズオン」を開催しましたー😄　&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/045/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;初めての開催だったので上手くいくか心配でしたが、参加してくれた皆さんが「いい感じだった」と言ってくれました😆　それってつまり成功！？　イエーイ！！！&lt;/p&gt;
-
-&lt;p&gt;では当日の様子を紹介していきたいと思います❤︎&lt;/p&gt;
-
-&lt;h2 id=&#34;初めての電子工作ハンズオン-の概要&#34;&gt;「初めての電子工作ハンズオン」の概要&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;初心者の方でもわかりやすく電子工作を楽しんでもらえるように&lt;/strong&gt;、2016年10月1日（土）に「初めての電子工作ハンズオンvol.1」を開催しました！&lt;/p&gt;
-
-&lt;p&gt;当日は女性5名と男性2名の計7名が参加。イベントを告知するときから「&lt;strong&gt;電子工作に興味があって、光るものが好きな女子&lt;/strong&gt;」を対象としていたので、女性の方が圧倒的に多かったですね！&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/045/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;参加者のみなさんには、dotstudioにてキット販売をしている「光るピアス」&lt;a href=&#34;https://dotstud.io/projects/neopixel-ring-gemma-earrings/&#34;&gt;&amp;ldquo;Sparkling Piercing Kit for CLUBBERS&amp;rdquo;（4480円）&lt;/a&gt;を、私が以前公開した&lt;a href=&#34;https://dotstud.io/blog/neopixel-ring-gemma-earrings/&#34;&gt;光るイヤリングの作り方&lt;/a&gt;という記事をもとに制作していきました〜😆　参加費は、キット代＋懇親会費用込みで4980円です！&lt;/p&gt;
-
-&lt;h2 id=&#34;当日の流れ&#34;&gt;当日の流れ&lt;/h2&gt;
-
-&lt;script async class=&#34;speakerdeck-embed&#34; data-id=&#34;dae09f60e1b44f4487087a3d11089922&#34; data-ratio=&#34;1.33333333333333&#34; src=&#34;//speakerdeck.com/assets/embed.js&#34;&gt;&lt;/script&gt;
-
-&lt;p&gt;今回のハンズオンでは、こちらのスライドで作り方を説明しながら進めてました〜😁&lt;/p&gt;
-
-&lt;h3 id=&#34;ハンダ付けの練習&#34;&gt;ハンダ付けの練習&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/045/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;まずはじめにハンダ付けの練習してもらいました。今回ハンダ付けの練習で作ってもらったのはこちらのスマイルくん！&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/045/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;ピンヘッダ&lt;/li&gt;
-&lt;li&gt;LED&lt;/li&gt;
-&lt;li&gt;フックアップワイヤー&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;これらの材料をユニバーサル基板（スマイルくんの土台になる部分）にハンダ付けしてもらいました😆&lt;/p&gt;
-
-&lt;p&gt;ピンヘッダの切断や、ワイヤーストリッパーでフックアップワイヤーの銅線を剥くところまで実際にやってもらっらので、最低限のハンダ付け基礎知識は覚えてもらえたと思います😄&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/045/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;一番大事なのは安全メガネをすること！　ハンダは下手すると飛び散るので、みなさん目は保護しておきましょう〜シャキーン😎&lt;/p&gt;
-
-&lt;h3 id=&#34;光るイヤリングの制作&#34;&gt;光るイヤリングの制作&lt;/h3&gt;
-
-&lt;p&gt;今回のハンズオンのメイン、&lt;strong&gt;光るイヤリングを制作する&lt;/strong&gt; パートです。パソコンでのプログラミング環境設定やハンダ付けなどは、各自私が書いた記事を元に作業を進めてもらいました！&lt;/p&gt;
-
-&lt;p&gt;ハンズオンでは &lt;strong&gt;プログラムのコピペのトリック&lt;/strong&gt; などを主に紹介しました😁&lt;/p&gt;
-
-&lt;h4 id=&#34;コピペのトリックとは&#34;&gt;コピペのトリックとは&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/045/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;簡単にプログラムを探す方法（今回はArduino IDE内のスケッチの例からサンプルプログラムを見つける方法）&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/045/07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;プログラム内で使うハードウェアの設定方法（拾ってきたプログラムの動作内容がわからないときに使える、データを送るピンの番号や、LEDの数などの変え方）&lt;/p&gt;
-
-&lt;p&gt;などを詳しく紹介しました😎&lt;/p&gt;
-
-&lt;h4 id=&#34;ledの色を変える&#34;&gt;LEDの色を変える&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/045/08.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ギャル電はクラブファッションを気にするので、プログラム内でのLEDの色の変え方を詳しく説明しました！　色の変え方さえ分かっておけば上等！😏&lt;/p&gt;
-
-&lt;h3 id=&#34;最後にピアスフックを付けて完成&#34;&gt;最後にピアスフックを付けて完成❤︎&lt;/h3&gt;
-
-&lt;p&gt;&lt;center&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;続々出来上がってきました！&lt;a href=&#34;https://twitter.com/hashtag/gyaruden?src=hash&#34;&gt;#gyaruden&lt;/a&gt; &lt;a href=&#34;https://twitter.com/hashtag/%E3%83%8F%E3%83%B3%E3%82%BA%E3%82%AA%E3%83%B3?src=hash&#34;&gt;#ハンズオン&lt;/a&gt; &lt;a href=&#34;https://t.co/z8edDgXky5&#34;&gt;pic.twitter.com/z8edDgXky5&lt;/a&gt;&lt;/p&gt; ギャル電 (@GALDEN999) &lt;a href=&#34;https://twitter.com/GALDEN999/status/782115708800950273&#34;&gt;2016年10月1日&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;かわいい&lt;a href=&#34;https://twitter.com/hashtag/gyaruden?src=hash&#34;&gt;#gyaruden&lt;/a&gt; &lt;a href=&#34;https://twitter.com/hashtag/%E3%83%8F%E3%83%B3%E3%82%BA%E3%82%AA%E3%83%B3?src=hash&#34;&gt;#ハンズオン&lt;/a&gt; &lt;a href=&#34;https://t.co/SmSwjFG3K5&#34;&gt;pic.twitter.com/SmSwjFG3K5&lt;/a&gt;&lt;/p&gt; ギャル電 (@GALDEN999) &lt;a href=&#34;https://twitter.com/GALDEN999/status/782124352376406016&#34;&gt;2016年10月1日&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;動画で見るとちょーかわいいですね💓💓💓&lt;/p&gt;
-
-&lt;p&gt;みんな似合ってました〜！！&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;ハンダ付け練習のやつもバッチにするとおしゃれ！ &lt;a href=&#34;https://t.co/Wmv4g1z11s&#34;&gt;pic.twitter.com/Wmv4g1z11s&lt;/a&gt;&lt;/p&gt; ギャル電 (@GALDEN999) &lt;a href=&#34;https://twitter.com/GALDEN999/status/782132757023469568&#34;&gt;2016年10月1日&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;ハンダ付けの練習で作ったスマイルくんをバッチにする方もいました！😄&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/045/09.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;「ギャル電に入りたい！」と言ってくれた参加者さんも！&lt;/p&gt;
-
-&lt;h2 id=&#34;会場を貸してくれたアスラテック株式会社&#34;&gt;会場を貸してくれたアスラテック株式会社&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/045/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;最後に、今回会場を提供していただいた&lt;a href=&#34;https://www.asratec.co.jp/&#34;&gt;アスラテック株式会社&lt;/a&gt;の今井さんが、アスラテック株式会社についてを紹介。なんと、アスラテック株式会社は &lt;strong&gt;ロボットのソフトウェア開発専用の会社&lt;/strong&gt; なんです！　開発されたソフトウェアで動くロボットはいっぱい種類があって面白いなと思いました！&lt;/p&gt;
-
-&lt;p&gt;今回は会場を提供していただき本当にありがとうございました！！😊💓&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/045/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;初めてハンズオンを開催したのですが、参加者の皆さんが「楽しかった！」「また参加したい」と言ってくれましたー！！！　めっちゃ嬉しいです💓&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;@n0bisuke&lt;/a&gt;さんのまとめ&lt;a href=&#34;https://t.co/umdho4aUWC&#34;&gt;https://t.co/umdho4aUWC&lt;/a&gt;を本日のトゥギャトピに選ばせていただきました！ギャル電、非常に気になるのでまた活動をまとめていただきたいです！トゥギャトピはTogetterのTOPページで紹介しています。みてね！&lt;/p&gt; トゥギャッターまとめ編集部 (@tg_editor) &lt;a href=&#34;https://twitter.com/tg_editor/status/782795742343680000&#34;&gt;2016年10月3日&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;また、当日の様子をTogetterでまとめたものが、TogetterのTOPページに掲載される「トゥギャトピ」に選ばれました！　イエーイ！！&lt;/p&gt;
-
-&lt;p&gt;次回は冬休み頃にハンズオンvol.2を開催したいと思ってます！　もっともっとみんなに電子工作の楽しさが伝わればめっちゃいいなと思います😊&lt;/p&gt;
-
-&lt;p&gt;ではギャル電の次の記事もお楽しみに💓&lt;/p&gt;
 </description>
     </item>
     
