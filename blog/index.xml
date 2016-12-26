@@ -7,8 +7,86 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Sun, 25 Dec 2016 02:19:41 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 26 Dec 2016 14:00:27 +0900</lastBuildDate>
     <atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Node.jsでファイル監視を行うchokiderを使ってみよう</title>
+      <link>https://dotstud.io/blog/nodejs-npm-chokidar-fswatch/</link>
+      <pubDate>Mon, 26 Dec 2016 14:00:27 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nodejs-npm-chokidar-fswatch/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudio代表の&lt;a href=&#34;http://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/nodejs-npm-readline-sync/&#34;&gt;Node.jsでコマンドラインツール作るときに使いやすいreadline-sync&lt;/a&gt;に続いて、Node.jsのモジュール紹介です。&lt;/p&gt;
+
+&lt;p&gt;Gitなどを用いて開発を行っていると「ファイルの変更を検知して何かを実行したい」という場面があります。
+今日はそんな場面で活用できるファイル監視を行うモジュールを紹介します。&lt;/p&gt;
+
+&lt;h2 id=&#34;執筆時点のマシンスペック&#34;&gt;執筆時点のマシンスペック&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;macOS Sierra (v10.12)&lt;/li&gt;
+&lt;li&gt;Node.js v6.6.0&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;何か不具合があったときに参照してください。&lt;/p&gt;
+
+&lt;h2 id=&#34;インストール&#34;&gt;インストール&lt;/h2&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://github.com/paulmillr/chokidar&#34;&gt;chokidar&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;npm init&lt;/code&gt;で&lt;code&gt;package.json&lt;/code&gt;を作成してから進めます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;npm init --yes
+npm i --save chokidar
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;サンプルを動かしてみる&#34;&gt;サンプルを動かしてみる&lt;/h2&gt;
+
+&lt;h3 id=&#34;ファイル監視&#34;&gt;ファイル監視&lt;/h3&gt;
+
+&lt;p&gt;app.jsを作成します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;const chokidar = require(&#39;chokidar&#39;);
+
+// One-liner for current directory, ignores .dotfiles
+chokidar.watch(&#39;.&#39;, {ignored: /[\/\\]\./}).on(&#39;all&#39;, (event, path) =&amp;gt; {
+  console.log(event, path);
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;app.jsを保存したらアプリケーションを起動しましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;node app
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これで、nodeコマンドを実行したディレクトリ以下のファイルを監視しはじめます。&lt;/p&gt;
+
+&lt;p&gt;先ほど実行した&lt;code&gt;npm init --yes&lt;/code&gt;で&lt;code&gt;package.json&lt;/code&gt;が作成されます。&lt;code&gt;app.js&lt;/code&gt;を実行したまま&lt;code&gt;package.json&lt;/code&gt;を編集してみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/1e9ddbebcda4037874c803f91d6a8b66.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;このように、変更があったファイルを検知してくれます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;・
+・
+・
+change package.json
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;chokidarを使ってファイル監視して「特定のファイルが更新されたら〇〇する」というトリガーを簡単に作れます。&lt;/p&gt;
+
+&lt;p&gt;プロジェクト管理などで活用してみてください。&lt;/p&gt;
+
+&lt;p&gt;それでは。&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>2016年12月版　Node.jsをホスティング出来るPaaSまとめ </title>
@@ -2391,106 +2469,6 @@ npm i serialport milkcocoa
 &lt;p&gt;せっかく作り上げたサービスを、できることなら成長させたいですよね。そのためにはサービスに関わる人全てが「経営者目線を意識」するのも効果的のようです。&lt;/p&gt;
 
 &lt;p&gt;これからのconnpassがどのような展開を迎えるのか、今後の活躍にも注目ですね！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>【connpass × のびすけ対談】勉強会あるある！イベントのドタキャンにどう対処する？</title>
-      <link>https://dotstud.io/blog/connpass-n0bisuke-interview-vol1/</link>
-      <pubDate>Tue, 01 Nov 2016 10:00:00 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/connpass-n0bisuke-interview-vol1/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、dotstudioエディターのうらら（@uraranbon）です。&lt;/p&gt;
-
-&lt;p&gt;いろんな人と交流をしたい。新しい情報を得たい。IT/Web業界では最新トレンドやナレッジを共有する「勉強会」や「LT（ライトニングトーク）」というイベントが毎日のように開催されています。&lt;/p&gt;
-
-&lt;p&gt;しかし、イベント当日に参加者が来ない「&lt;strong&gt;ドタキャン&lt;/strong&gt;」に悩まされたことがある方は多いのではないでしょうか。エンジニア向けイベントサービス「&lt;a href=&#34;http://connpass.com&#34;&gt;connpass&lt;/a&gt;」と、1年で100件ほどイベントを開催するエンジニアののびすけ（@n0bisuke）がドタキャン問題の解決策を話します。&lt;/p&gt;
-
-&lt;div class=&#34;person-intro&#34;&gt;
-    &lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34;/&gt;
-    &lt;div class=&#34;person-info&#34;&gt;
-        &lt;strong&gt;人物紹介：佐藤治夫 氏&lt;/strong&gt;
-        &lt;p&gt;株式会社ビープラウド代表。&lt;br /&gt;2011年からイベントサイト「connpass」を運営する傍ら、自身も積極的に勉強会やイベント活動をおこなっている。&lt;/p&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
-
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;話を伺ってきたのは、エンジニア向けのイベントを積極的に主催しているdotstudio代表/エンジニアのびすけです。よく「connpass」を使って集客をしています。&lt;/p&gt;
-
-&lt;div class=&#34;person-intro&#34;&gt;
-    &lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; /&gt;
-    &lt;div class=&#34;person-info&#34;&gt;
-        &lt;strong&gt;人物紹介：菅原のびすけ&lt;/strong&gt;
-        &lt;p&gt;dotstudio代表。&lt;br /&gt;1989年生まれのバックエンドエンジニア。 &lt;a href=&#34;http://iotlt.connpass.com&#34; target=&#34;_blank&#34;&gt;IoTLT&lt;/a&gt;、Swift愛好会、NodeBotsハンズオンなど、幅広いイベントを開催している。&lt;/p&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&#34;参加登録した人のドタキャンをなくすには&#34;&gt;参加登録した人のドタキャンをなくすには&lt;/h2&gt;
-
-&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; /&gt;&lt;span&gt;とあるイベントに参加者の8~9割がconnpassの通知メール経由ってすごいですよね。僕自身も6,000人の集客がconnpassでできました。ただ、人が集まりやすい仕組みになってるからこそ、勢いでくるというか。&lt;strong&gt;ドタキャン率も高い印象です&lt;/strong&gt;。それってどのイベントサイトにも言えると思うんですけど。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;
-
-&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;公開されると「とりあえず参加します」みたいな、記念参加みたいにする人もいますよね。そこをなんとかしたいっていう問題はあります。IT業界全体の問題ですよね。&lt;/span&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;ドタキャンをなくすにはどうしたらいいですかね。ドタキャン問題を減らせる機能はうちも入れたい。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;
-
-&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; /&gt;&lt;span&gt;&lt;strong&gt;事前課金式&lt;/strong&gt;みたいなのはいいかなと思います。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;
-
-&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;1,000円とか徴収するっていう感じですよね。そうすると参加者が伸び悩んじゃう懸念もありますね。「行けないかもしれないからちょっと……」みたいな。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;
-
-&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; /&gt;&lt;span&gt;あと、僕は&lt;a href=&#34;http://nodejs.connpass.com/&#34; &gt;Node学園&lt;/a&gt;さんのやり方を参考にしていますね。Node学園では&lt;strong&gt;最初にイベントページだけを公開して、募集は1週間前とかにしています。&lt;/strong&gt;最近のNode学園は2~3日前に募集開始になってるときもあります。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;
-
-&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; /&gt;&lt;span&gt;募集開始時期があまりにも早いと、申し込みしたこと自体を忘れてしまうんですよね。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;
-
-&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; /&gt;&lt;span&gt;世の中みんなクリーンな心だったらこんなこと考えなくていいんでしょうけど（笑）&lt;/span&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;あはは（笑）　いちおう、connpassには「参加した」とか「キャンセルした」とかは全部表示されるようになっているんです。他のサービスは参加を隠せたりするんですけど。ユーザページである程度その人を把握できます。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;
-
-&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; /&gt;&lt;span&gt;申し込みして、キャンセル処理してなくてもキャンセルする人もいますよね。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;
-
-&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; /&gt;&lt;span&gt;ドタキャンは問題だと思いつつ、仕方ないかとも思っているんですよね。ドタキャンは絶対発生するものと思っていて。 &lt;strong&gt;200人が定員の会場だとしたら250人くらいまで募集をかけるときもあります。&lt;/strong&gt;&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;
-
-&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;たしかに。僕も入らないけれど60人で募集して、当日来ないだろうという当たりをつけてやっていますね。&lt;/span&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;「ドタキャンはIT業界全体の問題」&lt;/strong&gt;と佐藤氏が仰っていたように、イベントでは避けられないものなのかもしれません。とほほ。&lt;/p&gt;
-
-&lt;p&gt;ドタキャンに悩んでいる方は、次のようなことを試すと良いかもしれませんね。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;最初にイベントページだけを公開して、募集は1週間前や2~3日前などにする&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;参加費をとり、事前回収制にする&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;ドタキャンを見越して多めに募集する（定員が200人なら250人募集など）&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;ドタキャン問題と向き合って、皆さんが主催するイベントも楽しいイベントになるといいですね！&lt;/p&gt;
 </description>
     </item>
     

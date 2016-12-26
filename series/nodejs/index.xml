@@ -10,6 +10,84 @@
     <atom:link href="/series/nodejs/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Node.jsでファイル監視を行うchokiderを使ってみよう</title>
+      <link>https://dotstud.io/blog/nodejs-npm-chokidar-fswatch/</link>
+      <pubDate>Mon, 26 Dec 2016 14:00:27 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nodejs-npm-chokidar-fswatch/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudio代表の&lt;a href=&#34;http://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/nodejs-npm-readline-sync/&#34;&gt;Node.jsでコマンドラインツール作るときに使いやすいreadline-sync&lt;/a&gt;に続いて、Node.jsのモジュール紹介です。&lt;/p&gt;
+
+&lt;p&gt;Gitなどを用いて開発を行っていると「ファイルの変更を検知して何かを実行したい」という場面があります。
+今日はそんな場面で活用できるファイル監視を行うモジュールを紹介します。&lt;/p&gt;
+
+&lt;h2 id=&#34;執筆時点のマシンスペック&#34;&gt;執筆時点のマシンスペック&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;macOS Sierra (v10.12)&lt;/li&gt;
+&lt;li&gt;Node.js v6.6.0&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;何か不具合があったときに参照してください。&lt;/p&gt;
+
+&lt;h2 id=&#34;インストール&#34;&gt;インストール&lt;/h2&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://github.com/paulmillr/chokidar&#34;&gt;chokidar&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;npm init&lt;/code&gt;で&lt;code&gt;package.json&lt;/code&gt;を作成してから進めます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;npm init --yes
+npm i --save chokidar
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;サンプルを動かしてみる&#34;&gt;サンプルを動かしてみる&lt;/h2&gt;
+
+&lt;h3 id=&#34;ファイル監視&#34;&gt;ファイル監視&lt;/h3&gt;
+
+&lt;p&gt;app.jsを作成します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;const chokidar = require(&#39;chokidar&#39;);
+
+// One-liner for current directory, ignores .dotfiles
+chokidar.watch(&#39;.&#39;, {ignored: /[\/\\]\./}).on(&#39;all&#39;, (event, path) =&amp;gt; {
+  console.log(event, path);
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;app.jsを保存したらアプリケーションを起動しましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;node app
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これで、nodeコマンドを実行したディレクトリ以下のファイルを監視しはじめます。&lt;/p&gt;
+
+&lt;p&gt;先ほど実行した&lt;code&gt;npm init --yes&lt;/code&gt;で&lt;code&gt;package.json&lt;/code&gt;が作成されます。&lt;code&gt;app.js&lt;/code&gt;を実行したまま&lt;code&gt;package.json&lt;/code&gt;を編集してみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/1e9ddbebcda4037874c803f91d6a8b66.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;このように、変更があったファイルを検知してくれます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;・
+・
+・
+change package.json
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;chokidarを使ってファイル監視して「特定のファイルが更新されたら〇〇する」というトリガーを簡単に作れます。&lt;/p&gt;
+
+&lt;p&gt;プロジェクト管理などで活用してみてください。&lt;/p&gt;
+
+&lt;p&gt;それでは。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>2016年12月版　Node.jsをホスティング出来るPaaSまとめ </title>
       <link>https://dotstud.io/blog/nodejs-hosting-services-2016/</link>
       <pubDate>Sun, 25 Dec 2016 02:19:41 +0900</pubDate>
