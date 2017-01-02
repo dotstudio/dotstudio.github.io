@@ -7,8 +7,110 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Mon, 26 Dec 2016 14:00:27 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 02 Jan 2017 15:00:53 +0900</lastBuildDate>
     <atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>AzureでMySQLのセットアップと接続方法</title>
+      <link>https://dotstud.io/blog/howto-setup-azure-mysql/</link>
+      <pubDate>Mon, 02 Jan 2017 15:00:53 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/howto-setup-azure-mysql/</guid>
+      
+      <description>
+
+&lt;p&gt;明けましておめでとうございます。今年もよろしくお願いします。&lt;/p&gt;
+
+&lt;p&gt;ゆったりした時間の流れている実家から記事を書いています。&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;@n0bisuke&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;今日はAzureでのMySQLの使い方を紹介します。&lt;/p&gt;
+
+&lt;p&gt;新年一発目の記事は何か抱負的なこと書いた方がいいんじゃないかって声もありそうですがそういうのはモチベーションが上がったら書きますね。&lt;/p&gt;
+
+&lt;h2 id=&#34;新規にmysqlデータベースを作成する&#34;&gt;新規にMySQLデータベースを作成する&lt;/h2&gt;
+
+&lt;p&gt;AzureポータルでのMySQLデータベース作成の方法を紹介していきます。
+まずは&lt;a href=&#34;https://portal.azure.com/&#34;&gt;ポータル&lt;/a&gt;にログインしましょう。&lt;/p&gt;
+
+&lt;p&gt;&amp;ldquo;&lt;strong&gt;+(新規) &amp;gt; Marketplaceを検索&lt;/strong&gt;&amp;ldquo;から&amp;rdquo;&lt;strong&gt;MySQL Database&lt;/strong&gt;&amp;ldquo;と検索しましょう。
+&lt;img src=&#34;https://i.gyazo.com/7fdfc593e719ceee8f19937be77d85d0.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&amp;ldquo;&lt;strong&gt;MySQL データベース&lt;/strong&gt;&amp;ldquo;を選択して&amp;rdquo;&lt;strong&gt;作成&lt;/strong&gt;&amp;ldquo;します。
+&lt;img src=&#34;https://i.gyazo.com/bdf92f08826f3b240c2bba42e91b70fa.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;（&lt;a href=&#34;https://docs.microsoft.com/ja-jp/azure/store-php-create-mysql-database&#34;&gt;Azure で MySQL データベースを作成して接続する&lt;/a&gt;の記事を参考に進めようとしたら何故か表示が変わっていて
+&amp;ldquo;Data + Strage&amp;rdquo;という項目が出てきませんでした。）&lt;/p&gt;
+
+&lt;p&gt;僕はここに行き着くまでで詰まってました……&lt;/p&gt;
+
+&lt;h2 id=&#34;初期情報の入力&#34;&gt;初期情報の入力&lt;/h2&gt;
+
+&lt;p&gt;データベースの情報を入力していきます。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;データベース名&lt;/strong&gt;: 任意の名前をつけましょう&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;サブスクリプション&lt;/strong&gt;: 利用するサブスクリプションを指定します。通常はデフォルト設定のままで大丈夫です。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;データベースの種類&lt;/strong&gt;: 共有か専用かを選択します。安く済ませる場合は共有にしましょう。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;リソースグループ&lt;/strong&gt;: 利用するリソースグループを指定します。無い場合は新規で作成しましょう。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;場所&lt;/strong&gt;: 日本からの利用なら東日本もしくは西日本を選択しましょう。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;価格レベル&lt;/strong&gt;: 利用する状況に合わせて選択します。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;法律条項&lt;/strong&gt;: 利用許諾のようなものです。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;価格レベルの設定は惑星の名前になっています。
+&lt;img src=&#34;https://i.gyazo.com/0ed437d5adb1d893f8a1d608ee9ba221.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;法律条項の箇所では購入ボタンを押すことで同意したものとされるようです。
+&lt;strong&gt;Azureクレジットとは別にお金がかかるらしい&lt;/strong&gt;ので注意してください。
+同意して購入ボタンを押しましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/ab48b5b3a701d57cec98ec928432bd0b.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;最後に作成を選択してしばらく待つとデータベースが作成されます。&lt;/p&gt;
+
+&lt;h2 id=&#34;クライアントアプリから接続してみる&#34;&gt;クライアントアプリから接続してみる&lt;/h2&gt;
+
+&lt;p&gt;実際にクライアントアプリから試してみましょう。
+僕はMacを利用しているので&lt;a href=&#34;https://www.sequelpro.com/&#34;&gt;Sequel Pro&lt;/a&gt;を使っています。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/0105d9ca6ca2a08eacec7e7720451755.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;データベースが作成されたらプロパティから以下の情報を確認します。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;ホスト名&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ポート&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ユーザー名&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;パスワード&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;データベース名&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;を確認しましょう。データベース名は設定したデータベース名だとアクセスできない場合があるので&lt;strong&gt;接続文字列&lt;/strong&gt;の&lt;strong&gt;Database=xxxx&lt;/strong&gt;の部分で確認しましょう。
+僕の環境の場合は&amp;rdquo;acsm_xxxxx&amp;rdquo;というデータベース名が設定されていました。
+&lt;img src=&#34;https://i.gyazo.com/01e2ed7ce45578d135b9dce1d86ddfd4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;それではSequel Proで先ほどの情報を入力して、&lt;strong&gt;接続をテスト&lt;/strong&gt;を押しましょう。
+接続情報に問題がなければ&lt;strong&gt;接続が成功しました&lt;/strong&gt;と表示されます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/c75ae94d4494933276ab8e9289bf737c.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Sequel Proの操作でテーブル追加なども可能です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/e48d09d4fb1af6f980686e961cc60107.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;他のクライアントでも同じような操作で接続確認を出来ると思います。&lt;/p&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;いかがでしたでしょうか。&lt;/p&gt;
+
+&lt;p&gt;AzureでMySQLを利用する方法を紹介しました。&lt;/p&gt;
+
+&lt;p&gt;ポータルのUIや仕様が調べて見つけたページと少し異なる部分がありましたが今回の内容と合わせて参考になれば幸いです。&lt;/p&gt;
+
+&lt;p&gt;それでは。&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Node.jsでファイル監視を行うchokiderを使ってみよう</title>
@@ -1352,16 +1454,6 @@ IoTLTに参加された方や&lt;/p&gt;
       <pubDate>Sun, 13 Nov 2016 01:02:41 +0900</pubDate>
       
       <guid>https://dotstud.io/docs/2-consumption/</guid>
-      
-      <description></description>
-    </item>
-    
-    <item>
-      <title>回路図</title>
-      <link>https://dotstud.io/docs/2-circuit/</link>
-      <pubDate>Sat, 12 Nov 2016 01:02:41 +0900</pubDate>
-      
-      <guid>https://dotstud.io/docs/2-circuit/</guid>
       
       <description></description>
     </item>
