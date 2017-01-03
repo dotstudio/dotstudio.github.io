@@ -69,35 +69,35 @@
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Node.jsをホスティング出来るPaaSに絞って調べてみました。古いまとめだとサービス終了しているものもあったので、2016年12月時点で再度調べてみました。">
+    <meta name="description" content="Node.jsアプリケーションからMySQLにアクセスする">
     <meta name="author" content="dotstudio Inc.">
-    <meta content="https://dotstud.io/img/blog/061/00_eyecatch.png">
+    <meta content="https://dotstud.io/img/blog/068/00_eyecatch.png">
     
-    <meta itemprop="name" content="2016年12月版　Node.jsをホスティング出来るPaaSまとめ  | dotstudio"/>
-    <meta itemprop="image" content="https://dotstud.io/img/blog/061/00_eyecatch.png"/>
+    <meta itemprop="name" content="Node.jsアプリケーションからMySQLにアクセスする | dotstudio"/>
+    <meta itemprop="image" content="https://dotstud.io/img/blog/068/00_eyecatch.png"/>
     
-    <meta property="og:title" content="2016年12月版　Node.jsをホスティング出来るPaaSまとめ  | dotstudio" />
+    <meta property="og:title" content="Node.jsアプリケーションからMySQLにアクセスする | dotstudio" />
     <meta property="og:locale" content="ja_JP" />
     <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://dotstud.io/blog/nodejs-hosting-services-2016/" />
+    <meta property="og:url" content="https://dotstud.io/blog/operate-mysql-from-nodejs/" />
     <meta property="og:site_name" content="dotstudio（ドットスタジオ）" />
-    <meta property="og:image" content="https://dotstud.io/img/blog/061/00_eyecatch.png" />
-    <meta property="og:image:secure_url" content="https://dotstud.io/img/blog/061/00_eyecatch.png" />
-    <meta property="og:description" content="Node.jsをホスティング出来るPaaSに絞って調べてみました。古いまとめだとサービス終了しているものもあったので、2016年12月時点で再度調べてみました。" />
+    <meta property="og:image" content="https://dotstud.io/img/blog/068/00_eyecatch.png" />
+    <meta property="og:image:secure_url" content="https://dotstud.io/img/blog/068/00_eyecatch.png" />
+    <meta property="og:description" content="Node.jsアプリケーションからMySQLにアクセスする" />
     <meta property="article:author" content="https://www.facebook.com/dotstud10/" /> 
     <meta property="fb:app_id" content="296336307370435" />
     <meta property="fb:pages" content="1013196712108753" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image:src" content="https://dotstud.io/img/blog/061/00_eyecatch.png">
+    <meta name="twitter:image:src" content="https://dotstud.io/img/blog/068/00_eyecatch.png">
     <meta name="twitter:site" content="@dotstud_io" />
-    <meta name="twitter:url" content="https://dotstud.io/blog/nodejs-hosting-services-2016/">
-    <meta name="twitter:description" content="Node.jsをホスティング出来るPaaSに絞って調べてみました。古いまとめだとサービス終了しているものもあったので、2016年12月時点で再度調べてみました。">
-    <meta name="twitter:title" content="2016年12月版　Node.jsをホスティング出来るPaaSまとめ  | dotstudio">
+    <meta name="twitter:url" content="https://dotstud.io/blog/operate-mysql-from-nodejs/">
+    <meta name="twitter:description" content="Node.jsアプリケーションからMySQLにアクセスする">
+    <meta name="twitter:title" content="Node.jsアプリケーションからMySQLにアクセスする | dotstudio">
     <meta name="twitter:creator" content="@dotstud_io" />
 
     
     <meta name="google-site-verification" content="oW2fcSG1fFnkDoRCGFJ0IGGebtBr8FjV2twoFMd7Skc" />
-    <title>2016年12月版　Node.jsをホスティング出来るPaaSまとめ  | dotstudio</title>
+    <title>Node.jsアプリケーションからMySQLにアクセスする | dotstudio</title>
     
 
     <link rel="stylesheet" href="/css/loader.css"> 
@@ -233,11 +233,11 @@
 
 
 <article class="blog-single">
-  <div class="date">2016.12.25</div>
+  <div class="date">2017.01.03</div>
 
-  <img class="blog-single--eyecatch" src="/img/blog/061/00_eyecatch.png" alt="" width="710px">
+  <img class="blog-single--eyecatch" src="/img/blog/068/00_eyecatch.png" alt="" width="710px">
   
-  <h1 class="blog-single--title">2016年12月版　Node.jsをホスティング出来るPaaSまとめ </h1>
+  <h1 class="blog-single--title">Node.jsアプリケーションからMySQLにアクセスする</h1>
   <div class="blog-single--row">
     <a class="author" href="/members/n0bisuke">
       <img src="/img/members/n0bisuke/author.png" alt="" class="author--avatar">
@@ -254,228 +254,243 @@
   
   <div class="blog-single--content markdown">
 
-<p>こんにちは、dotstudio代表の<a href="https://twitter.com/n0bisuke">のびすけ</a>です。</p>
+<p>こんにちは、dotstudioの代表の<a href="https://twitter.com/n0bisuke">のびすけ</a>です。</p>
 
-<p>年の瀬ですね。というかクリスマスですね。
-今回の記事は<a href="http://qiita.com/advent-calendar/2016/ipu">岩手県立大学アドベントカレンダー2016</a>に登録しています。</p>
+<p><a href="https://dotstud.io/blog/howto-setup-azure-mysql/">前回の記事(AzureでMySQLのセットアップと接続方法)</a>に続きMySQLの話です。</p>
 
-<p>僕が学生時代(2014年1月)に書いた記事「<a href="http://offsidenow.phpapps.jp/archives/1671">GUMBY + NODE.JS(EXPRESS) +APPFOGでペライチページを作ったので解説</a>」を見つけて、この中で<a href="https://www.ctl.io/appfog">AppFog</a>を利用してNode.jsのホスティングを行なっていました。
-最近になって「AppFogって今どうなってるんだろう」とか「もっと他のPaaSは無いのか」とか思ったので改めて調べてみたのでまとめてみます。</p>
+<p>今日は初心者向けに、Node.jsからMySQLにアクセスする方法をチュートリアル的に紹介します。</p>
 
-<p>（ちなみに、この記事内で触れている盛岡TSUTAYAのカフェCulfeは<a href="http://www.recomtank.com/entry/moriokatsutaya">電源とWi-Fi完備</a>で頻繁に利用していましたが、<a href="http://morioka-tsutaya.net/news/morioka-tsutaya-%E3%82%AB%E3%83%95%E3%82%A7%E3%80%80culfe%E3%80%80%E9%96%89%E5%BA%97%E3%81%AE%E3%81%8A%E7%9F%A5%E3%82%89%E3%81%9B/">2016年3月で閉店してしまっていた</a>みたいです……）</p>
+<h2 id="mysqlモジュール-ドライバー">MySQLモジュール（ドライバー）</h2>
 
-<h2 id="前置き">前置き</h2>
+<p>こちらのモジュールを利用します。
+おそらく一番利用されているMySQLのNode.jsモジュール（ドライバー）になります。</p>
 
-<p>まとめを読むにあたり、この辺を把握してもらえると嬉しいです。</p>
+<p><a href="https://www.npmjs.com/package/mysql">https://www.npmjs.com/package/mysql</a></p>
+
+<pre><code>npm init --yes
+npmt i mysql --save 
+</code></pre>
+
+<p>これでインストールはできました。</p>
+
+<h2 id="mysqlデータベースを用意">MySQLデータベースを用意</h2>
+
+<p>接続を試す前にデータベースが用意できているか確認しましょう。</p>
+
+<p><a href="https://dotstud.io/blog/howto-setup-azure-mysql/">前回の記事(AzureでMySQLのセットアップと接続方法)</a>などを参照してみましょう。</p>
+
+<p>仮データをいれておきましょう。</p>
+
+<p>今回は&rsquo;test_user&rsquo;テーブルを作って一件データを入れておきました。</p>
+
+<p><img src="/img/blog/068/01.png" alt="" /></p>
+
+<h2 id="crud-クラッド-とsql">CRUD（クラッド）とSQL</h2>
+
+<p>データアクセスの前に<a href="http://e-words.jp/w/CRUD.html">CRUD</a>について少し触れます。
+CRUDはデータベースシステムなどの基本概念であるデータの作成（Create）、読み出し（Read）、更新（Update）、削除（Delete）を表す言葉です。</p>
+
+<p><a href="http://se-java-school.com/itstudy/database/intro_db_jdbc/sqltext_01.php">SQL</a>はデータベースを操作するための言語です。
+MySQLの操作の最初のステップとして、SQLを使用してCRUDを実現してみましょう。</p>
+
+<p>CRUDはSQL構文では、以下のような形で対応しています。</p>
 
 <ul>
-<li>AWS、GCP、Azure、Bluemixなどの大手ベンダーは今回は対象外としました。</li>
-<li>全てを使ってみている訳ではないのでPaaSじゃないのも混ざってるかもしれないですけどご容赦下さい。</li>
+<li>Create -&gt; INSERT文</li>
+<li>Read -&gt; SELECT文</li>
+<li>Update -&gt; UPDATE文</li>
+<li>Delete -&gt; DELETE文</li>
 </ul>
 
-<p>また、今回参考にしたのは以下のサイトです。</p>
+<p>この4つの構文に対応してコードを書いていきましょう。</p>
+
+<h2 id="接続テストとread-select文">接続テストとRead（SELECT文）</h2>
+
+<p>まずはNode.jsからMySQLへの接続テストをしつつ、データ表示のReadにあたるSELECT文を使います。</p>
+
+<blockquote>
+<p>参考: <a href="http://www.dbonline.jp/mysql/select/index1.html">http://www.dbonline.jp/mysql/select/index1.html</a></p>
+</blockquote>
+
+<p>app.jsを作成しましょう。</p>
+
+<pre><code>//app.js
+
+'use strict'
+
+const mysql      = require('mysql');
+const connection = mysql.createConnection({
+    host     : 'hoge.hoge.com',
+    user     : 'n0bisuke',
+    password : 'n0bipass',
+    database : 'nobidb'
+});
+
+//ここからMySQLアクセス
+connection.connect();
+
+let sql = 'select * from nobidb.test_user';
+connection.query(sql, (err, rows, fields) =&gt; {
+  if (err) throw err; 
+  console.log('test_userテーブル: ', rows);
+});
+
+connection.end();
+</code></pre>
+
+<p>7〜10行目について</p>
 
 <ul>
-<li><a href="https://blog.appdynamics.com/product/battle-of-the-paas-node-js-apps-in-the-cloud/">Battle of the PaaS: Node.js Apps in the Cloud</a></li>
-<li><a href="http://www.axlight.com/mt/sundayhacking/2015/07/nodejspaas.html">node.jsアプリをデプロイするためのPaaSのクラウドサービスを探した</a></li>
-<li><a href="https://matome.naver.jp/odai/2133923360659821201">今アツいWeb開発者向けクラウドプラットフォームまとめ</a></li>
-<li><a href="https://github.com/nodejs/node-v0.x-archive/wiki/Node-Hosting">Hosting compatible with Node</a></li>
+<li>host: MySQLのホスト名です。仮にhoge.hoge.comを指定しています。</li>
+<li>user: MySQLに登録してあるユーザー名です。仮にn0bisukeを指定しています。</li>
+<li>password: MySQLに登録してあるパスワードです。仮にn0bipassを指定しています。</li>
+<li>database: MySQLで利用するDB名です。仮にnobidbを指定しています。</li>
 </ul>
 
-<h2 id="node-jsのホスティングで使えそうなサービスたち">Node.jsのホスティングで使えそうなサービスたち</h2>
+<p>16行目がSQLです。</p>
 
-<h3 id="heroku">Heroku</h3>
+<p>SELECT文は「<code>select カラム名 from DB名.テーブル名</code>」が基本になります。
+全てのカラムを取得する場合は<code>*</code>を指定します。</p>
 
-<p>URL: <a href="https://www.heroku.com">https://www.heroku.com</a></p>
+<p>16行目のSQL文は「<code>nobidb</code>データベースの<code>test_user</code>テーブルの全てのカラムの情報を取得する」という内容になります。</p>
 
-<p><img src="/img/blog/061/01.png" alt="" /></p>
+<p>それでは実行してみましょう。</p>
 
-<p>昔から安定のHerokuです。Node.js以外にもRuby/Java/PHP/Python/Go/Scala/Clojureが利用できます。</p>
+<pre><code>$ node app.js
+test_userテーブル:  [ RowDataPacket { id: 11, name: 'n0bisuke', created: 2017-01-01T21:35:26.000Z } ]
+</code></pre>
 
-<h3 id="modulus">Modulus</h3>
+<p>これで無事にNode.jsとMySQLの接続が確立され、予め登録していたtest_userテーブルの中身が表示（Read）されました。</p>
 
-<p>URL: <a href="https://modulus.io">https://modulus.io</a></p>
+<h2 id="create-insert文">Create（INSERT文）</h2>
 
-<p><img src="/img/blog/061/02.png" alt="" /></p>
+<p>次にデータ作成のCreateにあたるINSERT文を使ってみましょう。</p>
 
-<p><code>npm install -g modulus</code>でCLIツールをインストールして利用できます。
-Node.js/PHP/Java/Python/<a href="https://www.meteor.com">Meteor</a>(Node.jsのフレームワーク)が利用できます。</p>
+<blockquote>
+<p>参考: <a href="http://www.dbonline.jp/mysql/insert/index1.html">http://www.dbonline.jp/mysql/insert/index1.html</a></p>
+</blockquote>
 
-<h3 id="cloudnode">cloudnode</h3>
+<p>app.jsの16行目を以下に書き換えましょう。</p>
 
-<p>URL: <a href="https://cloudno.de/">https://cloudno.de/</a></p>
+<pre><code>let sql = `insert into nobidb.test_user (name) values (&quot;sugawara&quot;)`;
+</code></pre>
 
-<p><img src="/img/blog/061/03.png" alt="" /></p>
+<p>INSERT文の基本は「<code>insert into DB名.テーブル名 (カラム名1, カラム名2) values (値, 値)</code>」という形になります。
+今回の文では「<code>nobidb</code>データベースの<code>test_user</code>テーブルの<code>name</code>カラムに<code>sugawara</code>という文字列を入れてデータを作成する」という意味になります。</p>
 
-<p>Node.js向けのPaaSです。<code>npm install -g cloudnode-cli</code>で<code>cloudnodeコマンド</code>を利用してデプロイします。
-CouchDB、MongoDB、Redisなども利用できます。</p>
+<p>それでは実行してみましょう。</p>
 
-<h3 id="evennode">evennode</h3>
+<pre><code>$ node app.js
+test_userテーブル:  OkPacket {
+  fieldCount: 0,
+  affectedRows: 1,
+  insertId: 31,
+  serverStatus: 2,
+  warningCount: 0,
+  message: '',
+  protocol41: true,
+  changedRows: 0 }
+</code></pre>
 
-<p>URL: <a href="https://www.evennode.com/">https://www.evennode.com/</a></p>
+<p>クライアントなどで確認してもしっかり行が追加されていることが分かります。</p>
 
-<p><img src="/img/blog/061/04.png" alt="" /></p>
+<p><img src="/img/blog/068/02.png" alt="" /></p>
 
-<p>Node.js(とPython)向けのPaaSです。他のPaaSと違いアプリを作成すると「<code>git@git.evennode.com:xxxxxxxx.git</code>」という感じのGitリポジトリのURLが発行され、そこにプッシュすることでデプロイできます。
-CLIツールのインストールも不要なのは手軽ですね。</p>
+<h2 id="update-update文">Update（UPDATE文）</h2>
 
-<h3 id="nodechef">NodeChef</h3>
+<p>次にデータ更新のUpdateにあたるUPDATE文を使ってみましょう。</p>
 
-<p>URL: <a href="https://nodechef.com/">https://nodechef.com/</a></p>
+<blockquote>
+<p>参考: <a href="http://www.dbonline.jp/mysql/insert/index7.html">http://www.dbonline.jp/mysql/insert/index7.html</a></p>
+</blockquote>
 
-<p><img src="/img/blog/061/05.png" alt="" /></p>
+<p>app.jsの16行目を以下に書き換えましょう。</p>
 
-<p>こちらもNode.js向けのPaaSです。コマンドラインからデプロイができます。
-MongoDBやMeteorなどにも対応していてNode.js開発者が好むミドルウェアをサポートしてくれています。</p>
+<pre><code>let sql = `update dsdb.test_user set name=&quot;すがわら&quot; where id = 31`;
+</code></pre>
 
-<h3 id="nodejs-in-the-cloud-by-clever-cloud">Nodejs in the cloud （by Clever Cloud）</h3>
+<p>UPDATE文の基本は「<code>update DB名.テーブル名 set カラム名1=更新内容1 カラム名2=更新内容2 where 条件</code>」という形になります。
+今回の文では「<code>nobidb</code>データベースの<code>test_user</code>テーブルの、idが31の<code>name</code>カラムを<code>すがわら</code>という文字列にデータ更新する」という意味になります。</p>
 
-<p>URL: <a href="http://nodejs-cloud.com/en">http://nodejs-cloud.com/en</a></p>
+<p>それでは実行してみましょう。</p>
 
-<p><img src="/img/blog/061/06.png" alt="" /></p>
+<pre><code>$ node app.js
+test_userテーブル:  OkPacket {
+  fieldCount: 0,
+  affectedRows: 1,
+  insertId: 0,
+  serverStatus: 2,
+  warningCount: 0,
+  message: '(Rows matched: 1  Changed: 1  Warnings: 0',
+  protocol41: true,
+  changedRows: 1 }
+</code></pre>
 
-<p>「A cloud for Node.js HOST YOUR WEB APPS IN THE CLOUD WITHOUT HASSLE」とあるように、Node.jsを簡単にデプロイできるPaaSです。
-中身は<a href="https://www.clever-cloud.com/">Clever Cloud</a>が提供しているもののようです。</p>
+<p>クライアントなどで確認してもid31の行のnameがすがわらに更新されているのが分かります。</p>
 
-<h3 id="flow-app-engine">FLOW APP ENGINE</h3>
+<p><img src="/img/blog/068/03.png" alt="" /></p>
 
-<p>URL: <a href="https://flow.ch/appengine/">https://flow.ch/appengine/</a></p>
+<h2 id="delete-delete文">Delete（DELETE文）</h2>
 
-<p><img src="/img/blog/061/07.png" alt="" /></p>
+<p>最後にデータ削除のDeleteにあたるDELETE文を使ってみましょう。</p>
 
-<p>Node.jsのデプロイだけでなく、WebサーバーでのバランシングやDBの用意なども簡単なボタン操作で設定できます。
-NginxやApache、MongoDBやMySQLなどの有名なミドルウェアだけでなくかなり多くのミドルウェアをサポートしてくれています。</p>
+<blockquote>
+<p>参考: <a href="http://www.dbonline.jp/mysql/insert/index10.html">http://www.dbonline.jp/mysql/insert/index10.html</a></p>
+</blockquote>
 
-<h3 id="nodejitsu">Nodejitsu</h3>
+<p>app.jsの16行目を以下に書き換えましょう。</p>
 
-<p>URL: <a href="https://nodejitsu.com/">https://nodejitsu.com/</a></p>
+<pre><code>let sql = `delete from dsdb.test_user where id = 31`;
+</code></pre>
 
-<p><img src="/img/blog/061/08.png" alt="" /></p>
+<p>DELETE文の基本は「<code>delete from DB名.テーブル名 where 条件</code>」という形になります。
+今回の文では「<code>nobidb</code>データベースの<code>test_user</code>テーブルの、idが31の行を削除する」という意味になります。</p>
 
-<p>Node.js専用のPaaSです。今は新規のアカウント登録はできず前述したModulus経由で扱うことができるようです。</p>
+<p>それでは実行してみましょう。</p>
 
-<h3 id="joyent">Joyent</h3>
+<pre><code>$ node app.js
+test_userテーブル:  OkPacket {
+  fieldCount: 0,
+  affectedRows: 1,
+  insertId: 0,
+  serverStatus: 2,
+  warningCount: 0,
+  message: '',
+  protocol41: true,
+  changedRows: 0 }
+</code></pre>
 
-<p>URL: <a href="https://www.joyent.com/">https://www.joyent.com/</a></p>
+<p>クライアントなどで確認してもid31の行が削除されているのが分かります。</p>
 
-<p><img src="/img/blog/061/09.png" alt="" /></p>
+<p><img src="/img/blog/068/04.png" alt="" /></p>
 
-<p>IaaS提供もありますが、Dockerコンテナに最適化したクラウドサービス「<a href="https://www.joyent.com/triton">Triton</a>」やオブジェクトストレージの「<a href="https://www.joyent.com/manta">Manta</a>」を提供しています。
-Manta FUNCTIONSという機能ではNode.jsやPython、Rubyなど様々な言語を実行できます。</p>
+<p>ここまでで、Node.jsからMySQLにアクセスしてCRUDをする操作の紹介をしました。</p>
 
-<h3 id="appfog">AppFog</h3>
+<h2 id="tips-node-mysql2">Tips: node-mysql2</h2>
 
-<p>URL: <a href="http://appfog.com">http://appfog.com</a></p>
+<p><a href="http://qiita.com/n0bisuke/items/4e59d02f90bb66451011">Node.jsからMySQL接続のメモ(とnode-mysql2)</a>にもあるように<a href="https://github.com/sidorares/node-mysql2">node-mysql2</a>というモジュールもありますので、ベンチマークが気になり始めたら利用を試みるのも良いかもしれません。</p>
 
-<p><img src="/img/blog/061/10.png" alt="" /></p>
+<pre><code>$ npm i mysql2 --save
+</code></pre>
 
-<p>冒頭でも触れたPaaSです。二年前くらいは無料でそこそこ使えて学生時代の僕にはすごくいいサービスだったのですが、今は有料化してしまったみたいです。</p>
+<p>でインストールして</p>
 
-<h2 id="解説いれるくらい試せて無いサービスたち">解説いれるくらい試せて無いサービスたち</h2>
+<pre><code>const mysql = require('mysql');
+</code></pre>
 
-<p>試せて無いですがNode.jsホスティングで調べて出てきたサービスたちです。
-中にはVPSっぽいのもあるのでPaaSって感じでは無いのもあると思います。</p>
+<p>の読み込み箇所を</p>
 
-<p>あとで試してみて解説が書けそうだったら別途まとめたいと思います。</p>
+<pre><code>const mysql      = require('mysql2');
+</code></pre>
 
-<p>……ということで解説抜きでURLとキャプチャのみです。</p>
-
-<h3 id="platform-sh">platform.sh</h3>
-
-<p>URL: <a href="https://platform.sh/hosting/nodejs/">https://platform.sh/hosting/nodejs/</a></p>
-
-<p><img src="/img/blog/061/11.png" alt="" /></p>
-
-<h3 id="engine-yard">Engine Yard</h3>
-
-<p>URL: <a href="https://www.engineyard.com/">https://www.engineyard.com/</a></p>
-
-<p><img src="/img/blog/061/12.png" alt="" /></p>
-
-<h3 id="iclickandhost">iClickAndHost</h3>
-
-<p>URL: <a href="https://iclickandhost.com/website-hosting/">https://iclickandhost.com/website-hosting/</a></p>
-
-<p><img src="/img/blog/061/13.png" alt="" /></p>
-
-<h3 id="scalingo">Scalingo</h3>
-
-<p>URL: <a href="https://scalingo.com/">https://scalingo.com/</a></p>
-
-<p><img src="/img/blog/061/14.png" alt="" /></p>
-
-<h3 id="rosehosting">RoseHosting</h3>
-
-<p>URL: <a href="https://www.rosehosting.com/">https://www.rosehosting.com/</a></p>
-
-<p><img src="/img/blog/061/15.png" alt="" /></p>
-
-<h3 id="exoscale-apps">exoscale apps</h3>
-
-<p>URL: <a href="https://www.exoscale.ch/add-on/apps/">https://www.exoscale.ch/add-on/apps/</a></p>
-
-<p><img src="/img/blog/061/16.png" alt="" /></p>
-
-<h3 id="clerve-cloud">clerve cloud</h3>
-
-<p>URL: <a href="https://www.clever-cloud.com/nodejs">https://www.clever-cloud.com/nodejs</a></p>
-
-<p><img src="/img/blog/061/17.png" alt="" /></p>
-
-<h3 id="linode">Linode</h3>
-
-<p>URL: <a href="https://www.linode.com/">https://www.linode.com/</a></p>
-
-<p><img src="/img/blog/061/18.png" alt="" /></p>
-
-<h3 id="cloud-foundry">Cloud Foundry</h3>
-
-<p>URL: <a href="https://www.cloudfoundry.org/">https://www.cloudfoundry.org/</a></p>
-
-<p><img src="/img/blog/061/19.png" alt="" /></p>
-
-<h3 id="redhat-open-shift">RedHat Open Shift</h3>
-
-<p>URL: <a href="https://www.openshift.com/">https://www.openshift.com/</a></p>
-
-<p><img src="/img/blog/061/20.png" alt="" /></p>
-
-<h3 id="pogodan">Pogodan</h3>
-
-<p>URL: <a href="http://www.pogodan.com/">http://www.pogodan.com/</a></p>
-
-<p><img src="/img/blog/061/21.png" alt="" /></p>
-
-<h2 id="おまけ">おまけ</h2>
-
-<p>今回の記事を書く上で探してて惜しかったサービスをその他枠として挙げておきます。</p>
-
-<h3 id="commando-io-by-nodesocket">Commando.io （by nodesocket）</h3>
-
-<p>URL: <a href="https://commando.io/">https://commando.io/</a></p>
-
-<p><img src="/img/blog/061/22.png" alt="" /></p>
-
-<p><a href="http://nodesocket.com/">nodeSocket</a>というサービス名かと思いきや会社名でした。
-Command.ioというサービスでおそらくVPSサービスです。なのでNode.jsももちろん使えます。PaaSでは無いっぽいのでおまけ枠です。</p>
-
-<h3 id="c4sa">C4SA</h3>
-
-<p>URL: <a href="http://c4sa.nifty.com/">http://c4sa.nifty.com/</a></p>
-
-<p><img src="/img/blog/061/23.png" alt="" /></p>
-
-<p>Niftyが運営しているサービスです。残念ながらNode.jsには対応してませんでしたがPHPやRubyなどは利用できるみたいです。</p>
+<p>に修正するだけで使えるので移行も楽そうです。</p>
 
 <h2 id="おわりに">おわりに</h2>
 
-<p>いかがでしたでしょうか。
-思った以上にいっぱいあるなぁという感想です。</p>
+<p>Node.jsからMySQLにアクセスする方法を紹介しました。
+基礎的な内容になるので、初めてチャレンジする方は参考にして下さい。</p>
 
-<p>色々と調べててやはりHerokuが使い勝手や情報の調べやすさ的に圧倒的だなと感じました。</p>
-
-<p>特にこだわりなどが無く、「通常利用で無料である程度試したい」くらいであればHerokuを使うのが良いかと思います。
-ちょっと気分を変えたいときや、何かの理由でHerokuが厳しいと感じた際の参考になれば幸いです。</p>
+<p>SQL直書きだと脆弱性が&hellip;&hellip;とかの話はありそうですがそれはまた別の機会で書けたらと思います。</p>
 
 <p>それでは。</p>
 </div>
@@ -494,16 +509,6 @@ Command.ioというサービスでおそらくVPSサービスです。なのでN
           
           
           
-          <li class="js-items">
-            <article class="card-related">
-              <a class="" href="https://dotstud.io/blog/operate-mysql-from-nodejs/">
-                <img class="card-related--thumbnail" src="/img/blog/068/00_thumbnail.png" alt="サムネイル">
-                <h3 class="card-related--title">Node.jsアプリケーションからMySQLにアクセスする</h3>
-              </a>
-              
-            </article>
-          </li>
-        
         
           
           
@@ -526,6 +531,16 @@ Command.ioというサービスでおそらくVPSサービスです。なのでN
           
           
           
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/nodejs-hosting-services-2016/">
+                <img class="card-related--thumbnail" src="/img/blog/061/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">2016年12月版　Node.jsをホスティング出来るPaaSまとめ </h3>
+              </a>
+              
+            </article>
+          </li>
+        
         
           
           
@@ -930,12 +945,12 @@ Command.ioというサービスでおそらくVPSサービスです。なのでN
     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 
     &nbsp;
-    <div class="fb-like" data-href="https://dotstud.io/blog/nodejs-hosting-services-2016/" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
+    <div class="fb-like" data-href="https://dotstud.io/blog/operate-mysql-from-nodejs/" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
 
     &nbsp;
 
     <div class="hatena-b">
-      <a href="http://b.hatena.ne.jp/entry/s/dotstud.io/blog/nodejs-hosting-services-2016" class="hatena-bookmark-button" data-hatena-bookmark-title="2016年12月版　Node.jsをホスティング出来るPaaSまとめ " data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
+      <a href="http://b.hatena.ne.jp/entry/s/dotstud.io/blog/operate-mysql-from-nodejs" class="hatena-bookmark-button" data-hatena-bookmark-title="Node.jsアプリケーションからMySQLにアクセスする" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
         <img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" />
       </a>
       <script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>

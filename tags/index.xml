@@ -10,6 +10,257 @@
     <atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Node.jsアプリケーションからMySQLにアクセスする</title>
+      <link>https://dotstud.io/blog/operate-mysql-from-nodejs/</link>
+      <pubDate>Tue, 03 Jan 2017 10:05:15 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/operate-mysql-from-nodejs/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudioの代表の&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/howto-setup-azure-mysql/&#34;&gt;前回の記事(AzureでMySQLのセットアップと接続方法)&lt;/a&gt;に続きMySQLの話です。&lt;/p&gt;
+
+&lt;p&gt;今日は初心者向けに、Node.jsからMySQLにアクセスする方法をチュートリアル的に紹介します。&lt;/p&gt;
+
+&lt;h2 id=&#34;mysqlモジュール-ドライバー&#34;&gt;MySQLモジュール（ドライバー）&lt;/h2&gt;
+
+&lt;p&gt;こちらのモジュールを利用します。
+おそらく一番利用されているMySQLのNode.jsモジュール（ドライバー）になります。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.npmjs.com/package/mysql&#34;&gt;https://www.npmjs.com/package/mysql&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;npm init --yes
+npmt i mysql --save 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これでインストールはできました。&lt;/p&gt;
+
+&lt;h2 id=&#34;mysqlデータベースを用意&#34;&gt;MySQLデータベースを用意&lt;/h2&gt;
+
+&lt;p&gt;接続を試す前にデータベースが用意できているか確認しましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/howto-setup-azure-mysql/&#34;&gt;前回の記事(AzureでMySQLのセットアップと接続方法)&lt;/a&gt;などを参照してみましょう。&lt;/p&gt;
+
+&lt;p&gt;仮データをいれておきましょう。&lt;/p&gt;
+
+&lt;p&gt;今回は&amp;rsquo;test_user&amp;rsquo;テーブルを作って一件データを入れておきました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/068/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;crud-クラッド-とsql&#34;&gt;CRUD（クラッド）とSQL&lt;/h2&gt;
+
+&lt;p&gt;データアクセスの前に&lt;a href=&#34;http://e-words.jp/w/CRUD.html&#34;&gt;CRUD&lt;/a&gt;について少し触れます。
+CRUDはデータベースシステムなどの基本概念であるデータの作成（Create）、読み出し（Read）、更新（Update）、削除（Delete）を表す言葉です。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://se-java-school.com/itstudy/database/intro_db_jdbc/sqltext_01.php&#34;&gt;SQL&lt;/a&gt;はデータベースを操作するための言語です。
+MySQLの操作の最初のステップとして、SQLを使用してCRUDを実現してみましょう。&lt;/p&gt;
+
+&lt;p&gt;CRUDはSQL構文では、以下のような形で対応しています。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Create -&amp;gt; INSERT文&lt;/li&gt;
+&lt;li&gt;Read -&amp;gt; SELECT文&lt;/li&gt;
+&lt;li&gt;Update -&amp;gt; UPDATE文&lt;/li&gt;
+&lt;li&gt;Delete -&amp;gt; DELETE文&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;この4つの構文に対応してコードを書いていきましょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;接続テストとread-select文&#34;&gt;接続テストとRead（SELECT文）&lt;/h2&gt;
+
+&lt;p&gt;まずはNode.jsからMySQLへの接続テストをしつつ、データ表示のReadにあたるSELECT文を使います。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;参考: &lt;a href=&#34;http://www.dbonline.jp/mysql/select/index1.html&#34;&gt;http://www.dbonline.jp/mysql/select/index1.html&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;app.jsを作成しましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//app.js
+
+&#39;use strict&#39;
+
+const mysql      = require(&#39;mysql&#39;);
+const connection = mysql.createConnection({
+    host     : &#39;hoge.hoge.com&#39;,
+    user     : &#39;n0bisuke&#39;,
+    password : &#39;n0bipass&#39;,
+    database : &#39;nobidb&#39;
+});
+
+//ここからMySQLアクセス
+connection.connect();
+
+let sql = &#39;select * from nobidb.test_user&#39;;
+connection.query(sql, (err, rows, fields) =&amp;gt; {
+  if (err) throw err; 
+  console.log(&#39;test_userテーブル: &#39;, rows);
+});
+
+connection.end();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;7〜10行目について&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;host: MySQLのホスト名です。仮にhoge.hoge.comを指定しています。&lt;/li&gt;
+&lt;li&gt;user: MySQLに登録してあるユーザー名です。仮にn0bisukeを指定しています。&lt;/li&gt;
+&lt;li&gt;password: MySQLに登録してあるパスワードです。仮にn0bipassを指定しています。&lt;/li&gt;
+&lt;li&gt;database: MySQLで利用するDB名です。仮にnobidbを指定しています。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;16行目がSQLです。&lt;/p&gt;
+
+&lt;p&gt;SELECT文は「&lt;code&gt;select カラム名 from DB名.テーブル名&lt;/code&gt;」が基本になります。
+全てのカラムを取得する場合は&lt;code&gt;*&lt;/code&gt;を指定します。&lt;/p&gt;
+
+&lt;p&gt;16行目のSQL文は「&lt;code&gt;nobidb&lt;/code&gt;データベースの&lt;code&gt;test_user&lt;/code&gt;テーブルの全てのカラムの情報を取得する」という内容になります。&lt;/p&gt;
+
+&lt;p&gt;それでは実行してみましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ node app.js
+test_userテーブル:  [ RowDataPacket { id: 11, name: &#39;n0bisuke&#39;, created: 2017-01-01T21:35:26.000Z } ]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これで無事にNode.jsとMySQLの接続が確立され、予め登録していたtest_userテーブルの中身が表示（Read）されました。&lt;/p&gt;
+
+&lt;h2 id=&#34;create-insert文&#34;&gt;Create（INSERT文）&lt;/h2&gt;
+
+&lt;p&gt;次にデータ作成のCreateにあたるINSERT文を使ってみましょう。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;参考: &lt;a href=&#34;http://www.dbonline.jp/mysql/insert/index1.html&#34;&gt;http://www.dbonline.jp/mysql/insert/index1.html&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;app.jsの16行目を以下に書き換えましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let sql = `insert into nobidb.test_user (name) values (&amp;quot;sugawara&amp;quot;)`;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;INSERT文の基本は「&lt;code&gt;insert into DB名.テーブル名 (カラム名1, カラム名2) values (値, 値)&lt;/code&gt;」という形になります。
+今回の文では「&lt;code&gt;nobidb&lt;/code&gt;データベースの&lt;code&gt;test_user&lt;/code&gt;テーブルの&lt;code&gt;name&lt;/code&gt;カラムに&lt;code&gt;sugawara&lt;/code&gt;という文字列を入れてデータを作成する」という意味になります。&lt;/p&gt;
+
+&lt;p&gt;それでは実行してみましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ node app.js
+test_userテーブル:  OkPacket {
+  fieldCount: 0,
+  affectedRows: 1,
+  insertId: 31,
+  serverStatus: 2,
+  warningCount: 0,
+  message: &#39;&#39;,
+  protocol41: true,
+  changedRows: 0 }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;クライアントなどで確認してもしっかり行が追加されていることが分かります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/068/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;update-update文&#34;&gt;Update（UPDATE文）&lt;/h2&gt;
+
+&lt;p&gt;次にデータ更新のUpdateにあたるUPDATE文を使ってみましょう。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;参考: &lt;a href=&#34;http://www.dbonline.jp/mysql/insert/index7.html&#34;&gt;http://www.dbonline.jp/mysql/insert/index7.html&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;app.jsの16行目を以下に書き換えましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let sql = `update dsdb.test_user set name=&amp;quot;すがわら&amp;quot; where id = 31`;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;UPDATE文の基本は「&lt;code&gt;update DB名.テーブル名 set カラム名1=更新内容1 カラム名2=更新内容2 where 条件&lt;/code&gt;」という形になります。
+今回の文では「&lt;code&gt;nobidb&lt;/code&gt;データベースの&lt;code&gt;test_user&lt;/code&gt;テーブルの、idが31の&lt;code&gt;name&lt;/code&gt;カラムを&lt;code&gt;すがわら&lt;/code&gt;という文字列にデータ更新する」という意味になります。&lt;/p&gt;
+
+&lt;p&gt;それでは実行してみましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ node app.js
+test_userテーブル:  OkPacket {
+  fieldCount: 0,
+  affectedRows: 1,
+  insertId: 0,
+  serverStatus: 2,
+  warningCount: 0,
+  message: &#39;(Rows matched: 1  Changed: 1  Warnings: 0&#39;,
+  protocol41: true,
+  changedRows: 1 }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;クライアントなどで確認してもid31の行のnameがすがわらに更新されているのが分かります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/068/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;delete-delete文&#34;&gt;Delete（DELETE文）&lt;/h2&gt;
+
+&lt;p&gt;最後にデータ削除のDeleteにあたるDELETE文を使ってみましょう。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;参考: &lt;a href=&#34;http://www.dbonline.jp/mysql/insert/index10.html&#34;&gt;http://www.dbonline.jp/mysql/insert/index10.html&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;app.jsの16行目を以下に書き換えましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let sql = `delete from dsdb.test_user where id = 31`;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;DELETE文の基本は「&lt;code&gt;delete from DB名.テーブル名 where 条件&lt;/code&gt;」という形になります。
+今回の文では「&lt;code&gt;nobidb&lt;/code&gt;データベースの&lt;code&gt;test_user&lt;/code&gt;テーブルの、idが31の行を削除する」という意味になります。&lt;/p&gt;
+
+&lt;p&gt;それでは実行してみましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ node app.js
+test_userテーブル:  OkPacket {
+  fieldCount: 0,
+  affectedRows: 1,
+  insertId: 0,
+  serverStatus: 2,
+  warningCount: 0,
+  message: &#39;&#39;,
+  protocol41: true,
+  changedRows: 0 }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;クライアントなどで確認してもid31の行が削除されているのが分かります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/068/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ここまでで、Node.jsからMySQLにアクセスしてCRUDをする操作の紹介をしました。&lt;/p&gt;
+
+&lt;h2 id=&#34;tips-node-mysql2&#34;&gt;Tips: node-mysql2&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://qiita.com/n0bisuke/items/4e59d02f90bb66451011&#34;&gt;Node.jsからMySQL接続のメモ(とnode-mysql2)&lt;/a&gt;にもあるように&lt;a href=&#34;https://github.com/sidorares/node-mysql2&#34;&gt;node-mysql2&lt;/a&gt;というモジュールもありますので、ベンチマークが気になり始めたら利用を試みるのも良いかもしれません。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ npm i mysql2 --save
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;でインストールして&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;const mysql = require(&#39;mysql&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;の読み込み箇所を&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;const mysql      = require(&#39;mysql2&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;に修正するだけで使えるので移行も楽そうです。&lt;/p&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;Node.jsからMySQLにアクセスする方法を紹介しました。
+基礎的な内容になるので、初めてチャレンジする方は参考にして下さい。&lt;/p&gt;
+
+&lt;p&gt;SQL直書きだと脆弱性が&amp;hellip;&amp;hellip;とかの話はありそうですがそれはまた別の機会で書けたらと思います。&lt;/p&gt;
+
+&lt;p&gt;それでは。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>AzureでMySQLのセットアップと接続方法</title>
       <link>https://dotstud.io/blog/howto-setup-azure-mysql/</link>
       <pubDate>Mon, 02 Jan 2017 15:00:53 +0900</pubDate>
@@ -1854,312 +2105,6 @@ LINEなど、エンジニア以外にも使われているツールだとプロ�
 &lt;p&gt;[]()&lt;/p&gt;
 
 &lt;p&gt;ではまた！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>GR-COTTONで見た目も可愛く電子工作！部屋の温度をブラウザからチェックしてみよう</title>
-      <link>https://dotstud.io/blog/milkcocoa-grcotton-realtime-temperature/</link>
-      <pubDate>Thu, 03 Nov 2016 10:00:00 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/milkcocoa-grcotton-realtime-temperature/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは！　dotstudioのエディターのうららです。先日、バックエンドサービス「Milkcocoa」を題材にしたLT大会「 &lt;strong&gt;&lt;a href=&#34;http://mlkcca.connpass.com/event/34936/&#34;&gt;紅白Milkcocoa合戦&lt;/a&gt;&lt;/strong&gt; 」に参加してきました。&lt;/p&gt;
-
-&lt;p&gt;そこで発表した &lt;strong&gt;Webサイト上から部屋の温度がわかる&lt;/strong&gt; という仕組みが何かしらに役に立つ気がするので本記事にまとめておこうと思います。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;こんな人におすすめ&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;部屋の気温をブラウザ上からチェックできるようにしたり、データとして貯めたい人（ペットを飼ってる人や観葉植物を育てている人におすすめ）&lt;/li&gt;
-&lt;li&gt;電子工作には興味があるけれど、せっかくなら見た目が可愛いアイテムで挑戦したい人&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;全体の構成&#34;&gt;全体の構成&lt;/h2&gt;
-
-&lt;p&gt;マイコンボード「GR-COTTON」でセンサーの値を取得し、バックエンドサービス「Milkcocoa」を使いブラウザ側にデータを送ります。&lt;/p&gt;
-
-&lt;p&gt;MacとGR-COTTONをUSB接続し、Node.jsを経由してMilkcocoaにデータを送ります。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;milkcocoa&#34;&gt;Milkcocoa&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/01_milkcocoa.png&#34; alt=&#34;&#34; /&gt;
-&lt;a href=&#34;https://mlkcca.com&#34;&gt;milkcocoa&lt;/a&gt;とは、&lt;strong&gt;JavaScriptのソースコードを1行挿入するだけで、リアルタイム通信ができるようになる&lt;/strong&gt; サービスです。リアルタイム通信にはバックエンドの構築が必要ですが、そこの手間が省けます。&lt;/p&gt;
-
-&lt;h3 id=&#34;gr-cotton&#34;&gt;GR-COTTON&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/02_cotton.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;こちらが今回使うマイコンボード「&lt;a href=&#34;http://gadget.renesas.com/ja/product/cotton.html&#34;&gt;GR-COTTON&lt;/a&gt;」です。ルネサスエレクトロニクスが企画する「&lt;a href=&#34;http://gadget.renesas.com/ja/&#34;&gt;がじぇっとるねさす&lt;/a&gt;（通称がじぇるね）」が作っています。&lt;/p&gt;
-
-&lt;p&gt;最初からタッチセンサーや気温センサー、フルカラーLEDを搭載しています。しかもその &lt;strong&gt;タッチセンサーが星型&lt;/strong&gt; で、基盤も白をベースにしているので、見た目がものすごく可愛いんです！　&lt;/p&gt;
-
-&lt;h2 id=&#34;作り方&#34;&gt;作り方&lt;/h2&gt;
-
-&lt;p&gt;では早速作ってみましょう！　大きく分けると次の4つの作業をします。&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Milkcocoaの登録をする&lt;/li&gt;
-&lt;li&gt;GR-COTTONのチュートリアル1〜10をおこなう&lt;/li&gt;
-&lt;li&gt;app.jsをビルドする&lt;/li&gt;
-&lt;li&gt;Webサイトを作る（HTMLのみでOK）&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&#34;1-milkcocoaの登録をする&#34;&gt;1. Milkcocoaの登録をする&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/04_milkcocoa.png&#34; alt=&#34;&#34; /&gt;
-&lt;a href=&#34;https://mlkcca.com/&#34;&gt;トップページ&lt;/a&gt;からログインして、「新しいアプリを作る」をクリックします。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/05_milkcocoa.png&#34; alt=&#34;&#34; /&gt;
-アプリ名は自分で好きなものを登録します。ここでは「GR-COTTON」にしました。&lt;/p&gt;
-
-&lt;p&gt;これだけでMilkcocoa側の準備はOKです。&lt;/p&gt;
-
-&lt;h3 id=&#34;2-gr-cottonのチュートリアル1-10をおこなう&#34;&gt;2. GR-COTTONのチュートリアル1〜10をおこなう&lt;/h3&gt;
-
-&lt;p&gt;がじぇっとるねさすが提供している、こちらの&lt;a href=&#34;http://gadget.renesas.com/ja/product/cotton_sp1.html&#34;&gt;チュートリアル&lt;/a&gt;を参考に、1〜10まで進めてください。&lt;/p&gt;
-
-&lt;h3 id=&#34;3-node-jsのプログラムを用意する&#34;&gt;3. Node.jsのプログラムを用意する&lt;/h3&gt;
-
-&lt;p&gt;シリアル通信でCOTTONとMilkcocoaの橋渡しをするプログラムを用意します。以下のapp.jsをプログラムに記入して実行してみてください。Node.jsで作成しています。&lt;/p&gt;
-
-&lt;h4 id=&#34;app-js&#34;&gt;app.js&lt;/h4&gt;
-
-&lt;pre&gt;&lt;code&gt;// Milkcocoaの設定
-const MilkCocoa = require(&#39;milkcocoa&#39;);
-const milkcocoa = new MilkCocoa(&#39;your api key&#39;);
-const ds = milkcocoa.dataStore(&#39;status&#39;);
-
-// シリアル通信の設定
-const SerialPort = require(&#39;serialport&#39;);
-const portName = &#39;COM6&#39;; // IDE for GRとかで調べる
-const serial = new SerialPort(portName, {
-  baudrate: 9600,
-  flowcontrol: false,
-  parser: SerialPort.parsers.readline(&amp;quot;\n&amp;quot;)
-});
-
-serial.on(&#39;open&#39;, () =&amp;gt; {
-  console.log(&#39;open&#39;);
-});
-
-// シリアル通信でデータを受信したに呼び出される関数を定義
-serial.on(&#39;data&#39;, (input) =&amp;gt; {
-  console.log(input);
-  ds.send({message: input});
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;ターミナルを開いて、以下のコマンドでインストールします。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;npm init
-npm i serialport milkcocoa
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;app.jsを動かしたいときは、以下のコマンドを使います。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;node app.js
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;4-webサイトを作る-htmlのみでok&#34;&gt;4. Webサイトを作る（HTMLのみでOK）&lt;/h3&gt;
-
-&lt;p&gt;最後はフロント側を作ります！&lt;/p&gt;
-
-&lt;h4 id=&#34;index-html&#34;&gt;index.html&lt;/h4&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;!doctype html&amp;gt;
-&amp;lt;html&amp;gt;
-  &amp;lt;head&amp;gt;
-    &amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
-    &amp;lt;title&amp;gt;フロント&amp;lt;/title&amp;gt;
-  &amp;lt;/head&amp;gt;
-  &amp;lt;body&amp;gt;
-    &amp;lt;div id=&amp;quot;log&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
-    &amp;lt;script src=&amp;quot;https://code.jquery.com/jquery-2.2.4.min.js&amp;quot;   integrity=&amp;quot;sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=&amp;quot;   crossorigin=&amp;quot;anonymous&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-    &amp;lt;script src=&#39;https://cdn.mlkcca.com/v2.0.0/milkcocoa.js&#39;&amp;gt;&amp;lt;/script&amp;gt;
-    &amp;lt;script&amp;gt;
-    window.onload = () =&amp;gt; {
-      // Milkcocoa
-      const milkcocoa = new MilkCocoa(&#39;your api key&#39;);
-      const ds = milkcocoa.dataStore(&#39;status&#39;);
-
-      // Milkcocoaからデータが送られてきた時のコールバック
-      ds.on(&#39;send&#39;, (data) =&amp;gt; {
-        console.log(data.value);
-        // ここでhtmlのDOMを操作する
-
-     })
-    }
-    &amp;lt;/script&amp;gt;
-  &amp;lt;/body&amp;gt;
-&amp;lt;/html&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/07_milkcocoa.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;14行目の&lt;code&gt;your api key&lt;/code&gt;には、先ほど登録したMilkcocoaのこの箇所の文字列を入れます。&lt;/p&gt;
-
-&lt;p&gt;これで、&lt;code&gt;node app.js&lt;/code&gt;を打つと、コンソールに気温がリアルタイムで表示されるようになります！  ちなみに、&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;!doctype html&amp;gt;
-&amp;lt;html&amp;gt;
-  &amp;lt;head&amp;gt;
-    &amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
-    &amp;lt;title&amp;gt;うららフロント&amp;lt;/title&amp;gt;
-  &amp;lt;/head&amp;gt;
-
-
-  &amp;lt;body&amp;gt;
-	// ここに書き込める
-    &amp;lt;div id=&amp;quot;log&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
-    &amp;lt;script src=&amp;quot;https://code.jquery.com/jquery-2.2.4.min.js&amp;quot;   integrity=&amp;quot;sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=&amp;quot;   crossorigin=&amp;quot;anonymous&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-    &amp;lt;script src=&#39;https://cdn.mlkcca.com/v2.0.0/milkcocoa.js&#39;&amp;gt;&amp;lt;/script&amp;gt;
-    &amp;lt;script&amp;gt;
-    window.onload = () =&amp;gt; {
-      const milkcocoa = new MilkCocoa(&#39;your api key&#39;);
-      const ds = milkcocoa.dataStore(&#39;status&#39;);
-
-      ds.on(&#39;send&#39;, (data) =&amp;gt; {
-        console.log(data.value);
-     })
-    }
-    &amp;lt;/script&amp;gt;
-	// ここに書き込める
-  &amp;lt;/body&amp;gt;
-
-&amp;lt;/html&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;// ここに書き込める&lt;/code&gt; にHTMLなどを書くと、フロント側をいじることができます。&lt;/p&gt;
-
-&lt;h4 id=&#34;わたしが作ったフロント側のソースコード-cotton-html&#34;&gt;わたしが作ったフロント側のソースコード cotton.html&lt;/h4&gt;
-
-&lt;p&gt;完全に余談ですが、私が作ったフロント側のソースコードも載せておきます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;!doctype html&amp;gt;
-&amp;lt;html&amp;gt;
-  &amp;lt;head&amp;gt;
-    &amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
-    &amp;lt;title&amp;gt;部屋の温度なう&amp;lt;/title&amp;gt;
-    &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;http://fonts.googleapis.com/earlyaccess/notosansjp.css&amp;quot;&amp;gt; // googleフォントを入れてみた
-    &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; type=&amp;quot;text/css&amp;quot; href=&amp;quot;cotton.css&amp;quot;&amp;gt;
-  &amp;lt;/head&amp;gt;
-
-  &amp;lt;body&amp;gt;
-    &amp;lt;div id=&amp;quot;welcome&amp;quot;&amp;gt;Temperature Now&amp;lt;/div&amp;gt;
-    &amp;lt;div id=&amp;quot;log&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
-    &amp;lt;marquee&amp;gt;あなたは10573人目の訪問者です！&amp;lt;/marquee&amp;gt; // 文字が流れます
-    &amp;lt;div id=&amp;quot;you&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;br&amp;gt;
-    &amp;lt;center&amp;gt;&amp;lt;table border=&amp;quot;0&amp;quot; cellspacing=&amp;quot;0&amp;quot; cellpadding=&amp;quot;0&amp;quot;&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td align=&amp;quot;center&amp;quot;&amp;gt;&amp;lt;a href=&amp;quot;http://www.rays-counter.com/&amp;quot;&amp;gt;&amp;lt;img src=&amp;quot;http://www.rays-counter.com/d350_f6_022/578cc94f09357/&amp;quot; alt=&amp;quot;アクセスカウンター&amp;quot; border=&amp;quot;0&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td align=&amp;quot;center&amp;quot; style=&amp;quot;font-size:xx-small&amp;quot;&amp;gt;&amp;lt;img src=&amp;quot;http://www.rays-counter.com/images/counter_01.gif&amp;quot; border=&amp;quot;0&amp;quot;&amp;gt;&amp;lt;img src=&amp;quot;http://www.rays-counter.com/images/counter_02.gif&amp;quot; border=&amp;quot;0&amp;quot;&amp;gt;&amp;lt;img src=&amp;quot;http://www.rays-counter.com/images/counter_03.gif&amp;quot; border=&amp;quot;0&amp;quot;&amp;gt;&amp;lt;img src=&amp;quot;http://www.rays-counter.com/images/counter_04.gif&amp;quot; border=&amp;quot;0&amp;quot;&amp;gt;&amp;lt;img src=&amp;quot;http://www.rays-counter.com/images/counter_05.gif&amp;quot; border=&amp;quot;0&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/center&amp;gt; // アクセスカウンターです、フリーのを使いました
-    &amp;lt;script src=&amp;quot;https://code.jquery.com/jquery-2.2.4.min.js&amp;quot;   integrity=&amp;quot;sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=&amp;quot;   crossorigin=&amp;quot;anonymous&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-    &amp;lt;script src=&#39;https://cdn.mlkcca.com/v2.0.0/milkcocoa.js&#39;&amp;gt;&amp;lt;/script&amp;gt;
-    &amp;lt;script&amp;gt;
-    $(document).ready(function(){
-      // Milkcocoa
-      const milkcocoa = new MilkCocoa(&#39;yieldiq29oxas.mlkcca.com&#39;);
-      const ds = milkcocoa.dataStore(&#39;status&#39;);
-
-      // Milkcocoaからデータが送られてきた時のコールバック
-      ds.on(&#39;send&#39;, (data) =&amp;gt; {
-        console.log(data.value);
-        const temp=data.value.message;
-        if (temp&amp;gt;29){
-          $(&#39;#log&#39;).css(&#39;color&#39;, &#39;red&#39;);
-          $(&#39;#you&#39;).text(&#39;あついね！&#39;) // 29度以上になると「あついね！」というコメントが表示されます
-        }
-        else if (temp&amp;lt;27){
-          $(&#39;#log&#39;).css(&#39;color&#39;, &#39;blue&#39;);
-          $(&#39;#you&#39;).text(&#39;さむいね！&#39;)　// 27度以下になると「さむいね！」というコメントが表示されます
-        }
-        else {
-          $(&#39;#log&#39;).css(&#39;color&#39;, &#39;#eebbcb&#39;);
-          $(&#39;#you&#39;).text(&#39;ちょうどいいね！&#39;) // 27&amp;amp;28度になると「ちょうどいいね！」というコメントが表示されます
-        }
-        $(&#39;#log&#39;).text(&#39;今の温度は&#39;+data.value.message+&#39;度☆&#39;); // 今の温度が表示されます
-        // ここでhtmlのDOMを操作する
-        // milkcocoa と push でカウンター（javascript）
-
-     })
-   　});
-    &amp;lt;/script&amp;gt;
-  &amp;lt;/body&amp;gt;
-&amp;lt;/html&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;style-css&#34;&gt;style.css&lt;/h4&gt;
-
-&lt;pre&gt;&lt;code&gt;body {
-  font-family: &#39;Noto Sans Japanese&#39;, sans-serif;
-}
-
-#log {
-  font-size: 30px;
-  text-align: center;
-}
-
-#welcome {
-  font-size: 50px;
-  text-align: center;
-  color: darkblue
-}
-
-#you {
-    text-align: center;
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;見た目&#34;&gt;見た目&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/08_website.png&#34; alt=&#34;&#34; /&gt;
-このような感じの見た目になります。1990年代のサイトを目指しました。全然可愛くないですね。アクセスカウンタは無料で配布されていた「&lt;a href=&#34;http://www.rays-counter.com/&#34;&gt;無料アクセスカウンター&lt;/a&gt;」を使っています。&lt;/p&gt;
-
-&lt;p&gt;ということで、Webサイトの見た目はこのように自分でアレンジできます。HTMLの技術が少し必要になりますが、自由にいじって自分好みのサイトにしてみてください。（CSSもあればなおよしですね）&lt;/p&gt;
-
-&lt;p&gt;この状態ではサーバーにアップされていないのでローカル環境でないとサイトを見られませんが、これをアップすれば家の外からでもスマホやPCなどで室温を確認することができます。&lt;/p&gt;
-
-&lt;h2 id=&#34;注意点&#34;&gt;注意点&lt;/h2&gt;
-
-&lt;p&gt;ここからは私が詰んだ箇所を紹介します。全部で3つあります。&lt;/p&gt;
-
-&lt;h3 id=&#34;gr-cottonのジャンパを配線する&#34;&gt;GR-COTTONのジャンパを配線する&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/09_jumper.png&#34; alt=&#34;&#34; /&gt;
-通常はこのパーツを反対側に刺さないといけないです。チュートリアルにも載っていますが見落とすと操作できなくなります。&lt;/p&gt;
-
-&lt;h3 id=&#34;ケーブルは純正のものを使う&#34;&gt;ケーブルは純正のものを使う&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/10_cable.png&#34; alt=&#34;&#34; /&gt;
-コンビニで売っているモバイルバッテリーに付属しているようなケーブルだと、認識されないのです……。&lt;/p&gt;
-
-&lt;p&gt;データ通信が可能なタイプを用意しましょう。（GR-COTTONには純正のケーブルが付属していません）&lt;/p&gt;
-
-&lt;h3 id=&#34;kurumiwriterにチェックを入れる&#34;&gt;KurumiWriterにチェックを入れる&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/11_notfound.png&#34; alt=&#34;&#34; /&gt;
-ケーブルを純正にしたのにPCからUSBドライバが表示されない、ということがありました。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;FTDIの仕様上USBポートが開いた/閉じたときでDTR(COTTONのリセット)がハイ/ロウが排他的になります。KurumiWriterでその設定ができますがデフォルト(チェックなし)ではポートが開いたときDTRがロウになります。 &lt;a href=&#34;https://t.co/aWANpSdJka&#34;&gt;https://t.co/aWANpSdJka&lt;/a&gt;&lt;/p&gt; Renesas_FUN (@Renesas_FUN) &lt;a href=&#34;https://twitter.com/Renesas_FUN/status/750323606601609216&#34;&gt;2016年7月5日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;これをTwitterでつぶやいたところ、がじぇっとるねさすさんの公式アカウントからご回答いただきました。KurumiWriterのチェックボックスにチェックをいれていなかったことが原因でした……。&lt;/p&gt;
-
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-
-&lt;p&gt;自分が詰んだところの余談が長くなってしまったのですが、部屋の温度をGR-COTTONで取得してブラウザに表示する方法を紹介しました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/06_code.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;余談ですが、今回使った app.jsとhtmlは、知り合いの元組み込みエンジニアいわたんさん（&lt;a href=&#34;twitter.com/iwata_n&#34;&gt;@iwata_n&lt;/a&gt;）にお願いして作ってもらいました。いわたんさんありがとうございます！&lt;/p&gt;
-
-&lt;script async class=&#34;speakerdeck-embed&#34; data-id=&#34;aa68f3d1934d480f9a3a26a6062ffa9b&#34; data-ratio=&#34;1.33333333333333&#34; src=&#34;//speakerdeck.com/assets/embed.js&#34;&gt;&lt;/script&gt;
-
-&lt;p&gt;また、当日発表したプレゼン資料はこちらから見られます。&lt;/p&gt;
-
-&lt;p&gt;みなさんぜひ試してみてください！&lt;/p&gt;
 </description>
     </item>
     

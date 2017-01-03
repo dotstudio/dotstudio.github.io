@@ -10,6 +10,257 @@
     <atom:link href="/series/nodejs/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Node.jsアプリケーションからMySQLにアクセスする</title>
+      <link>https://dotstud.io/blog/operate-mysql-from-nodejs/</link>
+      <pubDate>Tue, 03 Jan 2017 10:05:15 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/operate-mysql-from-nodejs/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudioの代表の&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/howto-setup-azure-mysql/&#34;&gt;前回の記事(AzureでMySQLのセットアップと接続方法)&lt;/a&gt;に続きMySQLの話です。&lt;/p&gt;
+
+&lt;p&gt;今日は初心者向けに、Node.jsからMySQLにアクセスする方法をチュートリアル的に紹介します。&lt;/p&gt;
+
+&lt;h2 id=&#34;mysqlモジュール-ドライバー&#34;&gt;MySQLモジュール（ドライバー）&lt;/h2&gt;
+
+&lt;p&gt;こちらのモジュールを利用します。
+おそらく一番利用されているMySQLのNode.jsモジュール（ドライバー）になります。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.npmjs.com/package/mysql&#34;&gt;https://www.npmjs.com/package/mysql&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;npm init --yes
+npmt i mysql --save 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これでインストールはできました。&lt;/p&gt;
+
+&lt;h2 id=&#34;mysqlデータベースを用意&#34;&gt;MySQLデータベースを用意&lt;/h2&gt;
+
+&lt;p&gt;接続を試す前にデータベースが用意できているか確認しましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/howto-setup-azure-mysql/&#34;&gt;前回の記事(AzureでMySQLのセットアップと接続方法)&lt;/a&gt;などを参照してみましょう。&lt;/p&gt;
+
+&lt;p&gt;仮データをいれておきましょう。&lt;/p&gt;
+
+&lt;p&gt;今回は&amp;rsquo;test_user&amp;rsquo;テーブルを作って一件データを入れておきました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/068/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;crud-クラッド-とsql&#34;&gt;CRUD（クラッド）とSQL&lt;/h2&gt;
+
+&lt;p&gt;データアクセスの前に&lt;a href=&#34;http://e-words.jp/w/CRUD.html&#34;&gt;CRUD&lt;/a&gt;について少し触れます。
+CRUDはデータベースシステムなどの基本概念であるデータの作成（Create）、読み出し（Read）、更新（Update）、削除（Delete）を表す言葉です。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://se-java-school.com/itstudy/database/intro_db_jdbc/sqltext_01.php&#34;&gt;SQL&lt;/a&gt;はデータベースを操作するための言語です。
+MySQLの操作の最初のステップとして、SQLを使用してCRUDを実現してみましょう。&lt;/p&gt;
+
+&lt;p&gt;CRUDはSQL構文では、以下のような形で対応しています。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Create -&amp;gt; INSERT文&lt;/li&gt;
+&lt;li&gt;Read -&amp;gt; SELECT文&lt;/li&gt;
+&lt;li&gt;Update -&amp;gt; UPDATE文&lt;/li&gt;
+&lt;li&gt;Delete -&amp;gt; DELETE文&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;この4つの構文に対応してコードを書いていきましょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;接続テストとread-select文&#34;&gt;接続テストとRead（SELECT文）&lt;/h2&gt;
+
+&lt;p&gt;まずはNode.jsからMySQLへの接続テストをしつつ、データ表示のReadにあたるSELECT文を使います。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;参考: &lt;a href=&#34;http://www.dbonline.jp/mysql/select/index1.html&#34;&gt;http://www.dbonline.jp/mysql/select/index1.html&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;app.jsを作成しましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//app.js
+
+&#39;use strict&#39;
+
+const mysql      = require(&#39;mysql&#39;);
+const connection = mysql.createConnection({
+    host     : &#39;hoge.hoge.com&#39;,
+    user     : &#39;n0bisuke&#39;,
+    password : &#39;n0bipass&#39;,
+    database : &#39;nobidb&#39;
+});
+
+//ここからMySQLアクセス
+connection.connect();
+
+let sql = &#39;select * from nobidb.test_user&#39;;
+connection.query(sql, (err, rows, fields) =&amp;gt; {
+  if (err) throw err; 
+  console.log(&#39;test_userテーブル: &#39;, rows);
+});
+
+connection.end();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;7〜10行目について&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;host: MySQLのホスト名です。仮にhoge.hoge.comを指定しています。&lt;/li&gt;
+&lt;li&gt;user: MySQLに登録してあるユーザー名です。仮にn0bisukeを指定しています。&lt;/li&gt;
+&lt;li&gt;password: MySQLに登録してあるパスワードです。仮にn0bipassを指定しています。&lt;/li&gt;
+&lt;li&gt;database: MySQLで利用するDB名です。仮にnobidbを指定しています。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;16行目がSQLです。&lt;/p&gt;
+
+&lt;p&gt;SELECT文は「&lt;code&gt;select カラム名 from DB名.テーブル名&lt;/code&gt;」が基本になります。
+全てのカラムを取得する場合は&lt;code&gt;*&lt;/code&gt;を指定します。&lt;/p&gt;
+
+&lt;p&gt;16行目のSQL文は「&lt;code&gt;nobidb&lt;/code&gt;データベースの&lt;code&gt;test_user&lt;/code&gt;テーブルの全てのカラムの情報を取得する」という内容になります。&lt;/p&gt;
+
+&lt;p&gt;それでは実行してみましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ node app.js
+test_userテーブル:  [ RowDataPacket { id: 11, name: &#39;n0bisuke&#39;, created: 2017-01-01T21:35:26.000Z } ]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これで無事にNode.jsとMySQLの接続が確立され、予め登録していたtest_userテーブルの中身が表示（Read）されました。&lt;/p&gt;
+
+&lt;h2 id=&#34;create-insert文&#34;&gt;Create（INSERT文）&lt;/h2&gt;
+
+&lt;p&gt;次にデータ作成のCreateにあたるINSERT文を使ってみましょう。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;参考: &lt;a href=&#34;http://www.dbonline.jp/mysql/insert/index1.html&#34;&gt;http://www.dbonline.jp/mysql/insert/index1.html&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;app.jsの16行目を以下に書き換えましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let sql = `insert into nobidb.test_user (name) values (&amp;quot;sugawara&amp;quot;)`;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;INSERT文の基本は「&lt;code&gt;insert into DB名.テーブル名 (カラム名1, カラム名2) values (値, 値)&lt;/code&gt;」という形になります。
+今回の文では「&lt;code&gt;nobidb&lt;/code&gt;データベースの&lt;code&gt;test_user&lt;/code&gt;テーブルの&lt;code&gt;name&lt;/code&gt;カラムに&lt;code&gt;sugawara&lt;/code&gt;という文字列を入れてデータを作成する」という意味になります。&lt;/p&gt;
+
+&lt;p&gt;それでは実行してみましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ node app.js
+test_userテーブル:  OkPacket {
+  fieldCount: 0,
+  affectedRows: 1,
+  insertId: 31,
+  serverStatus: 2,
+  warningCount: 0,
+  message: &#39;&#39;,
+  protocol41: true,
+  changedRows: 0 }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;クライアントなどで確認してもしっかり行が追加されていることが分かります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/068/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;update-update文&#34;&gt;Update（UPDATE文）&lt;/h2&gt;
+
+&lt;p&gt;次にデータ更新のUpdateにあたるUPDATE文を使ってみましょう。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;参考: &lt;a href=&#34;http://www.dbonline.jp/mysql/insert/index7.html&#34;&gt;http://www.dbonline.jp/mysql/insert/index7.html&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;app.jsの16行目を以下に書き換えましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let sql = `update dsdb.test_user set name=&amp;quot;すがわら&amp;quot; where id = 31`;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;UPDATE文の基本は「&lt;code&gt;update DB名.テーブル名 set カラム名1=更新内容1 カラム名2=更新内容2 where 条件&lt;/code&gt;」という形になります。
+今回の文では「&lt;code&gt;nobidb&lt;/code&gt;データベースの&lt;code&gt;test_user&lt;/code&gt;テーブルの、idが31の&lt;code&gt;name&lt;/code&gt;カラムを&lt;code&gt;すがわら&lt;/code&gt;という文字列にデータ更新する」という意味になります。&lt;/p&gt;
+
+&lt;p&gt;それでは実行してみましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ node app.js
+test_userテーブル:  OkPacket {
+  fieldCount: 0,
+  affectedRows: 1,
+  insertId: 0,
+  serverStatus: 2,
+  warningCount: 0,
+  message: &#39;(Rows matched: 1  Changed: 1  Warnings: 0&#39;,
+  protocol41: true,
+  changedRows: 1 }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;クライアントなどで確認してもid31の行のnameがすがわらに更新されているのが分かります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/068/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;delete-delete文&#34;&gt;Delete（DELETE文）&lt;/h2&gt;
+
+&lt;p&gt;最後にデータ削除のDeleteにあたるDELETE文を使ってみましょう。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;参考: &lt;a href=&#34;http://www.dbonline.jp/mysql/insert/index10.html&#34;&gt;http://www.dbonline.jp/mysql/insert/index10.html&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;app.jsの16行目を以下に書き換えましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let sql = `delete from dsdb.test_user where id = 31`;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;DELETE文の基本は「&lt;code&gt;delete from DB名.テーブル名 where 条件&lt;/code&gt;」という形になります。
+今回の文では「&lt;code&gt;nobidb&lt;/code&gt;データベースの&lt;code&gt;test_user&lt;/code&gt;テーブルの、idが31の行を削除する」という意味になります。&lt;/p&gt;
+
+&lt;p&gt;それでは実行してみましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ node app.js
+test_userテーブル:  OkPacket {
+  fieldCount: 0,
+  affectedRows: 1,
+  insertId: 0,
+  serverStatus: 2,
+  warningCount: 0,
+  message: &#39;&#39;,
+  protocol41: true,
+  changedRows: 0 }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;クライアントなどで確認してもid31の行が削除されているのが分かります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/068/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ここまでで、Node.jsからMySQLにアクセスしてCRUDをする操作の紹介をしました。&lt;/p&gt;
+
+&lt;h2 id=&#34;tips-node-mysql2&#34;&gt;Tips: node-mysql2&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://qiita.com/n0bisuke/items/4e59d02f90bb66451011&#34;&gt;Node.jsからMySQL接続のメモ(とnode-mysql2)&lt;/a&gt;にもあるように&lt;a href=&#34;https://github.com/sidorares/node-mysql2&#34;&gt;node-mysql2&lt;/a&gt;というモジュールもありますので、ベンチマークが気になり始めたら利用を試みるのも良いかもしれません。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ npm i mysql2 --save
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;でインストールして&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;const mysql = require(&#39;mysql&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;の読み込み箇所を&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;const mysql      = require(&#39;mysql2&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;に修正するだけで使えるので移行も楽そうです。&lt;/p&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;Node.jsからMySQLにアクセスする方法を紹介しました。
+基礎的な内容になるので、初めてチャレンジする方は参考にして下さい。&lt;/p&gt;
+
+&lt;p&gt;SQL直書きだと脆弱性が&amp;hellip;&amp;hellip;とかの話はありそうですがそれはまた別の機会で書けたらと思います。&lt;/p&gt;
+
+&lt;p&gt;それでは。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Node.jsでファイル監視を行うchokiderを使ってみよう</title>
       <link>https://dotstud.io/blog/nodejs-npm-chokidar-fswatch/</link>
       <pubDate>Mon, 26 Dec 2016 14:00:27 +0900</pubDate>
