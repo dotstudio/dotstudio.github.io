@@ -1,0 +1,2600 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tips on dotstudio（ドットスタジオ）</title>
+    <link>https://dotstud.io/categories/tips/index.xml</link>
+    <description>Recent content in Tips on dotstudio（ドットスタジオ）</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>© 2016 dotstudio inc.</copyright>
+    <atom:link href="/categories/tips/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>AzureでMySQLのセットアップと接続方法</title>
+      <link>https://dotstud.io/blog/howto-setup-azure-mysql/</link>
+      <pubDate>Mon, 02 Jan 2017 15:00:53 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/howto-setup-azure-mysql/</guid>
+      
+      <description>
+
+&lt;p&gt;明けましておめでとうございます。今年もよろしくお願いします。&lt;/p&gt;
+
+&lt;p&gt;ゆったりした時間の流れている実家から記事を書いています。&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;@n0bisuke&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;今日はAzureでのMySQLの使い方を紹介します。&lt;/p&gt;
+
+&lt;p&gt;新年一発目の記事は何か抱負的なこと書いた方がいいんじゃないかって声もありそうですがそういうのはモチベーションが上がったら書きますね。&lt;/p&gt;
+
+&lt;h2 id=&#34;新規にmysqlデータベースを作成する&#34;&gt;新規にMySQLデータベースを作成する&lt;/h2&gt;
+
+&lt;p&gt;AzureポータルでのMySQLデータベース作成の方法を紹介していきます。
+まずは&lt;a href=&#34;https://portal.azure.com/&#34;&gt;ポータル&lt;/a&gt;にログインしましょう。&lt;/p&gt;
+
+&lt;p&gt;&amp;ldquo;&lt;strong&gt;+(新規) &amp;gt; Marketplaceを検索&lt;/strong&gt;&amp;ldquo;から&amp;rdquo;&lt;strong&gt;MySQL Database&lt;/strong&gt;&amp;ldquo;と検索しましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/067/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&amp;ldquo;&lt;strong&gt;MySQL データベース&lt;/strong&gt;&amp;ldquo;を選択して&amp;rdquo;&lt;strong&gt;作成&lt;/strong&gt;&amp;ldquo;します。
+&lt;img src=&#34;https://dotstud.io/img/blog/067/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;（&lt;a href=&#34;https://docs.microsoft.com/ja-jp/azure/store-php-create-mysql-database&#34;&gt;Azure で MySQL データベースを作成して接続する&lt;/a&gt;の記事を参考に進めようとしたら何故か表示が変わっていて
+&amp;ldquo;Data + Strage&amp;rdquo;という項目が出てきませんでした。）&lt;/p&gt;
+
+&lt;p&gt;僕はここに行き着くまでで詰まってました……&lt;/p&gt;
+
+&lt;h2 id=&#34;初期情報の入力&#34;&gt;初期情報の入力&lt;/h2&gt;
+
+&lt;p&gt;データベースの情報を入力していきます。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;データベース名&lt;/strong&gt;: 任意の名前をつけましょう&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;サブスクリプション&lt;/strong&gt;: 利用するサブスクリプションを指定します。通常はデフォルト設定のままで大丈夫です。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;データベースの種類&lt;/strong&gt;: 共有か専用かを選択します。安く済ませる場合は共有にしましょう。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;リソースグループ&lt;/strong&gt;: 利用するリソースグループを指定します。無い場合は新規で作成しましょう。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;場所&lt;/strong&gt;: 日本からの利用なら東日本もしくは西日本を選択しましょう。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;価格レベル&lt;/strong&gt;: 利用する状況に合わせて選択します。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;法律条項&lt;/strong&gt;: 利用許諾のようなものです。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;価格レベルの設定は惑星の名前になっています。
+&lt;img src=&#34;https://dotstud.io/img/blog/067/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;法律条項の箇所では購入ボタンを押すことで同意したものとされるようです。
+&lt;strong&gt;Azureクレジットとは別にお金がかかるらしい&lt;/strong&gt;ので注意してください。
+同意して購入ボタンを押しましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/067/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;最後に作成を選択してしばらく待つとデータベースが作成されます。&lt;/p&gt;
+
+&lt;h2 id=&#34;クライアントアプリから接続してみる&#34;&gt;クライアントアプリから接続してみる&lt;/h2&gt;
+
+&lt;p&gt;実際にクライアントアプリから試してみましょう。
+僕はMacを利用しているので&lt;a href=&#34;https://www.sequelpro.com/&#34;&gt;Sequel Pro&lt;/a&gt;を使っています。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/067/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;データベースが作成されたらプロパティから以下の情報を確認します。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;ホスト名&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ポート&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ユーザー名&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;パスワード&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;データベース名&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;を確認しましょう。データベース名は設定したデータベース名だとアクセスできない場合があるので&lt;strong&gt;接続文字列&lt;/strong&gt;の&lt;strong&gt;Database=xxxx&lt;/strong&gt;の部分で確認しましょう。
+僕の環境の場合は&amp;rdquo;acsm_xxxxx&amp;rdquo;というデータベース名が設定されていました。
+&lt;img src=&#34;https://dotstud.io/img/blog/067/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;それではSequel Proで先ほどの情報を入力して、&lt;strong&gt;接続をテスト&lt;/strong&gt;を押しましょう。
+接続情報に問題がなければ&lt;strong&gt;接続が成功しました&lt;/strong&gt;と表示されます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/067/07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Sequel Proの操作でテーブル追加なども可能です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/067/08.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;他のクライアントでも同じような操作で接続確認を出来ると思います。&lt;/p&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;いかがでしたでしょうか。&lt;/p&gt;
+
+&lt;p&gt;AzureでMySQLを利用する方法を紹介しました。&lt;/p&gt;
+
+&lt;p&gt;ポータルのUIや仕様が調べて見つけたページと少し異なる部分がありましたが今回の内容と合わせて参考になれば幸いです。&lt;/p&gt;
+
+&lt;p&gt;それでは。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Node.jsでファイル監視を行うchokiderを使ってみよう</title>
+      <link>https://dotstud.io/blog/nodejs-npm-chokidar-fswatch/</link>
+      <pubDate>Mon, 26 Dec 2016 14:00:27 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nodejs-npm-chokidar-fswatch/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudio代表の&lt;a href=&#34;http://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/nodejs-npm-readline-sync/&#34;&gt;Node.jsでコマンドラインツール作るときに使いやすいreadline-sync&lt;/a&gt;に続いて、Node.jsのモジュール紹介です。&lt;/p&gt;
+
+&lt;p&gt;Gitなどを用いて開発を行っていると「ファイルの変更を検知して何かを実行したい」という場面があります。
+今日はそんな場面で活用できるファイル監視を行うモジュールを紹介します。&lt;/p&gt;
+
+&lt;h2 id=&#34;執筆時点のマシンスペック&#34;&gt;執筆時点のマシンスペック&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;macOS Sierra (v10.12)&lt;/li&gt;
+&lt;li&gt;Node.js v6.6.0&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;何か不具合があったときに参照してください。&lt;/p&gt;
+
+&lt;h2 id=&#34;インストール&#34;&gt;インストール&lt;/h2&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://github.com/paulmillr/chokidar&#34;&gt;chokidar&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;npm init&lt;/code&gt;で&lt;code&gt;package.json&lt;/code&gt;を作成してから進めます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;npm init --yes
+npm i --save chokidar
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;サンプルを動かしてみる&#34;&gt;サンプルを動かしてみる&lt;/h2&gt;
+
+&lt;h3 id=&#34;ファイル監視&#34;&gt;ファイル監視&lt;/h3&gt;
+
+&lt;p&gt;app.jsを作成します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;const chokidar = require(&#39;chokidar&#39;);
+
+// One-liner for current directory, ignores .dotfiles
+chokidar.watch(&#39;.&#39;, {ignored: /[\/\\]\./}).on(&#39;all&#39;, (event, path) =&amp;gt; {
+  console.log(event, path);
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;app.jsを保存したらアプリケーションを起動しましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;node app
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これで、nodeコマンドを実行したディレクトリ以下のファイルを監視しはじめます。&lt;/p&gt;
+
+&lt;p&gt;先ほど実行した&lt;code&gt;npm init --yes&lt;/code&gt;で&lt;code&gt;package.json&lt;/code&gt;が作成されます。&lt;code&gt;app.js&lt;/code&gt;を実行したまま&lt;code&gt;package.json&lt;/code&gt;を編集してみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/1e9ddbebcda4037874c803f91d6a8b66.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;このように、変更があったファイルを検知してくれます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;・
+・
+・
+change package.json
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;chokidarを使ってファイル監視して「特定のファイルが更新されたら〇〇する」というトリガーを簡単に作れます。&lt;/p&gt;
+
+&lt;p&gt;プロジェクト管理などで活用してみてください。&lt;/p&gt;
+
+&lt;p&gt;それでは。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>2016年12月版　Node.jsをホスティング出来るPaaSまとめ </title>
+      <link>https://dotstud.io/blog/nodejs-hosting-services-2016/</link>
+      <pubDate>Sun, 25 Dec 2016 02:19:41 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nodejs-hosting-services-2016/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudio代表の&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;年の瀬ですね。というかクリスマスですね。
+今回の記事は&lt;a href=&#34;http://qiita.com/advent-calendar/2016/ipu&#34;&gt;岩手県立大学アドベントカレンダー2016&lt;/a&gt;に登録しています。&lt;/p&gt;
+
+&lt;p&gt;僕が学生時代(2014年1月)に書いた記事「&lt;a href=&#34;http://offsidenow.phpapps.jp/archives/1671&#34;&gt;GUMBY + NODE.JS(EXPRESS) +APPFOGでペライチページを作ったので解説&lt;/a&gt;」を見つけて、この中で&lt;a href=&#34;https://www.ctl.io/appfog&#34;&gt;AppFog&lt;/a&gt;を利用してNode.jsのホスティングを行なっていました。
+最近になって「AppFogって今どうなってるんだろう」とか「もっと他のPaaSは無いのか」とか思ったので改めて調べてみたのでまとめてみます。&lt;/p&gt;
+
+&lt;p&gt;（ちなみに、この記事内で触れている盛岡TSUTAYAのカフェCulfeは&lt;a href=&#34;http://www.recomtank.com/entry/moriokatsutaya&#34;&gt;電源とWi-Fi完備&lt;/a&gt;で頻繁に利用していましたが、&lt;a href=&#34;http://morioka-tsutaya.net/news/morioka-tsutaya-%E3%82%AB%E3%83%95%E3%82%A7%E3%80%80culfe%E3%80%80%E9%96%89%E5%BA%97%E3%81%AE%E3%81%8A%E7%9F%A5%E3%82%89%E3%81%9B/&#34;&gt;2016年3月で閉店してしまっていた&lt;/a&gt;みたいです……）&lt;/p&gt;
+
+&lt;h2 id=&#34;前置き&#34;&gt;前置き&lt;/h2&gt;
+
+&lt;p&gt;まとめを読むにあたり、この辺を把握してもらえると嬉しいです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;AWS、GCP、Azure、Bluemixなどの大手ベンダーは今回は対象外としました。&lt;/li&gt;
+&lt;li&gt;全てを使ってみている訳ではないのでPaaSじゃないのも混ざってるかもしれないですけどご容赦下さい。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;また、今回参考にしたのは以下のサイトです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.appdynamics.com/product/battle-of-the-paas-node-js-apps-in-the-cloud/&#34;&gt;Battle of the PaaS: Node.js Apps in the Cloud&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.axlight.com/mt/sundayhacking/2015/07/nodejspaas.html&#34;&gt;node.jsアプリをデプロイするためのPaaSのクラウドサービスを探した&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://matome.naver.jp/odai/2133923360659821201&#34;&gt;今アツいWeb開発者向けクラウドプラットフォームまとめ&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/nodejs/node-v0.x-archive/wiki/Node-Hosting&#34;&gt;Hosting compatible with Node&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;node-jsのホスティングで使えそうなサービスたち&#34;&gt;Node.jsのホスティングで使えそうなサービスたち&lt;/h2&gt;
+
+&lt;h3 id=&#34;heroku&#34;&gt;Heroku&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://www.heroku.com&#34;&gt;https://www.heroku.com&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;昔から安定のHerokuです。Node.js以外にもRuby/Java/PHP/Python/Go/Scala/Clojureが利用できます。&lt;/p&gt;
+
+&lt;h3 id=&#34;modulus&#34;&gt;Modulus&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://modulus.io&#34;&gt;https://modulus.io&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;npm install -g modulus&lt;/code&gt;でCLIツールをインストールして利用できます。
+Node.js/PHP/Java/Python/&lt;a href=&#34;https://www.meteor.com&#34;&gt;Meteor&lt;/a&gt;(Node.jsのフレームワーク)が利用できます。&lt;/p&gt;
+
+&lt;h3 id=&#34;cloudnode&#34;&gt;cloudnode&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://cloudno.de/&#34;&gt;https://cloudno.de/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Node.js向けのPaaSです。&lt;code&gt;npm install -g cloudnode-cli&lt;/code&gt;で&lt;code&gt;cloudnodeコマンド&lt;/code&gt;を利用してデプロイします。
+CouchDB、MongoDB、Redisなども利用できます。&lt;/p&gt;
+
+&lt;h3 id=&#34;evennode&#34;&gt;evennode&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://www.evennode.com/&#34;&gt;https://www.evennode.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Node.js(とPython)向けのPaaSです。他のPaaSと違いアプリを作成すると「&lt;code&gt;git@git.evennode.com:xxxxxxxx.git&lt;/code&gt;」という感じのGitリポジトリのURLが発行され、そこにプッシュすることでデプロイできます。
+CLIツールのインストールも不要なのは手軽ですね。&lt;/p&gt;
+
+&lt;h3 id=&#34;nodechef&#34;&gt;NodeChef&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://nodechef.com/&#34;&gt;https://nodechef.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;こちらもNode.js向けのPaaSです。コマンドラインからデプロイができます。
+MongoDBやMeteorなどにも対応していてNode.js開発者が好むミドルウェアをサポートしてくれています。&lt;/p&gt;
+
+&lt;h3 id=&#34;nodejs-in-the-cloud-by-clever-cloud&#34;&gt;Nodejs in the cloud （by Clever Cloud）&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;http://nodejs-cloud.com/en&#34;&gt;http://nodejs-cloud.com/en&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;「A cloud for Node.js HOST YOUR WEB APPS IN THE CLOUD WITHOUT HASSLE」とあるように、Node.jsを簡単にデプロイできるPaaSです。
+中身は&lt;a href=&#34;https://www.clever-cloud.com/&#34;&gt;Clever Cloud&lt;/a&gt;が提供しているもののようです。&lt;/p&gt;
+
+&lt;h3 id=&#34;flow-app-engine&#34;&gt;FLOW APP ENGINE&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://flow.ch/appengine/&#34;&gt;https://flow.ch/appengine/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Node.jsのデプロイだけでなく、WebサーバーでのバランシングやDBの用意なども簡単なボタン操作で設定できます。
+NginxやApache、MongoDBやMySQLなどの有名なミドルウェアだけでなくかなり多くのミドルウェアをサポートしてくれています。&lt;/p&gt;
+
+&lt;h3 id=&#34;nodejitsu&#34;&gt;Nodejitsu&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://nodejitsu.com/&#34;&gt;https://nodejitsu.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/08.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Node.js専用のPaaSです。今は新規のアカウント登録はできず前述したModulus経由で扱うことができるようです。&lt;/p&gt;
+
+&lt;h3 id=&#34;joyent&#34;&gt;Joyent&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://www.joyent.com/&#34;&gt;https://www.joyent.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/09.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;IaaS提供もありますが、Dockerコンテナに最適化したクラウドサービス「&lt;a href=&#34;https://www.joyent.com/triton&#34;&gt;Triton&lt;/a&gt;」やオブジェクトストレージの「&lt;a href=&#34;https://www.joyent.com/manta&#34;&gt;Manta&lt;/a&gt;」を提供しています。
+Manta FUNCTIONSという機能ではNode.jsやPython、Rubyなど様々な言語を実行できます。&lt;/p&gt;
+
+&lt;h3 id=&#34;appfog&#34;&gt;AppFog&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;http://appfog.com&#34;&gt;http://appfog.com&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;冒頭でも触れたPaaSです。二年前くらいは無料でそこそこ使えて学生時代の僕にはすごくいいサービスだったのですが、今は有料化してしまったみたいです。&lt;/p&gt;
+
+&lt;h2 id=&#34;解説いれるくらい試せて無いサービスたち&#34;&gt;解説いれるくらい試せて無いサービスたち&lt;/h2&gt;
+
+&lt;p&gt;試せて無いですがNode.jsホスティングで調べて出てきたサービスたちです。
+中にはVPSっぽいのもあるのでPaaSって感じでは無いのもあると思います。&lt;/p&gt;
+
+&lt;p&gt;あとで試してみて解説が書けそうだったら別途まとめたいと思います。&lt;/p&gt;
+
+&lt;p&gt;……ということで解説抜きでURLとキャプチャのみです。&lt;/p&gt;
+
+&lt;h3 id=&#34;platform-sh&#34;&gt;platform.sh&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://platform.sh/hosting/nodejs/&#34;&gt;https://platform.sh/hosting/nodejs/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;engine-yard&#34;&gt;Engine Yard&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://www.engineyard.com/&#34;&gt;https://www.engineyard.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/12.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;iclickandhost&#34;&gt;iClickAndHost&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://iclickandhost.com/website-hosting/&#34;&gt;https://iclickandhost.com/website-hosting/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/13.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;scalingo&#34;&gt;Scalingo&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://scalingo.com/&#34;&gt;https://scalingo.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/14.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;rosehosting&#34;&gt;RoseHosting&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://www.rosehosting.com/&#34;&gt;https://www.rosehosting.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/15.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;exoscale-apps&#34;&gt;exoscale apps&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://www.exoscale.ch/add-on/apps/&#34;&gt;https://www.exoscale.ch/add-on/apps/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/16.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;clerve-cloud&#34;&gt;clerve cloud&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://www.clever-cloud.com/nodejs&#34;&gt;https://www.clever-cloud.com/nodejs&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/17.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;linode&#34;&gt;Linode&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://www.linode.com/&#34;&gt;https://www.linode.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/18.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;cloud-foundry&#34;&gt;Cloud Foundry&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://www.cloudfoundry.org/&#34;&gt;https://www.cloudfoundry.org/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/19.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;redhat-open-shift&#34;&gt;RedHat Open Shift&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://www.openshift.com/&#34;&gt;https://www.openshift.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/20.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;pogodan&#34;&gt;Pogodan&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;http://www.pogodan.com/&#34;&gt;http://www.pogodan.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/21.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;おまけ&#34;&gt;おまけ&lt;/h2&gt;
+
+&lt;p&gt;今回の記事を書く上で探してて惜しかったサービスをその他枠として挙げておきます。&lt;/p&gt;
+
+&lt;h3 id=&#34;commando-io-by-nodesocket&#34;&gt;Commando.io （by nodesocket）&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://commando.io/&#34;&gt;https://commando.io/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/22.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://nodesocket.com/&#34;&gt;nodeSocket&lt;/a&gt;というサービス名かと思いきや会社名でした。
+Command.ioというサービスでおそらくVPSサービスです。なのでNode.jsももちろん使えます。PaaSでは無いっぽいのでおまけ枠です。&lt;/p&gt;
+
+&lt;h3 id=&#34;c4sa&#34;&gt;C4SA&lt;/h3&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;http://c4sa.nifty.com/&#34;&gt;http://c4sa.nifty.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/23.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Niftyが運営しているサービスです。残念ながらNode.jsには対応してませんでしたがPHPやRubyなどは利用できるみたいです。&lt;/p&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;いかがでしたでしょうか。
+思った以上にいっぱいあるなぁという感想です。&lt;/p&gt;
+
+&lt;p&gt;色々と調べててやはりHerokuが使い勝手や情報の調べやすさ的に圧倒的だなと感じました。&lt;/p&gt;
+
+&lt;p&gt;特にこだわりなどが無く、「通常利用で無料である程度試したい」くらいであればHerokuを使うのが良いかと思います。
+ちょっと気分を変えたいときや、何かの理由でHerokuが厳しいと感じた際の参考になれば幸いです。&lt;/p&gt;
+
+&lt;p&gt;それでは。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>LINE NotifyとGitHubを連携してSlackから移行してみました。</title>
+      <link>https://dotstud.io/blog/line-notify-chat-bot/</link>
+      <pubDate>Fri, 11 Nov 2016 11:30:54 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/line-notify-chat-bot/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudio代表の&lt;a href=&#34;http://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;この記事を見ている人は大半がLINEは使ってると思います。
+今日は&lt;a href=&#34;http://linedevday.linecorp.com/jp/2016/&#34;&gt;LINE DEVELOPER DAY 2016&lt;/a&gt;で発表があったLINEの新機能であるLINE Notifyを使ってみようと思います。&lt;/p&gt;
+
+&lt;h2 id=&#34;line-notify&#34;&gt;LINE Notify&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://notify-bot.line.me/ja/&#34;&gt;https://notify-bot.line.me/ja/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;様々なWebサービスなどと連携することで、LINEが提供する公式アカウント&amp;rdquo;LINE Notify&amp;rdquo;から通知させることができる機能です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/054/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;プログラミング不要-実際に使ってみましょう&#34;&gt;プログラミング不要！実際に使ってみましょう&lt;/h2&gt;
+
+&lt;h3 id=&#34;line-notfyと友達になる&#34;&gt;LINE Notfyと友達になる&lt;/h3&gt;
+
+&lt;p&gt;まずは&lt;a href=&#34;https://notify-bot.line.me/ja/&#34;&gt;LINE Notifyのサイト&lt;/a&gt;からLINE Notifyと友達になります。&lt;/p&gt;
+
+&lt;p&gt;サイトに掲載してあるQRコードをスマートフォンアプリのLINEから読み込みましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/054/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;githubリポジトリ作成&#34;&gt;GitHubリポジトリ作成&lt;/h3&gt;
+
+&lt;p&gt;今回は僕がメンターとして入っている&lt;a href=&#34;http://gsacademy.tokyo/&#34;&gt;G&amp;rsquo;s ACADEMY TOKYO&lt;/a&gt;の学生さんたちとのやりとりに使ってみます。
+今回は5期目なのでgs5thというリポジトリを作りました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/054/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;lineのトークルームにline-notifyアカウントを追加&#34;&gt;LINEのトークルームにLINE Notifyアカウントを追加&lt;/h3&gt;
+
+&lt;p&gt;トークルームを作成し、通知を受けるトークルームにLINE Notifyアカウントを追加しましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/054/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;連携作業&#34;&gt;連携作業&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://notify-bot.line.me/github/repos/select&#34;&gt;https://notify-bot.line.me/github/repos/select&lt;/a&gt; からGitHub連携ができます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/054/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;GitHubのアカウント（Organization）とリポジトリ、LINEのトークルームを先ほど作成したものを指定します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/054/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;最後に&lt;code&gt;「同意して連携する」&lt;/code&gt;を選択しましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;完了&#34;&gt;完了&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/054/07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;LINE Notifyから通知が来ます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/054/08.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;連携を試してみる&#34;&gt;連携を試してみる&lt;/h2&gt;
+
+&lt;p&gt;GitHubにPushすると&amp;hellip;&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/054/09.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;issueが追加されると&amp;hellip;&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/054/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;このようにLINEのトークルームにGitHubの通知が流れます。&lt;/p&gt;
+
+&lt;h2 id=&#34;実際に少し使ってみて&#34;&gt;実際に少し使ってみて&lt;/h2&gt;
+
+&lt;p&gt;今までSlack+GitHubを使ってました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/054/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;学生さんたちはエンジアリングは初心者の方が大半で、Slackを使ったことがないという人も多いです。
+エンジニア界だとSlackとGitHubはよくある組み合わせなので今まで採用してましたが、実際の連携は通知くらいにしか使ってなかったため今回のLINE連携で代用できそうです。&lt;/p&gt;
+
+&lt;h3 id=&#34;アカウント作ってくださいやりとり-が発生しない&#34;&gt;「アカウント作ってくださいやりとり」が発生しない&lt;/h3&gt;
+
+&lt;p&gt;やはりアカウントはデフォルトでみんな持っているんだなぁと感じました。
+逆に友達追加やりとりが少し手間でした。&lt;/p&gt;
+
+&lt;h3 id=&#34;通知を見逃さない&#34;&gt;通知を見逃さない&lt;/h3&gt;
+
+&lt;p&gt;Slackだとスマートフォンアプリもいれないと細かな通知には気づけないですが、LINEはみんな利用しているため問題なく通知に気付けます。&lt;/p&gt;
+
+&lt;h3 id=&#34;既読が分かる&#34;&gt;既読が分かる&lt;/h3&gt;
+
+&lt;p&gt;よくも悪くも既読が分かります。連絡をしたときに全員が確認できてるか分かるのは大きいです。&lt;/p&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;最近は、「Slackを使えば正義」みたいな文化は少し崩れて来た気もしています。
+LINEなど、エンジニア以外にも使われているツールだとプログラミング初心者がいるときにはいいのかもしれません。&lt;/p&gt;
+
+&lt;p&gt;GitHubとの連携はサイト上の操作のみでできましたが、LINE Notifyは独自にトークンを発行してプログラム経由で通知させることもできます。&lt;/p&gt;
+
+&lt;p&gt;結構自由度が効いて使い勝手は良さそうです。&lt;/p&gt;
+
+&lt;p&gt;今後も利用してみて感想など、応用などを発信できたらと思います。&lt;/p&gt;
+
+&lt;p&gt;それでは。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>【connpass × のびすけ対談】サービスの立ち上げから運営まで。「connpass」の歴史を聞いてみました</title>
+      <link>https://dotstud.io/blog/connpass-n0bisuke-interview-vol2/</link>
+      <pubDate>Wed, 02 Nov 2016 10:30:00 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/connpass-n0bisuke-interview-vol2/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudioエディターのうらら（@uraranbon）です。&lt;/p&gt;
+
+&lt;p&gt;今や10人に1人は社長と言われるほど起業が身近になった現代。しかし、夢や希望を詰めて作られたサービスの大方は、思うように成長せずに消えていってしまいます。&lt;/p&gt;
+
+&lt;p&gt;そんな中、イベントの募集を助けるWebサービス「connpass」は、2011年にリリースされてから5年で85,000人のユーザーを集め、connpassを利用し2015年〜2016年の1年間で6,000人の集客したという人もいます。&lt;/p&gt;
+
+&lt;p&gt;サービスを向上させる秘訣はあるのでしょうか。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/connpass-n0bisuke-interview-vol1/&#34;&gt;【connpass × のびすけ対談】勉強会あるある！イベントのドタキャンにどう対処する？&lt;/a&gt;に続き、connpassを運営する株式会社ビープラウドの代表・佐藤氏に話を伺ってきました。&lt;/p&gt;
+
+&lt;div class=&#34;person-intro&#34;&gt;
+    &lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34;/&gt;
+    &lt;div class=&#34;person-info&#34;&gt;
+        &lt;strong&gt;人物紹介：佐藤治夫 氏&lt;/strong&gt;
+        &lt;p&gt;株式会社ビープラウド代表。&lt;br /&gt;2011年からイベントサイト「connpass」を運営する傍ら、自身も積極的に勉強会やイベント活動をおこなっている。&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;話を伺ってきたのは、エンジニア向けのイベントを積極的に主催しているdotstudio代表/エンジニアのびすけです。よく「connpass」を使って集客をしています。&lt;/p&gt;
+
+&lt;div class=&#34;person-intro&#34;&gt;
+    &lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; /&gt;
+    &lt;div class=&#34;person-info&#34;&gt;
+        &lt;strong&gt;人物紹介：菅原のびすけ&lt;/strong&gt;
+        &lt;p&gt;dotstudio代表。&lt;br /&gt;1989年生まれのバックエンドエンジニア。 &lt;a href=&#34;http://iotlt.connpass.com&#34; target=&#34;_blank&#34;&gt;IoTLT&lt;/a&gt;、Swift愛好会、NodeBotsハンズオンなど、幅広いイベントを開催している。&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&#34;もともとはイベントから生まれたサービスだった&#34;&gt;もともとはイベントから生まれたサービスだった&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/037/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293920&#34; /&gt;&lt;span&gt;
+今日はありがとうございます。そもそも、なぜこういったイベントサービスを始めようと思ったんですか？&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;今はイベントサイトって結構ありますけど、もともとはリクルートさんが運営する&lt;a href=&#34;https://atnd.org/&#34;&gt;ATND&lt;/a&gt;しかありませんでした。そのときの技術が好きだった人たちが集まっていたんですけど、少しシンプルだったんです。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;そんなときに、&amp;rdquo;Django Dash&amp;rdquo;という「2~3日でサービスを1つ立ち上げよう」みたいなイベントがありました。そこで、イベントサイトならこういう機能がほしい、あれほしいっていうのを簡単に話していたんです。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;そのときはそれで終わってたんですけど、弊社でサービスを作りましょうかという話が持ち上がったときに、「途中までこういうのを作ったことがありますよ」と再浮上したのがきっかけです。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;
+&lt;img src=&#34;https://dotstud.io/img/blog/037/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;あとは、もともと僕が「BPStudy」という勉強会をずっと続けていたので、そこでエンジニアの人たちのコミュニティを広げたいとか、経験を高めたくなり、2011年に「ちゃんとサービスを始めよう」となりました。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293920&#34; /&gt;&lt;span&gt;へえ、もともとはイベントがきっかけだったんですね。オープンしてからすぐにイベントって集まったんですか？&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;いや、最初はそんなに多くなかったですね。弊社がPython系のコミュニティと繋がっていて、そのイベントの人たちが使ってくれて広まりました。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;イベント参加者だった人が「自分でやってみよう」というときに&lt;strong&gt;自分が参加したことのあるサイトを選ぶ&lt;/strong&gt;といった感じで広まったと思います。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293920&#34; /&gt;&lt;span&gt;余談ですが、その頃からPyCon主催の鈴木たかのりさんもいらっしゃったんですか？&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;そうですね。たかのりさんは、2011年にconnpassがオープンしてからすぐくらい、2012年あたりですね。有料決済みたいなのや、参加枠みたいな機能、アーリーバード枠とか。PyConの要望で追加した機能もあるんです。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;h2 id=&#34;ブレイクポイントはサービス開始2年後に&#34;&gt;ブレイクポイントはサービス開始2年後に&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/037/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293920&#34; /&gt;&lt;span&gt;connpassを始めた2011年から、何かブレイクポイントありますか？&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;2013年にありました。「IT勉強会に特化した」っていう部分ですね。もともとは「どういうイベントが対象」かっていうのを絞っていなくて。そこを、「IT勉強会といえばconnpass」と思ってもらえるようにしました。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293920&#34; /&gt;&lt;span&gt;具体的にはどのへんで伝えたんですか？&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;タイトルですね。ログインしているとわからないんですけど、トップページにこういう画面があって……&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;
+&lt;img src=&#34;https://dotstud.io/img/blog/037/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293920&#34; /&gt;&lt;span&gt;あ、上部の「エンジニアをつなぐ〜」というやつですね。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;ここから、より絞られたユーザーが集まってきたと思います。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;h2 id=&#34;サービスを-技術的チャレンジができる広告塔-に&#34;&gt;サービスを「技術的チャレンジができる広告塔」に&lt;/h2&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293920&#34; /&gt;&lt;span&gt;開発は何人くらいでおこなうんですか？&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;2人とか3人とかですね。今は専任ですが、状況に応じて受託開発をしたり、connpassをやってもらったりしています。いろんな案件を経験すれば、バランス良くスキルやノウハウが身につきますし、「こっちでノウハウを使おう」という流用もできるので。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/037/07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293920&#34; /&gt;&lt;span&gt;意外と少ない印象です。ちなみに、connpassって中の人にとってはどういう位置付けなのでしょう？&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;位置づけですか。ひとつは&lt;strong&gt;広告塔として&lt;/strong&gt;ですね。connpassがあることによって、「あ〜、connpassやってる会社ですか」って思ってもらえています。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;ふたつめは、&lt;strong&gt;技術的チャレンジがしやすい&lt;/strong&gt;っていうところですかね。結構Dockerとかを使って、サイトに導入していこうかなとは思っています。そういうデプロイのところは効率化しようかなと。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;connpassの特徴として、落ちない、不具合が少ないっていうのがありますが、それもやっぱり、不具合がおこりにくい、落ちないサイトってどういうサイトなの？っていうのをconnpassで実践してるからですね。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;みっつめは&lt;strong&gt;知見を得られる場所&lt;/strong&gt;ですね。運営・企画サポートまでを自分たちで回しているっていうことで、知見を得られているかなと思っています。ざっくりとした位置付けはこの3点ですね。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;h2 id=&#34;connpass開発で試行錯誤して活用した-匠メソッド&#34;&gt;connpass開発で試行錯誤して活用した「匠メソッド」&lt;/h2&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293920&#34; /&gt;&lt;span&gt;エンジニアの理想じゃないですか。ちなみに、サイトの企画〜運営までのナレッジは、具体的にどんなことを学んだんですか？&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;&lt;strong&gt;アイデア出しから形に落とし込むまでの要求開発方法&lt;/strong&gt;ですね。サービス企画ってやったことがないと、最終的にどう落とし込んでいくのかってスキルが必要だと思うんですよ。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;自分は「絶対いい！」とか思っている機能を、他の人が「いやぁ……」とかいうと、揉めますよね。みんな熱意があるからそうなるんですけど、喧嘩っぽくなっちゃったり、諦めて妥協したりする人が出て、&lt;strong&gt;結局3ヶ月とか4ヶ月とかかかることも&lt;/strong&gt;あります。みんなが納得する状態まで持っていくのは、意外に難しい。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;そこを「匠メソッド」という要求開発方法を使っていて。それを使ってアイデア出しから形にするまでを2~3日でまとめるんです。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;以前登壇した資料に詳しく書いていますが、現状に対する「こうした機能がほしい」というのが出ても、全部作るわけにはいかないじゃないですか。それを、「どうやって、何を基準に決めるの？」という部分を決めていますね。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&amp;nbsp;
+&lt;center&gt;&lt;iframe src=&#34;//www.slideshare.net/slideshow/embed_code/key/4vBwrvIJjIx1eL&#34; width=&#34;595&#34; height=&#34;485&#34; frameborder=&#34;0&#34; marginwidth=&#34;0&#34; marginheight=&#34;0&#34; scrolling=&#34;no&#34; style=&#34;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&#34; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&#34;margin-bottom:5px&#34;&gt; &lt;strong&gt; &lt;a href=&#34;//www.slideshare.net/ssuserafaef6/bpstudy88-connpass-42735511&#34; title=&#34;BPStudy#88 connpassにおける戦略決定&#34;&gt;BPStudy#88 connpassにおける戦略決定&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a href=&#34;//www.slideshare.net/ssuserafaef6&#34;&gt;Haruo Sato&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;まず、&lt;strong&gt;「誰に対してどういう価値があるか」&lt;/strong&gt;を出して、要求分析ツリーというツリーの形にします。そして、経営者目線でどこからやっていくかを話していくんです。そうすると、機能じゃなくて戦略的な話ができる。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;誰も幸せにならない、「絶対これがいい」と言い張る人がたまにいますよね。でも、それをあきらめられる。ロジカルに考えられます。あっさりと「これやろう、これは没、没にぶら下がっているのは全部やらないよね」みたいになります。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293920&#34; /&gt;&lt;span&gt;みんなが経営者目線を意識するんですね。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/037/08.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;そうですね。みんなが納得感のある落とし所をconnpassを通じてやっていて、それを受託開発もやっています。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;そういうふうに、サイトの企画から開発、運営までをエンジニアでやっているので、お客さんが「こういうサイト作りたいです」って言ったときにもそれを実践していますね。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;connpassのノウハウを生かして、効果の高いものを最小限のちからで。ただ「開発しますよ」という感じではなくて、そういう話ができるようにはなってきたかなって思いますね。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293920&#34; /&gt;&lt;span&gt;僕も匠メソッド試してみようかな。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;connpassの歴史をさっくりと伺いました。もともとはイベントから生まれ、その後は会社と一緒に成長してきたサービスでした。&lt;/p&gt;
+
+&lt;p&gt;せっかく作り上げたサービスを、できることなら成長させたいですよね。そのためにはサービスに関わる人全てが「経営者目線を意識」するのも効果的のようです。&lt;/p&gt;
+
+&lt;p&gt;これからのconnpassがどのような展開を迎えるのか、今後の活躍にも注目ですね！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>【connpass × のびすけ対談】勉強会あるある！イベントのドタキャンにどう対処する？</title>
+      <link>https://dotstud.io/blog/connpass-n0bisuke-interview-vol1/</link>
+      <pubDate>Tue, 01 Nov 2016 10:00:00 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/connpass-n0bisuke-interview-vol1/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudioエディターのうらら（@uraranbon）です。&lt;/p&gt;
+
+&lt;p&gt;いろんな人と交流をしたい。新しい情報を得たい。IT/Web業界では最新トレンドやナレッジを共有する「勉強会」や「LT（ライトニングトーク）」というイベントが毎日のように開催されています。&lt;/p&gt;
+
+&lt;p&gt;しかし、イベント当日に参加者が来ない「&lt;strong&gt;ドタキャン&lt;/strong&gt;」に悩まされたことがある方は多いのではないでしょうか。エンジニア向けイベントサービス「&lt;a href=&#34;http://connpass.com&#34;&gt;connpass&lt;/a&gt;」と、1年で100件ほどイベントを開催するエンジニアののびすけ（@n0bisuke）がドタキャン問題の解決策を話します。&lt;/p&gt;
+
+&lt;div class=&#34;person-intro&#34;&gt;
+    &lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34;/&gt;
+    &lt;div class=&#34;person-info&#34;&gt;
+        &lt;strong&gt;人物紹介：佐藤治夫 氏&lt;/strong&gt;
+        &lt;p&gt;株式会社ビープラウド代表。&lt;br /&gt;2011年からイベントサイト「connpass」を運営する傍ら、自身も積極的に勉強会やイベント活動をおこなっている。&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+
+&lt;p&gt;話を伺ってきたのは、エンジニア向けのイベントを積極的に主催しているdotstudio代表/エンジニアのびすけです。よく「connpass」を使って集客をしています。&lt;/p&gt;
+
+&lt;div class=&#34;person-intro&#34;&gt;
+    &lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; /&gt;
+    &lt;div class=&#34;person-info&#34;&gt;
+        &lt;strong&gt;人物紹介：菅原のびすけ&lt;/strong&gt;
+        &lt;p&gt;dotstudio代表。&lt;br /&gt;1989年生まれのバックエンドエンジニア。 &lt;a href=&#34;http://iotlt.connpass.com&#34; target=&#34;_blank&#34;&gt;IoTLT&lt;/a&gt;、Swift愛好会、NodeBotsハンズオンなど、幅広いイベントを開催している。&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&#34;参加登録した人のドタキャンをなくすには&#34;&gt;参加登録した人のドタキャンをなくすには&lt;/h2&gt;
+
+&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; /&gt;&lt;span&gt;とあるイベントに参加者の8~9割がconnpassの通知メール経由ってすごいですよね。僕自身も6,000人の集客がconnpassでできました。ただ、人が集まりやすい仕組みになってるからこそ、勢いでくるというか。&lt;strong&gt;ドタキャン率も高い印象です&lt;/strong&gt;。それってどのイベントサイトにも言えると思うんですけど。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;
+
+&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;公開されると「とりあえず参加します」みたいな、記念参加みたいにする人もいますよね。そこをなんとかしたいっていう問題はあります。IT業界全体の問題ですよね。&lt;/span&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;ドタキャンをなくすにはどうしたらいいですかね。ドタキャン問題を減らせる機能はうちも入れたい。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;
+
+&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; /&gt;&lt;span&gt;&lt;strong&gt;事前課金式&lt;/strong&gt;みたいなのはいいかなと思います。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;
+
+&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;1,000円とか徴収するっていう感じですよね。そうすると参加者が伸び悩んじゃう懸念もありますね。「行けないかもしれないからちょっと……」みたいな。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;
+
+&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; /&gt;&lt;span&gt;あと、僕は&lt;a href=&#34;http://nodejs.connpass.com/&#34; &gt;Node学園&lt;/a&gt;さんのやり方を参考にしていますね。Node学園では&lt;strong&gt;最初にイベントページだけを公開して、募集は1週間前とかにしています。&lt;/strong&gt;最近のNode学園は2~3日前に募集開始になってるときもあります。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;
+
+&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; /&gt;&lt;span&gt;募集開始時期があまりにも早いと、申し込みしたこと自体を忘れてしまうんですよね。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;
+
+&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; /&gt;&lt;span&gt;世の中みんなクリーンな心だったらこんなこと考えなくていいんでしょうけど（笑）&lt;/span&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;あはは（笑）　いちおう、connpassには「参加した」とか「キャンセルした」とかは全部表示されるようになっているんです。他のサービスは参加を隠せたりするんですけど。ユーザページである程度その人を把握できます。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;
+
+&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; /&gt;&lt;span&gt;申し込みして、キャンセル処理してなくてもキャンセルする人もいますよね。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;
+
+&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; /&gt;&lt;span&gt;ドタキャンは問題だと思いつつ、仕方ないかとも思っているんですよね。ドタキャンは絶対発生するものと思っていて。 &lt;strong&gt;200人が定員の会場だとしたら250人くらいまで募集をかけるときもあります。&lt;/strong&gt;&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;
+
+&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;たしかに。僕も入らないけれど60人で募集して、当日来ないだろうという当たりをつけてやっていますね。&lt;/span&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;「ドタキャンはIT業界全体の問題」&lt;/strong&gt;と佐藤氏が仰っていたように、イベントでは避けられないものなのかもしれません。とほほ。&lt;/p&gt;
+
+&lt;p&gt;ドタキャンに悩んでいる方は、次のようなことを試すと良いかもしれませんね。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;最初にイベントページだけを公開して、募集は1週間前や2~3日前などにする&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;参加費をとり、事前回収制にする&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ドタキャンを見越して多めに募集する（定員が200人なら250人募集など）&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;ドタキャン問題と向き合って、皆さんが主催するイベントも楽しいイベントになるといいですね！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Azure WebAppsにGitLab連携でデプロイしてみよう</title>
+      <link>https://dotstud.io/blog/azure-webapps-gitlab-connect/</link>
+      <pubDate>Tue, 18 Oct 2016 10:00:30 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/azure-webapps-gitlab-connect/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudio代表の&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;最近&lt;a href=&#34;https://azure.microsoft.com/ja-jp/documentation/articles/app-service-web-overview/&#34;&gt;Azure WebApps&lt;/a&gt;を使って開発をしています。dotstudioではGitLabを利用してソースコード管理をしているのでGitLabとWebAppsを連携し自動デプロイをする方法を紹介します。&lt;/p&gt;
+
+&lt;p&gt;「&lt;a href=&#34;https://christianliebel.com/2016/05/auto-deploying-to-azure-app-services-from-gitlab/&#34;&gt;Auto-Deploying to Azure App Services from GitLab&lt;/a&gt;」を参考にしましたが、調べても英語記事しかなかったので日本語記事は初めてだと思います！&lt;/p&gt;
+
+&lt;h2 id=&#34;今回やること&#34;&gt;今回やること&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://gitlab.com/&#34;&gt;GitLab&lt;/a&gt;はGitHubやBitbucketのようなGitのホスティングサービスです。
+GitHubとBitbucketはWebAppsが公式対応しているため簡単に設定できますが、GitLabは公式対応していないため少しやり方が特殊です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;やりたいことはこの図の通りで、作業者がGitLabにPushしたら自動的にWebAppsにデプロイされる仕組みを作ります。&lt;/p&gt;
+
+&lt;h2 id=&#34;事前準備&#34;&gt;事前準備&lt;/h2&gt;
+
+&lt;p&gt;以下の内容を事前に済ませておきましょう。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;WebAppsのアプリケーションを作成しておく&lt;/li&gt;
+&lt;li&gt;GitLabでリポジトリを作成しておく&lt;/li&gt;
+&lt;li&gt;GitLabに手元のマシンからPushできる状態にしておく&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;設定してみよう&#34;&gt;設定してみよう&lt;/h2&gt;
+
+&lt;h3 id=&#34;1-webappsにgitlabのurlを紐付ける&#34;&gt;1. WebAppsにGitLabのURLを紐付ける&lt;/h3&gt;
+
+&lt;p&gt;WebAppsのデプロイ設定をします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;アプリのデプロイ &amp;gt; デプロイオプション &amp;gt; ソースの選択 &amp;gt; 外部リポジトリ&lt;/strong&gt;を選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;GitLabのリポジトリURLを入力しましょう。 https形式とSSH形式のどちらでも大丈夫です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;無事に設定が完了すると、メニューの &lt;strong&gt;概要 &amp;gt; 外部リポジトリプロジェクト&lt;/strong&gt;にリポジトリのURLが設定されます。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-webappsのデプロイ用ssh公開鍵を取得する&#34;&gt;2. WebAppsのデプロイ用SSH公開鍵を取得する&lt;/h3&gt;
+
+&lt;p&gt;WebAppsに外部からアクセスするためにWebAppsのSSH公開鍵を取得します。&lt;/p&gt;
+
+&lt;p&gt;通常WebAppsの公開URLにアクセスする場合&lt;code&gt;http://アプリケーション名.azurewebsites.net&lt;/code&gt;というドメインにアクセスしますが、ここでは通常のURLに&lt;code&gt;.scm&lt;/code&gt;が追加されたドメインにアクセスします。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;https://アプリケーション名.scm.azurewebsites.net/api/sshkey?ensurePublicKey=1&lt;/code&gt; にアクセスしてみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;このssh-rsaから始まるダブルクォートで囲まれている部分が公開鍵になります。&lt;/p&gt;
+
+&lt;p&gt;ちなみに、アプリケーション名がn0bisukeの場合は&lt;code&gt;https://n0bisuke.scm.azurewebsites.net/api/sshkey?ensurePublicKey=1&lt;/code&gt;になります。&lt;/p&gt;
+
+&lt;h3 id=&#34;3-gitlabの対象リポジトリにデプロイ用ssh公開鍵を設定する&#34;&gt;3. GitLabの対象リポジトリにデプロイ用SSH公開鍵を設定する&lt;/h3&gt;
+
+&lt;p&gt;先ほどのSSH公開鍵をGitLabに設定します。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;https://gitlab.com/ユーザー名/リポジトリ名/deploy_keys&lt;/code&gt;にアクセスしましょう。
+リポジトリの &lt;strong&gt;設定(歯車マーク) &amp;gt; Deploy Keys&lt;/strong&gt;からもアクセスできます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Titleの項目に任意の名前を入力し、Keyの項目に先ほどのSSH公開鍵を貼りましょう。&lt;/p&gt;
+
+&lt;p&gt;これでGitLabのリポジトリに鍵を紐付けられ、GitLabからWebAppsにデプロイすることが出来るようになります。&lt;/p&gt;
+
+&lt;h3 id=&#34;4-webappsのwebhookアドレスをgitlabに紐付ける&#34;&gt;4. WebAppsのWebhookアドレスをGitLabに紐付ける&lt;/h3&gt;
+
+&lt;p&gt;ここまでの作業でWebAppsとGitLabの連携は出来ているのですが、今回は作業者がGitLabにPushしたらデプロイされる仕組みにしたいため、Pushを検知するための設定をします。&lt;/p&gt;
+
+&lt;p&gt;WebAppsのメニューから &lt;strong&gt;設定 &amp;gt; プロパティ &amp;gt; デプロイ開始のURL&lt;/strong&gt;の項目にあるURLをコピーしましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;https://$アプリケーション名:パスワード@アプリケーション名.scm.azurewebsites.net/deploy&lt;/code&gt;というURLが設定されているはずです。&lt;/p&gt;
+
+&lt;p&gt;GitLab側に移動し、 &lt;code&gt;https://gitlab.com/ユーザー名/リポジトリ名/hooks&lt;/code&gt;にアクセスしましょう。
+リポジトリの &lt;strong&gt;設定(歯車マーク) &amp;gt; Webhooks&lt;/strong&gt;からもアクセスできます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/08.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;URLの項目に先ほどのWebAppsのWebHookアドレス(&lt;code&gt;https://$アプリケーション名:パスワード@アプリケーション名.scm.azurewebsites.net/deploy&lt;/code&gt;)を貼り付けます。 他の項目は特に変更せずに&lt;code&gt;Add Webhook&lt;/code&gt;で追加します。&lt;/p&gt;
+
+&lt;p&gt;これで設定は完了です。&lt;/p&gt;
+
+&lt;h3 id=&#34;5-試してみる&#34;&gt;5. 試してみる&lt;/h3&gt;
+
+&lt;p&gt;Gitで適当にPushしてみましょう。するとWebAppsのデプロイオプションの項目で同期が確認できます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/09.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;http://アプリケーション名.azurewebsites.net&lt;/code&gt;にアクセスしてみるとソースコードが反映されていることが分かると思います。&lt;/p&gt;
+
+&lt;p&gt;お疲れ様でした！&lt;/p&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;イメージのしやすさから「GitLabからWebAppsにデプロイ」という表現を使いましたが、実際には「WebAppsがGitLab上のソースコードをPullしている」という表現の方が正しいと思います。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;GitLab側はPushがあったことをWebhookでWebAppsに声を掛けてあげて、WebApps側はGitLabから声が掛かったらPullしにいく、という流れです。&lt;/p&gt;
+
+&lt;p&gt;ちなみに今回はWebhookの設定でかなりハマって、「&lt;a href=&#34;https://github.com/projectkudu/kudu/wiki/Continuous-deployment&#34;&gt;projectkudu/kudu&lt;/a&gt;」や「&lt;a href=&#34;http://stackoverflow.com/questions/31538152/publishing-to-azure-web-apps-from-gitlab-repository-on-trigger&#34;&gt;Publishing to Azure Web Apps from GitLab repository on trigger&lt;/a&gt;」に&lt;code&gt;https://$mysite:BigRandomPassword@mysite.scm.azurewebsites.net/deploy&lt;/code&gt;がWebhookのURLだという記載があるのですが、&lt;code&gt;BigRandomPassword&lt;/code&gt;が謎すぎてかなり詰んでました。 WebApps側で「デプロイ開始のURL」という表現になってるのも分かりにくい気がしますね（苦笑）。&lt;/p&gt;
+
+&lt;p&gt;WebAppsとGitLabの仕様が変わるまではしばらくこの手順が生きるはずですので、参考になれば幸いです。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>本ブログにもページネーション機能が付きました！Hugoでページネーション機能を作ろう</title>
+      <link>https://dotstud.io/blog/hugo-howto-create-pagination/</link>
+      <pubDate>Wed, 12 Oct 2016 10:00:16 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/hugo-howto-create-pagination/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、 dotstudio代表の&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;このブログはページネーション機能が無かったのですが、そろそろコンテンツ数も増えてきたのでページネーション機能を実装しました。 888888&lt;/p&gt;
+
+&lt;p&gt;実際に作る方法を紹介します。&lt;/p&gt;
+
+&lt;h2 id=&#34;hugoでページネーション機能を作る&#34;&gt;Hugoでページネーション機能を作る&lt;/h2&gt;
+
+&lt;p&gt;今回はblogセクションにページネーションを実装します。&lt;/p&gt;
+
+&lt;p&gt;Hugoのページネーションで調べるとまずは&lt;a href=&#34;https://gohugo.io/extras/pagination/&#34;&gt;ドキュメントページのここ&lt;/a&gt;がヒットします。&lt;/p&gt;
+
+&lt;p&gt;もともとも&lt;code&gt;section/blog.html&lt;/code&gt;は以下のようなコードでした。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{{ partial &amp;quot;header.html&amp;quot; . }}
+    &amp;lt;!-- Main Content --&amp;gt;
+    &amp;lt;div id=&amp;quot;blog-card--container&amp;quot;&amp;gt;
+    {{ range first 12 (where .Data.Pages &amp;quot;Type&amp;quot; &amp;quot;blog&amp;quot;) }}
+      {{ .Render &amp;quot;summary&amp;quot;}}
+    {{ end }}
+    &amp;lt;/div&amp;gt;
+{{ partial &amp;quot;footer.html&amp;quot; . }}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ドキュメントページを参照しながら以下のように変更します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{{ partial &amp;quot;header.html&amp;quot; . }}
+
+    {{ $paginator := .Paginate (where .Data.Pages &amp;quot;Type&amp;quot; &amp;quot;blog&amp;quot;) 12 }}
+    &amp;lt;!-- Main Content --&amp;gt;
+    &amp;lt;div id=&amp;quot;blog-card--container&amp;quot;&amp;gt;
+       {{ range $paginator.Pages }}
+            {{ .Render &amp;quot;summary&amp;quot; }}
+        {{ end }}
+    &amp;lt;/div&amp;gt;
+    
+    {{ template &amp;quot;_internal/pagination.html&amp;quot; . }}
+
+{{ partial &amp;quot;footer.html&amp;quot; . }}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これだけでページネーション機能はとりあえず完成です。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;めちゃ簡単ですね！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;確認してみるとページの下の方に何かいる&amp;hellip;&amp;hellip;！&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/032/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;これがページネーションのメニューです。&lt;/p&gt;
+
+&lt;p&gt;勝手に生成されていてびっくりしますが、&lt;code&gt;{{ template &amp;quot;_internal/pagination.html&amp;quot; . }}&lt;/code&gt;の部分でこのメニューが生成されています。&lt;/p&gt;
+
+&lt;p&gt;だけどここから先で割と詰まりました苦笑&lt;/p&gt;
+
+&lt;h2 id=&#34;見た目とメニューの自由度を上げたい&#34;&gt;見た目とメニューの自由度を上げたい&lt;/h2&gt;
+
+&lt;p&gt;このままだとどこでHTMLが生成されているか不明です。&lt;code&gt;_internal/~~~.html&lt;/code&gt;はHugoの組み込みテンプレートになっていて、通常は変更することが出来ません。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.kakunaga.net/post/160517pagination/&#34;&gt;pagination の見た目&lt;/a&gt;の記事を見ると、&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;class=&amp;ldquo;pagination&amp;rdquo;&lt;/li&gt;
+&lt;li&gt;class=&amp;ldquo;active&amp;rdquo;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;が生成されているからCSSを指定すればいいみたいです。ただ、メニュー項目の自由度は無いので自分で定義してみたいと思います。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/spf13/hugo/blob/master/tpl/template_embedded.go#L116-L142&#34;&gt;Hugoのソース&lt;/a&gt;を覗き見ると対象箇所が分かります。&lt;/p&gt;
+
+&lt;p&gt;ここを元に&lt;code&gt;layouts/partials/paginator.html&lt;/code&gt;を作成します。以下ではコメントも入れておきました。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{{ $pag := $.Paginator }}
+{{ if gt $pag.TotalPages 1 }}
+    &amp;lt;ul class=&amp;quot;pagination&amp;quot;&amp;gt;
+        {{/*最初へ*/}}
+        {{ with $pag.First }}
+            &amp;lt;li&amp;gt;
+                &amp;lt;a href=&amp;quot;{{ .URL }}&amp;quot; aria-label=&amp;quot;First&amp;quot;&amp;gt;&amp;lt;span aria-hidden=&amp;quot;true&amp;quot;&amp;gt;最初へ&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+            &amp;lt;/li&amp;gt;
+        {{ end }}
+
+        {{/*前ページ*/}}
+        &amp;lt;li{{ if not $pag.HasPrev }}class=&amp;quot;disabled&amp;quot;{{ end }}&amp;gt;
+            &amp;lt;a href=&amp;quot;{{ if $pag.HasPrev }}{{ $pag.Prev.URL }}{{ end }}&amp;quot; aria-label=&amp;quot;Previous&amp;quot;&amp;gt;
+                &amp;lt;span aria-hidden=&amp;quot;true&amp;quot;&amp;gt;前へ&amp;lt;/span&amp;gt;
+            &amp;lt;/a&amp;gt;
+        &amp;lt;/li&amp;gt;
+
+        {{/*番号*/}}
+        {{ range $pag.Pagers }}
+            &amp;lt;li{{ if eq . $pag }}class=&amp;quot;active&amp;quot;{{ end }}&amp;gt;
+                &amp;lt;a href=&amp;quot;{{ .URL }}&amp;quot;&amp;gt;{{ .PageNumber }}&amp;lt;/a&amp;gt;
+            &amp;lt;/li&amp;gt;
+        {{ end }}
+        
+        {{/*次ページ*/}}
+        &amp;lt;li{{ if not $pag.HasNext }}class=&amp;quot;disabled&amp;quot;{{ end }}&amp;gt;
+            &amp;lt;a href=&amp;quot;{{ if $pag.HasNext }}{{ $pag.Next.URL }}{{ end }}&amp;quot; aria-label=&amp;quot;Next&amp;quot;&amp;gt;
+                &amp;lt;span aria-hidden=&amp;quot;true&amp;quot;&amp;gt;次へ&amp;lt;/span&amp;gt;
+            &amp;lt;/a&amp;gt;
+        &amp;lt;/li&amp;gt;
+
+        {{/*最後へ*/}}
+        {{ with $pag.Last }}
+            &amp;lt;li&amp;gt;
+                &amp;lt;a href=&amp;quot;{{ .URL }}&amp;quot; aria-label=&amp;quot;Last&amp;quot;&amp;gt;&amp;lt;span aria-hidden=&amp;quot;true&amp;quot;&amp;gt;最後へ&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+            &amp;lt;/li&amp;gt;
+        {{ end }}
+    &amp;lt;/ul&amp;gt;
+{{ end }}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;section/blog.html&lt;/code&gt;を以下に修正します。
+&lt;code&gt;_internal&lt;/code&gt;で組み込みテンプレートを呼び出していた行を今作成した&lt;code&gt;paginator.html&lt;/code&gt;を呼び出すように変更です。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{{ partial &amp;quot;header.html&amp;quot; . }}
+
+    {{ $paginator := .Paginate (where .Data.Pages &amp;quot;Type&amp;quot; &amp;quot;blog&amp;quot;) 12 }}
+    &amp;lt;!-- Main Content --&amp;gt;
+    &amp;lt;div id=&amp;quot;blog-card--container&amp;quot;&amp;gt;
+       {{ range $paginator.Pages }}
+            {{ .Render &amp;quot;summary&amp;quot; }}
+        {{ end }}
+    &amp;lt;/div&amp;gt;
+    
+    {{ partial &amp;quot;paginator.html&amp;quot; . }}
+
+{{ partial &amp;quot;footer.html&amp;quot; . }}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これで完成です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/032/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ビルドするとこのような形になりました。&lt;/p&gt;
+
+&lt;p&gt;あとは&lt;a href=&#34;https://dotstud.io/members/chachmaru/&#34;&gt;ちゃちゃまる先生&lt;/a&gt;にCSSをあててもらえば終了です。&lt;/p&gt;
+
+&lt;h2 id=&#34;出来上がったものがこちらです&#34;&gt;出来上がったものがこちらです&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/032/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;いい感じですね。&lt;/p&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;こちら(&lt;a href=&#34;http://wdkk.co.jp/note/2015/0915-hugo-pagination/&#34;&gt;Hugoでwebサイト構築(9) リストのページネーション(Pagination)&lt;/a&gt;)も参考にさせていただきました。&lt;/p&gt;
+
+&lt;p&gt;なかなか公式ドキュメントも調べづらいので参考になれば幸いです。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>ノンプログラミングで今話題のLINE Botを開発できる「hachidori」を試してみた</title>
+      <link>https://dotstud.io/blog/line-bot-with-hachidori/</link>
+      <pubDate>Fri, 07 Oct 2016 10:00:57 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/line-bot-with-hachidori/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudioエディターのうららです。
+2016/09/29にLINE Developer Day 2016が開催され、IFTTTやGitHubと連携できる「&lt;a href=&#34;https://notify-bot.line.me/en/&#34;&gt;LINE Notify&lt;/a&gt;」や&lt;a href=&#34;https://linecorp.com/ja/pr/news/ja/2016/1516&#34;&gt;新たなMessenger API&lt;/a&gt;が公開されるなどLINE Botが今まさに話題の渦中にいます。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://developers.linecorp.com/blog/ja/?p=3779&#34;&gt;LINE Developer Day 2016 結果報告（LINE Engineers&amp;rsquo; Blog）&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;そんなLINE Botをノンプログラミングで扱える「 &lt;strong&gt;hachidori&lt;/strong&gt; 」というサービスが登場していたので、サクッと触ってみました。&lt;/p&gt;
+
+&lt;p&gt;結論から言うと（途中詰まるところもありましたが）とても簡単にチャットボットを作れました。詰まった&amp;amp;チュートリアルをするなど使い方に慣れるまでを含めて3時間程度かかりましたが、 &lt;strong&gt;一度慣れてしまえば30分ほどで1つの簡単なボットを作れそうな肌感&lt;/strong&gt; です。&lt;/p&gt;
+
+&lt;h2 id=&#34;hachidoriについて&#34;&gt;hachidoriについて&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/01_hachidori.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://hachidori.io&#34;&gt;https://hachidori.io&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;2016/10/03に&lt;a href=&#34;http://prtimes.jp/main/html/rd/p/000000004.000019280.html&#34;&gt;プレスリリース&lt;/a&gt;が出されたばかりの新しいチャットボットツールです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/02_hachidori.png&#34; alt=&#34;&#34; /&gt;
+2016/10/06日現在、LINE BotとFacebook messengerに対応していますが、今後はKik.やTelegram、Slack、WeChatといったメッセンジャーに対応しそうな気配があります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/03_hachidori.png&#34; alt=&#34;&#34; /&gt;
+&lt;strong&gt;2016年10月末までなら無料プランが提供&lt;/strong&gt; されています。11月からは月額980円からの提供となりそうです。&lt;/p&gt;
+
+&lt;h2 id=&#34;作ってみた&#34;&gt;作ってみた&lt;/h2&gt;
+
+&lt;!-- ![](/img/blog/031/04.png)
+アカウントを登録して
+
+![](/img/blog/031/05.png)
+新規作成を選びます。 --&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/06.png&#34; alt=&#34;&#34; /&gt;
+早速&lt;a href=&#34;https://hachidori.io&#34;&gt;トップページ&lt;/a&gt;からアカウント登録をして、Botを作ってみようと思います。LINEとFacebookを選べるので、今回はLINEを選びます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/07.png&#34; alt=&#34;&#34; /&gt;
+Botの名前とアイコン写真を選びます。これは &lt;strong&gt;実際のLINEには反映されません&lt;/strong&gt;。hachidori側で管理しやすくするためのものかと思います。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/08.png&#34; alt=&#34;&#34; /&gt;
+Botを作るには、&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;LINE Business Centerに登録する&lt;/li&gt;
+&lt;li&gt;LINE DevelopersのChannelsにアクセスする&lt;/li&gt;
+&lt;li&gt;ChannelのIDやアクセストークンを取得する&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;といったように「何をすればいいのか」を明記してくれているので、指示に沿って進めます。まずはLINE Business Centerに登録しましょうっ。&lt;/p&gt;
+
+&lt;h3 id=&#34;line-business-centerに登録&#34;&gt;LINE Business Centerに登録&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/09_LINEAPI.png&#34; alt=&#34;&#34; /&gt;
+こちらがLINE Business Center。ついにMessenger APIとご対面です。（すでに登録されている方は読み飛ばしてください）&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/10_LINEAPI.png&#34; alt=&#34;&#34; /&gt;
+ちなみに、Messenger APIは &lt;strong&gt;結構無料で使えそう&lt;/strong&gt; です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/11_LINEAPI.png&#34; alt=&#34;&#34; /&gt;
+LINE Business Centerに登録していなかったので登録しました。ちなみに &lt;strong&gt;ここで登録した名前と画像がbotにそのまま使われます&lt;/strong&gt; 。上記の写真では自分の名前と画像を登録しましたが、実際にLINE上で試すときに &lt;strong&gt;自分と会話している&lt;/strong&gt; 状態になるので、作りたいボットに沿ったアイコンなどを登録をオススメします。&lt;/p&gt;
+
+&lt;!-- ![](/img/blog/031/12_LINEAPI.png)
+登録できました。これでLINE Developersが使えます。 --&gt;
+
+&lt;h3 id=&#34;line-developersでidなどの情報を取得&#34;&gt;LINE DevelopersでIDなどの情報を取得&lt;/h3&gt;
+
+&lt;!-- ![](/img/blog/031/13_LINEAPI.png) --&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/14_LINEAPI.png&#34; alt=&#34;&#34; /&gt;
+指示によると、LINE DevelopersにてChannelのIDやアクセストークンが必要とのことなので取得します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/15_hachidori.png&#34; alt=&#34;&#34; /&gt;
+これをhachidori側に入力します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/16_done.png&#34; alt=&#34;&#34; /&gt;
+ひとまず枠は完成です。&lt;/p&gt;
+
+&lt;h3 id=&#34;サーバーの登録&#34;&gt;サーバーの登録&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/17.png&#34; alt=&#34;&#34; /&gt;
+サーバー登録もします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/18.png&#34; alt=&#34;&#34; /&gt;
+こちらも指示に従えばOKです。&lt;/p&gt;
+
+&lt;h3 id=&#34;中身を作っていく&#34;&gt;中身を作っていく&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/19.png&#34; alt=&#34;&#34; /&gt;
+最初からチュートリアルが入っています。&lt;/p&gt;
+
+&lt;!-- ![](/img/blog/031/20.png)
+ここを押すと、実際に手を動かしながら学べるので時間がある方は挑戦をオススメします。（チュートリアルはエラーが多かったのですが一通りの使い方が学べた） --&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/21.png&#34; alt=&#34;&#34; /&gt;
+これを削除して作ってみます。&lt;/p&gt;
+
+&lt;p&gt;私は料理が得意ではないこともあり、いつも夕ごはん何作るかを悩みます。せっかくなので、オススメのメニューを提案してくれる「&lt;strong&gt;夕ごはんBot&lt;/strong&gt;」を作りたいと思います。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/22.png&#34; alt=&#34;&#34; /&gt;
+まずは特定の言葉に対して反応する方法がこちら。「こんばんは」という言葉に反応して、「こんばんは、（ユーザー名）さん！　お腹が空きましたね〜」と返すようにできます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/23.png&#34; alt=&#34;&#34; /&gt;
+ユーザー側のコメントをオフにすると、何を発言しても次の展開へ進められます。相槌などがくると想定して無理やり「何が食べたいですか？」へ進めます。&lt;/p&gt;
+
+&lt;p&gt;また、Botが何を返すかも選ぶことができます。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;通常テキスト&lt;/li&gt;
+&lt;li&gt;イメージボタン&lt;/li&gt;
+&lt;li&gt;画像/動画/ファイル&lt;/li&gt;
+&lt;li&gt;カルーセル&lt;/li&gt;
+&lt;li&gt;ボタン&lt;/li&gt;
+&lt;li&gt;二択&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;今回は二択を選択しました。「何が食べたいですか？」という質問に対して、「温かいもの」「冷たいもの」の二択を出します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/24.png&#34; alt=&#34;&#34; /&gt;
+「アクションを返す」では、選択肢をタップすると何をするかを指定できます。ここでは「温かいもの」「冷たいもの」と発言するようにしました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/25.png&#34; alt=&#34;&#34; /&gt;
+このように、ボタンをタップすると単語が自動で発言されます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/26.png&#34; alt=&#34;&#34; /&gt;
+選択肢によって、ルートが変わります。それぞれに沿った内容を作ります。ここでは「温かいもの」「冷たいもの」それぞれの内容を作りました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/27.png&#34; alt=&#34;&#34; /&gt;
+「温かいもの」の中身を作ってみます。「汁物」か「汁物じゃないか」を選びます。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;「汁物」の対義語って何ですか&lt;/p&gt; うらら (@uraranbon) &lt;a href=&#34;https://twitter.com/uraranbon/status/783577602376110080&#34;&gt;2016年10月5日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;心の叫び（※クラスタリングがおかしい）&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/28.png&#34; alt=&#34;&#34; /&gt;
+また選択肢を作ります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/29.png&#34; alt=&#34;&#34; /&gt;
+画像を入れる際は画像リンクを登録します。&lt;/p&gt;
+
+&lt;h2 id=&#34;完成した&#34;&gt;完成した&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/30.png&#34; alt=&#34;&#34; /&gt;
+これを繰り返してこんなものを作ってみました！　サクッとしか触っていないのでこれくらいしか作っていませんが、一通りできあがりました！&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/31.png&#34; alt=&#34;&#34; /&gt;
+「こんばんは」と発言すると始まります。ボタンも表示されます。このように、画像でサジェストしてくれます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/32.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;「冷たくて汁物ではないもの」だと「寿司」を提案してくれます。ちなみに今のところ、&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;温かい汁物　　　　　　：&lt;strong&gt;うどん&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;温かい汁物じゃないもの：&lt;strong&gt;麻婆豆腐&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;冷たい汁物　　　　　　：&lt;strong&gt;冷や汁&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;冷たい汁物じゃないもの：&lt;strong&gt;寿司&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;しかオススメしない仕様となっています。まだまだ簡単な内容ですが、このように一通りのBot開発ができました。詰んだところも含めると、合わせて3時間くらいでしょうか。&lt;/p&gt;
+
+&lt;h2 id=&#34;詰んだところ-既読されるが反応がない&#34;&gt;詰んだところ（既読されるが反応がない）&lt;/h2&gt;
+
+&lt;p&gt;せっかくなので詰んだところの紹介もします。（同じところで詰んだ人の参考になると嬉しいです）&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/34.png&#34; alt=&#34;&#34; /&gt;
+こんな風に &lt;strong&gt;既読はされるが反応がない&lt;/strong&gt; 状態になりました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/35.png&#34; alt=&#34;&#34; /&gt;
+いろいろ触ってみたのですが、どうやらサーバー登録の際に入力する &lt;strong&gt;Webhook URL&lt;/strong&gt; が最初入力したものからいつの間にか変わっていたのが原因でした。&lt;/p&gt;
+
+&lt;p&gt;いや、何か要因はあると思いますが、私にはわからんのでひとまず既読無視状態になったらここを再登録してみるのがいいと思います……。（要因がわかる方ぜひご教示ください）&lt;/p&gt;
+
+&lt;h2 id=&#34;他の機能もすごかった&#34;&gt;他の機能もすごかった&lt;/h2&gt;
+
+&lt;p&gt;Botを作る機能以外にも、&lt;strong&gt;作ったBotの分析ができる&lt;/strong&gt; 機能もありました。個人的に驚嘆したものを3つだけ紹介します。（他にもいろんな機能があります）&lt;/p&gt;
+
+&lt;h3 id=&#34;メッセージの予約投稿ができる&#34;&gt;メッセージの予約投稿ができる&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/36.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;1度Botへアクセスしたことのある人であれば、メッセージの予約送信ができます。これはビジネスとして運用したい人にとっては、かなり便利なんじゃないかなと……。&lt;/p&gt;
+
+&lt;h3 id=&#34;ユーザーの情報をリストにしてくれる&#34;&gt;ユーザーの情報をリストにしてくれる&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/37.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Botを通して取得した電話番号やメールアドレス、住所といった情報を、リスト化できるようです……。こ、これは……すごい……。&lt;/p&gt;
+
+&lt;h3 id=&#34;アナリティクスがすごい&#34;&gt;アナリティクスがすごい&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/38.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;実際にBotがどれくらい使われたのかを確認できるアナリティクスもありました。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;日別受信数&lt;/li&gt;
+&lt;li&gt;時間別受信数&lt;/li&gt;
+&lt;li&gt;男女比&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;といったことが確認できます。「&lt;strong&gt;XX時のアクセスが多いからこの時間に予約送信してみよう&lt;/strong&gt;」「&lt;strong&gt;女性ユーザーのほうが多い、ターゲットは男性だからもっと内容を変えた方がいいかも&lt;/strong&gt;」といった分析が簡単にできちゃうんじゃないですか？！&lt;/p&gt;
+
+&lt;p&gt;これが10月末まで無料なのは賞賛ものですし、11月以降も割とお手軽価格なんじゃないかなと思いました。個人的にはビジネスで使う予定はありませんが、私がチャットボット担当者だったらこの機能は泣いて喜びます。&lt;/p&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;ということでサクッと触ってみたのですが、思った以上に便利そうで椅子から転げ落ちそうです。「&lt;strong&gt;初期登録の作業はひとくせありそうだけど、簡単にボット作れそう&lt;/strong&gt;」ってことが伝わったかなと思います。&lt;/p&gt;
+
+&lt;p&gt;現場からは以上です。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>デザイナーの僕がHugoを使ってポートフォリオサイトを作ってみる #2【制作:基本編】</title>
+      <link>https://dotstud.io/blog/hugo-for-designers-vol2/</link>
+      <pubDate>Thu, 06 Oct 2016 10:40:04 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/hugo-for-designers-vol2/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudioのデザイナー・ちゃちゃまる（&lt;a href=&#34;https://twitter.com/chachmaru&#34;&gt;@chachmaru&lt;/a&gt;）です！&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/hugo-for-designers-vol1/&#34;&gt;第一回目&lt;/a&gt;では&lt;br /&gt;
+- 動的サイトと静的サイトの違い&lt;br /&gt;
+- Hugoの使い方&lt;br /&gt;
+- Hugoディレクトリの中身&lt;br /&gt;
+を説明しました。&lt;/p&gt;
+
+&lt;p&gt;本連載の第二回目では、とりあえずトップページに記事を表示させ、ローカル環境でテストしてみるところまで進めていきたいと思います！なお、この記事ではHugoに直接関係のない部分（基本的なHTMLやCSSの記述など）の解説は省いていきますのでご了承ください。&lt;/p&gt;
+
+&lt;p&gt;また、僕自身も手探りのため、コードや理解に間違っている部分や改善すべき点など多数あると思います。お気づきの方は、こっそりGithub issueの方で報告していただけたら幸いです。&lt;/p&gt;
+
+&lt;p&gt;それでは早速やっていきましょう！&lt;/p&gt;
+
+&lt;h2 id=&#34;記事を作成する&#34;&gt;記事を作成する&lt;/h2&gt;
+
+&lt;p&gt;Hugoを使った操作は、基本前回と同じようにターミナル内で行います。&lt;code&gt;アプリケーション &amp;gt; ユーティリティ &amp;gt; ターミナル.app&lt;/code&gt;から起動して、前回生成したHugoディレクトリまで移動しましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;hugo-newコマンド&#34;&gt;hugo newコマンド&lt;/h3&gt;
+
+&lt;p&gt;前回は&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ hugo new site chachamaru
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;というコマンドを使ってHugoディレクトリを生成しました。実はこの&lt;code&gt;hugo new&lt;/code&gt;コマンドの一部分を置き換えて&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;hugo new ジャンル/記事名（アルファベット）.md
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;とすることで、かんたんに記事もつくることができるのです。&lt;/p&gt;
+
+&lt;p&gt;最後の拡張子&lt;code&gt;.md&lt;/code&gt;は、マークダウンのファイルであることを表しています。Hugoは記事をマークダウン方式で書くことができるので、最後に&lt;code&gt;.md&lt;/code&gt;をつけるようにしましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;ジャンルを決める&#34;&gt;ジャンルを決める&lt;/h3&gt;
+
+&lt;p&gt;さて、ここで記事にどんなジャンルが欲しいかを考えます。もちろん後から新しいジャンルを追加することもできるので、今は「Works」（作品）と「Announcements」（お知らせ）の2つにします。&lt;/p&gt;
+
+&lt;p&gt;この場合、&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ hugo new works/my-first-work.md
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;と&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ hugo new announcements/my-new-website.md
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;などとすれば二種類のジャンルが作成されます。&lt;/p&gt;
+
+&lt;h3 id=&#34;記事の場所&#34;&gt;記事の場所&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;hugo new&lt;/code&gt;コマンドでつくられた記事は&lt;code&gt;content&lt;/code&gt;ディレクトリ内にあります。ジャンルが指定されている場合、ジャンル名がサブディレクトリ名になります。&lt;/p&gt;
+
+&lt;p&gt;今回の場合、&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/029/01.png&#34; alt=&#34;ディレクトリ構成&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;のような構成になっているはずです。&lt;/p&gt;
+
+&lt;p&gt;※&lt;code&gt;hugo new&lt;/code&gt;で生成したジャンル名や記事タイトルは、Finderなどからでも名称変更可能です。スペルミスなどをしてしまった場合は普段どおり名前を変更すれば大丈夫です。&lt;/p&gt;
+
+&lt;h3 id=&#34;フロントマター&#34;&gt;フロントマター&lt;/h3&gt;
+
+&lt;p&gt;作成した&lt;code&gt;my-first-work.md&lt;/code&gt;をテキストエディタで開いてみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/029/02.png&#34; alt=&#34;マークダウンファイル&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;開くと空のファイルではなく、&lt;code&gt;+++&lt;/code&gt;に囲まれて&lt;code&gt;date&lt;/code&gt;、&lt;code&gt;draft&lt;/code&gt;、&lt;code&gt;title&lt;/code&gt;の3つが書かれています。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;+++&lt;/code&gt;で囲まれている部分は、TOML（設定ファイルを記述する小さい言語）で書かれたこの&lt;code&gt;my-first-work.md&lt;/code&gt;の記事に関するデータであり、&lt;strong&gt;フロントマター&lt;/strong&gt;と呼びます。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;date&lt;/code&gt;には記事が作成された日にちと時間、&lt;code&gt;draft&lt;/code&gt;にはこの記事が下書き状態か否か、そして&lt;code&gt;title&lt;/code&gt;にはファイル名と同じ名前がデフォルトでつけられています。詳しくは後ほど。&lt;/p&gt;
+
+&lt;h3 id=&#34;記事を書く&#34;&gt;記事を書く&lt;/h3&gt;
+
+&lt;p&gt;本文は&lt;code&gt;+++&lt;/code&gt;で閉じた後の行に記述します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/029/03.png&#34; alt=&#34;マークダウンファイル&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;このファイルの名前&lt;code&gt;my-first-work.md&lt;/code&gt;は、この記事のページのURL（例: chachmaru.github.io/works/my-first-work）になります（ファイル名とURLを別々に設定することも可能）。実際にウェブサイトに表示されるタイトルはフロントマターの&lt;code&gt;title&lt;/code&gt;で指定されたものなので、好きな文言に書き換えておきましょう。&lt;/p&gt;
+
+&lt;p&gt;これで一旦記事作成は終わりです。次はHTMLを書いていきます。&lt;/p&gt;
+
+&lt;h2 id=&#34;トップページに記事一覧を表示させる&#34;&gt;トップページに記事一覧を表示させる&lt;/h2&gt;
+
+&lt;h3 id=&#34;index-htmlをつくる&#34;&gt;index.htmlをつくる&lt;/h3&gt;
+
+&lt;p&gt;前回のおさらいで、HUGOでは&lt;code&gt;layouts&lt;/code&gt;内にHTMLファイルを置きます。&lt;code&gt;index.html&lt;/code&gt;を作り、とりあえず「hello world」などと入れ、保存しましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;ブラウザでテストしてみる&#34;&gt;ブラウザでテストしてみる&lt;/h3&gt;
+
+&lt;p&gt;いよいよHUGOをブラウザで表示させてみます。テスト用のサーバーをたてるのは非常にかんたんで、&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ hugo server
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;とターミナルに入れるだけです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/029/04.png&#34; alt=&#34;ターミナルスクリーンショット&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Hugoはデフォルトで&lt;a href=&#34;localhost:1313&#34;&gt;localhost:1313&lt;/a&gt;にサーバーをたてるので、ブラウザでアクセスしてみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/029/05.png&#34; alt=&#34;ブラウザ&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;さきほど&lt;code&gt;index.html&lt;/code&gt;に入れた文字が表示されましたか？&lt;/p&gt;
+
+&lt;h3 id=&#34;コマンドにオプションをつける&#34;&gt;コマンドにオプションをつける&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;hugo server&lt;/code&gt;コマンドは、Hugoディレクトリ内のファイルを更新したあと一旦サーバーを停止させてもう一度起動しなければいけないので、非常にめんどうです。&lt;/p&gt;
+
+&lt;p&gt;そこで、一旦サーバーを停止して、次から&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ hugo server --watch --buildDrafts
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;としてください。&lt;/p&gt;
+
+&lt;p&gt;2つのハイフンから始まる文字は&lt;code&gt;hugo server&lt;/code&gt;コマンドのオプションです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;code&gt;--watch&lt;/code&gt;&lt;br /&gt;
+Hugoディレクトリ内に変更があったとき自動でブラウザをリロードしてくれます。これでいちいちサーバーを再起動しなくても大丈夫です。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;&lt;code&gt;--buildDrafts&lt;/code&gt;&lt;br /&gt;
+フロントマターの&lt;code&gt;draft&lt;/code&gt;欄が&lt;code&gt;true&lt;/code&gt;になっている記事を、Hugoはデフォルトでテストサーバーに反映させません。本番には向いているのですが、今はテスト段階のため、このオプションをつけて下書き記事も反映させます。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;これでずっと走らせておきながら開発ができます。&lt;/p&gt;
+
+&lt;h3 id=&#34;トップページに記事を表示させる&#34;&gt;トップページに記事を表示させる&lt;/h3&gt;
+
+&lt;p&gt;まずは以下を&lt;code&gt;index.html&lt;/code&gt;にコピペして保存してください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;!DOCTYPE html&amp;gt;
+
+&amp;lt;html&amp;gt;
+  &amp;lt;body&amp;gt;
+
+      {{ range first 10 .Data.Pages }}
+        &amp;lt;div&amp;gt;
+          &amp;lt;a href=&amp;quot;#&amp;quot;&amp;gt;{{ .Title }}&amp;lt;/a&amp;gt;
+        &amp;lt;/div&amp;gt;
+      {{ end }}
+
+  &amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;すると、ブラウザ側では&lt;br /&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/029/06.png&#34; alt=&#34;ブラウザ&#34; /&gt;&lt;br /&gt;
+のように、さきほど作成した&lt;code&gt;content&lt;/code&gt;ディレクトリ内の2つの記事タイトルが並べられていると思います！&lt;/p&gt;
+
+&lt;h2 id=&#34;goテンプレートを活用する&#34;&gt;Goテンプレートを活用する&lt;/h2&gt;
+
+&lt;p&gt;なぜ上記のようなコードだけで、こんなにもかんたんに記事一覧を表示させることができるのでしょうか。秘密は&lt;code&gt;{{ }}&lt;/code&gt;内のコードにあります。&lt;/p&gt;
+
+&lt;h3 id=&#34;hugoのテンプレートエンジン&#34;&gt;Hugoのテンプレートエンジン&lt;/h3&gt;
+
+&lt;p&gt;テンプレートエンジンとは、雛形（テンプレート）とデータを合成・出力することができるソフトウェアを指します。HugoはHTMLにかんたんなロジックを組みこむことができる軽量の「Go html/template」ライブラリを、テンプレートエンジンとして使用しています。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{{ range first 10 .Data.Pages}}
+
+{{ end }}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;は、全記事から最新の10記事分の、カッコ内に書かれたHTMLを用意しています。今回は全体で2つしか記事がないため、2つ分のみ用意されています。&lt;/p&gt;
+
+&lt;p&gt;また、&lt;code&gt;{{ .Title }}&lt;/code&gt;はその記事のタイトルを取得してくれます。つまり今回の場合、&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;div&amp;gt;
+  &amp;lt;a href=&amp;quot;#&amp;quot;&amp;gt;ポートフォリオサイトを作りました。&amp;lt;/a&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;div&amp;gt;
+  &amp;lt;a href=&amp;quot;#&amp;quot;&amp;gt;初めての作品&amp;lt;/a&amp;gt;
+&amp;lt;/div&amp;gt;    
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;とテンプレートエンジンにより変換されます。&lt;/p&gt;
+
+&lt;h2 id=&#34;次回予告&#34;&gt;次回予告&lt;/h2&gt;
+
+&lt;p&gt;今回は自分が書いた記事の一覧をトップページに表示させることができました。しかし、現時点だとタイトルをクリックしても記事ページには飛べません。Hugoでポートフォリオサイトを作るには、もう少しこの&lt;code&gt;{{ }}&lt;/code&gt;をうまく活用する必要がありそうです。&lt;/p&gt;
+
+&lt;p&gt;次回は個別記事のページ作成や、ジャンル、タグなどの仕組みをつくっていきたいと思います。&lt;/p&gt;
+
+&lt;p&gt;それではまた次回お会いしましょう！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Node.jsでコマンドラインツール作るときに使いやすいreadline-sync</title>
+      <link>https://dotstud.io/blog/nodejs-npm-readline-sync/</link>
+      <pubDate>Wed, 05 Oct 2016 10:00:00 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nodejs-npm-readline-sync/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke/&#34;&gt;のびすけ&lt;/a&gt;です。
+&lt;a href=&#34;https://dotstud.io/series/nodejs/&#34;&gt;Node.js Magazine&lt;/a&gt;という連載を作ったのでNode.js系のTipsを紹介していく予定です。&lt;/p&gt;
+
+&lt;p&gt;今日はNode.jsでコマンドラインツールを作る際に役立つreadline-syncというパッケージを紹介します。&lt;/p&gt;
+
+&lt;p&gt;実際にサンプルを動かして見ましょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;執筆時点のマシンスペック&#34;&gt;執筆時点のマシンスペック&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;macOS Sierra (v10.12)&lt;/li&gt;
+&lt;li&gt;Node.js v6.6.0&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;何か不具合があったときに参照してください。&lt;/p&gt;
+
+&lt;h2 id=&#34;インストール&#34;&gt;インストール&lt;/h2&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://www.npmjs.com/package/readline-sync&#34;&gt;https://www.npmjs.com/package/readline-sync&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;npm i readline-sync
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;サンプルを動かしてみる&#34;&gt;サンプルを動かしてみる&lt;/h2&gt;
+
+&lt;p&gt;まずは基本的なサンプルです。&lt;code&gt;.question()&lt;/code&gt;で質問して入力結果をそのまま変数に入れ込めます。このサンプルでいうと&lt;code&gt;userName&lt;/code&gt;と&lt;code&gt;favFood&lt;/code&gt;の変数に入力した値が入ります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//app.js
+const readlineSync = require(&#39;readline-sync&#39;);
+
+let userName = readlineSync.question(&#39;あなたの名前は? &#39;);
+console.log(`-&amp;gt;こんにちは ${userName}!`);
+
+let favFood = readlineSync.question(&#39;好きな食べ物は? &#39;, {hideEchoBack: true});
+console.log(`-&amp;gt;${userName}は${favFood}が好きなんだね!`);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;{hideEchoBack: true}&lt;/code&gt;というオプションをつけると入力時は&lt;code&gt;*&lt;/code&gt;で表示されます。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;実行&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/024/01_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;選択肢を出して選ばせる&#34;&gt;選択肢を出して選ばせる&lt;/h2&gt;
+
+&lt;p&gt;選択肢を提示してユーザーに選ばせる方法もよく使われます。&lt;/p&gt;
+
+&lt;p&gt;keyInSelectメソッドを使います。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//app.js
+const readlineSync = require(&#39;readline-sync&#39;);
+
+let animals = [&#39;のびすけ&#39;, &#39;うらら&#39;, &#39;ちゃちゃまる&#39;, &#39;うこ&#39;, &#39;ギャル電&#39;];
+let index = readlineSync.keyInSelect(animals, &#39;誰に連絡しますか?&#39;);
+console.log(`${animals[index]}に連絡します。`);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;実行してみる&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/024/02_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;人の名前を選択肢して、その人に連絡をする&lt;/strong&gt;みたいなインターフェイスを作って見ました。変数がanimalsなのは気にしません。&lt;/p&gt;
+
+&lt;h2 id=&#34;cliループでサブコマンドを作る&#34;&gt;CLIループでサブコマンドを作る&lt;/h2&gt;
+
+&lt;p&gt;コマンド終了のタイミングをユーザーに委ねたいときに使えます。&lt;/p&gt;
+
+&lt;p&gt;promptCLLoopメソッドで関数を引数に渡すと関数をループ実行してくれます。&lt;/p&gt;
+
+&lt;p&gt;このサンプルだと&lt;code&gt;bye&lt;/code&gt;というサブコマンドを入力すると終了します。&lt;/p&gt;
+
+&lt;p&gt;逆に言えば&lt;code&gt;bye&lt;/code&gt;を入力するまではずっとその他コマンドの入力を待ち受けます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//app.js
+
+const readlineSync = require(&#39;readline-sync&#39;);
+readlineSync.promptCLLoop({
+  add: (target, into) =&amp;gt; {
+    console.log(`${target}を${into}に追加します。`);
+    // Do something...
+  },
+  remove: (target) =&amp;gt; {
+    console.log(`${target}を削除します。`);
+    // Do something...
+  },
+  bye: () =&amp;gt; { return true; }
+});
+console.log(&#39;終了します。&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;実行してみる&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/024/03_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;こんな感じで&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt; コマンド名 変数1 変数2 ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;という入力を受け付けて紐づけられている関数の引数として変数が渡されます。&lt;/p&gt;
+
+&lt;h2 id=&#34;キー入力で値を選んでもらう&#34;&gt;キー入力で値を選んでもらう&lt;/h2&gt;
+
+&lt;p&gt;この表現がいいのか分からないですけど、、、見ればわかります。&lt;/p&gt;
+
+&lt;p&gt;keyInメソッドでキー入力の待ち受けを実現しています。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//app.js
+
+const readlineSync = require(&#39;readline-sync&#39;);
+
+const MAX = 60, MIN = 0;
+let value = 30, key;
+console.log(`\n\n${(new Array(20)).join(&#39; &#39;)}[Z] &amp;lt;- -&amp;gt; [X]  決定: [SPACE]\n`);
+while (true) {
+  console.log(&#39;\x1B[1A\x1B[K|&#39; +
+    (new Array(value + 1)).join(&#39;-&#39;) + &#39;O&#39; +
+    (new Array(MAX - value + 1)).join(&#39;-&#39;) + &#39;| &#39; + value);
+  key = readlineSync.keyIn(&#39;&#39;,
+    {hideEchoBack: true, mask: &#39;&#39;, limit: &#39;zx &#39;});
+  if (key === &#39;z&#39;) { if (value &amp;gt; MIN) { value--; } }
+  else if (key === &#39;x&#39;) { if (value &amp;lt; MAX) { value++; } }
+  else { break; }
+}
+console.log(`\nあなたが決めた値: ${value}`);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;実行してみる&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/024/04_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;zとxで値を調節してスペースで決定です。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;簡単でしたが以上になります。&lt;/p&gt;
+
+&lt;p&gt;いかがでしたでしょうか。
+非同期が基本になっているJavaScriptでコマンドラインからの入力受付を同期的にやる場合にはかなり使いやすいパッケージだと思います。&lt;/p&gt;
+
+&lt;p&gt;readline-syncでコマンドラインツールを作って見ましょう！&lt;/p&gt;
+
+&lt;p&gt;もっとこっちの方がオススメだよ！ってものがあれば是非&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;@n0bisuke&lt;/a&gt;に教えてください :)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>話題のチャットボット開発。Node.jsでHipChatに投稿してみよう。</title>
+      <link>https://dotstud.io/blog/hipchat-bot-by-nodejs/</link>
+      <pubDate>Tue, 04 Oct 2016 10:00:39 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/hipchat-bot-by-nodejs/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudio代表の&lt;a href=&#34;http://qiita.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;先日のLINE DEVELOPER DAYでのLINEのAPIの盛り上がりがありましたが、2016年はチャットボットが各所ですごく盛り上がっています。そんな話題に乗り遅れないようにチャットボットを作っていこうと思います。&lt;/p&gt;
+
+&lt;p&gt;dotstudioでは社内チャットにAtlasssian社の「HipChat」を利用しています。2010年に登場したツールですが、僕が愛用している（メッセンジャー管理アプリの）「Franz」に登録されているので選びました。&lt;/p&gt;
+
+&lt;p&gt;「業界的にSlackじゃないの？」ってなりそうですが、Slackのユーザー課金は金銭的にけっこう辛くなっていくのが目に見えるので早期からSlackをやめました。まだSlackで消耗してるの?って言いたいです（強がり）。&lt;/p&gt;
+
+&lt;p&gt;HipChatもSlack同様にインテグレーション追加やBot作成のAPIがかなり豊富です。&lt;/p&gt;
+
+&lt;p&gt;今日はNode.jsからHipChatに投稿する方法を紹介します。&lt;/p&gt;
+
+&lt;h2 id=&#34;hipchatのインテグレーション追加をする&#34;&gt;HipChatのインテグレーション追加をする&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.hipchat.com/&#34;&gt;https://www.hipchat.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;HipChatでご自身のチームにログインしましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/030/01.png&#34; alt=&#34;&#34; /&gt;
+メニューから &lt;strong&gt;インテグレーション&lt;/strong&gt;を選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/030/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Build your own integration&lt;/strong&gt;を選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/030/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;プルダウンメニューからBOTを作るROOMを選択&lt;/strong&gt;して &lt;strong&gt;Name your integration&lt;/strong&gt;にBOTの名前を入れましょう。 一部room名を黒塗りにしてますが察してください（笑）&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/030/04.png&#34; alt=&#34;&#34; /&gt;
+作成するとアクセストークンなどが生成されます。&lt;/p&gt;
+
+&lt;p&gt;ひとまず&lt;strong&gt;Try it!ボタン&lt;/strong&gt;を押してみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/030/05.png&#34; alt=&#34;&#34; /&gt;
+指定したROOMにメッセージが流れたら成功です。&lt;/p&gt;
+
+&lt;p&gt;それにしてもこの絵文字のセンスいいですよね。&lt;/p&gt;
+
+&lt;h2 id=&#34;curlコマンドでの実行を試す&#34;&gt;curlコマンドでの実行を試す&lt;/h2&gt;
+
+&lt;p&gt;先ほどの画面の &lt;strong&gt;Try it out&lt;/strong&gt;の項目に書いてあるcurlコマンドを実行することでAPI経由のPOSTを再現できます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;curl -d &#39;{&amp;quot;color&amp;quot;:&amp;quot;green&amp;quot;,&amp;quot;message&amp;quot;:&amp;quot;My first notification (yey)&amp;quot;,&amp;quot;notify&amp;quot;:false,&amp;quot;message_format&amp;quot;:&amp;quot;text&amp;quot;}&#39; -H &#39;Content-Type: application/json&#39; https://xxxxxx.hipchat.com/v2/room/XXXXXXX/notification?auth_token=XXXXXXXXXXXXXXXXXXXXXXXXXXXX
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ご自身の情報に置き換えて（むしろページのものをコピペして）ターミナ
+ルから実行すると先ほどの&lt;strong&gt;Try it!ボタン&lt;/strong&gt;を押した際と同じ挙動をしてくれます。&lt;/p&gt;
+
+&lt;h2 id=&#34;node-jsからpostリクエストしてみる&#34;&gt;Node.jsからPOSTリクエストしてみる&lt;/h2&gt;
+
+&lt;p&gt;実際にBotとして活用するにあたり、他の処理と連携させる必要があるのでプログラム経由でPOSTしてみます。dotstudioではNode.jsをよく利用しているのでNode.jsから先ほどのAPIにアクセスしてます。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;request&lt;/code&gt;や&lt;code&gt;SuperAgent&lt;/code&gt;などHTTPリクエストをいい感じにしてくれる外部モジュールはいくつもありますが、今回は&lt;a href=&#34;http://qiita.com/n0bisuke/items/33a6a6da1d6f455105f9&#34;&gt;Node.jsでJSONデータをHTTP POSTするメモ&lt;/a&gt;にもまとめたように外部モジュールに依存せずにNode.jsに組み込まれてる&lt;code&gt;http&lt;/code&gt;のみで実装してみます。&lt;/p&gt;
+
+&lt;p&gt;app.jsは以下のようになります。HOSTやPATHを先ほどの情報に置き換えて実行して見ましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;
+
+const http = require(&#39;http&#39;);
+const HOST = `xxxxx.hipchat.com`;
+const PATH = `/v2/room/XXXXXXX/notification?auth_token=XXXXXXXXXXXXXXXXXXXXXXXXXXXX`;
+
+let postData = {
+    &amp;quot;color&amp;quot;: &amp;quot;yellow&amp;quot;,
+    &amp;quot;message&amp;quot;: &amp;quot;test&amp;quot;,
+    &amp;quot;notify&amp;quot;: false,
+    &amp;quot;message_format&amp;quot;:&amp;quot;text&amp;quot;
+};
+
+let postDataStr = JSON.stringify(postData);
+let options = {
+    host: HOST,
+    port: 80,
+    path: PATH,
+    method: &#39;POST&#39;,
+    headers: {
+        &#39;Content-Type&#39;: &#39;application/json&#39;,
+        &#39;Content-Length&#39;: postDataStr.length
+    }
+};
+
+let req = http.request(options, (res) =&amp;gt; {
+  console.log(&#39;STATUS: &#39; + res.statusCode);
+  console.log(&#39;HEADERS: &#39; + JSON.stringify(res.headers));
+  res.setEncoding(&#39;utf8&#39;);
+  res.on(&#39;data&#39;, (chunk) =&amp;gt; {
+    console.log(&#39;BODY: &#39; + chunk);
+  });
+});
+req.on(&#39;error&#39;, (e) =&amp;gt; {
+  console.log(&#39;problem with request: &#39; + e.message);
+});
+req.write(postDataStr);
+req.end();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;7~12行目のPOSTデータのパラメーターは&lt;a href=&#34;https://www.hipchat.com/docs/apiv2/method/send_room_notification&#34;&gt;Send room notificationのリファレンス&lt;/a&gt;を確認しましょう。&lt;/p&gt;
+
+&lt;p&gt;けっこう細かく設定できるので詳細はまた別記事などで紹介したいです。&lt;/p&gt;
+
+&lt;p&gt;それでは、app.jsを実行してみます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;node app
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/030/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;さっきまでは&lt;code&gt;&amp;quot;color&amp;quot;: &amp;quot;green&amp;quot;&lt;/code&gt;でしたが&lt;code&gt;&amp;quot;color&amp;quot;: &amp;quot;yellow&amp;quot;&lt;/code&gt;にしてみました。
+背景が黄色になりますね。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;今回の背景色の変更もですが、&lt;a href=&#34;https://www.hipchat.com/docs/apiv2&#34;&gt;API Reference&lt;/a&gt;を見るとAPI経由で色々な機能が用意されていることがわかります。&lt;/p&gt;
+
+&lt;p&gt;他のチャットツールだと通常利用の機能をAPIで再現できない場合などもありますが、HipChatは通常の利用以上にAPI経由の方が自由度が高い設計になっている気がします。&lt;/p&gt;
+
+&lt;p&gt;Node.jsからもこんな形で簡単にBOT投稿ができるのでとりあえず簡単な通知などから作っていき、その様子もまたまとめていく予定です。&lt;/p&gt;
+
+&lt;p&gt;乞うご期待 ￣ー￣)／&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>人柱覚悟でさっそくmacOS Sierraにしてみました。</title>
+      <link>https://dotstud.io/blog/macos-sierra-update-process/</link>
+      <pubDate>Fri, 23 Sep 2016 10:00:39 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/macos-sierra-update-process/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudio代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。macOS Sierraが出ましたね。まだ早いんじゃないかと思いつつ試しにアップデートしてみたのでレポートします。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;ちなみに今回は「実際にmacOS Sierraにアップデートしてみたレポート」ですので、試す際にもしトラブルが発生しても当メディアでは責任は負いません。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;macos-sierra-v10-12&#34;&gt;macOS Sierra （v10.12）&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/01_image.png&#34; alt=&#34;&#34; /&gt;
+&lt;a href=&#34;http://www.apple.com/jp/macos/sierra/&#34;&gt;macOS Sierra&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;シエラって読むみたいです。OS X El Capitan（v10.11）の後続版にあたります。
+バージョンは10.12でコードネームがSierraです。&lt;/p&gt;
+
+&lt;p&gt;ちなみに10.11までは「Mac OS X」という表記でしたが、Sierraからは「macOS」へ変わり最初のmが小文字になりました。デザイン的な理由がありそうですね（笑）&lt;/p&gt;
+
+&lt;p&gt;既に色々なメディアが記事を書いていますので、何が変わったかや新機能などの詳細についてはそちらからキャッチアップして下さい。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;（http://www.itmedia.co.jp/news/articles/1609/20/news119.html&#34;&gt;「Adobe CS6」は「macOS Sierra」で必要システム構成外に　Java 6サポート終了で&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;（http://www.gizmodo.jp/2016/09/mac-os-sierra-released.html&#34;&gt;OS X…ではなく「macOS Sierra」が正式リリース。MacにSiriがやってきた！&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://applech2.com/archives/macos-10-12-sierra-upgrade-check.html&#34;&gt;macOS Sierraへアップグレードする前の注意点まとめ。&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;アップデートする僕のmacbookのマシンスペック&#34;&gt;アップデートする僕のMacBookのマシンスペック&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;MacBook Pro （Retina 13-inch、 Early2015）&lt;/li&gt;
+&lt;li&gt;OS X El Capitan／v10.11.6&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;ちなみに&lt;a href=&#34;https://dotstud.io/blog/setup-new-mac-app/&#34;&gt;先日の記事&lt;/a&gt;で新しく買ったMacです。&lt;/p&gt;
+
+&lt;h2 id=&#34;手順&#34;&gt;手順&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/02_image.png&#34; alt=&#34;&#34; /&gt;
+&lt;a href=&#34;https://itunes.apple.com/jp/app/macos-sierra/id1127487414?mt=12&#34;&gt;App Store&lt;/a&gt;からSierraのインストーラを落とします。&lt;/p&gt;
+
+&lt;p&gt;インストーラだけで4.78GBもあるので、ダウンロードには少し時間がかかると思います。&lt;/p&gt;
+
+&lt;h3 id=&#34;インストール&#34;&gt;インストール&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/03_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;DLが終わるとアプリケーションフォルダにインストーラがあるので動させます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/04_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;インストーラの手順に従って以下を進めましょう。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;続ける&lt;/strong&gt; を選択&lt;/li&gt;
+&lt;li&gt;ソフトウェア使用許諾の表示になるので &lt;strong&gt;同意する&lt;/strong&gt; を選択&lt;/li&gt;
+&lt;li&gt;ソフトウェア使用許諾のポップアップが出たら更に &lt;strong&gt;同意する&lt;/strong&gt; を選択&lt;/li&gt;
+&lt;li&gt;インストール先のディスク選択画面が出るので &lt;strong&gt;インストール&lt;/strong&gt; を選択&lt;/li&gt;
+&lt;li&gt;パスワードを求められるのでMacの &lt;strong&gt;パスワードを入力&lt;/strong&gt; し &lt;strong&gt;ヘルパーを追加&lt;/strong&gt; を選択&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;ここまで終わるとインストールの準備が開始されます。
+&lt;img src=&#34;https://dotstud.io/img/blog/022/05_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;再起動を求められるので再起動しましょう。起動してるアプリケーションはすべて閉じます。編集中のファイルはちゃんと保存しておきましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/06_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;再起動するとMacの起動時にこのような画面になりインストールが進みます。この画面はMac起動前なのでここだけスマホ撮影です（笑）
+&lt;img src=&#34;https://dotstud.io/img/blog/022/07_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ここも時間がかかるので、ご飯でも食べに行くのがちょうどいいかもしれません。インストールが完了すると起動します。&lt;/p&gt;
+
+&lt;h3 id=&#34;sierraの初期設定&#34;&gt;Sierraの初期設定&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/08_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;起動するとMacの初期設定っぽいウィザードになります。AppleIDでサインインします。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ソフトウェア使用許諾／プライバシーポリシー／利用規約の表示になるので &lt;strong&gt;同意する&lt;/strong&gt; を選択&lt;/li&gt;
+&lt;li&gt;ポップアップが出たら更に &lt;strong&gt;同意する&lt;/strong&gt; を選択&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;アカウント設定がされます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/09_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;iCloundキーチェーンの設定ですが、使っている人は設定しても良いと思います。僕はスキップしました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/10_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;次にSierraの新機能のiCloud Drive（MacのファイルをiCloudに保存する／Apple版のGoogle DriveやDropBoxみたいなもの）の設定です。この設定は後からでもできますが、僕はチェックをいれました。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;書類フォルダ&lt;/strong&gt; と &lt;strong&gt;デスクトップ&lt;/strong&gt; 内のファイルが自動的にアップロードされるので、書類やデスクトップが汚い人はアレなファイルがアップされちゃうかもしれないので気をつけましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/11_image.png&#34; alt=&#34;&#34; /&gt;
+次にSiriの設定です。これもSierraからの新機能です。iOSだけでしか使えなかったSiriですが、Macでも使えるようになります。目玉機能なのでオンにしておきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/12_image.png&#34; alt=&#34;&#34; /&gt;
+これで無事に起動しました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/13_image.png&#34; alt=&#34;&#34; /&gt;
+&lt;strong&gt;このMacについて&lt;/strong&gt; からスペック確認をするとmacOS Sierraの表記になっていますね。&lt;/p&gt;
+
+&lt;h2 id=&#34;新機能を試してみる&#34;&gt;新機能を試してみる&lt;/h2&gt;
+
+&lt;p&gt;新機能の全ては&lt;a href=&#34;http://applech2.com/archives/20160614-macos-10-12-sierra-new-features.html&#34;&gt;macOS 10.12 Sierraの新機能まとめ。&lt;/a&gt;などをチェックしてみてください。&lt;/p&gt;
+
+&lt;p&gt;僕が実際に使ってみたかったものや手元で試せるものを紹介します。&lt;/p&gt;
+
+&lt;h3 id=&#34;複数ウィンドウをまとめてくる-タブ&#34;&gt;複数ウィンドウをまとめてくる「タブ」&lt;/h3&gt;
+
+&lt;p&gt;アプリケーションを複数開いても、タブでひとつのウィンドウにまとめてくれる機能です。Keynoteでよくスライドを複数開くので、個人的には今回のアップデートで一番便利さを感じています。&lt;/p&gt;
+
+&lt;p&gt;サードパーティ製のアプリケーションでも可能みたいですが、まだ対応してるアプリは少なそうです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/14.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Keynoteでは &lt;strong&gt;ウィンドウ-&amp;gt;すべてのウィンドウを結合&lt;/strong&gt; で結合できます。他のアプリでも同じような表示になると思います。&lt;/p&gt;
+
+&lt;p&gt;タブ機能と言っていますが、どちらかというと &lt;strong&gt;一つのウィンドウにまとめてくれる機能&lt;/strong&gt; という感じです。&lt;/p&gt;
+
+&lt;h3 id=&#34;siri-がmacでも使えるようになった&#34;&gt;「Siri」がMacでも使えるようになった&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/15.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;iOSでしか使えなかった音声アシスタント機能の「Siri」をMacでも使えるようになりました。&lt;/p&gt;
+
+&lt;p&gt;アイコンクリックか &lt;strong&gt;Command+スペース&lt;/strong&gt; で起動できます。&lt;/p&gt;
+
+&lt;h3 id=&#34;macのストレージを自動で最適化してくれる-optimized-storage&#34;&gt;Macのストレージを自動で最適化してくれる「Optimized Storage」&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/16_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ストレージの空きがなくなってくると、iCloudにファイルを逃がしてストレージを最適化してくれます。まだ僕のMacは買ったばかりなので恩恵は受けていないですが期待できます。&lt;/p&gt;
+
+&lt;p&gt;ちなみに、新機能の「Optimized Storage」（後述）を使うにはiCloud設定が必要です。iCloud設定から &lt;strong&gt;Macストレージを最適化&lt;/strong&gt; をチェックしましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;画像や動画を切り離せる-ピクチャ-イン-ピクチャ-pinp&#34;&gt;画像や動画を切り離せる「ピクチャ・イン・ピクチャ （PinP）」&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/17.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;YouTubeやiTunesで見ている動画や画像などを&lt;code&gt;切り離せる&lt;/code&gt;機能です。ちなみに、ブラウザだとSafariしか使えないようです。早くChromeにも欲しいですね……。&lt;/p&gt;
+
+&lt;p&gt;Youtube動画の上などで右クリックを2回（コンテキストメニューをダブルクリック）すると &lt;strong&gt;ピクチャ・イン・ピクチャにする&lt;/strong&gt; という項目があるので、それを選択しましょう。&lt;/p&gt;
+
+&lt;h4 id=&#34;ちなみにchromeエクステンションがありました&#34;&gt;ちなみにChromeエクステンションがありました。&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/18.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://chrome.google.com/webstore/detail/picture-in-picture-viewer/efaagmolahogmekmnmkigonhfcdiemnl/related&#34;&gt;Picture in Picture Viewer&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Chromeのメニューバーにアイコンが追加されるので、そのアイコンをYoutubeなどを開いてるときに押すと切り離せます。ちなみに、初回だけ&lt;code&gt;chrome://flags/#enable-panels&lt;/code&gt;というフラグからパネルを有効にする必要があります。&lt;/p&gt;
+
+&lt;h2 id=&#34;気になる不具合など&#34;&gt;気になる不具合など&lt;/h2&gt;
+
+&lt;h3 id=&#34;karabinerが使えない問題&#34;&gt;karabinerが使えない問題&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/19_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/setup-new-mac-app/&#34;&gt;先日の記事&lt;/a&gt;でも紹介した&lt;a href=&#34;https://pqrs.org/osx/karabiner/index.html.ja&#34;&gt;Karabiner&lt;/a&gt;が、執筆した時点（2016年9月21日）だと対応していませんでした。&lt;/p&gt;
+
+&lt;p&gt;US配列キーボードで英数&amp;lt;-&amp;gt;かなのモード変換を、JIS配列のようにボタンひとつでやりたいという僕みたいな人には必須ツールだったので残念です。&lt;/p&gt;
+
+&lt;p&gt;……と思いきや&lt;a href=&#34;https://ei-kana.appspot.com/&#34;&gt;⌘英かな&lt;/a&gt;というアプリで代替できたので、こちらをインストールすると &lt;strong&gt;US配列の英数&amp;lt;-&amp;gt;かなのモード変換問題&lt;/strong&gt; は解決します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/20_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;インストールはリンク先を参照して下さい。&lt;/p&gt;
+
+&lt;h3 id=&#34;macos-sierraにしたらgitコマンドが動かなくなった&#34;&gt;macOS Sierraにしたらgitコマンドが動かなくなった……&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/21_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;これにハマる人はけっこういる気がします（笑）&lt;/p&gt;
+
+&lt;p&gt;こちらのQiitaの記事「&lt;a href=&#34;http://qiita.com/n0bisuke/items/0ad33fa466c3de5ac763&#34;&gt;macOS SierraにしたらGitコマンドが動かなくなった&lt;/a&gt;」にまとめましたが最初焦りますね。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめと雑感&#34;&gt;まとめと雑感&lt;/h2&gt;
+
+&lt;p&gt;今のところ、Sierraにしてから不具合は特に起きてないです。性能が上がったという実感も無いので、現時点（2016年9月21日）ではまだ必要がなければアップデートしなくても良いかもしれません。&lt;/p&gt;
+
+&lt;p&gt;ちなみにSierraにアップデートしたと同時にKeynoteがv7にアップデートしたんですけど、&lt;strong&gt;リアルタイム共同編集機能&lt;/strong&gt; というものが付いてて、こちらの方が気になっています（笑）&lt;/p&gt;
+
+&lt;p&gt;僕は問題ありませんでしたが、ハードウェア的な問題などでデータが消えてしまうとかもあるかもしれないので、アップデートする方はくれぐれもお気をつけて！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>デザイナーの僕がHugoを使ってポートフォリオサイトを作ってみる #1【準備編】</title>
+      <link>https://dotstud.io/blog/hugo-for-designers-vol1/</link>
+      <pubDate>Wed, 21 Sep 2016 10:00:40 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/hugo-for-designers-vol1/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudioのデザイナー・&lt;a href=&#34;https://dotstud.io/members/chachmaru/&#34;&gt;ちゃちゃまる&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;僕はまだ自分のポートフォリオサイトを持っていません。TumblrやPortfolioboxなどのサービスを使って作ろうと色々試してみましたが、自分のほしい機能がなかったり料金がかかったりしてしまい、結局挫折していました。&lt;/p&gt;
+
+&lt;p&gt;そこで、重い腰を上げて、外部サービスに頼らず自分だけでポートフォリオサイトを作ってみようと思います。&lt;/p&gt;
+
+&lt;h2 id=&#34;本連載のミッション&#34;&gt;本連載のミッション&lt;/h2&gt;
+
+&lt;p&gt;とりあえず僕がイメージしているポートフォリオサイトを書き起こしてみます。&lt;/p&gt;
+
+&lt;p&gt;まず機能面でほしいのは&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ブログのような投稿形式がいい（時系列に投稿を並べたい）&lt;/li&gt;
+&lt;li&gt;投稿をいくつかのジャンルにわけたい（作品、お知らせ、など）&lt;/li&gt;
+&lt;li&gt;作品には、それを作るにあたって使ったソフトウェア等をタグ付けしたい（#illustrator、 #photoshop、など）&lt;/li&gt;
+&lt;li&gt;作品の投稿には、作品の画像とともに作成した日付や説明文なども書きたい&lt;/li&gt;
+&lt;li&gt;コードはGithubで管理したい&lt;/li&gt;
+&lt;li&gt;Github Pages（&lt;a href=&#34;https://chachmaru.github.io&#34;&gt;https://chachmaru.github.io&lt;/a&gt;）で公開したい&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;ぐらいです。ジャンルは増やす可能性もあるので、その増えたジャンルに対しても違うレイアウトが組めるような自由度もほしいですね。&lt;/p&gt;
+
+&lt;p&gt;次にデザイン面。あくまでも作品がメインであって欲しいので、サイドバーなどはつけず、シンプルなデザインにしてみます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/021/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;また、勉強のため、テンプレート等は使わず自分でコードを書きたいと思います。&lt;/p&gt;
+
+&lt;p&gt;それでは一からやっていきましょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;動的サイトと静的サイト&#34;&gt;動的サイトと静的サイト&lt;/h2&gt;
+
+&lt;p&gt;ウェブサイトには実は「動的」と「静的」の二種類あることをご存知でしょうか？僕はなんとなく「JavaScriptを使ってアニメーションを施していれば動的、CSSだけなら静的なんじゃないかなー」と思っていたのですが、実は全く違いました。&lt;/p&gt;
+
+&lt;p&gt;「動的」と「静的」の大きな違いは、&lt;strong&gt;どのタイミングでHTMLが生成されるか&lt;/strong&gt;です。&lt;strong&gt;動的ウェブサイトでは、ページにアクセスがあったタイミング&lt;/strong&gt;でPHPやNode.jsなどのサーバーサイドのプログラムでHTML(場合によってはCSSやJavaScriptも)を生成します。例えば会員登録が必要なサイトの場合は会員情報などのデータを扱いますが、そういったデータベースを利用する必要がある場合は、ページにアクセスがあったタイミングでデータベースからデータを引っ張ってきて表示させています。一方、&lt;strong&gt;静的ウェブサイトの場合はユーザーがページにアクセスする前&lt;/strong&gt;の、管理者側がサーバーにファイルをアップロードするタイミングで既にHTMLが生成されています。ページアクセスより前にコンテンツ内容がHTMLに書かれていて、ブラウザがそのHTMLファイルを読み込んでいます。&lt;/p&gt;
+
+&lt;!-- 動的サイト：ページが表示されるタイミングでコンテンツが生成される
+動的サイト：もともとHTMLに書かれているコンテンツがそのまま表示される --&gt;
+
+&lt;p&gt;動的サイトではアクセスしたタイミングでデータを取ってきたり、HTML生成が行われるため静的サイトにくらべて時間がかかります。静的サイトの方がページの表示速度は早いです。しかし静的サイトでは、例えばユーザーログインなど、見る人によって異なるようなウェブサイトを構築することは難しいです。&lt;/p&gt;
+
+&lt;p&gt;今回のポートフォリオは画像をたくさん載せたいため表示速度はなるべく速い方がいいのと、個人のサイトなのでユーザーログインなどは特に考えないとすると、静的ウェブサイトがなんとなく良さそうだな、という感じですね。&lt;/p&gt;
+
+&lt;h2 id=&#34;静的サイトジェネレーター-hugo&#34;&gt;静的サイトジェネレーター Hugo&lt;/h2&gt;
+
+&lt;p&gt;静的サイトを作るといっても、全てのページのHTMLをベタ書きしていくのは効率が悪すぎます。ここで活躍するのが&lt;strong&gt;静的サイトジェネレーター&lt;/strong&gt;というもの。名前のとおり、自動的にHTMLを書き出してウェブサイトを作ってくれる便利なものです。&lt;/p&gt;
+
+&lt;p&gt;僕が使おうと思っている静的サイトジェネレーターは、最近話題らしい&lt;strong&gt;&lt;a href=&#34;http://gohugo.io/&#34;&gt;Hugo&lt;/a&gt;&lt;/strong&gt;です。Hugoの特徴はスピードと簡潔さで、僕のような初心者にもわかりやすそうですね。実はこのdotstudioのウェブサイトもHugoで出来ています。Hugoでは記事をマークダウン方式（詳しくは&lt;a href=&#34;http://www.markdown.jp/what-is-markdown/&#34;&gt;こちら&lt;/a&gt;）で書けるようになっているので、効率よく記事を書けるようになります。&lt;/p&gt;
+
+&lt;p&gt;僕の環境はこんな感じです。OSやバージョンによって動作が違う場合もありますのでご了承ください。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Mac OS X El Capitan (10.11.6)&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;Hugo Static Site Generator v0.16&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;とりあえずhugoを使ってみる&#34;&gt;とりあえずHugoを使ってみる&lt;/h2&gt;
+
+&lt;p&gt;早速Hugoをインストールして使ってみましょう。イラストレーターやフォトショップなどのインストール手順とは少し違い、コマンドラインから実行します。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Homebrew（ソフトウェアのインストールを単純化してくれる管理システム）をインストール&lt;/li&gt;
+&lt;li&gt;Homebrewを使ってHugoをインストール&lt;/li&gt;
+&lt;li&gt;Hugoを使ってウェブサイトを生成する&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;ちなみにHugoのインストールまでは代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;が書いた&lt;a href=&#34;https://dotstud.io/blog/setup-new-mac-app/&#34;&gt;僕がMacを買い換えてすぐにいれるツール&amp;amp;すぐにする初期設定【2016年9月版】&lt;/a&gt;にも載っています。&lt;/p&gt;
+
+&lt;h3 id=&#34;1-homebrewのインストール&#34;&gt;1. Homebrewのインストール&lt;/h3&gt;
+
+&lt;p&gt;HomebrewはmacOSのソフトウェアをインストール・管理してくれるものです。Hugo以外にも色々なものに使えると思うので、まだの方はぜひインストールをしてみてください。&lt;/p&gt;
+
+&lt;p&gt;ターミナル（アプリケーション＞ユーティリティ＞ターミナル.app）を開きます。そして&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ ruby -e &amp;quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;をコピペしてEnterを押すだけで完了です。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;$マークはコマンドであることを示す文字なので、$マーク以降の文字からコピーしてください&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;ついでに&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ brew update
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;も実行して、最新バージョンにアップデートしておきましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;2-hugoのインストール&#34;&gt;2. Hugoのインストール&lt;/h3&gt;
+
+&lt;p&gt;Homebrewでのインストールは基本&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ brew install xxxxx
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;です。&lt;/p&gt;
+
+&lt;p&gt;Hugoの場合&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ brew install hugo
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;で出来ます。簡単ですね！&lt;/p&gt;
+
+&lt;p&gt;きちんと作動しているかどうかは&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ hugo version
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;を実行してみて、&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Hugo Static Site Generator v0.16 BuildDate: 20xx-xx-xxTxx:xx:xx+09:00
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;のような結果が返ってきたかどうかで確認できます。&lt;/p&gt;
+
+&lt;h3 id=&#34;3-ウェブサイトを生成&#34;&gt;3. ウェブサイトを生成&lt;/h3&gt;
+
+&lt;p&gt;ウェブサイトを構成するファイル（HTMLやCSSなど）が入る場所を選びます。僕の場合ホームディレクトリ（アプリケーション、ドキュメント、写真フォルダなどがある場所）に新しく「dev」などの名前をつけたディレクトリを作って、その中を開発用にしています。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/021/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ここからはターミナルでの作業が多くなるので、コマンドの意味が分からない場合は&lt;a href=&#34;#&#34;&gt;UNIXコマンド一覧&lt;/a&gt;などと照らしあわせながら進めてみてください。&lt;/p&gt;
+
+&lt;p&gt;さて、まずはさきほどの&lt;code&gt;dev&lt;/code&gt;ディレクトリ内にターミナルで移動します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;cd dev
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;次に、Hugoの雛形を生成します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;hugo new site chachamaru
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/021/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;このようになったら成功です！&lt;/p&gt;
+
+&lt;h2 id=&#34;hugoディレクトリ内を軽く説明&#34;&gt;Hugoディレクトリ内を軽く説明&lt;/h2&gt;
+
+&lt;p&gt;Finderからdevディレクトリ内を見てみましょう。ターミナルのいるディレクトリをFinderで開くには&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ open .
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;と実行するのが便利です。&lt;/p&gt;
+
+&lt;p&gt;こんな感じになっていると思います。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/021/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Hugo内のディレクトリ/ファイルを軽く説明していきます。実際に作業をするタイミングで更に詳しく解説するので、斜め読みで大丈夫です。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;archetypes&lt;br /&gt;
+archetypesは「原型、典型」という意味で、各ジャンルの記事のベースをここに入れます。詳しくは後ほど。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;config.toml&lt;br /&gt;
+ウェブサイトの設定をするファイルです。&lt;code&gt;.toml&lt;/code&gt;はTOML（Tom&amp;rsquo;s Obvious, Minimal Language）ファイルの拡張子で、設定ファイルを記述する言語です。Tom Preston-Wernerさんが作った言語なので、「Tom’s」となってるんですね。そのまんまですね。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;content&lt;br /&gt;
+マークダウンで書いた記事を入れる場所です。ジャンルが複数ある場合、&lt;code&gt;content/ジャンル名/記事.md&lt;/code&gt;のようなディレクトリ構成になります。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;data&lt;br /&gt;
+様々なデータを管理しておく場所です。今回ポートフォリオサイトを作るにあたって必要は（今のところ）ないので、消してしまっても大丈夫です。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;layouts&lt;br /&gt;
+HTMLファイルを入れる場所です。&lt;code&gt;index.html&lt;/code&gt;や、各ジャンルの個別ページ、ヘッダーやフッターなどのパーツなども全てここに入れます。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;static&lt;br /&gt;
+「静的」という意味で、CSSや画像などを入れておく場所です。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;themes&lt;br /&gt;
+Hugoのテーマを入れておく場所です。ただし今回は全部自分でCSSを書きたいので、このディレクトリも使いません。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;次回予告&#34;&gt;次回予告&lt;/h2&gt;
+
+&lt;p&gt;今回は「準備編」ということで、少し長め＆詳しめに書いてみました。初心者の僕でも分かるように書いているので、解説や参考用外部リンクを多めに入れていこうと思います。&lt;/p&gt;
+
+&lt;p&gt;次回は「制作編」。HTMLとCSSを書いて、記事を書いて、ローカルサーバーを立ち上げてみるまでをやっていきたいと思います。&lt;/p&gt;
+
+&lt;p&gt;それではまた！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>僕がMacを買い換えてすぐにいれるツール&amp;すぐにする初期設定【2016年9月版】</title>
+      <link>https://dotstud.io/blog/setup-new-mac-app/</link>
+      <pubDate>Fri, 16 Sep 2016 10:00:01 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/setup-new-mac-app/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは！　dotstudio代表の&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;最近Macを新しくしたんですけど、最初にインストールしたアプリケーションや設定した項目を自分用にメモしたので公開します。&lt;/p&gt;
+
+&lt;p&gt;「Time Machineでバックアップとれよ！」みたいな話はあると思うんですけど、僕は基本的にパソコンを買い換えるタイミングで、使ってないアプリなどを断捨離したい性格なのでご理解ください。&lt;/p&gt;
+
+&lt;p&gt;僕は職種的には &lt;strong&gt;Webエンジニア / テクニカルライター / エバンジェリスト&lt;/strong&gt; あたりです。Web開発しつつ、記事執筆しつつみたいなスタイルの人は共感してくれるかも。&lt;/p&gt;
+
+&lt;h2 id=&#34;ことわり&#34;&gt;ことわり&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;スペックは Mac Book Pro 13 インチ / Retina / US配列 / OSX 10.11 El Capitan となっています。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Macを買って初日にいれたアプリケーションと設定のみを紹介しています。2日目以降にインストールするアプリは、多分自分にとって優先順位が低いので今回は省略です。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;自分用メモに近いのであしからず。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;アプリケーション&#34;&gt;アプリケーション&lt;/h2&gt;
+
+&lt;h3 id=&#34;google-chrome&#34;&gt;Google Chrome&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/01_chrome.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://www.google.co.jp/chrome/browser/desktop/index.html&#34;&gt;https://www.google.co.jp/chrome/browser/desktop/index.html&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;言わずと知れたGoogle製のブラウザです。
+MacのデフォルトブラウザはSafariなので、SafariからGoogle Chromeをダウンロードします。&lt;/p&gt;
+
+&lt;p&gt;さらばSafari。&lt;/p&gt;
+
+&lt;h3 id=&#34;gyazo-gyazo-gif&#34;&gt;Gyazo &amp;amp; Gyazo GIF&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/02_gyazo.png&#34; alt=&#34;&#34; /&gt;
+URL: &lt;a href=&#34;https://gyazo.com/&#34;&gt;https://gyazo.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;スクリーンショット撮影をしてくれるアプリケーションです。撮影したスクリーンショットをすぐさまサーバーにアップロードしてくれてURLを発行してくれます。&lt;/p&gt;
+
+&lt;p&gt;Gyazo GIFという画面録画をしてGIF画像にしてくれるアプリケーションも同時に使えるのですがこちらもよく使います。この記事も、Gyazoでキャプチャを撮りながら作っています。&lt;/p&gt;
+
+&lt;h3 id=&#34;kobito&#34;&gt;Kobito&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/03_kobito.png&#34; alt=&#34;&#34; /&gt;
+URL: &lt;a href=&#34;http://kobito.qiita.com/&#34;&gt;http://kobito.qiita.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Qiitaユーザーなら誰しもが使ってると思われる&lt;a href=&#34;http://qiita.com/&#34;&gt;Qiita&lt;/a&gt;連携の &lt;strong&gt;マークダウンエディタ&lt;/strong&gt; です。だいたいGyazoでスクリーンショットを撮影しつつ、発行された画像リンクをマークダウンで読み込んで記事を書く、というスタイルで作業してます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/04_kobito.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;そしてそのままQiitaの限定公開にアップロードすれば、レビューまでのスピードがかなり速くなるので &lt;strong&gt;Gyazo+Kobito+Qiitaの組み合わせはけっこうオススメ&lt;/strong&gt; です。&lt;/p&gt;
+
+&lt;h4 id=&#34;kobitoのデータ移行&#34;&gt;Kobitoのデータ移行&lt;/h4&gt;
+
+&lt;p&gt;KobitoでPC内に保存されてる下書き記事などを新しく買ったMacに移行する方法も合わせて紹介します。&lt;a href=&#34;http://qiita.com/nekoallergie/items/1cdc943252bd3cd90c37&#34;&gt;こちらのリンクを参考に（Kobitoのデータを新しい環境に手動で移行する）&lt;/a&gt;、古いMac側で以下のパスを開きます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;~/Library/Containers/com.qiita.Kobito/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/05_kobito.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;Data&lt;/code&gt;と&lt;code&gt;Container.plist&lt;/code&gt;をコピーして、USBメモリ経由で新規Macの同じディレクトリに放り込み、Kobitoを再起動すれば、下書きなどのデータも全て引き継がれます。&lt;/p&gt;
+
+&lt;h3 id=&#34;google-drive&#34;&gt;Google Drive&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/06_drive.png&#34; alt=&#34;&#34; /&gt;
+URL: &lt;a href=&#34;https://www.google.com/intl/ja_jp/drive/download/&#34;&gt;https://www.google.com/intl/ja_jp/drive/download/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;無料で使えるオンラインストレージです。チームメンバーでのファイル共有に使ってます。
+ちょっと前までDropBox派だったのですが、会社を立ち上げるにあたりGoogle Apps for Workを登録してから、Googleアカウントでまとめられるものはまとめようって思ってます。&lt;/p&gt;
+
+&lt;p&gt;「ツールって意外とお金がかかる」ことを起業してから知って、使うようになりました……。&lt;/p&gt;
+
+&lt;h3 id=&#34;franz&#34;&gt;Franz&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/07_franz.png&#34; alt=&#34;&#34; /&gt;
+URL: &lt;a href=&#34;http://meetfranz.com/&#34;&gt;http://meetfranz.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;デザイナーの&lt;a href=&#34;https://dotstud.io/members/chachmaru&#34;&gt;ちゃちゃまる&lt;/a&gt;が教えてくれたアプリです。複数のチャットツールを一元管理できます。これがめちゃ便利で、上記のようなよく使うツールはもちろんですが、海外では話題ですが国内ではマイナーなツールにも対応してます。&lt;/p&gt;
+
+&lt;p&gt;個人的には、SlackのMacアプリケーションが複数チームになってくるとかなり管理しにくい+動作が重いという難点があったのですが、Franzにすることで一気に解決しました。&lt;strong&gt;Slackアプリはインストールしなくなりました（笑）&lt;/strong&gt;　Franzがなかった生活には戻れないって思うくらいかなり捗ります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/08_franz.png&#34; alt=&#34;&#34; /&gt;
+ちなみにこれが僕が使ってるFranz画面です。&lt;/p&gt;
+
+&lt;h2 id=&#34;macの環境設定&#34;&gt;Macの環境設定&lt;/h2&gt;
+
+&lt;p&gt;ここからはMacの環境設定です。
+僕が不便に思っている点を解消する設定をしています。&lt;/p&gt;
+
+&lt;h3 id=&#34;キーリピートを最速に&#34;&gt;キーリピートを最速に&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/09_key.png&#34; alt=&#34;&#34; /&gt;
+キーリピートとは、&lt;strong&gt;同じキーを押し続けて同じ文字をタイプしたときの速さ&lt;/strong&gt; です。簡単に言うと「キーボード入力の速さ」ですね。個人的に感じていることですが、この設定はエンジニアやライターは必須な設定なのではないかと思っています。キーリピート速度が遅いと、カーソル移動がしんどいですからね……（苦笑）&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;システム環境設定&lt;/code&gt; -&amp;gt; &lt;code&gt;キーボード&lt;/code&gt;から&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;キーのリピート&lt;/code&gt;を速い&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;リピート入力認識までの時間&lt;/code&gt;を短い&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;で設定ができます。&lt;/p&gt;
+
+&lt;h3 id=&#34;usキーボードのかな変換時のキーマッピングを変える&#34;&gt;USキーボードのかな変換時のキーマッピングを変える&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/10_key.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Macのキーボード配列の変更方法です。&lt;/p&gt;
+
+&lt;p&gt;JIS配列だと、日本語&amp;lt;-&amp;gt;英語の変換はスペース隣の「かな」キーと「英数」キーでできます。ところがUS配列だとこのキーがなく、「command+スペース」で切り替えます。JIS配列をもともと使っていてUSに途中から切り替えた人は、この操作が面倒臭くなる人が多いのではないでしょうか。&lt;/p&gt;
+
+&lt;p&gt;そこで、US配列でもJIS配列と同じように使うために「キーマッピング」へ変更します。&lt;a href=&#34;https://pqrs.org/osx/karabiner/index.html.ja&#34;&gt;Karabiner&lt;/a&gt;をインストールして、「左右のコマンドキー（⌘）を「英数／かな」の設定を「コマンドキーの動作を優先モード」にすればOKです。&lt;/p&gt;
+
+&lt;p&gt;参考リンク: &lt;a href=&#34;http://heyhojournal.com/us-keyboard/&#34;&gt;MacのUSキーボードで日本語⇔英語切替を簡単に行う為の設定&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;caps-lockキーとcontrolキーの入れ替え&#34;&gt;Caps LockキーとControlキーの入れ替え&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/11_key.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;これもMacのキーボード配列を変更する方法です。&lt;/p&gt;
+
+&lt;p&gt;JIS配列だと、Controlキーが左手の小指のあたりに来ます。この位置はすごく使い易いのですが、US配列ではJIS配列でいうCaps Lockという、ほぼ使わないキーが来てしまいます……（苦笑）&lt;/p&gt;
+
+&lt;p&gt;キーマッピングは、&lt;code&gt;システム環境設定&lt;/code&gt; -&amp;gt; &lt;code&gt;キーボード&lt;/code&gt;から右下の&lt;code&gt;修飾キー&lt;/code&gt;ボタンを選択することで変更できます。&lt;/p&gt;
+
+&lt;p&gt;参考リンク: &lt;a href=&#34;http://inforati.jp/apple/mac-tips-techniques/system-hints/how-to-convert-the-control-key-and-the-caps-lock-key-in-macos.html&#34;&gt;US仕様のキーボードのMacでControlキーとCaps Lockキーを入れ替える方法&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;ライブ変換を無効に&#34;&gt;ライブ変換を無効に&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/12_live.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;MacにはEl Capitanになってから、文字を自動で変換してくれる「ライブ変換」機能が追加されたのですが、個人的には邪魔な気がしたので変えます。これは完全に趣味というか慣れなんだと思います。&lt;/p&gt;
+
+&lt;p&gt;メニューバー右上の文字入力方式切り替えの項目からチェックを外せばライブ変換が無効になります。&lt;/p&gt;
+
+&lt;h3 id=&#34;コンピュータ名を変える&#34;&gt;コンピュータ名を変える&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/13_pcname.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;↑こちらのスクショで分かるとおり、「sugawararyousuke-no-MacBook-Pro」という、謎のマシン名になっているので変えます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/14_pcname.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;環境設定 &amp;gt; 共有 &amp;gt; コンピュータ名&lt;/code&gt; にそのまま入力すればOKです。なんとなくですが、「CentOSで動いてるんだぞ」って感じの名前をつけています。&lt;/p&gt;
+
+&lt;h3 id=&#34;ディスプレイ設定を変更&#34;&gt;ディスプレイ設定を変更&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/15_display.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Retinaだとこの辺の設定も必須ですよね。作業領域確保です。&lt;/p&gt;
+
+&lt;h2 id=&#34;開発環境&#34;&gt;開発環境&lt;/h2&gt;
+
+&lt;h3 id=&#34;iterm2&#34;&gt;iTerm2&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/16_iterm2.png&#34; alt=&#34;&#34; /&gt;
+URL: &lt;a href=&#34;https://www.iterm2.com/downloads.html&#34;&gt;https://www.iterm2.com/downloads.html&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;つぎは開発ツールの「iTerm2」です。
+まずはデフォルトのターミナルより高機能なiTerm2に変更します。&lt;/p&gt;
+
+&lt;p&gt;いろいろな機能がありますが、Command+Dで画面分割できるところが地味にお気に入りです。&lt;/p&gt;
+
+&lt;h3 id=&#34;git&#34;&gt;Git&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/17_git.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Gitは実は最初からインストールされてないんですよね。長くMac使ってると忘れがちです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ git
+xcode-select: note: no developer tools were found at &#39;/Applications/Xcode.app&#39;, requesting install. Choose an option in the dialog to download the command line developer tools.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;gitコマンドを実行しようとすると、ウィンドウが表示されるのでインストールしましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/18_git.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;インストールが完了するとgitコマンドが使えるようになります。&lt;/p&gt;
+
+&lt;h3 id=&#34;visual-studio-code&#34;&gt;Visual Studio Code&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/19_code.png&#34; alt=&#34;&#34; /&gt;
+URL: &lt;a href=&#34;https://www.visualstudio.com/ja-jp/products/code-vs.aspx&#34;&gt;https://www.visualstudio.com/ja-jp/products/code-vs.aspx&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;だいたいのエディタは、プラグインをいれると似たような性能になりますが、Visual Studio Codeは初期設定でかなり優秀です。最近メインで使っています。&lt;/p&gt;
+
+&lt;p&gt;ただ、Sublime TextやAtomを使ってた時代もありましたし、時代が変わればAtom優勢になるときもあると思います。タイミングによって使い分けたいです。&lt;/p&gt;
+
+&lt;h4 id=&#34;コマンドラインから実行できるようにする&#34;&gt;コマンドラインから実行できるようにする&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/20_code.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;コマンドラインから実行するには、command+shift+pでコマンドパレッドを開いてcodeと打ち、PATH内に「codeコマンドをインストール項目」と表示されるのでそれを実行しましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-zsh&#34;&gt;n0bisuke-centos% code -h
+Visual Studio Code v1.3.1
+
+Usage: code [arguments] [paths...]
+
+Options:
+  -d, --diff
+      Open a diff editor. Requires to pass two file paths as arguments.
+  --disable-extensions
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;こんな感じで&lt;code&gt;codeコマンド&lt;/code&gt;が使えるようになります。&lt;/p&gt;
+
+&lt;h2 id=&#34;oh-my-zsh&#34;&gt;oh-my-zsh&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/21_ohmyzsh.png&#34; alt=&#34;&#34; /&gt;
+URL: &lt;a href=&#34;http://ohmyz.sh/&#34;&gt;http://ohmyz.sh/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;ざっくりいうとターミナル（zsh）が便利になるツールです。
+zshの設定を追加したり拡張しやすくしてくれます。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;まずはログインシェルをzshを設定&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;参考リンク: &lt;a href=&#34;http://mollifier.hatenablog.com/entry/2013/02/22/025415&#34;&gt;初めて Mac で zsh を使う人のためのチュートリアル&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;僕の場合oh-my-zshが使いたいだけなのですがzshにしておきます。この設定を間違えると最悪ログインできなくなってしまうので注意しましょう。一旦参考リンクのやり方を確認してから以下を実行するのをお勧めします。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;chsh -s /bin/zsh
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これでログインシェルがzshになりました。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;oh-my-zshのインストール&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;sh -c &amp;quot;$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これでインストールされます。
+テーマ変更とかもできるんですけど僕はデフォルトテーマのままでつかっちゃってます。&lt;/p&gt;
+
+&lt;p&gt;オススメテーマあったら教えてください。&lt;/p&gt;
+
+&lt;h2 id=&#34;homebrew&#34;&gt;homebrew&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/22_brew.png&#34; alt=&#34;&#34; /&gt;
+URL: &lt;a href=&#34;http://brew.sh/&#34;&gt;http://brew.sh/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Macで使う主に開発ツールのインストールを管理してくれるパッケージ管理ツールです。&lt;code&gt;brew install&lt;/code&gt;はよく使うので、初日にいれておきます。以下でインストールできます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;/usr/bin/ruby -e &amp;quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;確認で以下を実行します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;brew help
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;エラーが出ずにヘルプが表示されればokです。&lt;/p&gt;
+
+&lt;h3 id=&#34;node-js環境整備&#34;&gt;Node.js環境整備&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/23_node.png&#34; alt=&#34;&#34; /&gt;
+URL: &lt;a href=&#34;https://nodejs.org/en/&#34;&gt;https://nodejs.org/en/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;この辺は僕がNode.jsユーザーということもあるので優先度があがります。&lt;/p&gt;
+
+&lt;h4 id=&#34;nodebrewのインストール&#34;&gt;nodebrewのインストール&lt;/h4&gt;
+
+&lt;p&gt;URL: &lt;a href=&#34;https://github.com/hokaccha/nodebrew&#34;&gt;https://github.com/hokaccha/nodebrew&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;nodebrewは先ほどのhomebrewとは別物です。Node.jsのバージョン管理をしてくれるバージョンマネジメントツールです。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/creationix/nvm&#34;&gt;NVM&lt;/a&gt;や&lt;a href=&#34;https://github.com/tj/n&#34;&gt;N&lt;/a&gt;などもありますが最近はnodebrewを使っています。&lt;/p&gt;
+
+&lt;p&gt;インストール&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-zsh&#34;&gt;curl -L git.io/nodebrew | perl - setup
+echo &amp;quot;export PATH=$HOME/.nodebrew/current/bin:$PATH&amp;quot; &amp;gt;&amp;gt; .zshrc
+source .zshrc
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これでnodebrewコマンドが使える様になります。&lt;/p&gt;
+
+&lt;h4 id=&#34;node-jsのインストール&#34;&gt;Node.jsのインストール&lt;/h4&gt;
+
+&lt;p&gt;通常は以下でインストールできるのですが&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;nodebrew install-binary 6.5.0
+nodebrew use 6.5.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;参考リンクを見て高速にいれてみました&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;MAKE_OPTS=&amp;quot;-j 2&amp;quot; nodebrew install-binary v6.5.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;確かに速い……!&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;node -v
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;でバージョンが表示されれば無事にインストール完了です。&lt;/p&gt;
+
+&lt;p&gt;参考リンク: &lt;a href=&#34;http://qiita.com/yn-misaki/items/e92a47c662ea6d1236c1&#34;&gt;Nodebrewを使ってNode.jsを超高速にインストールする方法&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;sshfs-fuse-for-osx&#34;&gt;SSHFS / FUSE for OSX&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/24_fuse.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;SSH接続でリモートファイルをローカルにあるかのように編集できます。&lt;/p&gt;
+
+&lt;p&gt;ローカルマシンのFinderから操作したり、Visual Studio Codeなどのエディタでも編集できるのでサーバー側でVimを使うのが苦手な僕みたいなタイプにはオススメです。RaspberryPiでの開発のときにもラズパイ上のファイルをローカルファイルのように扱えるので重宝します。&lt;/p&gt;
+
+&lt;p&gt;参考リンク: &lt;a href=&#34;http://qiita.com/ysk24ok/items/bb148530a55a4e55d99b&#34;&gt;Macでsshfsを使ってローカルからリモートのファイルを触る&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;hugo&#34;&gt;Hugo&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/25_hugo.png&#34; alt=&#34;&#34; /&gt;
+URL: &lt;a href=&#34;https://gohugo.io/&#34;&gt;https://gohugo.io/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;最近人気上昇中の静的サイトジェネレーターです。一昔前はJekyllが主流でしたが記事数が多くなるとビルド速度が遅くなるというところもあり人気が伸び悩んでました。&lt;/p&gt;
+
+&lt;p&gt;Golang製のHugoは記事が増えても爆速ビルドなので最近ユーザーが増えてるイメージです。実はdotstudioのブログはHugoでできているので開発環境として必須です。インストールはbrew経由で一発ですね。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;brew install hugo
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Hugo系ナレッジもそのうち発信すると思います！&lt;/p&gt;
+
+&lt;h3 id=&#34;arduino-ide&#34;&gt;Arduino IDE&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/26_arduino.png&#34; alt=&#34;&#34; /&gt;
+URL: &lt;a href=&#34;https://www.arduino.cc/&#34;&gt;https://www.arduino.cc/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Arduino開発に必須のツールです。デバイスのデバッグなどでもよく使うので、dotstudioの事業の性質上必須です（笑）&lt;/p&gt;
+
+&lt;h2 id=&#34;終わりに-よたばなし&#34;&gt;終わりに＆よたばなし&lt;/h2&gt;
+
+&lt;p&gt;ということで紹介しました。自分の中で重要度の高いアプリケーションがまとまった気がします。誰かの役に立てば幸いです :)　&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/019/27_mac.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;関係ないけど今回Mac買うときに、ものすごく「MacBook12インチ」か「MacBook Pro 13インチ」かを迷ってましたが、表参道のApple Storeで鼻ピアスの女性店員に勧められてMac Book Pro 13インチに落ち着きました。&lt;strong&gt;「Mac Book Pro の方が買って後悔はしないですよ」&lt;/strong&gt; と言われたのが決め手ですね。&lt;/p&gt;
+
+&lt;p&gt;確かに後悔はない……はず。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
