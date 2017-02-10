@@ -176,7 +176,82 @@
       
       <guid>https://dotstud.io/docs/digitalanalog/</guid>
       
-      <description></description>
+      <description>
+
+&lt;p&gt;デジタル、アナログと聞いて何が思い浮かぶでしょうか？&lt;/p&gt;
+
+&lt;p&gt;テレビの種類にも使われますが、今回は電気的な違いについて説明していきます。&lt;/p&gt;
+
+&lt;h2 id=&#34;デジタルとアナログの違いって&#34;&gt;デジタルとアナログの違いって？&lt;/h2&gt;
+
+&lt;p&gt;一番の違いは、電圧の変化をグラフにしたときに分かります。&lt;/p&gt;
+
+&lt;p&gt;もともと以下のようなアナログの信号があるとします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/digitalanalog/analog.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;アナログの信号をデジタルにするとこのようになります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/digitalanalog/digital.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;見比べると、デジタルはある（1）ない（0）のどちらかで表現されるため、シンプルなデータになっています。&lt;/p&gt;
+
+&lt;p&gt;これによってあるかないかはハッキリと見て分かるのですが、 &lt;strong&gt;もともとの値がどれくらい大きかったのか、小さかったのかは分からなくなってしまいました。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;逆に、アナログはどれだけ大きい・小さいかは分かるのですが、 &lt;strong&gt;データは大きくなります。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;マイコンボードでみるデジタル-アナログ&#34;&gt;マイコンボードでみるデジタル、アナログ&lt;/h2&gt;
+
+&lt;p&gt;どのような違いがあるか分かったところで、マイコンボードでその値を取得する方法を説明します。&lt;/p&gt;
+
+&lt;p&gt;マイコンボードの種類により詳細な手順は変わるので注意してください。今回のプログラムについての説明は全て、Arduino Unoに基づいたものとします。&lt;/p&gt;
+
+&lt;p&gt;デジタル、アナログの入出力については、指定されたピンでやりとりします。&lt;/p&gt;
+
+&lt;h2 id=&#34;デジタルの入出力&#34;&gt;デジタルの入出力&lt;/h2&gt;
+
+&lt;h3 id=&#34;入力&#34;&gt;入力&lt;/h3&gt;
+
+&lt;p&gt;Arduino Unoでは、digitalRead関数を使ってある（HIGH）ない（LOW）を取得できます。&lt;/p&gt;
+
+&lt;p&gt;このときに注意しなくてはいけないのが閾値の値です。&lt;/p&gt;
+
+&lt;p&gt;Arduino Unoの場合は閾値は2.5vです。2.5vを超えるとHIGHになり、それ以下はLOWとなります。&lt;/p&gt;
+
+&lt;p&gt;この閾値はマイコンボードにより異なるので注意が必要です。&lt;/p&gt;
+
+&lt;p&gt;スイッチなどを付けて、押された・押されてないという状態を取得するときに、ノイズによって押していないのに押したと誤検知することがあります。&lt;/p&gt;
+
+&lt;p&gt;その場合は、プルアップという方法を利用することで誤検知を減らすことができます。&lt;/p&gt;
+
+&lt;h3 id=&#34;出力&#34;&gt;出力&lt;/h3&gt;
+
+&lt;p&gt;Arduino Unoでは、digitalWrite関数を使ってある（HIGH）ない（LOW）を出力できます。&lt;/p&gt;
+
+&lt;p&gt;HIGHのときに5vが出力され、LOWのとき0vが出力されます。&lt;/p&gt;
+
+&lt;p&gt;こちらもマイコンボードによって異なるので注意してください。&lt;/p&gt;
+
+&lt;h2 id=&#34;アナログの入出力&#34;&gt;アナログの入出力&lt;/h2&gt;
+
+&lt;h3 id=&#34;入力-1&#34;&gt;入力&lt;/h3&gt;
+
+&lt;p&gt;Arduino Unoでは、analogRead関数により0（0v）-1023（5v）の1024段階で値を取得できます。&lt;/p&gt;
+
+&lt;p&gt;入力する電圧が5vを超える場合、抵抗で分圧をすることで入力することができます。&lt;/p&gt;
+
+&lt;p&gt;分圧については、計算してくれるサイトなどもあるので参考にしてください。&lt;/p&gt;
+
+&lt;h3 id=&#34;出力-1&#34;&gt;出力&lt;/h3&gt;
+
+&lt;p&gt;Arduino Unoではアナログ出力はできません。&lt;/p&gt;
+
+&lt;p&gt;しかしPWMと呼ばれる方式により、擬似的にアナログ出力をすることができます。　&lt;/p&gt;
+
+&lt;p&gt;PWMの出力は、analogWrite関数により可能となります。0（0v）-255（5v）の256段階で指定することが可能です。&lt;/p&gt;
+
+&lt;p&gt;それによりLEDをふんわり点けることなどができるようになります。&lt;/p&gt;
+</description>
     </item>
     
     <item>
