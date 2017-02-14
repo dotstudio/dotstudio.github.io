@@ -264,7 +264,7 @@
             
             
                     
-                        <li class="wip">マイコンボード <span>[WIP]</span></li>
+                        <li><a href="https://dotstud.io/docs/microcon/">マイコンボード</a></li>
                     
             
         
@@ -835,19 +835,114 @@
     <div class="title">
       <h1 class="jp">マイコンボード</h1>
       <div class="line"></div>
-      <span class="en"></span>
+      <span class="en">Microcontroller Board</span>
     </div>
     
     <img class="eyecatch" src="" alt="">
 
 
 
-    <div class="content markdown"></div>
+    <div class="content markdown">
+
+<p>マイコンボードとは、マイクロコンピュータ（マイコン）と入出力回路などの周辺回路を1枚の基板に乗せ、手軽にマイコンを利用するための回路です。</p>
+
+<p>一昔前は、主に小型・低価格のマイコンを積んだものを指していました。</p>
+
+<p>最近では広義な意味でのマイコンボードとして、ArduinoやRaspberry Piなど、スマートフォンと同様の高性能なCPUを積んでいるものを含みます。</p>
+
+<h2 id="構成要素">構成要素</h2>
+
+<p>ボードによって異なりますが、マイコンボードにはマイコンを動かすための最低限の機能が備わっています。</p>
+
+<h3 id="cpu">CPU</h3>
+
+<p>プログラムを動かす部分です。</p>
+
+<p>入出力PINやメモリなどを１個のICに集積したマイコンを使用している物が主でしたが、最近では高性能なCPUを使用しているボードも多くあります。</p>
+
+<h3 id="メモリ">メモリ</h3>
+
+<h4 id="rom-read-only-memory">ROM（Read Only Memory）</h4>
+
+<p>読み込み専用のメモリです。プログラムの格納や、プログラム内の定数を保存しておくのに利用され、 <strong>電源が切れてもデータは残ります。</strong></p>
+
+<h4 id="ram-random-access-memory">RAM（Random Access Memory）</h4>
+
+<p>読み書きが可能なメモリです。プログラムの変数を格納するのに利用され、 <strong>電源が切れるとデータは消えてしまいます。</strong></p>
+
+<h3 id="周辺回路">周辺回路</h3>
+
+<p>電源やクロック回路など、CPUと組み合わせて利用する回路のことです。</p>
+
+<p>アナログ-デジタル変換やデジタル-アナログ変換、クロック、UARTなどのよく利用する機能はCPUに内蔵されている事が多く、「内蔵ペリフェラル」と呼ばれます。</p>
+
+<h3 id="ネットワークインターフェース">ネットワークインターフェース</h3>
+
+<p>マイコンボードが、外部の回路や他の機器との通信を行うためのインターフェースです。</p>
+
+<p>仕組みや構造はそれぞれの章を参照してください。</p>
+
+<ul>
+<li><a href="https://dotstud.io/docs/serial/">シリアル通信</a></li>
+<li>USBケーブル [WIP]</li>
+<li>イーサネット [WIP]</li>
+</ul>
+
+<h3 id="gpio">GPIO</h3>
+
+<p>センサやLEDなどとCPU間の信号のやり取りを行うための、汎用的な入出力ピンのことです。</p>
+
+<p>マイコンボードによっては、１つのピンにGPIOと内蔵ペリフェラルの複数の機能を割り当てていることがあります。</p>
+
+<p>排他的な利用となりピン数がたりなくなることもあるため、 <strong>実現したい機能に応じたマイコンボードを用意することが大切です。</strong></p>
+
+<h2 id="マイコンボードの分類">マイコンボードの分類</h2>
+
+<h3 id="安価でosが乗らない単機能なマイコンボード">安価でOSが乗らない単機能なマイコンボード</h3>
+
+<blockquote>
+<p>例：Arduino、mbed、ESPer、Nefry、WioNodeなど</p>
+</blockquote>
+
+<p>安いCPU（マイコン）を搭載しており、OSは乗っておらず、独自言語でプログラミングをします。</p>
+
+<p>電源を入れるとマイコンに書き込まれているプログラムが自動的に起動します。</p>
+
+<p>シリアル通信は簡単ですが、TCP/IPやUDP/IPといったIP通信は難易度が上がります。</p>
+
+<p>しかし最近では、ESPerというWi-Fiモジュールが出て無線LANやBluetoothが容易に扱えるため、人気になっています。</p>
+
+<p><strong>電飾系やモータを回すといった単機能な用途</strong> に向いています。</p>
+
+<h3 id="比較的高価でosが乗る多機能なマイコンボード">比較的高価でOSが乗る多機能なマイコンボード</h3>
+
+<blockquote>
+<p>例：Raspberry Pi、DragonBoardなど</p>
+</blockquote>
+
+<p>高機能なCPUを搭載しており、LinuxやWindows 10 IoT Coreなど様々なOSが動きます。</p>
+
+<p>「シングルボードコンピュータ」とも呼ばれることもあります。</p>
+
+<p>ディスプレイ出力、USBや無線LANといったリッチな外部通信I/Fを備えています。</p>
+
+<p><strong>複雑で多機能な用途</strong> に向いています。</p>
+
+<h2 id="使い方">使い方</h2>
+
+<p>dotstudioで販売しているマイコンボードなどの使い方は、それぞれの章を参照してみてください。</p>
+
+<ul>
+<li><a href="https://dotstud.io/docs/nefry/">Nefry</a></li>
+<li>WIO Node [WIP]</li>
+<li>Seeeduino v4.2 [WIP]</li>
+</ul>
+</div>
 
     <div class="information">
       <span>Last edited on 2016.11.15 by</span>
-      <a href="/members/">
-        <img src="/img/members//author.png" alt=""><span></span>
+      <a href="/members/iwata_n">
+        <img src="/img/members/iwata_n/author.png" alt=""><span>いわたん</span>
       </a>
     </div>
     <div id="fb-root"></div>
