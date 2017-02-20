@@ -80,6 +80,9 @@ body {
   text-align: center; }
   .markdown h2 {
     display: inline-block;
+    width: 100%;
+    background-color: #FAFAFA;
+    padding: 3rem 0;
     margin: 7rem auto 4rem auto;
     line-height: 2.5rem;
     font-size: 18px;
@@ -94,7 +97,7 @@ body {
       display: block;
       -webkit-font-smoothing: antialiased;
       font-size: 18px;
-      color: #404040;
+      color: #666666;
       font-family: 'Montserrat', sans-serif;
       letter-spacing: 0.1em;
       font-weight: 700;
@@ -112,7 +115,7 @@ body {
     -webkit-font-smoothing: antialiased;
     text-align: left;
     vertical-align: middle;
-    border-left: 10px solid #BFBFBF;
+    border-left: 10px solid #EEEEEE;
     padding-left: 10px;
     padding-top: 10px;
     box-sizing: border-box; }
@@ -128,22 +131,21 @@ body {
       .markdown p {
         margin: 1.8rem auto; } }
   .markdown strong {
-    font-weight: normal;
-    background: linear-gradient(transparent 60%, #ff0 0%); }
+    font-weight: bold; }
   .markdown a {
     color: #404040;
-    border-bottom: 1px solid #808080;
+    border-bottom: 1px solid #666666;
     transition: all 0.3s; }
     .markdown a:hover {
       color: black;
       background: none;
-      border-bottom: 1px solid #EEEEEE; }
+      border-bottom: 1px solid #222222; }
   .markdown img {
     display: block;
-    width: 100%;
-    max-width: 715px;
+    max-width: 100%;
     border-top: 1rem solid white;
-    border-bottom: 1rem solid white; }
+    border-bottom: 1rem solid white;
+    margin: 0 auto; }
   .markdown ul {
     display: block;
     width: 95%;
@@ -162,18 +164,18 @@ body {
     border-bottom: 1rem solid white; }
   .markdown ul#env {
     display: block;
-    background-color: #EEEEEE;
-    list-style: none;
     width: 400px;
-    box-sizing: border-box;
-    border-left: 10px solid #BFBFBF;
     padding-top: 1.5rem;
     padding-bottom: 1rem;
-    margin-top: 5rem; }
+    border-left: 10px solid #EEEEEE;
+    margin-top: 5rem;
+    background-color: #FAFAFA;
+    list-style: none;
+    box-sizing: border-box; }
     .markdown ul#env::before {
       content: '筆者の環境';
-      font-size: 0.8rem;
-      color: #808080; }
+      color: #666666;
+      font-size: 0.8rem; }
   .markdown ul#env > li {
     padding: 0.3rem 1.5rem;
     text-align: center; }
@@ -512,95 +514,110 @@ html {
 
 .blog-single {
   width: 715px;
-  margin: 0 auto;
-  /*LIGブログ仕様の人物紹介レイアウト*/
-  /*LIGブログ仕様の会話レイアウト*/ }
+  margin: 0 auto; }
   @media (max-width: 425px) {
     .blog-single {
       width: 100%; } }
+
+@media (max-width: 425px) {
+  .blog-single > .date {
+    margin-left: 3%; } }
+
+.blog-single--eyecatch {
+  width: 100%;
+  height: auto;
+  margin-top: 10px;
+  box-shadow: 0px 0px 10px 0 #EEEEEE; }
+
+.blog-single--title {
+  display: block;
+  width: 90%;
+  margin: 20px auto 0 auto; }
   @media (max-width: 425px) {
-    .blog-single .date {
-      margin-left: 3%; } }
-  .blog-single--eyecatch {
-    width: 100%;
-    height: auto;
-    margin-top: 10px;
-    box-shadow: 0px 0px 10px 0 #EEEEEE; }
-  .blog-single--title {
-    display: block;
-    font-size: 25px;
-    color: black;
-    font-family: HiraginoSans-W6;
-    -webkit-font-smoothing: antialiased;
-    line-height: 1.6;
-    letter-spacing: 1.9px;
-    width: 90%;
-    margin: 20px auto 0 auto; }
-    @media (max-width: 425px) {
-      .blog-single--title {
-        font-size: 20px;
-        color: black;
-        font-family: HiraginoSans-W6;
-        -webkit-font-smoothing: antialiased;
-        line-height: 1.5;
-        letter-spacing: 1.5px; } }
-    @media (max-width: 425px) {
-      .blog-single--title {
-        width: 94%;
-        margin: 10px auto 0 auto; } }
-  .blog-single--row {
-    display: block;
-    width: 90%;
-    margin: 20px auto 0 auto;
-    height: 40px;
-    overflow: hidden;
-    position: relative; }
-  .blog-single .author {
-    position: absolute;
-    left: 0px;
-    bottom: 0px; }
-  .blog-single .series {
-    position: absolute;
-    right: 0px;
-    bottom: 7px; }
-  .blog-single .share {
-    margin-top: 80px; }
-  .blog-single .related-entries .related-entries-item {
-    display: flex;
-    justify-content: center; }
-  .blog-single .related-entries img {
-    padding: 10px;
+    .blog-single--title {
+      width: 94%;
+      margin: 10px auto 0 auto; } }
+
+.blog-single--information {
+  display: block;
+  position: relative;
+  width: 90%;
+  height: 40px;
+  margin: 20px auto 0 auto;
+  overflow: hidden; }
+
+.blog-single--information > .author {
+  position: absolute;
+  left: 0px;
+  bottom: 0px; }
+
+.blog-single--information > .series {
+  position: absolute;
+  right: 0px;
+  bottom: 7px; }
+
+.blog-songle > .share {
+  margin-top: 80px; }
+
+.related-entries .related-entries-item {
+  display: flex;
+  justify-content: center; }
+  .related-entries .related-entries-item img {
     width: 250px;
-    height: 154px; }
-  .blog-single .person-intro {
-    display: flex;
-    border-style: solid;
-    border-color: gray; }
-    .blog-single .person-intro img {
-      margin: 30px;
-      border-radius: 20%;
-      width: 120px;
-      height: 120px;
-      display: inline-block;
-      vertical-align: middle; }
-    .blog-single .person-intro .person-info {
-      flex-flow: column wrap;
-      padding-top: 20px; }
-  .blog-single .box_tweet span {
+    height: 154px;
+    padding: 10px; }
+
+/*LIGブログ仕様の人物紹介レイアウト*/
+.person-intro {
+  display: flex;
+  border-style: solid;
+  border-color: gray; }
+  .person-intro img {
     display: inline-block;
-    vertical-align: middle;
-    width: 550px; }
-  .blog-single .box_tweet img {
+    width: 120px;
+    height: 120px;
     margin: 30px;
-    border-radius: 50%;
-    width: 100px;
-    display: inline-block;
-    vertical-align: middle; }
-  .blog-single--content {
-    margin: 100px auto 100px auto; }
-    @media (max-width: 425px) {
-      .blog-single--content {
-        width: 90%; } }
+    vertical-align: middle;
+    border-radius: 20%; }
+  .person-intro .person-info {
+    flex-flow: column wrap;
+    padding-top: 20px; }
+
+/*LIGブログ仕様の会話レイアウト*/
+.box-tweet span {
+  display: inline-block;
+  width: 550px;
+  vertical-align: middle; }
+
+.box-tweet img {
+  display: inline-block;
+  width: 100px;
+  margin: 30px;
+  border-radius: 50%;
+  vertical-align: middle; }
+
+.blog-single--content {
+  margin: 100px auto; }
+  @media (max-width: 425px) {
+    .blog-single--content {
+      width: 90%; } }
+
+.blog-single--content > .blog-single--toc {
+  text-align: left;
+  line-height: 20px;
+  width: 50%;
+  padding: 16px;
+  margin: 64px auto;
+  color: #222222;
+  background-color: #FAFAFA; }
+  .blog-single--content > .blog-single--toc li {
+    margin: 4px; }
+    .blog-single--content > .blog-single--toc li a:hover {
+      text-decoration: underline; }
+    .blog-single--content > .blog-single--toc li ul {
+      list-style: none;
+      margin-top: 4px;
+      margin-left: 8px; }
 
 html {
   font-size: 14px; }
@@ -1785,6 +1802,55 @@ html {
   flex-wrap: wrap;
   justify-content: center;
   list-style: none; }
+
+html {
+  font-size: 14px; }
+  @media (max-width: 425px) {
+    html {
+      font-size: 12px; } }
+
+.partners {
+  max-width: 956px;
+  margin: 0 auto;
+  margin-bottom: 5rem; }
+
+.partners--heading {
+  display: block;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+  font-size: 14px;
+  color: black;
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: 0.1em;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  height: auto; }
+
+.partners--logo-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 1rem; }
+  @media (max-width: 425px) {
+    .partners--logo-wrapper {
+      flex-direction: column;
+      align-items: center; } }
+
+.partners--logo {
+  background-color: #BFBFBF;
+  margin: 0.5rem 0.3rem; }
+
+html {
+  font-size: 14px; }
+  @media (max-width: 425px) {
+    html {
+      font-size: 12px; } }
+
+div.fb-page {
+  display: block;
+  width: 500px;
+  margin: 0 auto; }
 
 .logoTop {
   display: block;

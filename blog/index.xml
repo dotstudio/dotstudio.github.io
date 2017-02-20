@@ -7,8 +7,377 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Mon, 20 Feb 2017 10:00:02 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 21 Feb 2017 10:00:50 +0900</lastBuildDate>
     <atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>ハードウェア知識ゼロでもできる電子工作入門！「Gravity」ハンズオン</title>
+      <link>https://dotstud.io/blog/dfrobot-gravity-hands-on/</link>
+      <pubDate>Tue, 21 Feb 2017 10:00:50 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/dfrobot-gravity-hands-on/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、ちゃちゃまるです。&lt;/p&gt;
+
+&lt;p&gt;先日CodeZineさんで紹介した &lt;a href=&#34;http://codezine.jp/article/detail/9982&#34;&gt;ハードウェアの知識ゼロでもボードにセンサーをつなげられる「Gravity」シリーズ&lt;/a&gt; について、さらに詳しく使い方を説明していきたいと思います！&lt;/p&gt;
+
+&lt;p&gt;※この記事は主に初心者の方・他のマイコンボードを使ってはみたが挫折してしまった方向けです。&lt;/p&gt;
+
+&lt;h2 id=&#34;gravity-のおさらい&#34;&gt;「Gravity」のおさらい&lt;/h2&gt;
+
+&lt;p&gt;「&lt;strong&gt;Gravity&lt;/strong&gt;」とは中国・上海のハードウェア系企業であるDFRobotが作ったコネクタの規格、またそのコネクタを搭載したセンサー等を指します。&lt;/p&gt;
+
+&lt;p&gt;簡単に言うと、開発ボードとコントローラー（ボタンなど）やセンサー（音センサーなど）を統一された規格でつなぐことができるシリーズです。つなぐ部分やコネクタ自体が色分けされているので、&lt;strong&gt;直感的に配線ができ、簡単に自分の思う通りのものができます&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;本記事では&lt;a href=&#34;https://www.dfrobot.com/product-1454.html&#34;&gt;Gravity: Stater Kit for Arduino&lt;/a&gt;を題材にしています。&lt;/p&gt;
+
+&lt;h2 id=&#34;開発環境を整える&#34;&gt;開発環境を整える&lt;/h2&gt;
+
+&lt;p&gt;Gravityのコントローラーやセンサーを使うには、PCにIDE（書き込み用アプリケーション）を用意し、PCとマイコンボードをつなげる必要があります。まずは開発環境から整えていきましょう！&lt;/p&gt;
+
+&lt;ul id=&#34;env&#34;&gt;
+    &lt;li&gt;Macbook Air Early 2014&lt;/li&gt;
+    &lt;li&gt;OS X El Capitan v10.11.6&lt;/li&gt;
+    &lt;li&gt;Arduino IDE v1.6.12&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;arduino-ideをインストール&#34;&gt;Arduino IDEをインストール&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.arduino.cc/en/Main/Software&#34;&gt;Arduino - Software&lt;/a&gt;から「Arduino IDE」をダウンロードしてインストールします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/01.png&#34; alt=&#34;Download the Arduino IDE&#34; /&gt;
+「Download the Arduino IDE」からお使いのOSを選択してください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/02.png&#34; alt=&#34;JUST DOWNLOAD&#34; /&gt;
+Arduino IDEはドネーションウェア（ユーザーが任意の利用料を開発者に寄付するライセンス形態のソフトウェア）なので、寄付金額を選択する画面に移動します。今回はグレーで書かれている「JUST DOWNLOAD」をクリックしてダウンロードを開始します。&lt;/p&gt;
+
+&lt;h3 id=&#34;arduino-ideを起動&#34;&gt;Arduino IDEを起動&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/03.png&#34; alt=&#34;IDE初回起動画面&#34; /&gt;
+Arduino IDEをダウンロード後初回起動すると、上のような画面がでてきます。このテキストエリアにコードを書いていきます。&lt;/p&gt;
+
+&lt;p&gt;OSの言語を日本語以外に設定している場合、メニューバーの「Arduino」内の「Preferences」からArduino IDEの言語設定を変更できます。反映するにはOKを押した後アプリの再起動が必要です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/04.png&#34; alt=&#34;IDE画面説明&#34; /&gt;
+基本的なArduino IDEの流れとしては、まずエディア部分にコードを書き、検証ボタンでコードを検証、その後「マイコンボードに書き込む」ボタンでマイコンにプログラムを送ります。エラーやメッセージなどはコンパイラ画面に出力されます。&lt;/p&gt;
+
+&lt;h3 id=&#34;pcとマイコンボードをつなげる&#34;&gt;PCとマイコンボードをつなげる&lt;/h3&gt;
+
+&lt;p&gt;PCとマイコンボードをつないで、PCからArduino IDE経由でプログラムを書き込めるようにします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/05.png&#34; alt=&#34;ボードを選択&#34; /&gt;
+USBでDFRduinoとPCをつないだら、「ツール」から「Arduino/Genuino UNO」を選択するだけです。DFRduinoはArduinoと全く同じ（下で詳しく解説します）なので、これでボードと接続できました。&lt;/p&gt;
+
+&lt;h2 id=&#34;マイコンボードにプログラムを書き込む&#34;&gt;マイコンボードにプログラムを書き込む&lt;/h2&gt;
+
+&lt;p&gt;Arduino IDEではプログラムを書いたファイルのことを「スケッチ」と呼ぶのですが、実はアプリにいくつものスケッチサンプルが内蔵されています。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/06.png&#34; alt=&#34;&#34; /&gt;
+上の「スケッチ例」を見るとかなりの量があります。今回は「01.Basics」内の「Blink」というスケッチを呼び出してみましょう。「Blink」をクリックすると自動的にプログラムが書かれたウィンドウが出てきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/07.png&#34; alt=&#34;Blinkサンプル&#34; /&gt;
+たくさんの文字が書かれていますが、実際のプログラムは色がついている部分です（&lt;code&gt;/* */&lt;/code&gt; で囲まれている部分や&lt;code&gt;//&lt;/code&gt;と行の先頭にあるのはコメントなので、実際の挙動には関係しません）。ここに書く言語はC言語ベースの&lt;strong&gt;Arduino言語&lt;/strong&gt;です。C言語自体の記述方法（&lt;code&gt;if&lt;/code&gt;文や&lt;code&gt;for&lt;/code&gt;文など）はここでは解説しませんので、他のサイトを参考にしてください。&lt;/p&gt;
+
+&lt;p&gt;さて、ここで本来なら「検証」ボタンを使ってプログラムに間違いがないかチェックするのですが、今回はサンプルスケッチを使っているのでエラーは出ません。一応画面左上の「検証」（チェックマークのボタン）を押してみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/08.png&#34; alt=&#34;コンパイル完了&#34; /&gt;
+「コンパイルが完了しました。」と同時に色々出てきました。このような画面が出たらとりあえず「プログラムの検証は成功した」と認識していれば大丈夫です。ちなみに「コンパイル」とは、人間が理解できるプログラミング言語からコンピュータが理解できる機械語へとプログラムを変換することを指します。&lt;/p&gt;
+
+&lt;p&gt;コンパイルが完了したので、いよいよマイコンボードに書き込みましょう。「検証」の隣にある「マイコンボードに書き込む」（矢印マークのボタン）をクリックします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/09.png&#34; alt=&#34;ボード上のLED&#34; /&gt;
+DFRduino UNOは上の赤で囲った部分がLEDとなっていて、さきほどのスケッチを書き込むとここが周期的に光ったり消えたりします。&lt;/p&gt;
+
+&lt;p&gt;マイコンボードに書き込んだプログラムは、Arduino IDEで新しいスケッチを書き込まない限り動き続けます。LEDのチカチカを止めたいときは「ファイル」から「新規ファイル」を開いて、空のスケッチを書き込みます。&lt;/p&gt;
+
+&lt;h3 id=&#34;シールドを取り付ける&#34;&gt;シールドを取り付ける&lt;/h3&gt;
+
+&lt;p&gt;「シールド」とは、マイコンボードの機能を拡張させるアドオンボードのことを指します。今回使うマイコンボードの「DFRduino UNO R3」はArduino互換（Arduinoと全く同じ動きをするもので、作っている会社・団体が違うだけ）なので、まだこのままではGravityシリーズのセンサーやコントローラーを使うことはできません。そこで、このボードに重ねる形でGravity用シールド「I/O Sensor Expansion Shield v7.1」を乗せます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/10.png&#34; alt=&#34;シールドを重ねた写真&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;このI/O Sensor Expansion Shield v7.1を詳しく見てみると、ピン（金属の出っ張っている部分）が「黒・赤・緑」や「黒・赤・青」に色分けされています。&lt;strong&gt;これがまさに、知識ゼロでもGravityで遊ぶことができる理由&lt;/strong&gt;です（後ほど配線をする際にこの色分けの恩恵を受けます）。この後のチュートリアルでは常にシールドをマイコンボードに乗せた状態で使います。&lt;/p&gt;
+
+&lt;h2 id=&#34;プログラムの実行&#34;&gt;プログラムの実行&lt;/h2&gt;
+
+&lt;p&gt;いよいよプログラムを実際に書いて実行していきましょう！&lt;/p&gt;
+
+&lt;h3 id=&#34;デジタル信号を取得する&#34;&gt;デジタル信号を取得する&lt;/h3&gt;
+
+&lt;p&gt;何かのデータを取得する際、センサーから送られてくる信号には「デジタル」と「アナログ」の二種類があります。デジタル信号は値が「0」もしくは「1」で、アナログ信号の場合は値が「0」から「1023」の1024段階で、センサーから送られています。信号を取得するモジュールのことを&lt;strong&gt;インプットデバイス&lt;/strong&gt;と呼びます。&lt;/p&gt;
+
+&lt;p&gt;使うパーツ：&lt;br /&gt;
+- DFRduino UNO + I/O Sensor Expansion Shield v7.1&lt;br /&gt;
+- Digital Push Button Module（以下ボタン）&lt;/p&gt;
+
+&lt;h4 id=&#34;実行編&#34;&gt;実行編&lt;/h4&gt;
+
+&lt;p&gt;では手始めに、&lt;strong&gt;ボタンが押されているかどうかを確認する&lt;/strong&gt;プログラムを動かしてみましょう！&lt;/p&gt;
+
+&lt;p&gt;まずは配線をします。ボタンに付属のコネクタを指し、もう片方をシールドのD側2番ピン（以下図参照）に、コネクタとピンの色が合うように挿してください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/11.png&#34; alt=&#34;回路図-ボタン&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ボタンに付属している「黒・赤・緑」のコネクタは、デジタル信号を送るときに使います。今回はボタンが押されているか押されていないか、の2パターンの値が送られてきます。センサーやコントローラーの基盤の上に「D」や「A」と書かれていますが、これらもそれぞれデジタルかアナログかを示しています。&lt;/p&gt;
+
+&lt;p&gt;次に、D側2番ピンにつながっているボタンが押されているかどうかを検知するプログラムをArduino IDEのエディタ部分に書きます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;void setup() {
+	Serial.begin(9600);
+	pinMode(2, INPUT);
+}
+
+void loop() {
+	int buttonState = digitalRead(2);
+	Serial.println(buttonState);
+	delay(1);  
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;「検証」と「ボードに書き込み」ボタンの列の右端の「シリアルモニタ」ボタン（虫眼鏡のアイコン）をクリックします。ここに&lt;code&gt;Serial.println()&lt;/code&gt;の括弧内の値が表示されるようになります。&lt;/p&gt;
+
+&lt;!--![シリアルモニタスクショ](/img/blog/087/12.png)--&gt;
+
+&lt;h4 id=&#34;プログラム解説編&#34;&gt;プログラム解説編&lt;/h4&gt;
+
+&lt;p&gt;Arduino IDEで作成するプログラムは大きく&lt;code&gt;void setup()&lt;/code&gt;と&lt;code&gt;void loop()&lt;/code&gt;の2つに分けることができます。&lt;code&gt;setup()&lt;/code&gt;に続く中括弧（&lt;code&gt;{}&lt;/code&gt;）の中は一度だけ実行され、&lt;code&gt;loop()&lt;/code&gt;内のコードは繰り返し実行されます。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;Serial.begin(9600);&lt;/code&gt;はシリアル通信の際データの転送速度を9600で指定しています。これはシリアルモニタを使用するのに必要です。おまじない的なものと解釈してもらって大丈夫です（笑）&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;pinMode()&lt;/code&gt;はどのピンを使ってどのようにデータを使うかを示しています。括弧内の一つ目にはピン番号を、二つ目には&lt;code&gt;INPUT&lt;/code&gt;（データを取得する）もしくは&lt;code&gt;OUTPUT&lt;/code&gt;（データを送信する）を指定します。今回の場合、&lt;strong&gt;D側2番ピン&lt;/strong&gt;からデータ（ボタンが押されたかどうか）を&lt;strong&gt;取得&lt;/strong&gt;したいので、&lt;code&gt;pinMode(2, INPUT);&lt;/code&gt;となります。ちなみにD側2番ピンの場合&lt;code&gt;2&lt;/code&gt;、A側2番ピンの場合&lt;code&gt;A2&lt;/code&gt;と書きます。&lt;/p&gt;
+
+&lt;p&gt;以上が&lt;code&gt;setup()&lt;/code&gt;になります。次は&lt;code&gt;loop()&lt;/code&gt;内を見ていきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;digitalRead()&lt;/code&gt;を使うと、括弧内で指定したピンの値を読み取ることができます。今回は2番ピンを読み取りたいので&lt;code&gt;digitalRead(2)&lt;/code&gt;ですね。この値を&lt;code&gt;buttonState&lt;/code&gt;に入れておきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;Serial.println()&lt;/code&gt;は括弧内の値をシリアルモニタに映します。&lt;code&gt;Serial.println(buttonState);&lt;/code&gt;の場合、&lt;code&gt;buttonState&lt;/code&gt;、つまりボタンが押されているかどうかを&lt;code&gt;0&lt;/code&gt;または&lt;code&gt;1&lt;/code&gt;でシリアルモニタに表示します。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;delay()&lt;/code&gt;は括弧内の時間実行を遅らせます。時間の単位はミリ秒（1000分の1秒）です。&lt;code&gt;delay(1);&lt;/code&gt;を&lt;code&gt;loop()&lt;/code&gt;の最後に書くことによって、このプログラムを1ミリ秒ごとに実行するよう指定できます。&lt;/p&gt;
+
+&lt;h3 id=&#34;アナログ信号を取得する&#34;&gt;アナログ信号を取得する&lt;/h3&gt;
+
+&lt;p&gt;次はアナログ信号（0から1023までの値）を取得して、シリアルモニタで表示させてみましょう！こちらも先程と同様、センサーをインプットデバイスとして使います。&lt;/p&gt;
+
+&lt;p&gt;使うパーツ：&lt;br /&gt;
+- DFRduino UNO + I/O Sensor Expansion Shield v7.1&lt;br /&gt;
+- Analog Rotation Sensor（以下回転センサー）&lt;/p&gt;
+
+&lt;h4 id=&#34;実行編-1&#34;&gt;実行編&lt;/h4&gt;
+
+&lt;p&gt;付属しているアナログ用（黒・赤・青）のコネクタで回転センサーとシールドのA側0番ピンをつなげます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/13.png&#34; alt=&#34;回路図-回転&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;次に以下のプログラムをエディタにコピーします。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;void setup() {
+  Serial.begin(9600);
+}
+void loop() {
+  int sensorValue = analogRead(A0);
+  Serial.println(sensorValue);
+  delay(1);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;作成したスケッチを検証後ボードに送信します。シリアルモニタを開いて回転センサーのツマミを回すと、0から1023の値が回転角度に合わせて表示されると思います。&lt;/p&gt;
+
+&lt;!--![シリアルモニタスクショ](/img/blog/087/14.png)--&gt;
+
+&lt;h4 id=&#34;プログラム解説編-1&#34;&gt;プログラム解説編&lt;/h4&gt;
+
+&lt;p&gt;前回は&lt;code&gt;digitalRead()&lt;/code&gt;を使いましたが、今回はアナログの値を取得したいので&lt;code&gt;analogRead()&lt;/code&gt;を使います。括弧内にはピン番号を入れます。&lt;/p&gt;
+
+&lt;p&gt;記事がとんでもなく長くなってしまうので、既出のコードは解説しません。分からない方はお手数ですが上に戻って確認してください m(._.)m&lt;/p&gt;
+
+&lt;h3 id=&#34;ledをチカチカさせる&#34;&gt;LEDをチカチカさせる&lt;/h3&gt;
+
+&lt;p&gt;LEDを周期的にチカチカ光らせてみます。今回はピンにつないだものから値を取得するのではなく、値をピンにつないだものに送信します。このようなモジュールを&lt;strong&gt;アウトプットデバイス&lt;/strong&gt;と呼びます。&lt;/p&gt;
+
+&lt;p&gt;使うパーツ：&lt;br /&gt;
+- DFRduino UNO + I/O Sensor Expansion Shield v7.1&lt;br /&gt;
+- Digital Piranha LED-R（以下赤LED）&lt;/p&gt;
+
+&lt;h4 id=&#34;実行編-2&#34;&gt;実行編&lt;/h4&gt;
+
+&lt;p&gt;赤LEDをシールドのD側13番につなげてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/15.png&#34; alt=&#34;回路図-LED&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;プログラムは以下の通り。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;int ledPin = 13;
+void setup() {
+  pinMode(ledPin, OUTPUT);
+}
+void loop() {
+  digitalWrite(ledPin, HIGH);
+  delay(1000);
+  digitalWrite(ledPin, LOW);
+  delay(1000);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;検証→ボードに書き込みで、LEDが1秒周期でチカチカし始めます。&lt;/p&gt;
+
+&lt;h4 id=&#34;プログラム解説編-2&#34;&gt;プログラム解説編&lt;/h4&gt;
+
+&lt;p&gt;&lt;code&gt;digitalWrite()&lt;/code&gt;は、括弧内の一つ目に指定したピンに&lt;code&gt;HIGH&lt;/code&gt;もしくは&lt;code&gt;LOW&lt;/code&gt;の値を送ることができます。&lt;code&gt;HIGH&lt;/code&gt;は「1」、&lt;code&gt;LOW&lt;/code&gt;は「0」となります。&lt;/p&gt;
+
+&lt;p&gt;また、プログラム内で13番ピンの情報を何回か使うので、最初に&lt;code&gt;int ledPin = 13;&lt;/code&gt;と変数に入れておいてあげると、後々ピンの番号を変更したいときに便利です。&lt;/p&gt;
+
+&lt;h3 id=&#34;人感ライトを作る&#34;&gt;人感ライトを作る&lt;/h3&gt;
+
+&lt;p&gt;ここの辺りから電子工作っぽい感じになりますよ！次はインプットデバイスとアウトプットデバイスを同時に使い、&lt;strong&gt;一つのモジュールから値を取得して、その値を別のモジュールに送る&lt;/strong&gt;ような仕組みを作ってみます！&lt;/p&gt;
+
+&lt;p&gt;使うパーツ：&lt;br /&gt;
+- DFRduino UNO + I/O Sensor Expansion Shield v7.1&lt;br /&gt;
+- PIR Sensor（以下人感センサー）→インプットデバイス&lt;br /&gt;
+- Digital Piranha LED-R（以下赤LED）→アウトプットデバイス&lt;/p&gt;
+
+&lt;h4 id=&#34;実行編-3&#34;&gt;実行編&lt;/h4&gt;
+
+&lt;p&gt;人感センサーで動きを確認したら、赤LEDを点灯します。どちらもデジタルで良さそう（動いている・動いていない、点灯している・点灯していない、のそれぞれ2つの状態しかない）なので、人感センサーをD側2番ピンに、赤LEDをD側13番ピンにつなげます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/16.png&#34; alt=&#34;回路図-人感LED&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;プログラムは以下の通り。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;int sensorPin = 2;
+int ledPin =  13;
+int sensorState = 0;
+void setup() {
+  pinMode(ledPin, OUTPUT);
+  pinMode(sensorPin, INPUT);
+}
+
+void loop() {
+  sensorState = digitalRead(sensorPin);
+  if (sensorState == HIGH) {
+    digitalWrite(ledPin, HIGH);
+} else {
+    digitalWrite(ledPin, LOW);
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;検証→ボードに書き込んでみましょう。人感センサーに向かって動いたり手を振ったりするとLEDが付くはずです。&lt;/p&gt;
+
+&lt;h4 id=&#34;プログラム解説編-3&#34;&gt;プログラム解説編&lt;/h4&gt;
+
+&lt;p&gt;今回は変数を3つ作りました。ピン番号などは変数で管理すると、可読性も上がりピンの変更などもしやすいのでオススメです。最後に宣言した&lt;code&gt;sensorState&lt;/code&gt;は、人感センサーで読み取った値が入ります。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;digitalRead()&lt;/code&gt;で読み取った値は&lt;code&gt;HIGH&lt;/code&gt;または&lt;code&gt;LOW&lt;/code&gt;でかえってきます。なので&lt;code&gt;sensorState == HIGH&lt;/code&gt;や&lt;code&gt;sensorState == LOW&lt;/code&gt;としてあげると、&lt;code&gt;HIGH&lt;/code&gt;のとき、&lt;code&gt;LOW&lt;/code&gt;のとき、と条件によって別々の挙動を指定することができます。&lt;/p&gt;
+
+&lt;p&gt;まとめると、&lt;code&gt;digitalRead()&lt;/code&gt;で人感センサーからの値によって、赤LEDに&lt;code&gt;digitalWrite()&lt;/code&gt;でオンオフを指定しています。&lt;/p&gt;
+
+&lt;h3 id=&#34;音でledをつける&#34;&gt;音でLEDをつける&lt;/h3&gt;
+
+&lt;p&gt;だんだん慣れてきましたか？今度は音センサーを使って、一定の音量を超えたらLEDが光る仕組みを作りましょう！&lt;/p&gt;
+
+&lt;p&gt;使うパーツ：&lt;br /&gt;
+- DFRduino UNO + I/O Sensor Expansion Shield v7.1&lt;br /&gt;
+- Analog Sound Sensor（以下音センサー）→インプットデバイス&lt;br /&gt;
+- Digital Piranha LED-R（以下赤LED）→アウトプットデバイス&lt;/p&gt;
+
+&lt;h4 id=&#34;実行編-4&#34;&gt;実行編&lt;/h4&gt;
+
+&lt;p&gt;音センサーの基盤上に「A」と書かれているので、シールドのA側0番ピンに指します。赤LEDはいままで通りD側なので、D側13番に指します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/17.png&#34; alt=&#34;回路図-音LED&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;いままではD側何番、A側何番、と指定してきましたが、実はD側・A側さえ合っていれば基本何番でも大丈夫です。いくつものモジュールを近いピン番号にくっつけすぎるとごちゃごちゃするので、適当に間隔を空けて配線すると楽ですよ。&lt;/p&gt;
+
+&lt;p&gt;まずは以下のコードをエディタに入力してみてください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;int soundPin = 0;
+int ledPin = 13;
+
+void setup() {
+	pinMode(ledPin, OUTPUT);
+	Serial.begin(9600);
+}
+void loop(){
+	int soundState = analogRead(soundPin);
+	Serial.println(soundState);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;このプログラムを検証して実行すると、音センサーが返したアナログの値がシリアルモニタに出てきます。今回は音が「ある一定以上の音量になった場合」LEDを光らせたいので、その「ある一定」を見つける必要があります。周りの環境によって返ってくる音量の値が変わるので、自分がこれ以上音が鳴ったら光らせたい！という値を見つけてください。&lt;/p&gt;
+
+&lt;p&gt;「ある一定」の数値が決まったらそれを反映させつつ以下のプログラムにします。先程まで使っていたコードは先頭に&lt;code&gt;//&lt;/code&gt;をつけることで無視することができます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;int soundPin = 0;
+int ledPin = 13;
+
+void setup() {
+	pinMode(ledPin, OUTPUT);
+	// Serial.begin(9600);
+}
+void loop(){
+	int soundState = analogRead(soundPin);
+	// Serial.println(soundState);
+	if (soundState &amp;gt; 「ある一定」の数値) {
+		digitalWrite(ledPin, HIGH);
+		delay(10000);
+	} else {
+		digitalWrite(ledPin, LOW);
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;もう一度検証→ボードに書き込むと、周りの音が一定ラインを超えるとLEDが光るようになります！&lt;/p&gt;
+
+&lt;h3 id=&#34;ledをゆっくりと点灯させる&#34;&gt;LEDをゆっくりと点灯させる&lt;/h3&gt;
+
+&lt;p&gt;序盤にLEDを点灯させるのをすでにやりましたが、今度は&lt;strong&gt;ゆっくりと&lt;/strong&gt;点灯させます。勘の良い方は「LEDにアナログの値を書き込めないのではないか」と気づくと思います。ゆっくり点灯ということはおそらく&lt;code&gt;analogWrite()&lt;/code&gt;を使うことは予想できますが、LEDはいままで&lt;code&gt;digitalWrite();&lt;/code&gt;で値を送っていたのでできないのではないか、と。&lt;/p&gt;
+
+&lt;p&gt;そこで&lt;strong&gt;PWN&lt;/strong&gt;（Pulse Width Modulation・パルス幅変調）を使います。ググってみると何やら難しい話が出てきますが、簡単に言うと&lt;strong&gt;デジタル信号で擬似的にアナログデータを送る&lt;/strong&gt;ことができます。&lt;/p&gt;
+
+&lt;p&gt;PWMに対応しているピンは、今回のシールド上ではD側のアスタリスク（&lt;code&gt;*&lt;/code&gt;）が付いている3番、5番、6番、9番、10番、11番です。&lt;/p&gt;
+
+&lt;p&gt;使うパーツ：&lt;br /&gt;
+- DFRduino UNO + I/O Sensor Expansion Shield v7.1&lt;br /&gt;
+- Digital Piranha LED-R（以下赤LED）→アウトプットデバイス&lt;/p&gt;
+
+&lt;h4 id=&#34;実行編-5&#34;&gt;実行編&lt;/h4&gt;
+
+&lt;p&gt;赤LEDをシールドのD側10番につなげます。PWM対応なのを確認してください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/18.png&#34; alt=&#34;回路図-LEDPWM&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;プログラムは以下の通り。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;void setup() {
+	pinMode(ledPin,OUTPUT);
+}
+void loop(){
+	for (int value = 0 ; value &amp;lt; 255; value++) {
+		analogWrite(ledPin, value);
+		delay(5); }
+  for (int value = 255; value &amp;gt;0; value--){
+ 		analogWrite(ledPin, value);
+	delay(5); }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;検証→ボードに書き込みで、ゆっくりLEDがついて、ゆっくりLEDが消えるようになります。プログラム自体はシンプルなので、解説は割愛します。&lt;/p&gt;
+
+&lt;h2 id=&#34;お疲れ様でした&#34;&gt;お疲れ様でした！&lt;/h2&gt;
+
+&lt;p&gt;ここまでかなり長い道のりでしたね！この記事を書くのにも結構時間かかりました（笑）&lt;/p&gt;
+
+&lt;p&gt;この記事を通して、インプットデバイスから値を取得して、アウトプットデバイスに値を渡す、という処理をできるようになりました。これさえできるようになれば、後は好きなモジュールを使って作りたいものを作るだけです！&lt;/p&gt;
+
+&lt;p&gt;この記事で学んだことだけでできるプロジェクトの一例として、&lt;strong&gt;流れている音楽の大きさを赤・青・緑のLEDで表す&lt;/strong&gt;なんてのはどうでしょうか。音センサーから値を取ってきて、いくつ以上の値で緑LEDを光らせて、いくつ以上で青を、いくつ以上で赤を…… と指定すればできそうですね！PWMを使うことで、さらに細かく音の大きさが表わせそうです。&lt;/p&gt;
+
+&lt;p&gt;2017年2月23日開催の &lt;a href=&#34;https://dotstudio.connpass.com/event/49147/&#34;&gt;今度こそ挫折しない！知識ゼロからの電子工作ハンズオン&lt;/a&gt;イベントに来てくださっている方で、チュートリアルを早く終わってしまった方もぜひやってみてください！&lt;/p&gt;
+
+&lt;p&gt;それではまた！お疲れ様でした！&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>年に一度のITエンジニアのお祭り！デブサミ2017にIoTLTが出展しました！</title>
@@ -1986,133 +2355,6 @@ LINEなど、エンジニア以外にも使われているツールだとプロ�
 &lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
 
 &lt;p&gt;クリスマスにおすすめのプレゼント候補をまとめてみました。私自身どれも触ってみましたが、個人的にはMakey Makeyがアイデア次第でおもしろいことができそうなので気に入っています。若ければ若いほど常識にとらわれない豊かな発想が生まれると思うので、そのアイデアを実現できるようにガジェットを使ってみてください。ではまた！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>かなり盛り上がった！ものづくりの祭典＠中国 #MakerFaireShenZhen</title>
-      <link>https://dotstud.io/blog/maker-faire-shenzhen-report/</link>
-      <pubDate>Tue, 08 Nov 2016 19:30:18 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/maker-faire-shenzhen-report/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、dotstudioエディターのうらら（&lt;a href=&#34;http://twitter.com/uraranbon&#34;&gt;@uraranbon&lt;/a&gt;）です。&lt;/p&gt;
-
-&lt;p&gt;2006年から始まったものづくりの祭典「Maker Faire」は、いまや世界の20カ国くらいに広まり、勢いを伸ばし続けています。日本でも毎年夏におこなわれる恒例行事となりましたが、dotstudioは日本を飛び出し、中国・深センでおこなわれた「&lt;a href=&#34;http://www.makerfaireshenzhen.com/&#34;&gt;Maker Faire Shenzhen 2016&lt;/a&gt;（MFSZ）」に参加してきました！　80以上ものブースに世界各国からのものづくりが展示されていました〜〜！&lt;/p&gt;
-
-&lt;h2 id=&#34;会場の-海上世界-の広さに絶句&#34;&gt;会場の「海上世界」の広さに絶句&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;今回、中国の深センでおこなわれた「Maker Faire Shenzhen」。香港の近くの場所にあり、日本から飛行機では4時間程度の距離です。会場となるのは「海上世界」。中国に到着してからすぐに、何十個ものブースが出展されるイベント会場へ下見に行ったのですが……&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;街中に突然、船がある場所でした。でかっ！　&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;なかなか広そうです。この一角は、地元の人が集まるショッピングモールとのこと。一周してみましたがなかなか広かったです。あっ奥の方にブースが見える。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;入り口発見。設営がかなりしっかりしてます。&lt;/p&gt;
-
-&lt;h2 id=&#34;microsoftやintelといった大手企業も参加&#34;&gt;MicrosoftやIntelといった大手企業も参加&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/04-2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;もともと予定していた開催日は、10月21日（金）〜10月23日（日）でしたが、台風「Haima」の影響で10月23日（日）〜10月24日（月）に後ろ倒し。3日間開催予定が、2日間に圧縮。帰りの飛行機の都合もあり、私たちは23日のみの参加となりました。幸いにも1日で1周できる広さではありました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;いろんな企業が参加していましたが、会場のゲート近くには大手企業が軒を連ねていました。まずはintel。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;こちらはMicrosoft。顔認識する自動販売機を実演していました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;GROVEやWio Node、でおなじみの&lt;a href=&#34;https://www.seeedstudio.com&#34;&gt;Seeed&lt;/a&gt;。いろんなガジェットが紹介されていました！&lt;/p&gt;
-
-&lt;h2 id=&#34;見たことのないガジェットがあちこちに&#34;&gt;見たことのないガジェットがあちこちに&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/08.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;地面に砂で字を書きながら進むマシン。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/09.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;きれいな字です。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;こちらはペット用のスマート首輪。文字が流れるようです。詳細が読めない。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;台湾発の超小型のゲーム機「WiFiBoy（ESP32）」というもの。子供がプレイしているところを覗いたら、テトリスやってました。これMaker Faire Tokyoにも出展していたそうです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/12.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;こちらのブースは全て木でできていました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/13.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;プラネタリウムもやってました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/14.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ドラムや楽器を演奏するロボット。体を揺らしながらリズムを刻む様子をみんなカメラに収めていました。Maker Faire Tokyoでも見かけた気がします！&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/15.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;VRの体験コーナーもありました！（3回100元）&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/16.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ロボット同士のバトルも開催されていました！　周りには人だかりが。&lt;/p&gt;
-
-&lt;p&gt;という感じで、日本で見たことがあるものも出展されていましたが、ほとんどが初見のガジェットでした。（でも説明が読めなくて悔しい）アートとおもちゃ系が多かったように感じました。&lt;/p&gt;
-
-&lt;h2 id=&#34;来場者は-たまたま来た地元の人-が多かった印象&#34;&gt;来場者は「たまたま来た地元の人」が多かった印象&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/17.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;dotstudioとして展示したのは、私たちが普段PRしたり販売しているIoTガジェットらです。幸いにもdotstudioは人通りの多い場所で展示できて、人が途絶えませんでした。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/18.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;そして、本当にたまたま、私たちも日本で販売している &lt;strong&gt;Wio Nodeを作ったSeeedのエンジニアさんと会いました&lt;/strong&gt;。驚いた。手に持っている箱が裏向きですね。&lt;/p&gt;
-
-&lt;h2 id=&#34;あっと言う間に終わったmfsz-締めはaki-party&#34;&gt;あっと言う間に終わったMFSZ、締めはAki Party！&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/19.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;17時くらい閉めるムードに。Maker Faire Tokyoの後に秋葉原でおこなわれた「Aki Party」がここでも開催されるということで参加しました。日本からの参加者さんらと交流できました。&lt;/p&gt;
-
-&lt;p&gt;室内で &lt;strong&gt;ドローンが飛ぶなど&lt;/strong&gt; 、みんな楽しそうでした。&lt;/p&gt;
-
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/20.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;▲Aki Partyにて：床に投影されたMaker Faireのマスコットキャラクター&lt;/p&gt;
-
-&lt;p&gt;ということで1日しか参加できなかったMaker Faire Shenzhenですが、中国にも電子工作やテクノロジーが盛り上がっていることが認識できた素敵なイベントでした。&lt;/p&gt;
-
-&lt;p&gt;ショッピングモール周辺で開催されたこともあり、モールに来たついでにイベントも周ってみているという人が多そうな印象でした。「&lt;strong&gt;IoTってなに？&lt;/strong&gt;」という人も。反対に、おもちゃをスマホアプリから操作できる日本のデバイス「Mabeee」を知っている人もいるなど幅広いお客さんが集まりました。それって超素敵。&lt;/p&gt;
-
-&lt;p&gt;日本は幕張メッセなどのイベント会場でおこなわれ、しかも入場料もかかるので参加する人はおのずとテクノロジー関連に興味のある方になると思います。そういった意味では、&lt;strong&gt;深センのMaker Faireは広い人に解放されていて、新しい技術に触れる場になっていた&lt;/strong&gt; ように感じました。&lt;/p&gt;
-
-&lt;p&gt;今度はまた別の国のMaker Faireに参加してみたいです！&lt;/p&gt;
-
-&lt;p&gt;[]()&lt;/p&gt;
-
-&lt;p&gt;ではまた！&lt;/p&gt;
 </description>
     </item>
     
