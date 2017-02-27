@@ -38,7 +38,7 @@ function tableOfContents($domlist){
 function appendToc(){
     var $elem = document.querySelectorAll('.blog-single--content > h2,h3');
     if($elem.length === 0)return;
-    console.log($elem);
+    // console.log($elem);
     var $toc = tableOfContents($elem);
     var $firstHeader = document.querySelector('.blog-single--content h2');
     var $div = document.createElement('div');
