@@ -10,6 +10,274 @@
     <atom:link href="/categories/try/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>話題のWebBluetoothでGenuinoをリモートコントロールしてみよう</title>
+      <link>https://dotstud.io/blog/web-bluetooth-remote-blink/</link>
+      <pubDate>Tue, 07 Mar 2017 01:36:14 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/web-bluetooth-remote-blink/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudioの&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;最近WebBluetoothがChromeでデフォルトで利用できるようになったと知って、今回試してみたのでまとめてみました。&lt;/p&gt;
+
+&lt;h2 id=&#34;webbluetoothとは&#34;&gt;WebBluetoothとは&lt;/h2&gt;
+
+&lt;p&gt;WebブラウザのAPIでBluetoothが使えるようになるAPIです。正確にはBLE（Bluetooth Low Energy）というBluetooth4.0の機能を使えます。&lt;/p&gt;
+
+&lt;p&gt;通常、BLEはデバイス間を接続して通信させる規格ですが、その性質上、サーバーサイドかつ低レイヤーなプログラミング言語や周辺知識を持っていないと取り扱うことが難しかったです。&lt;/p&gt;
+
+&lt;p&gt;これまでにもNode.jsでは、&lt;a href=&#34;https://github.com/sandeepmistry/noble&#34;&gt;noble&lt;/a&gt;というBLEを扱えるモジュールや類似モジュールが存在しましたが、Node.jsはサーバーサイド言語なためホストマシンが必要でした。&lt;/p&gt;
+
+&lt;p&gt;WebBluetoothはブラウザのJavaScriptからBLEを扱うことができるブラウザAPIです。&lt;/p&gt;
+
+&lt;h3 id=&#34;何が嬉しいの&#34;&gt;何が嬉しいの？&lt;/h3&gt;
+
+&lt;p&gt;WebBluetoothを使えることは、何が利点になるのでしょうか。&lt;/p&gt;
+
+&lt;p&gt;大枠で捉えると、Webとデバイスの連携がしやすくなったことが挙げられます。&lt;/p&gt;
+
+&lt;p&gt;Webブラウザ上のJavaScriptで開発が出来るため、 &lt;strong&gt;通常のWebサイトの機能にデバイスとの連携する機能を追加することができる&lt;/strong&gt;ようになります。&lt;/p&gt;
+
+&lt;p&gt;現行のIoTデバイスはデータを取得するために付属の専用スマホアプリなどをインストールしてBLE通信をする必要があります。これは（スマートフォンの場合）スマホアプリの開発言語のJavaやSwiftからのみBLEを扱うことが出来たからです。&lt;/p&gt;
+
+&lt;p&gt;WebBluetoothが広まれば、デバイスと連携するスマートフォンアプリケーション（以下、スマホアプリ）を開発しなくてもいい時代が来るかもしれません。Webとデバイスの連携が格段にしやすくなるので、Webの表現は圧倒的に広がるなと感じています。&lt;/p&gt;
+
+&lt;p&gt;僕自身は2015年の終わりにWebBluetoothを知り、当時アツくなって発表などをしていました。&lt;/p&gt;
+
+&lt;script async class=&#34;speakerdeck-embed&#34; data-id=&#34;0e2b2871b9d04aab980c1274a383f1cd&#34; data-ratio=&#34;1.33333333333333&#34; src=&#34;//speakerdeck.com/assets/embed.js&#34;&gt;&lt;/script&gt;
+
+&lt;p&gt;WebBluetoothの詳細については&lt;a href=&#34;https://www.w3.org/community/web-bluetooth/&#34;&gt;W3Cのページ&lt;/a&gt;などをご確認ください。&lt;/p&gt;
+
+&lt;h2 id=&#34;webbluetoothとgenuino101でリモートlチカをしてみよう&#34;&gt;WebBluetoothとGenuino101でリモートLチカをしてみよう&lt;/h2&gt;
+
+&lt;p&gt;それでは実際にWebBluetoothを使ってみまししょう。&lt;/p&gt;
+
+&lt;p&gt;今回はGenuino101というBluetooth搭載のArduino互換ボードを利用してみます。&lt;/p&gt;
+
+&lt;h3 id=&#34;作るもの&#34;&gt;作るもの&lt;/h3&gt;
+
+&lt;p&gt;Androidのブラウザ（Google Chrome）からGenuino101に繋げたLEDをリモートで制御してみます。&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;instagram-media&#34; data-instgrm-captioned data-instgrm-version=&#34;7&#34; style=&#34; background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);&#34;&gt;&lt;div style=&#34;padding:8px;&#34;&gt; &lt;div style=&#34; background:#F8F8F8; line-height:0; margin-top:40px; padding:28.194444444444443% 0; text-align:center; width:100%;&#34;&gt; &lt;div style=&#34; background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;&#34;&gt;&lt;/div&gt;&lt;/div&gt; &lt;p style=&#34; margin:8px 0 0 0; padding:0 4px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/BRMD2E3AxN_/&#34; style=&#34; color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;&#34; target=&#34;_blank&#34;&gt;WebBluetoothがAndroid通常版Chromeでも使えるようになったのでリモートLチカ。 ブラウザでBluetooth使える感動噛みしめてる&lt;/a&gt;&lt;/p&gt; &lt;p style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;&#34;&gt;n0bisukeさん(@n0bisuke)がシェアした投稿 - &lt;time style=&#34; font-family:Arial,sans-serif; font-size:14px; line-height:17px;&#34; datetime=&#34;2017-03-03T19:54:26+00:00&#34;&gt;2017  3月 3 11:54午前 PST&lt;/time&gt;&lt;/p&gt;&lt;/div&gt;&lt;/blockquote&gt;
+&lt;script async defer src=&#34;//platform.instagram.com/en_US/embeds.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;ul id=&#34;env&#34;&gt;
+    &lt;li&gt;Macbook Pro Early 2016&lt;/li&gt;
+    &lt;li&gt;macOS Sierra v10.12.2&lt;/li&gt;
+    &lt;li&gt;Arduino IDE v1.8.1&lt;/li&gt;
+    &lt;li&gt;Android 6.0.1&lt;/li&gt;
+    &lt;li&gt;Chrome 56&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;genuino101側&#34;&gt;Genuino101側&lt;/h3&gt;
+
+&lt;p&gt;Genuino101側のソースコードはサンプルにあるものをそのまま使います。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;/*
+ * Copyright (c) 2016 Intel Corporation.  All rights reserved.
+ * See the bottom of this file for the license terms.
+ */
+
+#include &amp;lt;CurieBLE.h&amp;gt;
+
+BLEPeripheral blePeripheral;  // BLE Peripheral Device (the board you&#39;re programming)
+BLEService ledService(&amp;quot;19B10000-E8F2-537E-4F6C-D104768A1214&amp;quot;); // BLE LED Service
+
+// BLE LED Switch Characteristic - custom 128-bit UUID, read and writable by central
+BLEUnsignedCharCharacteristic switchCharacteristic(&amp;quot;19B10001-E8F2-537E-4F6C-D104768A1214&amp;quot;, BLERead | BLEWrite);
+
+const int ledPin = 13; // pin to use for the LED
+
+void setup() {
+  Serial.begin(9600);
+
+  // set LED pin to output mode
+  pinMode(ledPin, OUTPUT);
+
+  // set advertised local name and service UUID:
+  blePeripheral.setLocalName(&amp;quot;LED&amp;quot;);
+  blePeripheral.setAdvertisedServiceUuid(ledService.uuid());
+
+  // add service and characteristic:
+  blePeripheral.addAttribute(ledService);
+  blePeripheral.addAttribute(switchCharacteristic);
+
+  // set the initial value for the characeristic:
+  switchCharacteristic.setValue(0);
+
+  // begin advertising BLE service:
+  blePeripheral.begin();
+
+  Serial.println(&amp;quot;BLE LED Peripheral&amp;quot;);
+}
+
+void loop() {
+  // listen for BLE peripherals to connect:
+  BLECentral central = blePeripheral.central();
+
+  // if a central is connected to peripheral:
+  if (central) {
+    Serial.print(&amp;quot;Connected to central: &amp;quot;);
+    // print the central&#39;s MAC address:
+    Serial.println(central.address());
+
+    // while the central is still connected to peripheral:
+    while (central.connected()) {
+      // if the remote device wrote to the characteristic,
+      // use the value to control the LED:
+      if (switchCharacteristic.written()) {
+        if (switchCharacteristic.value()) {   // any value other than 0
+          Serial.println(&amp;quot;LED on&amp;quot;);
+          digitalWrite(ledPin, HIGH);         // will turn the LED on
+        } else {                              // a 0 value
+          Serial.println(F(&amp;quot;LED off&amp;quot;));
+          digitalWrite(ledPin, LOW);          // will turn the LED off
+        }
+      }
+    }
+
+    // when the central disconnects, print it out:
+    Serial.print(F(&amp;quot;Disconnected from central: &amp;quot;));
+    Serial.println(central.address());
+  }
+}
+
+/*
+   Copyright (c) 2016 Intel Corporation.  All rights reserved.
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2.1 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public
+   License along with this library; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;このコードをArduino IDEでGenuino101に書き込めばBLEのペリフェラル（デバイス側）として起動してくれます。&lt;/p&gt;
+
+&lt;p&gt;ソースコードの22行目の&lt;code&gt;blePeripheral.setLocalName(&amp;quot;LED&amp;quot;);&lt;/code&gt;でLEDと指定していますが、この文字列がBLEデバイスの表示名となります。&lt;/p&gt;
+
+&lt;p&gt;Macからは&lt;a href=&#34;https://itunes.apple.com/jp/app/lightblue/id639944780?mt=12&#34;&gt;LightBlue&lt;/a&gt;などのアプリで確認することができます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/afc225feba5b36b39547e701171b8070.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;ブラウザ側&#34;&gt;ブラウザ側&lt;/h3&gt;
+
+&lt;p&gt;ソースコードは&lt;a href=&#34;https://github.com/n0bisuke/webbluetooth_sample/tree/gh-pages/remote_blink&#34;&gt;こちら&lt;/a&gt;にあげています。&lt;/p&gt;
+
+&lt;p&gt;BLEはペリフェラル（デバイス）のUUID → ServiceのUUID → CharacteristicのUUIDという感じで接続していきます。&lt;/p&gt;
+
+&lt;p&gt;Characteristicがデバイスの個別の機能だとしたら、Serviceは機能群というイメージで捉えると分かりやすいかもしれません。&lt;/p&gt;
+
+&lt;p&gt;詳しくは&lt;a href=&#34;http://codezine.jp/article/detail/9287&#34;&gt;CodeZineさんの記事など&lt;/a&gt;をご参照ください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
+
+const UUID = &#39;19b10000-e8f2-537e-4f6c-d104768a1214&#39;;
+const SERVICE_UUID = &#39;19b10001-e8f2-537e-4f6c-d104768a1214&#39;;
+let g_characteristic = {};
+const $light = document.querySelector(&#39;#light&#39;);
+const $bulb = document.querySelector(&#39;.bulb&#39;);
+
+//接続後にon/off切り替え
+const ledToggel = () =&amp;gt; {
+  g_characteristic.readValue()
+  .then((val) =&amp;gt; {
+    let led_state = val.getUint8(0); //値読み取り
+    led_state = led_state ? 0 : 1;
+    g_characteristic.writeValue(new Uint8Array([led_state]));
+    toggelClass(led_state);
+  })
+}
+
+const main = () =&amp;gt; {
+  return navigator.bluetooth.requestDevice({acceptAllDevices:true, optionalServices:[UUID]})
+  .then(device =&amp;gt; {
+    console.log(device);
+    console.log(&#39;&amp;gt; Name:             &#39; + device.name);
+    console.log(&#39;&amp;gt; Id:               &#39; + device.id);
+    console.log(&#39;&amp;gt; Connected:        &#39; + device.gatt.connected);
+    console.log(&#39;--デバイスに接続中です...--&#39;);
+    return device.gatt.connect();
+  })
+  .then(server =&amp;gt; {
+      console.log(&#39;Getting ___ Service...&#39;);
+      return server.getPrimaryService(UUID);
+  })
+  .then(service =&amp;gt; {
+      console.log(&#39;Getting ____ Characteristic...&#39;);
+      return service.getCharacteristic(SERVICE_UUID);
+    })
+  .then(characteristic =&amp;gt; {
+      g_characteristic = characteristic;
+      $light.removeEventListener(&#39;click&#39;,main);
+      $light.addEventListener(&#39;click&#39;,ledToggel);
+      return characteristic;
+    })
+  .catch(error =&amp;gt; {
+    console.log(&#39;Argh! &#39; + error);
+  });
+}
+
+/**
+ * domのclass付け替え(表示切り替え)
+ */
+function toggelClass(led_state){
+  if(led_state){
+    addClass(&#39;#ff0000&#39;);
+  }else{
+    removeClass();
+  }
+}
+
+function removeClass(){
+    $bulb.style.background = &#39;#bbb&#39;;
+    $bulb.style.boxShadow = &#39;&#39;;
+    $bulb.classList.remove(&amp;quot;light_up&amp;quot;);
+}
+
+function addClass(color){
+    $bulb.style.background = color;
+    $bulb.style.boxShadow = `0 -10px 100px ${color}`;
+    $bulb.classList.add(&amp;quot;light_up&amp;quot;);
+}
+
+$light.addEventListener(&#39;click&#39;, main);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;21行目の&lt;code&gt;navigator.bluetooth.requestDevice()&lt;/code&gt;で周辺のデバイスを検索し、28行目の&lt;code&gt;device.gatt.connect()&lt;/code&gt;でデバイスに接続します。&lt;/p&gt;
+
+&lt;p&gt;32行目の&lt;code&gt;server.getPrimaryService()&lt;/code&gt;でServiceに接続し、36行目の&lt;code&gt;service.getCharacteristic()&lt;/code&gt;でCharacteristic（機能）にアクセスできます。&lt;/p&gt;
+
+&lt;p&gt;そこで接続が確立するとボタンを押すたびに10行目の&lt;code&gt;ledToggel()&lt;/code&gt;が呼ばれ、&lt;code&gt;.readValue()&lt;/code&gt;で値読みとり、&lt;code&gt;.writeValue()&lt;/code&gt;で値の書き込みができるようになります。&lt;/p&gt;
+
+&lt;p&gt;これらのコードは&lt;a href=&#34;https://n0bisuke.github.io/webbluetooth_sample/remote_blink/index.html&#34;&gt;GitHub Pagesで動作するようにホスティングしてある&lt;/a&gt;ので実際の動作確認もできます。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;いかがでしたか。&lt;/p&gt;
+
+&lt;p&gt;WebBluetoothを使うことで&lt;strong&gt;ブラウザからBluetoothを使ってデバイスを制御する&lt;/strong&gt;ことができました。&lt;/p&gt;
+
+&lt;p&gt;今後、この技術が普及することでWebブラウザとデバイスの距離がさらになくなっていくかもしれません。&lt;/p&gt;
+
+&lt;p&gt;是非みなさんも試してみて、この可能性を実感してみて下さい。&lt;/p&gt;
+
+&lt;p&gt;それでは。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>ハードウェア知識ゼロでも大丈夫。「Gravity」で始める電子工作入門</title>
       <link>https://dotstud.io/blog/dfrobot-gravity-hands-on/</link>
       <pubDate>Tue, 21 Feb 2017 10:00:50 +0900</pubDate>
