@@ -71,35 +71,35 @@
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Nefry is an IoT Device which allows you to connect internet very easily. You also can attach GROVE sensors to it.">
+    <meta name="description" content="FRISKサイズのWi-Fi搭載IoTデバイス「Nefry」とクラウドサービスAmbientを使ってデータのグラフ化を試してみました！">
     <meta name="author" content="dotstudio Inc.">
-    <meta content="https://dotstud.io/img/blog/047/00_eyecatch.png">
+    <meta content="https://dotstud.io/img/blog/092/00_eyecatch.png">
     
-    <meta itemprop="name" content="How to set up your Nefry for the first time | dotstudio"/>
-    <meta itemprop="image" content="https://dotstud.io/img/blog/047/00_eyecatch.png"/>
+    <meta itemprop="name" content="Nefryで取得したセンサーデータをAmbientで簡単にグラフ化しよう！ | dotstudio"/>
+    <meta itemprop="image" content="https://dotstud.io/img/blog/092/00_eyecatch.png"/>
     
-    <meta property="og:title" content="How to set up your Nefry for the first time | dotstudio" />
+    <meta property="og:title" content="Nefryで取得したセンサーデータをAmbientで簡単にグラフ化しよう！ | dotstudio" />
     <meta property="og:locale" content="ja_JP" />
     <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://dotstud.io/blog/nefry-enenglish-how-to/" />
+    <meta property="og:url" content="https://dotstud.io/blog/nefry-data-show-graphically/" />
     <meta property="og:site_name" content="dotstudio（ドットスタジオ）" />
-    <meta property="og:image" content="https://dotstud.io/img/blog/047/00_eyecatch.png" />
-    <meta property="og:image:secure_url" content="https://dotstud.io/img/blog/047/00_eyecatch.png" />
-    <meta property="og:description" content="Nefry is an IoT Device which allows you to connect internet very easily. You also can attach GROVE sensors to it." />
+    <meta property="og:image" content="https://dotstud.io/img/blog/092/00_eyecatch.png" />
+    <meta property="og:image:secure_url" content="https://dotstud.io/img/blog/092/00_eyecatch.png" />
+    <meta property="og:description" content="FRISKサイズのWi-Fi搭載IoTデバイス「Nefry」とクラウドサービスAmbientを使ってデータのグラフ化を試してみました！" />
     <meta property="article:author" content="https://www.facebook.com/dotstud10/" /> 
     <meta property="fb:app_id" content="296336307370435" />
     <meta property="fb:pages" content="1013196712108753" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image:src" content="https://dotstud.io/img/blog/047/00_eyecatch.png">
+    <meta name="twitter:image:src" content="https://dotstud.io/img/blog/092/00_eyecatch.png">
     <meta name="twitter:site" content="@dotstud_io" />
-    <meta name="twitter:url" content="https://dotstud.io/blog/nefry-enenglish-how-to/">
-    <meta name="twitter:description" content="Nefry is an IoT Device which allows you to connect internet very easily. You also can attach GROVE sensors to it.">
-    <meta name="twitter:title" content="How to set up your Nefry for the first time | dotstudio">
+    <meta name="twitter:url" content="https://dotstud.io/blog/nefry-data-show-graphically/">
+    <meta name="twitter:description" content="FRISKサイズのWi-Fi搭載IoTデバイス「Nefry」とクラウドサービスAmbientを使ってデータのグラフ化を試してみました！">
+    <meta name="twitter:title" content="Nefryで取得したセンサーデータをAmbientで簡単にグラフ化しよう！ | dotstudio">
     <meta name="twitter:creator" content="@dotstud_io" />
 
     
     <meta name="google-site-verification" content="oW2fcSG1fFnkDoRCGFJ0IGGebtBr8FjV2twoFMd7Skc" />
-    <title>How to set up your Nefry for the first time | dotstudio</title>
+    <title>Nefryで取得したセンサーデータをAmbientで簡単にグラフ化しよう！ | dotstudio</title>
     
 
     <link rel="stylesheet" href="/css/loader.css"> 
@@ -286,11 +286,11 @@
 
 
 <article class="blog-single">
-  <div class="date">2016.11.04</div>
+  <div class="date">2017.03.11</div>
 
-  <img class="blog-single--eyecatch" src="/img/blog/047/00_eyecatch.png" alt="" width="710px">
+  <img class="blog-single--eyecatch" src="/img/blog/092/00_eyecatch.png" alt="" width="710px">
   
-  <h1 class="blog-single--title">How to set up your Nefry for the first time</h1>
+  <h1 class="blog-single--title">Nefryで取得したセンサーデータをAmbientで簡単にグラフ化しよう！</h1>
 
   <div class="blog-single--information">
     <a class="author" href="/members/wami">
@@ -308,267 +308,187 @@
   
   <div class="blog-single--content markdown">
 
-<p>Hi I’m Wami. I’m a university student who is learning networking in Japan. I’m into electronics since 2014, and I’ve made an IoT device named “Nefry” which is as small as FRISK.</p>
+<p>こんにちは、外部ライターのわみ（<a href="http://twitter.com/wamisnet">@wamisnet</a>）です。愛知県でネットワークの勉強をしている学生です。2014年ごろから電子工作を始め、今回紹介するFRISKサイズのIoT向けデバイス「Nefry（ねふりー）」を自作しました。</p>
 
-<p>This is a very easy and short tutorial on how to set up the development environment on your Nefry and get started programming immediately. Arduino Software (IDE) needed.</p>
+<p>IoTといえば、データを取ることはもちろんですが、データの蓄積や分析が大切です。</p>
 
-<h2 id="what-is-nefry">What is Nefry?</h2>
+<p>今回は、<strong>簡単にデータを蓄積・グラフ化してくれる「Ambient」</strong> というサービスを使って、Nefryで取得したセンサーのデータをグラフ化する方法を紹介します。</p>
 
-<p><img src="/img/blog/047/01.png" alt="" /></p>
+<h2 id="nefryとは">Nefryとは</h2>
 
-<p>Nefry is an IoT Device which allows you to connect internet very easily. You also can  attach GROVE sensors to it. Nefry does not need complicated setting thus you can spend more time with making your ideas true.</p>
+<p><img src="https://dotstud.io/img/blog/059/01.png" alt="" /></p>
 
-<p>Nefry also can be connected with useful web services such as <a href="https://mlkcca.com/">milkcocoa</a> (real-time operating system) or <a href="https://ifttt.com/">IFTTT</a>. Since Nefry works with mobile battery, you can put Nefry anywhere you want.</p>
+<p>「Nefry（ねふりー）」は手軽にIoTに挑戦できるFRISKサイズのデバイスです。</p>
 
-<h2 id="let-s-get-started">Let&rsquo;s get started</h2>
+<p><a href="http://nefry.studio/">公式サイト</a>から、詳細なドキュメントや制作例を確認できます。</p>
 
-<p>You can make a program for Nefry on Arduino Software (IDE). Arduino is an open-source electronics platform which provides “Arduino language” to develop hardwares easier.</p>
+<h3 id="wi-fiを初期搭載">Wi-Fiを初期搭載</h3>
 
-<p>Arduino Software (IDE) is a software for writing Arduino language.</p>
+<p>Nefryは、Wi-Fiモジュールの <strong>ESP-WROOM-02を初期搭載</strong> しています。簡単にインターネットに接続できるので、接続に時間をとられることなくあなたのアイデア実現に集中できます。</p>
 
-<h3 id="downloading-arduino-software-ide">Downloading Arduino Software (IDE)</h3>
+<h3 id="スタンドアロンで動かせる">スタンドアロンで動かせる</h3>
 
-<p><img src="/img/blog/047/02.png" alt="" /></p>
+<p>スマートフォンで使うようなモバイルバッテリー（5V）から給電できます。<strong>モバイルバッテリー＋Nefryの2つで動作する</strong> ので、場所を選ばずに使うことができる優れものです！</p>
 
-<p>You can get the latest version of Arduino Software (IDE) from the <a href="https://www.arduino.cc/en/Main/Software">download page</a>.</p>
+<h3 id="外部サービス連携が簡単">外部サービス連携が簡単</h3>
 
-<p><img src="/img/blog/047/03.png" alt="" /></p>
+<p>NefryはGroveセンサの規格に対応しています。専用のソケットを使い、はんだづけ不要で楽しめます。また、リアルタイム通信を簡単に実現できる「Milkcocoa」や、様々なWebサービス同士を連携できる「IFTTT」などとも組み合わせることもできます。</p>
 
-<p>If you are using Windows, choose &ldquo;Windows Installer”. If you are using Mac, click &ldquo;Mac OS X” to install.</p>
+<p>実際に使ってみた例は以下をご覧ください。</p>
 
-<p><img src="/img/blog/047/04.png" alt="" /></p>
+<p><a href="http://liginc.co.jp/263899">Webサービス同士を連携できる「IFTTT」と自作IoTデバイスを繋いで生活を便利にしてみた</a></p>
 
-<p>After choosing the software, the page above will come up. If you want to donate and donate, choose &ldquo;CONTRIBUTE &amp; DOWNLOAD”. Otherwise click &ldquo;JUST DOWNLOAD” to start downloading.</p>
+<p><a href="https://dotstud.io/blog/iotlt-vol24-chantoku-report/">【大島薫×IoT】浮気男に社会的制裁を加えるマシーンを作ってみた</a></p>
 
-<h4 id="when-a-popup-like-this-comes-up-needed-uninstalling">When a popup like this comes up (Needed uninstalling)</h4>
+<p><strong><a href="https://dotstud.io/projects/nefry-connect-internet/">Nefryの購入はこちら！</a></strong></p>
 
-<p><img src="/img/blog/047/05.png" alt="" /></p>
+<h2 id="ambientとは">Ambientとは</h2>
 
-<p>If a popup like this comes up, that means you have already installed old version of Arduino Software (IDE). Click “OK” to uninstall the old one.</p>
+<p>Ambient（アンビエント）は、<strong>センサーデータを蓄積・グラフ化してくれるIoTに特化したクラウドサービス</strong> です。</p>
 
-<p>If not, please skip until next headline.</p>
+<p>Ambientから発行される「チャネルID」「ライトキー」の <strong>たった2つの情報をプログラムに書き込むだけ</strong> で、いとも簡単にセンサーデータをグラフ化することができます！</p>
 
-<p><img src="/img/blog/047/06.png" alt="" /></p>
+<p><img src="/img/blog/092/01_ambient.png" alt="" /></p>
 
-<p><img src="/img/blog/047/07.png" alt="" /></p>
+<p>このようなグラフを公開したり、簡単にカスタマイズしたりすることができるので、オススメのサービスです。</p>
 
-<p><img src="/img/blog/047/08.png" alt="" /></p>
+<p><strong><a href="https://ambidata.io/">Ambient公式サイト</a></strong></p>
 
-<h3 id="installing-arduino-software-ide">Installing Arduino Software (IDE)</h3>
+<h2 id="つくってみよう">つくってみよう！</h2>
 
-<p><img src="/img/blog/047/09.png" alt="" /></p>
+<p>Nefryで取得したデータをグラフ化するために、今回は以下の4ステップを試します。</p>
 
-<p>If you do not have any problems with Licence Agreement, click on the “I Agree” button to the next step.</p>
+<ul>
+<li>事前準備</li>
+<li>Ambientにチャネルを作成</li>
+<li>プログラムの書き込み</li>
+<li>NefryとAmbientの連携</li>
+</ul>
 
-<p><img src="/img/blog/047/10.png" alt="" /></p>
+<p>筆者の開発環境は以下です。</p>
 
-<p>You can select options (There is no problem with all checked though). Click “Next” to following step.</p>
+<ul>
+<li>windows 10</li>
+<li>Nefry version 2.3.0</li>
+</ul>
 
-<p><img src="/img/blog/047/11.png" alt="" /></p>
+<h2 id="事前準備">事前準備</h2>
 
-<p>You can browse the installation location.</p>
+<p>開発を始める前に、NefryとAmbientのセットアップをします。</p>
 
-<p><img src="/img/blog/047/12.png" alt="" /></p>
+<p>NefryのWi-Fi接続とAmbientのユーザ登録が完了している方は、<a href="/blog/nefry-data-show-graphically/#ambientにチャネルを作成">Ambientにチャネルを作成</a>から開始してください。</p>
 
-<p>Please wait for a while until install finishes.</p>
+<h3 id="nefryのセットアップ">Nefryのセットアップ</h3>
 
-<p><img src="/img/blog/047/13.png" alt="" /></p>
+<p>PCやスマートフォンから、Wi-FiのSSIDが <strong>Nefry-XXXX</strong>（変更した場合はその名前）になっているものを探し、接続します。</p>
 
-<p>After the installation finishes, you will see COMPLETED on the desplay.</p>
+<p>接続できるとこのようなページが表示されます。表示されない場合は <a href="http://192.168.4.1">http://192.168.4.1</a> に接続してみてください。</p>
 
-<h3 id="activating-arduino-software-ide">Activating Arduino Software (IDE)</h3>
+<p><img src="/img/blog/092/02_nefry_menu.png" alt="" />
+このトップページでNefryに関するいろいろな設定ができます。まずは「Setup WiFi」をクリックして、Wi-Fiの設定をします。</p>
 
-<p><img src="/img/blog/047/14.png" alt="" /></p>
+<p>Setup WiFiのページはこのようになっています。
+<img src="/img/blog/092/03_nefry_wifi.png" alt="" />
+接続したいWi-Fiを選び、パスワードがある場合は入力をします。入力が完了したら「Save」をクリックしてください。設定が保存され、Nefryが再起動します。</p>
 
-<p>After you have installed the Arduino Software (IDE), there will be an icon like this on you desktop. Double click to run Arduino Software (IDE).</p>
+<p>おまけですが、<strong>Nefry library 2.3.0</strong> 以降であると5つまでのWi-Fiを記憶することができ、自動的に最も強いWi-Fiに自動接続する機能を搭載しています。Nefryを持っていて <strong>ライブラリが古い場合は、更新することをオススメします</strong>。</p>
 
-<p><img src="/img/blog/047/15.png" alt="" /></p>
+<p>その他のセットアップや使い方の詳細は以下の記事をご覧ください。</p>
 
-<p>Arduino Software (IDE) will automatically start-up.</p>
+<p><a href="http://liginc.co.jp/236620">自作したオリジナルIoTデバイス「Nefry」とインターネットを繋いでみた</a></p>
 
-<p><img src="/img/blog/047/16.png" alt="" /></p>
+<h3 id="ambientの登録">Ambientの登録</h3>
 
-<p>You can now start programming. Well done!</p>
+<p>グラフ化に必要な情報を取得するために、まずAmbientに登録します。</p>
 
-<h2 id="installing-the-nefry-board">Installing the Nefry board</h2>
+<p><strong><a href="https://ambidata.io/">Ambient公式サイト</a></strong> の「ユーザー登録」から登録を進めます。</p>
 
-<p><img src="/img/blog/047/17.png" alt="" /></p>
+<p><img src="/img/blog/092/04_ambient_acount.png" alt="" /></p>
 
-<p>Arduino Software (IDE) does not support Nefry. To activate Nefry, you need to install the “board”. Open “Preferences”, and type the URL below to the new Additional Boards Manager URLs option.</p>
+<p>メールアドレス認証が必要なので、各自アカウントを用意してください。</p>
 
-<p><a href="http://wamisnet.github.io/package_nefry_index.json">http://wamisnet.github.io/package_nefry_index.json</a></p>
+<h2 id="ambientにチャネルを作成">Ambientにチャネルを作成</h2>
 
-<p><img src="/img/blog/047/18.png" alt="" /></p>
+<p>Ambientでは <strong>チャネルという単位で送信するデーターを管理・グラフ化する</strong> ため、まずはチャネルを作成します。「チャネルを作る」ボタンから作成します。
+<img src="/img/blog/092/05_ambient_channel.png" alt="" /></p>
 
-<p>Click &ldquo;OK&rdquo; to save the new preference settings.</p>
+<p>チャネルが無事に作成されると、先ほどのページに情報が追加されています。「チャネルID」と「ライトキー」をあとで使うので控えておきましょう。
+<img src="/img/blog/092/06_ambient_list.png" alt="" /></p>
 
-<p><img src="/img/blog/047/19.png" alt="" /></p>
+<h2 id="プログラムの書き込み">プログラムの書き込み</h2>
 
-<p>Open the Boards Manager by navigating to the Tools &gt; Board menu.</p>
+<p>今回はNefryについている <strong>アナログ入力</strong> を使ってみます。アナログ入力を扱えるセンサであればどのようなセンサでも大丈夫ですが、この記事ではGroveの明るさセンサを扱います。</p>
 
-<p><img src="/img/blog/047/20.png" alt="" /></p>
+<p>全体のプログラムはこちら。</p>
 
-<p>You will then be able to select Nefry and install the board. If you can’t find Nefry, please reconfirm you have typed the correct URL at Additional Boards Manager URLs option.</p>
-
-<h4 id="making-install-clean">Making install clean</h4>
-
-<p><img src="/img/blog/047/21.png" alt="" /></p>
-
-<p>Click on &ldquo;Install&rdquo; button to install the latest version (v1.6.12 2016/11/01). Download will begin in a moment.</p>
-
-<p><img src="/img/blog/047/22.png" alt="" /></p>
-
-<p>“INSTALLED” comes up when the installation is completed.</p>
-
-<p><img src="/img/blog/047/23.png" alt="" /></p>
-
-<p>You can now choose Nefry V2 on the category drop down menu (Tools &gt; Board “Nefry” &gt; Nefry V2). These settings are needed at the first time.</p>
-
-<p>Once you have done the primary settings, you can start from writing codes.</p>
-
-<h4 id="update-to-the-latest-version">Update to the latest version</h4>
-
-<p><img src="/img/blog/047/24.png" alt="" /></p>
-
-<p>Some troubles may cause if the old version of the board remains in your computer. You need to uninstall it by “Delete” button. Please wait for a while until uninstall is completed.</p>
-
-<p>After uninstalling, you can now install the newest version of Arduino Software (IDE). Please refer the headline “Making install clean” above.</p>
-
-<h2 id="writing-the-code">Writing the code</h2>
-
-<p>So now let’s write the program for Nefry. Nefry runs with the same codes with Arduino. When you run Arduino Software (IDE), following program should be written from the beginning.</p>
-
-<pre><code>void setup(){
-
-}
-
-void loop(){
-
-}
+<pre><code>&lt;script src=&quot;https://gist-it.appspot.com/github/Nefry-Community/ProgramMaster/blob/gh-pages/Nefry/Ambient/Analog/Analog.ino&quot;&gt;&lt;/script&gt;
 </code></pre>
 
-<p><img src="/img/blog/047/25.png" alt="" /></p>
+<p>Nefryにプログラムを書き込む方法は２つあります。</p>
 
-<p>Let me briefly explain about these codes.</p>
+<h3 id="arduino-ideを使う">Arduino IDEを使う</h3>
 
-<pre><code>void setup()
-</code></pre>
+<p>プログラムを編集したい場合などは、Arduino IDEに上のプログラムを貼り、編集します。</p>
 
-<p>In this part, you write processes to be carried out only once at start-up. For example, settings for input and output pin, or initial setting for sensors.</p>
+<p>Arduino IDEでコンパイルしたプログラムはNefryトップページの「Upload　Sketch」からアップロードすることができます。</p>
 
-<pre><code>void loop()
-</code></pre>
+<p>Arduino IDEにNefryの設定を追加する方法は、以下の記事を確認してください。</p>
 
-<p>In this part, you write processes to be repeatedly carried out during the boot. For example, LED blinking or sensor data acquisition.</p>
+<blockquote>
+<p><img src="https://cdn.liginc.co.jp/wp-content/uploads/2016/07/20160728-nefry.png" alt="" />
+<a href="https://liginc.co.jp/298161"><strong>さくっと生活を便利にする！FRISKサイズのIoT向けデバイス「Nefry」を使ってみよう【環境構築編】</strong></a></p>
+</blockquote>
 
-<p><img src="/img/blog/047/26.png" alt="" /></p>
+<h3 id="プログラムをダウンロードして使う">プログラムをダウンロードして使う</h3>
 
-<p>To wrap up, it is like this.</p>
+<p>もっと簡単に試したい場合、トップページから「Web Sketch Download」のページに移動し以下を入力してください。</p>
 
-<h3 id="using-led">Using LED</h3>
+<ul>
+<li>ドメイン :  program.nefry.studio</li>
+<li>URL :  /Nefry/Ambient/Analog</li>
+</ul>
 
-<p>This time, we will blink full-color LED randomly. Please delete all statements written on Arduino Software (IDE), and paste the program below.</p>
+<p><img src="/img/blog/092/07_nefry_websketch.png" alt="" /></p>
 
-<pre><code>#include &lt;Nefry.h&gt;
-//full-color LED, the color changes randomly
-void setup() {
-  Nefry.println(&quot;fullColorLED!&quot;);
-  randomSeed(analogRead(A0));
-}
-int red,green,blue;
-void loop() {
-  red=random(255);//random function reply numbers from 0 to 255 randomly
-  green=random(255);
-  blue=random(255);
-  Nefry.setLed(red,green,blue);//LED blinks randomly
-  String color=&quot;Red:&quot;;color+=red;
-  color+=&quot; Green:&quot;;color+=green;
-  color+=&quot; Blue:&quot;;color+=blue;
-  Nefry.println(color);//Nefry console shows the color
-  Nefry.ndelay(1000);//wait a second
-}
-</code></pre>
+<p><a href="http://program.nefry.studio/">Nefry Platform</a>というサイトでは他にも様々なプログラムを公開していますので、ぜひご覧ください。</p>
 
-<p><img src="/img/blog/047/27.png" alt="" /></p>
+<h2 id="nefryとambientの連携">NefryとAmbientの連携</h2>
 
-<p>Nefry functions are used in some places. I summarized these on <a href="http://qiita.com/wamisnet/items/e44812eb6d6fded7af26">Qiita</a>. Please have a look if you are interested.</p>
+<p>プログラムが書き込めたら、Ambientの情報をNefryに登録します。</p>
 
-<p><img src="/img/blog/047/28.png" alt="" /></p>
+<p>トップページから「Setup Module」をクリックしページを移動します。
+<img src="/img/blog/092/08_nefry_module.png" alt="" />
+設定項目の中から「WriteKey」と「ChannelID」となっている欄を見つけ、そこにAmbientで取得したライトキーとチャネルIDをそれぞれ入力します。</p>
 
-<p>You need to save the program after writing the code. The program will be saved in the location where you chose (Don&rsquo;t forget the place!).</p>
+<p>Saveをクリックすると、Nefryが再起動してAmbientにデータを送るようになります。</p>
 
-<p><img src="/img/blog/047/29.png" alt="" /></p>
+<p><strong>これで準備は完了です！</strong></p>
 
-<p>Click on &ldquo;Export compiled Binary” to convert the file for Nefry. It takes a little time.</p>
+<h2 id="ambientでグラフを見てみよう">Ambientでグラフを見てみよう</h2>
 
-<p><img src="/img/blog/047/30.png" alt="" /></p>
+<p>Nefryに接続した明るさセンサーの値のグラフです！
+<img src="/img/blog/092/09_product.png" alt="" /></p>
 
-<p>It will display &ldquo;Done compiling” if there is no problem with the program. If there is, Arduino Software (IDE) shows you where you have to fix (such as &ldquo;no semicolons&rdquo;).</p>
+<p>右側がAmbientのグラフ、左側がNefryの取得したアナログ値をWebConsoleで表示しています。
+<img src="http://program.nefry.studio/Nefry/Ambient/pic/ambientnefry.gif" alt="Ambient×Nefry.git" />
+Nefryにライトを当てたり遠ざけたりすると、わりと <strong>リアルタイムにどんどんグラフが生成されていく</strong> のが分かります。<a href="https://ambidata.io/ch/channel.html?id=785">こちらのページ</a>でで今回撮影したグラフをみることができます。</p>
 
-<p>In the following part, we will write a program to Nefry.</p>
+<p>Ambientでは <strong>グラフの自動スケールやグラフの公開機能、画像の添付</strong> など、今回紹介しきれないほど様々な機能が作成されています。</p>
 
-<h3 id="writing-program-on-nefry">Writing program on Nefry</h3>
+<p>詳しくはAmbientの公式サイトやドキュメントを確認してください。</p>
 
-<p>Finally let’s write the program on Nefry. Please connect Nefry to the USB port of mobile battery or PC.</p>
+<ul>
+<li><a href="https://ambidata.io/">Ambient公式サイト</a></li>
+<li><a href="https://ambidata.io/docs/">ドキュメント</a></li>
+</ul>
 
-<p><img src="/img/blog/047/31.png" alt="" /></p>
+<h2 id="まとめ">まとめ</h2>
 
-<p>After a while, there will be &ldquo;Nefry-○○○○” on your Wi-Fi. Please connect to it.</p>
+<p>今回は、なんとハードウエアもWeb側も <strong>コードを一切書かずにグラフ化する</strong> ことができました。</p>
 
-<p><img src="/img/blog/047/32.png" alt="" /></p>
+<p>紹介したのは折れ線グラフですが、<strong>棒グラフや散布図などもお手軽にグラフを作れるAmbient</strong> と <strong>Webへの接続が簡単なNefry</strong> でぜひぜひ遊んでみてください。</p>
 
-<p>When you have done connecting, main page of Nefry automatically opens. If not, please enter the URL below.</p>
-
-<p><a href="http://192.168.4.1">http://192.168.4.1</a></p>
-
-<p>You can do various settings on this page.</p>
-
-<p>To write program on Nefry, you need to change Nefry to writing mode. To change to writing mode, click on &ldquo;setup Module”.</p>
-
-<p><img src="/img/blog/047/33.png" alt="" /></p>
-
-<p>Nefry will automatically restart itself.</p>
-
-<p><img src="/img/blog/047/34.png" alt="" /></p>
-
-<p>I might as well tell you what happens when you click on &ldquo;Next page” at setup Module. At there, you can check networking information such as Mac address and IP address.</p>
-
-<p><img src="/img/blog/047/35.png" alt="" /></p>
-
-<p>So let’s write the program on Nefry. Click on &ldquo;Upload Sketch” to open the page. There will be “参照” button where you can choose your file. (You may be displayed different design than this due to your browser.)</p>
-
-<p><img src="/img/blog/047/36.png" alt="" /></p>
-
-<p>Open “arduino.bin”. (Please make sure you have selected the correct file.
-(If wrong, Nefry will stop starting up at the worst time so please be aware)</p>
-
-<p><img src="/img/blog/047/37.png" alt="" /></p>
-
-<p>Click on “Upload”. When uploading is completed, Nefry automatically restarts to update the program.</p>
-
-<p><img src="/img/blog/047/38.gif" alt="" /></p>
-
-<p>Now, LED shoule be blinking like this.</p>
-
-<p><img src="/img/blog/047/39.png" alt="" /></p>
-
-<p>Besides, there is also a page called &ldquo;Nefry Console” where you can check the status of Nefry.</p>
-
-<p><img src="/img/blog/047/40.png" alt="" /></p>
-
-<p>Also, at “Web Sketch Download”, you can download program to update your Nefry.</p>
-
-<p><img src="/img/blog/047/41.png" alt="" /></p>
-
-<p>At &ldquo;Setup WiFi”, you can connect Nefry to your own Wi-Fi.</p>
-
-<h2 id="conclusion">Conclusion</h2>
-
-<p>That&rsquo;s all for setting up you Nefry. I know it wouold be hard to make developing environment for the first time, but once you have created, that’s all.</p>
-
-<p>Thanks for reading and hope Nefry helps you to try IoT easier.</p>
-
-<p>Original Article (Japanese) : <a href="https://liginc.co.jp/298161">https://liginc.co.jp/298161</a></p>
+<p>Ambientを運営されている下島さん、記事にさせていただく許可を頂きありがとうございました。</p>
 </div>
 
   
@@ -649,100 +569,100 @@ void loop() {
           
           
           
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
           <li class="js-items">
             <article class="card-related">
-              <a class="" href="https://dotstud.io/blog/nefry-data-show-graphically/">
-                <img class="card-related--thumbnail" src="/img/blog/092/00_thumbnail.png" alt="サムネイル">
-                <h3 class="card-related--title">Nefryで取得したセンサーデータをAmbientで簡単にグラフ化しよう！</h3>
+              <a class="" href="https://dotstud.io/blog/nefry-enenglish-how-to/">
+                <img class="card-related--thumbnail" src="/img/blog/047/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">How to set up your Nefry for the first time</h3>
               </a>
               
             </article>
           </li>
         
-        
-          
-          
-          
-        
-          
-          
-          
-        
-          
-          
-          
-        
-          
-          
-          
-        
-          
-          
-          
-        
-          
-          
-          
-        
-          
-          
-          
-        
-          
-          
-          
-        
-          
-          
-          
-        
-          
-          
-          
-        
-          
-          
-          
-        
-          
-          
-          
-        
-          
-          
-          
-        
-          
-          
-          
-        
-          
-          
-          
-        
-          
-          
-          
-        
-          
-          
-          
-        
-          
-          
-          
-        
-          
-          
-          
-        
-          
-          
-          
-        
-          
-          
-          
         
           
           
@@ -1159,12 +1079,12 @@ void loop() {
     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 
     &nbsp;
-    <div class="fb-like" data-href="https://dotstud.io/blog/nefry-enenglish-how-to/" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
+    <div class="fb-like" data-href="https://dotstud.io/blog/nefry-data-show-graphically/" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
 
     &nbsp;
 
     <div class="hatena-b">
-      <a href="http://b.hatena.ne.jp/entry/s/dotstud.io/blog/nefry-enenglish-how-to" class="hatena-bookmark-button" data-hatena-bookmark-title="How to set up your Nefry for the first time" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
+      <a href="http://b.hatena.ne.jp/entry/s/dotstud.io/blog/nefry-data-show-graphically" class="hatena-bookmark-button" data-hatena-bookmark-title="Nefryで取得したセンサーデータをAmbientで簡単にグラフ化しよう！" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
         <img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" />
       </a>
       <script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>

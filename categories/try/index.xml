@@ -10,6 +10,199 @@
     <atom:link href="/categories/try/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Nefryで取得したセンサーデータをAmbientで簡単にグラフ化しよう！</title>
+      <link>https://dotstud.io/blog/nefry-data-show-graphically/</link>
+      <pubDate>Sat, 11 Mar 2017 23:48:05 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nefry-data-show-graphically/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、外部ライターのわみ（&lt;a href=&#34;http://twitter.com/wamisnet&#34;&gt;@wamisnet&lt;/a&gt;）です。愛知県でネットワークの勉強をしている学生です。2014年ごろから電子工作を始め、今回紹介するFRISKサイズのIoT向けデバイス「Nefry（ねふりー）」を自作しました。&lt;/p&gt;
+
+&lt;p&gt;IoTといえば、データを取ることはもちろんですが、データの蓄積や分析が大切です。&lt;/p&gt;
+
+&lt;p&gt;今回は、&lt;strong&gt;簡単にデータを蓄積・グラフ化してくれる「Ambient」&lt;/strong&gt; というサービスを使って、Nefryで取得したセンサーのデータをグラフ化する方法を紹介します。&lt;/p&gt;
+
+&lt;h2 id=&#34;nefryとは&#34;&gt;Nefryとは&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/059/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;「Nefry（ねふりー）」は手軽にIoTに挑戦できるFRISKサイズのデバイスです。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://nefry.studio/&#34;&gt;公式サイト&lt;/a&gt;から、詳細なドキュメントや制作例を確認できます。&lt;/p&gt;
+
+&lt;h3 id=&#34;wi-fiを初期搭載&#34;&gt;Wi-Fiを初期搭載&lt;/h3&gt;
+
+&lt;p&gt;Nefryは、Wi-Fiモジュールの &lt;strong&gt;ESP-WROOM-02を初期搭載&lt;/strong&gt; しています。簡単にインターネットに接続できるので、接続に時間をとられることなくあなたのアイデア実現に集中できます。&lt;/p&gt;
+
+&lt;h3 id=&#34;スタンドアロンで動かせる&#34;&gt;スタンドアロンで動かせる&lt;/h3&gt;
+
+&lt;p&gt;スマートフォンで使うようなモバイルバッテリー（5V）から給電できます。&lt;strong&gt;モバイルバッテリー＋Nefryの2つで動作する&lt;/strong&gt; ので、場所を選ばずに使うことができる優れものです！&lt;/p&gt;
+
+&lt;h3 id=&#34;外部サービス連携が簡単&#34;&gt;外部サービス連携が簡単&lt;/h3&gt;
+
+&lt;p&gt;NefryはGroveセンサの規格に対応しています。専用のソケットを使い、はんだづけ不要で楽しめます。また、リアルタイム通信を簡単に実現できる「Milkcocoa」や、様々なWebサービス同士を連携できる「IFTTT」などとも組み合わせることもできます。&lt;/p&gt;
+
+&lt;p&gt;実際に使ってみた例は以下をご覧ください。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://liginc.co.jp/263899&#34;&gt;Webサービス同士を連携できる「IFTTT」と自作IoTデバイスを繋いで生活を便利にしてみた&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/iotlt-vol24-chantoku-report/&#34;&gt;【大島薫×IoT】浮気男に社会的制裁を加えるマシーンを作ってみた&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://dotstud.io/projects/nefry-connect-internet/&#34;&gt;Nefryの購入はこちら！&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;ambientとは&#34;&gt;Ambientとは&lt;/h2&gt;
+
+&lt;p&gt;Ambient（アンビエント）は、&lt;strong&gt;センサーデータを蓄積・グラフ化してくれるIoTに特化したクラウドサービス&lt;/strong&gt; です。&lt;/p&gt;
+
+&lt;p&gt;Ambientから発行される「チャネルID」「ライトキー」の &lt;strong&gt;たった2つの情報をプログラムに書き込むだけ&lt;/strong&gt; で、いとも簡単にセンサーデータをグラフ化することができます！&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/092/01_ambient.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;このようなグラフを公開したり、簡単にカスタマイズしたりすることができるので、オススメのサービスです。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://ambidata.io/&#34;&gt;Ambient公式サイト&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;つくってみよう&#34;&gt;つくってみよう！&lt;/h2&gt;
+
+&lt;p&gt;Nefryで取得したデータをグラフ化するために、今回は以下の4ステップを試します。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;事前準備&lt;/li&gt;
+&lt;li&gt;Ambientにチャネルを作成&lt;/li&gt;
+&lt;li&gt;プログラムの書き込み&lt;/li&gt;
+&lt;li&gt;NefryとAmbientの連携&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;筆者の開発環境は以下です。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;windows 10&lt;/li&gt;
+&lt;li&gt;Nefry version 2.3.0&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;事前準備&#34;&gt;事前準備&lt;/h2&gt;
+
+&lt;p&gt;開発を始める前に、NefryとAmbientのセットアップをします。&lt;/p&gt;
+
+&lt;p&gt;NefryのWi-Fi接続とAmbientのユーザ登録が完了している方は、&lt;a href=&#34;https://dotstud.io/blog/nefry-data-show-graphically/#ambientにチャネルを作成&#34;&gt;Ambientにチャネルを作成&lt;/a&gt;から開始してください。&lt;/p&gt;
+
+&lt;h3 id=&#34;nefryのセットアップ&#34;&gt;Nefryのセットアップ&lt;/h3&gt;
+
+&lt;p&gt;PCやスマートフォンから、Wi-FiのSSIDが &lt;strong&gt;Nefry-XXXX&lt;/strong&gt;（変更した場合はその名前）になっているものを探し、接続します。&lt;/p&gt;
+
+&lt;p&gt;接続できるとこのようなページが表示されます。表示されない場合は &lt;a href=&#34;http://192.168.4.1&#34;&gt;http://192.168.4.1&lt;/a&gt; に接続してみてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/092/02_nefry_menu.png&#34; alt=&#34;&#34; /&gt;
+このトップページでNefryに関するいろいろな設定ができます。まずは「Setup WiFi」をクリックして、Wi-Fiの設定をします。&lt;/p&gt;
+
+&lt;p&gt;Setup WiFiのページはこのようになっています。
+&lt;img src=&#34;https://dotstud.io/img/blog/092/03_nefry_wifi.png&#34; alt=&#34;&#34; /&gt;
+接続したいWi-Fiを選び、パスワードがある場合は入力をします。入力が完了したら「Save」をクリックしてください。設定が保存され、Nefryが再起動します。&lt;/p&gt;
+
+&lt;p&gt;おまけですが、&lt;strong&gt;Nefry library 2.3.0&lt;/strong&gt; 以降であると5つまでのWi-Fiを記憶することができ、自動的に最も強いWi-Fiに自動接続する機能を搭載しています。Nefryを持っていて &lt;strong&gt;ライブラリが古い場合は、更新することをオススメします&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;その他のセットアップや使い方の詳細は以下の記事をご覧ください。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://liginc.co.jp/236620&#34;&gt;自作したオリジナルIoTデバイス「Nefry」とインターネットを繋いでみた&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;ambientの登録&#34;&gt;Ambientの登録&lt;/h3&gt;
+
+&lt;p&gt;グラフ化に必要な情報を取得するために、まずAmbientに登録します。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://ambidata.io/&#34;&gt;Ambient公式サイト&lt;/a&gt;&lt;/strong&gt; の「ユーザー登録」から登録を進めます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/092/04_ambient_acount.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;メールアドレス認証が必要なので、各自アカウントを用意してください。&lt;/p&gt;
+
+&lt;h2 id=&#34;ambientにチャネルを作成&#34;&gt;Ambientにチャネルを作成&lt;/h2&gt;
+
+&lt;p&gt;Ambientでは &lt;strong&gt;チャネルという単位で送信するデーターを管理・グラフ化する&lt;/strong&gt; ため、まずはチャネルを作成します。「チャネルを作る」ボタンから作成します。
+&lt;img src=&#34;https://dotstud.io/img/blog/092/05_ambient_channel.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;チャネルが無事に作成されると、先ほどのページに情報が追加されています。「チャネルID」と「ライトキー」をあとで使うので控えておきましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/092/06_ambient_list.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;プログラムの書き込み&#34;&gt;プログラムの書き込み&lt;/h2&gt;
+
+&lt;p&gt;今回はNefryについている &lt;strong&gt;アナログ入力&lt;/strong&gt; を使ってみます。アナログ入力を扱えるセンサであればどのようなセンサでも大丈夫ですが、この記事ではGroveの明るさセンサを扱います。&lt;/p&gt;
+
+&lt;p&gt;全体のプログラムはこちら。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;script src=&amp;quot;https://gist-it.appspot.com/github/Nefry-Community/ProgramMaster/blob/gh-pages/Nefry/Ambient/Analog/Analog.ino&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Nefryにプログラムを書き込む方法は２つあります。&lt;/p&gt;
+
+&lt;h3 id=&#34;arduino-ideを使う&#34;&gt;Arduino IDEを使う&lt;/h3&gt;
+
+&lt;p&gt;プログラムを編集したい場合などは、Arduino IDEに上のプログラムを貼り、編集します。&lt;/p&gt;
+
+&lt;p&gt;Arduino IDEでコンパイルしたプログラムはNefryトップページの「Upload　Sketch」からアップロードすることができます。&lt;/p&gt;
+
+&lt;p&gt;Arduino IDEにNefryの設定を追加する方法は、以下の記事を確認してください。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://cdn.liginc.co.jp/wp-content/uploads/2016/07/20160728-nefry.png&#34; alt=&#34;&#34; /&gt;
+&lt;a href=&#34;https://liginc.co.jp/298161&#34;&gt;&lt;strong&gt;さくっと生活を便利にする！FRISKサイズのIoT向けデバイス「Nefry」を使ってみよう【環境構築編】&lt;/strong&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&#34;プログラムをダウンロードして使う&#34;&gt;プログラムをダウンロードして使う&lt;/h3&gt;
+
+&lt;p&gt;もっと簡単に試したい場合、トップページから「Web Sketch Download」のページに移動し以下を入力してください。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ドメイン :  program.nefry.studio&lt;/li&gt;
+&lt;li&gt;URL :  /Nefry/Ambient/Analog&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/092/07_nefry_websketch.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://program.nefry.studio/&#34;&gt;Nefry Platform&lt;/a&gt;というサイトでは他にも様々なプログラムを公開していますので、ぜひご覧ください。&lt;/p&gt;
+
+&lt;h2 id=&#34;nefryとambientの連携&#34;&gt;NefryとAmbientの連携&lt;/h2&gt;
+
+&lt;p&gt;プログラムが書き込めたら、Ambientの情報をNefryに登録します。&lt;/p&gt;
+
+&lt;p&gt;トップページから「Setup Module」をクリックしページを移動します。
+&lt;img src=&#34;https://dotstud.io/img/blog/092/08_nefry_module.png&#34; alt=&#34;&#34; /&gt;
+設定項目の中から「WriteKey」と「ChannelID」となっている欄を見つけ、そこにAmbientで取得したライトキーとチャネルIDをそれぞれ入力します。&lt;/p&gt;
+
+&lt;p&gt;Saveをクリックすると、Nefryが再起動してAmbientにデータを送るようになります。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;これで準備は完了です！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;ambientでグラフを見てみよう&#34;&gt;Ambientでグラフを見てみよう&lt;/h2&gt;
+
+&lt;p&gt;Nefryに接続した明るさセンサーの値のグラフです！
+&lt;img src=&#34;https://dotstud.io/img/blog/092/09_product.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;右側がAmbientのグラフ、左側がNefryの取得したアナログ値をWebConsoleで表示しています。
+&lt;img src=&#34;http://program.nefry.studio/Nefry/Ambient/pic/ambientnefry.gif&#34; alt=&#34;Ambient×Nefry.git&#34; /&gt;
+Nefryにライトを当てたり遠ざけたりすると、わりと &lt;strong&gt;リアルタイムにどんどんグラフが生成されていく&lt;/strong&gt; のが分かります。&lt;a href=&#34;https://ambidata.io/ch/channel.html?id=785&#34;&gt;こちらのページ&lt;/a&gt;でで今回撮影したグラフをみることができます。&lt;/p&gt;
+
+&lt;p&gt;Ambientでは &lt;strong&gt;グラフの自動スケールやグラフの公開機能、画像の添付&lt;/strong&gt; など、今回紹介しきれないほど様々な機能が作成されています。&lt;/p&gt;
+
+&lt;p&gt;詳しくはAmbientの公式サイトやドキュメントを確認してください。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://ambidata.io/&#34;&gt;Ambient公式サイト&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://ambidata.io/docs/&#34;&gt;ドキュメント&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;今回は、なんとハードウエアもWeb側も &lt;strong&gt;コードを一切書かずにグラフ化する&lt;/strong&gt; ことができました。&lt;/p&gt;
+
+&lt;p&gt;紹介したのは折れ線グラフですが、&lt;strong&gt;棒グラフや散布図などもお手軽にグラフを作れるAmbient&lt;/strong&gt; と &lt;strong&gt;Webへの接続が簡単なNefry&lt;/strong&gt; でぜひぜひ遊んでみてください。&lt;/p&gt;
+
+&lt;p&gt;Ambientを運営されている下島さん、記事にさせていただく許可を頂きありがとうございました。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>話題のWebBluetoothでGenuino101をブラウザからリモートコントロールしてみよう</title>
       <link>https://dotstud.io/blog/web-bluetooth-remote-blink/</link>
       <pubDate>Thu, 09 Mar 2017 18:00:00 +0900</pubDate>
@@ -799,7 +992,7 @@ void loop() {
       
       <description>
 
-&lt;p&gt;こんにちは、外部ライターのわみ（&lt;a href=&#34;[http://twitter.com/wamisnet&#34;&gt;@wamisnet&lt;/a&gt;）と申します。愛知県でネットワークの勉強をしている学生です。2014年ごろから電子工作を始め、FRISKサイズのIoT向けデバイス「Nefry（ねふりー）」を自作しました。&lt;/p&gt;
+&lt;p&gt;こんにちは、外部ライターのわみ（&lt;a href=&#34;http://twitter.com/wamisnet&#34;&gt;@wamisnet&lt;/a&gt;）と申します。愛知県でネットワークの勉強をしている学生です。2014年ごろから電子工作を始め、FRISKサイズのIoT向けデバイス「Nefry（ねふりー）」を自作しました。&lt;/p&gt;
 
 &lt;p&gt;そんな「Nefry」をWeb系のエンジニアでも触れられるように、REST APIでハードウエアをいじれるようにしてみました。C言語を使わずに、JavaScriptやC#から簡単に試せるのでぜひ遊んでみてください。&lt;/p&gt;
 
