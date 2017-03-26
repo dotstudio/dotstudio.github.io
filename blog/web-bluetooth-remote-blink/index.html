@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
+  <meta charset="utf-8">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+    
+
+    
+    
+      
+      
+      
+      
+      
+      
+      
+      
+      
+        
+      
+      
+
+      
+      
+    
+
+    
+    
+
+    
+    
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="WebBluetoothを使ってGenuino101をリモート制御してみます。">
+    <meta name="author" content="dotstudio Inc.">
+    <meta content="https://dotstud.io/img/blog/090/00_eyecatch.png">
+    
+    <meta itemprop="name" content="話題のWebBluetoothでGenuino101をブラウザからリモートコントロールしてみよう | dotstudio"/>
+    <meta itemprop="image" content="https://dotstud.io/img/blog/090/00_eyecatch.png"/>
+    
+    <meta property="og:title" content="話題のWebBluetoothでGenuino101をブラウザからリモートコントロールしてみよう | dotstudio" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://dotstud.io/blog/web-bluetooth-remote-blink/" />
+    <meta property="og:site_name" content="dotstudio（ドットスタジオ）" />
+    <meta property="og:image" content="https://dotstud.io/img/blog/090/00_eyecatch.png" />
+    <meta property="og:image:secure_url" content="https://dotstud.io/img/blog/090/00_eyecatch.png" />
+    <meta property="og:description" content="WebBluetoothを使ってGenuino101をリモート制御してみます。" />
+    <meta property="article:author" content="https://www.facebook.com/dotstud10/" /> 
+    <meta property="fb:app_id" content="296336307370435" />
+    <meta property="fb:pages" content="1013196712108753" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image:src" content="https://dotstud.io/img/blog/090/00_eyecatch.png">
+    <meta name="twitter:site" content="@dotstud_io" />
+    <meta name="twitter:url" content="https://dotstud.io/blog/web-bluetooth-remote-blink/">
+    <meta name="twitter:description" content="WebBluetoothを使ってGenuino101をリモート制御してみます。">
+    <meta name="twitter:title" content="話題のWebBluetoothでGenuino101をブラウザからリモートコントロールしてみよう | dotstudio">
+    <meta name="twitter:creator" content="@dotstud_io" />
+
+    
+    <meta name="google-site-verification" content="oW2fcSG1fFnkDoRCGFJ0IGGebtBr8FjV2twoFMd7Skc" />
+    <title>話題のWebBluetoothでGenuino101をブラウザからリモートコントロールしてみよう | dotstudio</title>
+    
+
+    <link rel="stylesheet" href="/css/loader.css"> 
+    
+    <link rel="stylesheet" href='/css/master.css'>
+    <link rel="stylesheet" href="/css/icon-font.css"> 
+    
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+
+    <link rel="shortcut icon" type="image/png" href="/img/resources/favicon.png"/>
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="preload" as="style" onload="this.rel='stylesheet'">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel="preload" as="style" onload="this.rel='stylesheet'">
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel="preload" as="style" onload="this.rel='stylesheet'">
+    
+    <link href="/css/lib/hljs.css" rel="preload" as="style" onload="this.rel='stylesheet'">
+    
+
+    
+    
+    
+
+    
+    
+
+    
+    
+    
+    
+    
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-K5TRM9Q');</script>
+    
+</head>
+
+<body>
+  
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K5TRM9Q"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  
+
+  
+  <div id="fb-root"></div>
+  <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v2.8";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));</script>
+
+  
+
+  <header>
+    <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<symbol id="icon-arrow-right" viewBox="0 0 32 32">
+<title>arrow-right</title>
+<path class="path1" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M5.143 5.143l10.349 10.349"></path>
+<path class="path2" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M5.143 26.857l10.349-10.349"></path>
+<path class="path3" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M16.571 26.857l10.349-10.349"></path>
+<path class="path4" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M16.571 5.143l10.349 10.349"></path>
+</symbol>
+<symbol id="icon-hamburger" viewBox="0 0 60 32">
+<title>hamburger</title>
+<path class="path1" fill="none" stroke="#808080" stroke-width="7.1111" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M3.556 3.556h53.333"></path>
+<path class="path2" fill="none" stroke="#808080" stroke-width="7.1111" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M3.556 28.444h53.333"></path>
+</symbol>
+<symbol id="icon-logo-mark" viewBox="0 0 32 32">
+<title>logo-mark</title>
+<path class="path1" d="M19.731 28.8h-19.731v-19.699h19.731zM1.53 27.302h16.672v-16.672h-16.672z"></path>
+<path class="path2" d="M32 22.899h-19.731v-19.699h19.731zM13.798 21.37h16.672v-16.672h-16.672z"></path>
+</symbol>
+<symbol id="icon-social-facebook" viewBox="0 0 32 32">
+<title>social-facebook</title>
+<path class="path1" d="M30.1 0.12h-28.46c-0.974 0.011-1.76 0.804-1.76 1.78 0 0 0 0 0 0v28.46c0 0.983 0.797 1.78 1.78 1.78h15.32v-12.4h-4.16v-4.82h4.16v-3.58c-0.020-0.179-0.031-0.386-0.031-0.596 0-3.203 2.597-5.8 5.8-5.8 0.152 0 0.302 0.006 0.45 0.017-0.016-0.001-0.013-0.001-0.009-0.001 1.3 0 2.582 0.073 3.844 0.214l-0.155 4.286h-2.54c-2 0-2.36 0.96-2.36 2.36v3.1h4.76l-0.62 4.8h-4.12v12.4h8.12c0.983 0 1.78-0.797 1.78-1.78v-28.44c0-0.983-0.797-1.78-1.78-1.78z"></path>
+</symbol>
+<symbol id="icon-social-github" viewBox="0 0 32 32">
+<title>social-github</title>
+<path class="path1" d="M16 0.4c-0.001 0-0.002 0-0.004 0-8.837 0-16 7.163-16 16 0 7.028 4.531 12.997 10.831 15.147 0.913 0.173 1.213-0.307 1.213-0.747s-0.040-1.38-0.040-2.8c-4.44 1.060-5.38-2-5.38-2-0.308-0.987-0.937-1.798-1.763-2.33-1.477-1.010 0.103-0.99 0.103-0.99 1.055 0.144 1.941 0.76 2.451 1.624 0.607 1.039 1.701 1.715 2.953 1.715 0.6 0 1.164-0.155 1.653-0.428 0.062-0.836 0.437-1.58 1.002-2.13-3.559-0.401-7.279-1.781-7.279-8.001-0.001-0.032-0.001-0.069-0.001-0.106 0-1.621 0.624-3.096 1.645-4.198-0.181-0.526-0.283-1.135-0.283-1.769 0-0.85 0.184-1.657 0.514-2.383s1.325-0.404 4.385 1.676c1.199-0.341 2.577-0.537 4-0.537s2.801 0.196 4.107 0.562c2.953-2.026 4.293-1.666 4.293-1.666 0.31 0.683 0.49 1.481 0.49 2.321 0 0.688-0.121 1.348-0.343 1.959 1.030 1.058 1.654 2.533 1.654 4.154 0 0.037-0 0.075-0.001 0.112 0 6.134-3.74 7.494-7.3 7.894 0.685 0.69 1.108 1.641 1.108 2.69 0 0.088-0.003 0.175-0.009 0.261 0.001 2.128 0.001 3.848 0.001 4.368s0.28 0.92 1.1 0.78c6.413-2.183 10.944-8.152 10.944-15.18 0-8.837-7.163-16-16-16-0.015 0-0.031 0-0.046 0z"></path>
+</symbol>
+<symbol id="icon-social-twitter" viewBox="0 0 32 32">
+<title>social-twitter</title>
+<path class="path1" d="M10 29c0.036 0 0.078 0 0.12 0 10.25 0 18.56-8.31 18.56-18.56 0-0.042-0-0.085-0-0.127 0-0.274 0-0.554 0-0.834 1.312-0.959 2.414-2.113 3.289-3.431-1.070 0.454-2.347 0.82-3.686 0.984 1.293-0.819 2.312-2.084 2.804-3.587-1.184 0.679-2.577 1.234-4.062 1.539-1.286-1.244-2.976-2.027-4.849-2.027-3.634 0-6.58 2.946-6.58 6.58 0 0.518 0.060 1.022 0.173 1.506-5.473-0.309-10.286-2.887-13.523-6.813-0.587 0.917-0.919 2.059-0.919 3.278 0 2.258 1.137 4.25 2.871 5.435-1.063-0.025-2.070-0.325-2.95-0.822l0.032 0.017c-0 0.027-0.001 0.058-0.001 0.090 0 3.163 2.239 5.803 5.218 6.423-0.479 0.156-1.078 0.242-1.696 0.242-0.432 0-0.854-0.042-1.263-0.121 0.908 2.637 3.319 4.512 6.175 4.567-2.208 1.746-5.039 2.8-8.116 2.8-0.013 0-0.027-0-0.040-0-0.566-0.018-1.104-0.068-1.633-0.149 2.897 1.868 6.353 2.984 10.068 3.009z"></path>
+</symbol>
+</defs>
+</svg>
+
+    <div class="header">
+  <span class="logo"><a href="/"><svg id="icon-logo" width="100%"><use xlink:href="#icon-logo-mark"></svg></a></span>
+
+  <div class="menu">
+    <input type="checkbox" id="menu-toggle">
+      <label for="menu-toggle" class='label-toggle'>
+        <svg class="icon-hamburger"><use xlink:href="#icon-hamburger"></svg>
+      </label>
+    </input>
+    <ul>
+      <li class="menu-item"><a href="/blog">Blog</a></li>
+      <li class="menu-item"><a href="/shop">Shop</a></li>
+      <li class="menu-item"><a href="/docs">Docs</a></li>
+      <li class="menu-item"><a href="/about">About</a></li>
+      <li class="menu-icons">
+          <span><a href="https://www.facebook.com/dotstud10" target="_blank"><svg class="icon-social"><use xlink:href="#icon-social-facebook"></svg></a></span>
+          <span><a href="https://twitter.com/dotstud_io" target="_blank"><svg class="icon-social"><use xlink:href="#icon-social-twitter"></a></svg></span>
+          <span><a href="https://github.com/dotstudio" target="_blank"><svg class="icon-social"><use xlink:href="#icon-social-github"></a></svg></span>
+      </li>
+    </ul>
+  </div>
+
+</div>
+  </header>
+
+
+
+ 
+ 
+
+
+	
+		
+	
+
+
+
+
+<ul class="categories">
+	
+	<li><a href="/categories/try/" class="selected">
+		やってみるIoT
+	</a></li>
+	
+	<li><a href="/categories/learn/" class="">
+		IoTを知ろう
+	</a></li>
+	
+	<li><a href="/categories/event/" class="">
+		イベントレポート
+	</a></li>
+	
+	<li><a href="/categories/tips/" class="">
+		Tips
+	</a></li>
+	
+</ul>
+
+
+
+
+  
+    
+  
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+<article class="blog-single">
+  <div class="date">2017.03.09</div>
+
+  <img class="blog-single--eyecatch" src="/img/blog/090/00_eyecatch.png" alt="" width="710px">
+  
+  <h1 class="blog-single--title">話題のWebBluetoothでGenuino101をブラウザからリモートコントロールしてみよう</h1>
+
+  <div class="blog-single--information">
+    <a class="author" href="/members/n0bisuke">
+      <img src="/img/members/n0bisuke/author.png" alt="" class="author--avatar">
+      <p class="author--name">のびすけ</p>
+    </a>
+
+    
+
+  </div>
+  
+  <div class="blog-single--content markdown">
+
+<p>こんにちは、dotstudioの<a href="https://twitter.com/n0bisuke">のびすけ</a>です。</p>
+
+<p>最近WebBluetoothがChromeでデフォルトで利用できるようになったと知って、今回試してみたのでまとめてみました。</p>
+
+<h2 id="webbluetoothとは">WebBluetoothとは</h2>
+
+<p>WebブラウザのAPIでBluetoothが使えるようになるAPIです。正確にはBLE（Bluetooth Low Energy）というBluetooth4.0の機能を使えます。</p>
+
+<p>通常、BLEはデバイス間を接続して通信させる規格ですが、その性質上、サーバーサイドかつ低レイヤーなプログラミング言語や周辺知識を持っていないと取り扱うことが難しかったです。</p>
+
+<p>これまでにもNode.jsでは、<a href="https://github.com/sandeepmistry/noble">noble</a>というBLEを扱えるモジュールや類似モジュールが存在しましたが、Node.jsはサーバーサイド言語なためホストマシンが必要でした。</p>
+
+<p>WebBluetoothはブラウザのJavaScriptからBLEを扱うことができるブラウザAPIです。</p>
+
+<h3 id="何が嬉しいの">何が嬉しいの？</h3>
+
+<p>WebBluetoothを使えることは、何が利点になるのでしょうか。</p>
+
+<p>大枠で捉えると、Webとデバイスの連携がしやすくなったことが挙げられます。</p>
+
+<p>Webブラウザ上のJavaScriptで開発が出来るため、 <strong>通常のWebサイトの機能にデバイスとの連携する機能を追加することができる</strong>ようになります。</p>
+
+<p>現行のIoTデバイスはデータを取得するために付属の専用スマホアプリなどをインストールしてBLE通信をする必要があります。これは（スマートフォンの場合）スマホアプリの開発言語のJavaやSwiftからのみBLEを扱うことが出来たからです。</p>
+
+<p>WebBluetoothが広まれば、デバイスと連携するスマートフォンアプリケーション（以下、スマホアプリ）を開発しなくてもいい時代が来るかもしれません。Webとデバイスの連携が格段にしやすくなるので、Webの表現は圧倒的に広がるなと感じています。</p>
+
+<p>僕自身は2015年の終わりにWebBluetoothを知り、当時アツくなって発表などをしていました。</p>
+
+<script async class="speakerdeck-embed" data-id="0e2b2871b9d04aab980c1274a383f1cd" data-ratio="1.33333333333333" src="//speakerdeck.com/assets/embed.js"></script>
+
+<p>WebBluetoothの詳細については<a href="https://www.w3.org/community/web-bluetooth/">W3Cのページ</a>などをご確認ください。</p>
+
+<h2 id="webbluetoothとgenuino101でリモートlチカをしてみよう">WebBluetoothとGenuino101でリモートLチカをしてみよう</h2>
+
+<p>それでは実際にWebBluetoothを使ってみまししょう。</p>
+
+<p>今回はGenuino101というBluetooth搭載のArduino互換ボードを利用してみます。</p>
+
+<h3 id="作るもの">作るもの</h3>
+
+<p>Androidのブラウザ（Google Chrome）からGenuino101に繋げたLEDをリモートで制御してみます。</p>
+
+<p><blockquote class="instagram-media" data-instgrm-captioned data-instgrm-version="7" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"><div style="padding:8px;"> <div style=" background:#F8F8F8; line-height:0; margin-top:40px; padding:28.194444444444443% 0; text-align:center; width:100%;"> <div style=" background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;"></div></div> <p style=" margin:8px 0 0 0; padding:0 4px;"> <a href="https://www.instagram.com/p/BRMD2E3AxN_/" style=" color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;" target="_blank">WebBluetoothがAndroid通常版Chromeでも使えるようになったのでリモートLチカ。 ブラウザでBluetooth使える感動噛みしめてる</a></p> <p style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;">n0bisukeさん(@n0bisuke)がシェアした投稿 - <time style=" font-family:Arial,sans-serif; font-size:14px; line-height:17px;" datetime="2017-03-03T19:54:26+00:00">2017  3月 3 11:54午前 PST</time></p></div></blockquote>
+<script async defer src="//platform.instagram.com/en_US/embeds.js"></script></p>
+
+<ul id="env">
+    <li>Macbook Pro Early 2016</li>
+    <li>macOS Sierra v10.12.2</li>
+    <li>Arduino IDE v1.8.1</li>
+    <li>Android 6.0.1</li>
+    <li>Chrome 56</li>
+</ul>
+
+<h3 id="genuino101側">Genuino101側</h3>
+
+<p>Genuino101側のソースコードはサンプルにあるものをそのまま使います。</p>
+
+<pre><code>/*
+ * Copyright (c) 2016 Intel Corporation.  All rights reserved.
+ * See the bottom of this file for the license terms.
+ */
+
+#include &lt;CurieBLE.h&gt;
+
+BLEPeripheral blePeripheral;  // BLE Peripheral Device (the board you're programming)
+BLEService ledService(&quot;19B10000-E8F2-537E-4F6C-D104768A1214&quot;); // BLE LED Service
+
+// BLE LED Switch Characteristic - custom 128-bit UUID, read and writable by central
+BLEUnsignedCharCharacteristic switchCharacteristic(&quot;19B10001-E8F2-537E-4F6C-D104768A1214&quot;, BLERead | BLEWrite);
+
+const int ledPin = 13; // pin to use for the LED
+
+void setup() {
+  Serial.begin(9600);
+
+  // set LED pin to output mode
+  pinMode(ledPin, OUTPUT);
+
+  // set advertised local name and service UUID:
+  blePeripheral.setLocalName(&quot;LED&quot;);
+  blePeripheral.setAdvertisedServiceUuid(ledService.uuid());
+
+  // add service and characteristic:
+  blePeripheral.addAttribute(ledService);
+  blePeripheral.addAttribute(switchCharacteristic);
+
+  // set the initial value for the characeristic:
+  switchCharacteristic.setValue(0);
+
+  // begin advertising BLE service:
+  blePeripheral.begin();
+
+  Serial.println(&quot;BLE LED Peripheral&quot;);
+}
+
+void loop() {
+  // listen for BLE peripherals to connect:
+  BLECentral central = blePeripheral.central();
+
+  // if a central is connected to peripheral:
+  if (central) {
+    Serial.print(&quot;Connected to central: &quot;);
+    // print the central's MAC address:
+    Serial.println(central.address());
+
+    // while the central is still connected to peripheral:
+    while (central.connected()) {
+      // if the remote device wrote to the characteristic,
+      // use the value to control the LED:
+      if (switchCharacteristic.written()) {
+        if (switchCharacteristic.value()) {   // any value other than 0
+          Serial.println(&quot;LED on&quot;);
+          digitalWrite(ledPin, HIGH);         // will turn the LED on
+        } else {                              // a 0 value
+          Serial.println(F(&quot;LED off&quot;));
+          digitalWrite(ledPin, LOW);          // will turn the LED off
+        }
+      }
+    }
+
+    // when the central disconnects, print it out:
+    Serial.print(F(&quot;Disconnected from central: &quot;));
+    Serial.println(central.address());
+  }
+}
+
+/*
+   Copyright (c) 2016 Intel Corporation.  All rights reserved.
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2.1 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public
+   License along with this library; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+</code></pre>
+
+<p>このコードをArduino IDEでGenuino101に書き込めばBLEのペリフェラル（デバイス側）として起動してくれます。</p>
+
+<p>ソースコードの22行目の<code>blePeripheral.setLocalName(&quot;LED&quot;);</code>でLEDと指定していますが、この文字列がBLEデバイスの表示名となります。</p>
+
+<p>Macからは<a href="https://itunes.apple.com/jp/app/lightblue/id639944780?mt=12">LightBlue</a>などのアプリで確認することができます。</p>
+
+<p><img src="https://i.gyazo.com/afc225feba5b36b39547e701171b8070.png" alt="" /></p>
+
+<h3 id="ブラウザ側">ブラウザ側</h3>
+
+<p>ソースコードは<a href="https://github.com/n0bisuke/webbluetooth_sample/tree/gh-pages/remote_blink">こちら</a>にあげています。</p>
+
+<p>BLEはペリフェラル（デバイス）のUUID → ServiceのUUID → CharacteristicのUUIDという感じで接続していきます。</p>
+
+<p>Characteristicがデバイスの個別の機能だとしたら、Serviceは機能群というイメージで捉えると分かりやすいかもしれません。</p>
+
+<p>詳しくは<a href="http://codezine.jp/article/detail/9287">CodeZineさんの記事など</a>をご参照ください。</p>
+
+<pre><code>'use strict';
+
+const UUID = '19b10000-e8f2-537e-4f6c-d104768a1214';
+const SERVICE_UUID = '19b10001-e8f2-537e-4f6c-d104768a1214';
+let g_characteristic = {};
+const $light = document.querySelector('#light');
+const $bulb = document.querySelector('.bulb');
+
+//接続後にon/off切り替え
+const ledToggel = () =&gt; {
+  g_characteristic.readValue()
+  .then((val) =&gt; {
+    let led_state = val.getUint8(0); //値読み取り
+    led_state = led_state ? 0 : 1;
+    g_characteristic.writeValue(new Uint8Array([led_state]));
+    toggelClass(led_state);
+  })
+}
+
+const main = () =&gt; {
+  return navigator.bluetooth.requestDevice({acceptAllDevices:true, optionalServices:[UUID]})
+  .then(device =&gt; {
+    console.log(device);
+    console.log('&gt; Name:             ' + device.name);
+    console.log('&gt; Id:               ' + device.id);
+    console.log('&gt; Connected:        ' + device.gatt.connected);
+    console.log('--デバイスに接続中です...--');
+    return device.gatt.connect();
+  })
+  .then(server =&gt; {
+      console.log('Getting ___ Service...');
+      return server.getPrimaryService(UUID);
+  })
+  .then(service =&gt; {
+      console.log('Getting ____ Characteristic...');
+      return service.getCharacteristic(SERVICE_UUID);
+    })
+  .then(characteristic =&gt; {
+      g_characteristic = characteristic;
+      $light.removeEventListener('click',main);
+      $light.addEventListener('click',ledToggel);
+      return characteristic;
+    })
+  .catch(error =&gt; {
+    console.log('Argh! ' + error);
+  });
+}
+
+/**
+ * domのclass付け替え(表示切り替え)
+ */
+function toggelClass(led_state){
+  if(led_state){
+    addClass('#ff0000');
+  }else{
+    removeClass();
+  }
+}
+
+function removeClass(){
+    $bulb.style.background = '#bbb';
+    $bulb.style.boxShadow = '';
+    $bulb.classList.remove(&quot;light_up&quot;);
+}
+
+function addClass(color){
+    $bulb.style.background = color;
+    $bulb.style.boxShadow = `0 -10px 100px ${color}`;
+    $bulb.classList.add(&quot;light_up&quot;);
+}
+
+$light.addEventListener('click', main);
+</code></pre>
+
+<p>21行目の<code>navigator.bluetooth.requestDevice()</code>で周辺のデバイスを検索し、28行目の<code>device.gatt.connect()</code>でデバイスに接続します。</p>
+
+<p>32行目の<code>server.getPrimaryService()</code>でServiceに接続し、36行目の<code>service.getCharacteristic()</code>でCharacteristic（機能）にアクセスできます。</p>
+
+<p>そこで接続が確立するとボタンを押すたびに10行目の<code>ledToggel()</code>が呼ばれ、<code>.readValue()</code>で値読みとり、<code>.writeValue()</code>で値の書き込みができるようになります。</p>
+
+<p>これらのコードは<a href="https://n0bisuke.github.io/webbluetooth_sample/remote_blink/index.html">GitHub Pagesで動作するようにホスティングしてある</a>ので実際の動作確認もできます。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>いかがでしたか。</p>
+
+<p>WebBluetoothを使うことで<strong>ブラウザからBluetoothを使ってデバイスを制御する</strong>ことができました。</p>
+
+<p>今後、この技術が普及することでWebブラウザとデバイスの距離がさらになくなっていくかもしれません。</p>
+
+<p>是非みなさんも試してみて、この可能性を実感してみて下さい。</p>
+
+<p>それでは。</p>
+</div>
+
+  
+
+
+
+    
+    
+    
+    <nav class="related">
+      <h2 class="">関連記事</h2>
+      <ul class="cards-related">
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/akihabara-guide-for-beginners/">
+                <img class="card-related--thumbnail" src="/img/blog/091/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">【初心者必見】電子パーツ買うならここ！アキバ電気街徹底ガイド</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/dfrobot-gravity-hands-on/">
+                <img class="card-related--thumbnail" src="/img/blog/087/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">ハードウェア知識ゼロでも大丈夫。「Gravity」で始める電子工作入門</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/littlebits-arduino-analog-number/">
+                <img class="card-related--thumbnail" src="/img/blog/060/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">littleBits Arduinoモジュールでより細かく値を入出力して状況を伝えよう</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/nefry-rest-api-tutorial/">
+                <img class="card-related--thumbnail" src="/img/blog/059/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">URLを入れるだけ！REST APIでNefryを簡単に制御してみよう！</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/connpass-n0bisuke-interview-vol2/">
+                <img class="card-related--thumbnail" src="/img/blog/037/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">【connpass × のびすけ対談】サービスの立ち上げから運営まで。「connpass」の歴史を聞いてみました</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/connpass-n0bisuke-interview-vol1/">
+                <img class="card-related--thumbnail" src="/img/blog/036/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">【connpass × のびすけ対談】勉強会あるある！イベントのドタキャンにどう対処する？</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/led-lantern-and-torch/">
+                <img class="card-related--thumbnail" src="/img/blog/042/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">これは掘り出し物かも？ ソーラーバッテリ駆動でスマホ充電もできるLEDランタン！</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/led-multilingual-confessing-fan/">
+                <img class="card-related--thumbnail" src="/img/blog/044/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">使い所が分からなすぎる（笑）LEDで光るマルチリンガルなUSB扇風機を買ってみた</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/4k-camera-gopro-fake/">
+                <img class="card-related--thumbnail" src="/img/blog/041/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">まさかのGoPro？4Kのカメラを265元（4,000円程度）で買えた</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/wall-climbing-toy-car/">
+                <img class="card-related--thumbnail" src="/img/blog/040/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">すごいじゃん深セン。怪しさMAXの壁を登るラジコン？WALL CLIMBERを試してみた</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+        </ul>
+      </nav>
+
+
+
+  <div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v2.7&appId=296336307370435";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+  <div class="share">
+    <a href="https://twitter.com/share" class="twitter-share-button" data-size="large" data-hashtags="dotstudio">Tweet</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    &nbsp;
+    <div class="fb-like" data-href="https://dotstud.io/blog/web-bluetooth-remote-blink/" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
+
+    &nbsp;
+
+    <div class="hatena-b">
+      <a href="http://b.hatena.ne.jp/entry/s/dotstud.io/blog/web-bluetooth-remote-blink" class="hatena-bookmark-button" data-hatena-bookmark-title="話題のWebBluetoothでGenuino101をブラウザからリモートコントロールしてみよう" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
+        <img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" />
+      </a>
+      <script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+    </div>    
+  </div>
+
+</article>
+
+
+
+<footer class="footer">
+  <p class="footer-info">
+    <a class="footer-info--item" href="/about">会社概要</a>
+    <a class="footer-info--item" href="/members">メンバー</a>
+    <a class="footer-info--item" href="/legal#tos">利用規約</a>
+    <a class="footer-info--item" href="/legal#sct">特定商取引</a>
+    <a class="footer-info--item" href="/legal#pp">プライバシーポリシー</a>
+  </p>
+  <p class="footer-cr">© 2016 dotstudio inc.</p>
+</footer>
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+
+
+
+
+
+<script src="/js/app.js"></script>
+
+
+<script src="/js/lib/hljs.js"></script>
+<script src="/js/lib/hljs-numbers.js"></script>
+<script>
+  hljs.initHighlightingOnLoad();
+  hljs.initLineNumbersOnLoad();
+</script>
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-78080011-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+
