@@ -10,6 +10,137 @@
     <atom:link href="/series/gyaruden/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>【dotstudio×ギャル電】IoT派手イケディスプレーキャップをつくったよ！</title>
+      <link>https://dotstud.io/blog/gyaruden-hadeike-display-cap/</link>
+      <pubDate>Sun, 09 Apr 2017 21:14:04 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/gyaruden-hadeike-display-cap/</guid>
+      
+      <description>
+
+&lt;p&gt;どうも！dotstudioテクニカルライターの&lt;a href=&#34;https://dotstud.io/members/mao/&#34;&gt;マオ&lt;/a&gt;です。ドンキでアルドゥイーノが買える時代を夢見て、&lt;a href=&#34;https://dotstud.io/blog/iotlt-gbvol19-galden-report/&#34;&gt;ギャル電&lt;/a&gt;で活動しています。&lt;/p&gt;
+
+&lt;p&gt;今回はdotstudioとギャル電マオがコラボして派手でイケイケなIoTディスプレー付きキャップを作りました★
+&lt;img src=&#34;https://dotstud.io/img/blog/094/01_top.png&#34; alt=&#34;&#34; /&gt;
+この超イケてるキャップをかぶって実際に渋谷に繰り出してみた話を紹介していきたいと思います〜！&lt;/p&gt;
+
+&lt;h2 id=&#34;iot派手イケディスプレーキャップを作ったきっかけ&#34;&gt;IoT派手イケディスプレーキャップを作ったきっかけ&lt;/h2&gt;
+
+&lt;p&gt;ある日dotstudioにてうこさんから相談を受けたマオ。&lt;/p&gt;
+
+&lt;p&gt;「&lt;strong&gt;俺はイケてる電子工作を作っているのになぜパリピにモテないか。&lt;/strong&gt;」&lt;/p&gt;
+
+&lt;p&gt;たしかに、うこさんはなんでもできるスーパーエンジニアで、ギャル電マオは常にリスペクトしている先輩なのだ。
+&lt;img src=&#34;https://dotstud.io/img/blog/094/02_uko.png&#34; alt=&#34;&#34; /&gt;
+でもな、パリピにモテるのはまだほど遠い。&lt;/p&gt;
+
+&lt;p&gt;よってうちが出した結論、&lt;/p&gt;
+
+&lt;p&gt;「&lt;strong&gt;&lt;em&gt;とりあえずチャラくなって光ってればモテるんじゃね&lt;/em&gt;&lt;/strong&gt;」&lt;/p&gt;
+
+&lt;p&gt;そこで、うこさんと代表ののびすけさんを巻き込んで作成したのはこちら、名付けて『&lt;strong&gt;IoT派手イケディスプレーキャップ&lt;/strong&gt;』。
+&lt;img src=&#34;https://dotstud.io/img/blog/094/03_cap.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;とにかくモテたい人、口下手で上手く話せない人も、これを使えば光って目立つし帽子のディスプレーで言いたいことを表示することによって３倍増しぐらいにかっこいく見える。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;まさに最高のパーリーアイテムである。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;iot派手イケディスプレーキャップとは&#34;&gt;IoT派手イケディスプレーキャップとは？&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/094/04_cap.png&#34; alt=&#34;&#34; /&gt;
+このIoT派手イケディスプレーキャップは、&lt;strong&gt;ウェブからディスプレーへの出力パターンを選択&lt;/strong&gt; できる。また、指定した&lt;strong&gt;Twitterのハッシュタグツイートもリアルタイムで表示可能&lt;/strong&gt;だ。&lt;/p&gt;
+
+&lt;p&gt;制作はのびすけさんがネットワークまわり、うこさんがハードウェア全般を担当。ギャル電マオは外装デコレーションを担当した。&lt;/p&gt;
+
+&lt;p&gt;詳しくは別記事で紹介予定だ。&lt;/p&gt;
+
+&lt;h2 id=&#34;iot派手イケディスプレーキャップの仕組み&#34;&gt;IoT派手イケディスプレーキャップの仕組み&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/094/05_cap.png&#34; alt=&#34;&#34; /&gt;
+ディスプレーとキャップのあいだには、アルドゥイーノがついている。メガというデカいヤツと、ESP8266とかいうネットワークにつながるヤツだ。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/094/06_cap.png&#34; alt=&#34;&#34; /&gt;
+キャップの中にはモバイルバッテリーを入れて固定することができるゴムバンドがついている。&lt;/p&gt;
+
+&lt;p&gt;簡単な仕組みはこうだ。
+&lt;img src=&#34;https://dotstud.io/img/blog/094/07_structure.png&#34; alt=&#34;&#34; /&gt;
+まず、新着ツイートが投稿されるとそれをひらがなに変換し、サーバーに文字列を保存する。サーバーからESP8266にプッシュを送信して新着ツイートがあることを知らせると、ESP8266はひらがな文字列を取得しにいく。&lt;/p&gt;
+
+&lt;p&gt;それをアルドゥイーノメガにシリアルで送ると、あらかじめ書き込んでおいたフォントで文字列を変換し、ディスプレーに流すというふうになっている。&lt;/p&gt;
+
+&lt;p&gt;ちなみに、絵などの画像は全部ESP8266に書き込まれてあって、&lt;strong&gt;サーバーからのプッシュで好きなものに切り替えられるという優れモノ&lt;/strong&gt; だ。&lt;/p&gt;
+
+&lt;h2 id=&#34;試してみた&#34;&gt;試してみた&lt;/h2&gt;
+
+&lt;p&gt;早速パリピが集まる夜の渋谷の街に繰り出してみた。
+&lt;img src=&#34;https://dotstud.io/img/blog/094/08_dasao.png&#34; alt=&#34;&#34; /&gt;
+&lt;strong&gt;&lt;em&gt;最高にイケてる帽子被ってるのに、全然イケてねぇ！鉄道オタかよ！（笑）&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;これじゃあダメだ、いくら光っててもモテる気がしない。なにしろ服装が&lt;strong&gt;典型的な工学部男子&lt;/strong&gt;でパリピとは遠くかけ離れている。こうなったら頭の上から下まで全部変えるしかない。&lt;/p&gt;
+
+&lt;p&gt;ということで、うこさんをパリピに大改造！！！！&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;超イケてるパリピなチャラ男に仕上がったうこさんはこちら↓↓↓&lt;/em&gt;&lt;/strong&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/094/09_charao.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;チャラさ倍増(爆笑)、見た目は完全なるパリピ、まさに渋谷のギャル男！&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;この帽子を被っているだけで&lt;strong&gt;通常の１０倍ぐらいの人に声をかけられた。&lt;/strong&gt; ←これマジだから(笑)&lt;/p&gt;
+
+&lt;h2 id=&#34;パリピが集まる場所-渋谷肉横丁へ&#34;&gt;パリピが集まる場所、渋谷肉横丁へ&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/094/10_nikuyokocho.png&#34; alt=&#34;&#34; /&gt;
+肉横丁のお兄さんたちも大絶賛。やべえこの帽子爆アゲじゃん！と褒めてくれ仲良くなった。&lt;/p&gt;
+
+&lt;p&gt;まあ、&lt;strong&gt;お兄さんの表情もなかなかの爆アゲ感がある&lt;/strong&gt;と突っ込みたいところなのだが、うこさんは最高に舞い上がっている。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;数分後……&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;ギャル電マオ「あれ、うこさんどこに行った？」&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/094/11_nanpa.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;!!!!!!!!!!!!!!ナンパに成功してるじゃないか!!!!!!!!!!!!!!!&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;高度な技術を使いIoT派手イケディスプレーキャップを完成させた上でのこのナンパ…エモい……。&lt;/p&gt;
+
+&lt;p&gt;ダサかったうこさんの姿はもうない。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;名付けよう、君はもはや「テクノロジストナンパ師」。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;と思いきや&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/094/12_tweet.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;嬉しくてつい下心丸出しツイートをしてしまううこさん。&lt;/p&gt;
+
+&lt;p&gt;まって、それ&lt;strong&gt;ディスプレーに表示されるやつ&lt;/strong&gt;じゃん！&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/094/13_tweet_02.png&#34; alt=&#34;&#34; /&gt;
+女の子「ハァ？超キモいんですけど」&lt;/p&gt;
+
+&lt;p&gt;うこさん「あっ……」&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;あー、もう遅い（苦笑）&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;この女の子は比較的優しいから&lt;strong&gt;軽いビンタ&lt;/strong&gt;だったけど、普通ならただじゃあ済まない。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;みんなも気をつけよう。&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/094/14_matome.png&#34; alt=&#34;&#34; /&gt;
+こんな感じでイベントやパーティーで目立てるなど、使い道は様々で超楽しいデバイスです！&lt;/p&gt;
+
+&lt;p&gt;今後は、IoTLTにて登壇者に被ってもらい、リアルタイムでハッシュタグツイートをディスプレーに流してイベントを盛り上げる予定です。&lt;/p&gt;
+
+&lt;p&gt;みなさんもぜひIoTLTに遊びに来てこの&lt;strong&gt;IoT派手イケディスプレーキャップ&lt;/strong&gt;で遊んでみてくださいね！&lt;/p&gt;
+
+&lt;p&gt;では！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>レポート！ギャル電❤︎初めての電子工作ハンズオンvol.1開催</title>
       <link>https://dotstud.io/blog/gyaruden-handson-mao-report/</link>
       <pubDate>Mon, 31 Oct 2016 08:47:33 +0900</pubDate>
