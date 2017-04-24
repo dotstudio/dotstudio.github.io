@@ -7,8 +7,607 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Sun, 09 Apr 2017 21:14:04 +0900</lastBuildDate>
+    <lastBuildDate>Fri, 21 Apr 2017 22:18:36 +0900</lastBuildDate>
     <atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>「Wio Node」で半田付けなしの電子工作！温度計作りでIoTはじめの一歩</title>
+      <link>https://dotstud.io/blog/seeed-wionode-hands-on/</link>
+      <pubDate>Fri, 21 Apr 2017 22:18:36 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/seeed-wionode-hands-on/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、バックエンドエンジニアのちゃんとく（&lt;a href=&#34;https://twitter.com/tokutoku393&#34;&gt;@tokutoku393&lt;/a&gt;）です。&lt;/p&gt;
+
+&lt;p&gt;今回は、難しいプログラミングや半田付けなしで簡単に試せる「Wio Node」を使って温度表示計を作ってみます！この記事は「&lt;strong&gt;&lt;a href=&#34;https://dotstudio.connpass.com/event/53388/&#34;&gt;WioNodeで始めよう！挫折しないIoT入門ハンズオン
+&lt;/a&gt;&lt;/strong&gt;」の資料にもなっています。&lt;/p&gt;
+
+&lt;p&gt;かなり長いですが、詳細な手順を載せていますので根気よく頑張りましょう！&lt;/p&gt;
+
+&lt;h2 id=&#34;wio-nodeとは&#34;&gt;Wio Nodeとは&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/01_wio_node.png&#34; alt=&#34;&#34; /&gt;
+今回使うWio Nodeは、中国のSeeed Studio社が開発した&lt;strong&gt;Wi-Fiモジュール初期搭載のIoTデバイス&lt;/strong&gt;です。公式のスマートフォンアプリから、簡単にデバイスのセットアップや対応モジュールの入出力を試すことができます。&lt;/p&gt;
+
+&lt;h3 id=&#34;wi-fiモジュール初期搭載&#34;&gt;Wi-Fiモジュール初期搭載&lt;/h3&gt;
+
+&lt;p&gt;通常デバイスをWi-Fi接続するためには、拡張モジュールの購入や複雑な回路設計が必要です。&lt;/p&gt;
+
+&lt;p&gt;Wio Nodeでは&lt;strong&gt;Wi-FiモジュールのESP-8266を初期搭載&lt;/strong&gt;しており、Wi-Fi接続もスマートフォンアプリから簡単に設定できます。&lt;/p&gt;
+
+&lt;h3 id=&#34;groveセンサコネクタ搭載&#34;&gt;Groveセンサコネクタ搭載&lt;/h3&gt;
+
+&lt;p&gt;Wio NodeはGrove規格のモジュールをそのまま挿せるコネクタを搭載していて、&lt;strong&gt;半田付けなしでセンサやアクチュエータを接続&lt;/strong&gt;できます。&lt;/p&gt;
+
+&lt;p&gt;また、&lt;strong&gt;対応モジュールには豊富なAPIが用意&lt;/strong&gt;されており、APIを操作するプログラムを作るだけで簡単にウェブ連携を試すことができます。&lt;/p&gt;
+
+&lt;h3 id=&#34;スマートフォンアプリから簡単操作&#34;&gt;スマートフォンアプリから簡単操作&lt;/h3&gt;
+
+&lt;p&gt;Wio Nodeの大きな特徴の一つは、公式から専用スマートフォンアプリから用意されていることでしょう。&lt;/p&gt;
+
+&lt;p&gt;デバイスのセットアップやモジュールの接続に加えて、&lt;strong&gt;モジュールを操作できるAPIをすぐに試す&lt;/strong&gt;ことができます。&lt;/p&gt;
+
+&lt;h2 id=&#34;動かしてみる&#34;&gt;動かしてみる&lt;/h2&gt;
+
+&lt;p&gt;早速Wio Nodeを動かしてみましょう。今回試す手順は以下です。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Wio Nodeのセットアップ&lt;/li&gt;
+&lt;li&gt;Wio Nodeにモジュールを接続する&lt;/li&gt;
+&lt;li&gt;アプリからAPIを試す&lt;/li&gt;
+&lt;li&gt;Node.jsでプログラムを書く&lt;/li&gt;
+&lt;li&gt;試してみる&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Wio Node -&amp;gt; &lt;a href=&#34;https://dotstud.io/shop/wionode-social-remote-control/&#34;&gt;購入ページ&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Micro USBケーブル&lt;/li&gt;
+&lt;li&gt;Grove 温度センサ（型番: SEEED-101020015）&lt;/li&gt;
+&lt;li&gt;Grove 7セグメントディスプレイ（型番: SEEED-104030003）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;類似のセンサがたくさんありますので、型番をよくご確認ください。&lt;/strong&gt;（Wio Nodeに対応していない場合があります。）&lt;/p&gt;
+
+&lt;h4 id=&#34;筆者の環境&#34;&gt;筆者の環境&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;MacBook Pro（Retina 13-inch、Early 2015）&lt;/li&gt;
+&lt;li&gt;OS X El Capitan（v10.11.6）&lt;/li&gt;
+&lt;li&gt;iOS10.31&lt;/li&gt;
+&lt;li&gt;Node.js v7.9.0&lt;/li&gt;
+&lt;li&gt;npm 4.5.0&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;wio-nodeのセットアップ&#34;&gt;Wio Nodeのセットアップ&lt;/h3&gt;
+
+&lt;h4 id=&#34;開発用アプリのインストール&#34;&gt;開発用アプリのインストール&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/02_wio_app.png&#34; alt=&#34;&#34; /&gt;
+Wio Nodeの開発には、公式からリリースされている「Wio Link」というアプリ（Androidの場合は「Wio」）を利用します。執筆時はiOS版は1.5.2、Android版は2.3.6がリリースされています。今回はiOS版を使っての紹介です。&lt;/p&gt;
+
+&lt;p&gt;iOS: &lt;a href=&#34;https://itunes.apple.com/jp/app/wio-link/id1054893491?mt=8&#34;&gt;https://itunes.apple.com/jp/app/wio-link/id1054893491?mt=8&lt;/a&gt;&lt;br /&gt;
+Android: &lt;a href=&#34;https://play.google.com/store/apps/details?id=cc.seeed.iot.ap&amp;amp;hl=ja&#34;&gt;https://play.google.com/store/apps/details?id=cc.seeed.iot.ap&amp;amp;hl=ja&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;アプリとwio-nodeの設定&#34;&gt;アプリとWio Nodeの設定&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/03_acount.png&#34; alt=&#34;&#34; /&gt;
+まずはアカウントを作成しましょう。メールアドレスとパスワードを設定し「Register」で登録します。ServerLocationはデフォルトのGlobalにしておきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/04_add_device.png&#34; alt=&#34;&#34; /&gt;
+アカウントが作成されたらAdd Your First Deviceをタップし、Wio Nodeを選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/05_wio_connect.png&#34; alt=&#34;&#34; /&gt;
+Wio NodeにUSBケーブルで電源を供給しましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/06_func.png&#34; alt=&#34;&#34; /&gt;
+画面の指示にしたがってFuncボタン（写真親指側）を4秒以上長押しすると、青いランプがゆらゆらと光ります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/07_wio_network.png&#34; alt=&#34;&#34; /&gt;
+iOSのWi-Fi選択画面から、「Wio_XXXX」というSSIDを選択します。（Androidはアプリ内での選択です。）&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/08_wifi_list.png&#34; alt=&#34;&#34; /&gt;
+アプリに戻ると、続いてWi-Fiの接続を促されます。Wi-Fiリストから、使用するWi-Fiを選択しましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/09_device_connect.png&#34; alt=&#34;&#34; /&gt;
+Wio Nodeが認識されました。デバイスに名前をつけておきます。&lt;/p&gt;
+
+&lt;p&gt;以上で、Wio Nodeのセットアップが完了しました。同じデバイスとWi-Fiを使う場合は、以後起動するだけで接続されるようになります！&lt;/p&gt;
+
+&lt;h3 id=&#34;wio-nodeにモジュールを接続する&#34;&gt;Wio Nodeにモジュールを接続する&lt;/h3&gt;
+
+&lt;p&gt;アプリから、接続するモジュールを登録します。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/10_display_connect.png&#34; alt=&#34;&#34; /&gt;
+「PORT0」（左側）をタップして、下の「OUTPUT」から「4-Digit Display」を選択しましょう。&lt;strong&gt;似たようなモジュールがたくさんありますので、よく確認してください&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/11_temperature_connect.png&#34; alt=&#34;&#34; /&gt;
+続いて温度センサを登録します。「PORT1」（右側）をタップして、「INPUT」から「Temperature Sensor」を選択します。&lt;/p&gt;
+
+&lt;p&gt;アプリ画面を参考に、Wio Nodeにモジュールを接続します。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/12_module_connect.png&#34; alt=&#34;&#34; /&gt;
+「PORT0」に7セグメントディスプレイ、「PORT1」に温度センサを接続しましょう。&lt;/p&gt;
+
+&lt;p&gt;接続できたら、アプリ画面下部の「Update Firmware」をタップしましょう。読み込みのあと、「View API」というAPIサンプルページが表示されるようになります。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;アプリからapiを試す&#34;&gt;アプリからAPIを試す&lt;/h3&gt;
+
+&lt;p&gt;「View API」のページでは、手軽にモジュールを操作するAPIを試すことができます。正しく接続できているか、試してみましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/13_display_api.png&#34; alt=&#34;&#34; /&gt;
+まずは7セグメントディスプレイの「display_point」というAPIを試してみます。説明部分には、「&lt;strong&gt;POSTメソッドで1を送ると&amp;rdquo;:&amp;ldquo;が表示される&lt;/strong&gt;」とありますね。「Test Request」から1を送ってみます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/14_display_demo.png&#34; alt=&#34;&#34; /&gt;
+7セグメントディスプレイに&amp;rdquo;:&amp;ldquo;が表示されました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/15_temp_api.png&#34; alt=&#34;&#34; /&gt;
+続いて温度センサのAPIを試します。温度の取得には値は必要ないので、そのままGETメソッドでRequestします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/16_temp_demo.png&#34; alt=&#34;&#34; /&gt;
+現在の温度が返ってきました。（かなり暑いですね（笑））&lt;/p&gt;
+
+&lt;p&gt;挙動が確認できたら、2つのモジュールを連携させるプログラムを書いていきましょう！&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;memo-getメソッドとpostメソッド&#34;&gt;memo: GETメソッドとPOSTメソッド&lt;/h4&gt;
+
+&lt;p&gt;HTTPリクエストにはいくつかのメソッド（送信方法）があります。GET、POSTの他にもPUTメソッド、DELETEメソッドなどがあり、最近主流の「RESTful API」という考え方では&lt;strong&gt;操作する内容によってメソッドを使い分ける&lt;/strong&gt;ことになっています。&lt;/p&gt;
+
+&lt;p&gt;今回はメソッド名だけわかればプログラミング可能ですが、詳しく知りたい方は調べてみてください！&lt;/p&gt;
+
+&lt;h3 id=&#34;node-jsでプログラムを書く&#34;&gt;Node.jsでプログラムを書く&lt;/h3&gt;
+
+&lt;p&gt;センサの値を取得して、室温をディスプレイに表示するプログラムを書いていきましょう。プログラムはAPIを叩ければよいので、今回は&lt;strong&gt;Node.js&lt;/strong&gt;で作成します。&lt;/p&gt;
+
+&lt;p&gt;プログラムの仕組みを理解するために、以下の手順で説明します。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Node.jsのインストール&lt;/li&gt;
+&lt;li&gt;プロジェクトの作成&lt;/li&gt;
+&lt;li&gt;温度情報を取得する&lt;/li&gt;
+&lt;li&gt;温度情報を表示したい文字列に変換する&lt;/li&gt;
+&lt;li&gt;ディスプレイに温度を表示する&lt;/li&gt;
+&lt;li&gt;3秒ごとに更新する&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;サクッと試したい方は、githubの&lt;a href=&#34;https://github.com/dotstudio/wionode_handson/blob/master/app.js&#34;&gt;完成プログラム&lt;/a&gt;をご覧ください。READMEの手順を進めるとコーディングなしで動かせます。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;memo-コマンドラインの使い方&#34;&gt;memo: コマンドラインの使い方&lt;/h4&gt;
+
+&lt;p&gt;Node.jsの実行やファイル操作はコマンドラインで行います。Macには「ターミナル」、Windowsには「コマンドプロンプト」というアプリケーションが最初から入っているので、立ち上げて使いましょう。&lt;/p&gt;
+
+&lt;p&gt;初めてコマンドを使う方は、「ターミナル コマンド」などで検索すると基本的な使い方がわかりますよ！&lt;/p&gt;
+
+&lt;p&gt;筆者はiTerm2というクライアントアプリにzshというシェルを入れています。（画面がちょっと違うくらいだと思ってください。）&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;1-node-jsのインストール&#34;&gt;1. Node.jsのインストール&lt;/h4&gt;
+
+&lt;p&gt;まずはNode.jsのインストールから始めます。また&lt;code&gt;async/await&lt;/code&gt;という機能を使っているので、&lt;strong&gt;v7.6.0以上が必要&lt;/strong&gt;です。v7.6.0以上をインストール済みの方は次項の「プロジェクトの作成」から始めてください。&lt;/p&gt;
+
+&lt;p&gt;Node.jsのインストールには、簡単にバージョン管理ができる「&lt;strong&gt;nvm&lt;/strong&gt;」や「&lt;strong&gt;nodebrew&lt;/strong&gt;」を使うのが便利です。nodebrewを使ったインストール方法は下記を参照してください。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://dotstud.io/blog/setup-new-mac-app/#node-js%E7%92%B0%E5%A2%83%E6%95%B4%E5%82%99&#34;&gt;僕がMacを買い換えてすぐにいれるツール&amp;amp;すぐにする初期設定&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;インストールが完了したら、Node.jsが正しく動くか確認してみましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/17_node_v.png&#34; alt=&#34;&#34; /&gt;
+コマンドラインで&lt;code&gt;node -v&lt;/code&gt;を叩くとバージョンが出るようになったでしょうか？（&lt;strong&gt;v7.6.0以上ですよ！&lt;/strong&gt;）&lt;/p&gt;
+
+&lt;p&gt;Node.jsの環境構築はとても簡単なので、ウェブ開発が初めての方にもオススメです！&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;2-プロジェクトの作成&#34;&gt;2. プロジェクトの作成&lt;/h4&gt;
+
+&lt;p&gt;今回のWio Nodeのプログラムを置くプロジェクトを作成しましょう。&lt;/p&gt;
+
+&lt;p&gt;適当なディレクトリに移動します。（私は&lt;code&gt;/Users/ユーザ名/workspace&lt;/code&gt;という作業ディレクトリを用意しています。参考まで。）
+&lt;img src=&#34;https://dotstud.io/img/blog/095/18_mkdir.png&#34; alt=&#34;&#34; /&gt;
+&lt;code&gt;mkdir ディレクトリ名&lt;/code&gt;で新しいディレクトリを作成できます。&lt;code&gt;wio_temperature&lt;/code&gt;というディレクトリを作ってみました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/19_cd.png&#34; alt=&#34;&#34; /&gt;
+&lt;code&gt;cd ディレクトリ名&lt;/code&gt;で作成したディレクトリの下に移動します。&lt;/p&gt;
+
+&lt;p&gt;Node.jsでは「npm」でモジュールを管理できます。&lt;code&gt;npm init -y&lt;/code&gt;を実行しましょう。&lt;code&gt;-y&lt;/code&gt;オプションで名前等をデフォルト値で作成してくれます。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/20_npm_init.png&#34; alt=&#34;&#34; /&gt;
+プロジェクト名やライブラリなどを管理する「&lt;strong&gt;package.json&lt;/strong&gt;」が作成されました。&lt;/p&gt;
+
+&lt;p&gt;今回使用する「&lt;strong&gt;axios&lt;/strong&gt;」ライブラリをインストールします。&lt;code&gt;npm install axios --save&lt;/code&gt;を実行しましょう。&lt;code&gt;--save&lt;/code&gt;オプションをつけることでpackage.jsonに記載されます。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/21_npm_install.png&#34; alt=&#34;&#34; /&gt;
+axiosがインストールされ、package.jsonに追加されました。&lt;/p&gt;
+
+&lt;p&gt;続いてプログラムを記述するファイルを作成します。&lt;code&gt;touch ファイル名&lt;/code&gt;でファイルが作成されます。（Windowsの場合は&lt;code&gt;vi ファイル名&lt;/code&gt;で新規ファイルを開き&lt;code&gt;:wq&lt;/code&gt;で保存して終了してみましょう。）
+&lt;img src=&#34;https://dotstud.io/img/blog/095/22_touch.png&#34; alt=&#34;&#34; /&gt;
+app.jsというファイルを作成しました。（&lt;code&gt;ls&lt;/code&gt;コマンドでカレントディレクトリのファイルが見れます。Windowsは&lt;code&gt;dir&lt;/code&gt;。）&lt;/p&gt;
+
+&lt;p&gt;以上でプロジェクトの作成は完了です。ファイルにプログラムを書いていきましょう！&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;memo-ファイルの編集とエディタについて&#34;&gt;memo: ファイルの編集とエディタについて&lt;/h4&gt;
+
+&lt;p&gt;コマンドラインからでもファイルの編集はできますが、&lt;strong&gt;インデントやコードの補完が効かず作業しづらい&lt;/strong&gt;ので、テキストエディタを使うがオススメです。ちゃんとく的な初心者向けオススメエディタは&lt;a href=&#34;https://atom.io/&#34;&gt;Atom&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;下記記事ではVisual Studio Codeのインストール方法を紹介しています。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://dotstud.io/blog/setup-new-mac-app/#visual-studio-code&#34;&gt;僕がMacを買い換えてすぐにいれるツール&amp;amp;すぐにする初期設定&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;コマンドライン上で作業したい方は、「viエディタ コマンド」などで検索してみてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;3-温度情報を取得する&#34;&gt;3. 温度情報を取得する&lt;/h4&gt;
+
+&lt;p&gt;まずは温度を取得するプログラムを書いていきます。&lt;code&gt;BASE_URL&lt;/code&gt;はドメインが違う場合があるので、アプリから確認して自身のものに置き換えてください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
+
+const axios = require(&#39;axios&#39;);
+const TOKEN = process.argv[2] || &#39;&#39;;
+const BASE_PATH = `https://us.wio.seeed.io/v1/node`; // 自身のものをアプリで確認
+
+/**
+ * 温度取得
+ */
+ const getTemp = () =&amp;gt; {
+     const ENDPOINT = `/GroveTempA0/temp`;
+     const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${TOKEN}`;
+     axios.request({method: &#39;get&#39;, baseURL: BASE_URL})
+     .then((resp) =&amp;gt; console.log(resp));
+ }
+
+getTemp();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;axiosに温度取得APIのURLとオプションを渡し、返ってきた値を出力します。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;const ACCESS_TOKEN = process.argv[2] || &#39;&#39;;&lt;/code&gt;の部分は、コマンドライン引数（実行時に渡す値）を取得しています。tokenなどの人に知られたくない値は、ファイルに直接書かないのがベターです。&lt;/p&gt;
+
+&lt;p&gt;それでは正しく動くか試してみましょう。Node.jsは&lt;code&gt;node ファイル名&lt;/code&gt;で実行できます。今回は&lt;code&gt;app.js&lt;/code&gt;というファイル名で作成し、引数にtokenを渡すので&lt;code&gt;node app.js &amp;lt;token&amp;gt;&lt;/code&gt;で実行してみましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/23_temp_test.png&#34; alt=&#34;&#34; /&gt;
+温度センサの情報が返ってきたでしょうか？&lt;/p&gt;
+
+&lt;p&gt;1番下に温度情報がありますね。この情報を使ってディスプレイに表示する文字列を作っていきます。&lt;/p&gt;
+
+&lt;p&gt;エラーが出てしまった人は、「Node.js &amp;lt;エラーメッセージ&amp;gt;」で検索すると答えが見つかりやすいです。&lt;/p&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;4-温度情報を表示したい文字列に変換する&#34;&gt;4. 温度情報を表示したい文字列に変換する&lt;/h4&gt;
+
+&lt;p&gt;取得した温度情報を、ディスプレイに表示する文字列に作り変えるfunctionを作りましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;/**
+ * 取得した温度情報を表示する文字列に変換
+ *
+ * @param {number} temp
+ * @return {string}
+ */
+const temp2digit = (temp) =&amp;gt; {
+  let temp_str = `${temp}`;
+  temp_str = temp_str.replace(&#39;.&#39;, &#39;&#39;);
+  if (temp_str.length &amp;gt;= 4) {
+    temp_str = temp_str.substr(0, tempstr.length-1);
+  }
+  return `${temp_str}C`;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;temp2digit()の引数には、先ほど受け取った情報の温度部分だけを渡します。&lt;/p&gt;
+
+&lt;p&gt;数値を文字列に変換し、不要な&amp;rsquo;.&amp;lsquo;を取り除き、3桁にして、温度計らしく&amp;rsquo;C&amp;rsquo;を付けて返します。&lt;/p&gt;
+
+&lt;p&gt;先ほど作ったgetTemp()と一緒に実行するようにしてみましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
+
+const axios = require(&#39;axios&#39;);
+const TOKEN = process.argv[2] || &#39;&#39;;
+const BASE_PATH = `https://us.wio.seeed.io/v1/node`; // 自身のものをアプリで確認
+
+/**
+ * 温度取得
+ */
+ const getTemp = () =&amp;gt; {
+     const ENDPOINT = `/GroveTempA0/temp`;
+     const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${TOKEN}`;
+     return axios.request({method: &#39;get&#39;, baseURL: BASE_URL}); // ここでは実行しない
+ }
+
+/**
+ * 温度情報を文字列変換+Cを追加
+ * @param {number} temp
+ * @return {string}
+ */
+const temp2digit = (temp) =&amp;gt;{
+    let temp_str = `${temp}`;
+    temp_str = temp_str.replace(&#39;.&#39;,&#39;&#39;);
+    if(temp_str.length &amp;gt;= 4){
+        temp_str = temp_str.substr(0,temp_str.length-1);
+    }
+    return `${temp_str}C`;
+}
+
+async function main(){ // async/awaitを使う
+   const res = await getTemp();
+   const temp = res.data.temperature;
+   const text = temp2digit(temp);
+   console.log(text);
+}
+
+main();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ここではasync/awaitを使っています。awaitで指定したタスクの実行を待ってレスポンスを受け取り、asyncを付けたメソッドを一つのタスクとして処理するような機能です。Node.jsではv7.6.0から導入されました。&lt;/p&gt;
+
+&lt;p&gt;実行を待たせるため、getTemp()では、APIの結果ではなくメソッドを返すだけに変更します。&lt;/p&gt;
+
+&lt;p&gt;getTemp()で受け取ったobjectの子要素には&lt;code&gt;.&lt;/code&gt;でアクセスします。先ほどのレスポンスのdataの中のtemperatureが欲しいので&lt;code&gt;res.data.temperature&lt;/code&gt;となります。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;node app.js &amp;lt;token&amp;gt;&lt;/code&gt;で実行してみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/24_temp2digit.png&#34; alt=&#34;&#34; /&gt;
+温度計の文字列ができました！&lt;/p&gt;
+
+&lt;p&gt;次はいよいよこの文字列をディスプレイに表示させます。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;5-ディスプレイに温度を表示する&#34;&gt;5. ディスプレイに温度を表示する&lt;/h4&gt;
+
+&lt;p&gt;取得した温度の値を使って、ディスプレイに表示するAPIを叩きます。温度の区切りを表すため、最初に試した&amp;rsquo;:&amp;lsquo;を表示するAPIも使ってみましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;/**
+ * ディスプレイに値を表示
+ *
+ * @param {number} start_pos
+ * @param {strng} chars
+ */
+const fourDigit = (start_pos, chars) =&amp;gt; {
+  const ENDPOINT = `/Grove4DigitUART0/display_digits/${start_pos}/${chars}`;
+  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
+  return axios.request({method: &#39;POST&#39;, baseURL: BASE_URL})
+}
+
+/**
+ * : を表示/非表示
+ * @param {number} display 0|1
+ */
+const fourDigitPoint = (display) =&amp;gt; {
+  const ENDPOINT = `/Grove4DigitUART0/display_point/${display}`;
+  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
+  return axios.request({method: &#39;POST&#39;, baseURL: BASE_URL});
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;fourDigit()のstart_posにはディスプレイ表示の開始位置、charsには表示する文字を渡します。（詳しくはAPIの説明を読んでみてください）&lt;/p&gt;
+
+&lt;p&gt;fourDigitPoint()には表示するかどうかの0/1を渡すようになっています。&lt;/p&gt;
+
+&lt;p&gt;これまで作ったfunctionと繋げてみます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
+
+const axios = require(&#39;axios&#39;);
+const BASE_PATH = &#39;https://us.wio.seeed.io/v1/node&#39;; // 自身のものをアプリで確認
+const ACCESS_TOKEN = process.argv[2] || &#39;&#39;;
+
+/**
+ * 温度を取得
+ */
+const getTemp = () =&amp;gt; {
+  const ENDPOINT = `/GroveTempA0/temp`;
+  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
+  return axios.request({method: &#39;GET&#39;, baseURL: BASE_URL});
+}
+
+/**
+ * 取得した温度情報を表示する文字列に変換
+ *
+ * @param {number} temp
+ * @return {string}
+ */
+const temp2digit = (temp) =&amp;gt; {
+  let temp_str = `${temp}`;
+  temp_str = temp_str.replace(&#39;.&#39;, &#39;&#39;);
+  if (temp_str.length &amp;gt;= 4) {
+    temp_str = temp_str.substr(0, tempstr.length-1);
+  }
+  return `${temp_str}C`;
+}
+
+/**
+ * ディスプレイに値を表示
+ *
+ * @param {number} start_pos
+ * @param {strng} chars
+ */
+const fourDigit = (start_pos, chars) =&amp;gt; {
+  const ENDPOINT = `/Grove4DigitUART0/display_digits/${start_pos}/${chars}`;
+  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
+  return axios.request({method: &#39;POST&#39;, baseURL: BASE_URL});
+}
+
+/**
+ * : を表示/非表示
+ * @param {number} display 0|1
+ */
+const fourDigitPoint = (display) =&amp;gt; {
+  const ENDPOINT = `/Grove4DigitUART0/display_point/${display}`;
+  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
+  return axios.request({method: &#39;POST&#39;, baseURL: BASE_URL});
+}
+
+async function main() =&amp;gt; {
+  let res = getTemp();
+  const temp = res.data.temperature;
+  const text = temp2digit(temp);
+  console.log(text);
+  res = await fourDigit(0, text);
+  res = await fourDigitPoint(1);
+}
+
+main();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;こちらも試してみましょう。&lt;code&gt;node app.js &amp;lt;token&amp;gt;&lt;/code&gt;で実行です。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/25_comp_demo.png&#34; alt=&#34;&#34; /&gt;
+温度がディスプレイに表示されました！&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;6-3秒ごとに更新する&#34;&gt;6. 3秒ごとに更新する&lt;/h4&gt;
+
+&lt;p&gt;今のままではコマンドを実行した時しか処理が走りません。3秒ごとに実行するようプログラムを変えてみます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;const INTERVAL = 3000;
+
+/**
+ * 繰り返し実行する
+ */
+setInterval(() =&amp;gt; {
+  main()
+  .catch((e) =&amp;gt; {
+    if (e.response) console.log(e.response);
+  })
+}, INTERVAL);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;update()の実行部分をsetInterval()関数で繰り返すようにします。setInterval()の第二引数にミリ秒で数値を渡すと、その間隔ごとに実行されます。あとから変更しやすいよう、定数で宣言しておきましょう。&lt;/p&gt;
+
+&lt;p&gt;catch()はエラーが発生するとエラーレスポンスを受け取ります。&lt;/p&gt;
+
+&lt;p&gt;完成させたコードはこちら。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;
+
+const axios = require(&#39;axios&#39;);
+const BASE_PATH = &#39;https://us.wio.seeed.io/v1/node&#39;; // 自身のものをアプリで確認
+const ACCESS_TOKEN = process.argv[2] || &#39;&#39;;
+const INTERVAL = 3000;
+
+/**
+ * 温度を取得
+ *
+ * @return {object}
+ */
+const getTemp = () =&amp;gt; {
+  const ENDPOINT = `/GroveTempA0/temp`;
+  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
+  return axios.request({method: &#39;GET&#39;, baseURL: BASE_URL});
+}
+
+/**
+ * 取得した温度情報を表示する文字列に変換
+ *
+ * @param {number} temp
+ * @return {string}
+ */
+const tempToDigit = (temp) =&amp;gt; {
+  let temp_str = `${temp}`;
+  temp_str = temp_str.replace(&#39;.&#39;, &#39;&#39;);
+  if (temp_str.length &amp;gt;= 4) {
+    temp_str = temp_str.substr(0, tempstr.length-1);
+  }
+  return `${temp_str}C`;
+}
+
+/**
+ * ディスプレイに値を表示
+ *
+ * @param {number} start_pos
+ * @param {strng} chars
+ * @return {object}
+ */
+const fourDigit = (start_pos, chars) =&amp;gt; {
+  const ENDPOINT = `/Grove4DigitUART0/display_digits/${start_pos}/${chars}`;
+  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
+  return axios.request({method: &#39;POST&#39;, baseURL: BASE_URL})
+}
+
+/**
+ * : を表示/非表示
+ * @param {number} display 0|1
+ * @return {object}
+ */
+const fourDigitPoint = (display) =&amp;gt; {
+  const ENDPOINT = `/Grove4DigitUART0/display_point/${display}`;
+  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
+  return axios.request({method: &#39;POST&#39;, baseURL: BASE_URL});
+}
+
+/**
+ * メインの処理（同期）
+ */
+async function main() {
+  let res = getTemp();
+  const temp = res.data.temperature;
+  const text = tempToDigit(temp);
+  console.log(text);
+  res = await fourDigit(0, text);
+  res = await fourDigitPoint(1);
+}
+
+/**
+ * 繰り返し実行する
+ */
+setInterval(() =&amp;gt; {
+  main()
+  .catch((e) =&amp;gt; {
+    if (e.response) console.log(e.response);
+  })
+}, INTERVAL);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;試してみる&#34;&gt;試してみる&lt;/h3&gt;
+
+&lt;p&gt;完成コードを試してみます。ドキドキ。&lt;code&gt;node app.js&lt;/code&gt;で実行です。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/25_comp_demo.png&#34; alt=&#34;&#34; /&gt;
+現在の室温が表示されます。&lt;/p&gt;
+
+&lt;p&gt;3秒ごとに更新されるので、変化を試すため温度センサを手で温めてみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/26_warmer.png&#34; alt=&#34;&#34; /&gt;
+少し温度が上がりました。処理を止めたい場合は&lt;code&gt;controll+c&lt;/code&gt;で終了します。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;これでプログラムは完成です！やったー！！&lt;/strong&gt; お疲れ様でした！&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;補足-完成の一歩先へ&#34;&gt;補足: 完成の一歩先へ！&lt;/h4&gt;
+
+&lt;p&gt;「簡単であっという間だった」というあなた！&lt;strong&gt;このガジェットを使ってできることはまだまだあります！&lt;/strong&gt;例をあげるので、ぜひトライしてみてください。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;例1: Azure Web AppsなどのPaaSを使って常時稼働できるようにする&lt;/li&gt;
+&lt;li&gt;例2: 温度情報をAmbientなどのウェブサービスを使ってグラフ化してみる&lt;/li&gt;
+&lt;li&gt;例3: 一定の温度をトリガーにTwitterやSlackへ通知を送ってみる&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;上記はほんの一例です。Wio Node対応モジュールもたくさんありますので、ここまでの知見を使って試してみましょう！&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;いかがだったでしょうか？簡単と言いつつ、コマンドでの作業やウェブ開発の経験がない人には詰まる部分が多かったかもしれません。でも、これで&lt;strong&gt;InternetとThingsの連携ができるようになりました！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;IoTの世界には、まだまだたくさんの楽しいデバイスやアイディアが待っています。&lt;strong&gt;作っても使っても楽しい電子工作をやっていきましょう！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;最後まで読んでくださりありがとうございました！&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>【dotstudio×ギャル電】IoT派手イケディスプレーキャップをつくったよ！</title>
@@ -2657,273 +3256,6 @@ void loop() {
 &lt;p&gt;ブラウザさえあれば、REST APIで明るさセンサーの値が取れたり、NefryのLEDをいじったりとハードウエアを簡単にいじることができます。また、ArduinoIDEでプログラムが書けなくても手軽に触れるのでちょっと試したいことがあるときなんかにもいいです。&lt;/p&gt;
 
 &lt;p&gt;REST APIはJavaScriptやC#から制御できます。既存のものにハードウエアを制御させることもできるのでぜひ遊んでみてください。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>IoTで回転寿司を止めたり、クリスマスを煽ったりとカオスな会でした！ #IoTLT vol21</title>
-      <link>https://dotstud.io/blog/iotlt-vol21-n0bisuke-report/</link>
-      <pubDate>Fri, 18 Nov 2016 11:00:19 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/iotlt-vol21-n0bisuke-report/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちはIoTLTの主催をしているのびすけ（&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;@n0bisuke&lt;/a&gt;）です。&lt;/p&gt;
-
-&lt;p&gt;昨日（2016年11月17日）開催されたIoTLT vol21（&lt;a href=&#34;https://iotlt.connpass.com/event/42228/&#34;&gt;IoT縛りの勉強会! IoTLT vol.21 @ NHNテコラス&lt;/a&gt;）のレポートを書きたいと思います。
-やっぱりアーカイブって大事ですよね。と最近思いました。&lt;/p&gt;
-
-&lt;p&gt;ツイートは&lt;a href=&#34;http://togetter.com/li/1049781&#34;&gt;こちら&lt;/a&gt;にまとめています。&lt;/p&gt;
-
-&lt;p&gt;今回は日経の記者も取材に来てくれました。だんだんと注目を集めてる感じがしますね。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;日経さんに取材されるちゃんとく &lt;a href=&#34;https://twitter.com/tokutoku393&#34;&gt;@tokutoku393&lt;/a&gt; さん &lt;a href=&#34;https://twitter.com/hashtag/IoTLT?src=hash&#34;&gt;#IoTLT&lt;/a&gt; &lt;a href=&#34;https://t.co/TIkOKQvkSr&#34;&gt;pic.twitter.com/TIkOKQvkSr&lt;/a&gt;&lt;/p&gt; shanon (@shanonim) &lt;a href=&#34;https://twitter.com/shanonim/status/799242824503824384&#34;&gt;2016年11月17日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;iotltとは&#34;&gt;IoTLTとは&lt;/h2&gt;
-
-&lt;p&gt;僕とリレーションズの土屋さんの二人で開催しているIoTの勉強会です。
-毎回10人程度の登壇者が5分でLTをしていきます。毎回100~200人くらいの人が集まります。&lt;/p&gt;
-
-&lt;p&gt;某研究所調べだと国内最大規模になっていて、年間の参加者で5000人くらいの規模になっています。&lt;/p&gt;
-
-&lt;p&gt;今回、&lt;strong&gt;会場と懇親会&lt;a href=&#34;https://nhn-techorus.com/&#34;&gt;NHNテコラス&lt;/a&gt;さんに提供して頂きました。&lt;/strong&gt;ありがたき幸せ。&lt;/p&gt;
-
-&lt;h2 id=&#34;発表は今回も個性あふれるものが多かったです&#34;&gt;発表は今回も個性あふれるものが多かったです&lt;/h2&gt;
-
-&lt;p&gt;それでは、紹介していきます。
-ちなみに、今回のまとめのスライドは僕が執筆した時点で公開されてるものを載せています！&lt;/p&gt;
-
-&lt;h3 id=&#34;iotで雰囲気クリスマス-by-五十嵐さん&#34;&gt;IoTで雰囲気クリスマス by 五十嵐さん&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/058/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;「来ないよ！クリスマス」&lt;/strong&gt; という衝撃的な発表タイトルでスポンサーLTをした五十嵐さん。&lt;/p&gt;
-
-&lt;p&gt;「もうすぐクリスマスですけど大丈夫ですか？」とテコラスの社員のタカノさんを煽るIoTシステムを作った話です。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;スポンサーLTなのにテコラスのことはタカノさんがいることくらいしか分かりませんでした（笑）&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;iframe src=&#34;//www.slideshare.net/slideshow/embed_code/key/apMpJS5hvOgpOZ&#34; width=&#34;715&#34; height=&#34;605&#34; frameborder=&#34;0&#34; marginwidth=&#34;0&#34; marginheight=&#34;0&#34; scrolling=&#34;no&#34; style=&#34;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&#34; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&#34;margin-bottom:5px&#34;&gt; &lt;strong&gt; &lt;a href=&#34;//www.slideshare.net/MoeIkarashi/ss-69180135&#34; title=&#34;来ないよ！クリスマス&#34; target=&#34;_blank&#34;&gt;来ないよ！クリスマス&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a target=&#34;_blank&#34; href=&#34;//www.slideshare.net/MoeIkarashi&#34;&gt;Moe Ikarashi&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;loraの現地テスト動画車載-空撮動画-by-乾さん&#34;&gt;Loraの現地テスト動画車載、空撮動画 by 乾さん&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/058/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;大阪から参加して頂いた乾さん。&lt;/p&gt;
-
-&lt;p&gt;今IoT領域では話題のLoraを実際にテストした話です。&lt;/p&gt;
-
-&lt;p&gt;話のまとめとしては&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Loraは見通しの良い平地では1km~1.5km可能&lt;/li&gt;
-&lt;li&gt;大きな建物がなければ問題無し&lt;/li&gt;
-&lt;li&gt;受信側はできるだけ高所が望ましい&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;とのことです。&lt;a href=&#34;https://www.youtube.com/watch?v=S16GykarSQc&#34;&gt;こちら&lt;/a&gt;にテストの際の動画も載っています。&lt;/p&gt;
-
-&lt;p&gt;ここまでのツイートは&lt;a href=&#34;http://togetter.com/li/1049781?page=7&#34;&gt;こちら&lt;/a&gt;になります。&lt;/p&gt;
-
-&lt;h3 id=&#34;galdeino-失敗した話-by-鈴木さん-at-がじぇるね&#34;&gt;galdeino 失敗した話 by 鈴木さん at がじぇるね&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/058/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;IoTLTでは常連登壇者の鈴木さんです。&lt;/p&gt;
-
-&lt;p&gt;「ギャルdeイーノという&lt;a href=&#34;https://dotstud.io/blog/iotlt-gbvol19-galden-report/&#34;&gt;ギャル電&lt;/a&gt;のボードを作ろうとして失敗した話」かと思いきや、まさかの起業で失敗した話というIoTがほぼ関係無い話に（笑）&lt;/p&gt;
-
-&lt;p&gt;個人的には起業したばかりなので参考になりました（笑）&lt;/p&gt;
-
-&lt;h3 id=&#34;アレクサと俺のvoiceops-by-大熊さん&#34;&gt;アレクサと俺のVoiceOps by 大熊さん&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/058/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;RaspberryPiとAWSボイスアシスタントを作ってみた話です。&lt;/p&gt;
-
-&lt;p&gt;Amazon Echoに利用されている&lt;a href=&#34;http://alexa.amazon.com/spa/index.html&#34;&gt;Alexa&lt;/a&gt;を利用して、Raspberry PiでもAmazon Echoっぽい音声で家電などを制御する仕組みを作っています。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://io.adafruit.com/&#34;&gt;Adafruit IO&lt;/a&gt;と連携させて&lt;a href=&#34;https://learn.adafruit.com/adafruit-io-basics-neopixel-controller&#34;&gt;NeoPixel&lt;/a&gt;をコントロールするデモもしてくれました。&lt;/p&gt;
-
-&lt;p&gt;個人的にはAdafruitがそういうサービスをやってることを初めて知ったのでいい収穫です。&lt;/p&gt;
-
-&lt;p&gt;&lt;iframe src=&#34;//www.slideshare.net/slideshow/embed_code/key/girOKrsS7MdLVr&#34; width=&#34;715&#34; height=&#34;605&#34; frameborder=&#34;0&#34; marginwidth=&#34;0&#34; marginheight=&#34;0&#34; scrolling=&#34;no&#34; style=&#34;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&#34; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&#34;margin-bottom:5px&#34;&gt; &lt;strong&gt; &lt;a href=&#34;//www.slideshare.net/GenkiOkuma/voice-ops-201611&#34; title=&#34;アレクサと俺のVoice ops 201611&#34; target=&#34;_blank&#34;&gt;アレクサと俺のVoice ops 201611&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a target=&#34;_blank&#34; href=&#34;//www.slideshare.net/GenkiOkuma&#34;&gt;Genki Okuma&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;定点撮影のiot活用-airlapse爆誕-by-pochioさん&#34;&gt;定点撮影のIoT活用・AirLapse爆誕！ by Pochioさん&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/058/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;FlashAir芸人のPochioさん。
-今日もジャパネット高田ライクな口調で、定点撮影でのIoT活用話をしてくれました。&lt;/p&gt;
-
-&lt;p&gt;陸前高田の復興の様子を定点撮影した様子を見せてもらいました。&lt;/p&gt;
-
-&lt;p&gt;陸前高田は岩手ということもあり、僕も行ったことあるので感慨深いですね。&lt;/p&gt;
-
-&lt;p&gt;ここまでのツイートは&lt;a href=&#34;http://togetter.com/li/1049781?page=6&#34;&gt;こちら&lt;/a&gt;になります。&lt;/p&gt;
-
-&lt;h3 id=&#34;アプリをいれるiot電球-by-かんさん&#34;&gt;アプリをいれるIot電球 by かんさん&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/058/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;今週はIoTLTがスピンオフ企画も含めて3回あるのですが、3回とも登壇してくれるTeNKYUのかんさんです！&lt;/p&gt;
-
-&lt;p&gt;「玄関の電球の色が青だったら外は雨」みたいな形で照明で天気が分かるデバイスです。
-人感センサも内臓しているので見守りとか受付とか色々な用途に応用も可能です。&lt;/p&gt;
-
-&lt;p&gt;ツイッター上で値段気になってる人もいたので、TeNKYUのサイトは&lt;a href=&#34;http://tenkyu.net/&#34;&gt;こちら&lt;/a&gt;！&lt;/p&gt;
-
-&lt;p&gt;ここまでのツイートは&lt;a href=&#34;http://togetter.com/li/1049781?page=5&#34;&gt;こちら&lt;/a&gt;になります。&lt;/p&gt;
-
-&lt;h3 id=&#34;リコーダーiot-by-河野さん-at-秘密結社オープンフォース&#34;&gt;リコーダーIoT by 河野さん at 秘密結社オープンフォース&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/058/07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;IoTLTでは恒例になってきた秘密結社の総統です。&lt;/p&gt;
-
-&lt;p&gt;テンポ良すぎてめちゃ面白いんですけど、この臨場感はなかなか文章では伝わらないので一度見てもらいたいです（笑）&lt;/p&gt;
-
-&lt;p&gt;リコーダーIoTのデモが、テンポの速さとトラブルにより見れず&amp;hellip;&amp;hellip;（苦笑）&lt;/p&gt;
-
-&lt;h3 id=&#34;iotに関する実験を70件くらいやってきました-by-木村さん-at-リノべる&#34;&gt;IoTに関する実験を70件くらいやってきました by 木村さん at リノべる&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/058/08.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;久々に登壇してもらったリノべるの木村さんです。&lt;/p&gt;
-
-&lt;p&gt;IoTに関する色々な実験をやった話をして頂きました。
-スライドは&lt;a href=&#34;https://docs.google.com/presentation/d/1Vc1Hcqn4tH9qG1JoCGqVY-bsjRHq4NmnsTS3d-1nbaU/edit#slide=id.g18123fd135_0_0&#34;&gt;こちら&lt;/a&gt;です。&lt;/p&gt;
-
-&lt;p&gt;このスライドに真理が詰まってる気がしました。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;家はIoTハックの宝箱かと思いきやぜんぜんそうでもないそうなのです。実験でわかったこと。 &lt;a href=&#34;https://twitter.com/hashtag/iotlt?src=hash&#34;&gt;#iotlt&lt;/a&gt; &lt;a href=&#34;https://t.co/wUKoYhNiBZ&#34;&gt;pic.twitter.com/wUKoYhNiBZ&lt;/a&gt;&lt;/p&gt; うこ (@harmoniko) &lt;a href=&#34;https://twitter.com/harmoniko/status/799216441610248192&#34;&gt;2016年11月17日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;「&lt;strong&gt;家電の遠隔操作は二日で飽きる&lt;/strong&gt;」確かになぁ。&lt;/p&gt;
-
-&lt;p&gt;みんなやったことないところに夢を感じていたけど実際はどうだったって話が出てくるフェーズになったんですね。&lt;/p&gt;
-
-&lt;p&gt;ちなみにこの&lt;a href=&#34;https://dotstud.io/members/ukkz&#34;&gt;うこ&lt;/a&gt;のツイートがかなりリツイートされてます。（執筆時点で502）&lt;/p&gt;
-
-&lt;p&gt;ここまでのツイートは&lt;a href=&#34;http://togetter.com/li/1049781?page=4&#34;&gt;こちら&lt;/a&gt;になります。&lt;/p&gt;
-
-&lt;h3 id=&#34;minecraft-x-iot-by-いわたん&#34;&gt;Minecraft x IoT by いわたん&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/058/09.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Minecraft of ThingsでMoTを提唱するいわたんさん。&lt;/p&gt;
-
-&lt;p&gt;Minecraftを知らないという人は会場調べで一人しかいなく、それくらい知名度が高いゲームです。
-現実世界のボタンを押すことで、Minecraftの世界に命令を送ることができる仕組みを作った話です。&lt;/p&gt;
-
-&lt;p&gt;&lt;iframe src=&#34;//www.slideshare.net/slideshow/embed_code/key/7rb7202uLYrL0A&#34; width=&#34;715&#34; height=&#34;605&#34; frameborder=&#34;0&#34; marginwidth=&#34;0&#34; marginheight=&#34;0&#34; scrolling=&#34;no&#34; style=&#34;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&#34; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&#34;margin-bottom:5px&#34;&gt; &lt;strong&gt; &lt;a href=&#34;//www.slideshare.net/naokiiwata3/minecraft-x-iot&#34; title=&#34;Minecraft x IoT&#34; target=&#34;_blank&#34;&gt;Minecraft x IoT&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a target=&#34;_blank&#34; href=&#34;//www.slideshare.net/naokiiwata3&#34;&gt;Naoki Iwata&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;&lt;/p&gt;
-
-&lt;p&gt;Hacklogにも&lt;a href=&#34;http://hacklog.jp/works/49374&#34;&gt;投稿&lt;/a&gt;されています。&lt;/p&gt;
-
-&lt;p&gt;ちなみに利用していたWioNodeはdotstudioでも&lt;a href=&#34;https://dotstud.io/projects/wionode-social-remote-control/&#34;&gt;購入可能&lt;/a&gt;です！&lt;/p&gt;
-
-&lt;h3 id=&#34;iotで寿司を止める-by-湯村さん&#34;&gt;IoTで寿司を止める by 湯村さん&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/058/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;おうちハック同好会からの刺客です。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;回転寿司をIoTの力で止める&amp;hellip;&amp;hellip;!話&lt;/strong&gt;です。&lt;/p&gt;
-
-&lt;p&gt;ゾートロープ（回転覗き絵）の効果で回転寿司を止める実験をした話です。
-デモ機も実際に持ってきて下さいました。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;湯村さん( &lt;a href=&#34;https://twitter.com/yumu19&#34;&gt;@yumu19&lt;/a&gt; )が寿司を止めた話 &lt;a href=&#34;https://twitter.com/hashtag/iotlt?src=hash&#34;&gt;#iotlt&lt;/a&gt; &lt;a href=&#34;https://t.co/o093jxEWL7&#34;&gt;pic.twitter.com/o093jxEWL7&lt;/a&gt;&lt;/p&gt; えむにわ (@m2wasabi) &lt;a href=&#34;https://twitter.com/m2wasabi/status/799220235865767936&#34;&gt;2016年11月17日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;実験の途中で発生した現象、寿司テレポーテーション、寿司の多重化など興味深い（）内容でした。&lt;/p&gt;
-
-&lt;p&gt;結果としては&lt;strong&gt;年収８００万以下でも止まった寿司に出会える&lt;/strong&gt;らしいです。&lt;/p&gt;
-
-&lt;p&gt;今後の研究成果が気になるところですね。&lt;/p&gt;
-
-&lt;script async class=&#34;speakerdeck-embed&#34; data-id=&#34;de74ad3b3fe24721940d1ef5ac605fbf&#34; data-ratio=&#34;1.33333333333333&#34; src=&#34;//speakerdeck.com/assets/embed.js&#34;&gt;&lt;/script&gt;
-
-&lt;h3 id=&#34;永遠のd-by-ちゃんとく&#34;&gt;永遠のD by ちゃんとく&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/058/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;おなじみになってきたちゃんとく先生。
-永遠のDというタイトルですが、Dはダイエットのことみたいです。&lt;/p&gt;
-
-&lt;p&gt;これから色々とダイエットIoTを試すそうなのですが、今回は結果をツイートする部分から&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;&lt;a href=&#34;https://twitter.com/hashtag/iotlt?src=hash&#34;&gt;#iotlt&lt;/a&gt; デモでつぶやき成功 &lt;a href=&#34;https://t.co/vhkx1voNfK&#34;&gt;https://t.co/vhkx1voNfK&lt;/a&gt;&lt;/p&gt; 鈴木光宏 (@s_mitu) &lt;a href=&#34;https://twitter.com/s_mitu/status/799221909485277184&#34;&gt;2016年11月17日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;結論としては&lt;strong&gt;明日からがんばる。&lt;/strong&gt;らしいので &lt;strong&gt;今日から頑張ってるのでしょう。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;深センで見つけた怪しげデバイスたち-by-のびすけ&#34;&gt;深センで見つけた怪しげデバイスたち by のびすけ&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/058/12.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;僕です。先日深センに行ってきた際に発見した謎のデバイスを紹介しました。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://dotstud.io/blog/4k-camera-gopro-fake/&#34;&gt;さかのGoPro？4Kのカメラを265元（4,000円程度）で買えた&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://dotstud.io/blog/wall-climbing-toy-car/&#34;&gt;すごいじゃん深セン。怪しさMAXの壁を登るラジコン？WALL CLIMBERを試してみた&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://dotstud.io/blog/led-multilingual-confessing-fan/&#34;&gt;使い所が分からなすぎる（笑）LEDで光るマルチリンガルなUSB扇風機を買ってみた&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://dotstud.io/blog/led-lantern-and-torch/&#34;&gt;これは掘り出し物かも？ ソーラーバッテリ駆動でスマホ充電もできるLEDランタン！&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;などの記事にもなっているのでこちらもご覧ください。&lt;/p&gt;
-
-&lt;script async class=&#34;speakerdeck-embed&#34; data-id=&#34;effe96f310c34aaa805a8de0fd0e4621&#34; data-ratio=&#34;1.33333333333333&#34; src=&#34;//speakerdeck.com/assets/embed.js&#34;&gt;&lt;/script&gt;
-
-&lt;p&gt;ここまでのツイートは&lt;a href=&#34;http://togetter.com/li/1049781?page=2&#34;&gt;こちら&lt;/a&gt;になります。&lt;/p&gt;
-
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/058/13.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;いかがでしたでしょうか。今回久しぶりにモチーションがあったのでアーカイブ目的でまとめてみました。
-毎回面白い発表があって、振り返ることで勉強にもなるのでまとめは大事だと再認識です。&lt;/p&gt;
-
-&lt;p&gt;それでは、また。&lt;/p&gt;
-
-&lt;p&gt;来月も是非遊びに来てください！&lt;/p&gt;
-
-&lt;h2 id=&#34;告知&#34;&gt;告知&lt;/h2&gt;
-
-&lt;p&gt;まだまだ募集中ですのでIoTLTにぜひ遊びにきて下さい！&lt;/p&gt;
-
-&lt;h3 id=&#34;11-19-スタートアップiotlt-vol3&#34;&gt;&lt;sup&gt;11&lt;/sup&gt;&amp;frasl;&lt;sub&gt;19&lt;/sub&gt; スタートアップIoTLT vol3&lt;/h3&gt;
-
-&lt;p&gt;スピンオフ企画の一つで、IoTスタートアップの人に登壇してもらう会になっています。
-参加枠がまだありますのでぜひご参加下さい。なんと土曜日開催です。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://iotlt.connpass.com/event/42980/&#34;&gt;スタートアップ IoTLT vol.3&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;12-7-iotlt-vol22-イトーキ&#34;&gt;&lt;sup&gt;12&lt;/sup&gt;&amp;frasl;&lt;sub&gt;7&lt;/sub&gt; IoTLT vol22 @イトーキ&lt;/h3&gt;
-
-&lt;p&gt;次回のIoTLTはなんとイトーキさん開催です。昨日から募集開始したばかりです、登壇者も募集してますので是非&lt;a href=&#34;https://www.facebook.com/groups/IoTLT/&#34;&gt;IoTLTのFacebookグループ&lt;/a&gt;からお声がけ下さい！&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://iotlt.connpass.com/event/45272/&#34;&gt;IoTLT vol22 @イトーキ&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;mashup-awards-internet-of-awesome-things-部門賞-by-iotlt&#34;&gt;Mashup Awards Internet of Awesome Things 部門賞（by IoTLT）&lt;/h3&gt;
-
-&lt;p&gt;昨日のIoTLTでも話しましたが、Mashup AwardsのIoT部門賞でIoTLTと連携しています。&lt;/p&gt;
-
-&lt;p&gt;11/21が締め切りです！お急ぎください！&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://mashupaward.jp/2016/11/category-iot/&#34;&gt;Internet of Awesome Things 部門賞（by IoTLT）&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;関係ないですけどMashup Awardsが正式名称みたいですけど、ドメインはMashupAwardで単数形みたいなのでお間違えの無いように！&lt;/p&gt;
 </description>
     </item>
     
