@@ -472,7 +472,7 @@ Wio Nodeが認識されました。デバイスに名前をつけておきます
 
 <h4 id="1-node-jsのインストール">1. Node.jsのインストール</h4>
 
-<p>まずはNode.jsのインストールから始めます。また<code>async/await</code>という機能を使っているので、<strong>v7.6.0以上が必要</strong>です。v7.6.0以上をインストール済みの方は次項の「プロジェクトの作成」から始めてください。</p>
+<p>まずはNode.jsのインストールから始めます。また<code>async/await</code>という機能を使っているので、<strong>v7.6.0以上が必要</strong>です。最新版をインストール済みの方は次項の「プロジェクトの作成」から始めてください。</p>
 
 <p>Node.jsのインストールには、簡単にバージョン管理ができる「<strong>nvm</strong>」や「<strong>nodebrew</strong>」を使うのが便利です。nodebrewを使ったインストール方法は下記を参照してください。</p>
 
@@ -771,7 +771,7 @@ setInterval(() =&gt; {
 
 <p>完成させたコードはこちら。</p>
 
-<pre><code>'use strict'
+<pre><code>'use strict';
 
 const axios = require('axios');
 const BASE_PATH = 'https://us.wio.seeed.io/v1/node'; // 自身のものをアプリで確認
@@ -799,7 +799,7 @@ const tempToDigit = (temp) =&gt; {
   let temp_str = `${temp}`;
   temp_str = temp_str.replace('.', '');
   if (temp_str.length &gt;= 4) {
-    temp_str = temp_str.substr(0, tempstr.length-1);
+    temp_str = temp_str.substr(0, temp_str.length-1);
   }
   return `${temp_str}C`;
 }
@@ -832,7 +832,7 @@ const fourDigitPoint = (display) =&gt; {
  * メインの処理（同期）
  */
 async function main() {
-  let res = getTemp();
+  let res = await getTemp();
   const temp = res.data.temperature;
   const text = tempToDigit(temp);
   console.log(text);
