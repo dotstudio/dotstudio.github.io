@@ -247,7 +247,19 @@
             
             
                     
-                        <li><a href="https://dotstud.io/docs/nefry-setup/">Arduino IDEの環境構築</a></li>
+                        <li><a href="https://dotstud.io/docs/nefry_3step/">3ステップでわかる開発方法</a></li>
+                    
+            
+        
+            
+            
+            
+        
+            
+            
+            
+                    
+                        <li><a href="https://dotstud.io/docs/nefry-setup/">Arduino IDEのインストール</a></li>
                     
             
         
@@ -362,10 +374,6 @@
             
             
             
-        
-            
-            
-            
                     
                         <li><a href="https://dotstud.io/docs/nefry-cocoabit/">CocoaBit</a></li>
                     
@@ -374,17 +382,17 @@
             
             
             
+        
+            
+            
+            
+        
+            
+            
+            
                     
                         <li><a href="https://dotstud.io/docs/nefry-sample/">サンプルコード</a></li>
                     
-            
-        
-            
-            
-            
-        
-            
-            
             
         
             
@@ -961,7 +969,7 @@
 
 <h2 id="groveタッチセンサ">Groveタッチセンサ</h2>
 
-<p><img src="/img/docs/nefry/5v.png" alt="5v" /> <img src="/img/docs/nefry/3.3v.png" alt="3.3v" /> <img src="/img/docs/nefry/digital.png" alt="digital" /></p>
+<p><img src="/img/docs/nefry/grove_status.png" alt="" /></p>
 
 <p><img src="/img/docs/nefry/grovetouch.png" alt="Touch Senser" /></p>
 
@@ -972,64 +980,44 @@
 
 <h3 id="仕様">仕様</h3>
 
-<table>
-<thead>
-<tr>
-<th align="center"></th>
-<th align="center"></th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td align="center">動作電圧</td>
-<td align="center">2.0v-5.5v</td>
-</tr>
-
-<tr>
-<td align="center">動作電流(VCC=3v)</td>
-<td align="center">1.5 - 3.0μA</td>
-</tr>
-
-<tr>
-<td align="center">動作電流(VCC=5V)</td>
-<td align="center">3.5 - 7.0μA</td>
-</tr>
-
-<tr>
-<td align="center">出力応答時間</td>
-<td align="center">60 - 220ms</td>
-</tr>
-
-<tr>
-<td align="center">IC</td>
-<td align="center">TTP223-BA6</td>
-</tr>
-</tbody>
-</table>
+<p><img src="/img/docs/nefry/grove_detail.png" alt="" /></p>
 
 <h3 id="動作確認">動作確認</h3>
 
-<table>
-<thead>
-<tr>
-<th align="center">Nefry</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td align="center"><img src="/img/docs/nefry/nefry-ok.png" alt="NefryOK" /></td>
-</tr>
-</tbody>
-</table>
+<p><img src="/img/docs/nefry/nefry-ok.png" alt="NefryOK" /></p>
 
 <h3 id="サンプルプログラム">サンプルプログラム</h3>
 
 <p><img src="/img/docs/nefry/nefrytouch.png" alt="Nefry Touch Senser" /></p>
 
-<script src="http://gist-it.appspot.com/github/Nefry-Community/Arduino/blob/master/libraries/Nefry/examples/Nefry_Digital_IN_OUT/Nefry_Digital_IN_OUT.ino">
-</script>
+<pre><code>#include &lt;Nefry.h&gt;
+void setup() {
+  pinMode(D5,OUTPUT);//出力モード切り替え
+  pinMode(D4,INPUT_PULLUP);//入力モード切り替え
+}
+void loop() {
+  //SWを押した時にD5にLEDを差すと点灯する
+  if(Nefry.push_SW()){
+    //押した時
+    digitalWrite(D5,HIGH);
+    Nefry.println(&quot;Push SW&quot;);
+  }else{
+    //離した時
+    digitalWrite(D5,LOW);
+  }
+
+  //D4がLOWになったときにNefryのLEDが青色に光る
+  if(digitalRead(D4)==LOW){
+    //赤色になる（r,g,b）の順で色を指定できる
+    Nefry.setLed(0,0,255);
+    Nefry.println(&quot;D4 LOW&quot;);
+  }else{
+    //緑色になる
+    Nefry.setLed(0,255,255);
+  }
+  delay(100);
+}
+</code></pre>
 
 <p>詳細データ
 <a href="http://wiki.seeed.cc/Grove-Touch_Sensor/">http://wiki.seeed.cc/Grove-Touch_Sensor/</a></p>

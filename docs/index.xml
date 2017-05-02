@@ -33,19 +33,29 @@
       
       <description>
 
-&lt;p&gt;Nefryとは、&lt;a href=&#34;https://twitter.com/wamisnet&#34;&gt;wamisnet&lt;/a&gt;氏によって開発された小型のマイコンボードです。Wi-Fiさえあればすぐにネットワークに接続でき、IoTアプリケーションを製作する際のハードウェアプラットフォームとして非常に優秀な製品となっています。&lt;/p&gt;
+&lt;p&gt;「Nefry（ねふりー）」は、&lt;a href=&#34;https://twitter.com/wamisnet&#34;&gt;wamisnet&lt;/a&gt;氏によって開発された小型のマイコンボードです。Wi-Fiさえあればすぐにネットワークに接続でき、MilkcocoaやmyThings、IFTTTなどのインターネットのサービスと簡単に接続できます。&lt;/p&gt;
+
+&lt;p&gt;スマートフォンで使うようなモバイルバッテリーで動くので、場所を選ばずに使えます。&lt;/p&gt;
 
 &lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;
 
-&lt;p&gt;Nefryは、「ESP8266」というマイコンモジュールを利用したボードです。ESP8266はWi-Fiに対応しており、ネットワークに無線接続できるモジュールとしてはとても優れていますが、そのままでは難易度の高いはんだ付けが必須となっていました。&lt;/p&gt;
+&lt;p&gt;Nefryは「ESP8266」というマイコンモジュールを利用したボードです。ESP8266はWi-Fiに対応しており、ネットワークに無線接続できるモジュールとしてはとても優れていますが、そのままでは難易度の高いはんだ付けが必須となっていました。&lt;/p&gt;
 
 &lt;p&gt;そこで、入出力関連はGPIOソケットと&lt;a href=&#34;http://wiki.seeed.cc/Grove_System/&#34;&gt;Grove&lt;/a&gt;を備え、また電源も汎用的なUSBによるものとしたことで、ハードウェアの開発に一切の工具を不要としました。&lt;/p&gt;
 
 &lt;p&gt;さらに手持ちのPCのWebブラウザから様々な設定ができ、プログラムの書き込みも無線で行えるなどといったソフトウェア面での簡単さもあり、特に初心者がIoTなプロトタイプを作りたいといった場面で強力なベースプラットフォームとなるような設計になっています。&lt;/p&gt;
 
+&lt;h2 id=&#34;説明書&#34;&gt;説明書&lt;/h2&gt;
+
+&lt;p&gt;Nefryの詳細な仕様・動作などが参照できます。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://wamisnet.github.io/Nefry_manual.pdf&#34;&gt;https://wamisnet.github.io/Nefry_manual.pdf&lt;/a&gt;&lt;/p&gt;
+
 &lt;h2 id=&#34;インターフェース&#34;&gt;インターフェース&lt;/h2&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/97208/ba4a18a9-c793-bca0-5d3a-da47eea8ef71.png&#34; alt=&#34;Nefryの基板写真・各モジュールの説明入り&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/nefry_detail.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;技術仕様&#34;&gt;技術仕様&lt;/h2&gt;
 
@@ -83,44 +93,29 @@
 &lt;li&gt;上級者はパーツの後付けによってmicroSDカードを利用可能（スイッチとの同時利用不可）&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&#34;3ステップでわかる開発方法&#34;&gt;3ステップでわかる開発方法&lt;/h2&gt;
+&lt;h2 id=&#34;nefryでできること&#34;&gt;Nefryでできること&lt;/h2&gt;
 
-&lt;p&gt;基本的な始め方は以下の記事で紹介されています。&lt;/p&gt;
+&lt;p&gt;開発例の記事をまとめました！&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&#34;https://liginc.co.jp/298161&#34;&gt;さくっと生活を便利にする！FRISKサイズのIoT向けデバイス「Nefry」を使ってみよう【環境構築編】&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;nefryとは何か-他のボードとどこが違うの&#34;&gt;Nefryとは何か？他のボードとどこが違うの？&lt;/h3&gt;
 
-&lt;p&gt;こちらでは簡単な開発の流れを説明します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/nefry_custom.png&#34; alt=&#34;&#34; /&gt;
+&lt;a href=&#34;https://liginc.co.jp/236620&#34;&gt;自作したオリジナルIoTデバイス「Nefry」とインターネットを繋いでみた&lt;/a&gt;&lt;/p&gt;
 
-&lt;h3 id=&#34;1-arduino-ideとnefryライブラリをインストール&#34;&gt;1. Arduino IDEとNefryライブラリをインストール&lt;/h3&gt;
+&lt;h3 id=&#34;まずはnefryを開発するための環境を整える&#34;&gt;まずはNefryを開発するための環境を整える！&lt;/h3&gt;
 
-&lt;p&gt;Nefryは、「Arduino IDE」というArduino用の開発ソフトウェアで開発できます。Arduinoで開発をしたことがない方は、まずArduino IDEをダウンロード・インストールしましょう。次にIDE内からNefryライブラリをインストールします。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/nefry_try.png&#34; alt=&#34;&#34; /&gt;
+&lt;a href=&#34;https://liginc.co.jp/298161&#34;&gt;さくっと生活を便利にする！FRISKサイズのIoT向けデバイス「Nefry」を使ってみよう【環境構築編】&lt;/a&gt;&lt;/p&gt;
 
-&lt;h3 id=&#34;2-nefryをusb電源に接続してブラウザからwi-fiセットアップ&#34;&gt;2. NefryをUSB電源に接続してブラウザからWi-Fiセットアップ&lt;/h3&gt;
+&lt;h3 id=&#34;ボタンを押したことをwebに反映させてみよう&#34;&gt;ボタンを押したことをWebに反映させてみよう&lt;/h3&gt;
 
-&lt;p&gt;![モバイルバッテリにつないだNefryとPCのセットアップ画面]()&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/nefry_milkcocoa.png&#34; alt=&#34;&#34; /&gt;
+&lt;a href=&#34;https://liginc.co.jp/282918&#34;&gt;NefryとMilkcocoaを連携させて、WebサイトにリアルタイムでPush通知してみる&lt;/a&gt;&lt;/p&gt;
 
-&lt;p&gt;NefryのUSBをモバイルバッテリやPCのUSBポートに接続しましょう。これは電源専用となっています。
-電源が入ったらLEDが光るので、NefryのアクセスポイントをPCから探して接続します。&lt;/p&gt;
+&lt;h3 id=&#34;スマホやtwitterに通知を送ってみる&#34;&gt;スマホやTwitterに通知を送ってみる&lt;/h3&gt;
 
-&lt;p&gt;Nefryアクセスポイントに接続したままWebブラウザから &lt;a href=&#34;http://192.168.4.1&#34;&gt;http://192.168.4.1&lt;/a&gt; を参照して、コンソールが表示されれば各設定を調整します。（詳しくは上記の記事を参照ください）&lt;/p&gt;
-
-&lt;h3 id=&#34;3-arduino-ideで出力したバイナリファイルを転送&#34;&gt;3. Arduino IDEで出力したバイナリファイルを転送&lt;/h3&gt;
-
-&lt;p&gt;Arduino IDEで打ち込んだプログラムをあらかじめバイナリファイルにコンパイルしておきます。
-Web上のコンソールから当該のバイナリファイルを選択してアップロードしたら書き込みは完了です。&lt;/p&gt;
-
-&lt;h2 id=&#34;開発例&#34;&gt;開発例&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Nefryとは何か？他のボードとどこが違うの？&lt;br /&gt;
-&lt;a href=&#34;https://liginc.co.jp/236620&#34;&gt;自作したオリジナルIoTデバイス「Nefry」とインターネットを繋いでみた&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;まずはNefryを開発するための環境を整える！&lt;br /&gt;
-&lt;a href=&#34;https://liginc.co.jp/298161&#34;&gt;さくっと生活を便利にする！FRISKサイズのIoT向けデバイス「Nefry」を使ってみよう【環境構築編】&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;ボタンを押したことをWebに反映させてみよう&lt;br /&gt;
-&lt;a href=&#34;https://liginc.co.jp/282918&#34;&gt;NefryとMilkcocoaを連携させて、WebサイトにリアルタイムでPush通知してみる&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;スマホやTwitterに通知を送ってみる&lt;br /&gt;
-&lt;a href=&#34;https://liginc.co.jp/263899&#34;&gt;Webサービス同士を連携できる「IFTTT」と自作IoTデバイスを繋いで生活を便利にしてみた&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/nefry_ifttt.png&#34; alt=&#34;&#34; /&gt;
+&lt;a href=&#34;https://liginc.co.jp/263899&#34;&gt;Webサービス同士を連携できる「IFTTT」と自作IoTデバイスを繋いで生活を便利にしてみた&lt;/a&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;設計情報&#34;&gt;設計情報&lt;/h2&gt;
 
@@ -132,8 +127,11 @@ Web上のコンソールから当該のバイナリファイルを選択して�
 
 &lt;h2 id=&#34;公式リンク&#34;&gt;公式リンク&lt;/h2&gt;
 
-&lt;p&gt;購入先：&lt;a href=&#34;https://dotstud.io/projects/nefry-connect-internet/&#34;&gt;Nefry v1.0 | dotstudio&lt;/a&gt;&lt;br /&gt;
-説明書：&lt;a href=&#34;https://wamisnet.github.io/Nefry_manual.pdf&#34;&gt;Nefry v2.0&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;プログラム共有サイト: &lt;a href=&#34;https://program.nefry.studio/&#34;&gt;Nefry Platform&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;購入先：&lt;a href=&#34;https://dotstud.io/projects/nefry-connect-internet/&#34;&gt;Nefry v1.0 | dotstudio&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;説明書：&lt;a href=&#34;https://wamisnet.github.io/Nefry_manual.pdf&#34;&gt;Nefry v2.0&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 </description>
     </item>
     
@@ -274,15 +272,122 @@ Web上のコンソールから当該のバイナリファイルを選択して�
     </item>
     
     <item>
-      <title>Arduino IDEの環境構築</title>
+      <title>3ステップでわかる開発方法</title>
+      <link>https://dotstud.io/docs/nefry_3step/</link>
+      <pubDate>Tue, 19 Jul 2016 01:02:41 +0900</pubDate>
+      
+      <guid>https://dotstud.io/docs/nefry_3step/</guid>
+      
+      <description>
+
+&lt;p&gt;基本的な始め方は以下の記事で紹介されています。
+&lt;img src=&#34;https://dotstud.io/img/docs/nefry/nefry_try.png&#34; alt=&#34;&#34; /&gt;
+&lt;a href=&#34;https://liginc.co.jp/298161&#34;&gt;さくっと生活を便利にする！FRISKサイズのIoT向けデバイス「Nefry」を使ってみよう【環境構築編】&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;また、詳細な手順は各項目のドキュメントで確認してください。こちらでは簡単な開発の流れを説明します。&lt;/p&gt;
+
+&lt;h3 id=&#34;1-arduino-ideとnefryライブラリをインストール&#34;&gt;1. Arduino IDEとNefryライブラリをインストール&lt;/h3&gt;
+
+&lt;p&gt;Nefryは、「Arduino IDE」というArduino用の開発ソフトウェアで開発できます。Arduinoで開発をしたことがない方は、まずArduino IDEをダウンロード・インストールしましょう。次にIDE内からNefryライブラリをインストールします。&lt;/p&gt;
+
+&lt;p&gt;詳細: &lt;a href=&#34;https://dotstud.io/docs/nefry-setup&#34;&gt;Arduino IDEのインストール&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;2-nefryをusb電源に接続してブラウザからwi-fiセットアップ&#34;&gt;2. NefryをUSB電源に接続してブラウザからWi-Fiセットアップ&lt;/h3&gt;
+
+&lt;!-- ![モバイルバッテリにつないだNefryとPCのセットアップ画面]() --&gt;
+
+&lt;p&gt;NefryのUSBをモバイルバッテリやPCのUSBポートに接続しましょう。これは電源専用となっています。
+電源が入ったらLEDが光るので、NefryのアクセスポイントをPCから探して接続します。&lt;/p&gt;
+
+&lt;p&gt;Nefryアクセスポイントに接続したままWebブラウザから &lt;a href=&#34;http://192.168.4.1&#34;&gt;http://192.168.4.1&lt;/a&gt; を参照して、コンソールが表示されれば各設定を調整します。（詳しくは上記の記事を参照ください）&lt;/p&gt;
+
+&lt;h3 id=&#34;3-arduino-ideで出力したバイナリファイルを転送&#34;&gt;3. Arduino IDEで出力したバイナリファイルを転送&lt;/h3&gt;
+
+&lt;p&gt;Arduino IDEで打ち込んだプログラムをあらかじめバイナリファイルにコンパイルしておきます。
+Web上のコンソールから当該のバイナリファイルを選択してアップロードしたら書き込みは完了です。&lt;/p&gt;
+
+&lt;p&gt;詳細: &lt;a href=&#34;https://dotstud.io/docs/nefry-usage&#34;&gt;プログラムの書き方&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>回路図</title>
+      <link>https://dotstud.io/docs/circuit/</link>
+      <pubDate>Sat, 12 Nov 2016 01:02:41 +0900</pubDate>
+      
+      <guid>https://dotstud.io/docs/circuit/</guid>
+      
+      <description>
+
+&lt;p&gt;回路図とは、電子部品同士をどのように繋ぐのか図解したものです。&lt;/p&gt;
+
+&lt;p&gt;回路図があることで、自分が見たときはもちろん他の人に伝える時にも &lt;strong&gt;間違えることなく電子回路を組み立てる&lt;/strong&gt; ことができます。&lt;/p&gt;
+
+&lt;h2 id=&#34;回路図をみてみよう&#34;&gt;回路図をみてみよう&lt;/h2&gt;
+
+&lt;h3 id=&#34;一般的な回路図&#34;&gt;一般的な回路図&lt;/h3&gt;
+
+&lt;p&gt;回路図にもいくつか種類があります。下記のような、線と簡単な図形で描かれたシンプルなものが一般的です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/circuit/circuit.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;このような回路図を読むことができると、インターネット上にある様々な回路を組むことができます。
+しかし、事前知識なしに読むのは難しいです。&lt;/p&gt;
+
+&lt;p&gt;上のような回路図を読みたい場合、詳しく説明してくれるサイトもあるのでそちらを参照してください。&lt;/p&gt;
+
+&lt;h3 id=&#34;回路図作成ソフト-fritzing&#34;&gt;回路図作成ソフト『Fritzing』&lt;/h3&gt;
+
+&lt;p&gt;そこで今回は、『Fritzing』と呼ばれる回路図作成ソフトの回路図を見てみようと思います。&lt;/p&gt;
+
+&lt;p&gt;このソフトで描かれた回路図の特徴は、&lt;strong&gt;電子部品をイラストで表してくれるところ&lt;/strong&gt; です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/circuit/illust.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ボタンを押すとLEDが光る回路を組んでみました。実は、&lt;strong&gt;上の回路図とこのイラストの回路図は同じことを表しています。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;多くの場合は前述のシンプルな回路図で表記されるため、読める方がよいとは思います。&lt;/p&gt;
+
+&lt;p&gt;「この図形ってなんだっけ？」という時にはFritzingを使って検索してみるとよいでしょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;回路図でよくみる記号&#34;&gt;回路図でよくみる記号&lt;/h2&gt;
+
+&lt;h3 id=&#34;電源&#34;&gt;電源&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/circuit/battery.png&#34; alt=&#34;&#34; /&gt;
+電池やUSBなどから供給される電気の供給源です。プラスとマイナスがあり、横に２本線があるうち長い方がプラス、短い方がマイナスとなります。&lt;/p&gt;
+
+&lt;h3 id=&#34;コンデンサ&#34;&gt;コンデンサ&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/circuit/condenser.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;コンデンサは電気を蓄えたり放出したりする電子部品です。プラス・マイナスの極性が決まっているものもあるので注意が必要です。&lt;/p&gt;
+
+&lt;h3 id=&#34;抵抗&#34;&gt;抵抗&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/circuit/r.png&#34; alt=&#34;&#34; /&gt;
+抵抗は電流の流れを抑えることができます。LEDと一緒に使うことで、LEDが焼けることを保護することができます。&lt;/p&gt;
+
+&lt;h3 id=&#34;スイッチ&#34;&gt;スイッチ&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/circuit/switch.png&#34; alt=&#34;&#34; /&gt;
+オン、オフを切り替えすることができるものです。スイッチにも種類があるので、どのようなことがしたいかでスイッチを変えるとよいでしょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;led&#34;&gt;LED&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/circuit/led.png&#34; alt=&#34;&#34; /&gt;
+LEDは小さい電力で操作でき、強く光らせることができます。明るいものやマトリックス状になったものなどがあります。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Arduino IDEのインストール</title>
       <link>https://dotstud.io/docs/nefry-setup/</link>
       <pubDate>Tue, 19 Jul 2016 01:02:41 +0900</pubDate>
       
       <guid>https://dotstud.io/docs/nefry-setup/</guid>
       
       <description>
-
-&lt;h2 id=&#34;arduinoideのインストール&#34;&gt;ArduinoIDEのインストール&lt;/h2&gt;
 
 &lt;p&gt;Arduinoとは、電子工作に興味を持った方やハードウエアを使って簡単に作品を作ってみたい方におすすめする電子工作のプラットフォームです。
 Arduinoを使うメリットは、ハードウエアの難解なところを簡単な Arduino 言語と呼ばれるもので開発できるようになるところです。ArduinoIDEとはそのArduino言語を書くことができるツールのことです。
@@ -380,72 +485,54 @@ ArduinoIDEのファイル内にある環境設定の項目を開きます。&lt;
     </item>
     
     <item>
-      <title>回路図</title>
-      <link>https://dotstud.io/docs/circuit/</link>
-      <pubDate>Sat, 12 Nov 2016 01:02:41 +0900</pubDate>
+      <title>消費電力</title>
+      <link>https://dotstud.io/docs/consumption/</link>
+      <pubDate>Sun, 13 Nov 2016 01:02:41 +0900</pubDate>
       
-      <guid>https://dotstud.io/docs/circuit/</guid>
+      <guid>https://dotstud.io/docs/consumption/</guid>
       
       <description>
 
-&lt;p&gt;回路図とは、電子部品同士をどのように繋ぐのか図解したものです。&lt;/p&gt;
+&lt;p&gt;消費電力とは、「電気回路で消費される電力、つまり &lt;strong&gt;電気回路を動かすために必要な電気の量&lt;/strong&gt; を指します。&lt;/p&gt;
 
-&lt;p&gt;回路図があることで、自分が見たときはもちろん他の人に伝える時にも &lt;strong&gt;間違えることなく電子回路を組み立てる&lt;/strong&gt; ことができます。&lt;/p&gt;
+&lt;h2 id=&#34;消費電力の計算&#34;&gt;消費電力の計算&lt;/h2&gt;
 
-&lt;h2 id=&#34;回路図をみてみよう&#34;&gt;回路図をみてみよう&lt;/h2&gt;
+&lt;p&gt;消費される電気の量は、以下の式で表すことができます。&lt;/p&gt;
 
-&lt;h3 id=&#34;一般的な回路図&#34;&gt;一般的な回路図&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;電圧[V:ボルト] × 電流[A] = 消費電力[W:ワット]
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;回路図にもいくつか種類があります。下記のような、線と簡単な図形で描かれたシンプルなものが一般的です。&lt;/p&gt;
+&lt;p&gt;電圧が「電気を発生させる力の大きさ」、電流が「流れる電気そのもの」です。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/circuit/circuit.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;詳しくは「&lt;a href=&#34;https://dotstud.io/docs/aandv/&#34;&gt;電流と電圧&lt;/a&gt;」の項目を参照してください。&lt;/p&gt;
 
-&lt;p&gt;このような回路図を読むことができると、インターネット上にある様々な回路を組むことができます。
-しかし、事前知識なしに読むのは難しいです。&lt;/p&gt;
+&lt;p&gt;白熱電球を例に考えてみましょう。電球の表面に「100V 60W」という表記がある場合、この電球は &lt;strong&gt;100[V]の電圧をかけたときに60[W]の電力を消費する&lt;/strong&gt; ことを表します。&lt;/p&gt;
 
-&lt;p&gt;上のような回路図を読みたい場合、詳しく説明してくれるサイトもあるのでそちらを参照してください。&lt;/p&gt;
+&lt;h2 id=&#34;消費電力量&#34;&gt;消費電力量&lt;/h2&gt;
 
-&lt;h3 id=&#34;回路図作成ソフト-fritzing&#34;&gt;回路図作成ソフト『Fritzing』&lt;/h3&gt;
+&lt;p&gt;単位時間あたりに消費される電気の量は「消費電力量」と呼ばれ、&lt;/p&gt;
 
-&lt;p&gt;そこで今回は、『Fritzing』と呼ばれる回路図作成ソフトの回路図を見てみようと思います。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;電力[W] × 時間[h] = 消費電力量[Wh:ワットアワー]
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;このソフトで描かれた回路図の特徴は、&lt;strong&gt;電子部品をイラストで表してくれるところ&lt;/strong&gt; です。&lt;/p&gt;
+&lt;p&gt;で表すことができます。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/circuit/illust.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;先程の白熱電球を2時間点灯させた場合の消費電力量は、&lt;/p&gt;
 
-&lt;p&gt;ボタンを押すとLEDが光る回路を組んでみました。実は、&lt;strong&gt;上の回路図とこのイラストの回路図は同じことを表しています。&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;60[W] × 2[h] = 120[Wh]
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;多くの場合は前述のシンプルな回路図で表記されるため、読める方がよいとは思います。&lt;/p&gt;
+&lt;p&gt;となります。&lt;/p&gt;
 
-&lt;p&gt;「この図形ってなんだっけ？」という時にはFritzingを使って検索してみるとよいでしょう。&lt;/p&gt;
+&lt;h2 id=&#34;消費電力が大きい-たくさん電気を使う&#34;&gt;消費電力が大きい＝たくさん電気を使う&lt;/h2&gt;
 
-&lt;h2 id=&#34;回路図でよくみる記号&#34;&gt;回路図でよくみる記号&lt;/h2&gt;
+&lt;p&gt;消費電力が大きいということは、それだけ多くの電気を使うということです。&lt;/p&gt;
 
-&lt;h3 id=&#34;電源&#34;&gt;電源&lt;/h3&gt;
+&lt;p&gt;乾電池やモバイルバッテリーは持っている電気の量が少ないので、消費電力の大きい電子部品を動かす場合は &lt;strong&gt;回路全体の稼働時間が短くなってしまう&lt;/strong&gt; ことに注意してください。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/circuit/battery.png&#34; alt=&#34;&#34; /&gt;
-電池やUSBなどから供給される電気の供給源です。プラスとマイナスがあり、横に２本線があるうち長い方がプラス、短い方がマイナスとなります。&lt;/p&gt;
+&lt;p&gt;Arduino等のマイコンボードを省電力で使いたい場合、マイコンボードの &lt;strong&gt;SLEEP機能&lt;/strong&gt; が便利です。これはマイコンボードの電源は保ったまま必要な時だけ復帰する仕組みで、極力電力消費を抑えることができます。&lt;/p&gt;
 
-&lt;h3 id=&#34;コンデンサ&#34;&gt;コンデンサ&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/circuit/condenser.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;コンデンサは電気を蓄えたり放出したりする電子部品です。プラス・マイナスの極性が決まっているものもあるので注意が必要です。&lt;/p&gt;
-
-&lt;h3 id=&#34;抵抗&#34;&gt;抵抗&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/circuit/r.png&#34; alt=&#34;&#34; /&gt;
-抵抗は電流の流れを抑えることができます。LEDと一緒に使うことで、LEDが焼けることを保護することができます。&lt;/p&gt;
-
-&lt;h3 id=&#34;スイッチ&#34;&gt;スイッチ&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/circuit/switch.png&#34; alt=&#34;&#34; /&gt;
-オン、オフを切り替えすることができるものです。スイッチにも種類があるので、どのようなことがしたいかでスイッチを変えるとよいでしょう。&lt;/p&gt;
-
-&lt;h3 id=&#34;led&#34;&gt;LED&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/circuit/led.png&#34; alt=&#34;&#34; /&gt;
-LEDは小さい電力で操作でき、強く光らせることができます。明るいものやマトリックス状になったものなどがあります。&lt;/p&gt;
+&lt;p&gt;マイコンボードの形式や設定方法にもよりますが、乾電池1本で数ヶ月〜年単位で電力を供給することが可能になります。&lt;/p&gt;
 </description>
     </item>
     
@@ -609,105 +696,6 @@ NefryがWiFiの信号を出しているので、そのWiFiに接続します。
     </item>
     
     <item>
-      <title>消費電力</title>
-      <link>https://dotstud.io/docs/consumption/</link>
-      <pubDate>Sun, 13 Nov 2016 01:02:41 +0900</pubDate>
-      
-      <guid>https://dotstud.io/docs/consumption/</guid>
-      
-      <description>
-
-&lt;p&gt;消費電力とは、「電気回路で消費される電力、つまり &lt;strong&gt;電気回路を動かすために必要な電気の量&lt;/strong&gt; を指します。&lt;/p&gt;
-
-&lt;h2 id=&#34;消費電力の計算&#34;&gt;消費電力の計算&lt;/h2&gt;
-
-&lt;p&gt;消費される電気の量は、以下の式で表すことができます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;電圧[V:ボルト] × 電流[A] = 消費電力[W:ワット]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;電圧が「電気を発生させる力の大きさ」、電流が「流れる電気そのもの」です。&lt;/p&gt;
-
-&lt;p&gt;詳しくは「&lt;a href=&#34;https://dotstud.io/docs/aandv/&#34;&gt;電流と電圧&lt;/a&gt;」の項目を参照してください。&lt;/p&gt;
-
-&lt;p&gt;白熱電球を例に考えてみましょう。電球の表面に「100V 60W」という表記がある場合、この電球は &lt;strong&gt;100[V]の電圧をかけたときに60[W]の電力を消費する&lt;/strong&gt; ことを表します。&lt;/p&gt;
-
-&lt;h2 id=&#34;消費電力量&#34;&gt;消費電力量&lt;/h2&gt;
-
-&lt;p&gt;単位時間あたりに消費される電気の量は「消費電力量」と呼ばれ、&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;電力[W] × 時間[h] = 消費電力量[Wh:ワットアワー]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;で表すことができます。&lt;/p&gt;
-
-&lt;p&gt;先程の白熱電球を2時間点灯させた場合の消費電力量は、&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;60[W] × 2[h] = 120[Wh]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;となります。&lt;/p&gt;
-
-&lt;h2 id=&#34;消費電力が大きい-たくさん電気を使う&#34;&gt;消費電力が大きい＝たくさん電気を使う&lt;/h2&gt;
-
-&lt;p&gt;消費電力が大きいということは、それだけ多くの電気を使うということです。&lt;/p&gt;
-
-&lt;p&gt;乾電池やモバイルバッテリーは持っている電気の量が少ないので、消費電力の大きい電子部品を動かす場合は &lt;strong&gt;回路全体の稼働時間が短くなってしまう&lt;/strong&gt; ことに注意してください。&lt;/p&gt;
-
-&lt;p&gt;Arduino等のマイコンボードを省電力で使いたい場合、マイコンボードの &lt;strong&gt;SLEEP機能&lt;/strong&gt; が便利です。これはマイコンボードの電源は保ったまま必要な時だけ復帰する仕組みで、極力電力消費を抑えることができます。&lt;/p&gt;
-
-&lt;p&gt;マイコンボードの形式や設定方法にもよりますが、乾電池1本で数ヶ月〜年単位で電力を供給することが可能になります。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Console関連の関数</title>
-      <link>https://dotstud.io/docs/nefry-console/</link>
-      <pubDate>Tue, 19 Jul 2016 01:02:41 +0900</pubDate>
-      
-      <guid>https://dotstud.io/docs/nefry-console/</guid>
-      
-      <description>
-
-&lt;h2 id=&#34;console関連関数&#34;&gt;Console関連関数&lt;/h2&gt;
-
-&lt;p&gt;Consoleに関連する関数をまとめてみました。&lt;br /&gt;
-Nefryのwebconsoleとserialに文字を表示します。Serialはデフォルトでは115200bpsで通信します。&lt;/p&gt;
-
-&lt;h3 id=&#34;print&#34;&gt;print&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Nefryのwebconsoleとserialに文字を表示します。&lt;strong&gt;改行なし&lt;/strong&gt; です。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/print.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;println&#34;&gt;println&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Nefryのwebconsoleとserialに文字を表示します。&lt;strong&gt;改行あり&lt;/strong&gt; です。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/println.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;available&#34;&gt;available&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Nefryのwebconsoleで入力された文字数を返します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/available.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;read&#34;&gt;read&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;br /&gt;
-Nefryのwebconsoleで入力された文字を返します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/read.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
       <title>デジタルとアナログ</title>
       <link>https://dotstud.io/docs/digitalanalog/</link>
       <pubDate>Sun, 13 Nov 2016 01:02:41 +0900</pubDate>
@@ -793,6 +781,61 @@ Nefryのwebconsoleで入力された文字を返します。&lt;/p&gt;
     </item>
     
     <item>
+      <title>Console関連の関数</title>
+      <link>https://dotstud.io/docs/nefry-console/</link>
+      <pubDate>Tue, 19 Jul 2016 01:02:41 +0900</pubDate>
+      
+      <guid>https://dotstud.io/docs/nefry-console/</guid>
+      
+      <description>
+
+&lt;p&gt;Consoleに関連する関数をまとめてみました。&lt;br /&gt;
+Nefryのwebconsoleとserialに文字を表示します。Serialはデフォルトでは115200bpsで通信します。&lt;/p&gt;
+
+&lt;h3 id=&#34;print&#34;&gt;print&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Nefryのwebconsoleとserialに文字を表示します。&lt;strong&gt;改行なし&lt;/strong&gt; です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/print.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;println&#34;&gt;println&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Nefryのwebconsoleとserialに文字を表示します。&lt;strong&gt;改行あり&lt;/strong&gt; です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/println.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;available&#34;&gt;available&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Nefryのwebconsoleで入力された文字数を返します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/available.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;read&#34;&gt;read&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;br /&gt;
+Nefryのwebconsoleで入力された文字を返します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/read.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>直流と交流</title>
+      <link>https://dotstud.io/docs/dirandalt/</link>
+      <pubDate>Mon, 14 Nov 2016 01:02:41 +0900</pubDate>
+      
+      <guid>https://dotstud.io/docs/dirandalt/</guid>
+      
+      <description></description>
+    </item>
+    
+    <item>
       <title>Module関連の関数</title>
       <link>https://dotstud.io/docs/nefry-module/</link>
       <pubDate>Tue, 19 Jul 2016 01:02:41 +0900</pubDate>
@@ -800,8 +843,6 @@ Nefryのwebconsoleで入力された文字を返します。&lt;/p&gt;
       <guid>https://dotstud.io/docs/nefry-module/</guid>
       
       <description>
-
-&lt;h2 id=&#34;module関連関数&#34;&gt;Module関連関数&lt;/h2&gt;
 
 &lt;p&gt;NefryのModule Setup関連の関数をまとめてみました。Nefryに必要な設定などを行うことができます。&lt;br /&gt;
 このページの内容は、Nefryが表示しているWebページでも扱えます。&lt;/p&gt;
@@ -883,108 +924,6 @@ setConfHtmlPrint
 setConfWifi
 setConfHtml
  --&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>直流と交流</title>
-      <link>https://dotstud.io/docs/dirandalt/</link>
-      <pubDate>Mon, 14 Nov 2016 01:02:41 +0900</pubDate>
-      
-      <guid>https://dotstud.io/docs/dirandalt/</guid>
-      
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Nefryの便利な関数</title>
-      <link>https://dotstud.io/docs/nefry-popular/</link>
-      <pubDate>Tue, 19 Jul 2016 01:02:41 +0900</pubDate>
-      
-      <guid>https://dotstud.io/docs/nefry-popular/</guid>
-      
-      <description>
-
-&lt;h2 id=&#34;nefryの便利な関数&#34;&gt;Nefryの便利な関数&lt;/h2&gt;
-
-&lt;p&gt;Nefryの便利な関数をまとめてみました。&lt;/p&gt;
-
-&lt;h3 id=&#34;ndelay&#34;&gt;ndelay&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;delayではすべての処理が止まってしまいますがこちらを選ぶことで停止時間にNefryのWeb表示などの様々な機能を継続することができます。
-基本的に500ミリ秒以上の待ち時間になる場合はこちらを選んでください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/ndelay.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;reset&#34;&gt;reset&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Nefryをリセットし、プログラムを初めからやり直します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/reset.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;sleep&#34;&gt;sleep&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Nefryを省電力モードのスリープモードにします。スリープモードに入ると処理ができません。&lt;br /&gt;
-スリープが終わった後はプログラムを初めからやり直します。&lt;br /&gt;
-スリープモードを強制的終了させるにはNefry本体のリセットボタンを押すか、指定した時間が経つのを待つしかありません。
-0を入力することで、無期限スリープモードになります。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/sleep.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;getwebserver&#34;&gt;getWebServer&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ESP8266WebServerを扱うことができます。ユーザ側でWebページを追加することができます。
-Nefryのメインページにそのリンクを貼りたいときは&lt;code&gt;setIndexLink&lt;/code&gt;関数を使ってください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/getWebServer.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;setindexlink&#34;&gt;setIndexLink&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Nefryのメインページにリンクを貼ることができます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/setIndexLink.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;setprogramname&#34;&gt;setProgramName&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Nefryのトップページで表示されるプログラム名を設定できます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/setProgramName.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;getprogramname&#34;&gt;getProgramName&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Nefryのトップページで表示されるプログラム名を取得することができます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/getProgramName.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;getversion&#34;&gt;getVersion&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Nefryライブラリのバージョンを取得することができます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/getVersion.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;getmodulename&#34;&gt;getModuleName&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;NefryのModule名を取得することができます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/getModuleName.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 </description>
     </item>
     
@@ -1094,89 +1033,92 @@ Nefryのメインページにそのリンクを貼りたいときは&lt;code&gt;
     </item>
     
     <item>
-      <title>Wi-Fiの関数</title>
-      <link>https://dotstud.io/docs/nefry-wifi/</link>
+      <title>Nefryの便利な関数</title>
+      <link>https://dotstud.io/docs/nefry-popular/</link>
       <pubDate>Tue, 19 Jul 2016 01:02:41 +0900</pubDate>
       
-      <guid>https://dotstud.io/docs/nefry-wifi/</guid>
+      <guid>https://dotstud.io/docs/nefry-popular/</guid>
       
       <description>
 
-&lt;h2 id=&#34;wifi関連関数&#34;&gt;WiFi関連関数&lt;/h2&gt;
+&lt;p&gt;Nefryの便利な関数をまとめてみました。&lt;/p&gt;
 
-&lt;p&gt;NefryのWiFi関連の関数をまとめてみました。WiFiに必要な設定などを行うことができます。&lt;br /&gt;
-このページの内容は、Nefryが表示しているWebページでも扱えます。&lt;/p&gt;
+&lt;h3 id=&#34;ndelay&#34;&gt;ndelay&lt;/h3&gt;
 
-&lt;h3 id=&#34;addwifi&#34;&gt;addWifi&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0.png&#34; alt=&#34;2.3.0&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;delayではすべての処理が止まってしまいますがこちらを選ぶことで停止時間にNefryのWeb表示などの様々な機能を継続することができます。
+基本的に500ミリ秒以上の待ち時間になる場合はこちらを選んでください。&lt;/p&gt;
 
-&lt;p&gt;WiFiの設定を追加することができます。5つまでのWiFiを保存することができます。&lt;br /&gt;
-5つを超えた場合最も古いデータから削除されます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/ndelay.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/addWifi.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;h3 id=&#34;reset&#34;&gt;reset&lt;/h3&gt;
 
-&lt;h3 id=&#34;getlistwifi&#34;&gt;getlistWifi&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0.png&#34; alt=&#34;2.3.0&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Nefryをリセットし、プログラムを初めからやり直します。&lt;/p&gt;
 
-&lt;p&gt;WiFiの設定を表示することができます。IDとSSIDを表示することができます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/reset.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/getListWifi.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;h3 id=&#34;sleep&#34;&gt;sleep&lt;/h3&gt;
 
-&lt;h3 id=&#34;deletewifi&#34;&gt;deleteWifi&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0.png&#34; alt=&#34;2.3.0&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Nefryを省電力モードのスリープモードにします。スリープモードに入ると処理ができません。&lt;br /&gt;
+スリープが終わった後はプログラムを初めからやり直します。&lt;br /&gt;
+スリープモードを強制的終了させるにはNefry本体のリセットボタンを押すか、指定した時間が経つのを待つしかありません。
+0を入力することで、無期限スリープモードになります。&lt;/p&gt;
 
-&lt;p&gt;WiFiの設定を削除することができます。削除するデータをIDで指定します。&lt;br /&gt;
-getlistWifi関数でIDについて確認することができます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/sleep.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/deleteWifi.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;h3 id=&#34;getwebserver&#34;&gt;getWebServer&lt;/h3&gt;
 
-&lt;h3 id=&#34;searchwifi&#34;&gt;searchWiFi&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0.png&#34; alt=&#34;2.3.0&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;ESP8266WebServerを扱うことができます。ユーザ側でWebページを追加することができます。
+Nefryのメインページにそのリンクを貼りたいときは&lt;code&gt;setIndexLink&lt;/code&gt;関数を使ってください。&lt;/p&gt;
 
-&lt;p&gt;WiFiを検索します。これは、デフォルトで呼ばれるため基本的にはユーザが呼ぶ必要はありません。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/getWebServer.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/searchWifi.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;h3 id=&#34;setindexlink&#34;&gt;setIndexLink&lt;/h3&gt;
 
-&lt;h3 id=&#34;setwifiauto&#34;&gt;setWifiAuto&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0.png&#34; alt=&#34;2.3.0&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Nefryのメインページにリンクを貼ることができます。&lt;/p&gt;
 
-&lt;p&gt;WiFiの自動接続をするかどうかを選択できます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/setIndexLink.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/setWifiAuto.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;h3 id=&#34;setprogramname&#34;&gt;setProgramName&lt;/h3&gt;
 
-&lt;h3 id=&#34;setwifitimeout&#34;&gt;setWifiTimeout&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0.png&#34; alt=&#34;2.3.0&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Nefryのトップページで表示されるプログラム名を設定できます。&lt;/p&gt;
 
-&lt;p&gt;WiFiの再接続回数の上限を制限します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/setProgramName.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/setWifiTimeout.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;h3 id=&#34;getprogramname&#34;&gt;getProgramName&lt;/h3&gt;
 
-&lt;h3 id=&#34;setwifitimeoutclear&#34;&gt;setWifiTimeoutClear&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0.png&#34; alt=&#34;2.3.0&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Nefryのトップページで表示されるプログラム名を取得することができます。&lt;/p&gt;
 
-&lt;p&gt;WiFiの再接続回数のカウントをクリアします。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/getProgramName.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/setWifiTimeoutClear.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;h3 id=&#34;getversion&#34;&gt;getVersion&lt;/h3&gt;
 
-&lt;h3 id=&#34;autoconnect&#34;&gt;autoConnect&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;br /&gt;
-廃止予定&lt;/p&gt;
+&lt;p&gt;Nefryライブラリのバージョンを取得することができます。&lt;/p&gt;
 
-&lt;p&gt;WiFiの自動接続をします。Nefryのライブラリで自動接続を提供するので廃止を予定しています。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/getVersion.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/autoConnect.png&#34; alt=&#34;&#34; /&gt;
-&lt;!--
-getWifiTimeout
-getWifiAuto
- --&gt;&lt;/p&gt;
+&lt;h3 id=&#34;getmodulename&#34;&gt;getModuleName&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;NefryのModule名を取得することができます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/getModuleName.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 </description>
     </item>
     
