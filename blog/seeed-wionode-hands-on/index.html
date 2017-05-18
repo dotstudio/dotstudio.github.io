@@ -309,29 +309,18 @@
 <h2 id="wio-nodeとは">Wio Nodeとは</h2>
 
 <p><img src="/img/blog/095/01_wio_node.png" alt="" />
-今回使うWio Nodeは、中国のSeeed Studio社が開発した<strong>Wi-Fiモジュール初期搭載のIoTデバイス</strong>です。公式のスマートフォンアプリから、簡単にデバイスのセットアップや対応モジュールの入出力を試すことができます。</p>
+今回使うWio Nodeは、中国のSeeed Studio社が開発した<strong>Wi-Fiモジュール初期搭載のIoTデバイス</strong>です。</p>
 
-<h3 id="wi-fiモジュール初期搭載">Wi-Fiモジュール初期搭載</h3>
-
-<p>通常デバイスをWi-Fi接続するためには、拡張モジュールの購入や複雑な回路設計が必要です。</p>
-
-<p>Wio Nodeでは<strong>Wi-FiモジュールのESP-8266を初期搭載</strong>しており、Wi-Fi接続もスマートフォンアプリから簡単に設定できます。</p>
-
-<h3 id="groveセンサコネクタ搭載">Groveセンサコネクタ搭載</h3>
-
-<p>Wio NodeはGrove規格のモジュールをそのまま挿せるコネクタを搭載していて、<strong>半田付けなしでセンサやアクチュエータを接続</strong>できます。</p>
-
-<p>また、<strong>対応モジュールには豊富なAPIが用意</strong>されており、APIを操作するプログラムを作るだけで簡単にウェブ連携を試すことができます。</p>
-
-<h3 id="スマートフォンアプリから簡単操作">スマートフォンアプリから簡単操作</h3>
-
-<p>Wio Nodeの大きな特徴の一つは、公式から専用スマートフォンアプリから用意されていることでしょう。</p>
-
-<p>デバイスのセットアップやモジュールの接続に加えて、<strong>モジュールを操作できるAPIをすぐに試す</strong>ことができます。</p>
+<p><strong>Grove規格のモジュールをそのまま挿せるコネクタを搭載</strong>していて、はんだづけなしで動かすことができます。モジュールのセットアップも<strong>公式のスマートフォンアプリから行うことができ</strong>、電子工作初心者でも簡単に試せます。</p>
 
 <h2 id="動かしてみる">動かしてみる</h2>
 
-<p>早速Wio Nodeを動かしてみましょう。今回試す手順は以下です。</p>
+<p>早速Wio Nodeを動かしてみましょう。今回は、温度センサと7セグメントディスプレイを使って簡易温度計を作ってみます。</p>
+
+<p><img src="/img/blog/095/02_map.png" alt="" />
+Wio Nodeに接続したモジュール同士は一見つながっているように見えますが、<strong>内部で連携する仕組みはありません</strong>。それぞれWi-Fiを使ってAPIからインプットやアウトプットを制御します。</p>
+
+<p>以下の手順で作っていきます。</p>
 
 <ul>
 <li>Wio Nodeのセットアップ</li>
@@ -364,6 +353,12 @@
 
 <h3 id="wio-nodeのセットアップ">Wio Nodeのセットアップ</h3>
 
+<p>まずはWio Nodeの初期設定から進めていきます。</p>
+
+<p>Wio Nodeは<strong>モバイルバッテリ・PCなどからUSBケーブルで電源を供給しましょう</strong>。</p>
+
+<p><br /></p>
+
 <h4 id="開発用アプリのインストール">開発用アプリのインストール</h4>
 
 <p><img src="/img/blog/095/02_wio_app.png" alt="" />
@@ -377,16 +372,17 @@ Android: <a href="https://play.google.com/store/apps/details?id=cc.seeed.iot.ap&
 <h4 id="アプリとwio-nodeの設定">アプリとWio Nodeの設定</h4>
 
 <p><img src="/img/blog/095/03_acount.png" alt="" />
-まずはアカウントを作成しましょう。メールアドレスとパスワードを設定し「Register」で登録します。ServerLocationはデフォルトのGlobalにしておきます。</p>
+アプリを開いたらまずはアカウントを作成しましょう。メールアドレスとパスワードを設定し「Register」で登録します。ServerLocationはデフォルトのGlobalにしておきます。</p>
 
 <p><img src="/img/blog/095/04_add_device.png" alt="" />
 アカウントが作成されたらAdd Your First Deviceをタップし、Wio Nodeを選択します。</p>
 
-<p><img src="/img/blog/095/05_wio_connect.png" alt="" />
-Wio NodeにUSBケーブルで電源を供給しましょう。</p>
+<p>続いてWi-Fiの設定に移りますが、手順が少しややこしいので注意してください。
+<img src="/img/blog/095/05_wifi.png" alt="" />
+<strong>はじめにWio Node自身のWi-Fiに接続し、次にアクセスポイントとなるWi-Fiを選択します</strong>。</p>
 
 <p><img src="/img/blog/095/06_func.png" alt="" />
-画面の指示にしたがってFuncボタン（写真親指側）を4秒以上長押しすると、青いランプがゆらゆらと光ります。</p>
+まずは画面の指示にしたがってFuncボタン（写真親指側）を4秒以上長押しすると、青いランプがゆらゆらと光ります。</p>
 
 <p><img src="/img/blog/095/07_wio_network.png" alt="" />
 iOSのWi-Fi選択画面から、「Wio_XXXX」というSSIDを選択します。（Androidはアプリ内での選択です。）</p>
@@ -395,9 +391,9 @@ iOSのWi-Fi選択画面から、「Wio_XXXX」というSSIDを選択します。
 アプリに戻ると、続いてWi-Fiの接続を促されます。Wi-Fiリストから、使用するWi-Fiを選択しましょう。</p>
 
 <p><img src="/img/blog/095/09_device_connect.png" alt="" />
-Wio Nodeが認識されました。デバイスに名前をつけておきます。</p>
+Wio Nodeが認識されました。デバイスに名前をつけておきます。（Android端末で認識がうまくいかない場合、<strong>機内モードにして試す</strong> と解消することがあるようです。）</p>
 
-<p>以上で、Wio Nodeのセットアップが完了しました。同じデバイスとWi-Fiを使う場合は、以後起動するだけで接続されるようになります！</p>
+<p>以上でWio Nodeのセットアップが完了しました。同じデバイスとWi-Fiを使う場合は、以後起動するだけで接続されるようになります！</p>
 
 <h3 id="wio-nodeにモジュールを接続する">Wio Nodeにモジュールを接続する</h3>
 
@@ -480,7 +476,7 @@ Wio Nodeが認識されました。デバイスに名前をつけておきます
 
 <p>インストールが完了したら、Node.jsが正しく動くか確認してみましょう。
 <img src="/img/blog/095/17_node_v.png" alt="" />
-コマンドラインで<code>node -v</code>を叩くとバージョンが出るようになったでしょうか？（<strong>v7.6.0以上ですよ！</strong>）</p>
+コマンドラインで<code>node -v</code>を叩くとバージョンが出るようになったでしょうか？（v7.6.0以上ですよ！）</p>
 
 <p>Node.jsの環境構築はとても簡単なので、ウェブ開発が初めての方にもオススメです！</p>
 
@@ -509,7 +505,7 @@ Wio Nodeが認識されました。デバイスに名前をつけておきます
 <img src="/img/blog/095/21_npm_install.png" alt="" />
 axiosがインストールされ、package.jsonに追加されました。</p>
 
-<p>続いてプログラムを記述するファイルを作成します。<code>touch ファイル名</code>でファイルが作成されます。（Windowsの場合は<code>vi ファイル名</code>で新規ファイルを開き<code>:wq</code>で保存して終了してみましょう。）
+<p>続いてプログラムを記述するファイルを作成します。<code>touch ファイル名</code>でファイルが作成されます。（Windowsの場合はコマンドがないのでフォルダから作成してください。）
 <img src="/img/blog/095/22_touch.png" alt="" />
 app.jsというファイルを作成しました。（<code>ls</code>コマンドでカレントディレクトリのファイルが見れます。Windowsは<code>dir</code>。）</p>
 
@@ -554,11 +550,13 @@ const BASE_PATH = `https://us.wio.seeed.io/v1/node`; // 自身のものをアプ
 getTemp();
 </code></pre>
 
-<p>axiosに温度取得APIのURLとオプションを渡し、返ってきた値を出力します。</p>
+<p>axiosに温度取得APIのURLとオプションを渡し、返ってきた値を出力しています。</p>
 
 <p><code>const ACCESS_TOKEN = process.argv[2] || '';</code>の部分は、コマンドライン引数（実行時に渡す値）を取得しています。tokenなどの人に知られたくない値は、ファイルに直接書かないのがベターです。</p>
 
-<p>それでは正しく動くか試してみましょう。Node.jsは<code>node ファイル名</code>で実行できます。今回は<code>app.js</code>というファイル名で作成し、引数にtokenを渡すので<code>node app.js &lt;token&gt;</code>で実行してみましょう。
+<p>それでは正しく動くか試してみましょう。<code>node app.js &lt;自分のtoken&gt;</code>というコマンドで実行します。</p>
+
+<p>ご自身のtokenは<strong>アプリのView API画面から確認してください</strong>。<code>?access_token=</code>の後の文字列がtokenです。
 <img src="/img/blog/095/23_temp_test.png" alt="" />
 温度センサの情報が返ってきたでしょうか？</p>
 
@@ -592,7 +590,7 @@ const temp2digit = (temp) =&gt; {
 
 <p>数値を文字列に変換し、不要な&rsquo;.&lsquo;を取り除き、3桁にして、温度計らしく&rsquo;C&rsquo;を付けて返します。</p>
 
-<p>先ほど作ったgetTemp()と一緒に実行するようにしてみましょう。</p>
+<p>これを先ほど作ったgetTemp()と一緒に実行するようにしてみましょう。</p>
 
 <pre><code>'use strict';
 
@@ -639,7 +637,7 @@ main();
 
 <p>getTemp()で受け取ったobjectの子要素には<code>.</code>でアクセスします。先ほどのレスポンスのdataの中のtemperatureが欲しいので<code>res.data.temperature</code>となります。</p>
 
-<p><code>node app.js &lt;token&gt;</code>で実行してみます。
+<p><code>node app.js &lt;自分のtoken&gt;</code>で実行してみます。
 <img src="/img/blog/095/24_temp2digit.png" alt="" />
 温度計の文字列ができました！</p>
 
@@ -744,7 +742,7 @@ async function main() =&gt; {
 main();
 </code></pre>
 
-<p>こちらも試してみましょう。<code>node app.js &lt;token&gt;</code>で実行です。
+<p>こちらも試してみましょう。<code>node app.js &lt;自分のtoken&gt;</code>で実行です。
 <img src="/img/blog/095/25_comp_demo.png" alt="" />
 温度がディスプレイに表示されました！</p>
 
@@ -857,7 +855,7 @@ setInterval(() =&gt; {
 
 <h3 id="試してみる">試してみる</h3>
 
-<p>完成コードを試してみます。ドキドキ。<code>node app.js</code>で実行です。
+<p>完成コードを試してみます。ドキドキ。<code>node app.js &lt;自分のtoken&gt;</code>で実行です。
 <img src="/img/blog/095/25_comp_demo.png" alt="" />
 現在の室温が表示されます。</p>
 
@@ -871,7 +869,7 @@ setInterval(() =&gt; {
 
 <h4 id="補足-完成の一歩先へ">補足: 完成の一歩先へ！</h4>
 
-<p>「簡単であっという間だった」というあなた！<strong>このガジェットを使ってできることはまだまだあります！</strong>例をあげるので、ぜひトライしてみてください。</p>
+<p>「簡単であっという間だった」というあなた！<strong>このガジェットを使ってできることはまだまだあります！</strong></p>
 
 <ul>
 <li>例1: Azure Web AppsなどのPaaSを使って常時稼働できるようにする</li>
@@ -900,6 +898,18 @@ setInterval(() =&gt; {
     <nav class="related">
       <h2 class="">関連記事</h2>
       <ul class="cards-related">
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
         
           
           
@@ -1282,6 +1292,10 @@ setInterval(() =&gt; {
             </article>
           </li>
         
+        
+          
+          
+          
         
           
           

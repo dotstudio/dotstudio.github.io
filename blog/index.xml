@@ -7,8 +7,217 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Sat, 06 May 2017 12:01:42 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 18 May 2017 02:51:27 +0900</lastBuildDate>
     <atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Nefry BTとIFTTTでスイッチを押したらLINEを送る仕組みを作ってみよう</title>
+      <link>https://dotstud.io/blog/nefry-ifttt-push-line/</link>
+      <pubDate>Thu, 18 May 2017 02:51:27 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nefry-ifttt-push-line/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは。外部ライターのわみ（&lt;a href=&#34;https://twitter.com/wamisnet&#34;&gt;@wamisnet&lt;/a&gt;）です。Unirobot株式会社でロボットのソフトウェアエンジニアをやりながら、dotstudioでは私が作成しているIoTデバイス「Nefry」シリーズの販売やチュートリアル記事の執筆をしています。&lt;/p&gt;
+
+&lt;p&gt;Nefryは、ユーザの皆様からのフィードバックを頂き成長しています。新たなWi-Fi・BLEモジュール「ESP-WROOM-32」の発売もあり、このたび&lt;strong&gt;新機能と改良を加えた次世代の「Nefry BT」を発表&lt;/strong&gt;する事になりました。&lt;/p&gt;
+
+&lt;p&gt;今回は新しい「Nefry BT」を使って、Amazon Dash Buttonのようにスイッチを押した時にLINEに通知が行く仕組みを作ってみます。&lt;/p&gt;
+
+&lt;h2 id=&#34;nefry-btとは&#34;&gt;Nefry BTとは&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/100/01_nefry.png&#34; alt=&#34;&#34; /&gt;
+Nefryシリーズは、「&lt;strong&gt;簡単にインターネットにつながること&lt;/strong&gt;」をテーマにしたFRISKサイズのIoTデバイスです。Nefry BTからはWi-Fiに加えてBLE（Bluetooth Low Energy）に対応し、I/O機能も増えて開発の幅がさらに広がりました！&lt;/p&gt;
+
+&lt;p&gt;ハードウェアをできるだけ意識しなくて済むよう設計され、はんだづけや複雑な接続なしで動かすことができるため、初めてハードウェアを触る方にオススメのデバイスです。&lt;/p&gt;
+
+&lt;h2 id=&#34;作ってみる&#34;&gt;作ってみる&lt;/h2&gt;
+
+&lt;p&gt;今回試す流れは以下です。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;IFTTTにレシピを作成する&lt;/li&gt;
+&lt;li&gt;開発環境（Arduino IDE）を整える&lt;/li&gt;
+&lt;li&gt;プログラムを書き込む&lt;/li&gt;
+&lt;li&gt;Nefry BTとIFTTTを紐付ける&lt;/li&gt;
+&lt;li&gt;スイッチを押してLINEにメッセージを送ってみる&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Nefry BT&lt;/li&gt;
+&lt;li&gt;IFTTTのアカウント&lt;/li&gt;
+&lt;li&gt;LINEのアカウント&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;筆者の環境&#34;&gt;筆者の環境&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Nefry BT library Version 0.6.1&lt;/li&gt;
+&lt;li&gt;Windows 10&lt;/li&gt;
+&lt;li&gt;Arduino IDE 1.8.2&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&#34;注意&#34;&gt;注意&lt;/h4&gt;
+
+&lt;p&gt;Nefry BTは開発中のため、実際のコードや画面と異なる可能性があります。&lt;/p&gt;
+
+&lt;h3 id=&#34;iftttにレシピを作成する&#34;&gt;IFTTTにレシピを作成する&lt;/h3&gt;
+
+&lt;p&gt;IFTTTは様々なWebサービス同士を簡単に連携できるサービスです。連携したものは「レシピ」と呼ばれ、自分で新しいレシピを作成することもできます。今回はNefry BTとLINEを連携するレシピを作ってみます。&lt;/p&gt;
+
+&lt;p&gt;アカウントを持っていない場合は下記の記事を参考にアカウントを取得してください。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;参考: &lt;a href=&#34;https://liginc.co.jp/263899&#34;&gt;Webサービス同士を連携できる「IFTTT」と自作IoTデバイスを繋いで生活を便利にしてみた&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;アカウントを取得したら、Nefry BTとLINEを連携させるレシピを登録していきましょう。&lt;/p&gt;
+
+&lt;p&gt;IFTTTのレシピは「〇〇が起きたら△△する」というようにトリガーとアクションに分けられます。今回のトリガーは「&lt;strong&gt;Nefry BTのスイッチをクリックしたら&lt;/strong&gt;」、アクションは「&lt;strong&gt;LINEに通知する&lt;/strong&gt;」となります。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;トリガーとnefry-btを紐付けるキーの取得&#34;&gt;トリガーとNefry BTを紐付けるキーの取得&lt;/h4&gt;
+
+&lt;p&gt;今回はトリガーとして自作のWebサービスを利用できる「Maker Webhooks」を使います。&lt;/p&gt;
+
+&lt;p&gt;まずはMaker WebhooksをあとでNefry BTと紐付けるために、Secret Keyというキーを取得します。&lt;a href=&#34;https://ifttt.com/discover&#34;&gt;IFTTT公式サイト&lt;/a&gt;上部の「Search」から、Maker Webhooksを検索しクリックしましょう。（&amp;rdquo;make&amp;rdquo;で候補に出てきます。）
+&lt;img src=&#34;https://dotstud.io/img/blog/100/02_ifttt1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Maker Webhooksのページに移動したら右上にある「Setting」から設定します。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/03_ifttt2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;設定ページに移動しました。このとき初めての方はこのような認証画面が表示されます。ページ中央の「Connect」をクリックしてMaker Webhooksを有効にしましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/04_ifttt3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;有効になるとAccount Infoのページに移動します。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/05_ifttt4.png&#34; alt=&#34;&#34; /&gt;
+アカウントごとに割り当てられるSecret KeyがURLのuse/以下に記載されているのでコピーしておきます。今回の例ではSecret Keyは &lt;code&gt;c1kgN-ZOhUAxA6B7TpyiKc&lt;/code&gt; の部分です。（このSecret Keyはサンプルです。既に無効になっていますので自身で取得してください。）&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;トリガーの作成&#34;&gt;トリガーの作成&lt;/h4&gt;
+
+&lt;p&gt;続いてトリガーとなるMaker Webhooksの詳細を作成します。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/06_ifttt5.png&#34; alt=&#34;&#34; /&gt;
+&lt;a href=&#34;https://ifttt.com/create&#34;&gt;IFTTTのレシピ作成ページ&lt;/a&gt;から、「+this」のリンクをクリックします。&lt;/p&gt;
+
+&lt;p&gt;「Choose a service」から再度Maker Webhooksを検索しましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/07_ifttt6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Maker WebhooksはEventという単位でトリガーとなります。今回はEvent Nameを&amp;rdquo;Nefry&amp;rdquo;とし、「Create trigger」をクリックし作成します。Event NameはあとでNefry BTにも同じ名前で入力します。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/08_ifttt7.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;アクションの作成&#34;&gt;アクションの作成&lt;/h4&gt;
+
+&lt;p&gt;最後に、トリガーが生じた時に起こすアクションを登録します。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/09_ifttt8.png&#34; alt=&#34;&#34; /&gt;
+「+that」のリンクをクリックして、検索欄からLINEを検索しましょう。ここでTwitterやGmailなどを選択すると、それぞれのサービスと連携させることが出来ます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/100/10_ifttt9.png&#34; alt=&#34;&#34; /&gt;
+Recipientと書かれた欄にメッセージを送るLINEの送信先を選択します。&lt;/p&gt;
+
+&lt;p&gt;Messageと書かれた欄には送信するメッセージを入力します。MessageのValueにはプログラムから値を渡すことができるので、温度センサや明るさセンサなどの値をメッセージに組み込むことが可能です。写真のURLがあれば写真を送信することもできます。&lt;/p&gt;
+
+&lt;p&gt;入力が完了したら、Create actionをクリックして保存します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/100/11_ifttt10.png&#34; alt=&#34;&#34; /&gt;
+最後にFinishを押し、IFTTTのレシピの作成は完了です。&lt;/p&gt;
+
+&lt;h3 id=&#34;開発環境-arduino-ide-を整える&#34;&gt;開発環境（Arduino IDE）を整える&lt;/h3&gt;
+
+&lt;p&gt;続いてNefy BTにプログラムを書く環境を整えます。プログラムの書き込みにはArduino IDEと呼ばれるエディタを使用します。&lt;a href=&#34;https://www.arduino.cc/en/Main/Software&#34;&gt;公式サイト&lt;/a&gt;からダウンロードし、以下の手順でNefry BT用の設定を追加してください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/100/12_program.png&#34; alt=&#34;&#34; /&gt;
+Arduino IDEの「環境設定」のページから、「追加のボードマネージャのURL」に以下のリンクを入力して検索します。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;https://nefry.studio/package_nefrybt_index.json&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;メニューバーの[ツール]から、[ボード] -&amp;gt; [ボードマネージャー]を選択します。選択肢に「Nefry by Nefry Community」が表示されているので、インストールします。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/13_library.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;これでプログラムを書き込む準備が整いました。&lt;/p&gt;
+
+&lt;h3 id=&#34;プログラムを書き込む&#34;&gt;プログラムを書き込む&lt;/h3&gt;
+
+&lt;p&gt;以下はNefry BTに搭載されている「スイッチ」を押したときにIFTTTのEventを呼ぶプログラムです。&lt;/p&gt;
+
+&lt;p&gt;Arduino IDEを開き、以下のコードを貼り付けます。（//以降の部分はコメントです。）&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-cpp:&#34;&gt;#include &amp;lt;Nefry.h&amp;gt;
+#include &amp;lt;NefryIFTTT.h&amp;gt;
+String Event, SecretKey;
+int counter =0;                       //送信データのカウンタ
+
+void setup() {
+  Nefry.setStoreTitle(&amp;quot;SecretKey&amp;quot;,0); //Nefry DataStoreのタイトルを指定
+  Nefry.setStoreTitle(&amp;quot;Event&amp;quot;,1);     //Nefry DataStoreのタイトルを指定
+  SecretKey = Nefry.getStoreStr(0);   //Nefry DataStoreからデータを取得
+  Event = Nefry.getStoreStr(1);       //Nefry DataStoreからデータを取得
+  Nefry.enableSW();                   //SW有効化
+}
+
+void loop() {
+  if (Nefry.readSW()) {               //SWを押した時
+    counter++;                        //送信回数加算
+    bool sendData = IFTTT.send(Event, SecretKey,&amp;quot;Nefry&amp;quot;,(String)(micros()/1000000)+&amp;quot;秒&amp;quot;,(String)counter);//IFTTTにデータを送信
+                                      //Value1:Nefry,Value2:Nefryが起動してからの秒数,Value3:送信カウンタ
+    if (!sendData) {//IFTTTにデータを送信が成功したか失敗したかの判定
+      Nefry.setLed(255, 0, 0);        //Errの時、赤色点灯
+    }
+    Nefry.ndelay(1000);               //送信後1秒間待つ
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;貼り付けできたら[ツール] -&amp;gt; [ボード]から「Nefry BT」を選択します。Nefry BTとPCを繋ぎ、[ツール] -&amp;gt; [シリアルポート]でNefry BTのシリアルポートを選択しましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/14_arduinoide.png&#34; alt=&#34;&#34; /&gt;
+ボードとシリアルポートを選んだらArduino IDEの左上にある「→」を押しプログラムを書き込みます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/100/15_arduinoide2.png&#34; alt=&#34;&#34; /&gt;
+「ボードへの書き込みが完了しました。」と表示されたら、Nefry BTへのプログラムの書き込みは完了です。&lt;/p&gt;
+
+&lt;p&gt;最後にNefry BTにIFTTTとの連携情報を入力します。あと少しですので頑張っていきましょう！&lt;/p&gt;
+
+&lt;h3 id=&#34;nefry-btとiftttを紐付ける&#34;&gt;Nefry BTとIFTTTを紐付ける&lt;/h3&gt;
+
+&lt;p&gt;Nefry BTから&amp;rdquo;Nefry-OOOO&amp;rdquo;というWi-Fiの信号が発信されているので接続します。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/16_wifi.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;接続できたらChromeやIEなどのWebブラウザで&lt;a href=&#34;http://192.168.4.1&#34;&gt;Nefry BTのサイト&lt;/a&gt;にアクセスしましょう。&lt;code&gt;http://192.168.4.1&lt;/code&gt;にアクセスするとNefry BTの設定サイトが表示されます。このページからNefry BTに関する様々な設定ができます。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/17_nefry.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;まずは「Setup WiFi」をクリックし、Wi-Fiの設定をしましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/18_nefry.png&#34; alt=&#34;&#34; /&gt;
+接続するWi-Fiを入力して「Save」をクリックすると、Nefry BTに設定を保存＆再起動します。Wi-Fiが切断したら再接続してください。&lt;/p&gt;
+
+&lt;p&gt;設定が完了したら、トップページに戻り「Data Store」のページに移動します。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/19_nefry.png&#34; alt=&#34;&#34; /&gt;
+SecretKeyにはMaker Webhooksで確認した値を、EventにはLINEと連携した際に入力したEvent Name（今回は”Nefry”）を入力します。Saveをクリックし値を保存するとNefry BTが再起動します。&lt;/p&gt;
+
+&lt;p&gt;いよいよNefry BTについているスイッチを押してLINEにメッセージを送ってみましょう！&lt;/p&gt;
+
+&lt;h3 id=&#34;スイッチを押してlineにメッセージを送ってみる&#34;&gt;スイッチを押してLINEにメッセージを送ってみる&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/100/20_nefry.gif&#34; alt=&#34;&#34; /&gt;
+Nefry BTのスイッチを押すとLEDの色が変わり送信を始めます。送信が完了するとLEDが水色になり、LINEに通知されました！IFTTTのサーバ状態により応答が悪い場合もありますが、その時はIFTTTのページにてリロードをすると反応してくれます。&lt;/p&gt;
+
+&lt;p&gt;初回は登録が多く時間がかかりますが、今後はサクっと作れるでしょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;さいごに&#34;&gt;さいごに&lt;/h2&gt;
+
+&lt;p&gt;半田付けや複雑な設定なしで、ハードウェアをきっかけにしてLINEへメッセージを投稿する連携をサクッと試すことができました。今回紹介したNefry BTとIFTTTの連携を応用すればTwitterやGmailなどにもメッセージを送信できます。&lt;/p&gt;
+
+&lt;p&gt;リアルタイム通信が得意な「Milkcocoa」やクラウドサービスMicrosoft AzureのIoT向け機能である「Azure IoT Hub」などを使うとより幅広い開発ができるでしょう。&lt;/p&gt;
+
+&lt;p&gt;今後の更新で簡単に接続できるライブラリやサンプルコードを追加していく予定です。生まれたばかりでまだまだヒヨッコですが、進化していくNefry BTを応援していただけたらと思います。&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>【業界初！？】居酒屋大手「養老乃瀧」とハッカソンを共催しました！</title>
@@ -576,29 +785,18 @@ Swift愛好会に敬意を払い、恒例の集合写真。守りたいこの伝
 &lt;h2 id=&#34;wio-nodeとは&#34;&gt;Wio Nodeとは&lt;/h2&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/01_wio_node.png&#34; alt=&#34;&#34; /&gt;
-今回使うWio Nodeは、中国のSeeed Studio社が開発した&lt;strong&gt;Wi-Fiモジュール初期搭載のIoTデバイス&lt;/strong&gt;です。公式のスマートフォンアプリから、簡単にデバイスのセットアップや対応モジュールの入出力を試すことができます。&lt;/p&gt;
+今回使うWio Nodeは、中国のSeeed Studio社が開発した&lt;strong&gt;Wi-Fiモジュール初期搭載のIoTデバイス&lt;/strong&gt;です。&lt;/p&gt;
 
-&lt;h3 id=&#34;wi-fiモジュール初期搭載&#34;&gt;Wi-Fiモジュール初期搭載&lt;/h3&gt;
-
-&lt;p&gt;通常デバイスをWi-Fi接続するためには、拡張モジュールの購入や複雑な回路設計が必要です。&lt;/p&gt;
-
-&lt;p&gt;Wio Nodeでは&lt;strong&gt;Wi-FiモジュールのESP-8266を初期搭載&lt;/strong&gt;しており、Wi-Fi接続もスマートフォンアプリから簡単に設定できます。&lt;/p&gt;
-
-&lt;h3 id=&#34;groveセンサコネクタ搭載&#34;&gt;Groveセンサコネクタ搭載&lt;/h3&gt;
-
-&lt;p&gt;Wio NodeはGrove規格のモジュールをそのまま挿せるコネクタを搭載していて、&lt;strong&gt;半田付けなしでセンサやアクチュエータを接続&lt;/strong&gt;できます。&lt;/p&gt;
-
-&lt;p&gt;また、&lt;strong&gt;対応モジュールには豊富なAPIが用意&lt;/strong&gt;されており、APIを操作するプログラムを作るだけで簡単にウェブ連携を試すことができます。&lt;/p&gt;
-
-&lt;h3 id=&#34;スマートフォンアプリから簡単操作&#34;&gt;スマートフォンアプリから簡単操作&lt;/h3&gt;
-
-&lt;p&gt;Wio Nodeの大きな特徴の一つは、公式から専用スマートフォンアプリから用意されていることでしょう。&lt;/p&gt;
-
-&lt;p&gt;デバイスのセットアップやモジュールの接続に加えて、&lt;strong&gt;モジュールを操作できるAPIをすぐに試す&lt;/strong&gt;ことができます。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Grove規格のモジュールをそのまま挿せるコネクタを搭載&lt;/strong&gt;していて、はんだづけなしで動かすことができます。モジュールのセットアップも&lt;strong&gt;公式のスマートフォンアプリから行うことができ&lt;/strong&gt;、電子工作初心者でも簡単に試せます。&lt;/p&gt;
 
 &lt;h2 id=&#34;動かしてみる&#34;&gt;動かしてみる&lt;/h2&gt;
 
-&lt;p&gt;早速Wio Nodeを動かしてみましょう。今回試す手順は以下です。&lt;/p&gt;
+&lt;p&gt;早速Wio Nodeを動かしてみましょう。今回は、温度センサと7セグメントディスプレイを使って簡易温度計を作ってみます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/02_map.png&#34; alt=&#34;&#34; /&gt;
+Wio Nodeに接続したモジュール同士は一見つながっているように見えますが、&lt;strong&gt;内部で連携する仕組みはありません&lt;/strong&gt;。それぞれWi-Fiを使ってAPIからインプットやアウトプットを制御します。&lt;/p&gt;
+
+&lt;p&gt;以下の手順で作っていきます。&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Wio Nodeのセットアップ&lt;/li&gt;
@@ -631,6 +829,12 @@ Swift愛好会に敬意を払い、恒例の集合写真。守りたいこの伝
 
 &lt;h3 id=&#34;wio-nodeのセットアップ&#34;&gt;Wio Nodeのセットアップ&lt;/h3&gt;
 
+&lt;p&gt;まずはWio Nodeの初期設定から進めていきます。&lt;/p&gt;
+
+&lt;p&gt;Wio Nodeは&lt;strong&gt;モバイルバッテリ・PCなどからUSBケーブルで電源を供給しましょう&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
 &lt;h4 id=&#34;開発用アプリのインストール&#34;&gt;開発用アプリのインストール&lt;/h4&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/02_wio_app.png&#34; alt=&#34;&#34; /&gt;
@@ -644,16 +848,17 @@ Android: &lt;a href=&#34;https://play.google.com/store/apps/details?id=cc.seeed.
 &lt;h4 id=&#34;アプリとwio-nodeの設定&#34;&gt;アプリとWio Nodeの設定&lt;/h4&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/03_acount.png&#34; alt=&#34;&#34; /&gt;
-まずはアカウントを作成しましょう。メールアドレスとパスワードを設定し「Register」で登録します。ServerLocationはデフォルトのGlobalにしておきます。&lt;/p&gt;
+アプリを開いたらまずはアカウントを作成しましょう。メールアドレスとパスワードを設定し「Register」で登録します。ServerLocationはデフォルトのGlobalにしておきます。&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/04_add_device.png&#34; alt=&#34;&#34; /&gt;
 アカウントが作成されたらAdd Your First Deviceをタップし、Wio Nodeを選択します。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/05_wio_connect.png&#34; alt=&#34;&#34; /&gt;
-Wio NodeにUSBケーブルで電源を供給しましょう。&lt;/p&gt;
+&lt;p&gt;続いてWi-Fiの設定に移りますが、手順が少しややこしいので注意してください。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/05_wifi.png&#34; alt=&#34;&#34; /&gt;
+&lt;strong&gt;はじめにWio Node自身のWi-Fiに接続し、次にアクセスポイントとなるWi-Fiを選択します&lt;/strong&gt;。&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/06_func.png&#34; alt=&#34;&#34; /&gt;
-画面の指示にしたがってFuncボタン（写真親指側）を4秒以上長押しすると、青いランプがゆらゆらと光ります。&lt;/p&gt;
+まずは画面の指示にしたがってFuncボタン（写真親指側）を4秒以上長押しすると、青いランプがゆらゆらと光ります。&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/07_wio_network.png&#34; alt=&#34;&#34; /&gt;
 iOSのWi-Fi選択画面から、「Wio_XXXX」というSSIDを選択します。（Androidはアプリ内での選択です。）&lt;/p&gt;
@@ -662,9 +867,9 @@ iOSのWi-Fi選択画面から、「Wio_XXXX」というSSIDを選択します。
 アプリに戻ると、続いてWi-Fiの接続を促されます。Wi-Fiリストから、使用するWi-Fiを選択しましょう。&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/09_device_connect.png&#34; alt=&#34;&#34; /&gt;
-Wio Nodeが認識されました。デバイスに名前をつけておきます。&lt;/p&gt;
+Wio Nodeが認識されました。デバイスに名前をつけておきます。（Android端末で認識がうまくいかない場合、&lt;strong&gt;機内モードにして試す&lt;/strong&gt; と解消することがあるようです。）&lt;/p&gt;
 
-&lt;p&gt;以上で、Wio Nodeのセットアップが完了しました。同じデバイスとWi-Fiを使う場合は、以後起動するだけで接続されるようになります！&lt;/p&gt;
+&lt;p&gt;以上でWio Nodeのセットアップが完了しました。同じデバイスとWi-Fiを使う場合は、以後起動するだけで接続されるようになります！&lt;/p&gt;
 
 &lt;h3 id=&#34;wio-nodeにモジュールを接続する&#34;&gt;Wio Nodeにモジュールを接続する&lt;/h3&gt;
 
@@ -747,7 +952,7 @@ Wio Nodeが認識されました。デバイスに名前をつけておきます
 
 &lt;p&gt;インストールが完了したら、Node.jsが正しく動くか確認してみましょう。
 &lt;img src=&#34;https://dotstud.io/img/blog/095/17_node_v.png&#34; alt=&#34;&#34; /&gt;
-コマンドラインで&lt;code&gt;node -v&lt;/code&gt;を叩くとバージョンが出るようになったでしょうか？（&lt;strong&gt;v7.6.0以上ですよ！&lt;/strong&gt;）&lt;/p&gt;
+コマンドラインで&lt;code&gt;node -v&lt;/code&gt;を叩くとバージョンが出るようになったでしょうか？（v7.6.0以上ですよ！）&lt;/p&gt;
 
 &lt;p&gt;Node.jsの環境構築はとても簡単なので、ウェブ開発が初めての方にもオススメです！&lt;/p&gt;
 
@@ -776,7 +981,7 @@ Wio Nodeが認識されました。デバイスに名前をつけておきます
 &lt;img src=&#34;https://dotstud.io/img/blog/095/21_npm_install.png&#34; alt=&#34;&#34; /&gt;
 axiosがインストールされ、package.jsonに追加されました。&lt;/p&gt;
 
-&lt;p&gt;続いてプログラムを記述するファイルを作成します。&lt;code&gt;touch ファイル名&lt;/code&gt;でファイルが作成されます。（Windowsの場合は&lt;code&gt;vi ファイル名&lt;/code&gt;で新規ファイルを開き&lt;code&gt;:wq&lt;/code&gt;で保存して終了してみましょう。）
+&lt;p&gt;続いてプログラムを記述するファイルを作成します。&lt;code&gt;touch ファイル名&lt;/code&gt;でファイルが作成されます。（Windowsの場合はコマンドがないのでフォルダから作成してください。）
 &lt;img src=&#34;https://dotstud.io/img/blog/095/22_touch.png&#34; alt=&#34;&#34; /&gt;
 app.jsというファイルを作成しました。（&lt;code&gt;ls&lt;/code&gt;コマンドでカレントディレクトリのファイルが見れます。Windowsは&lt;code&gt;dir&lt;/code&gt;。）&lt;/p&gt;
 
@@ -821,11 +1026,13 @@ const BASE_PATH = `https://us.wio.seeed.io/v1/node`; // 自身のものをアプ
 getTemp();
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;axiosに温度取得APIのURLとオプションを渡し、返ってきた値を出力します。&lt;/p&gt;
+&lt;p&gt;axiosに温度取得APIのURLとオプションを渡し、返ってきた値を出力しています。&lt;/p&gt;
 
 &lt;p&gt;&lt;code&gt;const ACCESS_TOKEN = process.argv[2] || &#39;&#39;;&lt;/code&gt;の部分は、コマンドライン引数（実行時に渡す値）を取得しています。tokenなどの人に知られたくない値は、ファイルに直接書かないのがベターです。&lt;/p&gt;
 
-&lt;p&gt;それでは正しく動くか試してみましょう。Node.jsは&lt;code&gt;node ファイル名&lt;/code&gt;で実行できます。今回は&lt;code&gt;app.js&lt;/code&gt;というファイル名で作成し、引数にtokenを渡すので&lt;code&gt;node app.js &amp;lt;token&amp;gt;&lt;/code&gt;で実行してみましょう。
+&lt;p&gt;それでは正しく動くか試してみましょう。&lt;code&gt;node app.js &amp;lt;自分のtoken&amp;gt;&lt;/code&gt;というコマンドで実行します。&lt;/p&gt;
+
+&lt;p&gt;ご自身のtokenは&lt;strong&gt;アプリのView API画面から確認してください&lt;/strong&gt;。&lt;code&gt;?access_token=&lt;/code&gt;の後の文字列がtokenです。
 &lt;img src=&#34;https://dotstud.io/img/blog/095/23_temp_test.png&#34; alt=&#34;&#34; /&gt;
 温度センサの情報が返ってきたでしょうか？&lt;/p&gt;
 
@@ -859,7 +1066,7 @@ const temp2digit = (temp) =&amp;gt; {
 
 &lt;p&gt;数値を文字列に変換し、不要な&amp;rsquo;.&amp;lsquo;を取り除き、3桁にして、温度計らしく&amp;rsquo;C&amp;rsquo;を付けて返します。&lt;/p&gt;
 
-&lt;p&gt;先ほど作ったgetTemp()と一緒に実行するようにしてみましょう。&lt;/p&gt;
+&lt;p&gt;これを先ほど作ったgetTemp()と一緒に実行するようにしてみましょう。&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
 
@@ -906,7 +1113,7 @@ main();
 
 &lt;p&gt;getTemp()で受け取ったobjectの子要素には&lt;code&gt;.&lt;/code&gt;でアクセスします。先ほどのレスポンスのdataの中のtemperatureが欲しいので&lt;code&gt;res.data.temperature&lt;/code&gt;となります。&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;node app.js &amp;lt;token&amp;gt;&lt;/code&gt;で実行してみます。
+&lt;p&gt;&lt;code&gt;node app.js &amp;lt;自分のtoken&amp;gt;&lt;/code&gt;で実行してみます。
 &lt;img src=&#34;https://dotstud.io/img/blog/095/24_temp2digit.png&#34; alt=&#34;&#34; /&gt;
 温度計の文字列ができました！&lt;/p&gt;
 
@@ -1011,7 +1218,7 @@ async function main() =&amp;gt; {
 main();
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;こちらも試してみましょう。&lt;code&gt;node app.js &amp;lt;token&amp;gt;&lt;/code&gt;で実行です。
+&lt;p&gt;こちらも試してみましょう。&lt;code&gt;node app.js &amp;lt;自分のtoken&amp;gt;&lt;/code&gt;で実行です。
 &lt;img src=&#34;https://dotstud.io/img/blog/095/25_comp_demo.png&#34; alt=&#34;&#34; /&gt;
 温度がディスプレイに表示されました！&lt;/p&gt;
 
@@ -1124,7 +1331,7 @@ setInterval(() =&amp;gt; {
 
 &lt;h3 id=&#34;試してみる&#34;&gt;試してみる&lt;/h3&gt;
 
-&lt;p&gt;完成コードを試してみます。ドキドキ。&lt;code&gt;node app.js&lt;/code&gt;で実行です。
+&lt;p&gt;完成コードを試してみます。ドキドキ。&lt;code&gt;node app.js &amp;lt;自分のtoken&amp;gt;&lt;/code&gt;で実行です。
 &lt;img src=&#34;https://dotstud.io/img/blog/095/25_comp_demo.png&#34; alt=&#34;&#34; /&gt;
 現在の室温が表示されます。&lt;/p&gt;
 
@@ -1138,7 +1345,7 @@ setInterval(() =&amp;gt; {
 
 &lt;h4 id=&#34;補足-完成の一歩先へ&#34;&gt;補足: 完成の一歩先へ！&lt;/h4&gt;
 
-&lt;p&gt;「簡単であっという間だった」というあなた！&lt;strong&gt;このガジェットを使ってできることはまだまだあります！&lt;/strong&gt;例をあげるので、ぜひトライしてみてください。&lt;/p&gt;
+&lt;p&gt;「簡単であっという間だった」というあなた！&lt;strong&gt;このガジェットを使ってできることはまだまだあります！&lt;/strong&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;例1: Azure Web AppsなどのPaaSを使って常時稼働できるようにする&lt;/li&gt;
@@ -3275,144 +3482,6 @@ Command.ioというサービスでおそらくVPSサービスです。なのでN
 ちょっと気分を変えたいときや、何かの理由でHerokuが厳しいと感じた際の参考になれば幸いです。&lt;/p&gt;
 
 &lt;p&gt;それでは。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>littleBits Arduinoモジュールでより細かく値を入出力して状況を伝えよう</title>
-      <link>https://dotstud.io/blog/littlebits-arduino-analog-number/</link>
-      <pubDate>Thu, 15 Dec 2016 10:00:00 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/littlebits-arduino-analog-number/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、dotstudioライターの田中正吾です。電子回路のパーツを磁石でパチパチとつなげるだけで電子工作ができる「littleBits」の連載をLIGブログでおこなっています。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/235644&#34;&gt;littleBitsのArduinoモジュールで簡単にプログラミングをはじめてみよう&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/259378&#34;&gt;ArduinoモジュールでLチカしてみた（Windows・Mac）&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/268909&#34;&gt;ArduinoモジュールでON・OFFの入力値を取得してみよう&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/280761&#34;&gt;Arduinoモジュールで入出力の連携をしてみよう&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/295334&#34;&gt;シリアルモニタとNode.jsでlittleBits Arduinoモジュールを動かしてみよう&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/315934&#34;&gt;littleBitsのボタンを押すとIFTTT経由でLINEにメッセージが飛ぶ仕組みを作ってみよう&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;本記事では、これでの連載とは少し視点を変えて、 &lt;strong&gt;littleBits Arduinoモジュールでより細かく値を入出力するアナログ入出力&lt;/strong&gt; をご紹介します。では、さっそく始めていきましょう！&lt;/p&gt;
-
-&lt;h2 id=&#34;より細かく状況を伝えるアナログ値&#34;&gt;より細かく状況を伝えるアナログ値&lt;/h2&gt;
-
-&lt;p&gt;いままで、ボタンを押すと何かが起こるON/OFFの反応で説明していましたが、実は&lt;a href=&#34;http://jp.littlebits.com/kits/arduino-coding-kit/&#34;&gt;ARDUINO CODING KIT&lt;/a&gt;には、より細かく状況を伝えるアナログ値を扱う入出力モジュールがあります。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;たとえば、DIMMERモジュール（真ん中にあるダイヤル状のツマミのモジュール）は、ツマミを回すことで電気の流れが0～100%と変わります。またBAR GRAPHモジュール（右）は流れる電気によって光るLEDの数が変わります。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;つまみを回しきったとき。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;半分ぐらいまでひねったとき。電流50%のときですね。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ON/OFFではセンサーが「反応した」「反応していない」という2つの情報しか伝えられませんでした。しかし、このように電流の量によって度合いを伝えることができると、たとえば光センサーモジュールを使ったときに明るさを「暗い」「やや暗い」「やや明るい」「とても明るい」といったように、より細かく伝えることができます。&lt;/p&gt;
-
-&lt;h2 id=&#34;アナログ値をarduinoモジュールで計測してみる&#34;&gt;アナログ値をArduinoモジュールで計測してみる&lt;/h2&gt;
-
-&lt;p&gt;それでは早速アナログ値をArduinoモジュールで計測してみましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;DIMMERモジュールをArduinoモジュールの入力2番目のA0に取り付けます。&lt;/p&gt;
-
-&lt;p&gt;Arduinoモジュールでアナログ値を計測するには &lt;code&gt;analogRead&lt;/code&gt; 関数を使います。Arduinoモジュールで計測できるアナログ値は0%は0として、100%は1023として計測できます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;void setup() {
-  Serial.begin(9600);
-}
-
-void loop() {
-  int sensorValue = analogRead(A0);
-  if(sensorValue&amp;gt;0){
-    Serial.println(sensorValue);
-  }
-  delay(1);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;このコードを書き込んで、シリアルモニタで数値を見てみます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;DIMMERをひねると値が変わります。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;シリアルプロッタのほうがよりわかりやすいですね。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/08.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/09.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;dimmerモジュールのツマミにあわせて点滅を変えてみる&#34;&gt;DIMMERモジュールのツマミにあわせて点滅を変えてみる&lt;/h2&gt;
-
-&lt;p&gt;DIMMERモジュールのツマミの度合いが取れるようになったので、ツマミに合わせてBARGRAPHモジュールの点滅の仕方を変えてみましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;このように、さきほどのDIMMERモジュールとArduinoモジュールをつないだものに、BAR GRAPHモジュールも加えます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;void setup() {
-  Serial.begin(9600);
-  pinMode(5,OUTPUT);
-}
-
-void loop() {
-  int sensorValue = analogRead(A0);
-  if(sensorValue&amp;gt;0){
-    Serial.println(sensorValue);
-    digitalWrite(5,HIGH);
-    delay(sensorValue);
-    digitalWrite(5,LOW);
-  }
-  delay(sensorValue);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;このように書いたコードをArduinoモジュールに書き込みます。&lt;/p&gt;
-
-&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/PircFP-OsQY&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
-
-&lt;p&gt;DIMMERモジュールのつまみに対応して、点滅の仕方が変わるようになりました。&lt;/p&gt;
-
-&lt;h2 id=&#34;さらにサーボに変えてみる&#34;&gt;さらにサーボに変えてみる&lt;/h2&gt;
-
-&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/FVonwS3pb-E&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://jp.littlebits.com/kits/arduino-coding-kit/&#34;&gt;ARDUINO CODING KIT&lt;/a&gt;のサーボに変えてみました。LEDよりもわかりやすくなりますね。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;サーボに顔をつけてみます。&lt;/p&gt;
-
-&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/coAm51UmCo0&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
-
-&lt;p&gt;ツマミに合わせて顔がビクビクするものに早変わりします！　&lt;a href=&#34;https://liginc.co.jp/280761&#34;&gt;磁石で電子工作できる「littleBits」のArduinoモジュールで、入出力の連携をしてみよう&lt;/a&gt;で試した「三三七拍子するパンダ」はまだ動物らしい動きに見えましたが、この顔ネタはなかなかに気持ち悪いです。夢に出そう。&lt;/p&gt;
-
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-
-&lt;p&gt;今回はlittleBits Arduinoモジュールで &lt;strong&gt;より細かく値を入出力するアナログ入出力&lt;/strong&gt; をお伝えしました。ネタはひとつなのに、モジュールを付け替えるだけで光から動力へと変化します。工作物によって伝わる印象も変わるのがlittleBitsの面白いところです。&lt;/p&gt;
-
-&lt;p&gt;そして、アナログ値を扱うとON/OFFよりも細かく状況を伝えることができたり、動きにもアクセントを持たせるたりすることができます。&lt;/p&gt;
-
-&lt;p&gt;みなさんも、ぜひいろいろなことを試してみてはいかがでしょうか。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/12.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;littleBitsのハックには、LIGブログの&lt;a href=&#34;https://liginc.co.jp/series/littlebits&#34;&gt;littleBitsではじめるArduino&lt;/a&gt;連載、ならびに拙著『&lt;a href=&#34;http://www.1ft-seabass.jp/memo/2016/10/11/littlebits-book-release/?utm_content=bufferec8bb&amp;amp;utm_medium=social&amp;amp;utm_source=twitter.com&amp;amp;utm_campaign=buffer&#34;&gt;「littleBits」ではじめる電子工作&lt;/a&gt;』もぜひご参照ください。&lt;/p&gt;
 </description>
     </item>
     

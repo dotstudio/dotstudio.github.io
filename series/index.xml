@@ -357,29 +357,18 @@ Swift愛好会に敬意を払い、恒例の集合写真。守りたいこの伝
 &lt;h2 id=&#34;wio-nodeとは&#34;&gt;Wio Nodeとは&lt;/h2&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/01_wio_node.png&#34; alt=&#34;&#34; /&gt;
-今回使うWio Nodeは、中国のSeeed Studio社が開発した&lt;strong&gt;Wi-Fiモジュール初期搭載のIoTデバイス&lt;/strong&gt;です。公式のスマートフォンアプリから、簡単にデバイスのセットアップや対応モジュールの入出力を試すことができます。&lt;/p&gt;
+今回使うWio Nodeは、中国のSeeed Studio社が開発した&lt;strong&gt;Wi-Fiモジュール初期搭載のIoTデバイス&lt;/strong&gt;です。&lt;/p&gt;
 
-&lt;h3 id=&#34;wi-fiモジュール初期搭載&#34;&gt;Wi-Fiモジュール初期搭載&lt;/h3&gt;
-
-&lt;p&gt;通常デバイスをWi-Fi接続するためには、拡張モジュールの購入や複雑な回路設計が必要です。&lt;/p&gt;
-
-&lt;p&gt;Wio Nodeでは&lt;strong&gt;Wi-FiモジュールのESP-8266を初期搭載&lt;/strong&gt;しており、Wi-Fi接続もスマートフォンアプリから簡単に設定できます。&lt;/p&gt;
-
-&lt;h3 id=&#34;groveセンサコネクタ搭載&#34;&gt;Groveセンサコネクタ搭載&lt;/h3&gt;
-
-&lt;p&gt;Wio NodeはGrove規格のモジュールをそのまま挿せるコネクタを搭載していて、&lt;strong&gt;半田付けなしでセンサやアクチュエータを接続&lt;/strong&gt;できます。&lt;/p&gt;
-
-&lt;p&gt;また、&lt;strong&gt;対応モジュールには豊富なAPIが用意&lt;/strong&gt;されており、APIを操作するプログラムを作るだけで簡単にウェブ連携を試すことができます。&lt;/p&gt;
-
-&lt;h3 id=&#34;スマートフォンアプリから簡単操作&#34;&gt;スマートフォンアプリから簡単操作&lt;/h3&gt;
-
-&lt;p&gt;Wio Nodeの大きな特徴の一つは、公式から専用スマートフォンアプリから用意されていることでしょう。&lt;/p&gt;
-
-&lt;p&gt;デバイスのセットアップやモジュールの接続に加えて、&lt;strong&gt;モジュールを操作できるAPIをすぐに試す&lt;/strong&gt;ことができます。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Grove規格のモジュールをそのまま挿せるコネクタを搭載&lt;/strong&gt;していて、はんだづけなしで動かすことができます。モジュールのセットアップも&lt;strong&gt;公式のスマートフォンアプリから行うことができ&lt;/strong&gt;、電子工作初心者でも簡単に試せます。&lt;/p&gt;
 
 &lt;h2 id=&#34;動かしてみる&#34;&gt;動かしてみる&lt;/h2&gt;
 
-&lt;p&gt;早速Wio Nodeを動かしてみましょう。今回試す手順は以下です。&lt;/p&gt;
+&lt;p&gt;早速Wio Nodeを動かしてみましょう。今回は、温度センサと7セグメントディスプレイを使って簡易温度計を作ってみます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/02_map.png&#34; alt=&#34;&#34; /&gt;
+Wio Nodeに接続したモジュール同士は一見つながっているように見えますが、&lt;strong&gt;内部で連携する仕組みはありません&lt;/strong&gt;。それぞれWi-Fiを使ってAPIからインプットやアウトプットを制御します。&lt;/p&gt;
+
+&lt;p&gt;以下の手順で作っていきます。&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Wio Nodeのセットアップ&lt;/li&gt;
@@ -412,6 +401,12 @@ Swift愛好会に敬意を払い、恒例の集合写真。守りたいこの伝
 
 &lt;h3 id=&#34;wio-nodeのセットアップ&#34;&gt;Wio Nodeのセットアップ&lt;/h3&gt;
 
+&lt;p&gt;まずはWio Nodeの初期設定から進めていきます。&lt;/p&gt;
+
+&lt;p&gt;Wio Nodeは&lt;strong&gt;モバイルバッテリ・PCなどからUSBケーブルで電源を供給しましょう&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
 &lt;h4 id=&#34;開発用アプリのインストール&#34;&gt;開発用アプリのインストール&lt;/h4&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/02_wio_app.png&#34; alt=&#34;&#34; /&gt;
@@ -425,16 +420,17 @@ Android: &lt;a href=&#34;https://play.google.com/store/apps/details?id=cc.seeed.
 &lt;h4 id=&#34;アプリとwio-nodeの設定&#34;&gt;アプリとWio Nodeの設定&lt;/h4&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/03_acount.png&#34; alt=&#34;&#34; /&gt;
-まずはアカウントを作成しましょう。メールアドレスとパスワードを設定し「Register」で登録します。ServerLocationはデフォルトのGlobalにしておきます。&lt;/p&gt;
+アプリを開いたらまずはアカウントを作成しましょう。メールアドレスとパスワードを設定し「Register」で登録します。ServerLocationはデフォルトのGlobalにしておきます。&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/04_add_device.png&#34; alt=&#34;&#34; /&gt;
 アカウントが作成されたらAdd Your First Deviceをタップし、Wio Nodeを選択します。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/05_wio_connect.png&#34; alt=&#34;&#34; /&gt;
-Wio NodeにUSBケーブルで電源を供給しましょう。&lt;/p&gt;
+&lt;p&gt;続いてWi-Fiの設定に移りますが、手順が少しややこしいので注意してください。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/05_wifi.png&#34; alt=&#34;&#34; /&gt;
+&lt;strong&gt;はじめにWio Node自身のWi-Fiに接続し、次にアクセスポイントとなるWi-Fiを選択します&lt;/strong&gt;。&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/06_func.png&#34; alt=&#34;&#34; /&gt;
-画面の指示にしたがってFuncボタン（写真親指側）を4秒以上長押しすると、青いランプがゆらゆらと光ります。&lt;/p&gt;
+まずは画面の指示にしたがってFuncボタン（写真親指側）を4秒以上長押しすると、青いランプがゆらゆらと光ります。&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/07_wio_network.png&#34; alt=&#34;&#34; /&gt;
 iOSのWi-Fi選択画面から、「Wio_XXXX」というSSIDを選択します。（Androidはアプリ内での選択です。）&lt;/p&gt;
@@ -443,9 +439,9 @@ iOSのWi-Fi選択画面から、「Wio_XXXX」というSSIDを選択します。
 アプリに戻ると、続いてWi-Fiの接続を促されます。Wi-Fiリストから、使用するWi-Fiを選択しましょう。&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/09_device_connect.png&#34; alt=&#34;&#34; /&gt;
-Wio Nodeが認識されました。デバイスに名前をつけておきます。&lt;/p&gt;
+Wio Nodeが認識されました。デバイスに名前をつけておきます。（Android端末で認識がうまくいかない場合、&lt;strong&gt;機内モードにして試す&lt;/strong&gt; と解消することがあるようです。）&lt;/p&gt;
 
-&lt;p&gt;以上で、Wio Nodeのセットアップが完了しました。同じデバイスとWi-Fiを使う場合は、以後起動するだけで接続されるようになります！&lt;/p&gt;
+&lt;p&gt;以上でWio Nodeのセットアップが完了しました。同じデバイスとWi-Fiを使う場合は、以後起動するだけで接続されるようになります！&lt;/p&gt;
 
 &lt;h3 id=&#34;wio-nodeにモジュールを接続する&#34;&gt;Wio Nodeにモジュールを接続する&lt;/h3&gt;
 
@@ -528,7 +524,7 @@ Wio Nodeが認識されました。デバイスに名前をつけておきます
 
 &lt;p&gt;インストールが完了したら、Node.jsが正しく動くか確認してみましょう。
 &lt;img src=&#34;https://dotstud.io/img/blog/095/17_node_v.png&#34; alt=&#34;&#34; /&gt;
-コマンドラインで&lt;code&gt;node -v&lt;/code&gt;を叩くとバージョンが出るようになったでしょうか？（&lt;strong&gt;v7.6.0以上ですよ！&lt;/strong&gt;）&lt;/p&gt;
+コマンドラインで&lt;code&gt;node -v&lt;/code&gt;を叩くとバージョンが出るようになったでしょうか？（v7.6.0以上ですよ！）&lt;/p&gt;
 
 &lt;p&gt;Node.jsの環境構築はとても簡単なので、ウェブ開発が初めての方にもオススメです！&lt;/p&gt;
 
@@ -557,7 +553,7 @@ Wio Nodeが認識されました。デバイスに名前をつけておきます
 &lt;img src=&#34;https://dotstud.io/img/blog/095/21_npm_install.png&#34; alt=&#34;&#34; /&gt;
 axiosがインストールされ、package.jsonに追加されました。&lt;/p&gt;
 
-&lt;p&gt;続いてプログラムを記述するファイルを作成します。&lt;code&gt;touch ファイル名&lt;/code&gt;でファイルが作成されます。（Windowsの場合は&lt;code&gt;vi ファイル名&lt;/code&gt;で新規ファイルを開き&lt;code&gt;:wq&lt;/code&gt;で保存して終了してみましょう。）
+&lt;p&gt;続いてプログラムを記述するファイルを作成します。&lt;code&gt;touch ファイル名&lt;/code&gt;でファイルが作成されます。（Windowsの場合はコマンドがないのでフォルダから作成してください。）
 &lt;img src=&#34;https://dotstud.io/img/blog/095/22_touch.png&#34; alt=&#34;&#34; /&gt;
 app.jsというファイルを作成しました。（&lt;code&gt;ls&lt;/code&gt;コマンドでカレントディレクトリのファイルが見れます。Windowsは&lt;code&gt;dir&lt;/code&gt;。）&lt;/p&gt;
 
@@ -602,11 +598,13 @@ const BASE_PATH = `https://us.wio.seeed.io/v1/node`; // 自身のものをアプ
 getTemp();
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;axiosに温度取得APIのURLとオプションを渡し、返ってきた値を出力します。&lt;/p&gt;
+&lt;p&gt;axiosに温度取得APIのURLとオプションを渡し、返ってきた値を出力しています。&lt;/p&gt;
 
 &lt;p&gt;&lt;code&gt;const ACCESS_TOKEN = process.argv[2] || &#39;&#39;;&lt;/code&gt;の部分は、コマンドライン引数（実行時に渡す値）を取得しています。tokenなどの人に知られたくない値は、ファイルに直接書かないのがベターです。&lt;/p&gt;
 
-&lt;p&gt;それでは正しく動くか試してみましょう。Node.jsは&lt;code&gt;node ファイル名&lt;/code&gt;で実行できます。今回は&lt;code&gt;app.js&lt;/code&gt;というファイル名で作成し、引数にtokenを渡すので&lt;code&gt;node app.js &amp;lt;token&amp;gt;&lt;/code&gt;で実行してみましょう。
+&lt;p&gt;それでは正しく動くか試してみましょう。&lt;code&gt;node app.js &amp;lt;自分のtoken&amp;gt;&lt;/code&gt;というコマンドで実行します。&lt;/p&gt;
+
+&lt;p&gt;ご自身のtokenは&lt;strong&gt;アプリのView API画面から確認してください&lt;/strong&gt;。&lt;code&gt;?access_token=&lt;/code&gt;の後の文字列がtokenです。
 &lt;img src=&#34;https://dotstud.io/img/blog/095/23_temp_test.png&#34; alt=&#34;&#34; /&gt;
 温度センサの情報が返ってきたでしょうか？&lt;/p&gt;
 
@@ -640,7 +638,7 @@ const temp2digit = (temp) =&amp;gt; {
 
 &lt;p&gt;数値を文字列に変換し、不要な&amp;rsquo;.&amp;lsquo;を取り除き、3桁にして、温度計らしく&amp;rsquo;C&amp;rsquo;を付けて返します。&lt;/p&gt;
 
-&lt;p&gt;先ほど作ったgetTemp()と一緒に実行するようにしてみましょう。&lt;/p&gt;
+&lt;p&gt;これを先ほど作ったgetTemp()と一緒に実行するようにしてみましょう。&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
 
@@ -687,7 +685,7 @@ main();
 
 &lt;p&gt;getTemp()で受け取ったobjectの子要素には&lt;code&gt;.&lt;/code&gt;でアクセスします。先ほどのレスポンスのdataの中のtemperatureが欲しいので&lt;code&gt;res.data.temperature&lt;/code&gt;となります。&lt;/p&gt;
 
-&lt;p&gt;&lt;code&gt;node app.js &amp;lt;token&amp;gt;&lt;/code&gt;で実行してみます。
+&lt;p&gt;&lt;code&gt;node app.js &amp;lt;自分のtoken&amp;gt;&lt;/code&gt;で実行してみます。
 &lt;img src=&#34;https://dotstud.io/img/blog/095/24_temp2digit.png&#34; alt=&#34;&#34; /&gt;
 温度計の文字列ができました！&lt;/p&gt;
 
@@ -792,7 +790,7 @@ async function main() =&amp;gt; {
 main();
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;こちらも試してみましょう。&lt;code&gt;node app.js &amp;lt;token&amp;gt;&lt;/code&gt;で実行です。
+&lt;p&gt;こちらも試してみましょう。&lt;code&gt;node app.js &amp;lt;自分のtoken&amp;gt;&lt;/code&gt;で実行です。
 &lt;img src=&#34;https://dotstud.io/img/blog/095/25_comp_demo.png&#34; alt=&#34;&#34; /&gt;
 温度がディスプレイに表示されました！&lt;/p&gt;
 
@@ -905,7 +903,7 @@ setInterval(() =&amp;gt; {
 
 &lt;h3 id=&#34;試してみる&#34;&gt;試してみる&lt;/h3&gt;
 
-&lt;p&gt;完成コードを試してみます。ドキドキ。&lt;code&gt;node app.js&lt;/code&gt;で実行です。
+&lt;p&gt;完成コードを試してみます。ドキドキ。&lt;code&gt;node app.js &amp;lt;自分のtoken&amp;gt;&lt;/code&gt;で実行です。
 &lt;img src=&#34;https://dotstud.io/img/blog/095/25_comp_demo.png&#34; alt=&#34;&#34; /&gt;
 現在の室温が表示されます。&lt;/p&gt;
 
@@ -919,7 +917,7 @@ setInterval(() =&amp;gt; {
 
 &lt;h4 id=&#34;補足-完成の一歩先へ&#34;&gt;補足: 完成の一歩先へ！&lt;/h4&gt;
 
-&lt;p&gt;「簡単であっという間だった」というあなた！&lt;strong&gt;このガジェットを使ってできることはまだまだあります！&lt;/strong&gt;例をあげるので、ぜひトライしてみてください。&lt;/p&gt;
+&lt;p&gt;「簡単であっという間だった」というあなた！&lt;strong&gt;このガジェットを使ってできることはまだまだあります！&lt;/strong&gt;&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;例1: Azure Web AppsなどのPaaSを使って常時稼働できるようにする&lt;/li&gt;
