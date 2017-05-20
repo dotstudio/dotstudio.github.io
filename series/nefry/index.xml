@@ -10,6 +10,215 @@
     <atom:link href="/series/nefry/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Nefry BTとIFTTTでスイッチを押したらLINEを送る仕組みを作ってみよう</title>
+      <link>https://dotstud.io/blog/nefry-ifttt-push-line/</link>
+      <pubDate>Thu, 18 May 2017 02:51:27 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nefry-ifttt-push-line/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは。外部ライターのわみ（&lt;a href=&#34;https://twitter.com/wamisnet&#34;&gt;@wamisnet&lt;/a&gt;）です。Unirobot株式会社でロボットのソフトウェアエンジニアをやりながら、dotstudioでは私が作成しているIoTデバイス「Nefry」シリーズの販売やチュートリアル記事の執筆をしています。&lt;/p&gt;
+
+&lt;p&gt;Nefryは、ユーザの皆様からのフィードバックを頂き成長しています。新たなWi-Fi・BLEモジュール「ESP-WROOM-32」の発売もあり、このたび&lt;strong&gt;新機能と改良を加えた次世代の「Nefry BT」を発表&lt;/strong&gt;する事になりました。&lt;/p&gt;
+
+&lt;p&gt;今回は新しい「Nefry BT」を使って、Amazon Dash Buttonのようにスイッチを押した時にLINEに通知が行く仕組みを作ってみます。&lt;/p&gt;
+
+&lt;h2 id=&#34;nefry-btとは&#34;&gt;Nefry BTとは&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/100/01_nefry.png&#34; alt=&#34;&#34; /&gt;
+Nefryシリーズは、「&lt;strong&gt;簡単にインターネットにつながること&lt;/strong&gt;」をテーマにしたFRISKサイズのIoTデバイスです。Nefry BTからはWi-Fiに加えてBLE（Bluetooth Low Energy）に対応し、I/O機能も増えて開発の幅がさらに広がりました！&lt;/p&gt;
+
+&lt;p&gt;ハードウェアをできるだけ意識しなくて済むよう設計され、はんだづけや複雑な接続なしで動かすことができるため、初めてハードウェアを触る方にオススメのデバイスです。&lt;/p&gt;
+
+&lt;h2 id=&#34;作ってみる&#34;&gt;作ってみる&lt;/h2&gt;
+
+&lt;p&gt;今回試す流れは以下です。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;IFTTTにレシピを作成する&lt;/li&gt;
+&lt;li&gt;開発環境（Arduino IDE）を整える&lt;/li&gt;
+&lt;li&gt;プログラムを書き込む&lt;/li&gt;
+&lt;li&gt;Nefry BTとIFTTTを紐付ける&lt;/li&gt;
+&lt;li&gt;スイッチを押してLINEにメッセージを送ってみる&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Nefry BT&lt;/li&gt;
+&lt;li&gt;IFTTTのアカウント&lt;/li&gt;
+&lt;li&gt;LINEのアカウント&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;筆者の環境&#34;&gt;筆者の環境&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Nefry BT library Version 0.6.1&lt;/li&gt;
+&lt;li&gt;Windows 10&lt;/li&gt;
+&lt;li&gt;Arduino IDE 1.8.2&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&#34;注意&#34;&gt;注意&lt;/h4&gt;
+
+&lt;p&gt;Nefry BTは開発中のため、実際のコードや画面と異なる可能性があります。&lt;/p&gt;
+
+&lt;h3 id=&#34;iftttにレシピを作成する&#34;&gt;IFTTTにレシピを作成する&lt;/h3&gt;
+
+&lt;p&gt;IFTTTは様々なWebサービス同士を簡単に連携できるサービスです。連携したものは「レシピ」と呼ばれ、自分で新しいレシピを作成することもできます。今回はNefry BTとLINEを連携するレシピを作ってみます。&lt;/p&gt;
+
+&lt;p&gt;アカウントを持っていない場合は下記の記事を参考にアカウントを取得してください。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;参考: &lt;a href=&#34;https://liginc.co.jp/263899&#34;&gt;Webサービス同士を連携できる「IFTTT」と自作IoTデバイスを繋いで生活を便利にしてみた&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;アカウントを取得したら、Nefry BTとLINEを連携させるレシピを登録していきましょう。&lt;/p&gt;
+
+&lt;p&gt;IFTTTのレシピは「〇〇が起きたら△△する」というようにトリガーとアクションに分けられます。今回のトリガーは「&lt;strong&gt;Nefry BTのスイッチをクリックしたら&lt;/strong&gt;」、アクションは「&lt;strong&gt;LINEに通知する&lt;/strong&gt;」となります。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;トリガーとnefry-btを紐付けるキーの取得&#34;&gt;トリガーとNefry BTを紐付けるキーの取得&lt;/h4&gt;
+
+&lt;p&gt;今回はトリガーとして自作のWebサービスを利用できる「Maker Webhooks」を使います。&lt;/p&gt;
+
+&lt;p&gt;まずはMaker WebhooksをあとでNefry BTと紐付けるために、Secret Keyというキーを取得します。&lt;a href=&#34;https://ifttt.com/discover&#34;&gt;IFTTT公式サイト&lt;/a&gt;上部の「Search」から、Maker Webhooksを検索しクリックしましょう。（&amp;rdquo;make&amp;rdquo;で候補に出てきます。）
+&lt;img src=&#34;https://dotstud.io/img/blog/100/02_ifttt1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Maker Webhooksのページに移動したら右上にある「Setting」から設定します。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/03_ifttt2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;設定ページに移動しました。このとき初めての方はこのような認証画面が表示されます。ページ中央の「Connect」をクリックしてMaker Webhooksを有効にしましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/04_ifttt3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;有効になるとAccount Infoのページに移動します。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/05_ifttt4.png&#34; alt=&#34;&#34; /&gt;
+アカウントごとに割り当てられるSecret KeyがURLのuse/以下に記載されているのでコピーしておきます。今回の例ではSecret Keyは &lt;code&gt;c1kgN-ZOhUAxA6B7TpyiKc&lt;/code&gt; の部分です。（このSecret Keyはサンプルです。既に無効になっていますので自身で取得してください。）&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;トリガーの作成&#34;&gt;トリガーの作成&lt;/h4&gt;
+
+&lt;p&gt;続いてトリガーとなるMaker Webhooksの詳細を作成します。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/06_ifttt5.png&#34; alt=&#34;&#34; /&gt;
+&lt;a href=&#34;https://ifttt.com/create&#34;&gt;IFTTTのレシピ作成ページ&lt;/a&gt;から、「+this」のリンクをクリックします。&lt;/p&gt;
+
+&lt;p&gt;「Choose a service」から再度Maker Webhooksを検索しましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/07_ifttt6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Maker WebhooksはEventという単位でトリガーとなります。今回はEvent Nameを&amp;rdquo;Nefry&amp;rdquo;とし、「Create trigger」をクリックし作成します。Event NameはあとでNefry BTにも同じ名前で入力します。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/08_ifttt7.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;アクションの作成&#34;&gt;アクションの作成&lt;/h4&gt;
+
+&lt;p&gt;最後に、トリガーが生じた時に起こすアクションを登録します。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/09_ifttt8.png&#34; alt=&#34;&#34; /&gt;
+「+that」のリンクをクリックして、検索欄からLINEを検索しましょう。ここでTwitterやGmailなどを選択すると、それぞれのサービスと連携させることが出来ます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/100/10_ifttt9.png&#34; alt=&#34;&#34; /&gt;
+Recipientと書かれた欄にメッセージを送るLINEの送信先を選択します。&lt;/p&gt;
+
+&lt;p&gt;Messageと書かれた欄には送信するメッセージを入力します。MessageのValueにはプログラムから値を渡すことができるので、温度センサや明るさセンサなどの値をメッセージに組み込むことが可能です。写真のURLがあれば写真を送信することもできます。&lt;/p&gt;
+
+&lt;p&gt;入力が完了したら、Create actionをクリックして保存します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/100/11_ifttt10.png&#34; alt=&#34;&#34; /&gt;
+最後にFinishを押し、IFTTTのレシピの作成は完了です。&lt;/p&gt;
+
+&lt;h3 id=&#34;開発環境-arduino-ide-を整える&#34;&gt;開発環境（Arduino IDE）を整える&lt;/h3&gt;
+
+&lt;p&gt;続いてNefy BTにプログラムを書く環境を整えます。プログラムの書き込みにはArduino IDEと呼ばれるエディタを使用します。&lt;a href=&#34;https://www.arduino.cc/en/Main/Software&#34;&gt;公式サイト&lt;/a&gt;からダウンロードし、以下の手順でNefry BT用の設定を追加してください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/100/12_program.png&#34; alt=&#34;&#34; /&gt;
+Arduino IDEの「環境設定」のページから、「追加のボードマネージャのURL」に以下のリンクを入力して検索します。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;https://nefry.studio/package_nefrybt_index.json&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;メニューバーの[ツール]から、[ボード] -&amp;gt; [ボードマネージャー]を選択します。選択肢に「Nefry by Nefry Community」が表示されているので、インストールします。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/13_library.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;これでプログラムを書き込む準備が整いました。&lt;/p&gt;
+
+&lt;h3 id=&#34;プログラムを書き込む&#34;&gt;プログラムを書き込む&lt;/h3&gt;
+
+&lt;p&gt;以下はNefry BTに搭載されている「スイッチ」を押したときにIFTTTのEventを呼ぶプログラムです。&lt;/p&gt;
+
+&lt;p&gt;Arduino IDEを開き、以下のコードを貼り付けます。（//以降の部分はコメントです。）&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-cpp:&#34;&gt;#include &amp;lt;Nefry.h&amp;gt;
+#include &amp;lt;NefryIFTTT.h&amp;gt;
+String Event, SecretKey;
+int counter =0;                       //送信データのカウンタ
+
+void setup() {
+  Nefry.setStoreTitle(&amp;quot;SecretKey&amp;quot;,0); //Nefry DataStoreのタイトルを指定
+  Nefry.setStoreTitle(&amp;quot;Event&amp;quot;,1);     //Nefry DataStoreのタイトルを指定
+  SecretKey = Nefry.getStoreStr(0);   //Nefry DataStoreからデータを取得
+  Event = Nefry.getStoreStr(1);       //Nefry DataStoreからデータを取得
+  Nefry.enableSW();                   //SW有効化
+}
+
+void loop() {
+  if (Nefry.readSW()) {               //SWを押した時
+    counter++;                        //送信回数加算
+    bool sendData = IFTTT.send(Event, SecretKey,&amp;quot;Nefry&amp;quot;,(String)(micros()/1000000)+&amp;quot;秒&amp;quot;,(String)counter);//IFTTTにデータを送信
+                                      //Value1:Nefry,Value2:Nefryが起動してからの秒数,Value3:送信カウンタ
+    if (!sendData) {//IFTTTにデータを送信が成功したか失敗したかの判定
+      Nefry.setLed(255, 0, 0);        //Errの時、赤色点灯
+    }
+    Nefry.ndelay(1000);               //送信後1秒間待つ
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;貼り付けできたら[ツール] -&amp;gt; [ボード]から「Nefry BT」を選択します。Nefry BTとPCを繋ぎ、[ツール] -&amp;gt; [シリアルポート]でNefry BTのシリアルポートを選択しましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/14_arduinoide.png&#34; alt=&#34;&#34; /&gt;
+ボードとシリアルポートを選んだらArduino IDEの左上にある「→」を押しプログラムを書き込みます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/100/15_arduinoide2.png&#34; alt=&#34;&#34; /&gt;
+「ボードへの書き込みが完了しました。」と表示されたら、Nefry BTへのプログラムの書き込みは完了です。&lt;/p&gt;
+
+&lt;p&gt;最後にNefry BTにIFTTTとの連携情報を入力します。あと少しですので頑張っていきましょう！&lt;/p&gt;
+
+&lt;h3 id=&#34;nefry-btとiftttを紐付ける&#34;&gt;Nefry BTとIFTTTを紐付ける&lt;/h3&gt;
+
+&lt;p&gt;Nefry BTから&amp;rdquo;Nefry-OOOO&amp;rdquo;というWi-Fiの信号が発信されているので接続します。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/16_wifi.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;接続できたらChromeやIEなどのWebブラウザで&lt;a href=&#34;http://192.168.4.1&#34;&gt;Nefry BTのサイト&lt;/a&gt;にアクセスしましょう。&lt;code&gt;http://192.168.4.1&lt;/code&gt;にアクセスするとNefry BTの設定サイトが表示されます。このページからNefry BTに関する様々な設定ができます。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/17_nefry.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;まずは「Setup WiFi」をクリックし、Wi-Fiの設定をしましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/18_nefry.png&#34; alt=&#34;&#34; /&gt;
+接続するWi-Fiを入力して「Save」をクリックすると、Nefry BTに設定を保存＆再起動します。Wi-Fiが切断したら再接続してください。&lt;/p&gt;
+
+&lt;p&gt;設定が完了したら、トップページに戻り「Data Store」のページに移動します。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/19_nefry.png&#34; alt=&#34;&#34; /&gt;
+SecretKeyにはMaker Webhooksで確認した値を、EventにはLINEと連携した際に入力したEvent Name（今回は”Nefry”）を入力します。Saveをクリックし値を保存するとNefry BTが再起動します。&lt;/p&gt;
+
+&lt;p&gt;いよいよNefry BTについているスイッチを押してLINEにメッセージを送ってみましょう！&lt;/p&gt;
+
+&lt;h3 id=&#34;スイッチを押してlineにメッセージを送ってみる&#34;&gt;スイッチを押してLINEにメッセージを送ってみる&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/100/20_nefry.gif&#34; alt=&#34;&#34; /&gt;
+Nefry BTのスイッチを押すとLEDの色が変わり送信を始めます。送信が完了するとLEDが水色になり、LINEに通知されました！IFTTTのサーバ状態により応答が悪い場合もありますが、その時はIFTTTのページにてリロードをすると反応してくれます。&lt;/p&gt;
+
+&lt;p&gt;初回は登録が多く時間がかかりますが、今後はサクっと作れるでしょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;さいごに&#34;&gt;さいごに&lt;/h2&gt;
+
+&lt;p&gt;半田付けや複雑な設定なしで、ハードウェアをきっかけにしてLINEへメッセージを投稿する連携をサクッと試すことができました。今回紹介したNefry BTとIFTTTの連携を応用すればTwitterやGmailなどにもメッセージを送信できます。&lt;/p&gt;
+
+&lt;p&gt;リアルタイム通信が得意な「Milkcocoa」やクラウドサービスMicrosoft AzureのIoT向け機能である「Azure IoT Hub」などを使うとより幅広い開発ができるでしょう。&lt;/p&gt;
+
+&lt;p&gt;今後の更新で簡単に接続できるライブラリやサンプルコードを追加していく予定です。生まれたばかりでまだまだヒヨッコですが、進化していくNefry BTを応援していただけたらと思います。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Nefryで取得したセンサーデータをAmbientで簡単にグラフ化しよう！</title>
       <link>https://dotstud.io/blog/nefry-data-show-graphically/</link>
       <pubDate>Tue, 21 Mar 2017 13:48:05 +0900</pubDate>
@@ -199,6 +408,329 @@ Nefryにライトを当てたり遠ざけたりすると、わりと &lt;strong&
 &lt;p&gt;紹介したのは折れ線グラフですが、&lt;strong&gt;棒グラフや散布図などもお手軽にグラフを作れるAmbient&lt;/strong&gt; と &lt;strong&gt;Webへの接続が簡単なNefry&lt;/strong&gt; でぜひぜひ遊んでみてください。&lt;/p&gt;
 
 &lt;p&gt;Ambientを運営されている下島さん、記事にさせていただく許可を頂きありがとうございました。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>URLを入れるだけ！REST APIでNefryを簡単に制御してみよう！</title>
+      <link>https://dotstud.io/blog/nefry-rest-api-tutorial/</link>
+      <pubDate>Mon, 21 Nov 2016 08:00:00 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nefry-rest-api-tutorial/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、外部ライターのわみ（&lt;a href=&#34;http://twitter.com/wamisnet&#34;&gt;@wamisnet&lt;/a&gt;）と申します。愛知県でネットワークの勉強をしている学生です。2014年ごろから電子工作を始め、FRISKサイズのIoT向けデバイス「Nefry（ねふりー）」を自作しました。&lt;/p&gt;
+
+&lt;p&gt;そんな「Nefry」をWeb系のエンジニアでも触れられるように、REST APIでハードウエアをいじれるようにしてみました。C言語を使わずに、JavaScriptやC#から簡単に試せるのでぜひ遊んでみてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;※Nefry library version 2.2.2以上の場合使用できます。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;nefryとは&#34;&gt;Nefryとは&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/059/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;「Nefry（ねふりー）」は手軽にIoTに挑戦できるFRISKサイズのデバイスです。Wi-Fiを搭載しておりインターネットに接続しやすいため、接続に時間をとられることなくあなたのアイデア実現に集中できます。&lt;em&gt;日本の技適に通ったESP-WROOM-02を使っています。&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;また、スマートフォンで使うようなモバイルバッテリーで動作するので、場所を選ばずに使えるという優れものです！　Groveセンサー対応しており、はんだ付け不要で楽しめます。（&lt;strong&gt;&lt;a href=&#34;https://dotstud.io/projects/nefry-connect-internet/&#34;&gt;dotstudioのECサイト&lt;/a&gt;にて販売中です！！&lt;/strong&gt;）&lt;/p&gt;
+
+&lt;p&gt;LIGブログにいくつか記事を載せていますのでご覧ください。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://liginc.co.jp/236620&#34;&gt;自作したオリジナルIoTデバイス「Nefry」とインターネットを繋いでみた&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://liginc.co.jp/263899&#34;&gt;Webサービス同士を連携できる「IFTTT」と自作IoTデバイスを繋いで生活を便利にしてみた&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;rest-apiとは&#34;&gt;REST APIとは&lt;/h2&gt;
+
+&lt;p&gt;REST APIとは、簡単なURLを叩くだけでそこにある情報や資源にアクセスできる仕組みのことです。TwitterのREST APIで例えてみましょう！&lt;/p&gt;
+
+&lt;p&gt;Twitterでフォロワーの一覧を取得したい場合はこちらのREST API&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;api.twitter.com/1.1/&lt;strong&gt;followers/list&lt;/strong&gt;.json&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;ツイートを検索したい場合はこちらのREST API&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;api.twitter.com/1.1/&lt;strong&gt;search/tweets&lt;/strong&gt;.json&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;認証情報など必要な引数を渡せばTwitterにアクセスできるのです。URLを見るだけで、何ができるかがわかるのがREST APIのよさの一つだと思います。&lt;/p&gt;
+
+&lt;p&gt;そんなREST APIにNefryも対応し、より簡単にいろんなことを試せるようにしてみました。以下で、どんなことができるのかを簡単に紹介します。&lt;/p&gt;
+
+&lt;h2 id=&#34;nefryのおすすめrest-api&#34;&gt;NefryのおすすめREST API&lt;/h2&gt;
+
+&lt;p&gt;今回紹介するのは、今実装されている機能の一部のみです。実装されているすべての機能は&lt;a href=&#34;http://qiita.com/wamisnet/private/5483d14bf21cd3193ae0&#34;&gt;こちらのQiitaの記事&lt;/a&gt;にまとめていますので興味があればご覧ください。&lt;/p&gt;
+
+&lt;p&gt;デフォルトのままのREST APIであると、URLさえわかれば別の人も簡単に制御できてしまうので、基本的にはPasswordをかけて使用してください。（かけ方は後ほど紹介します）&lt;/p&gt;
+
+&lt;h3 id=&#34;gpio-入出力ピン&#34;&gt;GPIO（入出力ピン）&lt;/h3&gt;
+
+&lt;p&gt;Nefryについている入出力ピンを制御することができるAPIのまとめです。&lt;/p&gt;
+
+&lt;h3 id=&#34;入力&#34;&gt;入力&lt;/h3&gt;
+
+&lt;p&gt;Nefryの入力ピンがどうなっているかを取得できます。スイッチや明るさセンサーのような簡単なセンサーを手軽に試すことができます。&lt;/p&gt;
+
+&lt;h4 id=&#34;デジタル&#34;&gt;デジタル&lt;/h4&gt;
+
+&lt;p&gt;NefryのD0-D5の入力を取得できます。&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;left&#34;&gt;項目&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;内容&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;URL&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;/api/1.0/digitalRead&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;引数&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;pin(範囲：D0-D5)&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;具体例&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;/api/1.0/digitalRead?pin=D1&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;返り値&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;{&amp;ldquo;mode&amp;rdquo;:&amp;ldquo;digitalRead&amp;rdquo;,&amp;ldquo;pin&amp;rdquo;:&amp;ldquo;D1&amp;rdquo;,&amp;ldquo;value&amp;rdquo;:0}&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;pin名と状態がvalueに含まれて返答されます。valueの範囲は0(low)-1(high)となります。 &lt;strong&gt;スイッチの状態を取得するのに向いています。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;アナログ&#34;&gt;アナログ&lt;/h4&gt;
+
+&lt;p&gt;NefryのA0の入力を取得できます。&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;left&#34;&gt;項目&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;内容&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;URL&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;/api/1.0/analogRead&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;引数&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;なし&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;具体例&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;/api/1.0/analogRead&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;返り値&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;{&amp;ldquo;mode&amp;rdquo;:&amp;ldquo;analogRead&amp;rdquo;,&amp;ldquo;&amp;ldquo;value&amp;rdquo;:0}&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;状態がvalueに含まれて返答されます。valueの範囲は0-255となります。&lt;strong&gt;明るさセンサーを取得するのに向いています。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;出力&#34;&gt;出力&lt;/h3&gt;
+
+&lt;h4 id=&#34;デジタル-1&#34;&gt;デジタル&lt;/h4&gt;
+
+&lt;p&gt;NefryのD0-D5ピンの出力を制御できます。HIGH(3.3v)かLOW(0v)のどちらかを出力します。&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;left&#34;&gt;項目&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;内容&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;URL&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;/api/1.0/digitalWrite&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;引数&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;pin(範囲：D0-D5)　state(範囲：HIGH(1)-LOW(0))&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;具体例&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;/api/1.0/digitalWrite?pin=D1&amp;amp;state=HIGH&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;返り値&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;{&amp;ldquo;mode&amp;rdquo;:&amp;ldquo;digitalWrite&amp;rdquo;,&amp;ldquo;pin&amp;rdquo;:&amp;ldquo;D1&amp;rdquo;,&amp;ldquo;value&amp;rdquo;:1}&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;pin名と状態がvalueに含まれて返答されます。&lt;strong&gt;LEDを点滅させることができます。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;アナログ-pwm&#34;&gt;アナログ(PWM)&lt;/h4&gt;
+
+&lt;p&gt;NefryのD0-D5ピンの出力を制御できます。1023(3.3v)から0(0v)の指定された出力します。&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;left&#34;&gt;項目&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;内容&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;URL&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;/api/1.0/analogWrite&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;引数&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;pin(範囲：D0-D5)　state(範囲：0-1023)&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;具体例&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;/api/1.0/analogWrite?pin=D1&amp;amp;state=500&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;返り値&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;{&amp;ldquo;mode&amp;rdquo;:&amp;ldquo;analogWrite&amp;rdquo;,&amp;ldquo;pin&amp;rdquo;:&amp;ldquo;D1&amp;rdquo;,&amp;ldquo;value&amp;rdquo;:500}&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;pin名と状態がvalueに含まれて返答されます。&lt;strong&gt;LEDを徐々に明るくしたり、暗くしたりできます。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;nefry関数&#34;&gt;Nefry関数&lt;/h2&gt;
+
+&lt;h3 id=&#34;nefry-led&#34;&gt;Nefry LED&lt;/h3&gt;
+
+&lt;p&gt;NefryについているLEDの色を変更することができます。&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;left&#34;&gt;項目&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;内容&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;URL&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;/api/1.0/NefrysetLed&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;引数&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;r (範囲：0-255) g (範囲：0-255) b (範囲：0-255)&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;具体例&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;/api/1.0/NefrysetLed?r=255&amp;amp;g=0&amp;amp;b=0&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;返り値&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;{&amp;ldquo;mode&amp;rdquo;:&amp;ldquo;NefrysetLed&amp;rdquo;,&amp;ldquo;r&amp;rdquo;:255,&amp;ldquo;g&amp;rdquo;:0,&amp;ldquo;b&amp;rdquo;:0}&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;設定した値が返答されます。&lt;strong&gt;NefryについているLEDを制御することができます。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;使い方&#34;&gt;使い方&lt;/h2&gt;
+
+&lt;p&gt;NefryでREST APIを使う際には、前もってプログラムを書き込んでおく必要があります。
+Nefryにプログラムを書き込む際に必要な環境については、下の記事をご覧ください。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/298161&#34;&gt;さくっと生活を便利にする！FRISKサイズのIoT向けデバイス「Nefry」を使ってみよう【環境構築編】&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;環境ができたところで、Nefryのプログラムを紹介していきます。まずはシンプルなパスワード &lt;strong&gt;なし&lt;/strong&gt; から。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;NefryRESTAPI.h&amp;gt;
+void setup() {
+  NefryRESTAPI.begin();//RES TAPIを使うのに必要な初期化をおこないます。
+}
+
+void loop() {
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ものすごくシンプルですね、&lt;code&gt;#include&amp;lt;NefryRESTAPI.h&amp;gt;&lt;/code&gt;こちらでライブラリーを読み込み、&lt;code&gt;NefryRESTAPI.begin();&lt;/code&gt;にてライブラリーを使うのに必要な処理をするための関数を呼び出すだけでREST APIを使用できるようになります。&lt;/p&gt;
+
+&lt;h3 id=&#34;パスワードをつけてみる&#34;&gt;パスワードをつけてみる&lt;/h3&gt;
+
+&lt;p&gt;次にパスワード &lt;strong&gt;あり&lt;/strong&gt; のプログラムを紹介します。&lt;/p&gt;
+
+&lt;p&gt;※ 現状http通信での通信であるため、セキュリティ的には大変弱いです。あくまでパスワードは誰もが簡単にアクセスできないようにするためのものです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;NefryRESTAPI.h&amp;gt;
+void setup() {
+  NefryRESTAPI.begin();//REST APIを使うのに必要な初期化をおこないます。
+  NefryRESTAPI.setPassword(&amp;quot;Nefry&amp;quot;);//接続時にパスワードが必要になります。
+}
+
+void loop() {
+
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;先ほどのプログラムに&lt;code&gt;NefryRESTAPI.setPassword(&amp;quot;Nefry&amp;quot;);&lt;/code&gt;この一行をプラスするだけです。この場合のパスワードは、&lt;strong&gt;Nefry&lt;/strong&gt; となります。&lt;/p&gt;
+
+&lt;p&gt;ダブルクォーテーションの間にパスワードを入力して、Nefryに書き込めば準備完了です！　パスワードありはAPIを使用する際にURLにpass=(プログラム内のパスワード)を追記してください。&lt;/p&gt;
+
+&lt;p&gt;具体例1：　/api/1.0/NefrysetLed?r=255&amp;amp;g=0&amp;amp;b=255&amp;amp;pass=Nefry&lt;br /&gt;
+具体例2：　/api/1.0/analogRead?pass=Nefry&lt;/p&gt;
+
+&lt;h3 id=&#34;実際に動かしてみる&#34;&gt;実際に動かしてみる&lt;/h3&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;twitter-video&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;NefryにRESTAPIぽいものを実装してみた！&lt;br&gt;&lt;br&gt;APIを叩くとNefryにもともとついているledが青から緑に変化して、そのあとD5ピンに繋がってる赤色のledが点灯します &lt;a href=&#34;https://t.co/2Pe4yWuF1I&#34;&gt;pic.twitter.com/2Pe4yWuF1I&lt;/a&gt;&lt;/p&gt; わみ (@wamisnet) &lt;a href=&#34;https://twitter.com/wamisnet/status/796955915966525441&#34;&gt;2016年11月11日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;AndroidのchromeでNefryのREST APIを叩いてみました。初めにNefryついているLEDが青から緑になり、次のAPIの指示でD5ピンに接続されているLEDが点灯する流れを撮影しました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/059/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;私の環境では、はじめに&lt;strong&gt;&lt;a href=&#34;http://192.168.4.1/api/1.0/NefrysetLed?g=255&#34;&gt;http://192.168.4.1/api/1.0/NefrysetLed?g=255&lt;/a&gt;&lt;/strong&gt;でNefryのLEDの色を変更して、&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/059/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;つぎに&lt;strong&gt;&lt;a href=&#34;http://192.168.4.1/api/1.0/digitalWrite?pin=d5&amp;amp;state=high&#34;&gt;http://192.168.4.1/api/1.0/digitalWrite?pin=d5&amp;amp;state=high&lt;/a&gt;&lt;/strong&gt;で赤色のLEDを光らせています。URLを送信すると驚くくらい即反応します。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;ブラウザさえあれば、REST APIで明るさセンサーの値が取れたり、NefryのLEDをいじったりとハードウエアを簡単にいじることができます。また、ArduinoIDEでプログラムが書けなくても手軽に触れるのでちょっと試したいことがあるときなんかにもいいです。&lt;/p&gt;
+
+&lt;p&gt;REST APIはJavaScriptやC#から制御できます。既存のものにハードウエアを制御させることもできるのでぜひ遊んでみてください。&lt;/p&gt;
 </description>
     </item>
     
@@ -472,6 +1004,528 @@ void loop() {
 &lt;p&gt;Thanks for reading and hope Nefry helps you to try IoT easier.&lt;/p&gt;
 
 &lt;p&gt;Original Article (Japanese) : &lt;a href=&#34;https://liginc.co.jp/298161&#34;&gt;https://liginc.co.jp/298161&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>MilkcocoaとNefryでIoT体験！リモートでカラーLチカをしてみよう！</title>
+      <link>https://dotstud.io/blog/milkcocoa-nefry-iot-handson/</link>
+      <pubDate>Tue, 27 Sep 2016 10:00:27 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/milkcocoa-nefry-iot-handson/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudio代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;IoTな開発をしようとしても、Webやネットワーク、デバイスの知識などが必要になり、始めるまでですでに大変だという場合が多いと思います。&lt;/p&gt;
+
+&lt;p&gt;そんな方でも、ネットワークに接続しやすく初心者にも易しいデバイスである「Nefry」と、サーバーやネットワーク側の知識がなくてもデバイスやWebを連携できるサービス「Milkcocoa」を使うことで、手軽にIoT開発の入り口に立てます。&lt;/p&gt;
+
+&lt;p&gt;ということで今日はMilkcocoaとNefryを使い、&lt;strong&gt;Web上のドット絵の色とリアルなLEDを連携させてみましょう&lt;/strong&gt;！（ちなみに、この記事は&lt;a href=&#34;http://mlkcca.connpass.com/event/40292/&#34;&gt;IoT初心者向けハンズオン！ Milkcocoa Meetup vol 13 #mlkcca&lt;/a&gt;のハンズオン資料にもなっています）&lt;/p&gt;
+
+&lt;h2 id=&#34;今回やること-ledの色をブラウザ上から変える&#34;&gt;今回やること「LEDの色をブラウザ上から変える」&lt;/h2&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;instagram-media&#34; data-instgrm-captioned data-instgrm-version=&#34;7&#34; style=&#34; background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px); text-align:center;&#34;&gt;&lt;div style=&#34;padding:8px;&#34;&gt; &lt;div style=&#34; background:#F8F8F8; line-height:0; margin-top:40px; padding:28.1944444444% 0; text-align:center; width:100%;&#34;&gt; &lt;div style=&#34; background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;&#34;&gt;&lt;/div&gt;&lt;/div&gt; &lt;p style=&#34; margin:8px 0 0 0; padding:0 4px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/BKyHEcljEZS/&#34; style=&#34; color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;&#34; target=&#34;_blank&#34;&gt;#Nefry と #mlkcca のサンプル強化&lt;/a&gt;&lt;/p&gt; &lt;p style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;&#34;&gt;n0bisukeさん(@n0bisuke)が投稿した動画 - &lt;time style=&#34; font-family:Arial,sans-serif; font-size:14px; line-height:17px;&#34; datetime=&#34;2016-09-25T14:53:59+00:00&#34;&gt;2016 9月 25 7:53午前 PDT&lt;/time&gt;&lt;/p&gt;&lt;/div&gt;&lt;/blockquote&gt; &lt;script async defer src=&#34;//platform.instagram.com/en_US/embeds.js&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;今回作るものはこちら。&lt;strong&gt;Milkcocoaのドット絵で色を塗ると、NefryのLEDの色（&amp;amp;作成したWebサイト上のLED）が変わる&lt;/strong&gt; という仕組みです！　次の4ステップを通して開発していきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;STEP1：自前のWebサイトを作る&lt;/li&gt;
+&lt;li&gt;STEP2：ドット絵とWebサイトをMilkcocoa経由で繋げる&lt;/li&gt;
+&lt;li&gt;STEP3：NefryでLチカする&lt;/li&gt;
+&lt;li&gt;STEP4：ドット絵と自前のWebサイトとNefryを繋げてLチカする&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;今回はこれにチャレンジしてみましょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;今回使うもの-開発環境&#34;&gt;今回使うもの&amp;amp;開発環境&lt;/h2&gt;
+
+&lt;h3 id=&#34;milkcocoa&#34;&gt;Milkcocoa&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/01.png&#34; alt=&#34;&#34; /&gt;
+URL：&lt;a href=&#34;https://mlkcca.com/&#34;&gt;https://mlkcca.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;WebとWebや、Webとモバイルアプリなどをリアルタイムに繋げるリアルタイム通信ができるIoTのバックエンドサービスです。IoTデバイス間を繋げるハブになってくれます。&lt;/p&gt;
+
+&lt;p&gt;余談ですが、僕がエバンジェリストをしています。&lt;/p&gt;
+
+&lt;h3 id=&#34;nefry&#34;&gt;Nefry&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/02.png&#34; alt=&#34;&#34; /&gt;
+URL：&lt;a href=&#34;https://dotstud.io/projects/nefry-connect-internet/&#34;&gt;https://dotstud.io/projects/nefry-connect-internet/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;ESP8266をベースとしたArduino互換の開発ボードです。Wi-Fiの接続が簡単で、Milkcocoaとの連携もしやすいので、Web界隈の人に易しくIoTの入門におすすめです。青い基盤がversion1で、赤い基盤がversion2になります。&lt;/p&gt;
+
+&lt;p&gt;名古屋のメイカーである&lt;a href=&#34;https://twitter.com/wamisnet&#34;&gt;わみさん&lt;/a&gt;が制作していてdotstudioで販売しています。CodeZineの記事（&lt;a href=&#34;http://codezine.jp/article/detail/9653&#34;&gt;Arduino IDEで開発できるFRISKサイズのIoTデバイス「Nefry」&lt;/a&gt;）に概要説明がありますので参照してください。&lt;/p&gt;
+
+&lt;h3 id=&#34;筆者の環境&#34;&gt;筆者の環境&lt;/h3&gt;
+
+&lt;p&gt;僕の環境はこんな感じです。&lt;a href=&#34;https://dotstud.io/blog/macos-sierra-update-process/&#34;&gt;macOS Sierraにしたばかり&lt;/a&gt;ですが、今回の開発には問題はありませんでした。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;MacBook Pro（Retina 13-inch、 Early2015）&lt;/li&gt;
+&lt;li&gt;macOS Sierra / v10.12 ←アップデートしたばかりです（笑）&lt;/li&gt;
+&lt;li&gt;Arduino IDE v1.16.11&lt;/li&gt;
+&lt;li&gt;Nefry v2&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;事前確認&#34;&gt;事前確認&lt;/h3&gt;
+
+&lt;p&gt;開発にあたり必要なものがいくつかあります。問題のない方は「実際に作ってみよう」まで読み飛ばして下さい。&lt;/p&gt;
+
+&lt;h4 id=&#34;wi-fi環境はありますか&#34;&gt;Wi-Fi環境はありますか?&lt;/h4&gt;
+
+&lt;p&gt;Nefryの開発にはWi-Fiが必須になります。スマートフォンのテザリングなどでも問題ないです。&lt;/p&gt;
+
+&lt;h4 id=&#34;gitコマンドは使えますか&#34;&gt;gitコマンドは使えますか？&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Macの場合はターミナルでgitコマンドを打つとインストールを促されます。Mac以外の方でGitが使えない場合は&lt;a href=&#34;https://git-scm.com/&#34;&gt;公式サイト&lt;/a&gt;などの手順をもとにインストールしてください。&lt;/p&gt;
+
+&lt;h4 id=&#34;webサーバーを立ち上げられますか&#34;&gt;Webサーバーを立ち上げられますか？&lt;/h4&gt;
+
+&lt;p&gt;ブラウザからlocalhostにアクセスできる状態にできればOKです。
+XAMPや&lt;a href=&#34;https://www.npmjs.com/package/koko&#34;&gt;koko&lt;/a&gt;など他の方法でも大丈夫です。
+&lt;a href=&#34;http://qiita.com/higuma/items/b23ca9d96dac49999ab9&#34;&gt;開発用ローカルサーバを立ち上げる方法&lt;/a&gt;が参考になります。&lt;/p&gt;
+
+&lt;p&gt;今回はPythonのSimpleHTTPServerを使ってみます。Macの人なら特に何も設定してなくても使えるので便利です。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;python -m SimpleHTTPServer
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;サーバーの終了はCtrl+Cです。&lt;/p&gt;
+
+&lt;h4 id=&#34;milkcocoaのアカウント-appidはありますか-無料&#34;&gt;Milkcocoaのアカウント &amp;amp; AppIDはありますか？ (無料)&lt;/h4&gt;
+
+&lt;p&gt;アカウント登録がまだの場合は&lt;a href=&#34;https://mlkcca.com/&#34;&gt;公式サイト&lt;/a&gt;から、アカウント登録&amp;amp;アプリ作成をしてAppIDを取得しましょう。&lt;/p&gt;
+
+&lt;h4 id=&#34;nefryが手元にありますか&#34;&gt;Nefryが手元にありますか？&lt;/h4&gt;
+
+&lt;p&gt;持っていない場合は&lt;a href=&#34;https://dotstud.io/projects/nefry-connect-internet/&#34;&gt;こちら&lt;/a&gt;から購入できます。&lt;/p&gt;
+
+&lt;h4 id=&#34;arduino-ideはインストールされてますか&#34;&gt;Arduino IDEはインストールされてますか？&lt;/h4&gt;
+
+&lt;p&gt;こちらも持っていない場合は&lt;a href=&#34;https://www.arduino.cc/en/Main/Software&#34;&gt;公式サイト&lt;/a&gt;からDL&amp;amp;インストールしてください。&lt;/p&gt;
+
+&lt;h2 id=&#34;実際に作ってみよう&#34;&gt;実際に作ってみよう&lt;/h2&gt;
+
+&lt;p&gt;ここから実際に作っていきましょう。
+ソースコードのリポジトリは以下になります。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/n0bisuke/milkcocoa-nefry-handson&#34;&gt;https://github.com/n0bisuke/milkcocoa-nefry-handson&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;ちなみにフロント部分で利用しているWeb LEDはDenny Kuさんの&lt;a href=&#34;http://codepen.io/abalone0204/pen/RWgeJY&#34;&gt;Pure CSS Led Bulb&lt;/a&gt;をフォークして作っています。&lt;/p&gt;
+
+&lt;h3 id=&#34;step1-利用するwebサイト-web-led-を手元で立ち上げてみる&#34;&gt;STEP1：利用するWebサイト（Web LED）を手元で立ち上げてみる&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;git cloneしてソースコードをDLしましょう。このリポジトリにはSTEP1~4までの完成ソースコードがSTEP毎にブランチを分けて置いてあります。
+途中で分からなくなったら各ブランチに移動して確認してみましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git clone https://github.com/n0bisuke/milkcocoa-nefry-handson
+cd milkcocoa-nefry-handson
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;step1ブランチにチェックアウトします。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git checkout step1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;チェックアウトしたらサーバーを起動させてみましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;python -m SimpleHTTPServer
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://localhost:8000&#34;&gt;http://localhost:8000&lt;/a&gt; にブラウザでアクセスすると↑のGIFのような状態になると思います。&lt;/p&gt;
+
+&lt;p&gt;POWERボタンを押すとLEDが光ります。この記事ではこのサイトをWeb LEDと呼んでいきます。&lt;/p&gt;
+
+&lt;h3 id=&#34;step2-ドット絵とweb-ledを繋げてみよう&#34;&gt;STEP2：ドット絵とWeb LEDを繋げてみよう&lt;/h3&gt;
+
+&lt;h4 id=&#34;milkcocoa-sdkを読み込む&#34;&gt;Milkcocoa SDKを読み込む&lt;/h4&gt;
+
+&lt;p&gt;milkcocoa-nefry-handsonディレクトリの中には&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;app.js&lt;/li&gt;
+&lt;li&gt;index.html&lt;/li&gt;
+&lt;li&gt;readme.md&lt;/li&gt;
+&lt;li&gt;style.css&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;の4つのファイルがあります。まずはindex.htmlを編集します。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;index.html&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;script src=&amp;quot;https://cdn.mlkcca.com/v0.6.0/milkcocoa.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;この行をapp.jsの読み込み直前に記述しましょう。&lt;/p&gt;
+
+&lt;h4 id=&#34;milkcocoaのコードを追記&#34;&gt;Milkcocoaのコードを追記&lt;/h4&gt;
+
+&lt;p&gt;app.jsの末尾に追記しましょう。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;app.js&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;const milkcocoa = new MilkCocoa(`dogi9jz8c16.mlkcca.com`);
+const dot_ds = milkcocoa.dataStore(&#39;dots&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;dogi9jz8c16&lt;/strong&gt; の部分がドット絵のApp ID、&lt;strong&gt;dots&lt;/strong&gt; がドット絵のデータストア名になります。&lt;/p&gt;
+
+&lt;p&gt;また以下を追記します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let flag = 0;
+dot_ds.on(&#39;push&#39;,(pushed) =&amp;gt; {
+	//ドット絵に色が塗られると実行される部分
+    addClass(pushed.value.color);
+    flag = 1;
+});
+
+setInterval(()=&amp;gt;{
+    removeClass();
+    flag = 0;
+},5000);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;.on&lt;/code&gt;メソッドで&lt;code&gt;pushイベント&lt;/code&gt;を監視しています。ドット絵に色が塗られると、onメソッドのコールバック関数が発火してaddClass関数が実行されます。（ここの行数でいうと4行目）&lt;/p&gt;
+
+&lt;p&gt;ドット絵では塗られた色のカラーコードが送られて来るので色の情報をaddClass関数に渡しています。&lt;/p&gt;
+
+&lt;h4 id=&#34;step2の確認&#34;&gt;STEP2の確認&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;STEP1と同様に &lt;a href=&#34;http://localhost:8000&#34;&gt;http://localhost:8000&lt;/a&gt; にブラウザでアクセスして動作を確認しましょう。同時に &lt;a href=&#34;https://mlkcca.com/sample.html&#34;&gt;https://mlkcca.com/sample.html&lt;/a&gt; も開いてドット絵で色を塗るとLEDの色が変わることを確認してください。&lt;/p&gt;
+
+&lt;p&gt;ここまでの完成ソースコードは&lt;a href=&#34;https://github.com/n0bisuke/milkcocoa-nefry-handson/tree/step2&#34;&gt;STEP2ブランチ&lt;/a&gt;にまとめてあります。&lt;/p&gt;
+
+&lt;h3 id=&#34;step3-nefryでlチカしてみよう&#34;&gt;STEP3：NefryでLチカしてみよう&lt;/h3&gt;
+
+&lt;p&gt;いよいよNefryを触ります。Nefryの関連リンクもあるので参考にしましょう。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://codezine.jp/article/detail/9653&#34;&gt;Arduino IDEで開発できるFRISKサイズのIoTデバイス「Nefry」&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://qiita.com/wamisnet/items/d07c3c22e2bf5ab628ef&#34;&gt;Nefryの情報まとめ&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&#34;arduino-ideにnefryのボードマネージャを追加する&#34;&gt;Arduino IDEにNefryのボードマネージャを追加する&lt;/h4&gt;
+
+&lt;p&gt;Arduino IDEでNefryの開発ができるのですが、いくつかの設定が必要になります。Arduino IDEのメニューの &lt;strong&gt;環境設定 &amp;gt; 追加のボードマネージャのURL&lt;/strong&gt; のフォームに以下をURLを貼り付けてOKを押しましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;http://wamisnet.github.io/package_nefry_index.json
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;次にArduino IDEの &lt;strong&gt;ツール &amp;gt; ボード &amp;gt;ボードマネージャ&lt;/strong&gt; からNefryを検索します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/08.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Nefryの項目が出てくるのでインストールしましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/09.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;コードの準備&#34;&gt;コードの準備&lt;/h4&gt;
+
+&lt;p&gt;それではいよいよLチカです。ハローワールドですね。Nefryには最初からフルカラーLEDがついているのでカラフルなLチカが試せます。&lt;/p&gt;
+
+&lt;p&gt;以下がLチカのサンプルコードです。 &lt;strong&gt;新規ファイル&lt;/strong&gt; から新規のスケッチファイルを作成し、コードをとりあえずコピペしてみましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+//フルカラーLED　ランダムにカラーが変わります。
+void setup() {
+  Nefry.println(&amp;quot;フルカラーLED!&amp;quot;);
+  randomSeed(analogRead(A0));
+}
+int red,green,blue;
+void loop() {
+  red=random(255);//random関数は0-255の数値をランダムに返します。
+  green=random(255);
+  blue=random(255);
+  Nefry.setLed(red,green,blue);//LEDがランダムに点灯します。
+  String color=&amp;quot;Red:&amp;quot;;color+=red;
+  color+=&amp;quot; Green:&amp;quot;;color+=green;
+  color+=&amp;quot; Blue:&amp;quot;;color+=blue;
+  Nefry.println(color);//Nefry consoleで色を表示
+  Nefry.ndelay(1000);//1秒待つ
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Arduino開発をしたことがある人は、&lt;strong&gt;これを書いたら書き込みたくなりますが一旦待ちましょう。&lt;/strong&gt; Nefryではこのコードを直接書き込むのではなく、一旦 &lt;strong&gt;.bin&lt;/strong&gt; 形式にコンパイルしてからWebブラウザ経由で書き込みます。&lt;/p&gt;
+
+&lt;h4 id=&#34;ソースコードを-bin形式にコンパイル&#34;&gt;ソースコードを.bin形式にコンパイル&lt;/h4&gt;
+
+&lt;p&gt;まずはメニューの&lt;strong&gt;ツール &amp;gt; ボード&lt;/strong&gt;から&lt;strong&gt;Nefry&lt;/strong&gt;を選択しましょう。この時、赤い基盤のNefryの場合は&lt;strong&gt;Nefry V2&lt;/strong&gt;を選択してください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;次にメニューの &lt;strong&gt;スケッチ &amp;gt; コンパイルしたバイナリを出力&lt;/strong&gt; を選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;コンパイルが開始され、プログラム的なエラーがあればここで表示されます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/12.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;特にエラーが出なければ&lt;strong&gt;arduino.bin&lt;/strong&gt;というファイルがスケッチファイル（.ino）と同じディレクトリ内にできます。&lt;/p&gt;
+
+&lt;h4 id=&#34;nefryとpcをwi-fi経由で接続してプログラムを書き込む&#34;&gt;NefryとPCをWi-Fi経由で接続してプログラムを書き込む&lt;/h4&gt;
+
+&lt;p&gt;ここからはNefryとの接続ですので &lt;strong&gt;Nefryの電源をつけましょう。&lt;/strong&gt; NefryとPCの接続はWi-Fi経由で行います。そのためNefryはWi-Fi環境さえあれば &lt;strong&gt;PCと物理的に接続しなくとも開発ができる&lt;/strong&gt; デバイスです。&lt;/p&gt;
+
+&lt;p&gt;ちなみにNefryは &lt;strong&gt;PCに直挿しもできますが、USBで給電しているだけ&lt;/strong&gt; です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/13.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;まずはPCでWi-FiのSSIDを探します。Nefryが起動していると、&lt;strong&gt;Nefry_xxxx&lt;/strong&gt; というアクセスポイントが表示されるはずなので探して接続しましょう。&lt;/p&gt;
+
+&lt;p&gt;ちなみに、この&amp;rdquo;NefryのWi-Fi&amp;rdquo;に接続している段階ではWebサイトなどは見れないのでこのページを開いたまま進めることをオススメします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/14.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;接続できたらブラウザで &lt;a href=&#34;http://192.168.4.1&#34;&gt;http://192.168.4.1&lt;/a&gt; にアクセスします。「Hello from Nefry!」と表示されるのNefryの管理画面が表示されます。&lt;/p&gt;
+
+&lt;p&gt;メニューの &lt;strong&gt;Upload Sketch&lt;/strong&gt; を選択すると、アップローダが表示されるので先ほどの &lt;strong&gt;arduino.bin&lt;/strong&gt; をアップロードします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/15.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;これで先ほどのLチカプログラムがNefryに書き込まれます。&lt;/p&gt;
+
+&lt;h4 id=&#34;lチカ完成&#34;&gt;Lチカ完成&lt;/h4&gt;
+
+&lt;p&gt;プログラムの書き込みなどで数秒掛かるので少し待ちます。すると……&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/16.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ランダムな色でLEDがチカチカしたかと思います。うまくいきましたか？&lt;/p&gt;
+
+&lt;p&gt;ここまでできたら一安心です。ソースコードの&lt;code&gt;Nefry.ndelay(1000);&lt;/code&gt;の1000の数値を変えて、同じ手順でNefryに書き込んでチカチカする間隔が変わることを試してみましょう。&lt;/p&gt;
+
+&lt;p&gt;ここまでの完成ソースコードは&lt;a href=&#34;https://github.com/n0bisuke/milkcocoa-nefry-handson/tree/step3&#34;&gt;STEP3ブランチ&lt;/a&gt;にまとめてあります。&lt;/p&gt;
+
+&lt;h3 id=&#34;step4-nefryとmilkcocoaを繋げる&#34;&gt;STEP4：NefryとMilkcocoaを繋げる&lt;/h3&gt;
+
+&lt;p&gt;それでは本題であるMilkcocoaとNefryを繋げてみます。&lt;/p&gt;
+
+&lt;h4 id=&#34;nefryをネットワークに繋げる&#34;&gt;Nefryをネットワークに繋げる&lt;/h4&gt;
+
+&lt;p&gt;先ほどはNefryをホストにしてPCから直接Nefryに接続しました。&lt;/p&gt;
+
+&lt;p&gt;この状態だとローカルLAN接続しかできず、インターネットの世界にNefryを繋げることができません。
+今度はNefry自体をネットワークに接続しましょう。作業している部屋などで、普段使っているWi-FiにNefryを接続します。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Nefry_xxxx&lt;/strong&gt; という&amp;rdquo;NefryのWi-Fi&amp;rdquo;に接続されていることを確認してください。また &lt;a href=&#34;http://192.168.4.1&#34;&gt;http://192.168.4.1&lt;/a&gt; にアクセスし、メニューの &lt;strong&gt;Setup WiFi&lt;/strong&gt; を選択すると近くのSSIDとPASSを入力する画面が表示されます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/17.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;SSID（近くにあればプルダウンで選択できます）とパスワードを入力して、セーブしましょう。ポップアップで確認がでるのでOKを選択してください。SSIDが出てこない場合はリロードしてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/18.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;これでNefryがネットワークに繋がりました。&lt;/p&gt;
+
+&lt;h4 id=&#34;nefryのip-adressを調べる&#34;&gt;NefryのIP Adressを調べる&lt;/h4&gt;
+
+&lt;p&gt;Nefryがネットワークに繋がるとリスタートがかかってWi-Fi接続が途切れる場合があります。一度　&lt;strong&gt;Nefry_xxxx&lt;/strong&gt;　という&amp;rdquo;NefryのWi-Fi&amp;rdquo;に繋がっているか確認してください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/19.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://192.168.4.1&#34;&gt;http://192.168.4.1&lt;/a&gt; にアクセスしましょう。 &lt;strong&gt;IP Address&lt;/strong&gt;　の項目にNefryのIPアドレスが表示されています。表示されない場合はNefryを再起動して再度試してみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/20.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;これでNefryのIPが　&lt;strong&gt;192.168.43.56&lt;/strong&gt;　ということが分かりました。人によって変わるので各自の値で置き換えて見てください。IPアドレスが分かったらWi-Fiを繋ぎなおしましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/21.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;繋ぎなおしてから &lt;a href=&#34;http://192.168.43.56/&#34;&gt;http://192.168.43.56/&lt;/a&gt; にアクセスすると先ほどと同様のメニュー画面になります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/22.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&amp;ldquo;NefryのWi-Fi&amp;rdquo;でアクセスしてた際の 192.168.4.1 ではないIPでもNefryにアクセスできたことがわかります。&lt;/p&gt;
+
+&lt;p&gt;これでPCとNefryの両方がネットワークに接続することができました。(僕の場合はu-sen-lan)&lt;/p&gt;
+
+&lt;p&gt;&amp;ldquo;NefryのWi-Fi&amp;rdquo;に繋いだままだとサイトを見に行けなかったですが、これでWebサイトなどを通常に見ることができます。&lt;/p&gt;
+
+&lt;h4 id=&#34;milkcocoaのkeyを取得してnefryに設定&#34;&gt;MilkcocoaのKeyを取得してNefryに設定&lt;/h4&gt;
+
+&lt;p&gt;PCが通常のネットワークに繋がったので、Milkcocoaのウェブサイトを見にいきましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://mlkcca.com/edit/&#34;&gt;Milkcocoaの管理画面&lt;/a&gt;から &lt;strong&gt;認証 &amp;gt; 新しいAPI KeyとAPI Secretのペアを生成する&lt;/strong&gt; を選択しAPI KeyとAPI Secretを作ります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/23.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;App ID&lt;/li&gt;
+&lt;li&gt;API Key&lt;/li&gt;
+&lt;li&gt;API Secret&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;この三つの値を後ほど使います。&lt;/p&gt;
+
+&lt;h4 id=&#34;コーディング&#34;&gt;コーディング&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;app.jsの変更&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;app.js&lt;/strong&gt; に変更と追記をしていきます。&lt;/p&gt;
+
+&lt;p&gt;主に今回の変更は、ドット絵のデータとNefryに流すデータを繋げるための変更です。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;・
+・(省略)
+・
+//ドット絵側のアプリ&amp;amp;データストア
+let milkcocoa = new MilkCocoa(`dogi9jz8c16.mlkcca.com`);
+const dot_ds = milkcocoa.dataStore(&#39;dots&#39;);
+//Nefry側のアプリ&amp;amp;データストア
+milkcocoa = new MilkCocoa(`your-app-id.mlkcca.com`);
+const nefry_ds = milkcocoa.dataStore(&#39;nefry&#39;);
+
+let flag = 0, red = 0, green = 0, blue = 0;
+dot_ds.on(&#39;push&#39;,(pushed) =&amp;gt; {
+    //ドット絵から送られてくるカラーコードをRGBに変換
+    let color = pushed.value.color;
+    red = parseInt(color.substr(1,2), 16);
+    green = parseInt(color.substr(3,2), 16);
+    blue = parseInt(color.substr(5,2), 16);
+
+    addClass(color);
+    flag = 1;
+
+    //ドット絵から受け取ったデータをNefryに流す
+    nefry_ds.send({r:red,g:green,b:blue},(err,pushed) =&amp;gt; {
+        console.log(pushed);
+    });
+});
+・
+・(省略)
+・
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;変数 &lt;strong&gt;nefry_ds&lt;/strong&gt; としてNefry側のデータストアを新たに読み込みます。&lt;strong&gt;dot_ds.on()&lt;/strong&gt; の中では&lt;strong&gt;pushed.value.color&lt;/strong&gt;にカラーコード（#ce071bのような値）が送られてくるので、RGB（206,7,27のような値）に変換して、&lt;strong&gt;nefry_ds.send()&lt;/strong&gt; でNefry側に送信しています。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Nefry側&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Milkcocoaからのデータを受け取り、LEDを光らせるコードにしましょう。&lt;/p&gt;
+
+&lt;p&gt;以下のスケッチを作成し、STEP3の時と同様に &lt;strong&gt;arduino.bin&lt;/strong&gt; にコンパイルして出力します。先ほどの手順と同様にNefryのメニューから &lt;strong&gt;Upload Sketch&lt;/strong&gt; を選択してアップロードしましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+#include &amp;lt;Nefry_Milkcocoa.h&amp;gt;
+
+Nefry_Milkcocoa *milkcocoa;
+
+char *datastore;
+int red,green,blue;
+void onsend(DataElement *elem) {//MilkcocoaのOn関数と同一
+    //データストアにデータが届いたときに呼び出される
+    red = elem-&amp;gt;getInt(&amp;quot;r&amp;quot;);
+    green = elem-&amp;gt;getInt(&amp;quot;g&amp;quot;);
+    blue = elem-&amp;gt;getInt(&amp;quot;b&amp;quot;);
+    Nefry.setLed(red,green,blue);//LEDがランダムに点灯します。
+    String color=&amp;quot;Red:&amp;quot;;color+=red;color+=&amp;quot; Green:&amp;quot;;color+=green;color+=&amp;quot; Blue:&amp;quot;;color+=blue;
+    Nefry.println(color);//Nefry consoleで色を表示
+}
+
+void setup() {
+  milkcocoa-&amp;gt;print();//Setup ModuleページにAPPIDの表示をする
+  milkcocoa = Nefry_Milkcocoa::begin();//milkcocoaと接続に必要になる処理をします。
+  datastore = Nefry.getConfStr(3);//Setup Moduleページに入力されたデータストア名を保存します。
+  Nefry.println( milkcocoa-&amp;gt;on( datastore, &amp;quot;send&amp;quot;, onsend) ? &amp;quot;Milkcocoa onSend OK&amp;quot; : &amp;quot;Milkcocoa onSend NG&amp;quot; );//on関数を有効にします。
+}
+
+void loop() {
+  Nefry.println( milkcocoa-&amp;gt;loop(10000)? &amp;quot;Milkcocoa Connect OK&amp;quot; : &amp;quot;Milkcocoa Connect NG&amp;quot; );//10秒以内にMilkcocoaに接続できればokと表示されます。
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;setup()&lt;/strong&gt; 内ではMilkcocoaに接続するための準備をしています。 &lt;strong&gt;milkcocoa-&amp;gt;on( datastore, &amp;ldquo;send&amp;rdquo;, onsend)&lt;/strong&gt; の部分でsendイベントの監視が有効になります。&lt;strong&gt;onsend()&lt;/strong&gt; 内がsendイベントが送られてきたときに呼び出されます。&lt;/p&gt;
+
+&lt;p&gt;先ほどのapp.js側では &lt;strong&gt;{r:red,g:green,b:blue}&lt;/strong&gt; という形でRGBの値を送っていましたが、Nefry側では &lt;strong&gt;elem-&amp;gt;getInt(&amp;ldquo;r&amp;rdquo;)&lt;/strong&gt; とすることでrの値を取得できます。取得した値を &lt;strong&gt;Nefry.setLed()&lt;/strong&gt; に渡してあげることでLEDの色を変えられます。&lt;/p&gt;
+
+&lt;h4 id=&#34;nefryにmilkcocoaのkeyを設定していく&#34;&gt;NefryにMilkcocoaのKeyを設定していく&lt;/h4&gt;
+
+&lt;p&gt;最後にNefryのメニュー（この時点で僕の場合は &lt;a href=&#34;http://192.168.43.56/&#34;&gt;http://192.168.43.56/&lt;/a&gt; ）から &lt;strong&gt;Setup Module&lt;/strong&gt; のメニューから、取得した以下の値を入力し保存します。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;先に上記コードをNefryに書き込まないとこのAPI Keyなどの項目が表示されませんので気をつけましょう。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/24.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;また、DataStoreの値は任意ですが今回は &lt;strong&gt;nefry&lt;/strong&gt; にします。&lt;/p&gt;
+
+&lt;h4 id=&#34;試してみる&#34;&gt;試してみる&lt;/h4&gt;
+
+&lt;p&gt;ここまでが終わるとカラーLEDの色をドット絵に同期させることができます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/25.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;以下の状態にしてドット絵を操作してみましょう。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ブラウザで &lt;a href=&#34;http://localhost:8000&#34;&gt;http://localhost:8000&lt;/a&gt; にアクセス（写真のMac画面の右側）&lt;/li&gt;
+&lt;li&gt;同時に&lt;a href=&#34;https://mlkcca.com/sample.html&#34;&gt;ドット絵&lt;/a&gt;にアクセス（写真のMac画面の左側）&lt;/li&gt;
+&lt;li&gt;Nefryの電源を起動させておく（写真右側）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;前述したとおり、NefryはPCに直挿しでも大丈夫ですが、給電のみをおこなっているため別電源で起動しても問題ないです。写真（動画）ではスタンドアロン感を出すために、あえてPCでなくモバイルバッテリーに挿しています。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.instagram.com/p/BKyHEcljEZS/&#34;&gt;最初に載せた結果&lt;/a&gt;のようになっていれば成功です！&lt;/p&gt;
+
+&lt;p&gt;ここまでの完成ソースコードは&lt;a href=&#34;https://github.com/n0bisuke/milkcocoa-nefry-handson/tree/step4&#34;&gt;STEP4ブランチ&lt;/a&gt;にまとめてあります。&lt;/p&gt;
+
+&lt;p&gt;お疲れ様でした。&lt;/p&gt;
+
+&lt;h2 id=&#34;ハンズオンの様子など&#34;&gt;ハンズオンの様子など&lt;/h2&gt;
+
+&lt;p&gt;当日は&lt;a href=&#34;https://akiba.dmm-make.com/&#34;&gt;DMM.make AKIBA&lt;/a&gt;の会場をお借りして開催しました。
+&lt;a href=&#34;http://togetter.com/li/1029940&#34;&gt;MilkcocoaとNefryをつなげたハンズオン! Milkcocoa Meetup vol13 #mlkcca&lt;/a&gt;にもまとめましたが概ねSTEP4までを1.5時間くらいで完成させられていたのでハンズオンとしてはかなりよかったと思います。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;Nefry祭り始まるよ！😆 &lt;a href=&#34;https://twitter.com/hashtag/mlkcca?src=hash&#34;&gt;#mlkcca&lt;/a&gt; &lt;a href=&#34;https://t.co/ZrCMdMAy3R&#34;&gt;pic.twitter.com/ZrCMdMAy3R&lt;/a&gt;&lt;/p&gt; えむにわ(クオリティの低いツイート) (@m2wasabi) &lt;a href=&#34;https://twitter.com/m2wasabi/status/780717318955339776&#34;&gt;2016年9月27日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;当日はNefry開発者の&lt;a href=&#34;http://twitter.com/wamisnet&#34;&gt;わみさん&lt;/a&gt;、Milkcocoaの&lt;a href=&#34;http://twitter.com/bakuonboogie&#34;&gt;川野くん&lt;/a&gt;も参戦してくれて、かなり豪華な布陣になりました。&lt;/p&gt;
+
+&lt;p&gt;ちなみに、ハンズオンだと会場がNefry名のSSIDに溢れかえってしまい、自分のNefryがどれかが分からない問題があります。
+Nefryが発信するWiFiのSSIDはNefry_xxxxという形式になりますが、設定画面から名前を変更できるので、今回はあらかじめ名前を変更して配ることで対応しました。&lt;/p&gt;
+
+&lt;p&gt;今回のハンズオンで使った&lt;a href=&#34;https://github.com/n0bisuke/milkcocoa-nefry-handson&#34;&gt;ソースコード&lt;/a&gt;はGitHubにおいてありますのでどなたでも自由に使ってください。&lt;/p&gt;
+
+&lt;p&gt;無断でも大丈夫ですが使うときに&lt;a href=&#34;http://twitter.com/n0bisuke&#34;&gt;@n0bisuke&lt;/a&gt;に声かけてくれるとうれしかったりします笑&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;NefryとMilkcocoaを使って、リアルタイムにWebとモノを繋げるIoTな体験ができたと思います。&lt;/p&gt;
+
+&lt;p&gt;IoTな開発をやろうとした際に、開発環境の構築とネットワークへの接続が課題になるケースが多いです。
+RaspberryPiやArduinoは「電子工作初心者向け」だと世間では言われていますが、RaspberryPiはOS書き込みなど初期設定の内容が重く、Arduinoはネットワーク接続に課題があるように感じています。&lt;/p&gt;
+
+&lt;p&gt;またWebと接続しようとした際に必要となる知識がすごく多く、知識の深さに加えて幅広さも求められます。Nefry+Milkcocoaはその課題を解決するデバイス&amp;amp;サービスだと思います。「ちょっとIoT入門してみたい」という欲求を満たしやすいです。&lt;/p&gt;
+
+&lt;p&gt;ぜひ、みなさんもNefryとMilkcocoaを使ってIoTに入門してみて下さい。&lt;/p&gt;
+
+&lt;p&gt;それでは :)&lt;/p&gt;
 </description>
     </item>
     

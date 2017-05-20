@@ -7,8 +7,1491 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Mon, 27 Mar 2017 12:30:54 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 18 May 2017 02:51:27 +0900</lastBuildDate>
     <atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Nefry BTとIFTTTでスイッチを押したらLINEを送る仕組みを作ってみよう</title>
+      <link>https://dotstud.io/blog/nefry-ifttt-push-line/</link>
+      <pubDate>Thu, 18 May 2017 02:51:27 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nefry-ifttt-push-line/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは。外部ライターのわみ（&lt;a href=&#34;https://twitter.com/wamisnet&#34;&gt;@wamisnet&lt;/a&gt;）です。Unirobot株式会社でロボットのソフトウェアエンジニアをやりながら、dotstudioでは私が作成しているIoTデバイス「Nefry」シリーズの販売やチュートリアル記事の執筆をしています。&lt;/p&gt;
+
+&lt;p&gt;Nefryは、ユーザの皆様からのフィードバックを頂き成長しています。新たなWi-Fi・BLEモジュール「ESP-WROOM-32」の発売もあり、このたび&lt;strong&gt;新機能と改良を加えた次世代の「Nefry BT」を発表&lt;/strong&gt;する事になりました。&lt;/p&gt;
+
+&lt;p&gt;今回は新しい「Nefry BT」を使って、Amazon Dash Buttonのようにスイッチを押した時にLINEに通知が行く仕組みを作ってみます。&lt;/p&gt;
+
+&lt;h2 id=&#34;nefry-btとは&#34;&gt;Nefry BTとは&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/100/01_nefry.png&#34; alt=&#34;&#34; /&gt;
+Nefryシリーズは、「&lt;strong&gt;簡単にインターネットにつながること&lt;/strong&gt;」をテーマにしたFRISKサイズのIoTデバイスです。Nefry BTからはWi-Fiに加えてBLE（Bluetooth Low Energy）に対応し、I/O機能も増えて開発の幅がさらに広がりました！&lt;/p&gt;
+
+&lt;p&gt;ハードウェアをできるだけ意識しなくて済むよう設計され、はんだづけや複雑な接続なしで動かすことができるため、初めてハードウェアを触る方にオススメのデバイスです。&lt;/p&gt;
+
+&lt;h2 id=&#34;作ってみる&#34;&gt;作ってみる&lt;/h2&gt;
+
+&lt;p&gt;今回試す流れは以下です。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;IFTTTにレシピを作成する&lt;/li&gt;
+&lt;li&gt;開発環境（Arduino IDE）を整える&lt;/li&gt;
+&lt;li&gt;プログラムを書き込む&lt;/li&gt;
+&lt;li&gt;Nefry BTとIFTTTを紐付ける&lt;/li&gt;
+&lt;li&gt;スイッチを押してLINEにメッセージを送ってみる&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Nefry BT&lt;/li&gt;
+&lt;li&gt;IFTTTのアカウント&lt;/li&gt;
+&lt;li&gt;LINEのアカウント&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;筆者の環境&#34;&gt;筆者の環境&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Nefry BT library Version 0.6.1&lt;/li&gt;
+&lt;li&gt;Windows 10&lt;/li&gt;
+&lt;li&gt;Arduino IDE 1.8.2&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&#34;注意&#34;&gt;注意&lt;/h4&gt;
+
+&lt;p&gt;Nefry BTは開発中のため、実際のコードや画面と異なる可能性があります。&lt;/p&gt;
+
+&lt;h3 id=&#34;iftttにレシピを作成する&#34;&gt;IFTTTにレシピを作成する&lt;/h3&gt;
+
+&lt;p&gt;IFTTTは様々なWebサービス同士を簡単に連携できるサービスです。連携したものは「レシピ」と呼ばれ、自分で新しいレシピを作成することもできます。今回はNefry BTとLINEを連携するレシピを作ってみます。&lt;/p&gt;
+
+&lt;p&gt;アカウントを持っていない場合は下記の記事を参考にアカウントを取得してください。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;参考: &lt;a href=&#34;https://liginc.co.jp/263899&#34;&gt;Webサービス同士を連携できる「IFTTT」と自作IoTデバイスを繋いで生活を便利にしてみた&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;アカウントを取得したら、Nefry BTとLINEを連携させるレシピを登録していきましょう。&lt;/p&gt;
+
+&lt;p&gt;IFTTTのレシピは「〇〇が起きたら△△する」というようにトリガーとアクションに分けられます。今回のトリガーは「&lt;strong&gt;Nefry BTのスイッチをクリックしたら&lt;/strong&gt;」、アクションは「&lt;strong&gt;LINEに通知する&lt;/strong&gt;」となります。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;トリガーとnefry-btを紐付けるキーの取得&#34;&gt;トリガーとNefry BTを紐付けるキーの取得&lt;/h4&gt;
+
+&lt;p&gt;今回はトリガーとして自作のWebサービスを利用できる「Maker Webhooks」を使います。&lt;/p&gt;
+
+&lt;p&gt;まずはMaker WebhooksをあとでNefry BTと紐付けるために、Secret Keyというキーを取得します。&lt;a href=&#34;https://ifttt.com/discover&#34;&gt;IFTTT公式サイト&lt;/a&gt;上部の「Search」から、Maker Webhooksを検索しクリックしましょう。（&amp;rdquo;make&amp;rdquo;で候補に出てきます。）
+&lt;img src=&#34;https://dotstud.io/img/blog/100/02_ifttt1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Maker Webhooksのページに移動したら右上にある「Setting」から設定します。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/03_ifttt2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;設定ページに移動しました。このとき初めての方はこのような認証画面が表示されます。ページ中央の「Connect」をクリックしてMaker Webhooksを有効にしましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/04_ifttt3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;有効になるとAccount Infoのページに移動します。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/05_ifttt4.png&#34; alt=&#34;&#34; /&gt;
+アカウントごとに割り当てられるSecret KeyがURLのuse/以下に記載されているのでコピーしておきます。今回の例ではSecret Keyは &lt;code&gt;c1kgN-ZOhUAxA6B7TpyiKc&lt;/code&gt; の部分です。（このSecret Keyはサンプルです。既に無効になっていますので自身で取得してください。）&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;トリガーの作成&#34;&gt;トリガーの作成&lt;/h4&gt;
+
+&lt;p&gt;続いてトリガーとなるMaker Webhooksの詳細を作成します。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/06_ifttt5.png&#34; alt=&#34;&#34; /&gt;
+&lt;a href=&#34;https://ifttt.com/create&#34;&gt;IFTTTのレシピ作成ページ&lt;/a&gt;から、「+this」のリンクをクリックします。&lt;/p&gt;
+
+&lt;p&gt;「Choose a service」から再度Maker Webhooksを検索しましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/07_ifttt6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Maker WebhooksはEventという単位でトリガーとなります。今回はEvent Nameを&amp;rdquo;Nefry&amp;rdquo;とし、「Create trigger」をクリックし作成します。Event NameはあとでNefry BTにも同じ名前で入力します。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/08_ifttt7.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;アクションの作成&#34;&gt;アクションの作成&lt;/h4&gt;
+
+&lt;p&gt;最後に、トリガーが生じた時に起こすアクションを登録します。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/09_ifttt8.png&#34; alt=&#34;&#34; /&gt;
+「+that」のリンクをクリックして、検索欄からLINEを検索しましょう。ここでTwitterやGmailなどを選択すると、それぞれのサービスと連携させることが出来ます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/100/10_ifttt9.png&#34; alt=&#34;&#34; /&gt;
+Recipientと書かれた欄にメッセージを送るLINEの送信先を選択します。&lt;/p&gt;
+
+&lt;p&gt;Messageと書かれた欄には送信するメッセージを入力します。MessageのValueにはプログラムから値を渡すことができるので、温度センサや明るさセンサなどの値をメッセージに組み込むことが可能です。写真のURLがあれば写真を送信することもできます。&lt;/p&gt;
+
+&lt;p&gt;入力が完了したら、Create actionをクリックして保存します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/100/11_ifttt10.png&#34; alt=&#34;&#34; /&gt;
+最後にFinishを押し、IFTTTのレシピの作成は完了です。&lt;/p&gt;
+
+&lt;h3 id=&#34;開発環境-arduino-ide-を整える&#34;&gt;開発環境（Arduino IDE）を整える&lt;/h3&gt;
+
+&lt;p&gt;続いてNefy BTにプログラムを書く環境を整えます。プログラムの書き込みにはArduino IDEと呼ばれるエディタを使用します。&lt;a href=&#34;https://www.arduino.cc/en/Main/Software&#34;&gt;公式サイト&lt;/a&gt;からダウンロードし、以下の手順でNefry BT用の設定を追加してください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/100/12_program.png&#34; alt=&#34;&#34; /&gt;
+Arduino IDEの「環境設定」のページから、「追加のボードマネージャのURL」に以下のリンクを入力して検索します。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;https://nefry.studio/package_nefrybt_index.json&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;メニューバーの[ツール]から、[ボード] -&amp;gt; [ボードマネージャー]を選択します。選択肢に「Nefry by Nefry Community」が表示されているので、インストールします。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/13_library.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;これでプログラムを書き込む準備が整いました。&lt;/p&gt;
+
+&lt;h3 id=&#34;プログラムを書き込む&#34;&gt;プログラムを書き込む&lt;/h3&gt;
+
+&lt;p&gt;以下はNefry BTに搭載されている「スイッチ」を押したときにIFTTTのEventを呼ぶプログラムです。&lt;/p&gt;
+
+&lt;p&gt;Arduino IDEを開き、以下のコードを貼り付けます。（//以降の部分はコメントです。）&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-cpp:&#34;&gt;#include &amp;lt;Nefry.h&amp;gt;
+#include &amp;lt;NefryIFTTT.h&amp;gt;
+String Event, SecretKey;
+int counter =0;                       //送信データのカウンタ
+
+void setup() {
+  Nefry.setStoreTitle(&amp;quot;SecretKey&amp;quot;,0); //Nefry DataStoreのタイトルを指定
+  Nefry.setStoreTitle(&amp;quot;Event&amp;quot;,1);     //Nefry DataStoreのタイトルを指定
+  SecretKey = Nefry.getStoreStr(0);   //Nefry DataStoreからデータを取得
+  Event = Nefry.getStoreStr(1);       //Nefry DataStoreからデータを取得
+  Nefry.enableSW();                   //SW有効化
+}
+
+void loop() {
+  if (Nefry.readSW()) {               //SWを押した時
+    counter++;                        //送信回数加算
+    bool sendData = IFTTT.send(Event, SecretKey,&amp;quot;Nefry&amp;quot;,(String)(micros()/1000000)+&amp;quot;秒&amp;quot;,(String)counter);//IFTTTにデータを送信
+                                      //Value1:Nefry,Value2:Nefryが起動してからの秒数,Value3:送信カウンタ
+    if (!sendData) {//IFTTTにデータを送信が成功したか失敗したかの判定
+      Nefry.setLed(255, 0, 0);        //Errの時、赤色点灯
+    }
+    Nefry.ndelay(1000);               //送信後1秒間待つ
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;貼り付けできたら[ツール] -&amp;gt; [ボード]から「Nefry BT」を選択します。Nefry BTとPCを繋ぎ、[ツール] -&amp;gt; [シリアルポート]でNefry BTのシリアルポートを選択しましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/14_arduinoide.png&#34; alt=&#34;&#34; /&gt;
+ボードとシリアルポートを選んだらArduino IDEの左上にある「→」を押しプログラムを書き込みます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/100/15_arduinoide2.png&#34; alt=&#34;&#34; /&gt;
+「ボードへの書き込みが完了しました。」と表示されたら、Nefry BTへのプログラムの書き込みは完了です。&lt;/p&gt;
+
+&lt;p&gt;最後にNefry BTにIFTTTとの連携情報を入力します。あと少しですので頑張っていきましょう！&lt;/p&gt;
+
+&lt;h3 id=&#34;nefry-btとiftttを紐付ける&#34;&gt;Nefry BTとIFTTTを紐付ける&lt;/h3&gt;
+
+&lt;p&gt;Nefry BTから&amp;rdquo;Nefry-OOOO&amp;rdquo;というWi-Fiの信号が発信されているので接続します。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/16_wifi.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;接続できたらChromeやIEなどのWebブラウザで&lt;a href=&#34;http://192.168.4.1&#34;&gt;Nefry BTのサイト&lt;/a&gt;にアクセスしましょう。&lt;code&gt;http://192.168.4.1&lt;/code&gt;にアクセスするとNefry BTの設定サイトが表示されます。このページからNefry BTに関する様々な設定ができます。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/17_nefry.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;まずは「Setup WiFi」をクリックし、Wi-Fiの設定をしましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/18_nefry.png&#34; alt=&#34;&#34; /&gt;
+接続するWi-Fiを入力して「Save」をクリックすると、Nefry BTに設定を保存＆再起動します。Wi-Fiが切断したら再接続してください。&lt;/p&gt;
+
+&lt;p&gt;設定が完了したら、トップページに戻り「Data Store」のページに移動します。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/19_nefry.png&#34; alt=&#34;&#34; /&gt;
+SecretKeyにはMaker Webhooksで確認した値を、EventにはLINEと連携した際に入力したEvent Name（今回は”Nefry”）を入力します。Saveをクリックし値を保存するとNefry BTが再起動します。&lt;/p&gt;
+
+&lt;p&gt;いよいよNefry BTについているスイッチを押してLINEにメッセージを送ってみましょう！&lt;/p&gt;
+
+&lt;h3 id=&#34;スイッチを押してlineにメッセージを送ってみる&#34;&gt;スイッチを押してLINEにメッセージを送ってみる&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/100/20_nefry.gif&#34; alt=&#34;&#34; /&gt;
+Nefry BTのスイッチを押すとLEDの色が変わり送信を始めます。送信が完了するとLEDが水色になり、LINEに通知されました！IFTTTのサーバ状態により応答が悪い場合もありますが、その時はIFTTTのページにてリロードをすると反応してくれます。&lt;/p&gt;
+
+&lt;p&gt;初回は登録が多く時間がかかりますが、今後はサクっと作れるでしょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;さいごに&#34;&gt;さいごに&lt;/h2&gt;
+
+&lt;p&gt;半田付けや複雑な設定なしで、ハードウェアをきっかけにしてLINEへメッセージを投稿する連携をサクッと試すことができました。今回紹介したNefry BTとIFTTTの連携を応用すればTwitterやGmailなどにもメッセージを送信できます。&lt;/p&gt;
+
+&lt;p&gt;リアルタイム通信が得意な「Milkcocoa」やクラウドサービスMicrosoft AzureのIoT向け機能である「Azure IoT Hub」などを使うとより幅広い開発ができるでしょう。&lt;/p&gt;
+
+&lt;p&gt;今後の更新で簡単に接続できるライブラリやサンプルコードを追加していく予定です。生まれたばかりでまだまだヒヨッコですが、進化していくNefry BTを応援していただけたらと思います。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>【業界初！？】居酒屋大手「養老乃瀧」とハッカソンを共催しました！</title>
+      <link>https://dotstud.io/blog/yoro-hack-ukkz-report/</link>
+      <pubDate>Sat, 06 May 2017 12:01:42 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/yoro-hack-ukkz-report/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、ものづくり担当のうこ（&lt;a href=&#34;https://twitter.com/harmoniko&#34;&gt;@harmoniko&lt;/a&gt;）です。お花見の季節は終わってしまいましたが、暖かくなってますますお酒が美味しく感じる今日この頃ですね！&lt;/p&gt;
+
+&lt;p&gt;ゴールデンウィーク真っ只中の5月3日〜4日に、業界初と思われる &lt;strong&gt;「居酒屋×IoT」がテーマの「養老乃瀧ハッカソン」&lt;/strong&gt;を実施しました。ハックにお酒にと大盛り上がりだった様子を報告します！&lt;/p&gt;
+
+&lt;h2 id=&#34;養老乃瀧ハッカソンについて&#34;&gt;養老乃瀧ハッカソンについて&lt;/h2&gt;
+
+&lt;p&gt;おそらく業界初の &lt;strong&gt;「居酒屋×IoT」&lt;/strong&gt;をテーマにしたハッカソンです。しかも、朝から乾杯をしたあとにハックを始めるという、今までにない斬新な流れで行われました。&lt;/p&gt;
+
+&lt;p&gt;養老乃瀧の全面協力のもと、池袋は養老乃瀧の本社ビル・研修センターで開催。厨房も併設されていて、豪華な昼食と夕食も用意されていました。&lt;/p&gt;
+
+&lt;p&gt;イベント概要の詳細はこちらの募集ページをご覧ください。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://connpass.com/event/52842/&#34;&gt;【居酒屋 x IoT】業界初！？ 養老乃瀧ハッカソン！ - connpass&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.yoronotaki.co.jp/news/201703/20170324_213.html&#34;&gt;新着情報｜養老乃瀧グループ&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;開発風景1日目&#34;&gt;開発風景1日目&lt;/h2&gt;
+
+&lt;h3 id=&#34;乾杯-チームビルディング&#34;&gt;乾杯＆チームビルディング&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/098/01_kaijo.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/098/02_kaijo.png&#34; alt=&#34;&#34; /&gt;
+会場は池袋の養老乃瀧本社にある研修センターでした。池袋の西口から歩いてすぐそばで、ビル全体が養老乃瀧グループの店舗と本社というメッカな建物です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/098/03_kanpai.png&#34; alt=&#34;&#34; /&gt;
+まさかの開始早々にカンパイ（※朝です）。早速、イベントにおける居酒屋感をだしてゆきます。&lt;/p&gt;
+
+&lt;h3 id=&#34;アイデア出し&#34;&gt;アイデア出し&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/098/04_onigiri.png&#34; alt=&#34;&#34; /&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/098/05_onigiri.png&#34; alt=&#34;&#34; /&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/098/06_onigiri.png&#34; alt=&#34;&#34; /&gt;
+昼食は料理長さんの心遣いで「開発中も食べやすいように」とおにぎりが！食べたあとはアイデアソンの時間、どんどんアイデアを出して話し合い、具体的なプロダクトへと詰めてゆきます。&lt;/p&gt;
+
+&lt;h3 id=&#34;1分間の中間発表タイム&#34;&gt;1分間の中間発表タイム&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/098/07_pitch.png&#34; alt=&#34;&#34; /&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/098/08_pitch.png&#34; alt=&#34;&#34; /&gt;
+15時ごろからは中間発表があり、実際に作る前に各チームごとのアイデアと進捗を確認します。&lt;/p&gt;
+
+&lt;h3 id=&#34;本格的なハック開始&#34;&gt;本格的なハック開始！&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/098/09_hack.png&#34; alt=&#34;&#34; /&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/098/10_hack.png&#34; alt=&#34;&#34; /&gt;
+夕食を味わいつつ、夜遅くまで開発は続きました。&lt;/p&gt;
+
+&lt;h2 id=&#34;開発風景2日目&#34;&gt;開発風景2日目&lt;/h2&gt;
+
+&lt;h3 id=&#34;朝からフル稼働&#34;&gt;朝からフル稼働！&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/098/11_asa.png&#34; alt=&#34;&#34; /&gt;
+2日目は朝8時半からと早い会場オープンですが、ハッカソンはできるだけ時間を有効活用したいもの。お昼頃にはもうプロトタイプが出来上がってきました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/098/12_hiru.png&#34; alt=&#34;&#34; /&gt;
+この日の昼食はこちらも食べやすくておしゃれな一品です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/098/13_hack.png&#34; alt=&#34;&#34; /&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/098/14_hack.png&#34; alt=&#34;&#34; /&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/098/15_hack.png&#34; alt=&#34;&#34; /&gt;
+お昼を過ぎるともう会場はピリピリした雰囲気に。ソフトウェア・ハードウェアの実装やプレゼンテーションの作成でPCとにらめっこです。&lt;/p&gt;
+
+&lt;h3 id=&#34;ハッカソンはゴールを見失わないことが大事&#34;&gt;ハッカソンはゴールを見失わないことが大事&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/098/16_mentor.png&#34; alt=&#34;&#34; /&gt;
+ハッカソンの運営と参加の経験から、発表までのアドバイスがありました。時間のない中で制作に集中していると、見落としてしまう点はとても多いです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/098/17_hack.png&#34; alt=&#34;&#34; /&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/098/18_hack.png&#34; alt=&#34;&#34; /&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/098/19_hack.png&#34; alt=&#34;&#34; /&gt;
+夕方が近づくと開発は大詰めに突入し、参加者の方々の表情が険しくなっていくのがわかります。個人的には、この時間帯のエンジニアの顔つきがとても好きです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/098/20_guest.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;審査員の方々が揃い、17時になってハックタイムは終了、作品発表にうつります。&lt;/p&gt;
+
+&lt;h2 id=&#34;作品の紹介&#34;&gt;作品の紹介&lt;/h2&gt;
+
+&lt;h3 id=&#34;ひょうぞう-チーム-ひょうたんおじさん&#34;&gt;「ひょうぞう」（チーム：ひょうたんおじさん）&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/098/21_hyozo.png&#34; alt=&#34;&#34; /&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/098/22_hyozo.png&#34; alt=&#34;&#34; /&gt;
+ひょうたんに話しかけると注文や雑談ができてしまう、万能音声アシスタント。機械による音声アシスタントはスマホに搭載されていたり人型だったりすることが多いですが、ひょうたんが喋るなんて、可愛らしさがありながら居酒屋的な要素もしっかり表現されています。&lt;/p&gt;
+
+&lt;h3 id=&#34;光-るんです-チーム-スマートドランカー&#34;&gt;「光゜るんです」（チーム：スマートドランカー）&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/098/23_pikaru.png&#34; alt=&#34;&#34; /&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/098/24_pikaru.png&#34; alt=&#34;&#34; /&gt;
+実際の居酒屋で客側と店側それぞれが抱える問題に着目し、それらを同時に解決するための光るIoTプロダクト。透明なジョッキに相性の良いフルカラーLEDを組み合わせて映える見た目にするとともに、Webとも連動させて注文を効率化することができます。デモではその名の通りとにかく光って目立っていました。&lt;/p&gt;
+
+&lt;h3 id=&#34;チーズ-チーム-laddermatch&#34;&gt;「チーズ」（チーム：LadderMatch）&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/098/25_cheez.png&#34; alt=&#34;&#34; /&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/098/26_cheez.png&#34; alt=&#34;&#34; /&gt;
+飲み会で自動で写真を撮ってくれるサービス。集合写真を撮影するときはタイマーを使うのが主流ですが、こちらは「チーズ」と一言発するだけで撮影してくれるというものです。各席にカメラが設置されていて、撮影された写真を自動で加工したりダウンロードできたりといったことを想定されているそうです。&lt;/p&gt;
+
+&lt;h3 id=&#34;バックンにバクッとおまかせ-チーム-養老が大事なので4回言いました&#34;&gt;「バックンにバクッとおまかせ！」（チーム：養老が大事なので4回言いました）&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/098/27_bakkun.png&#34; alt=&#34;&#34; /&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/098/28_bakkun.png&#34; alt=&#34;&#34; /&gt;
+客側の「適当に色々頼みたい」に応じてメニューを自動注文してくれるスマホアプリ。来店した客にお互い気を遣わせないようにしたいということで、コースとアラカルトの中間のようなサービスを提供します。店がオススメしたいと考えるメニューを優先的に盛り込むこともでき、客側も店側もハッピーになれそうなプロダクトでした。&lt;/p&gt;
+
+&lt;h3 id=&#34;love-ジョッキ-チーム-シナモン乃瀧&#34;&gt;「LOVE-ジョッキ」（チーム：シナモン乃瀧）&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/098/29_love.png&#34; alt=&#34;&#34; /&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/098/30_love.png&#34; alt=&#34;&#34; /&gt;
+ジョッキにセンサがついていて、乾杯の瞬間をセンシング。個々人の性格を判定して相性を診断し席順まで決定するという、リアルマッチングサービスです。合コンで使うととても楽しくなりそうですが、メカ好きな僕としてはセンサや電子ワイヤが絡みついたジョッキが出てくるだけで大歓喜（？）ですね！&lt;/p&gt;
+
+&lt;h3 id=&#34;相手を身近に感じる遠隔お酌-チーム-おさけのたき&#34;&gt;「相手を身近に感じる遠隔お酌」（チーム：おさけのたき）&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/098/31_remote.png&#34; alt=&#34;&#34; /&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/098/32_remote.png&#34; alt=&#34;&#34; /&gt;
+東京の店舗で徳利を傾けると、遠く離れた支店でも用意された徳利が同時に傾いてお酌ができるというシステム。養老乃瀧の社是のひとつである「親孝行」をIoTシステムを使って実現しています。遠くの相手とテレビ電話をしながら飲むといった方法はありますが、実際にお酌ができる臨場感はその比ではないでしょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;仲間提灯-チーム-ちょうちんなかま&#34;&gt;「仲間提灯」（チーム：ちょうちんなかま）&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/098/33_chochin.png&#34; alt=&#34;&#34; /&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/098/34_chochin.png&#34; alt=&#34;&#34; /&gt;
+居酒屋のシンボルでもある提灯を各テーブルに配置し、客が色を変えることで様々な店内イベントに参加できるというもの。たとえば店内のテレビで野球観戦をしているときに、どちらのチームを応援しているかを色で示す「消極的な意思表現」をすることで、気負うことなく一体感を味わうことができます。&lt;/p&gt;
+
+&lt;h3 id=&#34;養tv-チーム-yotuber&#34;&gt;「養TV」（チーム：Yotuber）&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/098/35_yotube.png&#34; alt=&#34;&#34; /&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/098/36_yotube.png&#34; alt=&#34;&#34; /&gt;
+新しい職業として徐々に広がりを見せているユーチューバーに対し、店舗での配信サポートとファンからの差し入れを実現するシステム。始めたばかりのユーチューバーは収入がほとんどなくご飯を食べるのも厳しい状況だそうですが、養TVから配信すれば、面白いと思ってもらえたユーザーから直接ご飯を奢ってもらえるという夢のようなプロダクトです。&lt;/p&gt;
+
+&lt;h3 id=&#34;kanpai-チーム-sake&#34;&gt;「KANPAI」（チーム：SAKE）&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/098/37_kanpai.png&#34; alt=&#34;&#34; /&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/098/38_kanpai.png&#34; alt=&#34;&#34; /&gt;
+とにかく早く乾杯したい！という要望に応えるべく、入店直後すぐにビールが用意されるサービス。アプリを使って居酒屋の空席照会をし、空いていれば予約とともにファーストドリンクを頼んでおくことができます。着席と同時の乾杯はしたくてもなかなかできないので、実用性がとても高そうですね。&lt;/p&gt;
+
+&lt;h3 id=&#34;養老乃城-チーム-ビンジョルノ&#34;&gt;「養老乃城」（チーム：ビンジョルノ）&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/098/39_shiro.png&#34; alt=&#34;&#34; /&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/098/40_shiro.png&#34; alt=&#34;&#34; /&gt;
+養老乃瀧のメニュー注文と連動させたスマホゲーム。店舗ごとに現れるモンスターを捕まえ、商品を注文することでモンスターを強化し、別の店舗にいる客同士で対戦させることができます。スマホゲーム市場は今熱いビジネスのひとつですが、このようにリアルソーシャルゲームとすることで、飲食産業と連携した様々なサービスに発展させられそうですね。&lt;/p&gt;
+
+&lt;h3 id=&#34;46phone-チーム-team46phone&#34;&gt;「46Phone」（チーム：Team46Phone）&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/098/41_phone.png&#34; alt=&#34;&#34; /&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/098/42_phone.png&#34; alt=&#34;&#34; /&gt;
+居酒屋で飲んだ後にありがちな忘れ物を、電話を使って確認ができるサービス。自動応答と発話認識機能を使っていて、お店側の管理も簡単です。タイムサービスの応募も電話を使ってできるんだとか。インターフェースをスマホアプリではなく電話とすることで、どの年代の客層も利用しやすい仕様となっています。&lt;/p&gt;
+
+&lt;h2 id=&#34;結果発表&#34;&gt;結果発表！&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/098/43_matome.png&#34; alt=&#34;&#34; /&gt;
+まずはこのハッカソンの目指すところを確認。「居酒屋を楽しく、便利にするツール」というテーマに沿っているプロダクトを選出します。優秀なプロダクトは店舗での実稼働を目指すことを前提にしています。
+それでは結果発表！&lt;/p&gt;
+
+&lt;h3 id=&#34;twilio賞-youtuber-養tv&#34;&gt;Twilio賞：Youtuber「養TV」&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/098/44_twilio.png&#34; alt=&#34;&#34; /&gt;
+協賛としてサービスを提供していただいたTwilioからは、可愛らしいハンドセットが贈られました。&lt;/p&gt;
+
+&lt;h3 id=&#34;dmm-make-akiba賞-sake-kanpai&#34;&gt;DMM.make AKIBA賞：SAKE「KANPAI」&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/098/45_dmm.png&#34; alt=&#34;&#34; /&gt;
+審査員の岡島さん曰く、様々な欲望を提供してゆくDMMとしては、酒飲みの欲望を受け止めるほかなかったとのことです。賞品は「岡島さんと一緒に飲める賞」。&lt;/p&gt;
+
+&lt;h3 id=&#34;mashup-award賞-シナモン乃瀧-love-ジョッキ&#34;&gt;Mashup Award賞：シナモン乃瀧「LOVE-ジョッキ」&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/098/46_ma.png&#34; alt=&#34;&#34; /&gt;
+デモではうまく動かないなどのトラブルがありましたが、ハッカソンならではのチャレンジが評価されました。賞品は「好きなマイコンをプレゼント」。&lt;/p&gt;
+
+&lt;h3 id=&#34;特別賞その1-ひょうたんおじさん-ひょうぞう&#34;&gt;特別賞その1：ひょうたんおじさん「ひょうぞう」&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/098/47_beer.png&#34; alt=&#34;&#34; /&gt;
+実用性を勘案し、お店側としても楽しいなと思えるものとして、一軒目酒場の店長である千葉さんから選出されました。&lt;/p&gt;
+
+&lt;h3 id=&#34;特別賞その2-スマートドランカー-光-るんです&#34;&gt;特別賞その2：スマートドランカー「光゜るんです」&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/098/48_beer.png&#34; alt=&#34;&#34; /&gt;
+とにかくピカピカ光っている「パリピ感」が審査員の池澤あやかさんにウケたそうです。&lt;/p&gt;
+
+&lt;h3 id=&#34;最優秀賞は-おさけのたき-相手を身近に感じる遠隔お酌&#34;&gt;最優秀賞は……　おさけのたき「相手を身近に感じる遠隔お酌」&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/098/49_winner.png&#34; alt=&#34;&#34; /&gt;
+優勝は遠隔でお酌ができるプロダクト。ただただ居酒屋体験を楽しくするだけでなく、最新の技術をうまく使って養老乃瀧の社是「親孝行」をサポートするという素晴らしいアイデアでした。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/098/50_kanpai.png&#34; alt=&#34;&#34; /&gt;
+IT業界と飲食業界とのコラボがおそらく初であろう「養老乃瀧ハッカソン」でしたが、参加者の皆さんからも主催者側からも「とても楽しかった」という声をとても多くいただくことができました。
+優勝プロダクトが実際に店舗に登場するのはまだしばらく先にはなりますが、今後もこのようなイノベーションを加速するイベントをどんどん実施していきたいですね。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;業界初だと思われる養老の瀧ハッカソン &lt;a href=&#34;https://twitter.com/hashtag/yoro_hack?src=hash&#34;&gt;#yoro_hack&lt;/a&gt; 無事に終了いたしました、お疲れ様でした！第2回もあるかも…？だそうですのでもしその際はまた奮ってご参加くださいませ〜 &lt;a href=&#34;https://twitter.com/hashtag/dotstudio?src=hash&#34;&gt;#dotstudio&lt;/a&gt; &lt;a href=&#34;https://twitter.com/hashtag/hackathon?src=hash&#34;&gt;#hackathon&lt;/a&gt; &lt;a href=&#34;https://t.co/GEOaMmAmQ3&#34;&gt;pic.twitter.com/GEOaMmAmQ3&lt;/a&gt;&lt;/p&gt; うこ (@harmoniko) &lt;a href=&#34;https://twitter.com/harmoniko/status/860113158186311684&#34;&gt;2017年5月4日&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;懇親会に養老乃瀧の本気を見た&#34;&gt;懇親会に養老乃瀧の本気を見た&lt;/h2&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;IoTベンチャーdotstudioが養老の瀧とコラボしてハッカソンしてしまった結果をご査収ください &lt;a href=&#34;https://twitter.com/hashtag/yoro_hack?src=hash&#34;&gt;#yoro_hack&lt;/a&gt; &lt;a href=&#34;https://twitter.com/hashtag/dotstudio?src=hash&#34;&gt;#dotstudio&lt;/a&gt; &lt;a href=&#34;https://t.co/nSAd1vs5Yu&#34;&gt;pic.twitter.com/nSAd1vs5Yu&lt;/a&gt;&lt;/p&gt; うこ (@harmoniko) &lt;a href=&#34;https://twitter.com/harmoniko/status/860088526141915136&#34;&gt;2017年5月4日&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;解体ショー。 &lt;a href=&#34;https://twitter.com/hashtag/yoro_hack?src=hash&#34;&gt;#yoro_hack&lt;/a&gt; &lt;a href=&#34;https://t.co/v672AAN0QD&#34;&gt;pic.twitter.com/v672AAN0QD&lt;/a&gt;&lt;/p&gt; 4689 (@4689thon) &lt;a href=&#34;https://twitter.com/4689thon/status/860099962503176196&#34;&gt;2017年5月4日&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;おおよそハッカソンでは出ないような、というより、誕生日にビュッフェに食事しに行くよりも豪華ではないかとすら思われる素晴らしき食事を提供していただきました。ステマではなく、養老乃瀧ってなんて素敵なんだと感じずにはいられませんでした。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;おいしそうな料理と総料理長！ありがとうございました！ &lt;a href=&#34;https://twitter.com/hashtag/yoro_hack?src=hash&#34;&gt;#yoro_hack&lt;/a&gt; &lt;a href=&#34;https://t.co/NRvYjaP7Lh&#34;&gt;pic.twitter.com/NRvYjaP7Lh&lt;/a&gt;&lt;/p&gt; 4689 (@4689thon) &lt;a href=&#34;https://twitter.com/4689thon/status/860098794163118080&#34;&gt;2017年5月4日&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>【話題の土善旅館】Go開発合宿2017 #golangjp</title>
+      <link>https://dotstud.io/blog/go-beginners-camp-report/</link>
+      <pubDate>Thu, 27 Apr 2017 22:08:08 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/go-beginners-camp-report/</guid>
+      
+      <description>
+
+&lt;p&gt;【Go合宿】 土善旅館は最高だったしさらにパワーアップしていた【25人でGo！】&lt;/p&gt;
+
+&lt;h2 id=&#34;4-22-4-23-goビギナーズ開発合宿&#34;&gt;4/22〜4/23 Goビギナーズ開発合宿！&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/097/01_event_page.png&#34; alt=&#34;&#34; /&gt;
+&lt;a href=&#34;https://go-beginners.connpass.com/event/47481/&#34;&gt;Go合宿募集ページ&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Swift愛好会の&lt;a href=&#34;http://qiita.com/gotou015/items/40081f33b68f616491b8&#34;&gt;開発合宿&lt;/a&gt;に当てられて、&lt;strong&gt;Goビギナーズでも開発合宿を開催した&lt;/strong&gt;のでレポートします！&lt;/p&gt;
+
+&lt;p&gt;なおあまりビギナーはいなかった模様。&lt;/p&gt;
+
+&lt;p&gt;土善旅館さんの神っぷりについては至る所でまとめられているのですが、&lt;strong&gt;想像よりずっと神だった&lt;/strong&gt;&amp;amp;&amp;amp;&lt;strong&gt;さらにパワーアップしていた&lt;/strong&gt;のでみんなマジで行こう！という思いで綴ります。そして&lt;strong&gt;合宿を開催したい幹事さん向け&lt;/strong&gt;に備忘録を！&lt;/p&gt;
+
+&lt;p&gt;当日のTogetterまとめはこちら。 -&amp;gt; &lt;a href=&#34;https://togetter.com/li/1104119&#34;&gt;【土善旅館】25人でGo開発合宿！【isGOD】&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;短いまとめ&#34;&gt;短いまとめ&lt;/h2&gt;
+
+&lt;p&gt;長くなること必至なので、絶対に知って欲しい点だけ先にまとめ。&lt;/p&gt;
+
+&lt;h3 id=&#34;土善旅館は最高&#34;&gt;土善旅館は最高&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;思ってたよりずっとキレイ、かつキレイにしようとしている感がある（至る所がリフォーム済み）&lt;/li&gt;
+&lt;li&gt;静か。広い。庭がすごい。&lt;/li&gt;
+&lt;li&gt;ご飯超豪華。夜は前菜にお造りに煮付けにしゃぶしゃぶに、とただ最高だった。&lt;/li&gt;
+&lt;li&gt;設備充。お風呂は24H、いつでもコーヒー、マンガ、マッサージ機。できなかったけど卓球も。&lt;/li&gt;
+&lt;li&gt;旅館の人の対応がすごい。送迎も人数変更も超柔軟で、&lt;strong&gt;冷蔵庫（本体）まで貸してくれた&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;土善旅館の開発環境はまじ最高&#34;&gt;土善旅館の開発環境はまじ最高&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;備品言うことなし、且つ高機能&lt;/strong&gt;。爆速のWi-Fi、でかいスクリーン、モニタ複数、変換ケーブル、Macでも競合しない延長コンセントetc.&lt;/li&gt;
+&lt;li&gt;開発部屋がめちゃ広い。椅子と畳がいい感じ。&lt;/li&gt;
+&lt;li&gt;クッション（&lt;a href=&#34;https://yogibo.jp/&#34;&gt;Yogibo&lt;/a&gt;）・毛布等充実。&lt;/li&gt;
+&lt;li&gt;開発部屋は&lt;strong&gt;ずーっと開放で一律500円。ヤッッッッス&lt;/strong&gt;。寝たり起きたりもうここで仕事したい。&lt;/li&gt;
+&lt;li&gt;いい塩梅でにゃーんが癒しを運んでくる。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;ありがとうline&#34;&gt;ありがとうLINE&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;全体連絡はLINEグループ&amp;amp;金銭徴収はLINE Pay。（一部希望者はPayPal）&lt;/li&gt;
+&lt;li&gt;LINE Payは手数料なし・徴収が簡単・履歴が残る・キャッシュバックも簡単。&lt;/li&gt;
+&lt;li&gt;LINEアルバムで写真即シェア。&lt;/li&gt;
+&lt;li&gt;スタンプ押せるので会話が盛り上がりやすい。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;安定のスプレッドシート&#34;&gt;安定のスプレッドシート&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;connpassIDとLINEアカウントの照合、集金済みフラグなど管理&lt;/li&gt;
+&lt;li&gt;支払い金額を管理&lt;/li&gt;
+&lt;li&gt;LTエントリーを各自記入してもらう&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;行程を追いながら要点まとめ&#34;&gt;行程を追いながら要点まとめ&lt;/h2&gt;
+
+&lt;h3 id=&#34;募集-集金&#34;&gt;募集&amp;amp;集金&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/097/02_pay_sheet.png&#34; alt=&#34;&#34; /&gt;
+募集はconnpass＆集金はLINE PayとPayPalで。&lt;/p&gt;
+
+&lt;p&gt;connpassで申し込みがあっても連絡がつかないとまずいので、今回は&lt;strong&gt;集金した人を宿泊人数として計算&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;アカウントと集金フラグはスプレッドシートで管理。&lt;/p&gt;
+
+&lt;p&gt;旅館さんに&lt;strong&gt;男女の数（部屋割り）を聞かれる&lt;/strong&gt;のでconnpassなら申込時アンケートにするといいかも。&lt;/p&gt;
+
+&lt;h3 id=&#34;役割分担&#34;&gt;役割分担&lt;/h3&gt;
+
+&lt;p&gt;結構やることが多いのでしっかり分担。今回は以下。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;リーダー、コンテンツ企画: tenntennさん&lt;/li&gt;
+&lt;li&gt;旅館との連絡: しーめるさん&lt;/li&gt;
+&lt;li&gt;買い出し: 木下さん&lt;/li&gt;
+&lt;li&gt;LINE招待, 会計: のびすけさん&lt;/li&gt;
+&lt;li&gt;賑やかし: ちゃんとく&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;すみませんすみません&lt;/p&gt;
+
+&lt;h3 id=&#34;旅のプランを考える&#34;&gt;旅のプランを考える&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/097/03_time_schedule.png&#34; alt=&#34;&#34; /&gt;
+&lt;a href=&#34;https://gist.github.com/tokutoku393/1afea0a7f4649bd5b0349e76a78833df&#34;&gt;Go合宿2017しおり&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;時間や持ち物共有のためのしおりがこちら。Swift愛好会のしおりを&lt;del&gt;パク&lt;/del&gt;参考に作成。後藤神まじ感謝！&lt;/p&gt;
+
+&lt;p&gt;基本的に時間はゆるふわ、旅館さんも「来て欲しい頃に送迎呼んで〜」とかなり柔軟に対応してくれる。&lt;/p&gt;
+
+&lt;p&gt;旅館とのやりとりは電話。&lt;strong&gt;電話できるタイプのエンジニアがいるとつよい&lt;/strong&gt;。しーめるさん本当にありがとう！&lt;/p&gt;
+
+&lt;h2 id=&#34;1日目&#34;&gt;1日目&lt;/h2&gt;
+
+&lt;h3 id=&#34;10-10-日暮里駅集合&#34;&gt;10:10 日暮里駅集合&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/097/04_nippori.png&#34; alt=&#34;&#34; /&gt;
+渋谷を経由すると遠くなる人が多かったので、日暮里駅に集合。&lt;/p&gt;
+
+&lt;p&gt;JR日暮里駅-&amp;gt;京成日暮里駅の乗り換え改札が大きくて集合しやすい感じ。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;この時点で数人は遅刻する&lt;/strong&gt;。まあ異国に行くわけではないのでOKだ！&lt;/p&gt;
+
+&lt;h3 id=&#34;11-25-成田組合流&#34;&gt;11:25 成田組合流&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/097/05_narita.png&#34; alt=&#34;&#34; /&gt;
+京成成田駅-&amp;gt;JR成田駅への乗り換えポイントで合流する人ちらほら。恒例（？）の記念写真を撮る。&lt;/p&gt;
+
+&lt;p&gt;乗り換え時間が短い中で焦ってコンビニで買い物したけど、&lt;strong&gt;笹川にも普通にコンビニはあるぞ！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;11-40-笹川まで鈍行に揺られる&#34;&gt;11:40 笹川まで鈍行に揺られる&lt;/h3&gt;
+
+&lt;p&gt;外はのどかな田園風景、電車の乗客も少なくなって合宿感にテンション上がる。&lt;/p&gt;
+
+&lt;p&gt;全員では無理だったけどちょこちょこ固まって座って開発したりお喋りしたり。&lt;/p&gt;
+
+&lt;p&gt;Wantedly風写真撮りポイント。&lt;/p&gt;
+
+&lt;h3 id=&#34;12-30-笹川駅着-青柳亭で腹ごしらえ&#34;&gt;12:30 笹川駅着、青柳亭で腹ごしらえ！&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/097/06_aoyagi.png&#34; alt=&#34;&#34; /&gt;
+駅から歩いて数分の青柳亭で昼食。手前にアオヤギっていう服屋があるけどそれは偽物だ！（見ればわかる）&lt;/p&gt;
+
+&lt;p&gt;Swift愛好会の方で「メニュー取りまとめが大変なので全員同じにすればよかった」とあったけど、私が違うのを注文したかったので取りまとめを申し出た。&lt;strong&gt;すぐに後悔した。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;「丼もの+セット麺」が基本のメニューで、種類がありすぎてまじで大変。あつ/ひや/うどん/そば/かけ/もり、などなど色々あるし違うのもできるよって言ってくれる。&lt;/p&gt;
+
+&lt;p&gt;メニューを入手したので参考にしてください。（※変更の可能性大いにありです）
+&lt;img src=&#34;https://dotstud.io/img/blog/097/07_menu.png&#34; alt=&#34;&#34; /&gt;
+（これ以外にもあるよ！）&lt;/p&gt;
+
+&lt;h3 id=&#34;14-00-食事後にコンビニへ&#34;&gt;14:00 食事後にコンビニへ&lt;/h3&gt;
+
+&lt;p&gt;青柳亭の目の前にセブンイレブンがある。みんなで歩いて行って適宜買い物。&lt;/p&gt;
+
+&lt;p&gt;土善旅館さんへ伝えると&lt;strong&gt;こちらへお迎えに来てくれた&lt;/strong&gt;。GOD。&lt;/p&gt;
+
+&lt;p&gt;ここで一次遅刻組合流。&lt;/p&gt;
+
+&lt;h3 id=&#34;14-30-旅館着-充実っぷりに驚愕&#34;&gt;14:30 旅館着、充実っぷりに驚愕&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/097/08_ryokan_all.png&#34; alt=&#34;&#34; /&gt;
+長旅を経て旅館着！看板の合宿感にテンション上がる！&lt;/p&gt;
+
+&lt;p&gt;とりあえず男女それぞれお部屋に移動。&lt;/p&gt;
+
+&lt;p&gt;女子4人だったのでお部屋を相当広く使えて最高だった。部屋内に洗面台×2とトイレもある充実っぷり。ドライヤー、ヘアアイロン、選べる浴衣とネコみみを貸してもらえた。（男性は同じお部屋を10人で使ったっぽい）
+&lt;img src=&#34;https://dotstud.io/img/blog/097/09_ryokan_heya.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;男性の浴衣と、タオル、歯ブラシは有料なので忘れずにね！&lt;/p&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;memo-お会計&#34;&gt;memo: お会計&lt;/h4&gt;
+
+&lt;p&gt;到着した時点でお会計。&lt;/p&gt;
+
+&lt;p&gt;Go合宿時のお値段は、&lt;strong&gt;宿泊費8200円＋設備使用量500円/1人+税&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;それ以外に夕食時のお酒を&lt;strong&gt;全体で7000円分&lt;/strong&gt;と、2日目にお願いした&lt;strong&gt;おにぎり250円/1人&lt;/strong&gt;を合わせても安すぎる！！！しかもなぜか70円引きされていた。&lt;/p&gt;
+
+&lt;h3 id=&#34;15-00-乾杯-開発スタート&#34;&gt;15:00 乾杯＆開発スタート！&lt;/h3&gt;
+
+&lt;p&gt;ハイネケンのビールサーバで乾杯して開発スタート！
+&lt;img src=&#34;https://dotstud.io/img/blog/097/10_kanpai1.png&#34; alt=&#34;&#34; /&gt;
+乾杯後一人ずつ軽く自己紹介と旅の目標共有。&lt;/p&gt;
+
+&lt;p&gt;開発部屋ひんろい！！足りないものがないくらい充実！&lt;/p&gt;
+
+&lt;p&gt;延長コード、変換ケーブル、モニタ、クッション等々欲しいものは一通り揃ってる。&lt;/p&gt;
+
+&lt;p&gt;そして「この後買い出しに行く」旨を伝えると、&lt;strong&gt;冷蔵庫（本体）を貸してくれる&lt;/strong&gt;という神ハプニング。代車で運ばれてきました。&lt;/p&gt;
+
+&lt;h3 id=&#34;15-15-初心者講座開催&#34;&gt;15:15 初心者講座開催&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/097/11_wantedly.png&#34; alt=&#34;&#34; /&gt;
+主催tenntennさんによりGo初めての人向け講座。&lt;/p&gt;
+
+&lt;p&gt;基本の項目をザックリまとめて30分くらい（体感）で教えてくれました。圧倒的感謝……！
+&lt;center&gt;
+&lt;iframe src=&#34;//www.slideshare.net/slideshow/embed_code/key/efg9YT4fSkYUU6&#34; width=&#34;595&#34; height=&#34;485&#34; frameborder=&#34;0&#34; marginwidth=&#34;0&#34; marginheight=&#34;0&#34; scrolling=&#34;no&#34; style=&#34;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&#34; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&#34;margin-bottom:5px&#34;&gt; &lt;strong&gt; &lt;a href=&#34;//www.slideshare.net/takuyaueda967/2016-go&#34; title=&#34;Go入門&#34; target=&#34;_blank&#34;&gt;Go入門&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a target=&#34;_blank&#34; href=&#34;https://www.slideshare.net/takuyaueda967&#34;&gt;Takuya Ueda&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;17-00-買い出し班スーパーへ&#34;&gt;17:00 買い出し班スーパーへ&lt;/h3&gt;
+
+&lt;p&gt;土善旅館さんのご好意で車を借りて買い出しへ。飲まない運転者が必要だね！&lt;/p&gt;
+
+&lt;p&gt;と思いきや旅館さんが「&lt;strong&gt;買い出しも送迎しますよ&lt;/strong&gt;」と言ってくれる。&lt;/p&gt;
+
+&lt;p&gt;なぜかちょうどよく運営の木下さんが現れたので、今回はお気持ちだけいただきスーパーへ。&lt;/p&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;memo-買い出しの量決めるの結構大変&#34;&gt;memo: 買い出しの量決めるの結構大変&lt;/h4&gt;
+
+&lt;p&gt;事前にビール飲まない人だけアンケート取って車で5分くらいのスーパーへ買い出しへ。&lt;/p&gt;
+
+&lt;p&gt;だいたい人数×3本くらいのお酒を購入。ビール7:カクテル3くらいか。ボトル等は特になし。&lt;/p&gt;
+
+&lt;p&gt;つまみを8000円分くらい購入。PC触るので、お値段はるけどスナックよりチーズとかサラミとかナッツとかが嬉しいかも。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;スーパーはクレジットカード使えないので要注意&lt;/strong&gt;。（※合宿時点）&lt;/p&gt;
+
+&lt;p&gt;今回お酒の量はちょうどいい感じだったけど、参加者の雰囲気によってかなり前後しそう。&lt;/p&gt;
+
+&lt;h3 id=&#34;17-30-夕飯までもくもく&#34;&gt;17:30 夕飯までもくもく&lt;/h3&gt;
+
+&lt;p&gt;買い出し後、仕切り直し乾杯！&lt;/p&gt;
+
+&lt;p&gt;夕飯を19:00（遅い方）にしたので、それまでもくもく。&lt;/p&gt;
+
+&lt;p&gt;Yogiboを駆使したゴロ寝スタイルとか、ヘッドフォンで集中したりとか、思い思いに開発。
+&lt;img src=&#34;https://dotstud.io/img/blog/097/12_mkmk.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;19-00-豪勢なお夕飯&#34;&gt;19:00 豪勢なお夕飯！&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/097/13_dinner.png&#34; alt=&#34;&#34; /&gt;
+結構お菓子食べてしまっていたのを後悔。つまみ解放は夕食後が正解だったか？&lt;/p&gt;
+
+&lt;p&gt;前菜、お造り、天ぷら、肉、魚、本当にたまらんでした。&lt;/p&gt;
+
+&lt;p&gt;夕食後はそのまま飲んだりお風呂はいったり自由時間。&lt;/p&gt;
+
+&lt;h3 id=&#34;21-00-仕切り直し乾杯&#34;&gt;21:00 仕切り直し乾杯&lt;/h3&gt;
+
+&lt;p&gt;改めて乾杯！ここで旅の締めとして&lt;strong&gt;2日目にLT大会を開催&lt;/strong&gt;することを告知、参加者を募る。&lt;/p&gt;
+
+&lt;p&gt;タイムリミットがあると頑張れるしプレッシャーも少なくていいね！&lt;/p&gt;
+
+&lt;h3 id=&#34;24-00-峠越え&#34;&gt;24:00 峠越え&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/097/14_allnight.png&#34; alt=&#34;&#34; /&gt;
+24時だよ全員集合！！&lt;/p&gt;
+
+&lt;p&gt;飲んだり書いたり飲んだり書いたり、最終組はその後4:30頃まで開発していた模様。&lt;/p&gt;
+
+&lt;p&gt;Swift愛好会の時は開発部屋で雑魚寝班が多かったみたいだけど、今回は結構お部屋に戻っていました。&lt;/p&gt;
+
+&lt;p&gt;開発部屋でゴロ寝してたらこんなハプニングも(//ω//)
+&lt;center&gt;
+&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;開発部屋で寝てたらこうなってた☺️ &lt;a href=&#34;https://twitter.com/hashtag/golangjp?src=hash&#34;&gt;#golangjp&lt;/a&gt; &lt;a href=&#34;https://t.co/vbAkRUCIiK&#34;&gt;pic.twitter.com/vbAkRUCIiK&lt;/a&gt;&lt;/p&gt; ちゃんとく( ˙꒳​˙ ) (@tokutoku393) &lt;a href=&#34;https://twitter.com/tokutoku393/status/855918202760474625&#34;&gt;2017年4月22日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;2日目&#34;&gt;2日目&lt;/h2&gt;
+
+&lt;h3 id=&#34;8-00-朝食&#34;&gt;8:00 朝食&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/097/15_morning.png&#34; alt=&#34;&#34; /&gt;
+朝からお鍋（アサリ出汁湯豆腐）とか最高か！！&lt;/p&gt;
+
+&lt;p&gt;今回は朝早かったからか5人くらい来なかったかな？なんだかんだ8:30くらいまでに来れば食べれた。&lt;/p&gt;
+
+&lt;h3 id=&#34;9-00-追い込みもくもく開始&#34;&gt;9:00 追い込みもくもく開始&lt;/h3&gt;
+
+&lt;p&gt;開発合宿も終盤、気合いを入れ直す乾杯！&lt;/p&gt;
+
+&lt;p&gt;みんなちゃんと起きて開発してた。エンジニアのそういうとこ最高。（その間朝風呂してた）&lt;/p&gt;
+
+&lt;h3 id=&#34;11-00-lt大会で成果発表&#34;&gt;11:00 LT大会で成果発表&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/097/16_lt.png&#34; alt=&#34;&#34; /&gt;
+計14名がエントリー！成果出せた人も出せなかった人も和やかなムードで発表。&lt;/p&gt;
+
+&lt;p&gt;今回は「一番楽しかったを感じたLT」「一番今後頑張って欲しいと思ったLT」「一番Goへの愛を感じたLT」へ投票を用意。（googleフォーム）&lt;/p&gt;
+
+&lt;p&gt;初心者〜玄人までいろんな話を聞けたし投票も結構ばらけてかなり良かったのでは！！&lt;/p&gt;
+
+&lt;h3 id=&#34;11-30-追いうちの神デザート&#34;&gt;11:30 追いうちの神デザート&lt;/h3&gt;
+
+&lt;p&gt;ここで旅館さんサービスのデザート登場。
+&lt;img src=&#34;https://dotstud.io/img/blog/097/17_desert.png&#34; alt=&#34;&#34; /&gt;
+聞いていた話よりグレードアップしている。しゅごい。。&lt;/p&gt;
+
+&lt;h3 id=&#34;12-30-お昼-まったり開発&#34;&gt;12:30 お昼＆まったり開発&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/097/18_onigiri.png&#34; alt=&#34;&#34; /&gt;
+お願いしたおにぎり+残りのお酒でラスト乾杯！&lt;/p&gt;
+
+&lt;p&gt;おにぎりの沁みる美味しさ・・。&lt;/p&gt;
+
+&lt;p&gt;そして全てのお会計が終わったので余った分一人当たり494円をキャッシュバック。&lt;/p&gt;
+
+&lt;p&gt;端数のキャッシュバックも簡単、&lt;strong&gt;そうLINE Payならね&lt;/strong&gt;。
+（一括送金はできないようなので個別対応。ありがとうのびすけさん！）&lt;/p&gt;
+
+&lt;h3 id=&#34;14-10-宿発-笹川駅へ&#34;&gt;14:10 宿発、笹川駅へ&lt;/h3&gt;
+
+&lt;p&gt;チェックアウトは15:00＆電車は1時間に一本なので、時間を決めて送迎をお願いすればok。&lt;/p&gt;
+
+&lt;h3 id=&#34;14-30-笹川駅で恒例のやつ&#34;&gt;14:30 笹川駅で恒例のやつ&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/097/19_sasagawa.png&#34; alt=&#34;&#34; /&gt;
+Swift愛好会に敬意を払い、恒例の集合写真。守りたいこの伝統。&lt;/p&gt;
+
+&lt;h3 id=&#34;after-記事書くまでが合宿&#34;&gt;After 記事書くまでが合宿！&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://qiita.com/ShirataHikaru/items/639ed865ee30765c7f43&#34;&gt;GoビギナーがPDFのクローラー作った&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://medium.com/@maro_kt/go%E5%90%88%E5%AE%BF-%E5%9C%9F%E5%96%84%E6%97%85%E9%A4%A8%E3%81%AB%E5%8F%82%E5%8A%A0%E3%81%97%E3%81%A6%E3%81%8D%E3%81%9F-7607bf5d8342&#34;&gt;Go合宿＠土善旅館に参加してきた&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://tikasan.hatenablog.com/entry/2017/04/23/231512&#34;&gt;Go合宿でビール駆動開発してきた@土善旅館&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://shanonim.hatenablog.com/entry/2017/04/24/000648&#34;&gt;Go合宿2017@ 土善旅館に参加しました #golangjp&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;その日のうちにたくさんまとめブログを書いてもらいました！！！&lt;/p&gt;
+
+&lt;p&gt;充実した旅になったようでよかったです（泣）&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;土善旅館最高とは聞いていたが、よもやここまでとは……。本当に言うこと無しな旅でした。&lt;/p&gt;
+
+&lt;p&gt;百聞は一見にしかず、&lt;strong&gt;みんなとにかく土善旅館さんに行ってくれ。最高だけが待っている！！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;（ちなみにちゃんとくは体調不良で合宿中12時間くらい寝て過ごしたのでハロー世界しかできませんでした。みんな体調管理はしっかりね！！）&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>「Wio Node」で半田付けなしの電子工作！温度計作りでIoTはじめの一歩</title>
+      <link>https://dotstud.io/blog/seeed-wionode-hands-on/</link>
+      <pubDate>Fri, 21 Apr 2017 22:18:36 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/seeed-wionode-hands-on/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、バックエンドエンジニアのちゃんとく（&lt;a href=&#34;https://twitter.com/tokutoku393&#34;&gt;@tokutoku393&lt;/a&gt;）です。&lt;/p&gt;
+
+&lt;p&gt;今回は、難しいプログラミングや半田付けなしで簡単に試せる「Wio Node」を使って温度表示計を作ってみます！この記事は「&lt;strong&gt;&lt;a href=&#34;https://dotstudio.connpass.com/event/53388/&#34;&gt;WioNodeで始めよう！挫折しないIoT入門ハンズオン
+&lt;/a&gt;&lt;/strong&gt;」の資料にもなっています。&lt;/p&gt;
+
+&lt;p&gt;かなり長いですが、詳細な手順を載せていますので根気よく頑張りましょう！&lt;/p&gt;
+
+&lt;h2 id=&#34;wio-nodeとは&#34;&gt;Wio Nodeとは&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/01_wio_node.png&#34; alt=&#34;&#34; /&gt;
+今回使うWio Nodeは、中国のSeeed Studio社が開発した&lt;strong&gt;Wi-Fiモジュール初期搭載のIoTデバイス&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Grove規格のモジュールをそのまま挿せるコネクタを搭載&lt;/strong&gt;していて、はんだづけなしで動かすことができます。モジュールのセットアップも&lt;strong&gt;公式のスマートフォンアプリから行うことができ&lt;/strong&gt;、電子工作初心者でも簡単に試せます。&lt;/p&gt;
+
+&lt;h2 id=&#34;動かしてみる&#34;&gt;動かしてみる&lt;/h2&gt;
+
+&lt;p&gt;早速Wio Nodeを動かしてみましょう。今回は、温度センサと7セグメントディスプレイを使って簡易温度計を作ってみます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/02_map.png&#34; alt=&#34;&#34; /&gt;
+Wio Nodeに接続したモジュール同士は一見つながっているように見えますが、&lt;strong&gt;内部で連携する仕組みはありません&lt;/strong&gt;。それぞれWi-Fiを使ってAPIからインプットやアウトプットを制御します。&lt;/p&gt;
+
+&lt;p&gt;以下の手順で作っていきます。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Wio Nodeのセットアップ&lt;/li&gt;
+&lt;li&gt;Wio Nodeにモジュールを接続する&lt;/li&gt;
+&lt;li&gt;アプリからAPIを試す&lt;/li&gt;
+&lt;li&gt;Node.jsでプログラムを書く&lt;/li&gt;
+&lt;li&gt;試してみる&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Wio Node -&amp;gt; &lt;a href=&#34;https://dotstud.io/shop/wionode-social-remote-control/&#34;&gt;購入ページ&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Micro USBケーブル&lt;/li&gt;
+&lt;li&gt;Grove 温度センサ（型番: SEEED-101020015）&lt;/li&gt;
+&lt;li&gt;Grove 7セグメントディスプレイ（型番: SEEED-104030003）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;類似のセンサがたくさんありますので、型番をよくご確認ください。&lt;/strong&gt;（Wio Nodeに対応していない場合があります。）&lt;/p&gt;
+
+&lt;h4 id=&#34;筆者の環境&#34;&gt;筆者の環境&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;MacBook Pro（Retina 13-inch、Early 2015）&lt;/li&gt;
+&lt;li&gt;OS X El Capitan（v10.11.6）&lt;/li&gt;
+&lt;li&gt;iOS10.31&lt;/li&gt;
+&lt;li&gt;Node.js v7.9.0&lt;/li&gt;
+&lt;li&gt;npm 4.5.0&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;wio-nodeのセットアップ&#34;&gt;Wio Nodeのセットアップ&lt;/h3&gt;
+
+&lt;p&gt;まずはWio Nodeの初期設定から進めていきます。&lt;/p&gt;
+
+&lt;p&gt;Wio Nodeは&lt;strong&gt;モバイルバッテリ・PCなどからUSBケーブルで電源を供給しましょう&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;開発用アプリのインストール&#34;&gt;開発用アプリのインストール&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/02_wio_app.png&#34; alt=&#34;&#34; /&gt;
+Wio Nodeの開発には、公式からリリースされている「Wio Link」というアプリ（Androidの場合は「Wio」）を利用します。執筆時はiOS版は1.5.2、Android版は2.3.6がリリースされています。今回はiOS版を使っての紹介です。&lt;/p&gt;
+
+&lt;p&gt;iOS: &lt;a href=&#34;https://itunes.apple.com/jp/app/wio-link/id1054893491?mt=8&#34;&gt;https://itunes.apple.com/jp/app/wio-link/id1054893491?mt=8&lt;/a&gt;&lt;br /&gt;
+Android: &lt;a href=&#34;https://play.google.com/store/apps/details?id=cc.seeed.iot.ap&amp;amp;hl=ja&#34;&gt;https://play.google.com/store/apps/details?id=cc.seeed.iot.ap&amp;amp;hl=ja&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;アプリとwio-nodeの設定&#34;&gt;アプリとWio Nodeの設定&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/03_acount.png&#34; alt=&#34;&#34; /&gt;
+アプリを開いたらまずはアカウントを作成しましょう。メールアドレスとパスワードを設定し「Register」で登録します。ServerLocationはデフォルトのGlobalにしておきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/04_add_device.png&#34; alt=&#34;&#34; /&gt;
+アカウントが作成されたらAdd Your First Deviceをタップし、Wio Nodeを選択します。&lt;/p&gt;
+
+&lt;p&gt;続いてWi-Fiの設定に移りますが、手順が少しややこしいので注意してください。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/06_func.png&#34; alt=&#34;&#34; /&gt;
+まずは画面の指示にしたがってFuncボタン（写真親指側）を4秒以上長押しすると、青いランプがゆらゆらと光ります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/07_wio_network.png&#34; alt=&#34;&#34; /&gt;
+iOSのWi-Fi選択画面から、「Wio_XXXX」というSSIDを選択します。（Androidはアプリ内での選択です。）&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/08_wifi_list.png&#34; alt=&#34;&#34; /&gt;
+アプリに戻ると、続いてWi-Fiの接続を促されます。Wi-Fiリストから、使用するWi-Fiを選択しましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/09_device_connect.png&#34; alt=&#34;&#34; /&gt;
+Wio Nodeが認識されました。デバイスに名前をつけておきます。（Android端末で認識がうまくいかない場合、&lt;strong&gt;機内モードにして試す&lt;/strong&gt; と解消することがあるようです。）&lt;/p&gt;
+
+&lt;p&gt;以上でWio Nodeのセットアップが完了しました。同じデバイスとWi-Fiを使う場合は、以後起動するだけで接続されるようになります！&lt;/p&gt;
+
+&lt;h3 id=&#34;wio-nodeにモジュールを接続する&#34;&gt;Wio Nodeにモジュールを接続する&lt;/h3&gt;
+
+&lt;p&gt;アプリから、接続するモジュールを登録します。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/10_display_connect.png&#34; alt=&#34;&#34; /&gt;
+「PORT0」（左側）をタップして、下の「OUTPUT」から「4-Digit Display」を選択しましょう。&lt;strong&gt;似たようなモジュールがたくさんありますので、よく確認してください&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/11_temperature_connect.png&#34; alt=&#34;&#34; /&gt;
+続いて温度センサを登録します。「PORT1」（右側）をタップして、「INPUT」から「Temperature Sensor」を選択します。&lt;/p&gt;
+
+&lt;p&gt;アプリ画面を参考に、Wio Nodeにモジュールを接続します。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/12_module_connect.png&#34; alt=&#34;&#34; /&gt;
+「PORT0」に7セグメントディスプレイ、「PORT1」に温度センサを接続しましょう。&lt;/p&gt;
+
+&lt;p&gt;接続できたら、アプリ画面下部の「Update Firmware」をタップしましょう。読み込みのあと、「View API」というAPIサンプルページが表示されるようになります。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;アプリからapiを試す&#34;&gt;アプリからAPIを試す&lt;/h3&gt;
+
+&lt;p&gt;「View API」のページでは、手軽にモジュールを操作するAPIを試すことができます。正しく接続できているか、試してみましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/13_display_api.png&#34; alt=&#34;&#34; /&gt;
+まずは7セグメントディスプレイの「display_point」というAPIを試してみます。説明部分には、「&lt;strong&gt;POSTメソッドで1を送ると&amp;rdquo;:&amp;ldquo;が表示される&lt;/strong&gt;」とありますね。「Test Request」から1を送ってみます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/14_display_demo.png&#34; alt=&#34;&#34; /&gt;
+7セグメントディスプレイに&amp;rdquo;:&amp;ldquo;が表示されました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/15_temp_api.png&#34; alt=&#34;&#34; /&gt;
+続いて温度センサのAPIを試します。温度の取得には値は必要ないので、そのままGETメソッドでRequestします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/16_temp_demo.png&#34; alt=&#34;&#34; /&gt;
+現在の温度が返ってきました。（かなり暑いですね（笑））&lt;/p&gt;
+
+&lt;p&gt;挙動が確認できたら、2つのモジュールを連携させるプログラムを書いていきましょう！&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;memo-getメソッドとpostメソッド&#34;&gt;memo: GETメソッドとPOSTメソッド&lt;/h4&gt;
+
+&lt;p&gt;HTTPリクエストにはいくつかのメソッド（送信方法）があります。GET、POSTの他にもPUTメソッド、DELETEメソッドなどがあり、最近主流の「RESTful API」という考え方では&lt;strong&gt;操作する内容によってメソッドを使い分ける&lt;/strong&gt;ことになっています。&lt;/p&gt;
+
+&lt;p&gt;今回はメソッド名だけわかればプログラミング可能ですが、詳しく知りたい方は調べてみてください！&lt;/p&gt;
+
+&lt;h3 id=&#34;node-jsでプログラムを書く&#34;&gt;Node.jsでプログラムを書く&lt;/h3&gt;
+
+&lt;p&gt;センサの値を取得して、室温をディスプレイに表示するプログラムを書いていきましょう。プログラムはAPIを叩ければよいので、今回は&lt;strong&gt;Node.js&lt;/strong&gt;で作成します。&lt;/p&gt;
+
+&lt;p&gt;プログラムの仕組みを理解するために、以下の手順で説明します。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Node.jsのインストール&lt;/li&gt;
+&lt;li&gt;プロジェクトの作成&lt;/li&gt;
+&lt;li&gt;温度情報を取得する&lt;/li&gt;
+&lt;li&gt;温度情報を表示したい文字列に変換する&lt;/li&gt;
+&lt;li&gt;ディスプレイに温度を表示する&lt;/li&gt;
+&lt;li&gt;3秒ごとに更新する&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;memo-コマンドラインの使い方&#34;&gt;memo: コマンドラインの使い方&lt;/h4&gt;
+
+&lt;p&gt;Node.jsの実行やファイル操作はコマンドラインで行います。Macには「ターミナル」、Windowsには「コマンドプロンプト」というアプリケーションが最初から入っているので、立ち上げて使いましょう。&lt;/p&gt;
+
+&lt;p&gt;初めてコマンドを使う方は、「ターミナル コマンド」などで検索すると基本的な使い方がわかりますよ！&lt;/p&gt;
+
+&lt;p&gt;筆者はiTerm2というクライアントアプリにzshというシェルを入れています。（画面がちょっと違うくらいだと思ってください。）&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;1-node-jsのインストール&#34;&gt;1. Node.jsのインストール&lt;/h4&gt;
+
+&lt;p&gt;まずはNode.jsのインストールから始めます。また&lt;code&gt;async/await&lt;/code&gt;という機能を使っているので、&lt;strong&gt;v7.6.0以上が必要&lt;/strong&gt;です。最新版をインストール済みの方は次項の「プロジェクトの作成」から始めてください。&lt;/p&gt;
+
+&lt;p&gt;Node.jsのインストールには、簡単にバージョン管理ができる「&lt;strong&gt;nvm&lt;/strong&gt;」や「&lt;strong&gt;nodebrew&lt;/strong&gt;」を使うのが便利です。nodebrewを使ったインストール方法は下記を参照してください。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://dotstud.io/blog/setup-new-mac-app/#node-js%E7%92%B0%E5%A2%83%E6%95%B4%E5%82%99&#34;&gt;僕がMacを買い換えてすぐにいれるツール&amp;amp;すぐにする初期設定&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;インストールが完了したら、Node.jsが正しく動くか確認してみましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/17_node_v.png&#34; alt=&#34;&#34; /&gt;
+コマンドラインで&lt;code&gt;node -v&lt;/code&gt;を叩くとバージョンが出るようになったでしょうか？（v7.6.0以上ですよ！）&lt;/p&gt;
+
+&lt;p&gt;Node.jsの環境構築はとても簡単なので、ウェブ開発が初めての方にもオススメです！&lt;/p&gt;
+
+&lt;h4 id=&#34;memo-コーディング無しで動かしてみる&#34;&gt;memo: コーディング無しで動かしてみる&lt;/h4&gt;
+
+&lt;p&gt;サクッと試したい方は、githubの&lt;a href=&#34;https://github.com/dotstudio/wionode_handson&#34;&gt;完成プログラム&lt;/a&gt;をご覧ください。READMEの手順を進めるとコーディングなしで動かせます。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;2-プロジェクトの作成&#34;&gt;2. プロジェクトの作成&lt;/h4&gt;
+
+&lt;p&gt;今回のWio Nodeのプログラムを置くプロジェクトを作成しましょう。&lt;/p&gt;
+
+&lt;p&gt;適当なディレクトリに移動します。（私は&lt;code&gt;/Users/ユーザ名/workspace&lt;/code&gt;という作業ディレクトリを用意しています。参考まで。）
+&lt;img src=&#34;https://dotstud.io/img/blog/095/18_mkdir.png&#34; alt=&#34;&#34; /&gt;
+&lt;code&gt;mkdir ディレクトリ名&lt;/code&gt;で新しいディレクトリを作成できます。&lt;code&gt;wio_temperature&lt;/code&gt;というディレクトリを作ってみました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/19_cd.png&#34; alt=&#34;&#34; /&gt;
+&lt;code&gt;cd ディレクトリ名&lt;/code&gt;で作成したディレクトリの下に移動します。&lt;/p&gt;
+
+&lt;p&gt;Node.jsでは「npm」でモジュールを管理できます。&lt;code&gt;npm init -y&lt;/code&gt;を実行しましょう。&lt;code&gt;-y&lt;/code&gt;オプションで名前等をデフォルト値で作成してくれます。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/20_npm_init.png&#34; alt=&#34;&#34; /&gt;
+プロジェクト名やライブラリなどを管理する「&lt;strong&gt;package.json&lt;/strong&gt;」が作成されました。&lt;/p&gt;
+
+&lt;p&gt;今回使用する「&lt;strong&gt;axios&lt;/strong&gt;」ライブラリをインストールします。&lt;code&gt;npm install axios --save&lt;/code&gt;を実行しましょう。&lt;code&gt;--save&lt;/code&gt;オプションをつけることでpackage.jsonに記載されます。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/21_npm_install.png&#34; alt=&#34;&#34; /&gt;
+axiosがインストールされ、package.jsonに追加されました。&lt;/p&gt;
+
+&lt;p&gt;続いてプログラムを記述するファイルを作成します。&lt;code&gt;touch ファイル名&lt;/code&gt;でファイルが作成されます。（Windowsの場合はコマンドがないのでフォルダから作成してください。）
+&lt;img src=&#34;https://dotstud.io/img/blog/095/22_touch.png&#34; alt=&#34;&#34; /&gt;
+app.jsというファイルを作成しました。（&lt;code&gt;ls&lt;/code&gt;コマンドでカレントディレクトリのファイルが見れます。Windowsは&lt;code&gt;dir&lt;/code&gt;。）&lt;/p&gt;
+
+&lt;p&gt;以上でプロジェクトの作成は完了です。ファイルにプログラムを書いていきましょう！&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;memo-ファイルの編集とエディタについて&#34;&gt;memo: ファイルの編集とエディタについて&lt;/h4&gt;
+
+&lt;p&gt;コマンドラインからでもファイルの編集はできますが、&lt;strong&gt;インデントやコードの補完が効かず作業しづらい&lt;/strong&gt;ので、テキストエディタを使うがオススメです。ちゃんとく的な初心者向けオススメエディタは&lt;a href=&#34;https://atom.io/&#34;&gt;Atom&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;下記記事ではVisual Studio Codeのインストール方法を紹介しています。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://dotstud.io/blog/setup-new-mac-app/#visual-studio-code&#34;&gt;僕がMacを買い換えてすぐにいれるツール&amp;amp;すぐにする初期設定&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;コマンドライン上で作業したい方は、「viエディタ コマンド」などで検索してみてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;3-温度情報を取得する&#34;&gt;3. 温度情報を取得する&lt;/h4&gt;
+
+&lt;p&gt;まずは温度を取得するプログラムを書いていきます。&lt;code&gt;BASE_URL&lt;/code&gt;はドメインが違う場合があるので、アプリから確認して自身のものに置き換えてください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
+
+const axios = require(&#39;axios&#39;);
+const TOKEN = process.argv[2] || &#39;&#39;;
+const BASE_PATH = `https://us.wio.seeed.io/v1/node`; // 自身のものをアプリで確認
+
+/**
+ * 温度取得
+ */
+ const getTemp = () =&amp;gt; {
+     const ENDPOINT = `/GroveTempA0/temp`;
+     const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${TOKEN}`;
+     axios.request({method: &#39;get&#39;, baseURL: BASE_URL})
+     .then((resp) =&amp;gt; console.log(resp));
+ }
+
+getTemp();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;axiosに温度取得APIのURLとオプションを渡し、返ってきた値を出力しています。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;const ACCESS_TOKEN = process.argv[2] || &#39;&#39;;&lt;/code&gt;の部分は、コマンドライン引数（実行時に渡す値）を取得しています。tokenなどの人に知られたくない値は、ファイルに直接書かないのがベターです。&lt;/p&gt;
+
+&lt;p&gt;それでは正しく動くか試してみましょう。&lt;code&gt;node app.js &amp;lt;自分のtoken&amp;gt;&lt;/code&gt;というコマンドで実行します。&lt;/p&gt;
+
+&lt;p&gt;ご自身のtokenは&lt;strong&gt;アプリのView API画面から確認してください&lt;/strong&gt;。&lt;code&gt;?access_token=&lt;/code&gt;の後の文字列がtokenです。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/23_temp_test.png&#34; alt=&#34;&#34; /&gt;
+温度センサの情報が返ってきたでしょうか？&lt;/p&gt;
+
+&lt;p&gt;1番下に温度情報がありますね。この情報を使ってディスプレイに表示する文字列を作っていきます。&lt;/p&gt;
+
+&lt;p&gt;エラーが出てしまった人は、「Node.js &amp;lt;エラーメッセージ&amp;gt;」で検索すると答えが見つかりやすいです。&lt;/p&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;4-温度情報を表示したい文字列に変換する&#34;&gt;4. 温度情報を表示したい文字列に変換する&lt;/h4&gt;
+
+&lt;p&gt;取得した温度情報を、ディスプレイに表示する文字列に作り変えるfunctionを作りましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;/**
+ * 取得した温度情報を表示する文字列に変換
+ *
+ * @param {number} temp
+ * @return {string}
+ */
+const temp2digit = (temp) =&amp;gt; {
+  let temp_str = `${temp}`;
+  temp_str = temp_str.replace(&#39;.&#39;, &#39;&#39;);
+  if (temp_str.length &amp;gt;= 4) {
+    temp_str = temp_str.substr(0, tempstr.length-1);
+  }
+  return `${temp_str}C`;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;temp2digit()の引数には、先ほど受け取った情報の温度部分だけを渡します。&lt;/p&gt;
+
+&lt;p&gt;数値を文字列に変換し、不要な&amp;rsquo;.&amp;lsquo;を取り除き、3桁にして、温度計らしく&amp;rsquo;C&amp;rsquo;を付けて返します。&lt;/p&gt;
+
+&lt;p&gt;これを先ほど作ったgetTemp()と一緒に実行するようにしてみましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
+
+const axios = require(&#39;axios&#39;);
+const TOKEN = process.argv[2] || &#39;&#39;;
+const BASE_PATH = `https://us.wio.seeed.io/v1/node`; // 自身のものをアプリで確認
+
+/**
+ * 温度取得
+ */
+ const getTemp = () =&amp;gt; {
+     const ENDPOINT = `/GroveTempA0/temp`;
+     const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${TOKEN}`;
+     return axios.request({method: &#39;get&#39;, baseURL: BASE_URL}); // ここでは実行しない
+ }
+
+/**
+ * 温度情報を文字列変換+Cを追加
+ * @param {number} temp
+ * @return {string}
+ */
+const temp2digit = (temp) =&amp;gt;{
+    let temp_str = `${temp}`;
+    temp_str = temp_str.replace(&#39;.&#39;,&#39;&#39;);
+    if(temp_str.length &amp;gt;= 4){
+        temp_str = temp_str.substr(0,temp_str.length-1);
+    }
+    return `${temp_str}C`;
+}
+
+async function main(){ // async/awaitを使う
+   const res = await getTemp();
+   const temp = res.data.temperature;
+   const text = temp2digit(temp);
+   console.log(text);
+}
+
+main();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ここではasync/awaitを使っています。awaitで指定したタスクの実行を待ってレスポンスを受け取り、asyncを付けたメソッドを一つのタスクとして処理するような機能です。Node.jsではv7.6.0から導入されました。&lt;/p&gt;
+
+&lt;p&gt;実行を待たせるため、getTemp()では、APIの結果ではなくメソッドを返すだけに変更します。&lt;/p&gt;
+
+&lt;p&gt;getTemp()で受け取ったobjectの子要素には&lt;code&gt;.&lt;/code&gt;でアクセスします。先ほどのレスポンスのdataの中のtemperatureが欲しいので&lt;code&gt;res.data.temperature&lt;/code&gt;となります。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;node app.js &amp;lt;自分のtoken&amp;gt;&lt;/code&gt;で実行してみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/24_temp2digit.png&#34; alt=&#34;&#34; /&gt;
+温度計の文字列ができました！&lt;/p&gt;
+
+&lt;p&gt;次はいよいよこの文字列をディスプレイに表示させます。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;5-ディスプレイに温度を表示する&#34;&gt;5. ディスプレイに温度を表示する&lt;/h4&gt;
+
+&lt;p&gt;取得した温度の値を使って、ディスプレイに表示するAPIを叩きます。温度の区切りを表すため、最初に試した&amp;rsquo;:&amp;lsquo;を表示するAPIも使ってみましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;/**
+ * ディスプレイに値を表示
+ *
+ * @param {number} start_pos
+ * @param {strng} chars
+ */
+const fourDigit = (start_pos, chars) =&amp;gt; {
+  const ENDPOINT = `/Grove4DigitUART0/display_digits/${start_pos}/${chars}`;
+  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
+  return axios.request({method: &#39;POST&#39;, baseURL: BASE_URL})
+}
+
+/**
+ * : を表示/非表示
+ * @param {number} display 0|1
+ */
+const fourDigitPoint = (display) =&amp;gt; {
+  const ENDPOINT = `/Grove4DigitUART0/display_point/${display}`;
+  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
+  return axios.request({method: &#39;POST&#39;, baseURL: BASE_URL});
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;fourDigit()のstart_posにはディスプレイ表示の開始位置、charsには表示する文字を渡します。（詳しくはAPIの説明を読んでみてください）&lt;/p&gt;
+
+&lt;p&gt;fourDigitPoint()には表示するかどうかの0/1を渡すようになっています。&lt;/p&gt;
+
+&lt;p&gt;これまで作ったfunctionと繋げてみます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
+
+const axios = require(&#39;axios&#39;);
+const BASE_PATH = &#39;https://us.wio.seeed.io/v1/node&#39;; // 自身のものをアプリで確認
+const ACCESS_TOKEN = process.argv[2] || &#39;&#39;;
+
+/**
+ * 温度を取得
+ */
+const getTemp = () =&amp;gt; {
+  const ENDPOINT = `/GroveTempA0/temp`;
+  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
+  return axios.request({method: &#39;GET&#39;, baseURL: BASE_URL});
+}
+
+/**
+ * 取得した温度情報を表示する文字列に変換
+ *
+ * @param {number} temp
+ * @return {string}
+ */
+const temp2digit = (temp) =&amp;gt; {
+  let temp_str = `${temp}`;
+  temp_str = temp_str.replace(&#39;.&#39;, &#39;&#39;);
+  if (temp_str.length &amp;gt;= 4) {
+    temp_str = temp_str.substr(0, tempstr.length-1);
+  }
+  return `${temp_str}C`;
+}
+
+/**
+ * ディスプレイに値を表示
+ *
+ * @param {number} start_pos
+ * @param {strng} chars
+ */
+const fourDigit = (start_pos, chars) =&amp;gt; {
+  const ENDPOINT = `/Grove4DigitUART0/display_digits/${start_pos}/${chars}`;
+  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
+  return axios.request({method: &#39;POST&#39;, baseURL: BASE_URL});
+}
+
+/**
+ * : を表示/非表示
+ * @param {number} display 0|1
+ */
+const fourDigitPoint = (display) =&amp;gt; {
+  const ENDPOINT = `/Grove4DigitUART0/display_point/${display}`;
+  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
+  return axios.request({method: &#39;POST&#39;, baseURL: BASE_URL});
+}
+
+async function main() =&amp;gt; {
+  let res = getTemp();
+  const temp = res.data.temperature;
+  const text = temp2digit(temp);
+  console.log(text);
+  res = await fourDigit(0, text);
+  res = await fourDigitPoint(1);
+}
+
+main();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;こちらも試してみましょう。&lt;code&gt;node app.js &amp;lt;自分のtoken&amp;gt;&lt;/code&gt;で実行です。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/25_comp_demo.png&#34; alt=&#34;&#34; /&gt;
+温度がディスプレイに表示されました！&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;6-3秒ごとに更新する&#34;&gt;6. 3秒ごとに更新する&lt;/h4&gt;
+
+&lt;p&gt;今のままではコマンドを実行した時しか処理が走りません。3秒ごとに実行するようプログラムを変えてみます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;const INTERVAL = 3000;
+
+/**
+ * 繰り返し実行する
+ */
+setInterval(() =&amp;gt; {
+  main()
+  .catch((e) =&amp;gt; {
+    if (e.response) console.log(e.response);
+  })
+}, INTERVAL);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;update()の実行部分をsetInterval()関数で繰り返すようにします。setInterval()の第二引数にミリ秒で数値を渡すと、その間隔ごとに実行されます。あとから変更しやすいよう、定数で宣言しておきましょう。&lt;/p&gt;
+
+&lt;p&gt;catch()はエラーが発生するとエラーレスポンスを受け取ります。&lt;/p&gt;
+
+&lt;p&gt;完成させたコードはこちら。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
+
+const axios = require(&#39;axios&#39;);
+const BASE_PATH = &#39;https://us.wio.seeed.io/v1/node&#39;; // 自身のものをアプリで確認
+const ACCESS_TOKEN = process.argv[2] || &#39;&#39;;
+const INTERVAL = 3000;
+
+/**
+ * 温度を取得
+ *
+ * @return {object}
+ */
+const getTemp = () =&amp;gt; {
+  const ENDPOINT = `/GroveTempA0/temp`;
+  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
+  return axios.request({method: &#39;GET&#39;, baseURL: BASE_URL});
+}
+
+/**
+ * 取得した温度情報を表示する文字列に変換
+ *
+ * @param {number} temp
+ * @return {string}
+ */
+const tempToDigit = (temp) =&amp;gt; {
+  let temp_str = `${temp}`;
+  temp_str = temp_str.replace(&#39;.&#39;, &#39;&#39;);
+  if (temp_str.length &amp;gt;= 4) {
+    temp_str = temp_str.substr(0, temp_str.length-1);
+  }
+  return `${temp_str}C`;
+}
+
+/**
+ * ディスプレイに値を表示
+ *
+ * @param {number} start_pos
+ * @param {strng} chars
+ * @return {object}
+ */
+const fourDigit = (start_pos, chars) =&amp;gt; {
+  const ENDPOINT = `/Grove4DigitUART0/display_digits/${start_pos}/${chars}`;
+  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
+  return axios.request({method: &#39;POST&#39;, baseURL: BASE_URL})
+}
+
+/**
+ * : を表示/非表示
+ * @param {number} display 0|1
+ * @return {object}
+ */
+const fourDigitPoint = (display) =&amp;gt; {
+  const ENDPOINT = `/Grove4DigitUART0/display_point/${display}`;
+  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
+  return axios.request({method: &#39;POST&#39;, baseURL: BASE_URL});
+}
+
+/**
+ * メインの処理（同期）
+ */
+async function main() {
+  let res = await getTemp();
+  const temp = res.data.temperature;
+  const text = tempToDigit(temp);
+  console.log(text);
+  res = await fourDigit(0, text);
+  res = await fourDigitPoint(1);
+}
+
+/**
+ * 繰り返し実行する
+ */
+setInterval(() =&amp;gt; {
+  main()
+  .catch((e) =&amp;gt; {
+    if (e.response) console.log(e.response);
+  })
+}, INTERVAL);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;試してみる&#34;&gt;試してみる&lt;/h3&gt;
+
+&lt;p&gt;完成コードを試してみます。ドキドキ。&lt;code&gt;node app.js &amp;lt;自分のtoken&amp;gt;&lt;/code&gt;で実行です。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/25_comp_demo.png&#34; alt=&#34;&#34; /&gt;
+現在の室温が表示されます。&lt;/p&gt;
+
+&lt;p&gt;3秒ごとに更新されるので、変化を試すため温度センサを手で温めてみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/26_warmer.png&#34; alt=&#34;&#34; /&gt;
+少し温度が上がりました。処理を止めたい場合は&lt;code&gt;controll+c&lt;/code&gt;で終了します。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;これでプログラムは完成です！やったー！！&lt;/strong&gt; お疲れ様でした！&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;補足-完成の一歩先へ&#34;&gt;補足: 完成の一歩先へ！&lt;/h4&gt;
+
+&lt;p&gt;「簡単であっという間だった」というあなた！&lt;strong&gt;このガジェットを使ってできることはまだまだあります！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;例1: Azure Web AppsなどのPaaSを使って常時稼働できるようにする&lt;/li&gt;
+&lt;li&gt;例2: 温度情報をAmbientなどのウェブサービスを使ってグラフ化してみる&lt;/li&gt;
+&lt;li&gt;例3: 一定の温度をトリガーにTwitterやSlackへ通知を送ってみる&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;上記はほんの一例です。Wio Node対応モジュールもたくさんありますので、ここまでの知見を使って試してみましょう！&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;いかがだったでしょうか？簡単と言いつつ、コマンドでの作業やウェブ開発の経験がない人には詰まる部分が多かったかもしれません。でも、これで&lt;strong&gt;InternetとThingsの連携ができるようになりました！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;IoTの世界には、まだまだたくさんの楽しいデバイスやアイディアが待っています。&lt;strong&gt;作っても使っても楽しい電子工作をやっていきましょう！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;最後まで読んでくださりありがとうございました！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>【dotstudio×ギャル電】IoT派手イケディスプレーキャップをつくったよ！</title>
+      <link>https://dotstud.io/blog/gyaruden-hadeike-display-cap/</link>
+      <pubDate>Sun, 09 Apr 2017 21:14:04 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/gyaruden-hadeike-display-cap/</guid>
+      
+      <description>
+
+&lt;p&gt;どうも！dotstudioテクニカルライターの&lt;a href=&#34;https://dotstud.io/members/mao/&#34;&gt;マオ&lt;/a&gt;です。ドンキでアルドゥイーノが買える時代を夢見て、&lt;a href=&#34;https://dotstud.io/blog/iotlt-gbvol19-galden-report/&#34;&gt;ギャル電&lt;/a&gt;で活動しています。&lt;/p&gt;
+
+&lt;p&gt;今回はdotstudioとギャル電マオがコラボして派手でイケイケなIoTディスプレー付きキャップを作りました★
+&lt;img src=&#34;https://dotstud.io/img/blog/094/01_top.png&#34; alt=&#34;&#34; /&gt;
+この超イケてるキャップをかぶって実際に渋谷に繰り出してみた話を紹介していきたいと思います〜！&lt;/p&gt;
+
+&lt;h2 id=&#34;iot派手イケディスプレーキャップを作ったきっかけ&#34;&gt;IoT派手イケディスプレーキャップを作ったきっかけ&lt;/h2&gt;
+
+&lt;p&gt;ある日dotstudioにてうこさんから相談を受けたマオ。&lt;/p&gt;
+
+&lt;p&gt;「&lt;strong&gt;俺はイケてる電子工作を作っているのになぜパリピにモテないか。&lt;/strong&gt;」&lt;/p&gt;
+
+&lt;p&gt;たしかに、うこさんはなんでもできるスーパーエンジニアで、ギャル電マオは常にリスペクトしている先輩なのだ。
+&lt;img src=&#34;https://dotstud.io/img/blog/094/02_uko.png&#34; alt=&#34;&#34; /&gt;
+でもな、パリピにモテるのはまだほど遠い。&lt;/p&gt;
+
+&lt;p&gt;よってうちが出した結論、&lt;/p&gt;
+
+&lt;p&gt;「&lt;strong&gt;&lt;em&gt;とりあえずチャラくなって光ってればモテるんじゃね&lt;/em&gt;&lt;/strong&gt;」&lt;/p&gt;
+
+&lt;p&gt;そこで、うこさんと代表ののびすけさんを巻き込んで作成したのはこちら、名付けて『&lt;strong&gt;IoT派手イケディスプレーキャップ&lt;/strong&gt;』。
+&lt;img src=&#34;https://dotstud.io/img/blog/094/03_cap.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;とにかくモテたい人、口下手で上手く話せない人も、これを使えば光って目立つし帽子のディスプレーで言いたいことを表示することによって３倍増しぐらいにかっこいく見える。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;まさに最高のパーリーアイテムである。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;iot派手イケディスプレーキャップとは&#34;&gt;IoT派手イケディスプレーキャップとは？&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/094/04_cap.png&#34; alt=&#34;&#34; /&gt;
+このIoT派手イケディスプレーキャップは、&lt;strong&gt;ウェブからディスプレーへの出力パターンを選択&lt;/strong&gt; できる。また、指定した&lt;strong&gt;Twitterのハッシュタグツイートもリアルタイムで表示可能&lt;/strong&gt;だ。&lt;/p&gt;
+
+&lt;p&gt;制作はのびすけさんがネットワークまわり、うこさんがハードウェア全般を担当。ギャル電マオは外装デコレーションを担当した。&lt;/p&gt;
+
+&lt;p&gt;詳しくは別記事で紹介予定だ。&lt;/p&gt;
+
+&lt;h2 id=&#34;iot派手イケディスプレーキャップの仕組み&#34;&gt;IoT派手イケディスプレーキャップの仕組み&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/094/05_cap.png&#34; alt=&#34;&#34; /&gt;
+ディスプレーとキャップのあいだには、アルドゥイーノがついている。メガというデカいヤツと、ESP8266とかいうネットワークにつながるヤツだ。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/094/06_cap.png&#34; alt=&#34;&#34; /&gt;
+キャップの中にはモバイルバッテリーを入れて固定することができるゴムバンドがついている。&lt;/p&gt;
+
+&lt;p&gt;簡単な仕組みはこうだ。
+&lt;img src=&#34;https://dotstud.io/img/blog/094/07_structure.png&#34; alt=&#34;&#34; /&gt;
+まず、新着ツイートが投稿されるとそれをひらがなに変換し、サーバーに文字列を保存する。サーバーからESP8266にプッシュを送信して新着ツイートがあることを知らせると、ESP8266はひらがな文字列を取得しにいく。&lt;/p&gt;
+
+&lt;p&gt;それをアルドゥイーノメガにシリアルで送ると、あらかじめ書き込んでおいたフォントで文字列を変換し、ディスプレーに流すというふうになっている。&lt;/p&gt;
+
+&lt;p&gt;ちなみに、絵などの画像は全部ESP8266に書き込まれてあって、&lt;strong&gt;サーバーからのプッシュで好きなものに切り替えられるという優れモノ&lt;/strong&gt; だ。&lt;/p&gt;
+
+&lt;h2 id=&#34;試してみた&#34;&gt;試してみた&lt;/h2&gt;
+
+&lt;p&gt;早速パリピが集まる夜の渋谷の街に繰り出してみた。
+&lt;img src=&#34;https://dotstud.io/img/blog/094/08_dasao.png&#34; alt=&#34;&#34; /&gt;
+&lt;strong&gt;&lt;em&gt;最高にイケてる帽子被ってるのに、全然イケてねぇ！鉄道オタかよ！（笑）&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;これじゃあダメだ、いくら光っててもモテる気がしない。なにしろ服装が&lt;strong&gt;典型的な工学部男子&lt;/strong&gt;でパリピとは遠くかけ離れている。こうなったら頭の上から下まで全部変えるしかない。&lt;/p&gt;
+
+&lt;p&gt;ということで、うこさんをパリピに大改造！！！！&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;超イケてるパリピなチャラ男に仕上がったうこさんはこちら↓↓↓&lt;/em&gt;&lt;/strong&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/094/09_charao.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;チャラさ倍増(爆笑)、見た目は完全なるパリピ、まさに渋谷のギャル男！&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;この帽子を被っているだけで&lt;strong&gt;通常の１０倍ぐらいの人に声をかけられた。&lt;/strong&gt; ←これマジだから(笑)&lt;/p&gt;
+
+&lt;h2 id=&#34;パリピが集まる場所-渋谷肉横丁へ&#34;&gt;パリピが集まる場所、渋谷肉横丁へ&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/094/10_nikuyokocho.png&#34; alt=&#34;&#34; /&gt;
+肉横丁のお兄さんたちも大絶賛。やべえこの帽子爆アゲじゃん！と褒めてくれ仲良くなった。&lt;/p&gt;
+
+&lt;p&gt;まあ、&lt;strong&gt;お兄さんの表情もなかなかの爆アゲ感がある&lt;/strong&gt;と突っ込みたいところなのだが、うこさんは最高に舞い上がっている。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;数分後……&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;ギャル電マオ「あれ、うこさんどこに行った？」&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/094/11_nanpa.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;!!!!!!!!!!!!!!ナンパに成功してるじゃないか!!!!!!!!!!!!!!!&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;高度な技術を使いIoT派手イケディスプレーキャップを完成させた上でのこのナンパ…エモい……。&lt;/p&gt;
+
+&lt;p&gt;ダサかったうこさんの姿はもうない。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;名付けよう、君はもはや「テクノロジストナンパ師」。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;と思いきや&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/094/12_tweet.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;嬉しくてつい下心丸出しツイートをしてしまううこさん。&lt;/p&gt;
+
+&lt;p&gt;まって、それ&lt;strong&gt;ディスプレーに表示されるやつ&lt;/strong&gt;じゃん！&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/094/13_tweet_02.gif&#34; alt=&#34;&#34; /&gt;
+女の子「ハァ？超キモいんですけど（バシッ）」&lt;/p&gt;
+
+&lt;p&gt;うこさん「あっ……」&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;あー、もう遅い（苦笑）&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;この女の子は比較的優しいから&lt;strong&gt;軽いビンタ&lt;/strong&gt;だったけど、普通ならただじゃあ済まない。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;みんなも気をつけよう。&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/094/14_matome.png&#34; alt=&#34;&#34; /&gt;
+こんな感じでイベントやパーティーで目立てるなど、使い道は様々で超楽しいデバイスです！&lt;/p&gt;
+
+&lt;p&gt;今後は、IoTLTにて登壇者に被ってもらい、リアルタイムでハッシュタグツイートをディスプレーに流してイベントを盛り上げる予定です。&lt;/p&gt;
+
+&lt;p&gt;みなさんもぜひIoTLTに遊びに来てこの&lt;strong&gt;IoT派手イケディスプレーキャップ&lt;/strong&gt;で遊んでみてくださいね！&lt;/p&gt;
+
+&lt;p&gt;では！&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>【初心者必見】電子パーツ買うならここ！アキバ電気街徹底ガイド</title>
@@ -1996,906 +3479,6 @@ Command.ioというサービスでおそらくVPSサービスです。なのでN
 ちょっと気分を変えたいときや、何かの理由でHerokuが厳しいと感じた際の参考になれば幸いです。&lt;/p&gt;
 
 &lt;p&gt;それでは。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>littleBits Arduinoモジュールでより細かく値を入出力して状況を伝えよう</title>
-      <link>https://dotstud.io/blog/littlebits-arduino-analog-number/</link>
-      <pubDate>Thu, 15 Dec 2016 10:00:00 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/littlebits-arduino-analog-number/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、dotstudioライターの田中正吾です。電子回路のパーツを磁石でパチパチとつなげるだけで電子工作ができる「littleBits」の連載をLIGブログでおこなっています。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/235644&#34;&gt;littleBitsのArduinoモジュールで簡単にプログラミングをはじめてみよう&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/259378&#34;&gt;ArduinoモジュールでLチカしてみた（Windows・Mac）&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/268909&#34;&gt;ArduinoモジュールでON・OFFの入力値を取得してみよう&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/280761&#34;&gt;Arduinoモジュールで入出力の連携をしてみよう&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/295334&#34;&gt;シリアルモニタとNode.jsでlittleBits Arduinoモジュールを動かしてみよう&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/315934&#34;&gt;littleBitsのボタンを押すとIFTTT経由でLINEにメッセージが飛ぶ仕組みを作ってみよう&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;本記事では、これでの連載とは少し視点を変えて、 &lt;strong&gt;littleBits Arduinoモジュールでより細かく値を入出力するアナログ入出力&lt;/strong&gt; をご紹介します。では、さっそく始めていきましょう！&lt;/p&gt;
-
-&lt;h2 id=&#34;より細かく状況を伝えるアナログ値&#34;&gt;より細かく状況を伝えるアナログ値&lt;/h2&gt;
-
-&lt;p&gt;いままで、ボタンを押すと何かが起こるON/OFFの反応で説明していましたが、実は&lt;a href=&#34;http://jp.littlebits.com/kits/arduino-coding-kit/&#34;&gt;ARDUINO CODING KIT&lt;/a&gt;には、より細かく状況を伝えるアナログ値を扱う入出力モジュールがあります。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;たとえば、DIMMERモジュール（真ん中にあるダイヤル状のツマミのモジュール）は、ツマミを回すことで電気の流れが0～100%と変わります。またBAR GRAPHモジュール（右）は流れる電気によって光るLEDの数が変わります。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;つまみを回しきったとき。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;半分ぐらいまでひねったとき。電流50%のときですね。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ON/OFFではセンサーが「反応した」「反応していない」という2つの情報しか伝えられませんでした。しかし、このように電流の量によって度合いを伝えることができると、たとえば光センサーモジュールを使ったときに明るさを「暗い」「やや暗い」「やや明るい」「とても明るい」といったように、より細かく伝えることができます。&lt;/p&gt;
-
-&lt;h2 id=&#34;アナログ値をarduinoモジュールで計測してみる&#34;&gt;アナログ値をArduinoモジュールで計測してみる&lt;/h2&gt;
-
-&lt;p&gt;それでは早速アナログ値をArduinoモジュールで計測してみましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;DIMMERモジュールをArduinoモジュールの入力2番目のA0に取り付けます。&lt;/p&gt;
-
-&lt;p&gt;Arduinoモジュールでアナログ値を計測するには &lt;code&gt;analogRead&lt;/code&gt; 関数を使います。Arduinoモジュールで計測できるアナログ値は0%は0として、100%は1023として計測できます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;void setup() {
-  Serial.begin(9600);
-}
-
-void loop() {
-  int sensorValue = analogRead(A0);
-  if(sensorValue&amp;gt;0){
-    Serial.println(sensorValue);
-  }
-  delay(1);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;このコードを書き込んで、シリアルモニタで数値を見てみます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;DIMMERをひねると値が変わります。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;シリアルプロッタのほうがよりわかりやすいですね。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/08.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/09.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;dimmerモジュールのツマミにあわせて点滅を変えてみる&#34;&gt;DIMMERモジュールのツマミにあわせて点滅を変えてみる&lt;/h2&gt;
-
-&lt;p&gt;DIMMERモジュールのツマミの度合いが取れるようになったので、ツマミに合わせてBARGRAPHモジュールの点滅の仕方を変えてみましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;このように、さきほどのDIMMERモジュールとArduinoモジュールをつないだものに、BAR GRAPHモジュールも加えます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;void setup() {
-  Serial.begin(9600);
-  pinMode(5,OUTPUT);
-}
-
-void loop() {
-  int sensorValue = analogRead(A0);
-  if(sensorValue&amp;gt;0){
-    Serial.println(sensorValue);
-    digitalWrite(5,HIGH);
-    delay(sensorValue);
-    digitalWrite(5,LOW);
-  }
-  delay(sensorValue);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;このように書いたコードをArduinoモジュールに書き込みます。&lt;/p&gt;
-
-&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/PircFP-OsQY&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
-
-&lt;p&gt;DIMMERモジュールのつまみに対応して、点滅の仕方が変わるようになりました。&lt;/p&gt;
-
-&lt;h2 id=&#34;さらにサーボに変えてみる&#34;&gt;さらにサーボに変えてみる&lt;/h2&gt;
-
-&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/FVonwS3pb-E&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://jp.littlebits.com/kits/arduino-coding-kit/&#34;&gt;ARDUINO CODING KIT&lt;/a&gt;のサーボに変えてみました。LEDよりもわかりやすくなりますね。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;サーボに顔をつけてみます。&lt;/p&gt;
-
-&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/coAm51UmCo0&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
-
-&lt;p&gt;ツマミに合わせて顔がビクビクするものに早変わりします！　&lt;a href=&#34;https://liginc.co.jp/280761&#34;&gt;磁石で電子工作できる「littleBits」のArduinoモジュールで、入出力の連携をしてみよう&lt;/a&gt;で試した「三三七拍子するパンダ」はまだ動物らしい動きに見えましたが、この顔ネタはなかなかに気持ち悪いです。夢に出そう。&lt;/p&gt;
-
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-
-&lt;p&gt;今回はlittleBits Arduinoモジュールで &lt;strong&gt;より細かく値を入出力するアナログ入出力&lt;/strong&gt; をお伝えしました。ネタはひとつなのに、モジュールを付け替えるだけで光から動力へと変化します。工作物によって伝わる印象も変わるのがlittleBitsの面白いところです。&lt;/p&gt;
-
-&lt;p&gt;そして、アナログ値を扱うとON/OFFよりも細かく状況を伝えることができたり、動きにもアクセントを持たせるたりすることができます。&lt;/p&gt;
-
-&lt;p&gt;みなさんも、ぜひいろいろなことを試してみてはいかがでしょうか。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/12.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;littleBitsのハックには、LIGブログの&lt;a href=&#34;https://liginc.co.jp/series/littlebits&#34;&gt;littleBitsではじめるArduino&lt;/a&gt;連載、ならびに拙著『&lt;a href=&#34;http://www.1ft-seabass.jp/memo/2016/10/11/littlebits-book-release/?utm_content=bufferec8bb&amp;amp;utm_medium=social&amp;amp;utm_source=twitter.com&amp;amp;utm_campaign=buffer&#34;&gt;「littleBits」ではじめる電子工作&lt;/a&gt;』もぜひご参照ください。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>IoTって結局なに？世界のIoT実例 - 赤ちゃん・子育て編（5選）</title>
-      <link>https://dotstud.io/blog/internet-of-things-baby/</link>
-      <pubDate>Tue, 22 Nov 2016 08:00:00 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/internet-of-things-baby/</guid>
-      
-      <description>
-
-&lt;p&gt;モノのインターネットを繋げる「IoT」という用語や技術が話題になっていますが、子育てには役立つのでしょうか？　日本ではまだあまり見かけないデザインやコンセプトのIoT製品を独断で選んで紹介します。&lt;/p&gt;
-
-&lt;h2 id=&#34;sproutling-赤ちゃんのステータスを把握できる足首バンド型デバイス&#34;&gt;Sproutling：赤ちゃんのステータスを把握できる足首バンド型デバイス&lt;/h2&gt;
-
-&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/slyXHix8hLg&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://sproutling.com/&#34;&gt;Sproutling&lt;/a&gt;は赤ちゃんの足首につけるバンド型のデバイスです。スマートフォンで、赤ちゃんが今「寝ている」「泣いている」かといった状態や、心拍数や体温なども確認できます。「あなたの子育てを少し楽にしてくれる」ようです。&lt;/p&gt;
-
-&lt;p&gt;泣いているかどうかがすぐにわからないくらい大きめの家（特に海外など）に住んでいる方におすすめのガジェットかなと思いました。&lt;/p&gt;
-
-&lt;h2 id=&#34;owlet-きちんと呼吸をしているかを確認するための足首バンド型デバイス&#34;&gt;Owlet：きちんと呼吸をしているかを確認するための足首バンド型デバイス&lt;/h2&gt;
-
-&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/MJj_TNrIFdU&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://www.owletcare.com/&#34;&gt;Owlet&lt;/a&gt;も足首につけるタイプのデバイスです。心拍数をリアルタイムで確認できて、&lt;strong&gt;万が一呼吸が止まったらアラートが出ます&lt;/strong&gt; 。また、体温や睡眠の質、睡眠の体制などもアプリが教えてくれるそうです。&lt;/p&gt;
-
-&lt;p&gt;病院で心拍数を計る際につける医療器具に使われているパーツを、バンドの中に入れています。&lt;/p&gt;
-
-&lt;p&gt;YouTubeの紹介動画に登場する製作メンバーらにも子供がいて、実際に器具を使って役に立ったと語っている姿が印象的でした。&lt;/p&gt;
-
-&lt;h2 id=&#34;mimo-赤ちゃんがきちんと眠れているかを確認できるウェアラブルデバイス&#34;&gt;mimo：赤ちゃんがきちんと眠れているかを確認できるウェアラブルデバイス&lt;/h2&gt;
-
-&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/7vPt0V2yYmo&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
-
-&lt;p&gt;赤ちゃんがよく眠れるように作られたのが&lt;a href=&#34;http://mimobaby.com/&#34;&gt;mimo&lt;/a&gt;です。小さな緑のカメ型のアイテムで、専用の服（綿）かベッドのマットに取り付けることができます。&lt;/p&gt;
-
-&lt;p&gt;Bluetooth/WiFi経由でスマートフォンと接続して、赤ちゃんのステータスや部屋の温度をアプリから確認できます。また、睡眠データもタイムラインで表示。何時間起きていた/眠っていたかを一目で把握できます。自動で記録できるのがいいですね。&lt;/p&gt;
-
-&lt;h2 id=&#34;withings-成長をアプリで把握できる体重計&#34;&gt;Withings：成長をアプリで把握できる体重計&lt;/h2&gt;
-
-&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/FZjewfWfhzg&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
-
-&lt;p&gt;Withingsは子供用の成長記録ツールです。赤ちゃんの体重を計測したり、ミルクや食べ物などを登録してどれくらい栄養を摂取したかを記録できます。&lt;/p&gt;
-
-&lt;p&gt;今では大人用の健康管理ができる体重計が続々と登場していますが、子供用の体重計は2012年に登場したこのWithingsが提供しているもののみのようです。&lt;/p&gt;
-
-&lt;h2 id=&#34;osmo-フリーハンドで絵を描けるようになるカメラ&#34;&gt;Osmo：フリーハンドで絵を描けるようになるカメラ&lt;/h2&gt;
-
-&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/UjLM5GFcut4&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
-
-&lt;p&gt;Osmoと呼ばれる小さなデバイスをiPadのカメラに取り付けると、自分の手元と絵がiPadの画面に映し出されます。そしてトレースしたい絵や写真をiPadに表示させると、ガイド線を見ながら紙に絵を描けるようになるというもの。アルファベットを認識して文字当てゲームなんかもできます。&lt;/p&gt;
-
-&lt;p&gt;簡単に「絵が描ける」という成功体験を得られそうです。昔、少女漫画の付録についてきた、プラスチックに絵を反射させて紙に描けるものを思い出しました。（説明が難しい）&lt;/p&gt;
-
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-
-&lt;p&gt;子育てに役立つIoT製品は世界で続々と登場しています。これからも赤ちゃんの役にたつ製品が生まれ、テクノロジーが子育てのちょっとしたサポートになってくれそうです。&lt;/p&gt;
-
-&lt;p&gt;自分の生活の範囲であれば、マイコンボード（小さなコンピュータ）やセンサーといった電子パーツを使って、IoTを自作することもできます。dotstudioではそういったIoTに興味のある方向けに、パーツを集めたキットも販売しているので、自作IoTに挑戦してみたい方は利用してみてください。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;センサーなどを使ってみたい方向け：&lt;a href=&#34;https://dotstud.io/projects/nefry-connect-internet/&#34;&gt;Nefry&lt;/a&gt;、&lt;a href=&#34;https://dotstud.io/projects/wionode-social-remote-control/&#34;&gt;Wio Node&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;はんだづけを練習したい方向け：&lt;a href=&#34;https://dotstud.io/projects/led-keychain-original-handa/&#34;&gt;光るキーホルダー制作キット&lt;/a&gt;・&lt;a href=&#34;https://dotstud.io/projects/neopixel-ring-gemma-earrings/&#34;&gt;光るイヤリング制作キット&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;JavaScriptでモータなどを動かしてみたい方向け：&lt;a href=&#34;https://dotstud.io/projects/nodebots-seeeduino-for-beginners/&#34;&gt;Node.jsキット&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;それではまた。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>URLを入れるだけ！REST APIでNefryを簡単に制御してみよう！</title>
-      <link>https://dotstud.io/blog/nefry-rest-api-tutorial/</link>
-      <pubDate>Mon, 21 Nov 2016 08:00:00 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/nefry-rest-api-tutorial/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、外部ライターのわみ（&lt;a href=&#34;http://twitter.com/wamisnet&#34;&gt;@wamisnet&lt;/a&gt;）と申します。愛知県でネットワークの勉強をしている学生です。2014年ごろから電子工作を始め、FRISKサイズのIoT向けデバイス「Nefry（ねふりー）」を自作しました。&lt;/p&gt;
-
-&lt;p&gt;そんな「Nefry」をWeb系のエンジニアでも触れられるように、REST APIでハードウエアをいじれるようにしてみました。C言語を使わずに、JavaScriptやC#から簡単に試せるのでぜひ遊んでみてください。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;※Nefry library version 2.2.2以上の場合使用できます。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;nefryとは&#34;&gt;Nefryとは&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/059/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;「Nefry（ねふりー）」は手軽にIoTに挑戦できるFRISKサイズのデバイスです。Wi-Fiを搭載しておりインターネットに接続しやすいため、接続に時間をとられることなくあなたのアイデア実現に集中できます。&lt;em&gt;日本の技適に通ったESP-WROOM-02を使っています。&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;また、スマートフォンで使うようなモバイルバッテリーで動作するので、場所を選ばずに使えるという優れものです！　Groveセンサー対応しており、はんだ付け不要で楽しめます。（&lt;strong&gt;&lt;a href=&#34;https://dotstud.io/projects/nefry-connect-internet/&#34;&gt;dotstudioのECサイト&lt;/a&gt;にて販売中です！！&lt;/strong&gt;）&lt;/p&gt;
-
-&lt;p&gt;LIGブログにいくつか記事を載せていますのでご覧ください。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://liginc.co.jp/236620&#34;&gt;自作したオリジナルIoTデバイス「Nefry」とインターネットを繋いでみた&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://liginc.co.jp/263899&#34;&gt;Webサービス同士を連携できる「IFTTT」と自作IoTデバイスを繋いで生活を便利にしてみた&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;rest-apiとは&#34;&gt;REST APIとは&lt;/h2&gt;
-
-&lt;p&gt;REST APIとは、簡単なURLを叩くだけでそこにある情報や資源にアクセスできる仕組みのことです。TwitterのREST APIで例えてみましょう！&lt;/p&gt;
-
-&lt;p&gt;Twitterでフォロワーの一覧を取得したい場合はこちらのREST API&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;api.twitter.com/1.1/&lt;strong&gt;followers/list&lt;/strong&gt;.json&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;ツイートを検索したい場合はこちらのREST API&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;api.twitter.com/1.1/&lt;strong&gt;search/tweets&lt;/strong&gt;.json&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;認証情報など必要な引数を渡せばTwitterにアクセスできるのです。URLを見るだけで、何ができるかがわかるのがREST APIのよさの一つだと思います。&lt;/p&gt;
-
-&lt;p&gt;そんなREST APIにNefryも対応し、より簡単にいろんなことを試せるようにしてみました。以下で、どんなことができるのかを簡単に紹介します。&lt;/p&gt;
-
-&lt;h2 id=&#34;nefryのおすすめrest-api&#34;&gt;NefryのおすすめREST API&lt;/h2&gt;
-
-&lt;p&gt;今回紹介するのは、今実装されている機能の一部のみです。実装されているすべての機能は&lt;a href=&#34;http://qiita.com/wamisnet/private/5483d14bf21cd3193ae0&#34;&gt;こちらのQiitaの記事&lt;/a&gt;にまとめていますので興味があればご覧ください。&lt;/p&gt;
-
-&lt;p&gt;デフォルトのままのREST APIであると、URLさえわかれば別の人も簡単に制御できてしまうので、基本的にはPasswordをかけて使用してください。（かけ方は後ほど紹介します）&lt;/p&gt;
-
-&lt;h3 id=&#34;gpio-入出力ピン&#34;&gt;GPIO（入出力ピン）&lt;/h3&gt;
-
-&lt;p&gt;Nefryについている入出力ピンを制御することができるAPIのまとめです。&lt;/p&gt;
-
-&lt;h3 id=&#34;入力&#34;&gt;入力&lt;/h3&gt;
-
-&lt;p&gt;Nefryの入力ピンがどうなっているかを取得できます。スイッチや明るさセンサーのような簡単なセンサーを手軽に試すことができます。&lt;/p&gt;
-
-&lt;h4 id=&#34;デジタル&#34;&gt;デジタル&lt;/h4&gt;
-
-&lt;p&gt;NefryのD0-D5の入力を取得できます。&lt;/p&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th align=&#34;left&#34;&gt;項目&lt;/th&gt;
-&lt;th align=&#34;left&#34;&gt;内容&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;URL&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;/api/1.0/digitalRead&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;引数&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;pin(範囲：D0-D5)&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;具体例&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;/api/1.0/digitalRead?pin=D1&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;返り値&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;{&amp;ldquo;mode&amp;rdquo;:&amp;ldquo;digitalRead&amp;rdquo;,&amp;ldquo;pin&amp;rdquo;:&amp;ldquo;D1&amp;rdquo;,&amp;ldquo;value&amp;rdquo;:0}&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;pin名と状態がvalueに含まれて返答されます。valueの範囲は0(low)-1(high)となります。 &lt;strong&gt;スイッチの状態を取得するのに向いています。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;アナログ&#34;&gt;アナログ&lt;/h4&gt;
-
-&lt;p&gt;NefryのA0の入力を取得できます。&lt;/p&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th align=&#34;left&#34;&gt;項目&lt;/th&gt;
-&lt;th align=&#34;left&#34;&gt;内容&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;URL&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;/api/1.0/analogRead&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;引数&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;なし&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;具体例&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;/api/1.0/analogRead&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;返り値&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;{&amp;ldquo;mode&amp;rdquo;:&amp;ldquo;analogRead&amp;rdquo;,&amp;ldquo;&amp;ldquo;value&amp;rdquo;:0}&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;状態がvalueに含まれて返答されます。valueの範囲は0-255となります。&lt;strong&gt;明るさセンサーを取得するのに向いています。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;出力&#34;&gt;出力&lt;/h3&gt;
-
-&lt;h4 id=&#34;デジタル-1&#34;&gt;デジタル&lt;/h4&gt;
-
-&lt;p&gt;NefryのD0-D5ピンの出力を制御できます。HIGH(3.3v)かLOW(0v)のどちらかを出力します。&lt;/p&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th align=&#34;left&#34;&gt;項目&lt;/th&gt;
-&lt;th align=&#34;left&#34;&gt;内容&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;URL&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;/api/1.0/digitalWrite&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;引数&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;pin(範囲：D0-D5)　state(範囲：HIGH(1)-LOW(0))&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;具体例&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;/api/1.0/digitalWrite?pin=D1&amp;amp;state=HIGH&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;返り値&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;{&amp;ldquo;mode&amp;rdquo;:&amp;ldquo;digitalWrite&amp;rdquo;,&amp;ldquo;pin&amp;rdquo;:&amp;ldquo;D1&amp;rdquo;,&amp;ldquo;value&amp;rdquo;:1}&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;pin名と状態がvalueに含まれて返答されます。&lt;strong&gt;LEDを点滅させることができます。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;アナログ-pwm&#34;&gt;アナログ(PWM)&lt;/h4&gt;
-
-&lt;p&gt;NefryのD0-D5ピンの出力を制御できます。1023(3.3v)から0(0v)の指定された出力します。&lt;/p&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th align=&#34;left&#34;&gt;項目&lt;/th&gt;
-&lt;th align=&#34;left&#34;&gt;内容&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;URL&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;/api/1.0/analogWrite&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;引数&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;pin(範囲：D0-D5)　state(範囲：0-1023)&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;具体例&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;/api/1.0/analogWrite?pin=D1&amp;amp;state=500&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;返り値&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;{&amp;ldquo;mode&amp;rdquo;:&amp;ldquo;analogWrite&amp;rdquo;,&amp;ldquo;pin&amp;rdquo;:&amp;ldquo;D1&amp;rdquo;,&amp;ldquo;value&amp;rdquo;:500}&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;pin名と状態がvalueに含まれて返答されます。&lt;strong&gt;LEDを徐々に明るくしたり、暗くしたりできます。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;nefry関数&#34;&gt;Nefry関数&lt;/h2&gt;
-
-&lt;h3 id=&#34;nefry-led&#34;&gt;Nefry LED&lt;/h3&gt;
-
-&lt;p&gt;NefryについているLEDの色を変更することができます。&lt;/p&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th align=&#34;left&#34;&gt;項目&lt;/th&gt;
-&lt;th align=&#34;left&#34;&gt;内容&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;URL&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;/api/1.0/NefrysetLed&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;引数&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;r (範囲：0-255) g (範囲：0-255) b (範囲：0-255)&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;具体例&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;/api/1.0/NefrysetLed?r=255&amp;amp;g=0&amp;amp;b=0&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;返り値&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;{&amp;ldquo;mode&amp;rdquo;:&amp;ldquo;NefrysetLed&amp;rdquo;,&amp;ldquo;r&amp;rdquo;:255,&amp;ldquo;g&amp;rdquo;:0,&amp;ldquo;b&amp;rdquo;:0}&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;設定した値が返答されます。&lt;strong&gt;NefryについているLEDを制御することができます。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;使い方&#34;&gt;使い方&lt;/h2&gt;
-
-&lt;p&gt;NefryでREST APIを使う際には、前もってプログラムを書き込んでおく必要があります。
-Nefryにプログラムを書き込む際に必要な環境については、下の記事をご覧ください。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/298161&#34;&gt;さくっと生活を便利にする！FRISKサイズのIoT向けデバイス「Nefry」を使ってみよう【環境構築編】&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;環境ができたところで、Nefryのプログラムを紹介していきます。まずはシンプルなパスワード &lt;strong&gt;なし&lt;/strong&gt; から。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;NefryRESTAPI.h&amp;gt;
-void setup() {
-  NefryRESTAPI.begin();//RES TAPIを使うのに必要な初期化をおこないます。
-}
-
-void loop() {
-
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;ものすごくシンプルですね、&lt;code&gt;#include&amp;lt;NefryRESTAPI.h&amp;gt;&lt;/code&gt;こちらでライブラリーを読み込み、&lt;code&gt;NefryRESTAPI.begin();&lt;/code&gt;にてライブラリーを使うのに必要な処理をするための関数を呼び出すだけでREST APIを使用できるようになります。&lt;/p&gt;
-
-&lt;h3 id=&#34;パスワードをつけてみる&#34;&gt;パスワードをつけてみる&lt;/h3&gt;
-
-&lt;p&gt;次にパスワード &lt;strong&gt;あり&lt;/strong&gt; のプログラムを紹介します。&lt;/p&gt;
-
-&lt;p&gt;※ 現状http通信での通信であるため、セキュリティ的には大変弱いです。あくまでパスワードは誰もが簡単にアクセスできないようにするためのものです。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;NefryRESTAPI.h&amp;gt;
-void setup() {
-  NefryRESTAPI.begin();//REST APIを使うのに必要な初期化をおこないます。
-  NefryRESTAPI.setPassword(&amp;quot;Nefry&amp;quot;);//接続時にパスワードが必要になります。
-}
-
-void loop() {
-
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;先ほどのプログラムに&lt;code&gt;NefryRESTAPI.setPassword(&amp;quot;Nefry&amp;quot;);&lt;/code&gt;この一行をプラスするだけです。この場合のパスワードは、&lt;strong&gt;Nefry&lt;/strong&gt; となります。&lt;/p&gt;
-
-&lt;p&gt;ダブルクォーテーションの間にパスワードを入力して、Nefryに書き込めば準備完了です！　パスワードありはAPIを使用する際にURLにpass=(プログラム内のパスワード)を追記してください。&lt;/p&gt;
-
-&lt;p&gt;具体例1：　/api/1.0/NefrysetLed?r=255&amp;amp;g=0&amp;amp;b=255&amp;amp;pass=Nefry&lt;br /&gt;
-具体例2：　/api/1.0/analogRead?pass=Nefry&lt;/p&gt;
-
-&lt;h3 id=&#34;実際に動かしてみる&#34;&gt;実際に動かしてみる&lt;/h3&gt;
-
-&lt;p&gt;&lt;blockquote class=&#34;twitter-video&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;NefryにRESTAPIぽいものを実装してみた！&lt;br&gt;&lt;br&gt;APIを叩くとNefryにもともとついているledが青から緑に変化して、そのあとD5ピンに繋がってる赤色のledが点灯します &lt;a href=&#34;https://t.co/2Pe4yWuF1I&#34;&gt;pic.twitter.com/2Pe4yWuF1I&lt;/a&gt;&lt;/p&gt; わみ (@wamisnet) &lt;a href=&#34;https://twitter.com/wamisnet/status/796955915966525441&#34;&gt;2016年11月11日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;AndroidのchromeでNefryのREST APIを叩いてみました。初めにNefryついているLEDが青から緑になり、次のAPIの指示でD5ピンに接続されているLEDが点灯する流れを撮影しました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/059/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;私の環境では、はじめに&lt;strong&gt;&lt;a href=&#34;http://192.168.4.1/api/1.0/NefrysetLed?g=255&#34;&gt;http://192.168.4.1/api/1.0/NefrysetLed?g=255&lt;/a&gt;&lt;/strong&gt;でNefryのLEDの色を変更して、&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/059/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;つぎに&lt;strong&gt;&lt;a href=&#34;http://192.168.4.1/api/1.0/digitalWrite?pin=d5&amp;amp;state=high&#34;&gt;http://192.168.4.1/api/1.0/digitalWrite?pin=d5&amp;amp;state=high&lt;/a&gt;&lt;/strong&gt;で赤色のLEDを光らせています。URLを送信すると驚くくらい即反応します。&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;ブラウザさえあれば、REST APIで明るさセンサーの値が取れたり、NefryのLEDをいじったりとハードウエアを簡単にいじることができます。また、ArduinoIDEでプログラムが書けなくても手軽に触れるのでちょっと試したいことがあるときなんかにもいいです。&lt;/p&gt;
-
-&lt;p&gt;REST APIはJavaScriptやC#から制御できます。既存のものにハードウエアを制御させることもできるのでぜひ遊んでみてください。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>IoTで回転寿司を止めたり、クリスマスを煽ったりとカオスな会でした！ #IoTLT vol21</title>
-      <link>https://dotstud.io/blog/iotlt-vol21-n0bisuke-report/</link>
-      <pubDate>Fri, 18 Nov 2016 11:00:19 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/iotlt-vol21-n0bisuke-report/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちはIoTLTの主催をしているのびすけ（&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;@n0bisuke&lt;/a&gt;）です。&lt;/p&gt;
-
-&lt;p&gt;昨日（2016年11月17日）開催されたIoTLT vol21（&lt;a href=&#34;https://iotlt.connpass.com/event/42228/&#34;&gt;IoT縛りの勉強会! IoTLT vol.21 @ NHNテコラス&lt;/a&gt;）のレポートを書きたいと思います。
-やっぱりアーカイブって大事ですよね。と最近思いました。&lt;/p&gt;
-
-&lt;p&gt;ツイートは&lt;a href=&#34;http://togetter.com/li/1049781&#34;&gt;こちら&lt;/a&gt;にまとめています。&lt;/p&gt;
-
-&lt;p&gt;今回は日経の記者も取材に来てくれました。だんだんと注目を集めてる感じがしますね。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;日経さんに取材されるちゃんとく &lt;a href=&#34;https://twitter.com/tokutoku393&#34;&gt;@tokutoku393&lt;/a&gt; さん &lt;a href=&#34;https://twitter.com/hashtag/IoTLT?src=hash&#34;&gt;#IoTLT&lt;/a&gt; &lt;a href=&#34;https://t.co/TIkOKQvkSr&#34;&gt;pic.twitter.com/TIkOKQvkSr&lt;/a&gt;&lt;/p&gt; shanon (@shanonim) &lt;a href=&#34;https://twitter.com/shanonim/status/799242824503824384&#34;&gt;2016年11月17日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;iotltとは&#34;&gt;IoTLTとは&lt;/h2&gt;
-
-&lt;p&gt;僕とリレーションズの土屋さんの二人で開催しているIoTの勉強会です。
-毎回10人程度の登壇者が5分でLTをしていきます。毎回100~200人くらいの人が集まります。&lt;/p&gt;
-
-&lt;p&gt;某研究所調べだと国内最大規模になっていて、年間の参加者で5000人くらいの規模になっています。&lt;/p&gt;
-
-&lt;p&gt;今回、&lt;strong&gt;会場と懇親会&lt;a href=&#34;https://nhn-techorus.com/&#34;&gt;NHNテコラス&lt;/a&gt;さんに提供して頂きました。&lt;/strong&gt;ありがたき幸せ。&lt;/p&gt;
-
-&lt;h2 id=&#34;発表は今回も個性あふれるものが多かったです&#34;&gt;発表は今回も個性あふれるものが多かったです&lt;/h2&gt;
-
-&lt;p&gt;それでは、紹介していきます。
-ちなみに、今回のまとめのスライドは僕が執筆した時点で公開されてるものを載せています！&lt;/p&gt;
-
-&lt;h3 id=&#34;iotで雰囲気クリスマス-by-五十嵐さん&#34;&gt;IoTで雰囲気クリスマス by 五十嵐さん&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/058/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;「来ないよ！クリスマス」&lt;/strong&gt; という衝撃的な発表タイトルでスポンサーLTをした五十嵐さん。&lt;/p&gt;
-
-&lt;p&gt;「もうすぐクリスマスですけど大丈夫ですか？」とテコラスの社員のタカノさんを煽るIoTシステムを作った話です。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;スポンサーLTなのにテコラスのことはタカノさんがいることくらいしか分かりませんでした（笑）&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;iframe src=&#34;//www.slideshare.net/slideshow/embed_code/key/apMpJS5hvOgpOZ&#34; width=&#34;715&#34; height=&#34;605&#34; frameborder=&#34;0&#34; marginwidth=&#34;0&#34; marginheight=&#34;0&#34; scrolling=&#34;no&#34; style=&#34;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&#34; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&#34;margin-bottom:5px&#34;&gt; &lt;strong&gt; &lt;a href=&#34;//www.slideshare.net/MoeIkarashi/ss-69180135&#34; title=&#34;来ないよ！クリスマス&#34; target=&#34;_blank&#34;&gt;来ないよ！クリスマス&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a target=&#34;_blank&#34; href=&#34;//www.slideshare.net/MoeIkarashi&#34;&gt;Moe Ikarashi&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;loraの現地テスト動画車載-空撮動画-by-乾さん&#34;&gt;Loraの現地テスト動画車載、空撮動画 by 乾さん&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/058/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;大阪から参加して頂いた乾さん。&lt;/p&gt;
-
-&lt;p&gt;今IoT領域では話題のLoraを実際にテストした話です。&lt;/p&gt;
-
-&lt;p&gt;話のまとめとしては&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Loraは見通しの良い平地では1km~1.5km可能&lt;/li&gt;
-&lt;li&gt;大きな建物がなければ問題無し&lt;/li&gt;
-&lt;li&gt;受信側はできるだけ高所が望ましい&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;とのことです。&lt;a href=&#34;https://www.youtube.com/watch?v=S16GykarSQc&#34;&gt;こちら&lt;/a&gt;にテストの際の動画も載っています。&lt;/p&gt;
-
-&lt;p&gt;ここまでのツイートは&lt;a href=&#34;http://togetter.com/li/1049781?page=7&#34;&gt;こちら&lt;/a&gt;になります。&lt;/p&gt;
-
-&lt;h3 id=&#34;galdeino-失敗した話-by-鈴木さん-at-がじぇるね&#34;&gt;galdeino 失敗した話 by 鈴木さん at がじぇるね&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/058/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;IoTLTでは常連登壇者の鈴木さんです。&lt;/p&gt;
-
-&lt;p&gt;「ギャルdeイーノという&lt;a href=&#34;https://dotstud.io/blog/iotlt-gbvol19-galden-report/&#34;&gt;ギャル電&lt;/a&gt;のボードを作ろうとして失敗した話」かと思いきや、まさかの起業で失敗した話というIoTがほぼ関係無い話に（笑）&lt;/p&gt;
-
-&lt;p&gt;個人的には起業したばかりなので参考になりました（笑）&lt;/p&gt;
-
-&lt;h3 id=&#34;アレクサと俺のvoiceops-by-大熊さん&#34;&gt;アレクサと俺のVoiceOps by 大熊さん&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/058/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;RaspberryPiとAWSボイスアシスタントを作ってみた話です。&lt;/p&gt;
-
-&lt;p&gt;Amazon Echoに利用されている&lt;a href=&#34;http://alexa.amazon.com/spa/index.html&#34;&gt;Alexa&lt;/a&gt;を利用して、Raspberry PiでもAmazon Echoっぽい音声で家電などを制御する仕組みを作っています。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://io.adafruit.com/&#34;&gt;Adafruit IO&lt;/a&gt;と連携させて&lt;a href=&#34;https://learn.adafruit.com/adafruit-io-basics-neopixel-controller&#34;&gt;NeoPixel&lt;/a&gt;をコントロールするデモもしてくれました。&lt;/p&gt;
-
-&lt;p&gt;個人的にはAdafruitがそういうサービスをやってることを初めて知ったのでいい収穫です。&lt;/p&gt;
-
-&lt;p&gt;&lt;iframe src=&#34;//www.slideshare.net/slideshow/embed_code/key/girOKrsS7MdLVr&#34; width=&#34;715&#34; height=&#34;605&#34; frameborder=&#34;0&#34; marginwidth=&#34;0&#34; marginheight=&#34;0&#34; scrolling=&#34;no&#34; style=&#34;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&#34; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&#34;margin-bottom:5px&#34;&gt; &lt;strong&gt; &lt;a href=&#34;//www.slideshare.net/GenkiOkuma/voice-ops-201611&#34; title=&#34;アレクサと俺のVoice ops 201611&#34; target=&#34;_blank&#34;&gt;アレクサと俺のVoice ops 201611&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a target=&#34;_blank&#34; href=&#34;//www.slideshare.net/GenkiOkuma&#34;&gt;Genki Okuma&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;定点撮影のiot活用-airlapse爆誕-by-pochioさん&#34;&gt;定点撮影のIoT活用・AirLapse爆誕！ by Pochioさん&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/058/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;FlashAir芸人のPochioさん。
-今日もジャパネット高田ライクな口調で、定点撮影でのIoT活用話をしてくれました。&lt;/p&gt;
-
-&lt;p&gt;陸前高田の復興の様子を定点撮影した様子を見せてもらいました。&lt;/p&gt;
-
-&lt;p&gt;陸前高田は岩手ということもあり、僕も行ったことあるので感慨深いですね。&lt;/p&gt;
-
-&lt;p&gt;ここまでのツイートは&lt;a href=&#34;http://togetter.com/li/1049781?page=6&#34;&gt;こちら&lt;/a&gt;になります。&lt;/p&gt;
-
-&lt;h3 id=&#34;アプリをいれるiot電球-by-かんさん&#34;&gt;アプリをいれるIot電球 by かんさん&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/058/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;今週はIoTLTがスピンオフ企画も含めて3回あるのですが、3回とも登壇してくれるTeNKYUのかんさんです！&lt;/p&gt;
-
-&lt;p&gt;「玄関の電球の色が青だったら外は雨」みたいな形で照明で天気が分かるデバイスです。
-人感センサも内臓しているので見守りとか受付とか色々な用途に応用も可能です。&lt;/p&gt;
-
-&lt;p&gt;ツイッター上で値段気になってる人もいたので、TeNKYUのサイトは&lt;a href=&#34;http://tenkyu.net/&#34;&gt;こちら&lt;/a&gt;！&lt;/p&gt;
-
-&lt;p&gt;ここまでのツイートは&lt;a href=&#34;http://togetter.com/li/1049781?page=5&#34;&gt;こちら&lt;/a&gt;になります。&lt;/p&gt;
-
-&lt;h3 id=&#34;リコーダーiot-by-河野さん-at-秘密結社オープンフォース&#34;&gt;リコーダーIoT by 河野さん at 秘密結社オープンフォース&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/058/07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;IoTLTでは恒例になってきた秘密結社の総統です。&lt;/p&gt;
-
-&lt;p&gt;テンポ良すぎてめちゃ面白いんですけど、この臨場感はなかなか文章では伝わらないので一度見てもらいたいです（笑）&lt;/p&gt;
-
-&lt;p&gt;リコーダーIoTのデモが、テンポの速さとトラブルにより見れず&amp;hellip;&amp;hellip;（苦笑）&lt;/p&gt;
-
-&lt;h3 id=&#34;iotに関する実験を70件くらいやってきました-by-木村さん-at-リノべる&#34;&gt;IoTに関する実験を70件くらいやってきました by 木村さん at リノべる&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/058/08.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;久々に登壇してもらったリノべるの木村さんです。&lt;/p&gt;
-
-&lt;p&gt;IoTに関する色々な実験をやった話をして頂きました。
-スライドは&lt;a href=&#34;https://docs.google.com/presentation/d/1Vc1Hcqn4tH9qG1JoCGqVY-bsjRHq4NmnsTS3d-1nbaU/edit#slide=id.g18123fd135_0_0&#34;&gt;こちら&lt;/a&gt;です。&lt;/p&gt;
-
-&lt;p&gt;このスライドに真理が詰まってる気がしました。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;家はIoTハックの宝箱かと思いきやぜんぜんそうでもないそうなのです。実験でわかったこと。 &lt;a href=&#34;https://twitter.com/hashtag/iotlt?src=hash&#34;&gt;#iotlt&lt;/a&gt; &lt;a href=&#34;https://t.co/wUKoYhNiBZ&#34;&gt;pic.twitter.com/wUKoYhNiBZ&lt;/a&gt;&lt;/p&gt; うこ (@harmoniko) &lt;a href=&#34;https://twitter.com/harmoniko/status/799216441610248192&#34;&gt;2016年11月17日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;「&lt;strong&gt;家電の遠隔操作は二日で飽きる&lt;/strong&gt;」確かになぁ。&lt;/p&gt;
-
-&lt;p&gt;みんなやったことないところに夢を感じていたけど実際はどうだったって話が出てくるフェーズになったんですね。&lt;/p&gt;
-
-&lt;p&gt;ちなみにこの&lt;a href=&#34;https://dotstud.io/members/ukkz&#34;&gt;うこ&lt;/a&gt;のツイートがかなりリツイートされてます。（執筆時点で502）&lt;/p&gt;
-
-&lt;p&gt;ここまでのツイートは&lt;a href=&#34;http://togetter.com/li/1049781?page=4&#34;&gt;こちら&lt;/a&gt;になります。&lt;/p&gt;
-
-&lt;h3 id=&#34;minecraft-x-iot-by-いわたん&#34;&gt;Minecraft x IoT by いわたん&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/058/09.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Minecraft of ThingsでMoTを提唱するいわたんさん。&lt;/p&gt;
-
-&lt;p&gt;Minecraftを知らないという人は会場調べで一人しかいなく、それくらい知名度が高いゲームです。
-現実世界のボタンを押すことで、Minecraftの世界に命令を送ることができる仕組みを作った話です。&lt;/p&gt;
-
-&lt;p&gt;&lt;iframe src=&#34;//www.slideshare.net/slideshow/embed_code/key/7rb7202uLYrL0A&#34; width=&#34;715&#34; height=&#34;605&#34; frameborder=&#34;0&#34; marginwidth=&#34;0&#34; marginheight=&#34;0&#34; scrolling=&#34;no&#34; style=&#34;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&#34; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&#34;margin-bottom:5px&#34;&gt; &lt;strong&gt; &lt;a href=&#34;//www.slideshare.net/naokiiwata3/minecraft-x-iot&#34; title=&#34;Minecraft x IoT&#34; target=&#34;_blank&#34;&gt;Minecraft x IoT&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a target=&#34;_blank&#34; href=&#34;//www.slideshare.net/naokiiwata3&#34;&gt;Naoki Iwata&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;&lt;/p&gt;
-
-&lt;p&gt;Hacklogにも&lt;a href=&#34;http://hacklog.jp/works/49374&#34;&gt;投稿&lt;/a&gt;されています。&lt;/p&gt;
-
-&lt;p&gt;ちなみに利用していたWioNodeはdotstudioでも&lt;a href=&#34;https://dotstud.io/projects/wionode-social-remote-control/&#34;&gt;購入可能&lt;/a&gt;です！&lt;/p&gt;
-
-&lt;h3 id=&#34;iotで寿司を止める-by-湯村さん&#34;&gt;IoTで寿司を止める by 湯村さん&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/058/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;おうちハック同好会からの刺客です。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;回転寿司をIoTの力で止める&amp;hellip;&amp;hellip;!話&lt;/strong&gt;です。&lt;/p&gt;
-
-&lt;p&gt;ゾートロープ（回転覗き絵）の効果で回転寿司を止める実験をした話です。
-デモ機も実際に持ってきて下さいました。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;湯村さん( &lt;a href=&#34;https://twitter.com/yumu19&#34;&gt;@yumu19&lt;/a&gt; )が寿司を止めた話 &lt;a href=&#34;https://twitter.com/hashtag/iotlt?src=hash&#34;&gt;#iotlt&lt;/a&gt; &lt;a href=&#34;https://t.co/o093jxEWL7&#34;&gt;pic.twitter.com/o093jxEWL7&lt;/a&gt;&lt;/p&gt; えむにわ (@m2wasabi) &lt;a href=&#34;https://twitter.com/m2wasabi/status/799220235865767936&#34;&gt;2016年11月17日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;実験の途中で発生した現象、寿司テレポーテーション、寿司の多重化など興味深い（）内容でした。&lt;/p&gt;
-
-&lt;p&gt;結果としては&lt;strong&gt;年収８００万以下でも止まった寿司に出会える&lt;/strong&gt;らしいです。&lt;/p&gt;
-
-&lt;p&gt;今後の研究成果が気になるところですね。&lt;/p&gt;
-
-&lt;script async class=&#34;speakerdeck-embed&#34; data-id=&#34;de74ad3b3fe24721940d1ef5ac605fbf&#34; data-ratio=&#34;1.33333333333333&#34; src=&#34;//speakerdeck.com/assets/embed.js&#34;&gt;&lt;/script&gt;
-
-&lt;h3 id=&#34;永遠のd-by-ちゃんとく&#34;&gt;永遠のD by ちゃんとく&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/058/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;おなじみになってきたちゃんとく先生。
-永遠のDというタイトルですが、Dはダイエットのことみたいです。&lt;/p&gt;
-
-&lt;p&gt;これから色々とダイエットIoTを試すそうなのですが、今回は結果をツイートする部分から&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;&lt;a href=&#34;https://twitter.com/hashtag/iotlt?src=hash&#34;&gt;#iotlt&lt;/a&gt; デモでつぶやき成功 &lt;a href=&#34;https://t.co/vhkx1voNfK&#34;&gt;https://t.co/vhkx1voNfK&lt;/a&gt;&lt;/p&gt; 鈴木光宏 (@s_mitu) &lt;a href=&#34;https://twitter.com/s_mitu/status/799221909485277184&#34;&gt;2016年11月17日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;結論としては&lt;strong&gt;明日からがんばる。&lt;/strong&gt;らしいので &lt;strong&gt;今日から頑張ってるのでしょう。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;深センで見つけた怪しげデバイスたち-by-のびすけ&#34;&gt;深センで見つけた怪しげデバイスたち by のびすけ&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/058/12.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;僕です。先日深センに行ってきた際に発見した謎のデバイスを紹介しました。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://dotstud.io/blog/4k-camera-gopro-fake/&#34;&gt;さかのGoPro？4Kのカメラを265元（4,000円程度）で買えた&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://dotstud.io/blog/wall-climbing-toy-car/&#34;&gt;すごいじゃん深セン。怪しさMAXの壁を登るラジコン？WALL CLIMBERを試してみた&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://dotstud.io/blog/led-multilingual-confessing-fan/&#34;&gt;使い所が分からなすぎる（笑）LEDで光るマルチリンガルなUSB扇風機を買ってみた&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://dotstud.io/blog/led-lantern-and-torch/&#34;&gt;これは掘り出し物かも？ ソーラーバッテリ駆動でスマホ充電もできるLEDランタン！&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;などの記事にもなっているのでこちらもご覧ください。&lt;/p&gt;
-
-&lt;script async class=&#34;speakerdeck-embed&#34; data-id=&#34;effe96f310c34aaa805a8de0fd0e4621&#34; data-ratio=&#34;1.33333333333333&#34; src=&#34;//speakerdeck.com/assets/embed.js&#34;&gt;&lt;/script&gt;
-
-&lt;p&gt;ここまでのツイートは&lt;a href=&#34;http://togetter.com/li/1049781?page=2&#34;&gt;こちら&lt;/a&gt;になります。&lt;/p&gt;
-
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/058/13.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;いかがでしたでしょうか。今回久しぶりにモチーションがあったのでアーカイブ目的でまとめてみました。
-毎回面白い発表があって、振り返ることで勉強にもなるのでまとめは大事だと再認識です。&lt;/p&gt;
-
-&lt;p&gt;それでは、また。&lt;/p&gt;
-
-&lt;p&gt;来月も是非遊びに来てください！&lt;/p&gt;
-
-&lt;h2 id=&#34;告知&#34;&gt;告知&lt;/h2&gt;
-
-&lt;p&gt;まだまだ募集中ですのでIoTLTにぜひ遊びにきて下さい！&lt;/p&gt;
-
-&lt;h3 id=&#34;11-19-スタートアップiotlt-vol3&#34;&gt;&lt;sup&gt;11&lt;/sup&gt;&amp;frasl;&lt;sub&gt;19&lt;/sub&gt; スタートアップIoTLT vol3&lt;/h3&gt;
-
-&lt;p&gt;スピンオフ企画の一つで、IoTスタートアップの人に登壇してもらう会になっています。
-参加枠がまだありますのでぜひご参加下さい。なんと土曜日開催です。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://iotlt.connpass.com/event/42980/&#34;&gt;スタートアップ IoTLT vol.3&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;12-7-iotlt-vol22-イトーキ&#34;&gt;&lt;sup&gt;12&lt;/sup&gt;&amp;frasl;&lt;sub&gt;7&lt;/sub&gt; IoTLT vol22 @イトーキ&lt;/h3&gt;
-
-&lt;p&gt;次回のIoTLTはなんとイトーキさん開催です。昨日から募集開始したばかりです、登壇者も募集してますので是非&lt;a href=&#34;https://www.facebook.com/groups/IoTLT/&#34;&gt;IoTLTのFacebookグループ&lt;/a&gt;からお声がけ下さい！&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://iotlt.connpass.com/event/45272/&#34;&gt;IoTLT vol22 @イトーキ&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;mashup-awards-internet-of-awesome-things-部門賞-by-iotlt&#34;&gt;Mashup Awards Internet of Awesome Things 部門賞（by IoTLT）&lt;/h3&gt;
-
-&lt;p&gt;昨日のIoTLTでも話しましたが、Mashup AwardsのIoT部門賞でIoTLTと連携しています。&lt;/p&gt;
-
-&lt;p&gt;11/21が締め切りです！お急ぎください！&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://mashupaward.jp/2016/11/category-iot/&#34;&gt;Internet of Awesome Things 部門賞（by IoTLT）&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;関係ないですけどMashup Awardsが正式名称みたいですけど、ドメインはMashupAwardで単数形みたいなのでお間違えの無いように！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>IoTって結局なに？世界のIoT実例 - 自転車・バイク編（7選）</title>
-      <link>https://dotstud.io/blog/internet-of-things-bike/</link>
-      <pubDate>Thu, 17 Nov 2016 13:00:00 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/internet-of-things-bike/</guid>
-      
-      <description>
-
-&lt;p&gt;「IoT（モノのインターネット）」という用語をよく聞くようになりましたが、具体的にどんな場面で役に立つのかはまだまだ想像しにくいですよね。&lt;/p&gt;
-
-&lt;p&gt;しかし、世界ではIoTな製品がたくさん登場しています。今回は、「IoTが何か」がわかるような世界のIoT実例を、自転車やバイクの製品に絞って紹介します。本当に把握できないほどあるので、日本ではあまり見かけないデザインやコンセプトのIoT製品を私の独断で選びました。&lt;/p&gt;
-
-&lt;h2 id=&#34;1-skully-gps内臓のスマートヘルメット&#34;&gt;1. Skully：GPS内臓のスマートヘルメット&lt;/h2&gt;
-
-&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/ZdcWd594lRw&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
-
-&lt;p&gt;バイク用のヘルメット「Skully」は後述するように素敵なガジェットだったのですが、クラウドファンディングサービス「Indiegogo」にて予算を達成していたにも関わらず2016年8月にSKULLY社が業務停止を発表し、製品の出荷がなくなってしまいました。しかし、アイデアが素敵だと思ったので紹介します。&lt;/p&gt;
-
-&lt;p&gt;Skullyはヘルメットのカバー部分に映像を映し出す「ヘッドアップディスプレイ（HUD）」を備えたヘルメットです。バイクの速度を常時ディスプレイから確認できたり、ヘルメットの後方についているカメラで、前を向きながら自分の後方を確認できます。&lt;/p&gt;
-
-&lt;p&gt;体験した人によると、首を振らずに周囲の90%くらいは見えた（&lt;a href=&#34;https://www.youtube.com/watch?v=ig2bd7jxq5k&#34;&gt;参照&lt;/a&gt;）そうです。また、GPSを内蔵しており、あらかじめ設定しておいた目的地への曲がるタイミングなどを知れます。電話に出ることも可能なのだとか。スマートフォンで地図アプリを使わなくてもいいって地味に便利ですよね。これが量産されていたら・・・！&lt;/p&gt;
-
-&lt;p&gt;2016年11月現在：生産・販売停止&lt;/p&gt;
-
-&lt;h2 id=&#34;2-vanhawks-valour-目的地までナビしてくれる自転車&#34;&gt;2. Vanhawks Valour：目的地までナビしてくれる自転車&lt;/h2&gt;
-
-&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/_ob4lQX7LWs&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://www.vanhawks.com/&#34;&gt;Vanhawks Valour&lt;/a&gt;はIoT技術を詰め込んだ自転車です。まず、ハンドルに埋め込まれたLEDが曲がるタイミングや方向を示してくれます。そして、後方の車などを検知するセンサーが自転車に内蔵されてるので、もし車などが接近しても自転車のハンドルが振動して危険を察知することができます。&lt;/p&gt;
-
-&lt;p&gt;スマートフォンアプリから走行ルートを指示できたり、走行距離を記録できたりとあなたの自転車生活をサポートしてくれる魅力がたくさん。Kickstarterで出資を募り成功したプロジェクトです。黒と赤を基調にした見た目がかっこいいですね〜〜！&lt;/p&gt;
-
-&lt;p&gt;2016年11月現在：売り切れ&lt;/p&gt;
-
-&lt;h2 id=&#34;3-hammerhead-one-もう道に迷わない-ハンドルに取り付けるナビ&#34;&gt;3. Hammerhead One：もう道に迷わない！ハンドルに取り付けるナビ&lt;/h2&gt;
-
-&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/akKyhPXZQGI&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://hammerhead.io/&#34;&gt;Hammerhead One&lt;/a&gt;は自分の自転車のハンドルに取り付けるだけで、目的地までの方向をLEDライトでナビしてくれるT字型のツールです。コンセプトが2. Vanhawks Valourと似ていますが、こちらはすでに自転車を持っている人向けの製品ですね。&lt;/p&gt;
-
-&lt;p&gt;夜に光るフルカラーLEDはきっと綺麗でしょうね！&lt;/p&gt;
-
-&lt;p&gt;2016年11月現在：&lt;a href=&#34;http://hammerhead.io/#shopify-store&#34;&gt;販売中（$99）&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;4-ellipse-スマホから施錠できる自転車用の鍵&#34;&gt;4. Ellipse：スマホから施錠できる自転車用の鍵&lt;/h2&gt;
-
-&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/6gyLPjDakAc&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://www.lattis.io/&#34;&gt;Ellipse&lt;/a&gt;はU字型のロックです。スマホアプリからBluetooth経由で施錠できるほか、盗まれそうになったらアラートをプッシュ通知で受け取れます。タップしなくても、ある程度近づくだけで開錠するよにも設定できます。鍵はソーラーパネルから充電できるそうです。&lt;/p&gt;
-
-&lt;p&gt;アプリから他の人へ自転車の開錠権利を渡すこともできます。友人や家族に貸すときもアプリから簡単。インターネット経由で鍵の権限を渡せるスマートロックの「Qrio」みたいですね。&lt;/p&gt;
-
-&lt;p&gt;2016年11月現在：&lt;a href=&#34;https://www.lattis.io/&#34;&gt;販売中（$199）&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;5-xkuty-iphoneから操作できる電動バイク&#34;&gt;5. Xkuty：iPhoneから操作できる電動バイク&lt;/h2&gt;
-
-&lt;iframe src=&#34;https://player.vimeo.com/video/80877138?title=0&amp;byline=0&amp;portrait=0&#34; width=&#34;715&#34; height=&#34;402&#34; frameborder=&#34;0&#34; webkitallowfullscreen mozallowfullscreen allowfullscreen&gt;&lt;/iframe&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://www.xkuty.com/en/&#34;&gt;Xkuty&lt;/a&gt;はiPhoneから電源のオン・オフや速度の上限設定などを設定できる電動バイクです。ソーラーパネルつきの充電スポットから充電できる仕組みになっています。バイクの色はぜんぶで8色。&lt;/p&gt;
-
-&lt;p&gt;走行距離を確認できたり、ロックの貸借りなんかもスマホアプリからできるようになれば便利ですね。&lt;/p&gt;
-
-&lt;p&gt;2016年11月現在：&lt;a href=&#34;https://store.xkuty.com/en/&#34;&gt;販売中（2.980€〜 ）&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;6-brompton-みんなで街のデータを集める自転車&#34;&gt;6. brompton：みんなで街のデータを集める自転車&lt;/h2&gt;
-
-&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/tifFeG1oW70&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://www.brompton.com/&#34;&gt;Brompton&lt;/a&gt;はセンサーつきの折りたたみ自転車。ひとつひとつ、ロンドンにて手作業で作られています。街でのサイクリングをより安全にするために開発されました。&lt;/p&gt;
-
-&lt;p&gt;Bromptonを使うと現在の走行速度がわかるほか、万が一事故にあった際、事前に登録しておいた連絡先に通知がいきます。また、パソコンから事故現場を地図で把握できます。&lt;/p&gt;
-
-&lt;p&gt;街の気温や空気の汚染度（Air Quality）を各自転車のセンサーからデータ得て貯めているそうです。乗り手に優しく環境汚染とも長期的に向き合える自転車です。&lt;/p&gt;
-
-&lt;p&gt;2016年11月現在：&lt;a href=&#34;https://www.brompton.com/Buy&#34;&gt;販売中（£785〜 ）&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;7-orbitrec-3dプリントで作られた本気の自転車&#34;&gt;7. Orbitrec：3Dプリントで作られた本気の自転車&lt;/h2&gt;
-
-&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/4wzEwFAdv7w&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://xon.cerevo.com/ja/orbitrec/&#34;&gt;Orbitrec&lt;/a&gt;は3Dプリンタで作られた自転車。加速度、角速度、地磁気、温度、湿度、気圧、照度などを取得できるセンサーとGPSを搭載しています。日本の企業「Cerevo」が制作しました。&lt;/p&gt;
-
-&lt;p&gt;秋葉原にあるものづくりスペース&lt;a href=&#34;https://akiba.dmm-make.com/&#34;&gt;DMM.make AKIBA&lt;/a&gt;にて一時期展示されていましたが、本当に見た目がかっこよかったです。（その頃は機能についてを知らなかったので詳しく見ていませんでした……自分のバカ！）&lt;/p&gt;
-
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-
-&lt;p&gt;モノとインターネットを繋げる「IoT」の概念を少しでも想像できていれば幸いです。&lt;/p&gt;
-
-&lt;p&gt;ただ単に「モノとインターネットを繋げるだけ」では用途がわかりにくいものが生まれがちです。しかし、今回紹介した製品のようにコンセプトや解決したい課題があれば、きっとIoTは役に立つんじゃないかなと思います。&lt;/p&gt;
-
-&lt;p&gt;自分の生活の範囲であれば、マイコンボード（小さなコンピュータ）やセンサーといった電子パーツを使って、自作することもできます。dotstudioではそういったIoTに興味のある方向けに、パーツを集めたキットも販売しているので、自作IoTに挑戦してみたい方は利用してみてください。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;センサーなどを使ってみたい方向け：&lt;a href=&#34;https://dotstud.io/projects/nefry-connect-internet/&#34;&gt;Nefry&lt;/a&gt;、&lt;a href=&#34;https://dotstud.io/projects/wionode-social-remote-control/&#34;&gt;Wio Node&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;はんだづけを練習したい方向け：&lt;a href=&#34;https://dotstud.io/projects/led-keychain-original-handa/&#34;&gt;光るキーホルダー制作キット&lt;/a&gt;・&lt;a href=&#34;https://dotstud.io/projects/neopixel-ring-gemma-earrings/&#34;&gt;光るイヤリング制作キット&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;JavaScriptでモータなどを動かしてみたい方向け：&lt;a href=&#34;https://dotstud.io/projects/nodebots-seeeduino-for-beginners/&#34;&gt;Node.jsキット&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;それではまた。&lt;/p&gt;
 </description>
     </item>
     
