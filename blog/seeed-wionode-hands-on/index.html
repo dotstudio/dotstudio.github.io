@@ -372,25 +372,53 @@ Android: <a href="https://play.google.com/store/apps/details?id=cc.seeed.iot.ap&
 <h4 id="アプリとwio-nodeの設定">アプリとWio Nodeの設定</h4>
 
 <p><img src="/img/blog/095/03_acount.png" alt="" />
-アプリを開いたらまずはアカウントを作成しましょう。メールアドレスとパスワードを設定し「Register」で登録します。ServerLocationはデフォルトのGlobalにしておきます。</p>
+アプリを開いたらまずはアカウントを作成しましょう。「SIGN UP」からメールアドレスとパスワードを設定し「Register」で登録します。ServerLocationはデフォルトのGlobalにしておきます。</p>
+
+<p><strong>GmailやFacebookのアカウントを使った登録もできますが、他サービスとの連携でうまくいかないことがあるので非推奨です</strong>。</p>
 
 <p><img src="/img/blog/095/04_add_device.png" alt="" />
 アカウントが作成されたらAdd Your First Deviceをタップし、Wio Nodeを選択します。</p>
 
-<p>続いてWi-Fiの設定に移りますが、手順が少しややこしいので注意してください。
-<img src="/img/blog/095/06_func.png" alt="" />
+<p><br /></p>
+
+<h4 id="wi-fi設定">Wi-Fi設定</h4>
+
+<p>続いてWi-Fi設定をします。<strong>手順が少しややこしいので注意してください</strong>。</p>
+
+<p>まずは簡単にWio Nodeがインターネットに繋がる仕組みを整理してみます。
+<img src="/img/blog/095/05_internet.png" alt="" />
+デバイスがインターネットに繋がるためには、<strong>インターネットに繋がる媒介（=アクセスポイント）</strong>が必要です。私たちは普段ルータやポケットWi-Fi（モバイルルータ）を媒介にしていますね。</p>
+
+<p>Wio Nodeも同様に、インターネットに繋がるために<strong>アクセスポイントが必要</strong>です。</p>
+
+<p><img src="/img/blog/095/06_wifi_setup.png" alt="" />
+Wio Nodeに<strong>アクセスポイントの情報を教える必要がある</strong>ので、アドホックモードでWio Nodeとスマートフォンを同じ回線に繋いだ状態にします。</p>
+
+<p><strong>スマートフォンからWio Nodeにアクセスポイント情報を教えてあげる</strong>と、その後は<strong>Wio Node自身がアクセスポイントに繋がります</strong>。</p>
+
+<p>接続手順が複雑になりますが、この仕組みを押さえておきましょう！</p>
+
+<p>アクセスポイントやWAN/LANについてよくわからない方は<a href="/docs/network">ドキュメント</a>を参照してください。</p>
+
+<p><br /></p>
+
+<h4 id="wi-fi設定手順">Wi-Fi設定手順</h4>
+
+<p><img src="/img/blog/095/06_func.png" alt="" />
 まずは画面の指示にしたがってFuncボタン（写真親指側）を4秒以上長押しすると、青いランプがゆらゆらと光ります。</p>
 
 <p><img src="/img/blog/095/07_wio_network.png" alt="" />
-iOSのWi-Fi選択画面から、「Wio_XXXX」というSSIDを選択します。（Androidはアプリ内での選択です。）</p>
+iOSのWi-Fi選択画面から、「Wio_XXXX」というSSIDを選択します。（Androidはアプリ内での選択です。）アドホックモードで<strong>Wio Nodeとスマートフォンが繋がっている状態</strong>です。</p>
 
 <p><img src="/img/blog/095/08_wifi_list.png" alt="" />
-アプリに戻ると、続いてWi-Fiの接続を促されます。Wi-Fiリストから、使用するWi-Fiを選択しましょう。</p>
+アプリに戻ると、続いてWi-Fiの接続を促されます。ネットワークリストから、部屋や会場のWi-Fi（利用するWi-Fi）を選択してパスワードを入力しましょう。<strong>アクセスポイント情報を教えてあげた状態</strong>です。</p>
 
 <p><img src="/img/blog/095/09_device_connect.png" alt="" />
-Wio Nodeが認識されました。デバイスに名前をつけておきます。（Android端末で認識がうまくいかない場合、<strong>機内モードにして試す</strong> と解消することがあるようです。）</p>
+Wio Nodeがインターネットに繋がり、登録が完了しました。デバイスに名前をつけておきます。（Android端末で認識がうまくいかない場合、<strong>機内モードにして試す</strong>と解消することがあるようです。）</p>
 
-<p>以上でWio Nodeのセットアップが完了しました。同じデバイスとWi-Fiを使う場合は、以後起動するだけで接続されるようになります！</p>
+<p><strong>アプリからでは失敗する場合は、<a href="/docs/wionode-wiosetup">こちら</a>を参考にWio-Setupというツールを試してみてください</strong>。</p>
+
+<p>以上でWio Nodeのセットアップは完了です。同じデバイスとアクセスポイントを使う場合は、以後起動するだけで接続されるようになります！</p>
 
 <h3 id="wio-nodeにモジュールを接続する">Wio Nodeにモジュールを接続する</h3>
 
@@ -406,6 +434,8 @@ Wio Nodeが認識されました。デバイスに名前をつけておきます
 「PORT0」に7セグメントディスプレイ、「PORT1」に温度センサを接続しましょう。</p>
 
 <p>接続できたら、アプリ画面下部の「Update Firmware」をタップしましょう。読み込みのあと、「View API」というAPIサンプルページが表示されるようになります。</p>
+
+<p><strong>Updateが失敗する場合はモジュールの接続が左右間違っていないか今一度確認してください</strong>。</p>
 
 <p><br /></p>
 
@@ -477,6 +507,8 @@ Wio Nodeが認識されました。デバイスに名前をつけておきます
 
 <p>Node.jsの環境構築はとても簡単なので、ウェブ開発が初めての方にもオススメです！</p>
 
+<p><br /></p>
+
 <h4 id="memo-コーディング無しで動かしてみる">memo: コーディング無しで動かしてみる</h4>
 
 <p>サクッと試したい方は、githubの<a href="https://github.com/dotstudio/wionode_handson">完成プログラム</a>をご覧ください。READMEの手順を進めるとコーディングなしで動かせます。</p>
@@ -512,15 +544,13 @@ app.jsというファイルを作成しました。（<code>ls</code>コマン�
 
 <h4 id="memo-ファイルの編集とエディタについて">memo: ファイルの編集とエディタについて</h4>
 
-<p>コマンドラインからでもファイルの編集はできますが、<strong>インデントやコードの補完が効かず作業しづらい</strong>ので、テキストエディタを使うがオススメです。ちゃんとく的な初心者向けオススメエディタは<a href="https://atom.io/">Atom</a>です。</p>
+<p>コマンドラインからでもファイルの編集はできますが、<strong>インデントやコードの補完が効かず作業しづらい</strong>ので、テキストエディタを使うのがオススメです。</p>
 
 <p>下記記事ではVisual Studio Codeのインストール方法を紹介しています。</p>
 
 <ul>
 <li><a href="https://dotstud.io/blog/setup-new-mac-app/#visual-studio-code">僕がMacを買い換えてすぐにいれるツール&amp;すぐにする初期設定</a></li>
 </ul>
-
-<p>コマンドライン上で作業したい方は、「viエディタ コマンド」などで検索してみてください。</p>
 
 <p><br /></p>
 
@@ -1043,6 +1073,62 @@ setInterval(() =&gt; {
           
           
           
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/howto-use-original-package/">
+                <img class="card-related--thumbnail" src="/img/blog/102/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">dotstuidoオリジナルのパッケージができました！〜使い方編〜</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/make-dotstudio-original-package/">
+                <img class="card-related--thumbnail" src="/img/blog/101/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">dotstudioオリジナルのパッケージができました！〜制作編〜</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
           <li class="js-items">
             <article class="card-related">
               <a class="" href="https://dotstud.io/blog/go-beginners-camp-report/">
@@ -1297,6 +1383,14 @@ setInterval(() =&gt; {
             </article>
           </li>
         
+        
+          
+          
+          
+        
+          
+          
+          
         
           
           

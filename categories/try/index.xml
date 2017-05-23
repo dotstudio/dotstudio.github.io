@@ -300,25 +300,53 @@ Android: &lt;a href=&#34;https://play.google.com/store/apps/details?id=cc.seeed.
 &lt;h4 id=&#34;アプリとwio-nodeの設定&#34;&gt;アプリとWio Nodeの設定&lt;/h4&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/03_acount.png&#34; alt=&#34;&#34; /&gt;
-アプリを開いたらまずはアカウントを作成しましょう。メールアドレスとパスワードを設定し「Register」で登録します。ServerLocationはデフォルトのGlobalにしておきます。&lt;/p&gt;
+アプリを開いたらまずはアカウントを作成しましょう。「SIGN UP」からメールアドレスとパスワードを設定し「Register」で登録します。ServerLocationはデフォルトのGlobalにしておきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;GmailやFacebookのアカウントを使った登録もできますが、他サービスとの連携でうまくいかないことがあるので非推奨です&lt;/strong&gt;。&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/04_add_device.png&#34; alt=&#34;&#34; /&gt;
 アカウントが作成されたらAdd Your First Deviceをタップし、Wio Nodeを選択します。&lt;/p&gt;
 
-&lt;p&gt;続いてWi-Fiの設定に移りますが、手順が少しややこしいので注意してください。
-&lt;img src=&#34;https://dotstud.io/img/blog/095/06_func.png&#34; alt=&#34;&#34; /&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;wi-fi設定&#34;&gt;Wi-Fi設定&lt;/h4&gt;
+
+&lt;p&gt;続いてWi-Fi設定をします。&lt;strong&gt;手順が少しややこしいので注意してください&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;まずは簡単にWio Nodeがインターネットに繋がる仕組みを整理してみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/05_internet.png&#34; alt=&#34;&#34; /&gt;
+デバイスがインターネットに繋がるためには、&lt;strong&gt;インターネットに繋がる媒介（=アクセスポイント）&lt;/strong&gt;が必要です。私たちは普段ルータやポケットWi-Fi（モバイルルータ）を媒介にしていますね。&lt;/p&gt;
+
+&lt;p&gt;Wio Nodeも同様に、インターネットに繋がるために&lt;strong&gt;アクセスポイントが必要&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/06_wifi_setup.png&#34; alt=&#34;&#34; /&gt;
+Wio Nodeに&lt;strong&gt;アクセスポイントの情報を教える必要がある&lt;/strong&gt;ので、アドホックモードでWio Nodeとスマートフォンを同じ回線に繋いだ状態にします。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;スマートフォンからWio Nodeにアクセスポイント情報を教えてあげる&lt;/strong&gt;と、その後は&lt;strong&gt;Wio Node自身がアクセスポイントに繋がります&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;接続手順が複雑になりますが、この仕組みを押さえておきましょう！&lt;/p&gt;
+
+&lt;p&gt;アクセスポイントやWAN/LANについてよくわからない方は&lt;a href=&#34;https://dotstud.io/docs/network&#34;&gt;ドキュメント&lt;/a&gt;を参照してください。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;wi-fi設定手順&#34;&gt;Wi-Fi設定手順&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/06_func.png&#34; alt=&#34;&#34; /&gt;
 まずは画面の指示にしたがってFuncボタン（写真親指側）を4秒以上長押しすると、青いランプがゆらゆらと光ります。&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/07_wio_network.png&#34; alt=&#34;&#34; /&gt;
-iOSのWi-Fi選択画面から、「Wio_XXXX」というSSIDを選択します。（Androidはアプリ内での選択です。）&lt;/p&gt;
+iOSのWi-Fi選択画面から、「Wio_XXXX」というSSIDを選択します。（Androidはアプリ内での選択です。）アドホックモードで&lt;strong&gt;Wio Nodeとスマートフォンが繋がっている状態&lt;/strong&gt;です。&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/08_wifi_list.png&#34; alt=&#34;&#34; /&gt;
-アプリに戻ると、続いてWi-Fiの接続を促されます。Wi-Fiリストから、使用するWi-Fiを選択しましょう。&lt;/p&gt;
+アプリに戻ると、続いてWi-Fiの接続を促されます。ネットワークリストから、部屋や会場のWi-Fi（利用するWi-Fi）を選択してパスワードを入力しましょう。&lt;strong&gt;アクセスポイント情報を教えてあげた状態&lt;/strong&gt;です。&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/09_device_connect.png&#34; alt=&#34;&#34; /&gt;
-Wio Nodeが認識されました。デバイスに名前をつけておきます。（Android端末で認識がうまくいかない場合、&lt;strong&gt;機内モードにして試す&lt;/strong&gt; と解消することがあるようです。）&lt;/p&gt;
+Wio Nodeがインターネットに繋がり、登録が完了しました。デバイスに名前をつけておきます。（Android端末で認識がうまくいかない場合、&lt;strong&gt;機内モードにして試す&lt;/strong&gt;と解消することがあるようです。）&lt;/p&gt;
 
-&lt;p&gt;以上でWio Nodeのセットアップが完了しました。同じデバイスとWi-Fiを使う場合は、以後起動するだけで接続されるようになります！&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;アプリからでは失敗する場合は、&lt;a href=&#34;https://dotstud.io/docs/wionode-wiosetup&#34;&gt;こちら&lt;/a&gt;を参考にWio-Setupというツールを試してみてください&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;以上でWio Nodeのセットアップは完了です。同じデバイスとアクセスポイントを使う場合は、以後起動するだけで接続されるようになります！&lt;/p&gt;
 
 &lt;h3 id=&#34;wio-nodeにモジュールを接続する&#34;&gt;Wio Nodeにモジュールを接続する&lt;/h3&gt;
 
@@ -334,6 +362,8 @@ Wio Nodeが認識されました。デバイスに名前をつけておきます
 「PORT0」に7セグメントディスプレイ、「PORT1」に温度センサを接続しましょう。&lt;/p&gt;
 
 &lt;p&gt;接続できたら、アプリ画面下部の「Update Firmware」をタップしましょう。読み込みのあと、「View API」というAPIサンプルページが表示されるようになります。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Updateが失敗する場合はモジュールの接続が左右間違っていないか今一度確認してください&lt;/strong&gt;。&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -405,6 +435,8 @@ Wio Nodeが認識されました。デバイスに名前をつけておきます
 
 &lt;p&gt;Node.jsの環境構築はとても簡単なので、ウェブ開発が初めての方にもオススメです！&lt;/p&gt;
 
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
 &lt;h4 id=&#34;memo-コーディング無しで動かしてみる&#34;&gt;memo: コーディング無しで動かしてみる&lt;/h4&gt;
 
 &lt;p&gt;サクッと試したい方は、githubの&lt;a href=&#34;https://github.com/dotstudio/wionode_handson&#34;&gt;完成プログラム&lt;/a&gt;をご覧ください。READMEの手順を進めるとコーディングなしで動かせます。&lt;/p&gt;
@@ -440,15 +472,13 @@ app.jsというファイルを作成しました。（&lt;code&gt;ls&lt;/code&gt
 
 &lt;h4 id=&#34;memo-ファイルの編集とエディタについて&#34;&gt;memo: ファイルの編集とエディタについて&lt;/h4&gt;
 
-&lt;p&gt;コマンドラインからでもファイルの編集はできますが、&lt;strong&gt;インデントやコードの補完が効かず作業しづらい&lt;/strong&gt;ので、テキストエディタを使うがオススメです。ちゃんとく的な初心者向けオススメエディタは&lt;a href=&#34;https://atom.io/&#34;&gt;Atom&lt;/a&gt;です。&lt;/p&gt;
+&lt;p&gt;コマンドラインからでもファイルの編集はできますが、&lt;strong&gt;インデントやコードの補完が効かず作業しづらい&lt;/strong&gt;ので、テキストエディタを使うのがオススメです。&lt;/p&gt;
 
 &lt;p&gt;下記記事ではVisual Studio Codeのインストール方法を紹介しています。&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://dotstud.io/blog/setup-new-mac-app/#visual-studio-code&#34;&gt;僕がMacを買い換えてすぐにいれるツール&amp;amp;すぐにする初期設定&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-
-&lt;p&gt;コマンドライン上で作業したい方は、「viエディタ コマンド」などで検索してみてください。&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
