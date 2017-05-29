@@ -436,56 +436,6 @@ void loop() {
     </item>
     
     <item>
-      <title>仕様詳細</title>
-      <link>https://dotstud.io/docs/nefry-technical-specification/</link>
-      <pubDate>Fri, 26 May 2017 01:02:41 +0900</pubDate>
-      
-      <guid>https://dotstud.io/docs/nefry-technical-specification/</guid>
-      
-      <description>
-
-&lt;h2 id=&#34;インターフェース&#34;&gt;インターフェース&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/97208/ba4a18a9-c793-bca0-5d3a-da47eea8ef71.png&#34; alt=&#34;Nefryの基板写真・各モジュールの説明入り&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/nefry_detail.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;技術仕様&#34;&gt;技術仕様&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;メインチップ: ESP8266(ESP-WROOM-02)&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Wi-Fi 802.11b/g/n(2.4GHz帯)&lt;/li&gt;
-&lt;li&gt;セキュリティ WPA2/WPA/WEP/AES/TKIP&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;フルカラーLED*1&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Groveモジュールを最大4個接続
-(UART, I2C, デジタル, アナログ, 各1ソケット)&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;GPIOピンソケット&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;アナログ入力(A0)&lt;/li&gt;
-&lt;li&gt;I2C(D0, D1)&lt;/li&gt;
-&lt;li&gt;SPI(D2, D3, D4, D5)&lt;/li&gt;
-&lt;li&gt;3.3Vソケット*1, GNDソケット * 2&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;ユーザーが利用可能なスイッチ(SW) * 1&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;説明書&#34;&gt;説明書&lt;/h2&gt;
-
-&lt;p&gt;Nefry v2.0の詳細な仕様・動作などが参照できます。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://wamisnet.github.io/Nefry_manual.pdf&#34;&gt;https://wamisnet.github.io/Nefry_manual.pdf&lt;/a&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
       <title>設定ページの紹介</title>
       <link>https://dotstud.io/docs/nefry-config-page/</link>
       <pubDate>Fri, 26 May 2017 01:02:41 +0900</pubDate>
@@ -535,17 +485,500 @@ Nefryの状態を確認することができるページです。&lt;/p&gt;
     </item>
     
     <item>
-      <title>設計情報</title>
-      <link>https://dotstud.io/docs/nefry-design-information/</link>
-      <pubDate>Fri, 26 May 2017 01:02:41 +0900</pubDate>
+      <title>Nefryライブラリ</title>
+      <link>https://dotstud.io/docs/nefry-library/</link>
+      <pubDate>Mon, 29 May 2017 01:02:41 +0900</pubDate>
       
-      <guid>https://dotstud.io/docs/nefry-design-information/</guid>
+      <guid>https://dotstud.io/docs/nefry-library/</guid>
       
-      <description>&lt;p&gt;回路図
-&lt;img src=&#34;https://dotstud.io/img/docs/nefry/nefrykr.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+      <description>
 
-&lt;p&gt;配線図
-&lt;img src=&#34;https://dotstud.io/img/docs/nefry/nefrycr.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;nefryライブラリとは&#34;&gt;Nefryライブラリとは？&lt;/h2&gt;
+
+&lt;p&gt;こちらのドキュメントは随時更新していきます。Arduino IDEでのプログラミングを想定しています。&lt;/p&gt;
+
+&lt;p&gt;Arduino IDEの使用時には&lt;code&gt;#include&amp;lt;Nefry.h&amp;gt;&lt;/code&gt;を入力してから使用してください。関数を呼び出す時には&amp;rdquo;Nefry.関数()&amp;ldquo;とすることで使うことができます。
+例えば&lt;code&gt;Nefry.print(&amp;quot;test&amp;quot;);&lt;/code&gt;や&lt;code&gt;Nefry.reset();&lt;/code&gt;このように使うことができます。&lt;/p&gt;
+
+&lt;h2 id=&#34;どんなことができるの-ソフトウエア&#34;&gt;どんなことができるの？（ソフトウエア）&lt;/h2&gt;
+
+&lt;p&gt;Nefryのハードウエア×ソフトウエアで難しいIoTを簡単に扱えるようにしています。&lt;/p&gt;
+
+&lt;p&gt;Nefryが出力しているWiFiに接続すると自動的にWebページが立ち上がり様々な設定ができます。&lt;/p&gt;
+
+&lt;h3 id=&#34;wifiの設定ページ&#34;&gt;WiFiの設定ページ&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/nefry-func-wifi&#34;&gt;WiFi関連関数のページ&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Nefryに5つまでのWiFiを記憶させることができ、WiFiに接続するときに最も適したものに接続します。&lt;/p&gt;
+
+&lt;p&gt;WiFiを検索して、簡単に保存することができます。Nefryに保存済みのWiFi Listを削除することもできます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/wifi.png&#34; alt=&#34;wifi&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;nefryの各種設定ページ&#34;&gt;Nefryの各種設定ページ&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/nefry-func-module&#34;&gt;Module関連関数のページ&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Nefryに対して様々な設定ができます。Nefryに名前を付けたり、Nefryが出力するWiFiにパスワードを付けることができます。&lt;/p&gt;
+
+&lt;p&gt;他にも環境変数として、文字列8つと数値8つ扱うことができ、その値はプログラムから扱うことができます。&lt;/p&gt;
+
+&lt;p&gt;この環境変数を上手く使うとサクッと設定値を変更することができるのでプログラムの幅が広がります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/module.png&#34; alt=&#34;module&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;全件表示
+&lt;img src=&#34;https://dotstud.io/img/docs/nefry/modulefull.png&#34; alt=&#34;module&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;プログラムの更新ページ&#34;&gt;プログラムの更新ページ&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/nefry-func-update&#34;&gt;アップデート関連関数のページ&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Nefryのプログラムを更新する方法は主に2つあります。ローカルアップデートとオンラインアップデートがあります。それぞれの章で説明していきます。&lt;/p&gt;
+
+&lt;h4 id=&#34;ローカルアップデート&#34;&gt;ローカルアップデート&lt;/h4&gt;
+
+&lt;p&gt;ローカルアップデートは、ファイルを選んでNefryにアップロードすることで更新する機能です。基本的にはこちらの方法で扱うことになります。&lt;/p&gt;
+
+&lt;p&gt;Arduino IDEでファイルを作成し、アップロードする流れになります。ファイルの作成方法については、&lt;a href=&#34;https://dotstud.io/docs/nefry-program-setup/&#34;&gt;こちら&lt;/a&gt;を参照してください。
+&lt;img src=&#34;https://dotstud.io/img/docs/nefry/local.png&#34; alt=&#34;local&#34; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;オンラインアップデート&#34;&gt;オンラインアップデート&lt;/h4&gt;
+
+&lt;p&gt;オンラインアップデートは、ネット上にアップロードされているファイルをNefryがダウンロードして、自らを更新する機能です。&lt;/p&gt;
+
+&lt;p&gt;Nefryが実行できるファイルがネットにあればプログラムを書かずに試すことができますので手軽に始めることができます。&lt;a href=&#34;http://program.nefry.studio/&#34;&gt;こちらのサイト&lt;/a&gt;でプログラムを公開していますので是非参考にしてください。&lt;br /&gt;
+&lt;img src=&#34;https://dotstud.io/img/docs/nefry/web.png&#34; alt=&#34;web&#34; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;nefryコンソール&#34;&gt;Nefryコンソール&lt;/h4&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/nefry-func-console&#34;&gt;Console関連関数のページ&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;NefryにはWeb上で確認できるコンソールがあります。ページ内で入力することもできます。&lt;/p&gt;
+
+&lt;p&gt;Nefryから取得して表示間隔も変更できます。
+&lt;img src=&#34;https://dotstud.io/img/docs/nefry/console.png&#34; alt=&#34;console&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;どんなことができるの-ハードウエア&#34;&gt;どんなことができるの？（ハードウエア）&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/nefry-func-hardware&#34;&gt;ハードウエア関連関数のページ&lt;/a&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;フルカラーled&#34;&gt;フルカラーLED&lt;/h4&gt;
+
+&lt;p&gt;RGBで色を指定して光らせることができます。&lt;/p&gt;
+
+&lt;h4 id=&#34;sw&#34;&gt;SW&lt;/h4&gt;
+
+&lt;p&gt;スイッチがもともと付いているので、簡単にハードウエアを試すことができます。&lt;/p&gt;
+
+&lt;h4 id=&#34;grove&#34;&gt;Grove&lt;/h4&gt;
+
+&lt;p&gt;Groveのソケットが付いておりセンサーやディスプレイを簡単に繋げられます。&lt;/p&gt;
+
+&lt;h4 id=&#34;ソケット&#34;&gt;ソケット&lt;/h4&gt;
+
+&lt;p&gt;Grove以外にもソケットが出ているため、Arduinoと同じようにLEDやセンサーを繋げることができます。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Wi-Fi関連の関数</title>
+      <link>https://dotstud.io/docs/nefry-func-wifi/</link>
+      <pubDate>Mon, 29 May 2017 01:02:41 +0900</pubDate>
+      
+      <guid>https://dotstud.io/docs/nefry-func-wifi/</guid>
+      
+      <description>
+
+&lt;p&gt;NefryのWiFi関連の関数をまとめてみました。WiFiに必要な設定などを行うことができます。&lt;/p&gt;
+
+&lt;p&gt;このページの内容は、Nefryが表示しているWebページでも扱えます。&lt;/p&gt;
+
+&lt;h3 id=&#34;addwifi&#34;&gt;addWifi&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0.png&#34; alt=&#34;2.3.0&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;WiFiの設定を追加することができます。5つまでのWiFiを保存することができます。&lt;br /&gt;
+5つを超えた場合最も古いデータから削除されます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/addWifi.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;getlistwifi&#34;&gt;getlistWifi&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0.png&#34; alt=&#34;2.3.0&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;WiFiの設定を表示することができます。IDとSSIDを表示することができます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/getListWifi.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;deletewifi&#34;&gt;deleteWifi&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0.png&#34; alt=&#34;2.3.0&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;WiFiの設定を削除することができます。削除するデータをIDで指定します。&lt;br /&gt;
+getlistWifi関数でIDについて確認することができます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/deleteWifi.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;searchwifi&#34;&gt;searchWiFi&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0.png&#34; alt=&#34;2.3.0&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;WiFiを検索します。これは、デフォルトで呼ばれるため基本的にはユーザが呼ぶ必要はありません。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/searchWifi.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;setwifiauto&#34;&gt;setWifiAuto&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0.png&#34; alt=&#34;2.3.0&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;WiFiの自動接続をするかどうかを選択できます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/setWifiAuto.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;setwifitimeout&#34;&gt;setWifiTimeout&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0.png&#34; alt=&#34;2.3.0&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;WiFiの再接続回数の上限を制限します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/setWifiTimeout.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;setwifitimeoutclear&#34;&gt;setWifiTimeoutClear&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0.png&#34; alt=&#34;2.3.0&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;WiFiの再接続回数のカウントをクリアします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/setWifiTimeoutClear.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;autoconnect&#34;&gt;autoConnect&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;br /&gt;
+廃止予定&lt;/p&gt;
+
+&lt;p&gt;WiFiの自動接続をします。Nefryのライブラリで自動接続を提供するので廃止を予定しています。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/autoConnect.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>その他の便利な関数</title>
+      <link>https://dotstud.io/docs/nefry-func-others/</link>
+      <pubDate>Mon, 29 May 2017 01:02:41 +0900</pubDate>
+      
+      <guid>https://dotstud.io/docs/nefry-func-others/</guid>
+      
+      <description>
+
+&lt;p&gt;Nefryの便利な関数をまとめてみました。&lt;/p&gt;
+
+&lt;h3 id=&#34;ndelay&#34;&gt;ndelay&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;delayではすべての処理が止まってしまいますがこちらを選ぶことで停止時間にNefryのWeb表示などの様々な機能を継続することができます。
+基本的に500ミリ秒以上の待ち時間になる場合はこちらを選んでください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/ndelay.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;reset&#34;&gt;reset&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Nefryをリセットし、プログラムを初めからやり直します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/reset.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;sleep&#34;&gt;sleep&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Nefryを省電力モードのスリープモードにします。スリープモードに入ると処理ができません。&lt;br /&gt;
+スリープが終わった後はプログラムを初めからやり直します。&lt;br /&gt;
+スリープモードを強制的終了させるにはNefry本体のリセットボタンを押すか、指定した時間が経つのを待つしかありません。
+0を入力することで、無期限スリープモードになります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/sleep.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;getwebserver&#34;&gt;getWebServer&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ESP8266WebServerを扱うことができます。ユーザ側でWebページを追加することができます。
+Nefryのメインページにそのリンクを貼りたいときは&lt;code&gt;setIndexLink&lt;/code&gt;関数を使ってください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/getWebServer.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;setindexlink&#34;&gt;setIndexLink&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Nefryのメインページにリンクを貼ることができます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/setIndexLink.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;setprogramname&#34;&gt;setProgramName&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Nefryのトップページで表示されるプログラム名を設定できます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/setProgramName.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;getprogramname&#34;&gt;getProgramName&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Nefryのトップページで表示されるプログラム名を取得することができます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/getProgramName.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;getversion&#34;&gt;getVersion&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Nefryライブラリのバージョンを取得することができます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/getVersion.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;getmodulename&#34;&gt;getModuleName&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;NefryのModule名を取得することができます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/getModuleName.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>アップデート関連の関数</title>
+      <link>https://dotstud.io/docs/nefry-func-update/</link>
+      <pubDate>Mon, 29 May 2017 01:02:41 +0900</pubDate>
+      
+      <guid>https://dotstud.io/docs/nefry-func-update/</guid>
+      
+      <description>
+
+&lt;p&gt;Nefryのアップデート関連の関数をまとめてみました。&lt;br /&gt;
+このページの内容は、Nefryが表示しているWebページでも扱えます。&lt;/p&gt;
+
+&lt;h3 id=&#34;autoupdate&#34;&gt;autoUpdate&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0.png&#34; alt=&#34;2.3.0&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Nefryの機能としてサーバにアップロードされているプログラムとNefryのプログラムのバージョンが異なる場合、自動的にプログラムをダウンロードして更新する機能があります。&lt;br /&gt;
+その機能を扱える関数となります。ネットワーク接続が必須となります。
+Nefry側からの提供を予定しています。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/autoUpdate.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>コンソール関連の関数</title>
+      <link>https://dotstud.io/docs/nefry-func-console/</link>
+      <pubDate>Mon, 29 May 2017 01:02:41 +0900</pubDate>
+      
+      <guid>https://dotstud.io/docs/nefry-func-console/</guid>
+      
+      <description>
+
+&lt;p&gt;Consoleに関連する関数をまとめてみました。&lt;br /&gt;
+Nefryのwebconsoleとserialに文字を表示します。Serialはデフォルトでは115200bpsで通信します。&lt;/p&gt;
+
+&lt;h3 id=&#34;print&#34;&gt;print&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Nefryのwebconsoleとserialに文字を表示します。&lt;strong&gt;改行なし&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/print.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;println&#34;&gt;println&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Nefryのwebconsoleとserialに文字を表示します。&lt;strong&gt;改行あり&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/println.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;available&#34;&gt;available&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Nefryのwebconsoleで入力された文字数を返します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/available.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;read&#34;&gt;read&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;br /&gt;
+Nefryのwebconsoleで入力された文字を返します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/read.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>ハードウェア関連の関数</title>
+      <link>https://dotstud.io/docs/nefry-func-hardware/</link>
+      <pubDate>Mon, 29 May 2017 01:02:41 +0900</pubDate>
+      
+      <guid>https://dotstud.io/docs/nefry-func-hardware/</guid>
+      
+      <description>
+
+&lt;p&gt;Nefryのハードウエア関連の関数をまとめてみました。&lt;br /&gt;
+Nefryが持っているハードウエアの機能を扱うことができます。&lt;/p&gt;
+
+&lt;h2 id=&#34;フルカラーled制御&#34;&gt;フルカラーLED制御&lt;/h2&gt;
+
+&lt;p&gt;RGBで色を変化させることができます。&lt;/p&gt;
+
+&lt;h3 id=&#34;setled&#34;&gt;setLed&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;NefryのLEDを制御することができます。&lt;/p&gt;
+
+&lt;!--
+色の指定の方法が2つありますので順に説明して行きます。
+
+RGBを順に指定する方法
+ --&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/setLed.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;!--
+16進数で指定する方法
+
+||||
+|:---:|:---:|:---:|
+|引数1|const char*|色を指定します。000000からFFFFFFの範囲で指定ができます。|
+|引数4|int|(指定なしOK)明るさの強さを指定します。0-255の範囲で指定ができます。|
+|引数5|int|(指定なしOK)制御ピンを指定します。NefryのLEDを制御する場合必要ありません。|
+|引数6|int|(指定なしOK)何個目のLEDを光らせるか指定します。NefryのLEDを制御する場合必要ありません。|
+|返り値|void|なし|
+|具体例||Nefry.setLed(&#34;FF0000&#34;);//赤色が点灯します。|
+
+--&gt;
+
+&lt;h3 id=&#34;beginled&#34;&gt;beginLed&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Nefryについている同じ種類のLEDを制御するときに使える関数です。NefryにもともとついているLEDを使う場合は必要ありません。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/beginLed.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;スイッチ検知&#34;&gt;スイッチ検知&lt;/h2&gt;
+
+&lt;p&gt;NefryにはResetとSWと書かれたスイッチが付いています。&lt;br /&gt;
+SWのスイッチについてはプログラムから自由に扱うことができます。&lt;/p&gt;
+
+&lt;h3 id=&#34;readsw&#34;&gt;readSW&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;この関数が呼ばれたときにスイッチが押されているか検知することができます。旧関数名：push_SW()&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/readSW.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>モジュール関連の関数</title>
+      <link>https://dotstud.io/docs/nefry-func-module/</link>
+      <pubDate>Mon, 29 May 2017 01:02:41 +0900</pubDate>
+      
+      <guid>https://dotstud.io/docs/nefry-func-module/</guid>
+      
+      <description>
+
+&lt;p&gt;NefryのModule Setup関連の関数をまとめてみました。Nefryに必要な設定などを行うことができます。&lt;br /&gt;
+このページの内容は、Nefryが表示しているWebページでも扱えます。&lt;/p&gt;
+
+&lt;h3 id=&#34;文字列管理&#34;&gt;文字列管理&lt;/h3&gt;
+
+&lt;p&gt;文字列は0-2の欄は128文字まで、3-7の欄は64文字までの入力ができます。&lt;/p&gt;
+
+&lt;h3 id=&#34;getconfstr&#34;&gt;getConfStr&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;NefryのModule Setupで入力された文字列を取得できます。&lt;br /&gt;
+入力された文字列をプログラム内で使う際にこの関数が便利です。&lt;br /&gt;
+入力欄は初期状態では表示されないので&lt;code&gt;setConfHtmlStr&lt;/code&gt;関数を使って表示させるようにしてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/getConfStr.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;setconfhtmlstr&#34;&gt;setConfHtmlStr&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;NefryのModule Setupで指定された欄を表示します。&lt;strong&gt;これを呼ばないとModule Setupに表示されません。&lt;/strong&gt;
+説明を書くことができるので、上手くつかってください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/setConfHtmlStr.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;setconfstr&#34;&gt;setConfStr&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;NefryのModule Setupに文字列を代入することができます。&lt;br /&gt;
+デフォルト値として始めから文字を入れておきたいときにこの関数が便利です。&lt;br /&gt;
+入力欄は初期状態では表示されないので&lt;code&gt;setConfHtmlStr&lt;/code&gt;関数を使って表示させるようにしてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/setConfStr.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;数値管理&#34;&gt;数値管理&lt;/h3&gt;
+
+&lt;p&gt;-32,768 ～ 32,767の範囲で数値を扱うことができます。&lt;/p&gt;
+
+&lt;h3 id=&#34;getconfvalue&#34;&gt;getConfValue&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;NefryのModule Setupで入力された数値を取得できます。&lt;br /&gt;
+入力された数値をプログラム内で使う際にこの関数が便利です。&lt;br /&gt;
+入力欄は初期状態では表示されないので&lt;code&gt;setConfHtmlValue&lt;/code&gt;関数を使って表示させるようにしてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/getConfValue.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;setconfhtmlvalue&#34;&gt;setConfHtmlValue&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;NefryのModule Setupで指定された欄を表示します。&lt;strong&gt;これを呼ばないとModule Setupに表示されません。&lt;/strong&gt;
+説明を書くことができるので、上手くつかってください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/setConfHtmlValue.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;setconfvalue&#34;&gt;setConfValue&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/2.3.0u.png&#34; alt=&#34;2.3.0u&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;NefryのModule Setupに文字列を代入することができます。&lt;br /&gt;
+デフォルト値として始めから文字を入れておきたいときにこの関数が便利です。&lt;br /&gt;
+入力欄は初期状態では表示されないので&lt;code&gt;setConfHtmlValue&lt;/code&gt;関数を使って表示させるようにしてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefry/setConfValue.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;!--
+##その他の関数
+setConfModul
+Auth
+setConfUser
+login
+getConfHtmlPrint
+setConfHtmlPrint
+setConfWifi
+setConfHtml
+ --&gt;
 </description>
     </item>
     
