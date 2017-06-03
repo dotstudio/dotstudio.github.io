@@ -1,0 +1,1420 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Handson on dotstudio（ドットスタジオ）</title>
+    <link>https://dotstud.io/series/handson/index.xml</link>
+    <description>Recent content in Handson on dotstudio（ドットスタジオ）</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>© 2016 dotstudio inc.</copyright>
+    <atom:link href="/series/handson/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>「Wio Node」で半田付けなしの電子工作！温度計作りでIoTはじめの一歩</title>
+      <link>https://dotstud.io/blog/seeed-wionode-hands-on/</link>
+      <pubDate>Fri, 21 Apr 2017 22:18:36 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/seeed-wionode-hands-on/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、バックエンドエンジニアのちゃんとく（&lt;a href=&#34;https://twitter.com/tokutoku393&#34;&gt;@tokutoku393&lt;/a&gt;）です。&lt;/p&gt;
+
+&lt;p&gt;今回は、難しいプログラミングや半田付けなしで簡単に試せる「Wio Node」を使って温度表示計を作ってみます！この記事は「&lt;strong&gt;&lt;a href=&#34;https://dotstudio.connpass.com/event/53388/&#34;&gt;WioNodeで始めよう！挫折しないIoT入門ハンズオン
+&lt;/a&gt;&lt;/strong&gt;」の資料にもなっています。&lt;/p&gt;
+
+&lt;p&gt;かなり長いですが、詳細な手順を載せていますので根気よく頑張りましょう！&lt;/p&gt;
+
+&lt;h2 id=&#34;wio-nodeとは&#34;&gt;Wio Nodeとは&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/01_wio_node.png&#34; alt=&#34;&#34; /&gt;
+今回使うWio Nodeは、中国のSeeed Studio社が開発した&lt;strong&gt;Wi-Fiモジュール初期搭載のIoTデバイス&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Grove規格のモジュールをそのまま挿せるコネクタを搭載&lt;/strong&gt;していて、はんだづけなしで動かすことができます。モジュールのセットアップも&lt;strong&gt;公式のスマートフォンアプリから行うことができ&lt;/strong&gt;、電子工作初心者でも簡単に試せます。&lt;/p&gt;
+
+&lt;h2 id=&#34;動かしてみる&#34;&gt;動かしてみる&lt;/h2&gt;
+
+&lt;p&gt;早速Wio Nodeを動かしてみましょう。今回は、温度センサと7セグメントディスプレイを使って簡易温度計を作ってみます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/02_map.png&#34; alt=&#34;&#34; /&gt;
+Wio Nodeに接続したモジュール同士は一見つながっているように見えますが、&lt;strong&gt;内部で連携する仕組みはありません&lt;/strong&gt;。それぞれWi-Fiを使ってAPIからインプットやアウトプットを制御します。&lt;/p&gt;
+
+&lt;p&gt;以下の手順で作っていきます。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Wio Nodeのセットアップ&lt;/li&gt;
+&lt;li&gt;Wio Nodeにモジュールを接続する&lt;/li&gt;
+&lt;li&gt;アプリからAPIを試す&lt;/li&gt;
+&lt;li&gt;Node.jsでプログラムを書く&lt;/li&gt;
+&lt;li&gt;試してみる&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Wio Node -&amp;gt; &lt;a href=&#34;https://dotstud.io/shop/wionode-social-remote-control/&#34;&gt;購入ページ&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Micro USBケーブル&lt;/li&gt;
+&lt;li&gt;Grove 温度センサ（型番: SEEED-101020015）&lt;/li&gt;
+&lt;li&gt;Grove 7セグメントディスプレイ（型番: SEEED-104030003）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;類似のセンサがたくさんありますので、型番をよくご確認ください。&lt;/strong&gt;（Wio Nodeに対応していない場合があります。）&lt;/p&gt;
+
+&lt;h4 id=&#34;筆者の環境&#34;&gt;筆者の環境&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;MacBook Pro（Retina 13-inch、Early 2015）&lt;/li&gt;
+&lt;li&gt;OS X El Capitan（v10.11.6）&lt;/li&gt;
+&lt;li&gt;iOS10.31&lt;/li&gt;
+&lt;li&gt;Node.js v7.9.0&lt;/li&gt;
+&lt;li&gt;npm 4.5.0&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;wio-nodeのセットアップ&#34;&gt;Wio Nodeのセットアップ&lt;/h3&gt;
+
+&lt;p&gt;まずはWio Nodeの初期設定から進めていきます。&lt;/p&gt;
+
+&lt;p&gt;Wio Nodeは&lt;strong&gt;モバイルバッテリ・PCなどからUSBケーブルで電源を供給しましょう&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;開発用アプリのインストール&#34;&gt;開発用アプリのインストール&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/02_wio_app.png&#34; alt=&#34;&#34; /&gt;
+Wio Nodeの開発には、公式からリリースされている「Wio Link」というアプリ（Androidの場合は「Wio」）を利用します。執筆時はiOS版は1.5.2、Android版は2.3.6がリリースされています。今回はiOS版を使っての紹介です。&lt;/p&gt;
+
+&lt;p&gt;iOS: &lt;a href=&#34;https://itunes.apple.com/jp/app/wio-link/id1054893491?mt=8&#34;&gt;https://itunes.apple.com/jp/app/wio-link/id1054893491?mt=8&lt;/a&gt;&lt;br /&gt;
+Android: &lt;a href=&#34;https://play.google.com/store/apps/details?id=cc.seeed.iot.ap&amp;amp;hl=ja&#34;&gt;https://play.google.com/store/apps/details?id=cc.seeed.iot.ap&amp;amp;hl=ja&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;アプリとwio-nodeの設定&#34;&gt;アプリとWio Nodeの設定&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/03_acount.png&#34; alt=&#34;&#34; /&gt;
+アプリを開いたらまずはアカウントを作成しましょう。「SIGN UP」からメールアドレスとパスワードを設定し「Register」で登録します。ServerLocationはデフォルトのGlobalにしておきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;GmailやFacebookのアカウントを使った登録もできますが、他サービスとの連携でうまくいかないことがあるので非推奨です&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/04_add_device.png&#34; alt=&#34;&#34; /&gt;
+アカウントが作成されたらAdd Your First Deviceをタップし、Wio Nodeを選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;wi-fi設定&#34;&gt;Wi-Fi設定&lt;/h4&gt;
+
+&lt;p&gt;続いてWi-Fi設定をします。&lt;strong&gt;手順が少しややこしいので注意してください&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;まずは簡単にWio Nodeがインターネットに繋がる仕組みを整理してみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/05_internet.png&#34; alt=&#34;&#34; /&gt;
+デバイスがインターネットに繋がるためには、&lt;strong&gt;インターネットに繋がる媒介（=アクセスポイント）&lt;/strong&gt;が必要です。私たちは普段ルータやポケットWi-Fi（モバイルルータ）を媒介にしていますね。&lt;/p&gt;
+
+&lt;p&gt;Wio Nodeも同様に、インターネットに繋がるために&lt;strong&gt;アクセスポイントが必要&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/06_wifi_setup.png&#34; alt=&#34;&#34; /&gt;
+Wio Nodeに&lt;strong&gt;アクセスポイントの情報を教える必要がある&lt;/strong&gt;ので、アドホックモードでWio Nodeとスマートフォンを同じ回線に繋いだ状態にします。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;スマートフォンからWio Nodeにアクセスポイント情報を教えてあげる&lt;/strong&gt;と、その後は&lt;strong&gt;Wio Node自身がアクセスポイントに繋がります&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;接続手順が複雑になりますが、この仕組みを押さえておきましょう！&lt;/p&gt;
+
+&lt;p&gt;アクセスポイントやWAN/LANについてよくわからない方は&lt;a href=&#34;https://dotstud.io/docs/network&#34;&gt;ドキュメント&lt;/a&gt;を参照してください。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;wi-fi設定手順&#34;&gt;Wi-Fi設定手順&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/06_func.png&#34; alt=&#34;&#34; /&gt;
+まずは画面の指示にしたがってFuncボタン（写真親指側）を4秒以上長押しすると、青いランプがゆらゆらと光ります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/07_wio_network.png&#34; alt=&#34;&#34; /&gt;
+iOSのWi-Fi選択画面から、「Wio_XXXX」というSSIDを選択します。（Androidはアプリ内での選択です。）アドホックモードで&lt;strong&gt;Wio Nodeとスマートフォンが繋がっている状態&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/08_wifi_list.png&#34; alt=&#34;&#34; /&gt;
+アプリに戻ると、続いてWi-Fiの接続を促されます。ネットワークリストから、部屋や会場のWi-Fi（利用するWi-Fi）を選択してパスワードを入力しましょう。&lt;strong&gt;アクセスポイント情報を教えてあげた状態&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/09_device_connect.png&#34; alt=&#34;&#34; /&gt;
+Wio Nodeがインターネットに繋がり、登録が完了しました。デバイスに名前をつけておきます。（Android端末で認識がうまくいかない場合、&lt;strong&gt;機内モードにして試す&lt;/strong&gt;と解消することがあるようです。）&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;アプリからでは失敗する場合は、&lt;a href=&#34;https://dotstud.io/docs/wionode-wiosetup&#34;&gt;こちら&lt;/a&gt;を参考にWio-Setupというツールを試してみてください&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;以上でWio Nodeのセットアップは完了です。同じデバイスとアクセスポイントを使う場合は、以後起動するだけで接続されるようになります！&lt;/p&gt;
+
+&lt;h3 id=&#34;wio-nodeにモジュールを接続する&#34;&gt;Wio Nodeにモジュールを接続する&lt;/h3&gt;
+
+&lt;p&gt;アプリから、接続するモジュールを登録します。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/10_display_connect.png&#34; alt=&#34;&#34; /&gt;
+「PORT0」（左側）をタップして、下の「OUTPUT」から「4-Digit Display」を選択しましょう。&lt;strong&gt;似たようなモジュールがたくさんありますので、よく確認してください&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/11_temperature_connect.png&#34; alt=&#34;&#34; /&gt;
+続いて温度センサを登録します。「PORT1」（右側）をタップして、「INPUT」から「Temperature Sensor」を選択します。&lt;/p&gt;
+
+&lt;p&gt;アプリ画面を参考に、Wio Nodeにモジュールを接続します。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/12_module_connect.png&#34; alt=&#34;&#34; /&gt;
+「PORT0」に7セグメントディスプレイ、「PORT1」に温度センサを接続しましょう。&lt;/p&gt;
+
+&lt;p&gt;接続できたら、アプリ画面下部の「Update Firmware」をタップしましょう。読み込みのあと、「View API」というAPIサンプルページが表示されるようになります。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Updateが失敗する場合はモジュールの接続が左右間違っていないか今一度確認してください&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;アプリからapiを試す&#34;&gt;アプリからAPIを試す&lt;/h3&gt;
+
+&lt;p&gt;「View API」のページでは、手軽にモジュールを操作するAPIを試すことができます。正しく接続できているか、試してみましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/13_display_api.png&#34; alt=&#34;&#34; /&gt;
+まずは7セグメントディスプレイの「display_point」というAPIを試してみます。説明部分には、「&lt;strong&gt;POSTメソッドで1を送ると&amp;rdquo;:&amp;ldquo;が表示される&lt;/strong&gt;」とありますね。「Test Request」から1を送ってみます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/14_display_demo.png&#34; alt=&#34;&#34; /&gt;
+7セグメントディスプレイに&amp;rdquo;:&amp;ldquo;が表示されました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/15_temp_api.png&#34; alt=&#34;&#34; /&gt;
+続いて温度センサのAPIを試します。温度の取得には値は必要ないので、そのままGETメソッドでRequestします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/16_temp_demo.png&#34; alt=&#34;&#34; /&gt;
+現在の温度が返ってきました。（かなり暑いですね（笑））&lt;/p&gt;
+
+&lt;p&gt;挙動が確認できたら、2つのモジュールを連携させるプログラムを書いていきましょう！&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;memo-getメソッドとpostメソッド&#34;&gt;memo: GETメソッドとPOSTメソッド&lt;/h4&gt;
+
+&lt;p&gt;HTTPリクエストにはいくつかのメソッド（送信方法）があります。GET、POSTの他にもPUTメソッド、DELETEメソッドなどがあり、最近主流の「RESTful API」という考え方では&lt;strong&gt;操作する内容によってメソッドを使い分ける&lt;/strong&gt;ことになっています。&lt;/p&gt;
+
+&lt;p&gt;今回はメソッド名だけわかればプログラミング可能ですが、詳しく知りたい方は調べてみてください！&lt;/p&gt;
+
+&lt;h3 id=&#34;node-jsでプログラムを書く&#34;&gt;Node.jsでプログラムを書く&lt;/h3&gt;
+
+&lt;p&gt;センサの値を取得して、室温をディスプレイに表示するプログラムを書いていきましょう。プログラムはAPIを叩ければよいので、今回は&lt;strong&gt;Node.js&lt;/strong&gt;で作成します。&lt;/p&gt;
+
+&lt;p&gt;プログラムの仕組みを理解するために、以下の手順で説明します。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Node.jsのインストール&lt;/li&gt;
+&lt;li&gt;プロジェクトの作成&lt;/li&gt;
+&lt;li&gt;温度情報を取得する&lt;/li&gt;
+&lt;li&gt;温度情報を表示したい文字列に変換する&lt;/li&gt;
+&lt;li&gt;ディスプレイに温度を表示する&lt;/li&gt;
+&lt;li&gt;3秒ごとに更新する&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;memo-コマンドラインの使い方&#34;&gt;memo: コマンドラインの使い方&lt;/h4&gt;
+
+&lt;p&gt;Node.jsの実行やファイル操作はコマンドラインで行います。Macには「ターミナル」、Windowsには「コマンドプロンプト」というアプリケーションが最初から入っているので、立ち上げて使いましょう。&lt;/p&gt;
+
+&lt;p&gt;初めてコマンドを使う方は、「ターミナル コマンド」などで検索すると基本的な使い方がわかりますよ！&lt;/p&gt;
+
+&lt;p&gt;筆者はiTerm2というクライアントアプリにzshというシェルを入れています。（画面がちょっと違うくらいだと思ってください。）&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;1-node-jsのインストール&#34;&gt;1. Node.jsのインストール&lt;/h4&gt;
+
+&lt;p&gt;まずはNode.jsのインストールから始めます。また&lt;code&gt;async/await&lt;/code&gt;という機能を使っているので、&lt;strong&gt;v7.6.0以上が必要&lt;/strong&gt;です。最新版をインストール済みの方は次項の「プロジェクトの作成」から始めてください。&lt;/p&gt;
+
+&lt;p&gt;Node.jsのインストールには、簡単にバージョン管理ができる「&lt;strong&gt;nvm&lt;/strong&gt;」や「&lt;strong&gt;nodebrew&lt;/strong&gt;」を使うのが便利です。nodebrewを使ったインストール方法は下記を参照してください。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://dotstud.io/blog/setup-new-mac-app/#node-js%E7%92%B0%E5%A2%83%E6%95%B4%E5%82%99&#34;&gt;僕がMacを買い換えてすぐにいれるツール&amp;amp;すぐにする初期設定&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;インストールが完了したら、Node.jsが正しく動くか確認してみましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/17_node_v.png&#34; alt=&#34;&#34; /&gt;
+コマンドラインで&lt;code&gt;node -v&lt;/code&gt;を叩くとバージョンが出るようになったでしょうか？（v7.6.0以上ですよ！）&lt;/p&gt;
+
+&lt;p&gt;Node.jsの環境構築はとても簡単なので、ウェブ開発が初めての方にもオススメです！&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;memo-コーディング無しで動かしてみる&#34;&gt;memo: コーディング無しで動かしてみる&lt;/h4&gt;
+
+&lt;p&gt;サクッと試したい方は、githubの&lt;a href=&#34;https://github.com/dotstudio/wionode_handson&#34;&gt;完成プログラム&lt;/a&gt;をご覧ください。READMEの手順を進めるとコーディングなしで動かせます。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;2-プロジェクトの作成&#34;&gt;2. プロジェクトの作成&lt;/h4&gt;
+
+&lt;p&gt;今回のWio Nodeのプログラムを置くプロジェクトを作成しましょう。&lt;/p&gt;
+
+&lt;p&gt;適当なディレクトリに移動します。（私は&lt;code&gt;/Users/ユーザ名/workspace&lt;/code&gt;という作業ディレクトリを用意しています。参考まで。）
+&lt;img src=&#34;https://dotstud.io/img/blog/095/18_mkdir.png&#34; alt=&#34;&#34; /&gt;
+&lt;code&gt;mkdir ディレクトリ名&lt;/code&gt;で新しいディレクトリを作成できます。&lt;code&gt;wio_temperature&lt;/code&gt;というディレクトリを作ってみました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/19_cd.png&#34; alt=&#34;&#34; /&gt;
+&lt;code&gt;cd ディレクトリ名&lt;/code&gt;で作成したディレクトリの下に移動します。&lt;/p&gt;
+
+&lt;p&gt;Node.jsでは「npm」でモジュールを管理できます。&lt;code&gt;npm init -y&lt;/code&gt;を実行しましょう。&lt;code&gt;-y&lt;/code&gt;オプションで名前等をデフォルト値で作成してくれます。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/20_npm_init.png&#34; alt=&#34;&#34; /&gt;
+プロジェクト名やライブラリなどを管理する「&lt;strong&gt;package.json&lt;/strong&gt;」が作成されました。&lt;/p&gt;
+
+&lt;p&gt;今回使用する「&lt;strong&gt;axios&lt;/strong&gt;」ライブラリをインストールします。&lt;code&gt;npm install axios --save&lt;/code&gt;を実行しましょう。&lt;code&gt;--save&lt;/code&gt;オプションをつけることでpackage.jsonに記載されます。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/21_npm_install.png&#34; alt=&#34;&#34; /&gt;
+axiosがインストールされ、package.jsonに追加されました。&lt;/p&gt;
+
+&lt;p&gt;続いてプログラムを記述するファイルを作成します。&lt;code&gt;touch ファイル名&lt;/code&gt;でファイルが作成されます。（Windowsの場合はコマンドがないのでフォルダから作成してください。）
+&lt;img src=&#34;https://dotstud.io/img/blog/095/22_touch.png&#34; alt=&#34;&#34; /&gt;
+app.jsというファイルを作成しました。（&lt;code&gt;ls&lt;/code&gt;コマンドでカレントディレクトリのファイルが見れます。Windowsは&lt;code&gt;dir&lt;/code&gt;。）&lt;/p&gt;
+
+&lt;p&gt;以上でプロジェクトの作成は完了です。ファイルにプログラムを書いていきましょう！&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;memo-ファイルの編集とエディタについて&#34;&gt;memo: ファイルの編集とエディタについて&lt;/h4&gt;
+
+&lt;p&gt;コマンドラインからでもファイルの編集はできますが、&lt;strong&gt;インデントやコードの補完が効かず作業しづらい&lt;/strong&gt;ので、テキストエディタを使うのがオススメです。&lt;/p&gt;
+
+&lt;p&gt;下記記事ではVisual Studio Codeのインストール方法を紹介しています。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://dotstud.io/blog/setup-new-mac-app/#visual-studio-code&#34;&gt;僕がMacを買い換えてすぐにいれるツール&amp;amp;すぐにする初期設定&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;3-温度情報を取得する&#34;&gt;3. 温度情報を取得する&lt;/h4&gt;
+
+&lt;p&gt;まずは温度を取得するプログラムを書いていきます。&lt;code&gt;BASE_URL&lt;/code&gt;はドメインが違う場合があるので、アプリから確認して自身のものに置き換えてください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
+
+const axios = require(&#39;axios&#39;);
+const TOKEN = process.argv[2] || &#39;&#39;;
+const BASE_PATH = `https://us.wio.seeed.io/v1/node`; // 自身のものをアプリで確認
+
+/**
+ * 温度取得
+ */
+ const getTemp = () =&amp;gt; {
+     const ENDPOINT = `/GroveTempA0/temp`;
+     const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${TOKEN}`;
+     axios.request({method: &#39;get&#39;, baseURL: BASE_URL})
+     .then((resp) =&amp;gt; console.log(resp));
+ }
+
+getTemp();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;axiosに温度取得APIのURLとオプションを渡し、返ってきた値を出力しています。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;const ACCESS_TOKEN = process.argv[2] || &#39;&#39;;&lt;/code&gt;の部分は、コマンドライン引数（実行時に渡す値）を取得しています。tokenなどの人に知られたくない値は、ファイルに直接書かないのがベターです。&lt;/p&gt;
+
+&lt;p&gt;それでは正しく動くか試してみましょう。&lt;code&gt;node app.js &amp;lt;自分のtoken&amp;gt;&lt;/code&gt;というコマンドで実行します。&lt;/p&gt;
+
+&lt;p&gt;ご自身のtokenは&lt;strong&gt;アプリのView API画面から確認してください&lt;/strong&gt;。&lt;code&gt;?access_token=&lt;/code&gt;の後の文字列がtokenです。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/23_temp_test.png&#34; alt=&#34;&#34; /&gt;
+温度センサの情報が返ってきたでしょうか？&lt;/p&gt;
+
+&lt;p&gt;1番下に温度情報がありますね。この情報を使ってディスプレイに表示する文字列を作っていきます。&lt;/p&gt;
+
+&lt;p&gt;エラーが出てしまった人は、「Node.js &amp;lt;エラーメッセージ&amp;gt;」で検索すると答えが見つかりやすいです。&lt;/p&gt;
+
+&lt;p&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;4-温度情報を表示したい文字列に変換する&#34;&gt;4. 温度情報を表示したい文字列に変換する&lt;/h4&gt;
+
+&lt;p&gt;取得した温度情報を、ディスプレイに表示する文字列に作り変えるfunctionを作りましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;/**
+ * 取得した温度情報を表示する文字列に変換
+ *
+ * @param {number} temp
+ * @return {string}
+ */
+const temp2digit = (temp) =&amp;gt; {
+  let temp_str = `${temp}`;
+  temp_str = temp_str.replace(&#39;.&#39;, &#39;&#39;);
+  if (temp_str.length &amp;gt;= 4) {
+    temp_str = temp_str.substr(0, tempstr.length-1);
+  }
+  return `${temp_str}C`;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;temp2digit()の引数には、先ほど受け取った情報の温度部分だけを渡します。&lt;/p&gt;
+
+&lt;p&gt;数値を文字列に変換し、不要な&amp;rsquo;.&amp;lsquo;を取り除き、3桁にして、温度計らしく&amp;rsquo;C&amp;rsquo;を付けて返します。&lt;/p&gt;
+
+&lt;p&gt;これを先ほど作ったgetTemp()と一緒に実行するようにしてみましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
+
+const axios = require(&#39;axios&#39;);
+const TOKEN = process.argv[2] || &#39;&#39;;
+const BASE_PATH = `https://us.wio.seeed.io/v1/node`; // 自身のものをアプリで確認
+
+/**
+ * 温度取得
+ */
+ const getTemp = () =&amp;gt; {
+     const ENDPOINT = `/GroveTempA0/temp`;
+     const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${TOKEN}`;
+     return axios.request({method: &#39;get&#39;, baseURL: BASE_URL}); // ここでは実行しない
+ }
+
+/**
+ * 温度情報を文字列変換+Cを追加
+ * @param {number} temp
+ * @return {string}
+ */
+const temp2digit = (temp) =&amp;gt;{
+    let temp_str = `${temp}`;
+    temp_str = temp_str.replace(&#39;.&#39;,&#39;&#39;);
+    if(temp_str.length &amp;gt;= 4){
+        temp_str = temp_str.substr(0,temp_str.length-1);
+    }
+    return `${temp_str}C`;
+}
+
+async function main(){ // async/awaitを使う
+   const res = await getTemp();
+   const temp = res.data.temperature;
+   const text = temp2digit(temp);
+   console.log(text);
+}
+
+main();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ここではasync/awaitを使っています。awaitで指定したタスクの実行を待ってレスポンスを受け取り、asyncを付けたメソッドを一つのタスクとして処理するような機能です。Node.jsではv7.6.0から導入されました。&lt;/p&gt;
+
+&lt;p&gt;実行を待たせるため、getTemp()では、APIの結果ではなくメソッドを返すだけに変更します。&lt;/p&gt;
+
+&lt;p&gt;getTemp()で受け取ったobjectの子要素には&lt;code&gt;.&lt;/code&gt;でアクセスします。先ほどのレスポンスのdataの中のtemperatureが欲しいので&lt;code&gt;res.data.temperature&lt;/code&gt;となります。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;node app.js &amp;lt;自分のtoken&amp;gt;&lt;/code&gt;で実行してみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/24_temp2digit.png&#34; alt=&#34;&#34; /&gt;
+温度計の文字列ができました！&lt;/p&gt;
+
+&lt;p&gt;次はいよいよこの文字列をディスプレイに表示させます。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;5-ディスプレイに温度を表示する&#34;&gt;5. ディスプレイに温度を表示する&lt;/h4&gt;
+
+&lt;p&gt;取得した温度の値を使って、ディスプレイに表示するAPIを叩きます。温度の区切りを表すため、最初に試した&amp;rsquo;:&amp;lsquo;を表示するAPIも使ってみましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;/**
+ * ディスプレイに値を表示
+ *
+ * @param {number} start_pos
+ * @param {strng} chars
+ */
+const fourDigit = (start_pos, chars) =&amp;gt; {
+  const ENDPOINT = `/Grove4DigitUART0/display_digits/${start_pos}/${chars}`;
+  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
+  return axios.request({method: &#39;POST&#39;, baseURL: BASE_URL})
+}
+
+/**
+ * : を表示/非表示
+ * @param {number} display 0|1
+ */
+const fourDigitPoint = (display) =&amp;gt; {
+  const ENDPOINT = `/Grove4DigitUART0/display_point/${display}`;
+  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
+  return axios.request({method: &#39;POST&#39;, baseURL: BASE_URL});
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;fourDigit()のstart_posにはディスプレイ表示の開始位置、charsには表示する文字を渡します。（詳しくはAPIの説明を読んでみてください）&lt;/p&gt;
+
+&lt;p&gt;fourDigitPoint()には表示するかどうかの0/1を渡すようになっています。&lt;/p&gt;
+
+&lt;p&gt;これまで作ったfunctionと繋げてみます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
+
+const axios = require(&#39;axios&#39;);
+const BASE_PATH = &#39;https://us.wio.seeed.io/v1/node&#39;; // 自身のものをアプリで確認
+const ACCESS_TOKEN = process.argv[2] || &#39;&#39;;
+
+/**
+ * 温度を取得
+ */
+const getTemp = () =&amp;gt; {
+  const ENDPOINT = `/GroveTempA0/temp`;
+  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
+  return axios.request({method: &#39;GET&#39;, baseURL: BASE_URL});
+}
+
+/**
+ * 取得した温度情報を表示する文字列に変換
+ *
+ * @param {number} temp
+ * @return {string}
+ */
+const temp2digit = (temp) =&amp;gt; {
+  let temp_str = `${temp}`;
+  temp_str = temp_str.replace(&#39;.&#39;, &#39;&#39;);
+  if (temp_str.length &amp;gt;= 4) {
+    temp_str = temp_str.substr(0, tempstr.length-1);
+  }
+  return `${temp_str}C`;
+}
+
+/**
+ * ディスプレイに値を表示
+ *
+ * @param {number} start_pos
+ * @param {strng} chars
+ */
+const fourDigit = (start_pos, chars) =&amp;gt; {
+  const ENDPOINT = `/Grove4DigitUART0/display_digits/${start_pos}/${chars}`;
+  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
+  return axios.request({method: &#39;POST&#39;, baseURL: BASE_URL});
+}
+
+/**
+ * : を表示/非表示
+ * @param {number} display 0|1
+ */
+const fourDigitPoint = (display) =&amp;gt; {
+  const ENDPOINT = `/Grove4DigitUART0/display_point/${display}`;
+  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
+  return axios.request({method: &#39;POST&#39;, baseURL: BASE_URL});
+}
+
+async function main() =&amp;gt; {
+  let res = getTemp();
+  const temp = res.data.temperature;
+  const text = temp2digit(temp);
+  console.log(text);
+  res = await fourDigit(0, text);
+  res = await fourDigitPoint(1);
+}
+
+main();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;こちらも試してみましょう。&lt;code&gt;node app.js &amp;lt;自分のtoken&amp;gt;&lt;/code&gt;で実行です。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/25_comp_demo.png&#34; alt=&#34;&#34; /&gt;
+温度がディスプレイに表示されました！&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;6-3秒ごとに更新する&#34;&gt;6. 3秒ごとに更新する&lt;/h4&gt;
+
+&lt;p&gt;今のままではコマンドを実行した時しか処理が走りません。3秒ごとに実行するようプログラムを変えてみます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;const INTERVAL = 3000;
+
+/**
+ * 繰り返し実行する
+ */
+setInterval(() =&amp;gt; {
+  main()
+  .catch((e) =&amp;gt; {
+    if (e.response) console.log(e.response);
+  })
+}, INTERVAL);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;update()の実行部分をsetInterval()関数で繰り返すようにします。setInterval()の第二引数にミリ秒で数値を渡すと、その間隔ごとに実行されます。あとから変更しやすいよう、定数で宣言しておきましょう。&lt;/p&gt;
+
+&lt;p&gt;catch()はエラーが発生するとエラーレスポンスを受け取ります。&lt;/p&gt;
+
+&lt;p&gt;完成させたコードはこちら。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
+
+const axios = require(&#39;axios&#39;);
+const BASE_PATH = &#39;https://us.wio.seeed.io/v1/node&#39;; // 自身のものをアプリで確認
+const ACCESS_TOKEN = process.argv[2] || &#39;&#39;;
+const INTERVAL = 3000;
+
+/**
+ * 温度を取得
+ *
+ * @return {object}
+ */
+const getTemp = () =&amp;gt; {
+  const ENDPOINT = `/GroveTempA0/temp`;
+  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
+  return axios.request({method: &#39;GET&#39;, baseURL: BASE_URL});
+}
+
+/**
+ * 取得した温度情報を表示する文字列に変換
+ *
+ * @param {number} temp
+ * @return {string}
+ */
+const tempToDigit = (temp) =&amp;gt; {
+  let temp_str = `${temp}`;
+  temp_str = temp_str.replace(&#39;.&#39;, &#39;&#39;);
+  if (temp_str.length &amp;gt;= 4) {
+    temp_str = temp_str.substr(0, temp_str.length-1);
+  }
+  return `${temp_str}C`;
+}
+
+/**
+ * ディスプレイに値を表示
+ *
+ * @param {number} start_pos
+ * @param {strng} chars
+ * @return {object}
+ */
+const fourDigit = (start_pos, chars) =&amp;gt; {
+  const ENDPOINT = `/Grove4DigitUART0/display_digits/${start_pos}/${chars}`;
+  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
+  return axios.request({method: &#39;POST&#39;, baseURL: BASE_URL})
+}
+
+/**
+ * : を表示/非表示
+ * @param {number} display 0|1
+ * @return {object}
+ */
+const fourDigitPoint = (display) =&amp;gt; {
+  const ENDPOINT = `/Grove4DigitUART0/display_point/${display}`;
+  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
+  return axios.request({method: &#39;POST&#39;, baseURL: BASE_URL});
+}
+
+/**
+ * メインの処理（同期）
+ */
+async function main() {
+  let res = await getTemp();
+  const temp = res.data.temperature;
+  const text = tempToDigit(temp);
+  console.log(text);
+  res = await fourDigit(0, text);
+  res = await fourDigitPoint(1);
+}
+
+/**
+ * 繰り返し実行する
+ */
+setInterval(() =&amp;gt; {
+  main()
+  .catch((e) =&amp;gt; {
+    if (e.response) console.log(e.response);
+  })
+}, INTERVAL);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;試してみる&#34;&gt;試してみる&lt;/h3&gt;
+
+&lt;p&gt;完成コードを試してみます。ドキドキ。&lt;code&gt;node app.js &amp;lt;自分のtoken&amp;gt;&lt;/code&gt;で実行です。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/25_comp_demo.png&#34; alt=&#34;&#34; /&gt;
+現在の室温が表示されます。&lt;/p&gt;
+
+&lt;p&gt;3秒ごとに更新されるので、変化を試すため温度センサを手で温めてみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/095/26_warmer.png&#34; alt=&#34;&#34; /&gt;
+少し温度が上がりました。処理を止めたい場合は&lt;code&gt;controll+c&lt;/code&gt;で終了します。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;これでプログラムは完成です！やったー！！&lt;/strong&gt; お疲れ様でした！&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;補足-完成の一歩先へ&#34;&gt;補足: 完成の一歩先へ！&lt;/h4&gt;
+
+&lt;p&gt;「簡単であっという間だった」というあなた！&lt;strong&gt;このガジェットを使ってできることはまだまだあります！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;例1: Azure Web AppsなどのPaaSを使って常時稼働できるようにする&lt;/li&gt;
+&lt;li&gt;例2: 温度情報をAmbientなどのウェブサービスを使ってグラフ化してみる&lt;/li&gt;
+&lt;li&gt;例3: 一定の温度をトリガーにTwitterやSlackへ通知を送ってみる&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;上記はほんの一例です。Wio Node対応モジュールもたくさんありますので、ここまでの知見を使って試してみましょう！&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;いかがだったでしょうか？簡単と言いつつ、コマンドでの作業やウェブ開発の経験がない人には詰まる部分が多かったかもしれません。でも、これで&lt;strong&gt;InternetとThingsの連携ができるようになりました！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;IoTの世界には、まだまだたくさんの楽しいデバイスやアイディアが待っています。&lt;strong&gt;作っても使っても楽しい電子工作をやっていきましょう！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;最後まで読んでくださりありがとうございました！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>話題のWebBluetoothでGenuino101をブラウザからリモートコントロールしてみよう</title>
+      <link>https://dotstud.io/blog/web-bluetooth-remote-blink/</link>
+      <pubDate>Thu, 09 Mar 2017 18:00:00 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/web-bluetooth-remote-blink/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudioの&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;最近WebBluetoothがChromeでデフォルトで利用できるようになったと知って、今回試してみたのでまとめてみました。&lt;/p&gt;
+
+&lt;h2 id=&#34;webbluetoothとは&#34;&gt;WebBluetoothとは&lt;/h2&gt;
+
+&lt;p&gt;WebブラウザのAPIでBluetoothが使えるようになるAPIです。正確にはBLE（Bluetooth Low Energy）というBluetooth4.0の機能を使えます。&lt;/p&gt;
+
+&lt;p&gt;通常、BLEはデバイス間を接続して通信させる規格ですが、その性質上、サーバーサイドかつ低レイヤーなプログラミング言語や周辺知識を持っていないと取り扱うことが難しかったです。&lt;/p&gt;
+
+&lt;p&gt;これまでにもNode.jsでは、&lt;a href=&#34;https://github.com/sandeepmistry/noble&#34;&gt;noble&lt;/a&gt;というBLEを扱えるモジュールや類似モジュールが存在しましたが、Node.jsはサーバーサイド言語なためホストマシンが必要でした。&lt;/p&gt;
+
+&lt;p&gt;WebBluetoothはブラウザのJavaScriptからBLEを扱うことができるブラウザAPIです。&lt;/p&gt;
+
+&lt;h3 id=&#34;何が嬉しいの&#34;&gt;何が嬉しいの？&lt;/h3&gt;
+
+&lt;p&gt;WebBluetoothを使えることは、何が利点になるのでしょうか。&lt;/p&gt;
+
+&lt;p&gt;大枠で捉えると、Webとデバイスの連携がしやすくなったことが挙げられます。&lt;/p&gt;
+
+&lt;p&gt;Webブラウザ上のJavaScriptで開発が出来るため、 &lt;strong&gt;通常のWebサイトの機能にデバイスとの連携する機能を追加することができる&lt;/strong&gt;ようになります。&lt;/p&gt;
+
+&lt;p&gt;現行のIoTデバイスはデータを取得するために付属の専用スマホアプリなどをインストールしてBLE通信をする必要があります。これは（スマートフォンの場合）スマホアプリの開発言語のJavaやSwiftからのみBLEを扱うことが出来たからです。&lt;/p&gt;
+
+&lt;p&gt;WebBluetoothが広まれば、デバイスと連携するスマートフォンアプリケーション（以下、スマホアプリ）を開発しなくてもいい時代が来るかもしれません。Webとデバイスの連携が格段にしやすくなるので、Webの表現は圧倒的に広がるなと感じています。&lt;/p&gt;
+
+&lt;p&gt;僕自身は2015年の終わりにWebBluetoothを知り、当時アツくなって発表などをしていました。&lt;/p&gt;
+
+&lt;script async class=&#34;speakerdeck-embed&#34; data-id=&#34;0e2b2871b9d04aab980c1274a383f1cd&#34; data-ratio=&#34;1.33333333333333&#34; src=&#34;//speakerdeck.com/assets/embed.js&#34;&gt;&lt;/script&gt;
+
+&lt;p&gt;WebBluetoothの詳細については&lt;a href=&#34;https://www.w3.org/community/web-bluetooth/&#34;&gt;W3Cのページ&lt;/a&gt;などをご確認ください。&lt;/p&gt;
+
+&lt;h2 id=&#34;webbluetoothとgenuino101でリモートlチカをしてみよう&#34;&gt;WebBluetoothとGenuino101でリモートLチカをしてみよう&lt;/h2&gt;
+
+&lt;p&gt;それでは実際にWebBluetoothを使ってみまししょう。&lt;/p&gt;
+
+&lt;p&gt;今回はGenuino101というBluetooth搭載のArduino互換ボードを利用してみます。&lt;/p&gt;
+
+&lt;h3 id=&#34;作るもの&#34;&gt;作るもの&lt;/h3&gt;
+
+&lt;p&gt;Androidのブラウザ（Google Chrome）からGenuino101に繋げたLEDをリモートで制御してみます。&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;instagram-media&#34; data-instgrm-captioned data-instgrm-version=&#34;7&#34; style=&#34; background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);&#34;&gt;&lt;div style=&#34;padding:8px;&#34;&gt; &lt;div style=&#34; background:#F8F8F8; line-height:0; margin-top:40px; padding:28.194444444444443% 0; text-align:center; width:100%;&#34;&gt; &lt;div style=&#34; background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;&#34;&gt;&lt;/div&gt;&lt;/div&gt; &lt;p style=&#34; margin:8px 0 0 0; padding:0 4px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/BRMD2E3AxN_/&#34; style=&#34; color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;&#34; target=&#34;_blank&#34;&gt;WebBluetoothがAndroid通常版Chromeでも使えるようになったのでリモートLチカ。 ブラウザでBluetooth使える感動噛みしめてる&lt;/a&gt;&lt;/p&gt; &lt;p style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;&#34;&gt;n0bisukeさん(@n0bisuke)がシェアした投稿 - &lt;time style=&#34; font-family:Arial,sans-serif; font-size:14px; line-height:17px;&#34; datetime=&#34;2017-03-03T19:54:26+00:00&#34;&gt;2017  3月 3 11:54午前 PST&lt;/time&gt;&lt;/p&gt;&lt;/div&gt;&lt;/blockquote&gt;
+&lt;script async defer src=&#34;//platform.instagram.com/en_US/embeds.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;ul id=&#34;env&#34;&gt;
+    &lt;li&gt;Macbook Pro Early 2016&lt;/li&gt;
+    &lt;li&gt;macOS Sierra v10.12.2&lt;/li&gt;
+    &lt;li&gt;Arduino IDE v1.8.1&lt;/li&gt;
+    &lt;li&gt;Android 6.0.1&lt;/li&gt;
+    &lt;li&gt;Chrome 56&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;genuino101側&#34;&gt;Genuino101側&lt;/h3&gt;
+
+&lt;p&gt;Genuino101側のソースコードはサンプルにあるものをそのまま使います。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;/*
+ * Copyright (c) 2016 Intel Corporation.  All rights reserved.
+ * See the bottom of this file for the license terms.
+ */
+
+#include &amp;lt;CurieBLE.h&amp;gt;
+
+BLEPeripheral blePeripheral;  // BLE Peripheral Device (the board you&#39;re programming)
+BLEService ledService(&amp;quot;19B10000-E8F2-537E-4F6C-D104768A1214&amp;quot;); // BLE LED Service
+
+// BLE LED Switch Characteristic - custom 128-bit UUID, read and writable by central
+BLEUnsignedCharCharacteristic switchCharacteristic(&amp;quot;19B10001-E8F2-537E-4F6C-D104768A1214&amp;quot;, BLERead | BLEWrite);
+
+const int ledPin = 13; // pin to use for the LED
+
+void setup() {
+  Serial.begin(9600);
+
+  // set LED pin to output mode
+  pinMode(ledPin, OUTPUT);
+
+  // set advertised local name and service UUID:
+  blePeripheral.setLocalName(&amp;quot;LED&amp;quot;);
+  blePeripheral.setAdvertisedServiceUuid(ledService.uuid());
+
+  // add service and characteristic:
+  blePeripheral.addAttribute(ledService);
+  blePeripheral.addAttribute(switchCharacteristic);
+
+  // set the initial value for the characeristic:
+  switchCharacteristic.setValue(0);
+
+  // begin advertising BLE service:
+  blePeripheral.begin();
+
+  Serial.println(&amp;quot;BLE LED Peripheral&amp;quot;);
+}
+
+void loop() {
+  // listen for BLE peripherals to connect:
+  BLECentral central = blePeripheral.central();
+
+  // if a central is connected to peripheral:
+  if (central) {
+    Serial.print(&amp;quot;Connected to central: &amp;quot;);
+    // print the central&#39;s MAC address:
+    Serial.println(central.address());
+
+    // while the central is still connected to peripheral:
+    while (central.connected()) {
+      // if the remote device wrote to the characteristic,
+      // use the value to control the LED:
+      if (switchCharacteristic.written()) {
+        if (switchCharacteristic.value()) {   // any value other than 0
+          Serial.println(&amp;quot;LED on&amp;quot;);
+          digitalWrite(ledPin, HIGH);         // will turn the LED on
+        } else {                              // a 0 value
+          Serial.println(F(&amp;quot;LED off&amp;quot;));
+          digitalWrite(ledPin, LOW);          // will turn the LED off
+        }
+      }
+    }
+
+    // when the central disconnects, print it out:
+    Serial.print(F(&amp;quot;Disconnected from central: &amp;quot;));
+    Serial.println(central.address());
+  }
+}
+
+/*
+   Copyright (c) 2016 Intel Corporation.  All rights reserved.
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2.1 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+
+   You should have received a copy of the GNU Lesser General Public
+   License along with this library; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;このコードをArduino IDEでGenuino101に書き込めばBLEのペリフェラル（デバイス側）として起動してくれます。&lt;/p&gt;
+
+&lt;p&gt;ソースコードの22行目の&lt;code&gt;blePeripheral.setLocalName(&amp;quot;LED&amp;quot;);&lt;/code&gt;でLEDと指定していますが、この文字列がBLEデバイスの表示名となります。&lt;/p&gt;
+
+&lt;p&gt;Macからは&lt;a href=&#34;https://itunes.apple.com/jp/app/lightblue/id639944780?mt=12&#34;&gt;LightBlue&lt;/a&gt;などのアプリで確認することができます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/afc225feba5b36b39547e701171b8070.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;ブラウザ側&#34;&gt;ブラウザ側&lt;/h3&gt;
+
+&lt;p&gt;ソースコードは&lt;a href=&#34;https://github.com/n0bisuke/webbluetooth_sample/tree/gh-pages/remote_blink&#34;&gt;こちら&lt;/a&gt;にあげています。&lt;/p&gt;
+
+&lt;p&gt;BLEはペリフェラル（デバイス）のUUID → ServiceのUUID → CharacteristicのUUIDという感じで接続していきます。&lt;/p&gt;
+
+&lt;p&gt;Characteristicがデバイスの個別の機能だとしたら、Serviceは機能群というイメージで捉えると分かりやすいかもしれません。&lt;/p&gt;
+
+&lt;p&gt;詳しくは&lt;a href=&#34;http://codezine.jp/article/detail/9287&#34;&gt;CodeZineさんの記事など&lt;/a&gt;をご参照ください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
+
+const UUID = &#39;19b10000-e8f2-537e-4f6c-d104768a1214&#39;;
+const SERVICE_UUID = &#39;19b10001-e8f2-537e-4f6c-d104768a1214&#39;;
+let g_characteristic = {};
+const $light = document.querySelector(&#39;#light&#39;);
+const $bulb = document.querySelector(&#39;.bulb&#39;);
+
+//接続後にon/off切り替え
+const ledToggel = () =&amp;gt; {
+  g_characteristic.readValue()
+  .then((val) =&amp;gt; {
+    let led_state = val.getUint8(0); //値読み取り
+    led_state = led_state ? 0 : 1;
+    g_characteristic.writeValue(new Uint8Array([led_state]));
+    toggelClass(led_state);
+  })
+}
+
+const main = () =&amp;gt; {
+  return navigator.bluetooth.requestDevice({acceptAllDevices:true, optionalServices:[UUID]})
+  .then(device =&amp;gt; {
+    console.log(device);
+    console.log(&#39;&amp;gt; Name:             &#39; + device.name);
+    console.log(&#39;&amp;gt; Id:               &#39; + device.id);
+    console.log(&#39;&amp;gt; Connected:        &#39; + device.gatt.connected);
+    console.log(&#39;--デバイスに接続中です...--&#39;);
+    return device.gatt.connect();
+  })
+  .then(server =&amp;gt; {
+      console.log(&#39;Getting ___ Service...&#39;);
+      return server.getPrimaryService(UUID);
+  })
+  .then(service =&amp;gt; {
+      console.log(&#39;Getting ____ Characteristic...&#39;);
+      return service.getCharacteristic(SERVICE_UUID);
+    })
+  .then(characteristic =&amp;gt; {
+      g_characteristic = characteristic;
+      $light.removeEventListener(&#39;click&#39;,main);
+      $light.addEventListener(&#39;click&#39;,ledToggel);
+      return characteristic;
+    })
+  .catch(error =&amp;gt; {
+    console.log(&#39;Argh! &#39; + error);
+  });
+}
+
+/**
+ * domのclass付け替え(表示切り替え)
+ */
+function toggelClass(led_state){
+  if(led_state){
+    addClass(&#39;#ff0000&#39;);
+  }else{
+    removeClass();
+  }
+}
+
+function removeClass(){
+    $bulb.style.background = &#39;#bbb&#39;;
+    $bulb.style.boxShadow = &#39;&#39;;
+    $bulb.classList.remove(&amp;quot;light_up&amp;quot;);
+}
+
+function addClass(color){
+    $bulb.style.background = color;
+    $bulb.style.boxShadow = `0 -10px 100px ${color}`;
+    $bulb.classList.add(&amp;quot;light_up&amp;quot;);
+}
+
+$light.addEventListener(&#39;click&#39;, main);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;21行目の&lt;code&gt;navigator.bluetooth.requestDevice()&lt;/code&gt;で周辺のデバイスを検索し、28行目の&lt;code&gt;device.gatt.connect()&lt;/code&gt;でデバイスに接続します。&lt;/p&gt;
+
+&lt;p&gt;32行目の&lt;code&gt;server.getPrimaryService()&lt;/code&gt;でServiceに接続し、36行目の&lt;code&gt;service.getCharacteristic()&lt;/code&gt;でCharacteristic（機能）にアクセスできます。&lt;/p&gt;
+
+&lt;p&gt;そこで接続が確立するとボタンを押すたびに10行目の&lt;code&gt;ledToggel()&lt;/code&gt;が呼ばれ、&lt;code&gt;.readValue()&lt;/code&gt;で値読みとり、&lt;code&gt;.writeValue()&lt;/code&gt;で値の書き込みができるようになります。&lt;/p&gt;
+
+&lt;p&gt;これらのコードは&lt;a href=&#34;https://n0bisuke.github.io/webbluetooth_sample/remote_blink/index.html&#34;&gt;GitHub Pagesで動作するようにホスティングしてある&lt;/a&gt;ので実際の動作確認もできます。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;いかがでしたか。&lt;/p&gt;
+
+&lt;p&gt;WebBluetoothを使うことで&lt;strong&gt;ブラウザからBluetoothを使ってデバイスを制御する&lt;/strong&gt;ことができました。&lt;/p&gt;
+
+&lt;p&gt;今後、この技術が普及することでWebブラウザとデバイスの距離がさらになくなっていくかもしれません。&lt;/p&gt;
+
+&lt;p&gt;是非みなさんも試してみて、この可能性を実感してみて下さい。&lt;/p&gt;
+
+&lt;p&gt;それでは。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>ハードウェア知識ゼロでも大丈夫。「Gravity」で始める電子工作入門</title>
+      <link>https://dotstud.io/blog/dfrobot-gravity-hands-on/</link>
+      <pubDate>Tue, 21 Feb 2017 10:00:50 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/dfrobot-gravity-hands-on/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、ちゃちゃまるです。&lt;/p&gt;
+
+&lt;p&gt;先日CodeZineさんで紹介した &lt;a href=&#34;http://codezine.jp/article/detail/9982&#34;&gt;ハードウェアの知識ゼロでもボードにセンサーをつなげられる「Gravity」シリーズ&lt;/a&gt; について、さらに詳しく使い方を説明していきたいと思います！&lt;/p&gt;
+
+&lt;p&gt;「&lt;a href=&#34;https://dotstudio.connpass.com/event/49147/&#34;&gt;今度こそ挫折しない！知識ゼロからの電子工作ハンズオン&lt;/a&gt;」の資料にもなっています。&lt;/p&gt;
+
+&lt;p&gt;※この記事は主に初心者の方・他のマイコンボードを使ってはみたが挫折してしまった方向けです。&lt;/p&gt;
+
+&lt;h2 id=&#34;gravity-のおさらい&#34;&gt;「Gravity」のおさらい&lt;/h2&gt;
+
+&lt;p&gt;「&lt;strong&gt;Gravity&lt;/strong&gt;」とは中国・上海のハードウェア系企業であるDFRobotが作ったコネクタの規格、またそのコネクタを搭載したセンサー等を指します。&lt;/p&gt;
+
+&lt;p&gt;簡単に言うと、開発ボードとコントローラー（ボタンなど）やセンサー（音センサーなど）を統一された規格でつなぐことができるシリーズです。つなぐ部分やコネクタ自体が色分けされているので、&lt;strong&gt;直感的に配線ができ、簡単に自分の思う通りのものができます&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;本記事では&lt;a href=&#34;https://www.dfrobot.com/product-1454.html&#34;&gt;Gravity: Stater Kit for Arduino&lt;/a&gt;を題材にしています。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/photo.png&#34; alt=&#34;Gravityシリーズ&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;開発環境を整える&#34;&gt;開発環境を整える&lt;/h2&gt;
+
+&lt;p&gt;Gravityのコントローラーやセンサーを使うには、PCにIDE（書き込み用アプリケーション）を用意し、PCとマイコンボードをつなげる必要があります。まずは開発環境から整えていきましょう！&lt;/p&gt;
+
+&lt;ul id=&#34;env&#34;&gt;
+    &lt;li&gt;Macbook Air Early 2014&lt;/li&gt;
+    &lt;li&gt;OS X El Capitan v10.11.6&lt;/li&gt;
+    &lt;li&gt;Arduino IDE v1.6.12&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;arduino-ideをインストール&#34;&gt;Arduino IDEをインストール&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.arduino.cc/en/Main/Software&#34;&gt;Arduino - Software&lt;/a&gt;から「Arduino IDE」をダウンロードしてインストールします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/01.png&#34; alt=&#34;Download the Arduino IDE&#34; /&gt;
+「Download the Arduino IDE」からお使いのOSを選択してください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/02.png&#34; alt=&#34;JUST DOWNLOAD&#34; /&gt;
+Arduino IDEはドネーションウェア（ユーザーが任意の利用料を開発者に寄付するライセンス形態のソフトウェア）なので、寄付金額を選択する画面に移動します。今回はグレーで書かれている「JUST DOWNLOAD」をクリックしてダウンロードを開始します。&lt;/p&gt;
+
+&lt;h3 id=&#34;arduino-ideを起動&#34;&gt;Arduino IDEを起動&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/03.png&#34; alt=&#34;IDE初回起動画面&#34; /&gt;
+Arduino IDEをダウンロード後初回起動すると、上のような画面がでてきます。このテキストエリアにコードを書いていきます。&lt;/p&gt;
+
+&lt;p&gt;OSの言語を日本語以外に設定している場合、メニューバーの「Arduino」内の「Preferences」からArduino IDEの言語設定を変更できます。反映するにはOKを押した後アプリの再起動が必要です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/04.png&#34; alt=&#34;IDE画面説明&#34; /&gt;
+基本的なArduino IDEの流れとしては、まずエディア部分にコードを書き、検証ボタンでコードを検証、その後「マイコンボードに書き込む」ボタンでマイコンにプログラムを送ります。エラーやメッセージなどはコンパイラ画面に出力されます。&lt;/p&gt;
+
+&lt;h3 id=&#34;pcとマイコンボードをつなげる&#34;&gt;PCとマイコンボードをつなげる&lt;/h3&gt;
+
+&lt;p&gt;PCとマイコンボードをつないで、PCからArduino IDE経由でプログラムを書き込めるようにします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/05.png&#34; alt=&#34;ボードを選択&#34; /&gt;
+USBでDFRduinoとPCをつないだら、「ツール」から「Arduino/Genuino UNO」を選択するだけです。DFRduinoはArduinoと全く同じ（下で詳しく解説します）なので、これでボードと接続できました。&lt;/p&gt;
+
+&lt;h2 id=&#34;マイコンボードにプログラムを書き込む&#34;&gt;マイコンボードにプログラムを書き込む&lt;/h2&gt;
+
+&lt;p&gt;Arduino IDEではプログラムを書いたファイルのことを「スケッチ」と呼ぶのですが、実はアプリにいくつものスケッチサンプルが内蔵されています。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/06.png&#34; alt=&#34;&#34; /&gt;
+上の「スケッチ例」を見るとかなりの量があります。今回は「01.Basics」内の「Blink」というスケッチを呼び出してみましょう。「Blink」をクリックすると自動的にプログラムが書かれたウィンドウが出てきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/07.png&#34; alt=&#34;Blinkサンプル&#34; /&gt;
+たくさんの文字が書かれていますが、実際のプログラムは色がついている部分です（&lt;code&gt;/* */&lt;/code&gt; で囲まれている部分や&lt;code&gt;//&lt;/code&gt;と行の先頭にあるのはコメントなので、実際の挙動には関係しません）。ここに書く言語はC言語ベースの&lt;strong&gt;Arduino言語&lt;/strong&gt;です。C言語自体の記述方法（&lt;code&gt;if&lt;/code&gt;文や&lt;code&gt;for&lt;/code&gt;文など）はここでは解説しませんので、他のサイトを参考にしてください。&lt;/p&gt;
+
+&lt;p&gt;さて、ここで本来なら「検証」ボタンを使ってプログラムに間違いがないかチェックするのですが、今回はサンプルスケッチを使っているのでエラーは出ません。一応画面左上の「検証」（チェックマークのボタン）を押してみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/08.png&#34; alt=&#34;コンパイル完了&#34; /&gt;
+「コンパイルが完了しました。」と同時に色々出てきました。このような画面が出たらとりあえず「プログラムの検証は成功した」と認識していれば大丈夫です。ちなみに「コンパイル」とは、人間が理解できるプログラミング言語からコンピュータが理解できる機械語へとプログラムを変換することを指します。&lt;/p&gt;
+
+&lt;p&gt;コンパイルが完了したので、いよいよマイコンボードに書き込みましょう。「検証」の隣にある「マイコンボードに書き込む」（矢印マークのボタン）をクリックします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/09.png&#34; alt=&#34;ボード上のLED&#34; /&gt;
+DFRduino UNOは上の赤で囲った部分がLEDとなっていて、さきほどのスケッチを書き込むとここが周期的に光ったり消えたりします。&lt;/p&gt;
+
+&lt;p&gt;マイコンボードに書き込んだプログラムは、Arduino IDEで新しいスケッチを書き込まない限り動き続けます。LEDのチカチカを止めたいときは「ファイル」から「新規ファイル」を開いて、空のスケッチを書き込みます。&lt;/p&gt;
+
+&lt;h3 id=&#34;シールドを取り付ける&#34;&gt;シールドを取り付ける&lt;/h3&gt;
+
+&lt;p&gt;「シールド」とは、マイコンボードの機能を拡張させるアドオンボードのことを指します。今回使うマイコンボードの「DFRduino UNO R3」はArduino互換（Arduinoと全く同じ動きをするもので、作っている会社・団体が違うだけ）なので、まだこのままではGravityシリーズのセンサーやコントローラーを使うことはできません。そこで、このボードに重ねる形でGravity用シールド「I/O Sensor Expansion Shield v7.1」を乗せます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/10.png&#34; alt=&#34;シールドを重ねた写真&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;このI/O Sensor Expansion Shield v7.1を詳しく見てみると、ピン（金属の出っ張っている部分）が「黒・赤・緑」や「黒・赤・青」に色分けされています。&lt;strong&gt;これがまさに、知識ゼロでもGravityで遊ぶことができる理由&lt;/strong&gt;です（後ほど配線をする際にこの色分けの恩恵を受けます）。この後のチュートリアルでは常にシールドをマイコンボードに乗せた状態で使います。&lt;/p&gt;
+
+&lt;h2 id=&#34;プログラムの実行&#34;&gt;プログラムの実行&lt;/h2&gt;
+
+&lt;p&gt;いよいよプログラムを実際に書いて実行していきましょう！&lt;/p&gt;
+
+&lt;h3 id=&#34;デジタル信号を取得する&#34;&gt;デジタル信号を取得する&lt;/h3&gt;
+
+&lt;p&gt;何かのデータを取得する際、センサーから送られてくる信号には「デジタル」と「アナログ」の二種類があります。デジタル信号は値が「0」もしくは「1」で、アナログ信号の場合は値が「0」から「1023」の1024段階で、センサーから送られています。信号を取得するモジュールのことを&lt;strong&gt;インプットデバイス&lt;/strong&gt;と呼びます。&lt;/p&gt;
+
+&lt;p&gt;使うパーツ：&lt;br /&gt;
+- DFRduino UNO + I/O Sensor Expansion Shield v7.1&lt;br /&gt;
+- Digital Push Button Module（以下ボタン）&lt;/p&gt;
+
+&lt;h4 id=&#34;実行編&#34;&gt;実行編&lt;/h4&gt;
+
+&lt;p&gt;では手始めに、&lt;strong&gt;ボタンが押されているかどうかを確認する&lt;/strong&gt;プログラムを動かしてみましょう！&lt;/p&gt;
+
+&lt;p&gt;まずは配線をします。ボタンに付属のコネクタを指し、もう片方をシールドのD側2番ピン（以下図参照）に、コネクタとピンの色が合うように挿してください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/11.png&#34; alt=&#34;回路図-ボタン&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ボタンに付属している「黒・赤・緑」のコネクタは、デジタル信号を送るときに使います。今回はボタンが押されているか押されていないか、の2パターンの値が送られてきます。センサーやコントローラーの基盤の上に「D」や「A」と書かれていますが、これらもそれぞれデジタルかアナログかを示しています。&lt;/p&gt;
+
+&lt;p&gt;次に、D側2番ピンにつながっているボタンが押されているかどうかを検知するプログラムをArduino IDEのエディタ部分に書きます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;void setup() {
+	Serial.begin(9600);
+	pinMode(2, INPUT);
+}
+
+void loop() {
+	int buttonState = digitalRead(2);
+	Serial.println(buttonState);
+	delay(1);  
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;「検証」と「ボードに書き込み」ボタンの列の右端の「シリアルモニタ」ボタン（虫眼鏡のアイコン）をクリックします。ここに&lt;code&gt;Serial.println()&lt;/code&gt;の括弧内の値が表示されるようになります。&lt;/p&gt;
+
+&lt;!--![シリアルモニタスクショ](/img/blog/087/12.png)--&gt;
+
+&lt;h4 id=&#34;プログラム解説編&#34;&gt;プログラム解説編&lt;/h4&gt;
+
+&lt;p&gt;Arduino IDEで作成するプログラムは大きく&lt;code&gt;void setup()&lt;/code&gt;と&lt;code&gt;void loop()&lt;/code&gt;の2つに分けることができます。&lt;code&gt;setup()&lt;/code&gt;に続く中括弧（&lt;code&gt;{}&lt;/code&gt;）の中は一度だけ実行され、&lt;code&gt;loop()&lt;/code&gt;内のコードは繰り返し実行されます。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;Serial.begin(9600);&lt;/code&gt;はシリアル通信の際データの転送速度を9600で指定しています。これはシリアルモニタを使用するのに必要です。おまじない的なものと解釈してもらって大丈夫です（笑）&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;pinMode()&lt;/code&gt;はどのピンを使ってどのようにデータを使うかを示しています。括弧内の一つ目にはピン番号を、二つ目には&lt;code&gt;INPUT&lt;/code&gt;（データを取得する）もしくは&lt;code&gt;OUTPUT&lt;/code&gt;（データを送信する）を指定します。今回の場合、&lt;strong&gt;D側2番ピン&lt;/strong&gt;からデータ（ボタンが押されたかどうか）を&lt;strong&gt;取得&lt;/strong&gt;したいので、&lt;code&gt;pinMode(2, INPUT);&lt;/code&gt;となります。ちなみにD側2番ピンの場合&lt;code&gt;2&lt;/code&gt;、A側2番ピンの場合&lt;code&gt;A2&lt;/code&gt;と書きます。&lt;/p&gt;
+
+&lt;p&gt;以上が&lt;code&gt;setup()&lt;/code&gt;になります。次は&lt;code&gt;loop()&lt;/code&gt;内を見ていきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;digitalRead()&lt;/code&gt;を使うと、括弧内で指定したピンの値を読み取ることができます。今回は2番ピンを読み取りたいので&lt;code&gt;digitalRead(2)&lt;/code&gt;ですね。この値を&lt;code&gt;buttonState&lt;/code&gt;に入れておきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;Serial.println()&lt;/code&gt;は括弧内の値をシリアルモニタに映します。&lt;code&gt;Serial.println(buttonState);&lt;/code&gt;の場合、&lt;code&gt;buttonState&lt;/code&gt;、つまりボタンが押されているかどうかを&lt;code&gt;0&lt;/code&gt;または&lt;code&gt;1&lt;/code&gt;でシリアルモニタに表示します。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;delay()&lt;/code&gt;は括弧内の時間実行を遅らせます。時間の単位はミリ秒（1000分の1秒）です。&lt;code&gt;delay(1);&lt;/code&gt;を&lt;code&gt;loop()&lt;/code&gt;の最後に書くことによって、このプログラムを1ミリ秒ごとに実行するよう指定できます。&lt;/p&gt;
+
+&lt;h3 id=&#34;アナログ信号を取得する&#34;&gt;アナログ信号を取得する&lt;/h3&gt;
+
+&lt;p&gt;次はアナログ信号（0から1023までの値）を取得して、シリアルモニタで表示させてみましょう！こちらも先程と同様、センサーをインプットデバイスとして使います。&lt;/p&gt;
+
+&lt;p&gt;使うパーツ：&lt;br /&gt;
+- DFRduino UNO + I/O Sensor Expansion Shield v7.1&lt;br /&gt;
+- Analog Rotation Sensor（以下回転センサー）&lt;/p&gt;
+
+&lt;h4 id=&#34;実行編-1&#34;&gt;実行編&lt;/h4&gt;
+
+&lt;p&gt;付属しているアナログ用（黒・赤・青）のコネクタで回転センサーとシールドのA側0番ピンをつなげます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/13.png&#34; alt=&#34;回路図-回転&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;次に以下のプログラムをエディタにコピーします。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;void setup() {
+  Serial.begin(9600);
+}
+void loop() {
+  int sensorValue = analogRead(A0);
+  Serial.println(sensorValue);
+  delay(1);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;作成したスケッチを検証後ボードに送信します。シリアルモニタを開いて回転センサーのツマミを回すと、0から1023の値が回転角度に合わせて表示されると思います。&lt;/p&gt;
+
+&lt;!--![シリアルモニタスクショ](/img/blog/087/14.png)--&gt;
+
+&lt;h4 id=&#34;プログラム解説編-1&#34;&gt;プログラム解説編&lt;/h4&gt;
+
+&lt;p&gt;前回は&lt;code&gt;digitalRead()&lt;/code&gt;を使いましたが、今回はアナログの値を取得したいので&lt;code&gt;analogRead()&lt;/code&gt;を使います。括弧内にはピン番号を入れます。&lt;/p&gt;
+
+&lt;p&gt;記事がとんでもなく長くなってしまうので、既出のコードは解説しません。分からない方はお手数ですが上に戻って確認してください m(._.)m&lt;/p&gt;
+
+&lt;h3 id=&#34;ledをチカチカさせる&#34;&gt;LEDをチカチカさせる&lt;/h3&gt;
+
+&lt;p&gt;LEDを周期的にチカチカ光らせてみます。今回はピンにつないだものから値を取得するのではなく、値をピンにつないだものに送信します。このようなモジュールを&lt;strong&gt;アウトプットデバイス&lt;/strong&gt;と呼びます。&lt;/p&gt;
+
+&lt;p&gt;使うパーツ：&lt;br /&gt;
+- DFRduino UNO + I/O Sensor Expansion Shield v7.1&lt;br /&gt;
+- Digital Piranha LED-R（以下赤LED）&lt;/p&gt;
+
+&lt;h4 id=&#34;実行編-2&#34;&gt;実行編&lt;/h4&gt;
+
+&lt;p&gt;赤LEDをシールドのD側13番につなげてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/15.png&#34; alt=&#34;回路図-LED&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;プログラムは以下の通り。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;int ledPin = 13;
+void setup() {
+  pinMode(ledPin, OUTPUT);
+}
+void loop() {
+  digitalWrite(ledPin, HIGH);
+  delay(1000);
+  digitalWrite(ledPin, LOW);
+  delay(1000);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;検証→ボードに書き込みで、LEDが1秒周期でチカチカし始めます。&lt;/p&gt;
+
+&lt;h4 id=&#34;プログラム解説編-2&#34;&gt;プログラム解説編&lt;/h4&gt;
+
+&lt;p&gt;&lt;code&gt;digitalWrite()&lt;/code&gt;は、括弧内の一つ目に指定したピンに&lt;code&gt;HIGH&lt;/code&gt;もしくは&lt;code&gt;LOW&lt;/code&gt;の値を送ることができます。&lt;code&gt;HIGH&lt;/code&gt;は「1」、&lt;code&gt;LOW&lt;/code&gt;は「0」となります。&lt;/p&gt;
+
+&lt;p&gt;また、プログラム内で13番ピンの情報を何回か使うので、最初に&lt;code&gt;int ledPin = 13;&lt;/code&gt;と変数に入れておいてあげると、後々ピンの番号を変更したいときに便利です。&lt;/p&gt;
+
+&lt;h3 id=&#34;人感ライトを作る&#34;&gt;人感ライトを作る&lt;/h3&gt;
+
+&lt;p&gt;ここの辺りから電子工作っぽい感じになりますよ！次はインプットデバイスとアウトプットデバイスを同時に使い、&lt;strong&gt;一つのモジュールから値を取得して、その値を別のモジュールに送る&lt;/strong&gt;ような仕組みを作ってみます！&lt;/p&gt;
+
+&lt;p&gt;使うパーツ：&lt;br /&gt;
+- DFRduino UNO + I/O Sensor Expansion Shield v7.1&lt;br /&gt;
+- PIR Sensor（以下人感センサー）→インプットデバイス&lt;br /&gt;
+- Digital Piranha LED-R（以下赤LED）→アウトプットデバイス&lt;/p&gt;
+
+&lt;h4 id=&#34;実行編-3&#34;&gt;実行編&lt;/h4&gt;
+
+&lt;p&gt;人感センサーで動きを確認したら、赤LEDを点灯します。どちらもデジタルで良さそう（動いている・動いていない、点灯している・点灯していない、のそれぞれ2つの状態しかない）なので、人感センサーをD側2番ピンに、赤LEDをD側13番ピンにつなげます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/16.png&#34; alt=&#34;回路図-人感LED&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;プログラムは以下の通り。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;int sensorPin = 2;
+int ledPin =  13;
+int sensorState = 0;
+void setup() {
+  pinMode(ledPin, OUTPUT);
+  pinMode(sensorPin, INPUT);
+}
+
+void loop() {
+  sensorState = digitalRead(sensorPin);
+  if (sensorState == HIGH) {
+    digitalWrite(ledPin, HIGH);
+} else {
+    digitalWrite(ledPin, LOW);
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;検証→ボードに書き込んでみましょう。人感センサーに向かって動いたり手を振ったりするとLEDが付くはずです。&lt;/p&gt;
+
+&lt;h4 id=&#34;プログラム解説編-3&#34;&gt;プログラム解説編&lt;/h4&gt;
+
+&lt;p&gt;今回は変数を3つ作りました。ピン番号などは変数で管理すると、可読性も上がりピンの変更などもしやすいのでオススメです。最後に宣言した&lt;code&gt;sensorState&lt;/code&gt;は、人感センサーで読み取った値が入ります。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;digitalRead()&lt;/code&gt;で読み取った値は&lt;code&gt;HIGH&lt;/code&gt;または&lt;code&gt;LOW&lt;/code&gt;でかえってきます。なので&lt;code&gt;sensorState == HIGH&lt;/code&gt;や&lt;code&gt;sensorState == LOW&lt;/code&gt;としてあげると、&lt;code&gt;HIGH&lt;/code&gt;のとき、&lt;code&gt;LOW&lt;/code&gt;のとき、と条件によって別々の挙動を指定することができます。&lt;/p&gt;
+
+&lt;p&gt;まとめると、&lt;code&gt;digitalRead()&lt;/code&gt;で人感センサーからの値によって、赤LEDに&lt;code&gt;digitalWrite()&lt;/code&gt;でオンオフを指定しています。&lt;/p&gt;
+
+&lt;h3 id=&#34;音でledをつける&#34;&gt;音でLEDをつける&lt;/h3&gt;
+
+&lt;p&gt;だんだん慣れてきましたか？今度は音センサーを使って、一定の音量を超えたらLEDが光る仕組みを作りましょう！&lt;/p&gt;
+
+&lt;p&gt;使うパーツ：&lt;br /&gt;
+- DFRduino UNO + I/O Sensor Expansion Shield v7.1&lt;br /&gt;
+- Analog Sound Sensor（以下音センサー）→インプットデバイス&lt;br /&gt;
+- Digital Piranha LED-R（以下赤LED）→アウトプットデバイス&lt;/p&gt;
+
+&lt;h4 id=&#34;実行編-4&#34;&gt;実行編&lt;/h4&gt;
+
+&lt;p&gt;音センサーの基盤上に「A」と書かれているので、シールドのA側0番ピンに指します。赤LEDはいままで通りD側なので、D側13番に指します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/17.png&#34; alt=&#34;回路図-音LED&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;いままではD側何番、A側何番、と指定してきましたが、実はD側・A側さえ合っていれば基本何番でも大丈夫です。いくつものモジュールを近いピン番号にくっつけすぎるとごちゃごちゃするので、適当に間隔を空けて配線すると楽ですよ。&lt;/p&gt;
+
+&lt;p&gt;まずは以下のコードをエディタに入力してみてください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;int soundPin = A0;
+int ledPin = 13;
+
+void setup() {
+	pinMode(ledPin, OUTPUT);
+	Serial.begin(9600);
+}
+void loop(){
+	int soundState = analogRead(soundPin);
+	Serial.println(soundState);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;このプログラムを検証して実行すると、音センサーが返したアナログの値がシリアルモニタに出てきます。今回は音が「ある一定以上の音量になった場合」LEDを光らせたいので、その「ある一定」を見つける必要があります。周りの環境によって返ってくる音量の値が変わるので、自分がこれ以上音が鳴ったら光らせたい！という値を見つけてください。&lt;/p&gt;
+
+&lt;p&gt;「ある一定」の数値が決まったらそれを反映させつつ以下のプログラムにします。先程まで使っていたコードは先頭に&lt;code&gt;//&lt;/code&gt;をつけることで無視することができます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;int soundPin = A0;
+int ledPin = 13;
+
+void setup() {
+	pinMode(ledPin, OUTPUT);
+	// Serial.begin(9600);
+}
+void loop(){
+	int soundState = analogRead(soundPin);
+	// Serial.println(soundState);
+	if (soundState &amp;gt; 「ある一定」の数値) {
+		digitalWrite(ledPin, HIGH);
+		delay(10000);
+	} else {
+		digitalWrite(ledPin, LOW);
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;もう一度検証→ボードに書き込むと、周りの音が一定ラインを超えるとLEDが光るようになります！&lt;/p&gt;
+
+&lt;h3 id=&#34;ledをゆっくりと点灯させる&#34;&gt;LEDをゆっくりと点灯させる&lt;/h3&gt;
+
+&lt;p&gt;序盤にLEDを点灯させるのをすでにやりましたが、今度は&lt;strong&gt;ゆっくりと&lt;/strong&gt;点灯させます。勘の良い方は「LEDにアナログの値を書き込めないのではないか」と気づくと思います。ゆっくり点灯ということはおそらく&lt;code&gt;analogWrite()&lt;/code&gt;を使うことは予想できますが、LEDはいままで&lt;code&gt;digitalWrite();&lt;/code&gt;で値を送っていたのでできないのではないか、と。&lt;/p&gt;
+
+&lt;p&gt;そこで&lt;strong&gt;PWN&lt;/strong&gt;（Pulse Width Modulation・パルス幅変調）を使います。ググってみると何やら難しい話が出てきますが、簡単に言うと&lt;strong&gt;デジタル信号で擬似的にアナログデータを送る&lt;/strong&gt;ことができます。&lt;/p&gt;
+
+&lt;p&gt;PWMに対応しているピンは、今回のシールド上ではD側のアスタリスク（&lt;code&gt;*&lt;/code&gt;）が付いている3番、5番、6番、9番、10番、11番です。&lt;/p&gt;
+
+&lt;p&gt;使うパーツ：&lt;br /&gt;
+- DFRduino UNO + I/O Sensor Expansion Shield v7.1&lt;br /&gt;
+- Digital Piranha LED-R（以下赤LED）→アウトプットデバイス&lt;/p&gt;
+
+&lt;h4 id=&#34;実行編-5&#34;&gt;実行編&lt;/h4&gt;
+
+&lt;p&gt;赤LEDをシールドのD側10番につなげます。PWM対応なのを確認してください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/18.png&#34; alt=&#34;回路図-LEDPWM&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;プログラムは以下の通り。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;int ledPin = 10;
+
+void setup() {
+	pinMode(ledPin,OUTPUT);
+}
+void loop(){
+	for (int value = 0 ; value &amp;lt; 255; value++) {
+		analogWrite(ledPin, value);
+		delay(5); }
+  for (int value = 255; value &amp;gt;0; value--){
+ 		analogWrite(ledPin, value);
+	delay(5); }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;検証→ボードに書き込みで、ゆっくりLEDがついて、ゆっくりLEDが消えるようになります。プログラム自体はシンプルなので、解説は割愛します。&lt;/p&gt;
+
+&lt;h2 id=&#34;お疲れ様でした&#34;&gt;お疲れ様でした！&lt;/h2&gt;
+
+&lt;p&gt;ここまでかなり長い道のりでしたね！この記事を書くのにも結構時間かかりました（笑）&lt;/p&gt;
+
+&lt;p&gt;この記事を通して、インプットデバイスから値を取得して、アウトプットデバイスに値を渡す、という処理をできるようになりました。これさえできるようになれば、後は好きなモジュールを使って作りたいものを作るだけです！&lt;/p&gt;
+
+&lt;p&gt;この記事で学んだことだけでできるプロジェクトの一例として、&lt;strong&gt;流れている音楽の大きさを赤・青・緑のLEDで表す&lt;/strong&gt;なんてのはどうでしょうか。音センサーから値を取ってきて、いくつ以上の値で緑LEDを光らせて、いくつ以上で青を、いくつ以上で赤を…… と指定すればできそうですね！PWMを使うことで、さらに細かく音の大きさが表わせそうです。&lt;/p&gt;
+
+&lt;p&gt;2017年2月23日開催の &lt;a href=&#34;https://dotstudio.connpass.com/event/49147/&#34;&gt;今度こそ挫折しない！知識ゼロからの電子工作ハンズオン&lt;/a&gt;イベントに来てくださっている方で、チュートリアルを早く終わってしまった方もぜひやってみてください！&lt;/p&gt;
+
+&lt;p&gt;それではまた！お疲れ様でした！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>littleBits Arduinoモジュールでより細かく値を入出力して状況を伝えよう</title>
+      <link>https://dotstud.io/blog/littlebits-arduino-analog-number/</link>
+      <pubDate>Thu, 15 Dec 2016 10:00:00 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/littlebits-arduino-analog-number/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudioライターの田中正吾です。電子回路のパーツを磁石でパチパチとつなげるだけで電子工作ができる「littleBits」の連載をLIGブログでおこなっています。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/235644&#34;&gt;littleBitsのArduinoモジュールで簡単にプログラミングをはじめてみよう&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/259378&#34;&gt;ArduinoモジュールでLチカしてみた（Windows・Mac）&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/268909&#34;&gt;ArduinoモジュールでON・OFFの入力値を取得してみよう&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/280761&#34;&gt;Arduinoモジュールで入出力の連携をしてみよう&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/295334&#34;&gt;シリアルモニタとNode.jsでlittleBits Arduinoモジュールを動かしてみよう&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/315934&#34;&gt;littleBitsのボタンを押すとIFTTT経由でLINEにメッセージが飛ぶ仕組みを作ってみよう&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;本記事では、これでの連載とは少し視点を変えて、 &lt;strong&gt;littleBits Arduinoモジュールでより細かく値を入出力するアナログ入出力&lt;/strong&gt; をご紹介します。では、さっそく始めていきましょう！&lt;/p&gt;
+
+&lt;h2 id=&#34;より細かく状況を伝えるアナログ値&#34;&gt;より細かく状況を伝えるアナログ値&lt;/h2&gt;
+
+&lt;p&gt;いままで、ボタンを押すと何かが起こるON/OFFの反応で説明していましたが、実は&lt;a href=&#34;http://jp.littlebits.com/kits/arduino-coding-kit/&#34;&gt;ARDUINO CODING KIT&lt;/a&gt;には、より細かく状況を伝えるアナログ値を扱う入出力モジュールがあります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;たとえば、DIMMERモジュール（真ん中にあるダイヤル状のツマミのモジュール）は、ツマミを回すことで電気の流れが0～100%と変わります。またBAR GRAPHモジュール（右）は流れる電気によって光るLEDの数が変わります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;つまみを回しきったとき。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;半分ぐらいまでひねったとき。電流50%のときですね。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ON/OFFではセンサーが「反応した」「反応していない」という2つの情報しか伝えられませんでした。しかし、このように電流の量によって度合いを伝えることができると、たとえば光センサーモジュールを使ったときに明るさを「暗い」「やや暗い」「やや明るい」「とても明るい」といったように、より細かく伝えることができます。&lt;/p&gt;
+
+&lt;h2 id=&#34;アナログ値をarduinoモジュールで計測してみる&#34;&gt;アナログ値をArduinoモジュールで計測してみる&lt;/h2&gt;
+
+&lt;p&gt;それでは早速アナログ値をArduinoモジュールで計測してみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;DIMMERモジュールをArduinoモジュールの入力2番目のA0に取り付けます。&lt;/p&gt;
+
+&lt;p&gt;Arduinoモジュールでアナログ値を計測するには &lt;code&gt;analogRead&lt;/code&gt; 関数を使います。Arduinoモジュールで計測できるアナログ値は0%は0として、100%は1023として計測できます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;void setup() {
+  Serial.begin(9600);
+}
+
+void loop() {
+  int sensorValue = analogRead(A0);
+  if(sensorValue&amp;gt;0){
+    Serial.println(sensorValue);
+  }
+  delay(1);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;このコードを書き込んで、シリアルモニタで数値を見てみます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;DIMMERをひねると値が変わります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;シリアルプロッタのほうがよりわかりやすいですね。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/08.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/09.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;dimmerモジュールのツマミにあわせて点滅を変えてみる&#34;&gt;DIMMERモジュールのツマミにあわせて点滅を変えてみる&lt;/h2&gt;
+
+&lt;p&gt;DIMMERモジュールのツマミの度合いが取れるようになったので、ツマミに合わせてBARGRAPHモジュールの点滅の仕方を変えてみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;このように、さきほどのDIMMERモジュールとArduinoモジュールをつないだものに、BAR GRAPHモジュールも加えます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;void setup() {
+  Serial.begin(9600);
+  pinMode(5,OUTPUT);
+}
+
+void loop() {
+  int sensorValue = analogRead(A0);
+  if(sensorValue&amp;gt;0){
+    Serial.println(sensorValue);
+    digitalWrite(5,HIGH);
+    delay(sensorValue);
+    digitalWrite(5,LOW);
+  }
+  delay(sensorValue);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;このように書いたコードをArduinoモジュールに書き込みます。&lt;/p&gt;
+
+&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/PircFP-OsQY&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;DIMMERモジュールのつまみに対応して、点滅の仕方が変わるようになりました。&lt;/p&gt;
+
+&lt;h2 id=&#34;さらにサーボに変えてみる&#34;&gt;さらにサーボに変えてみる&lt;/h2&gt;
+
+&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/FVonwS3pb-E&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://jp.littlebits.com/kits/arduino-coding-kit/&#34;&gt;ARDUINO CODING KIT&lt;/a&gt;のサーボに変えてみました。LEDよりもわかりやすくなりますね。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;サーボに顔をつけてみます。&lt;/p&gt;
+
+&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/coAm51UmCo0&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;ツマミに合わせて顔がビクビクするものに早変わりします！　&lt;a href=&#34;https://liginc.co.jp/280761&#34;&gt;磁石で電子工作できる「littleBits」のArduinoモジュールで、入出力の連携をしてみよう&lt;/a&gt;で試した「三三七拍子するパンダ」はまだ動物らしい動きに見えましたが、この顔ネタはなかなかに気持ち悪いです。夢に出そう。&lt;/p&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;今回はlittleBits Arduinoモジュールで &lt;strong&gt;より細かく値を入出力するアナログ入出力&lt;/strong&gt; をお伝えしました。ネタはひとつなのに、モジュールを付け替えるだけで光から動力へと変化します。工作物によって伝わる印象も変わるのがlittleBitsの面白いところです。&lt;/p&gt;
+
+&lt;p&gt;そして、アナログ値を扱うとON/OFFよりも細かく状況を伝えることができたり、動きにもアクセントを持たせるたりすることができます。&lt;/p&gt;
+
+&lt;p&gt;みなさんも、ぜひいろいろなことを試してみてはいかがでしょうか。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/12.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;littleBitsのハックには、LIGブログの&lt;a href=&#34;https://liginc.co.jp/series/littlebits&#34;&gt;littleBitsではじめるArduino&lt;/a&gt;連載、ならびに拙著『&lt;a href=&#34;http://www.1ft-seabass.jp/memo/2016/10/11/littlebits-book-release/?utm_content=bufferec8bb&amp;amp;utm_medium=social&amp;amp;utm_source=twitter.com&amp;amp;utm_campaign=buffer&#34;&gt;「littleBits」ではじめる電子工作&lt;/a&gt;』もぜひご参照ください。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
