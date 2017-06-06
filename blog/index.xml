@@ -7,8 +7,195 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Tue, 06 Jun 2017 20:26:13 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 07 Jun 2017 17:15:30 +0900</lastBuildDate>
     <atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Node.js製の静的サイトジェネレータ「Hexo」で無料ブログ開発 vol.1</title>
+      <link>https://dotstud.io/blog/hexo-static-site-vol1/</link>
+      <pubDate>Wed, 07 Jun 2017 17:15:30 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/hexo-static-site-vol1/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、エンジニアのちゃんとくです。ひょんなことから&lt;a href=&#34;https://nodejs.connpass.com/&#34;&gt;&lt;strong&gt;Node女学園&lt;/strong&gt;&lt;/a&gt;というNode.jsを学ぶ女性のためのコミュニティを立ち上げました。&lt;/p&gt;
+
+&lt;p&gt;イベントを数回開催しましたが、毎回のナレッジが流れていくのがもったいない……。ということでNode女学園のブログを開設しました！
+&lt;img src=&#34;https://dotstud.io/img/blog/105/blog.png&#34; alt=&#34;&#34; /&gt;
+現在公開しているページは&lt;a href=&#34;https://nodegirls-jp.github.io/&#34;&gt;&lt;strong&gt;こちら&lt;/strong&gt;&lt;/a&gt;、ブログのレポジトリは&lt;a href=&#34;https://github.com/nodegirls-jp/nodegirls-jp.github.io&#34;&gt;&lt;strong&gt;こちら&lt;/strong&gt;&lt;/a&gt;。（鋭意開発中です）&lt;/p&gt;
+
+&lt;p&gt;こちらのページはNode.js製の静的サイトジェネレータ「&lt;strong&gt;Hexo&lt;/strong&gt;」で開発して「&lt;strong&gt;Github Pages&lt;/strong&gt;」で公開しています。手軽に無料で公開できますので、制作過程を紹介していきたいと思います！&lt;/p&gt;
+
+&lt;p&gt;今回は環境構築からGithub Pagesで公開するところまでやってみます。&lt;/p&gt;
+
+&lt;h2 id=&#34;はじめに&#34;&gt;はじめに&lt;/h2&gt;
+
+&lt;h3 id=&#34;静的サイトジェネレータって&#34;&gt;静的サイトジェネレータって？&lt;/h3&gt;
+
+&lt;p&gt;静的サイトジェネレータは、HTML/CSS/JavaScriptで構築される静的サイトをコマンドラインで簡単に生成することができるツールです。ヘッダやフッタの共通化、簡易ルーティング、MarkdownファイルのHTML変換など&lt;strong&gt;面倒な部分をよしなにやってくれます&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;Ruby製のJekyllやGo製のHUGO、React.js製のGatsby……と様々な言語で組まれたジェネレータがありますが、試してみる分にはあまり大きな違いはないので好みに合わせて選びましょう！&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://staticsitegenerators.net/&#34;&gt;Static Site Generators&lt;/a&gt;というサイトで静的サイトジェネレータの一覧が見れます。
+&lt;img src=&#34;https://dotstud.io/img/blog/105/ranking.png&#34; alt=&#34;&#34; /&gt;
+スター順に並べてみると、Jekyll、HUGOに続いてかなり人気ですね！&lt;/p&gt;
+
+&lt;p&gt;ちなみに&lt;strong&gt;dotstudioのサイトはHUGO&lt;/strong&gt;で生成されています。こちらの入門についてはデザイナーのちゃちゃまるくんが頑張っているのでご参照ください。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://dotstud.io/blog/hugo-for-designers-vol1/&#34;&gt;デザイナーの僕がHugoを使ってポートフォリオサイトを作ってみる #1【準備編】&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;github-pagesって&#34;&gt;Github Pagesって？&lt;/h3&gt;
+
+&lt;p&gt;Githubが提供する、&lt;strong&gt;無料で静的サイトを公開できるホスティングサービス&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;Githubのアカウントやorgnization、プロジェクトごとにサイトを制作することができ、&lt;strong&gt;pushしていくだけ&lt;/strong&gt;で公開できるのでgit管理に慣れている人にとってはかなり手軽ですね！&lt;/p&gt;
+
+&lt;p&gt;今回はGithub Pagesを作成するアカウント（またはorgnization）が作成されている前提で進めますので、お持ちでない方は登録から始めてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/&#34;&gt;https://github.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;またプロジェクトに紐付けて公開する場合は手順が異なりますが本記事では割愛します。&lt;/p&gt;
+
+&lt;h2 id=&#34;githubにレポジトリを作成しよう&#34;&gt;Githubにレポジトリを作成しよう&lt;/h2&gt;
+
+&lt;p&gt;まずはGithubにGithub Pages用のレポジトリを作成しましょう。&lt;a href=&#34;https://github.com/&#34;&gt;Github&lt;/a&gt;にアクセスし、[New Repository]を選択します。
+&lt;img src=&#34;https://dotstud.io/img/blog/105/new.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;「Create a new repository」のページに移動します。
+&lt;img src=&#34;https://dotstud.io/img/blog/105/create.png&#34; alt=&#34;&#34; /&gt;
+「&lt;strong&gt;Owner&lt;/strong&gt;」にはGithub Pagesを作成したいアカウントやorgnizationを指定します。今回はnodegirls-jpというorgnizationを指定します。&lt;/p&gt;
+
+&lt;p&gt;「&lt;strong&gt;Repository name&lt;/strong&gt;」には&lt;code&gt;owner名.github.io&lt;/code&gt;と入力します。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;このフォーマットに従わないとGithub Pagesが作成されない&lt;/strong&gt;ので注意してください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/105/repos.png&#34; alt=&#34;&#34; /&gt;
+レポジトリができました！公開URLは&lt;code&gt;https://owner名.github.io&lt;/code&gt;になります。&lt;/p&gt;
+
+&lt;p&gt;SSHのアドレスは後ほど使うのでメモしておきます。&lt;/p&gt;
+
+&lt;h2 id=&#34;雛形を作ってみよう&#34;&gt;雛形を作ってみよう&lt;/h2&gt;
+
+&lt;p&gt;続いてGithub Pagesで公開するブログをHexoで作っていきます。&lt;/p&gt;
+
+&lt;h3 id=&#34;開発環境構築&#34;&gt;開発環境構築&lt;/h3&gt;
+
+&lt;p&gt;Hexoの開発は&lt;strong&gt;Node.jsが動く環境&lt;/strong&gt;で行います。まずはNode.jsをインストールしましょう。&lt;/p&gt;
+
+&lt;p&gt;Node.jsのインストールには「nvm」や「nodebrew」を使うと便利です。下記ではnodebrewを使ったインストール方法を紹介しています。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://dotstud.io/blog/setup-new-mac-app/#node-js環境整備&#34;&gt;僕がMacを買い換えてすぐにいれるツール&amp;amp;すぐにする初期設定&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;続いてHexoのインストールです。下記のコマンドを実行しましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;npm install -g hexo
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;-g&lt;/code&gt;オプションをつけることでグローバルにインストールすることができます。&lt;/p&gt;
+
+&lt;h3 id=&#34;コマンドで雛形生成&#34;&gt;コマンドで雛形生成&lt;/h3&gt;
+
+&lt;p&gt;Hexoのコマンドでブログの雛形を生成します。&lt;/p&gt;
+
+&lt;p&gt;プロジェクトを作りたい場所へ移動し、&lt;code&gt;hexo init [ブログ名]&lt;/code&gt;で作成です。今回は「nodegirls-jp」というブログ名にします。
+&lt;img src=&#34;https://dotstud.io/img/blog/105/init.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;実行すると自動で&lt;code&gt;nodegirls-jp&lt;/code&gt;ディレクトリが作成されます。
+&lt;img src=&#34;https://dotstud.io/img/blog/105/ls.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ディレクトリの下へ移動して見てみましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/105/files.png&#34; alt=&#34;&#34; /&gt;
+ファイルとフォルダが作成されています。&lt;/p&gt;
+
+&lt;p&gt;ここで&lt;code&gt;npm install&lt;/code&gt;を実行してモジュールをインストールします。
+&lt;img src=&#34;https://dotstud.io/img/blog/105/npm.png&#34; alt=&#34;&#34; /&gt;
+これだけで雛形が完成です！&lt;/p&gt;
+
+&lt;h3 id=&#34;ローカルで確認する&#34;&gt;ローカルで確認する&lt;/h3&gt;
+
+&lt;p&gt;ローカルサーバを立ち上げてブログを確認してみます。（この状態ではまだ公開されません。）
+&lt;img src=&#34;https://dotstud.io/img/blog/105/server.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;起動したまま&lt;a href=&#34;http://localhost:4000/&#34;&gt;http://localhost:4000/&lt;/a&gt; へアクセスしましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/105/sample.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ブログの雛形が作成されました！簡単…簡単……ッ！&lt;/p&gt;
+
+&lt;h3 id=&#34;ブログの設定を追加&#34;&gt;ブログの設定を追加&lt;/h3&gt;
+
+&lt;p&gt;主な設定は&lt;code&gt;_config.yml&lt;/code&gt;というファイルに記述します。エディタで&lt;code&gt;_config.yml&lt;/code&gt;を開きましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/105/config.png&#34; alt=&#34;&#34; /&gt;
+こんな感じでブログに関する説明がずらっと記載されているので編集します。&lt;/p&gt;
+
+&lt;p&gt;urlは先ほど作った&lt;code&gt;https://owner名.github.io&lt;/code&gt;を設定します。title, subtitle, authorなどはお好みで設定しましょう。日本語ブログの場合&lt;code&gt;language&lt;/code&gt;は&lt;code&gt;ja&lt;/code&gt;、&lt;code&gt;timezone&lt;/code&gt;は&lt;code&gt;Asia/Tokyo&lt;/code&gt;がおすすめです。&lt;/p&gt;
+
+&lt;p&gt;今回の設定はこのようにしました。参考までに。
+&lt;img src=&#34;https://dotstud.io/img/blog/105/config_sample.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;一番下まで行くと&lt;code&gt;#Deployment&lt;/code&gt;の項目があります。デプロイのためにここを修正します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;deploy:
+  type: git
+  repo: git@github.com:nodegirls-jp/nodegirls-jp.github.io.git
+  branch: master
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;repoには&lt;strong&gt;先ほど作成したレポジトリのSSHアドレスを記述&lt;/strong&gt;します。&lt;/p&gt;
+
+&lt;p&gt;設定をローカルで確認するとこんな感じになっています。
+&lt;img src=&#34;https://dotstud.io/img/blog/105/sample_local.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;反映されていない場合は一度&lt;code&gt;control&lt;/code&gt;+&lt;code&gt;c&lt;/code&gt;でサーバを止め、&lt;code&gt;hexo server&lt;/code&gt;で起動しなおしてみてください。&lt;/p&gt;
+
+&lt;h2 id=&#34;公開してみよう&#34;&gt;公開してみよう&lt;/h2&gt;
+
+&lt;p&gt;いよいよ公開してみましょう。下記コマンドでビルド、公開を一度に行ってくれます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;hexo deploy -g
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ここでエラーが出る場合は、以下のコマンドでデプロイツールをインストールしましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;npm install hexo-deployer-git --save
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;公開されたページを確認してみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/105/deploy.png&#34; alt=&#34;&#34; /&gt;
+公開できました！&lt;/p&gt;
+
+&lt;h2 id=&#34;記事を追加しよう&#34;&gt;記事を追加しよう&lt;/h2&gt;
+
+&lt;p&gt;記事を追加してみましょう。&lt;code&gt;hexo new 記事名&lt;/code&gt;というコマンドで生成できます。
+&lt;img src=&#34;https://dotstud.io/img/blog/105/about.png&#34; alt=&#34;&#34; /&gt;
+最初の記事なので&lt;code&gt;about&lt;/code&gt;という記事を作ってみました。デフォルトの設定では&lt;code&gt;サイトURL/YYYY/MM/DD/タイトル&lt;/code&gt;というURLになります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/105/new_post.png&#34; alt=&#34;&#34; /&gt;
+&lt;code&gt;_posts&lt;/code&gt;の下に&lt;code&gt;about.md&lt;/code&gt;が作成されました。このファイルを編集します。&lt;/p&gt;
+
+&lt;p&gt;title, dataには自動で値が付与されており、tagsには任意のタグを追加できます。
+&lt;img src=&#34;https://dotstud.io/img/blog/105/header.png&#34; alt=&#34;&#34; /&gt;
+titleを修正して、「info」というタグを設定してみました。&lt;code&gt;---&lt;/code&gt;の下から記事本文をマークダウンで記述します。（HTMLも可）&lt;/p&gt;
+
+&lt;p&gt;記事を&lt;code&gt;hexo d -g&lt;/code&gt;でデプロイします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/105/post_sample.png&#34; alt=&#34;&#34; /&gt;
+記事が公開できました！&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;サーバの整備やデプロイなどをほとんど意識せずに公開することができました！コマンドを使い慣れている人は本当に&lt;strong&gt;爆速開発&lt;/strong&gt;だったと思います。&lt;/p&gt;
+
+&lt;p&gt;テーマやプラグインの追加で簡単に拡張できるので、どんどんカスタマイズしてみましょう。&lt;/p&gt;
+
+&lt;p&gt;次回はテーマを当ててブログのデザインを変更してみます。&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Wio NodeとIFTTTで簡単IoT！紫外線情報を取得してみよう</title>
@@ -3328,92 +3515,6 @@ void loop(){
 &lt;p&gt;2017年2月23日開催の &lt;a href=&#34;https://dotstudio.connpass.com/event/49147/&#34;&gt;今度こそ挫折しない！知識ゼロからの電子工作ハンズオン&lt;/a&gt;イベントに来てくださっている方で、チュートリアルを早く終わってしまった方もぜひやってみてください！&lt;/p&gt;
 
 &lt;p&gt;それではまた！お疲れ様でした！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>年に一度のITエンジニアのお祭り！デブサミ2017にIoTLTが出展しました！</title>
-      <link>https://dotstud.io/blog/devsumi-2017-chantoku-report/</link>
-      <pubDate>Mon, 20 Feb 2017 10:00:02 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/devsumi-2017-chantoku-report/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、バックエンドエンジニアのちゃんとく（&lt;a href=&#34;https://twitter.com/tokutoku393&#34;&gt;@tokutoku393&lt;/a&gt;）です。&lt;/p&gt;
-
-&lt;p&gt;先日（2017年2月16日）開催された「デブサミ2017」一日目に、代表のびすけの主催する&lt;a href=&#34;https://iotlt.connpass.com/&#34;&gt;IoT縛りの勉強会! IoTLT&lt;/a&gt;がコミュニティとして出展しました。&lt;/p&gt;
-
-&lt;p&gt;当日のコミュニティ出展ブースやイベントの様子をお届けします！&lt;/p&gt;
-
-&lt;h2 id=&#34;デブサミとは&#34;&gt;デブサミとは&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://event.shoeisha.jp/devsumi/20170216/&#34;&gt;デブサミ2017 公式サイト&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;ウェブサービスに関してはもちろん、IoT、人工知能、VRまで、最新のテクノロジーが集結する年に一度のITエンジニアのお祭り！&lt;/p&gt;
-
-&lt;p&gt;2日間、6会場に渡って開催され、2000名規模のエンジニアが参加しているそうです。（公式サイトより）&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/086/01_kaijyo.png&#34; alt=&#34;&#34; /&gt;
-今年の会場は目黒雅叙園。本当にテック系イベントがここで……！？&lt;/p&gt;
-
-&lt;h2 id=&#34;特別展示展-エンジニアコミュニティ特集&#34;&gt;特別展示展 - エンジニアコミュニティ特集&lt;/h2&gt;
-
-&lt;p&gt;デブサミ2017では、特別企画展としてエンジニアコミュニティ特集が開催されました。（一日目のみ）&lt;/p&gt;
-
-&lt;p&gt;「五感で体験できるテクノロジー」をテーマに、各コミュニティの参加者が自作のIoTガジェットを持ち寄り展示しました！&lt;/p&gt;
-
-&lt;h3 id=&#34;参加コミュニティ&#34;&gt;参加コミュニティ&lt;/h3&gt;
-
-&lt;h4 id=&#34;tmcn&#34;&gt;TMCN&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/086/02_TMCN.png&#34; alt=&#34;&#34; /&gt;
-センサ好きの飲み会から生まれた、最新ガジェットに関心のある個人をネットワークするコミュニティ。「Tokyo Motion Controll Network」の略だそうです。&lt;/p&gt;
-
-&lt;p&gt;MashupAwards入賞者や、デブサミスピーカーも擁するTMCNさんですが、作られるガジェットから「技術の無駄遣い」との声も……？（いい意味で）&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/086/03_hightouch.png&#34; alt=&#34;&#34; /&gt;
-ハイタッチする感覚を味わえるグローブ。使いどころは不明。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/086/04_pingpong.png&#34; alt=&#34;&#34; /&gt;
-体育館の「キュッキュ」音が楽しめるスリッパと、振動・エフェクト音を発する卓球ラケットで擬似スポーツを体験。&lt;/p&gt;
-
-&lt;h4 id=&#34;iot縛りの勉強会-iotlt&#34;&gt;IoT縛りの勉強会! IoTLT&lt;/h4&gt;
-
-&lt;p&gt;dotstudio代表のびすけが主催するIoTコミュニティ。IoTをテーマに毎月様々な分野の人たちがLTをしています。詳細な概要や開催の経緯については、CodeIQ MAGAZINEで取材していただいたこちらの記事をご覧ください。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://codeiq.jp/magazine/2016/03/38409/&#34;&gt;「IoT縛りの勉強会！IoTLT」が、毎月200人規模のエンジニア・クリエイターを集める人気の秘密&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;dotstudioからはちゃんとくとしゃのんが出展させていただきました！
-&lt;img src=&#34;https://dotstud.io/img/blog/086/05_chantoku.png&#34; alt=&#34;&#34; /&gt;
-体重計のデータをサーバに転送しLINEに通知を送るガジェット。自分のダイエット用。（ちゃんとく）&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/086/06_shanon.png&#34; alt=&#34;&#34; /&gt;
-Android端末に挿して直接センサーの値を取れるWaffle！土の水分状況を取得なう。（しゃのん）&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/086/07_pokio.png&#34; alt=&#34;&#34; /&gt;
-IoTLTではお馴染みポキオ氏。京急線が遅延すると光るが当日は遅延せず。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/086/08_iotlt.png&#34; alt=&#34;&#34; /&gt;
-目的地に向かって倒れる傘や、Slackの会話に反応して動くPickupon、遠足カメラマンアプリなど、たくさん展示していただきました！&lt;/p&gt;
-
-&lt;h3 id=&#34;来場者の反応&#34;&gt;来場者の反応&lt;/h3&gt;
-
-&lt;p&gt;来訪者はエンジニアの方はもちろん、技術やIoTにあまり馴染みのない方まで様々。一日目のみの参加でしたが、幅広い分野の方たちに展示を楽しんでいただきました！&lt;/p&gt;
-
-&lt;p&gt;「子供に電子工作させたい」「買えるんですか？」「これ使って痩せたいです（笑）」など、たくさんの反響が。技術のしくみも面白いけれど、「とりあえず遊んでみたら楽しい！」 ということから興味を持ってくれた方が多かったように思います。&lt;/p&gt;
-
-&lt;p&gt;IoTという言葉がバズワードになって久しく、企業や大規模サービスのものだと捉えがちですが、 &lt;strong&gt;身近で、楽しくて、誰でもできる&lt;/strong&gt; のがIoTなんだと再認識しました。 IoT、まだまだ流行るぞー！！&lt;/p&gt;
-
-&lt;h2 id=&#34;我らがギャル電はデブラジに生出演&#34;&gt;我らがギャル電はデブラジに生出演！&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/086/09_gyaruden.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;IoTLT発のギャル電子工作ユニット、「ギャル電」はなんとデブラジ公開収録に出演！&lt;/p&gt;
-
-&lt;p&gt;「&lt;strong&gt;野生のPDCA&lt;/strong&gt;」「&lt;strong&gt;とりあえず光っとけばパリピにモテる&lt;/strong&gt;」などのパワーワードで今回も会場をざわつかせていました。&lt;/p&gt;
-
-&lt;p&gt;ギャル電の公開収録についての詳細は別記事にまとめます！&lt;/p&gt;
 </description>
     </item>
     

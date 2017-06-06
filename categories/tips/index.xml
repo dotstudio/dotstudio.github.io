@@ -10,6 +10,193 @@
     <atom:link href="/categories/tips/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Node.js製の静的サイトジェネレータ「Hexo」で無料ブログ開発 vol.1</title>
+      <link>https://dotstud.io/blog/hexo-static-site-vol1/</link>
+      <pubDate>Wed, 07 Jun 2017 17:15:30 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/hexo-static-site-vol1/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、エンジニアのちゃんとくです。ひょんなことから&lt;a href=&#34;https://nodejs.connpass.com/&#34;&gt;&lt;strong&gt;Node女学園&lt;/strong&gt;&lt;/a&gt;というNode.jsを学ぶ女性のためのコミュニティを立ち上げました。&lt;/p&gt;
+
+&lt;p&gt;イベントを数回開催しましたが、毎回のナレッジが流れていくのがもったいない……。ということでNode女学園のブログを開設しました！
+&lt;img src=&#34;https://dotstud.io/img/blog/105/blog.png&#34; alt=&#34;&#34; /&gt;
+現在公開しているページは&lt;a href=&#34;https://nodegirls-jp.github.io/&#34;&gt;&lt;strong&gt;こちら&lt;/strong&gt;&lt;/a&gt;、ブログのレポジトリは&lt;a href=&#34;https://github.com/nodegirls-jp/nodegirls-jp.github.io&#34;&gt;&lt;strong&gt;こちら&lt;/strong&gt;&lt;/a&gt;。（鋭意開発中です）&lt;/p&gt;
+
+&lt;p&gt;こちらのページはNode.js製の静的サイトジェネレータ「&lt;strong&gt;Hexo&lt;/strong&gt;」で開発して「&lt;strong&gt;Github Pages&lt;/strong&gt;」で公開しています。手軽に無料で公開できますので、制作過程を紹介していきたいと思います！&lt;/p&gt;
+
+&lt;p&gt;今回は環境構築からGithub Pagesで公開するところまでやってみます。&lt;/p&gt;
+
+&lt;h2 id=&#34;はじめに&#34;&gt;はじめに&lt;/h2&gt;
+
+&lt;h3 id=&#34;静的サイトジェネレータって&#34;&gt;静的サイトジェネレータって？&lt;/h3&gt;
+
+&lt;p&gt;静的サイトジェネレータは、HTML/CSS/JavaScriptで構築される静的サイトをコマンドラインで簡単に生成することができるツールです。ヘッダやフッタの共通化、簡易ルーティング、MarkdownファイルのHTML変換など&lt;strong&gt;面倒な部分をよしなにやってくれます&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;Ruby製のJekyllやGo製のHUGO、React.js製のGatsby……と様々な言語で組まれたジェネレータがありますが、試してみる分にはあまり大きな違いはないので好みに合わせて選びましょう！&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://staticsitegenerators.net/&#34;&gt;Static Site Generators&lt;/a&gt;というサイトで静的サイトジェネレータの一覧が見れます。
+&lt;img src=&#34;https://dotstud.io/img/blog/105/ranking.png&#34; alt=&#34;&#34; /&gt;
+スター順に並べてみると、Jekyll、HUGOに続いてかなり人気ですね！&lt;/p&gt;
+
+&lt;p&gt;ちなみに&lt;strong&gt;dotstudioのサイトはHUGO&lt;/strong&gt;で生成されています。こちらの入門についてはデザイナーのちゃちゃまるくんが頑張っているのでご参照ください。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://dotstud.io/blog/hugo-for-designers-vol1/&#34;&gt;デザイナーの僕がHugoを使ってポートフォリオサイトを作ってみる #1【準備編】&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;github-pagesって&#34;&gt;Github Pagesって？&lt;/h3&gt;
+
+&lt;p&gt;Githubが提供する、&lt;strong&gt;無料で静的サイトを公開できるホスティングサービス&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;Githubのアカウントやorgnization、プロジェクトごとにサイトを制作することができ、&lt;strong&gt;pushしていくだけ&lt;/strong&gt;で公開できるのでgit管理に慣れている人にとってはかなり手軽ですね！&lt;/p&gt;
+
+&lt;p&gt;今回はGithub Pagesを作成するアカウント（またはorgnization）が作成されている前提で進めますので、お持ちでない方は登録から始めてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/&#34;&gt;https://github.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;またプロジェクトに紐付けて公開する場合は手順が異なりますが本記事では割愛します。&lt;/p&gt;
+
+&lt;h2 id=&#34;githubにレポジトリを作成しよう&#34;&gt;Githubにレポジトリを作成しよう&lt;/h2&gt;
+
+&lt;p&gt;まずはGithubにGithub Pages用のレポジトリを作成しましょう。&lt;a href=&#34;https://github.com/&#34;&gt;Github&lt;/a&gt;にアクセスし、[New Repository]を選択します。
+&lt;img src=&#34;https://dotstud.io/img/blog/105/new.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;「Create a new repository」のページに移動します。
+&lt;img src=&#34;https://dotstud.io/img/blog/105/create.png&#34; alt=&#34;&#34; /&gt;
+「&lt;strong&gt;Owner&lt;/strong&gt;」にはGithub Pagesを作成したいアカウントやorgnizationを指定します。今回はnodegirls-jpというorgnizationを指定します。&lt;/p&gt;
+
+&lt;p&gt;「&lt;strong&gt;Repository name&lt;/strong&gt;」には&lt;code&gt;owner名.github.io&lt;/code&gt;と入力します。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;このフォーマットに従わないとGithub Pagesが作成されない&lt;/strong&gt;ので注意してください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/105/repos.png&#34; alt=&#34;&#34; /&gt;
+レポジトリができました！公開URLは&lt;code&gt;https://owner名.github.io&lt;/code&gt;になります。&lt;/p&gt;
+
+&lt;p&gt;SSHのアドレスは後ほど使うのでメモしておきます。&lt;/p&gt;
+
+&lt;h2 id=&#34;雛形を作ってみよう&#34;&gt;雛形を作ってみよう&lt;/h2&gt;
+
+&lt;p&gt;続いてGithub Pagesで公開するブログをHexoで作っていきます。&lt;/p&gt;
+
+&lt;h3 id=&#34;開発環境構築&#34;&gt;開発環境構築&lt;/h3&gt;
+
+&lt;p&gt;Hexoの開発は&lt;strong&gt;Node.jsが動く環境&lt;/strong&gt;で行います。まずはNode.jsをインストールしましょう。&lt;/p&gt;
+
+&lt;p&gt;Node.jsのインストールには「nvm」や「nodebrew」を使うと便利です。下記ではnodebrewを使ったインストール方法を紹介しています。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://dotstud.io/blog/setup-new-mac-app/#node-js環境整備&#34;&gt;僕がMacを買い換えてすぐにいれるツール&amp;amp;すぐにする初期設定&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;続いてHexoのインストールです。下記のコマンドを実行しましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;npm install -g hexo
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;-g&lt;/code&gt;オプションをつけることでグローバルにインストールすることができます。&lt;/p&gt;
+
+&lt;h3 id=&#34;コマンドで雛形生成&#34;&gt;コマンドで雛形生成&lt;/h3&gt;
+
+&lt;p&gt;Hexoのコマンドでブログの雛形を生成します。&lt;/p&gt;
+
+&lt;p&gt;プロジェクトを作りたい場所へ移動し、&lt;code&gt;hexo init [ブログ名]&lt;/code&gt;で作成です。今回は「nodegirls-jp」というブログ名にします。
+&lt;img src=&#34;https://dotstud.io/img/blog/105/init.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;実行すると自動で&lt;code&gt;nodegirls-jp&lt;/code&gt;ディレクトリが作成されます。
+&lt;img src=&#34;https://dotstud.io/img/blog/105/ls.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ディレクトリの下へ移動して見てみましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/105/files.png&#34; alt=&#34;&#34; /&gt;
+ファイルとフォルダが作成されています。&lt;/p&gt;
+
+&lt;p&gt;ここで&lt;code&gt;npm install&lt;/code&gt;を実行してモジュールをインストールします。
+&lt;img src=&#34;https://dotstud.io/img/blog/105/npm.png&#34; alt=&#34;&#34; /&gt;
+これだけで雛形が完成です！&lt;/p&gt;
+
+&lt;h3 id=&#34;ローカルで確認する&#34;&gt;ローカルで確認する&lt;/h3&gt;
+
+&lt;p&gt;ローカルサーバを立ち上げてブログを確認してみます。（この状態ではまだ公開されません。）
+&lt;img src=&#34;https://dotstud.io/img/blog/105/server.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;起動したまま&lt;a href=&#34;http://localhost:4000/&#34;&gt;http://localhost:4000/&lt;/a&gt; へアクセスしましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/105/sample.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ブログの雛形が作成されました！簡単…簡単……ッ！&lt;/p&gt;
+
+&lt;h3 id=&#34;ブログの設定を追加&#34;&gt;ブログの設定を追加&lt;/h3&gt;
+
+&lt;p&gt;主な設定は&lt;code&gt;_config.yml&lt;/code&gt;というファイルに記述します。エディタで&lt;code&gt;_config.yml&lt;/code&gt;を開きましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/105/config.png&#34; alt=&#34;&#34; /&gt;
+こんな感じでブログに関する説明がずらっと記載されているので編集します。&lt;/p&gt;
+
+&lt;p&gt;urlは先ほど作った&lt;code&gt;https://owner名.github.io&lt;/code&gt;を設定します。title, subtitle, authorなどはお好みで設定しましょう。日本語ブログの場合&lt;code&gt;language&lt;/code&gt;は&lt;code&gt;ja&lt;/code&gt;、&lt;code&gt;timezone&lt;/code&gt;は&lt;code&gt;Asia/Tokyo&lt;/code&gt;がおすすめです。&lt;/p&gt;
+
+&lt;p&gt;今回の設定はこのようにしました。参考までに。
+&lt;img src=&#34;https://dotstud.io/img/blog/105/config_sample.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;一番下まで行くと&lt;code&gt;#Deployment&lt;/code&gt;の項目があります。デプロイのためにここを修正します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;deploy:
+  type: git
+  repo: git@github.com:nodegirls-jp/nodegirls-jp.github.io.git
+  branch: master
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;repoには&lt;strong&gt;先ほど作成したレポジトリのSSHアドレスを記述&lt;/strong&gt;します。&lt;/p&gt;
+
+&lt;p&gt;設定をローカルで確認するとこんな感じになっています。
+&lt;img src=&#34;https://dotstud.io/img/blog/105/sample_local.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;反映されていない場合は一度&lt;code&gt;control&lt;/code&gt;+&lt;code&gt;c&lt;/code&gt;でサーバを止め、&lt;code&gt;hexo server&lt;/code&gt;で起動しなおしてみてください。&lt;/p&gt;
+
+&lt;h2 id=&#34;公開してみよう&#34;&gt;公開してみよう&lt;/h2&gt;
+
+&lt;p&gt;いよいよ公開してみましょう。下記コマンドでビルド、公開を一度に行ってくれます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;hexo deploy -g
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ここでエラーが出る場合は、以下のコマンドでデプロイツールをインストールしましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;npm install hexo-deployer-git --save
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;公開されたページを確認してみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/105/deploy.png&#34; alt=&#34;&#34; /&gt;
+公開できました！&lt;/p&gt;
+
+&lt;h2 id=&#34;記事を追加しよう&#34;&gt;記事を追加しよう&lt;/h2&gt;
+
+&lt;p&gt;記事を追加してみましょう。&lt;code&gt;hexo new 記事名&lt;/code&gt;というコマンドで生成できます。
+&lt;img src=&#34;https://dotstud.io/img/blog/105/about.png&#34; alt=&#34;&#34; /&gt;
+最初の記事なので&lt;code&gt;about&lt;/code&gt;という記事を作ってみました。デフォルトの設定では&lt;code&gt;サイトURL/YYYY/MM/DD/タイトル&lt;/code&gt;というURLになります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/105/new_post.png&#34; alt=&#34;&#34; /&gt;
+&lt;code&gt;_posts&lt;/code&gt;の下に&lt;code&gt;about.md&lt;/code&gt;が作成されました。このファイルを編集します。&lt;/p&gt;
+
+&lt;p&gt;title, dataには自動で値が付与されており、tagsには任意のタグを追加できます。
+&lt;img src=&#34;https://dotstud.io/img/blog/105/header.png&#34; alt=&#34;&#34; /&gt;
+titleを修正して、「info」というタグを設定してみました。&lt;code&gt;---&lt;/code&gt;の下から記事本文をマークダウンで記述します。（HTMLも可）&lt;/p&gt;
+
+&lt;p&gt;記事を&lt;code&gt;hexo d -g&lt;/code&gt;でデプロイします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/105/post_sample.png&#34; alt=&#34;&#34; /&gt;
+記事が公開できました！&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;サーバの整備やデプロイなどをほとんど意識せずに公開することができました！コマンドを使い慣れている人は本当に&lt;strong&gt;爆速開発&lt;/strong&gt;だったと思います。&lt;/p&gt;
+
+&lt;p&gt;テーマやプラグインの追加で簡単に拡張できるので、どんどんカスタマイズしてみましょう。&lt;/p&gt;
+
+&lt;p&gt;次回はテーマを当ててブログのデザインを変更してみます。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>dotstuidoオリジナルのパッケージができました！〜使い方編〜</title>
       <link>https://dotstud.io/blog/howto-use-original-package/</link>
       <pubDate>Mon, 22 May 2017 21:20:43 +0900</pubDate>
@@ -1969,199 +2156,6 @@ req.end();
 &lt;p&gt;Node.jsからもこんな形で簡単にBOT投稿ができるのでとりあえず簡単な通知などから作っていき、その様子もまたまとめていく予定です。&lt;/p&gt;
 
 &lt;p&gt;乞うご期待 ￣ー￣)／&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>人柱覚悟でさっそくmacOS Sierraにしてみました。</title>
-      <link>https://dotstud.io/blog/macos-sierra-update-process/</link>
-      <pubDate>Fri, 23 Sep 2016 10:00:39 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/macos-sierra-update-process/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、dotstudio代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。macOS Sierraが出ましたね。まだ早いんじゃないかと思いつつ試しにアップデートしてみたのでレポートします。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;ちなみに今回は「実際にmacOS Sierraにアップデートしてみたレポート」ですので、試す際にもしトラブルが発生しても当メディアでは責任は負いません。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;macos-sierra-v10-12&#34;&gt;macOS Sierra （v10.12）&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/01_image.png&#34; alt=&#34;&#34; /&gt;
-&lt;a href=&#34;http://www.apple.com/jp/macos/sierra/&#34;&gt;macOS Sierra&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;シエラって読むみたいです。OS X El Capitan（v10.11）の後続版にあたります。
-バージョンは10.12でコードネームがSierraです。&lt;/p&gt;
-
-&lt;p&gt;ちなみに10.11までは「Mac OS X」という表記でしたが、Sierraからは「macOS」へ変わり最初のmが小文字になりました。デザイン的な理由がありそうですね（笑）&lt;/p&gt;
-
-&lt;p&gt;既に色々なメディアが記事を書いていますので、何が変わったかや新機能などの詳細についてはそちらからキャッチアップして下さい。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;（http://www.itmedia.co.jp/news/articles/1609/20/news119.html&#34;&gt;「Adobe CS6」は「macOS Sierra」で必要システム構成外に　Java 6サポート終了で&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;（http://www.gizmodo.jp/2016/09/mac-os-sierra-released.html&#34;&gt;OS X…ではなく「macOS Sierra」が正式リリース。MacにSiriがやってきた！&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://applech2.com/archives/macos-10-12-sierra-upgrade-check.html&#34;&gt;macOS Sierraへアップグレードする前の注意点まとめ。&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;アップデートする僕のmacbookのマシンスペック&#34;&gt;アップデートする僕のMacBookのマシンスペック&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;MacBook Pro （Retina 13-inch、 Early2015）&lt;/li&gt;
-&lt;li&gt;OS X El Capitan／v10.11.6&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;ちなみに&lt;a href=&#34;https://dotstud.io/blog/setup-new-mac-app/&#34;&gt;先日の記事&lt;/a&gt;で新しく買ったMacです。&lt;/p&gt;
-
-&lt;h2 id=&#34;手順&#34;&gt;手順&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/02_image.png&#34; alt=&#34;&#34; /&gt;
-&lt;a href=&#34;https://itunes.apple.com/jp/app/macos-sierra/id1127487414?mt=12&#34;&gt;App Store&lt;/a&gt;からSierraのインストーラを落とします。&lt;/p&gt;
-
-&lt;p&gt;インストーラだけで4.78GBもあるので、ダウンロードには少し時間がかかると思います。&lt;/p&gt;
-
-&lt;h3 id=&#34;インストール&#34;&gt;インストール&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/03_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;DLが終わるとアプリケーションフォルダにインストーラがあるので動させます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/04_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;インストーラの手順に従って以下を進めましょう。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;続ける&lt;/strong&gt; を選択&lt;/li&gt;
-&lt;li&gt;ソフトウェア使用許諾の表示になるので &lt;strong&gt;同意する&lt;/strong&gt; を選択&lt;/li&gt;
-&lt;li&gt;ソフトウェア使用許諾のポップアップが出たら更に &lt;strong&gt;同意する&lt;/strong&gt; を選択&lt;/li&gt;
-&lt;li&gt;インストール先のディスク選択画面が出るので &lt;strong&gt;インストール&lt;/strong&gt; を選択&lt;/li&gt;
-&lt;li&gt;パスワードを求められるのでMacの &lt;strong&gt;パスワードを入力&lt;/strong&gt; し &lt;strong&gt;ヘルパーを追加&lt;/strong&gt; を選択&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;ここまで終わるとインストールの準備が開始されます。
-&lt;img src=&#34;https://dotstud.io/img/blog/022/05_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;再起動を求められるので再起動しましょう。起動してるアプリケーションはすべて閉じます。編集中のファイルはちゃんと保存しておきましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/06_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;再起動するとMacの起動時にこのような画面になりインストールが進みます。この画面はMac起動前なのでここだけスマホ撮影です（笑）
-&lt;img src=&#34;https://dotstud.io/img/blog/022/07_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ここも時間がかかるので、ご飯でも食べに行くのがちょうどいいかもしれません。インストールが完了すると起動します。&lt;/p&gt;
-
-&lt;h3 id=&#34;sierraの初期設定&#34;&gt;Sierraの初期設定&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/08_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;起動するとMacの初期設定っぽいウィザードになります。AppleIDでサインインします。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;ソフトウェア使用許諾／プライバシーポリシー／利用規約の表示になるので &lt;strong&gt;同意する&lt;/strong&gt; を選択&lt;/li&gt;
-&lt;li&gt;ポップアップが出たら更に &lt;strong&gt;同意する&lt;/strong&gt; を選択&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;アカウント設定がされます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/09_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;iCloundキーチェーンの設定ですが、使っている人は設定しても良いと思います。僕はスキップしました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/10_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;次にSierraの新機能のiCloud Drive（MacのファイルをiCloudに保存する／Apple版のGoogle DriveやDropBoxみたいなもの）の設定です。この設定は後からでもできますが、僕はチェックをいれました。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;書類フォルダ&lt;/strong&gt; と &lt;strong&gt;デスクトップ&lt;/strong&gt; 内のファイルが自動的にアップロードされるので、書類やデスクトップが汚い人はアレなファイルがアップされちゃうかもしれないので気をつけましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/11_image.png&#34; alt=&#34;&#34; /&gt;
-次にSiriの設定です。これもSierraからの新機能です。iOSだけでしか使えなかったSiriですが、Macでも使えるようになります。目玉機能なのでオンにしておきます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/12_image.png&#34; alt=&#34;&#34; /&gt;
-これで無事に起動しました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/13_image.png&#34; alt=&#34;&#34; /&gt;
-&lt;strong&gt;このMacについて&lt;/strong&gt; からスペック確認をするとmacOS Sierraの表記になっていますね。&lt;/p&gt;
-
-&lt;h2 id=&#34;新機能を試してみる&#34;&gt;新機能を試してみる&lt;/h2&gt;
-
-&lt;p&gt;新機能の全ては&lt;a href=&#34;http://applech2.com/archives/20160614-macos-10-12-sierra-new-features.html&#34;&gt;macOS 10.12 Sierraの新機能まとめ。&lt;/a&gt;などをチェックしてみてください。&lt;/p&gt;
-
-&lt;p&gt;僕が実際に使ってみたかったものや手元で試せるものを紹介します。&lt;/p&gt;
-
-&lt;h3 id=&#34;複数ウィンドウをまとめてくる-タブ&#34;&gt;複数ウィンドウをまとめてくる「タブ」&lt;/h3&gt;
-
-&lt;p&gt;アプリケーションを複数開いても、タブでひとつのウィンドウにまとめてくれる機能です。Keynoteでよくスライドを複数開くので、個人的には今回のアップデートで一番便利さを感じています。&lt;/p&gt;
-
-&lt;p&gt;サードパーティ製のアプリケーションでも可能みたいですが、まだ対応してるアプリは少なそうです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/14.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Keynoteでは &lt;strong&gt;ウィンドウ-&amp;gt;すべてのウィンドウを結合&lt;/strong&gt; で結合できます。他のアプリでも同じような表示になると思います。&lt;/p&gt;
-
-&lt;p&gt;タブ機能と言っていますが、どちらかというと &lt;strong&gt;一つのウィンドウにまとめてくれる機能&lt;/strong&gt; という感じです。&lt;/p&gt;
-
-&lt;h3 id=&#34;siri-がmacでも使えるようになった&#34;&gt;「Siri」がMacでも使えるようになった&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/15.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;iOSでしか使えなかった音声アシスタント機能の「Siri」をMacでも使えるようになりました。&lt;/p&gt;
-
-&lt;p&gt;アイコンクリックか &lt;strong&gt;Command+スペース&lt;/strong&gt; で起動できます。&lt;/p&gt;
-
-&lt;h3 id=&#34;macのストレージを自動で最適化してくれる-optimized-storage&#34;&gt;Macのストレージを自動で最適化してくれる「Optimized Storage」&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/16_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ストレージの空きがなくなってくると、iCloudにファイルを逃がしてストレージを最適化してくれます。まだ僕のMacは買ったばかりなので恩恵は受けていないですが期待できます。&lt;/p&gt;
-
-&lt;p&gt;ちなみに、新機能の「Optimized Storage」（後述）を使うにはiCloud設定が必要です。iCloud設定から &lt;strong&gt;Macストレージを最適化&lt;/strong&gt; をチェックしましょう。&lt;/p&gt;
-
-&lt;h3 id=&#34;画像や動画を切り離せる-ピクチャ-イン-ピクチャ-pinp&#34;&gt;画像や動画を切り離せる「ピクチャ・イン・ピクチャ （PinP）」&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/17.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;YouTubeやiTunesで見ている動画や画像などを&lt;code&gt;切り離せる&lt;/code&gt;機能です。ちなみに、ブラウザだとSafariしか使えないようです。早くChromeにも欲しいですね……。&lt;/p&gt;
-
-&lt;p&gt;Youtube動画の上などで右クリックを2回（コンテキストメニューをダブルクリック）すると &lt;strong&gt;ピクチャ・イン・ピクチャにする&lt;/strong&gt; という項目があるので、それを選択しましょう。&lt;/p&gt;
-
-&lt;h4 id=&#34;ちなみにchromeエクステンションがありました&#34;&gt;ちなみにChromeエクステンションがありました。&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/18.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://chrome.google.com/webstore/detail/picture-in-picture-viewer/efaagmolahogmekmnmkigonhfcdiemnl/related&#34;&gt;Picture in Picture Viewer&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Chromeのメニューバーにアイコンが追加されるので、そのアイコンをYoutubeなどを開いてるときに押すと切り離せます。ちなみに、初回だけ&lt;code&gt;chrome://flags/#enable-panels&lt;/code&gt;というフラグからパネルを有効にする必要があります。&lt;/p&gt;
-
-&lt;h2 id=&#34;気になる不具合など&#34;&gt;気になる不具合など&lt;/h2&gt;
-
-&lt;h3 id=&#34;karabinerが使えない問題&#34;&gt;karabinerが使えない問題&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/19_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/setup-new-mac-app/&#34;&gt;先日の記事&lt;/a&gt;でも紹介した&lt;a href=&#34;https://pqrs.org/osx/karabiner/index.html.ja&#34;&gt;Karabiner&lt;/a&gt;が、執筆した時点（2016年9月21日）だと対応していませんでした。&lt;/p&gt;
-
-&lt;p&gt;US配列キーボードで英数&amp;lt;-&amp;gt;かなのモード変換を、JIS配列のようにボタンひとつでやりたいという僕みたいな人には必須ツールだったので残念です。&lt;/p&gt;
-
-&lt;p&gt;……と思いきや&lt;a href=&#34;https://ei-kana.appspot.com/&#34;&gt;⌘英かな&lt;/a&gt;というアプリで代替できたので、こちらをインストールすると &lt;strong&gt;US配列の英数&amp;lt;-&amp;gt;かなのモード変換問題&lt;/strong&gt; は解決します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/20_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;インストールはリンク先を参照して下さい。&lt;/p&gt;
-
-&lt;h3 id=&#34;macos-sierraにしたらgitコマンドが動かなくなった&#34;&gt;macOS Sierraにしたらgitコマンドが動かなくなった……&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/022/21_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;これにハマる人はけっこういる気がします（笑）&lt;/p&gt;
-
-&lt;p&gt;こちらのQiitaの記事「&lt;a href=&#34;http://qiita.com/n0bisuke/items/0ad33fa466c3de5ac763&#34;&gt;macOS SierraにしたらGitコマンドが動かなくなった&lt;/a&gt;」にまとめましたが最初焦りますね。&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめと雑感&#34;&gt;まとめと雑感&lt;/h2&gt;
-
-&lt;p&gt;今のところ、Sierraにしてから不具合は特に起きてないです。性能が上がったという実感も無いので、現時点（2016年9月21日）ではまだ必要がなければアップデートしなくても良いかもしれません。&lt;/p&gt;
-
-&lt;p&gt;ちなみにSierraにアップデートしたと同時にKeynoteがv7にアップデートしたんですけど、&lt;strong&gt;リアルタイム共同編集機能&lt;/strong&gt; というものが付いてて、こちらの方が気になっています（笑）&lt;/p&gt;
-
-&lt;p&gt;僕は問題ありませんでしたが、ハードウェア的な問題などでデータが消えてしまうとかもあるかもしれないので、アップデートする方はくれぐれもお気をつけて！&lt;/p&gt;
 </description>
     </item>
     
