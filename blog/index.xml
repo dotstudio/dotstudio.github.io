@@ -7,8 +7,487 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Wed, 07 Jun 2017 17:15:30 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 08 Jun 2017 20:03:04 +0900</lastBuildDate>
     <atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>電子工作でパリピな夏を独り占め！サイバーパンク大五郎！！</title>
+      <link>https://dotstud.io/blog/gyaruden-party-people-daigoro/</link>
+      <pubDate>Thu, 08 Jun 2017 20:03:04 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/gyaruden-party-people-daigoro/</guid>
+      
+      <description>
+
+&lt;p&gt;はじめまして、ギャル電きょうこです。ギャルによるギャルのためのテクノロジーを提案する電子工作ユニット、ギャル電で活動しておりまっす。夢はドンキでアルドゥイーノが買える世の中です。&lt;/p&gt;
+
+&lt;p&gt;この記事では、&lt;strong&gt;”Lチカ以上、IoT未満”&lt;/strong&gt; な電子工作テクニックでも楽しく作れてすぐに遊べるアイテムを紹介していきたいと思います。&lt;/p&gt;
+
+&lt;h2 id=&#34;今回の工作は夏フェスでパリピにめっちゃモテるやつ&#34;&gt;今回の工作は夏フェスでパリピにめっちゃモテるやつ！&lt;/h2&gt;
+
+&lt;p&gt;夏といえば、夏フェス！夏フェスといえばパリピ！パリピといえば酒！！！です。&lt;/p&gt;
+
+&lt;p&gt;ということで、今回はパリピに激モテな電子工作、&lt;strong&gt;甲類焼酎大五郎４ℓペットボトル&lt;/strong&gt;を作ってみました。&lt;/p&gt;
+
+&lt;h2 id=&#34;なぜ大五郎なのか&#34;&gt;なぜ大五郎なのか&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/109/1.png&#34; alt=&#34;&#34; /&gt;
+渋谷の街を歩いていたらセンター街で片手にスマホ、片手に4ℓの大五郎（半分減ってる）をもっているギャルをみかけました。&lt;/p&gt;
+
+&lt;p&gt;デニムのショーパンにベアトップ、そして大五郎。強めギャルファッションにこんなにも大五郎がジャストフィットしていてエモさしかありませんでした。&lt;/p&gt;
+
+&lt;p&gt;このエモさにさらにLEDを加えたら、絶対に最高なものができる！光る大五郎とか超未来！！なんでみんな光らせないわけ？！超機会損失してる！！！！&lt;/p&gt;
+
+&lt;p&gt;ないなら今すぐ作るしかない！というわけで、とりあえず大五郎を光らせることにしたのです。&lt;/p&gt;
+
+&lt;h2 id=&#34;とりあえず光らす方法&#34;&gt;とりあえず光らす方法&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/109/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;材料&#34;&gt;材料&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;モバイルバッテリー&lt;/li&gt;
+&lt;li&gt;LEDテープ（WS2812B）&lt;/li&gt;
+&lt;li&gt;MicroUSBケーブル&lt;/li&gt;
+&lt;li&gt;ArduinoまたはArduino互換機（今回はGR-CITRUSとAdafruit Trinket５Vを使用しました）&lt;/li&gt;
+&lt;li&gt;ジャンパワイヤと電線&lt;/li&gt;
+&lt;li&gt;ブレッドボード&lt;/li&gt;
+&lt;li&gt;両面テープ&lt;/li&gt;
+&lt;li&gt;ダクトテープ&lt;/li&gt;
+&lt;li&gt;大五郎4ℓ&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;ボードについては、わたしは小さくてUSBケーブルを差す口がもともとついているやつが好みなので、今回は&lt;strong&gt;GR-CITRUS&lt;/strong&gt;と&lt;strong&gt;Adafruit Trinket５V&lt;/strong&gt;を使ってみました。USBケーブルの口が付いたボードは、モバイルバッテリーをつなげば動くのでめっちゃ便利です。&lt;/p&gt;
+
+&lt;p&gt;環境導入については、ボードの名前と自分の使っているPCのOSのバージョン（Windows XXとかMac OS XXとか）でググるとだいたい親切な先人の情報がみつかると思いまっす。&lt;/p&gt;
+
+&lt;h3 id=&#34;配線は3本だからそんなに難しくない&#34;&gt;配線は3本だからそんなに難しくない&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/109/3.png&#34; alt=&#34;&#34; /&gt;
+NeoPixel LEDテープ（WS2812B）は、GND、５V、信号（D0）の三本の線をそれぞれArduino（または互換機）のGND、５V、デジタルピンにつなぐと光らせることができます。&lt;/p&gt;
+
+&lt;p&gt;今回の光る大五郎のように、底面とハンドルの部分だけLEDを使いたい場合は、LEDテープを光らせたい部分の長さに切ってテープとテープの間を電線で3本つなぎなおしたらオッケーです。&lt;/p&gt;
+
+&lt;p&gt;配線に必要な電線の長さは、適当に実物において測りました。仮置きするときはマスキングテープで貼るとやりやすいです。&lt;/p&gt;
+
+&lt;h3 id=&#34;ledを光らせるプログラムを入れる&#34;&gt;LEDを光らせるプログラムを入れる&lt;/h3&gt;
+
+&lt;h4 id=&#34;gr-citrus&#34;&gt;GR-CITRUS&lt;/h4&gt;
+
+&lt;p&gt;GR-CITRUSはWebコンパイラを使ってブラウザでスケッチを作成することができます。詳しい書き込み方法は下記を参照してください。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;参考: &lt;a href=&#34;http://gadget.renesas.com/ja/product/citrus_sp2.html&#34;&gt;GR-CITRUS 特設Webコンパイラでスケッチ&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;Adafruit_NeoPixcel.cpp&lt;/code&gt;と&lt;code&gt;Adafruit_NeoPixel.h&lt;/code&gt;の二つのファイルを下記ページからダウンロードして、GR-CITRUSで作成したプロジェクトにアップロードする必要があります。（Webコンパイラ使用時）&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/adafruit/Adafruit_NeoPixel&#34;&gt;https://github.com/adafruit/Adafruit_NeoPixel&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Arduino.h&amp;gt;
+#include &amp;lt;Adafruit_NeoPixel.h&amp;gt;
+#ifdef __AVR__
+  #include &amp;lt;avr/power.h&amp;gt;
+#endif
+
+//neopixcel用の設定部分
+//neopixelを接続するPINを設定
+#define PIN_LED 12
+//neopixelのLEDの数を設定
+#define NUM_LEDS 12
+
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_LEDS, PIN_LED, NEO_GRB + NEO_KHZ800);
+
+bool oldState = HIGH;
+int showType = 0;
+
+void showStrip() {
+ #ifdef ADAFRUIT_NEOPIXEL_H
+   strip.show();
+ #endif
+ #ifndef ADAFRUIT_NEOPIXEL_H
+   FastLED.show();
+ #endif
+}
+
+void setPixel(int Pixel, byte red, byte green, byte blue) {
+ #ifdef ADAFRUIT_NEOPIXEL_H
+   strip.setPixelColor(Pixel, strip.Color(red, green, blue));
+ #endif
+ #ifndef ADAFRUIT_NEOPIXEL_H
+   leds[Pixel].r = red;
+   leds[Pixel].g = green;
+   leds[Pixel].b = blue;
+ #endif
+}
+
+void setAll(byte red, byte green, byte blue) {
+  for(int i = 0; i &amp;lt; 17; i++ ) {
+    setPixel(i, red, green, blue);
+  }
+  showStrip();
+}
+
+// ここからNeoPixelのアニメーション設定
+
+
+void FadeInOut(byte red, byte green, byte blue){
+  float r, g, b;
+
+  for(int k = 0; k &amp;lt; 256; k=k+1) {
+    r = (k/256.0)*red;
+    g = (k/256.0)*green;
+    b = (k/256.0)*blue;
+    setAll(r,g,b);
+    showStrip();
+  }
+
+  for(int k = 255; k &amp;gt;= 0; k=k-2) {
+    r = (k/256.0)*red;
+    g = (k/256.0)*green;
+    b = (k/256.0)*blue;
+    setAll(r,g,b);
+    showStrip();
+  }
+}
+
+
+void Strobe(byte red, byte green, byte blue, int StrobeCount, int FlashDelay, int EndPause){
+  for(int j = 0; j &amp;lt; StrobeCount; j++) {
+    setAll(red,green,blue);
+    showStrip();
+    delay(FlashDelay);
+    setAll(0,0,0);
+    showStrip();
+    delay(FlashDelay);
+  }
+
+ delay(EndPause);
+}
+
+
+void Sparkle(byte red, byte green, byte blue, int SpeedDelay) {
+  int Pixel = random(NUM_LEDS);
+  setPixel(Pixel,red,green,blue);
+  showStrip();
+  delay(SpeedDelay);
+  setPixel(Pixel,0,0,0);
+}
+
+void RunningLights(byte red, byte green, byte blue, int WaveDelay) {
+  int Position=0;
+
+  for(int i=0; i&amp;lt;NUM_LEDS*2; i++)
+  {
+      Position++; // = 0; //Position + Rate;
+      for(int i=0; i&amp;lt;NUM_LEDS; i++) {
+        // sine wave, 3 offset waves make a rainbow!
+        //float level = sin(i+Position) * 127 + 128;
+        //setPixel(i,level,0,0);
+        //float level = sin(i+Position) * 127 + 128;
+        setPixel(i,((sin(i+Position) * 127 + 128)/255)*red,
+                   ((sin(i+Position) * 127 + 128)/255)*green,
+                   ((sin(i+Position) * 127 + 128)/255)*blue);
+      }
+
+      showStrip();
+      delay(WaveDelay);
+  }
+}
+
+byte * Wheel(byte WheelPos) {
+  static byte c[3];
+
+  if(WheelPos &amp;lt; 85) {
+   c[0]=WheelPos * 3;
+   c[1]=255 - WheelPos * 3;
+   c[2]=0;
+  } else if(WheelPos &amp;lt; 170) {
+   WheelPos -= 85;
+   c[0]=255 - WheelPos * 3;
+   c[1]=0;
+   c[2]=WheelPos * 3;
+  } else {
+   WheelPos -= 170;
+   c[0]=0;
+   c[1]=WheelPos * 3;
+   c[2]=255 - WheelPos * 3;
+  }
+
+  return c;
+}
+
+
+void rainbowCycle(int SpeedDelay) {
+  byte *c;
+  uint16_t i, j;
+
+  for(j=0; j&amp;lt;256*5; j++) { // 5 cycles of all colors on wheel
+    for(i=0; i&amp;lt; NUM_LEDS; i++) {
+      c=Wheel(((i * 256 / NUM_LEDS) + j) &amp;amp; 255);
+      setPixel(i, *c, *(c+1), *(c+2));
+    }
+    showStrip();
+    delay(SpeedDelay);
+  }
+}
+
+
+void Twinkle(byte red, byte green, byte blue, int Count, int SpeedDelay, boolean OnlyOne) {
+  setAll(0,0,0);
+
+  for (int i=0; i&amp;lt;Count; i++) {
+     setPixel(random(NUM_LEDS),red,green,blue);
+     showStrip();
+     delay(SpeedDelay);
+     if(OnlyOne) {
+       setAll(0,0,0);
+     }
+   }
+}
+void TwinkleRandom(int Count, int SpeedDelay, boolean OnlyOne) {
+  setAll(0,0,0);
+
+  for (int i=0; i&amp;lt;Count; i++) {
+     setPixel(random(NUM_LEDS),random(0,255),random(0,255),random(0,255));
+     showStrip();
+     delay(SpeedDelay);
+     if(OnlyOne) {
+       setAll(0,0,0);
+     }
+   }
+}
+
+void setup()
+{
+    pinMode(PIN_LED0, OUTPUT);
+    digitalWrite(PIN_LED, LOW);
+   #if defined (__AVR_ATtiny85__)
+   if (F_CPU == 16000000) clock_prescale_set(clock_div_1);
+  #endif
+  strip.begin();
+  strip.show();
+}
+
+void loop()
+{
+    FadeInOut(0x1C, 0xFF, 0xB3);
+    FadeInOut(0x1C, 0xFF, 0xB3);
+    FadeInOut(0x1C, 0xFF, 0xB3);
+    FadeInOut(0x36, 0xEB, 0xFF);
+    FadeInOut(0x36, 0xEB, 0xFF);
+    FadeInOut(0x36, 0xEB, 0xFF);
+    Twinkle(0xff, 40, 99, 10, 50, false);
+    Twinkle(0xff, 40, 99, 10, 50, false);
+    TwinkleRandom(20, 100, false);
+    TwinkleRandom(20, 100, false);
+    TwinkleRandom(20, 100, false);
+    TwinkleRandom(20, 100, false);
+    TwinkleRandom(20, 100, false);
+    TwinkleRandom(20, 100, false);
+    RunningLights(0x26,0xFF,0x7D, 50);
+   RunningLights(0x26,0xFF,0x7D, 50);
+    RunningLights(0x26,0xFF,0x7D, 50);
+    RunningLights(0xDD,0xFF,0x33, 50);
+     RunningLights(0xDD,0xFF,0x33, 50);
+      RunningLights(0xDD,0xFF,0x33, 50);
+    RunningLights(0xFF,0xAE,0x0D, 50);
+    RunningLights(0xFF,0xAE,0x0D, 50);
+    RunningLights(0xFF,0xAE,0x0D, 50);
+    RunningLights(0xFF,0x21,0x21, 50);
+    RunningLights(0xFF,0x21,0x21, 50);
+    RunningLights(0xFF,0x21,0x21, 50);
+    RunningLights(0xFF,0x54,0x93, 50);
+    RunningLights(0xFF,0x54,0x93, 50);
+    RunningLights(0xFF,0x54,0x93, 50);
+    RunningLights(0x7A,0x7F,0xFF, 50);
+    RunningLights(0x7A,0x7F,0xFF, 50);
+    RunningLights(0x7A,0x7F,0xFF, 50);
+    Strobe(0xff, 0xff, 0xff, 10, 50, 1000);
+    Strobe(0xff, 0xff, 0xff, 10, 50, 1000);
+    Strobe(0xff, 0xAB, 0xf9, 10, 50, 1000);
+    Strobe(0xff, 0xAB, 0xf9, 10, 50, 1000);
+    rainbowCycle(20);
+
+  }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;adafruit-trinket&#34;&gt;Adafruit Trinket&lt;/h4&gt;
+
+&lt;p&gt;TrinketはArduino IDEでスケッチを作成し書き込みます。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://learn.adafruit.com/introducing-trinket&#34;&gt;Introduction Trinket&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Adafruit_NeoPixel.h&amp;gt;
+#ifdef __AVR__
+  #include &amp;lt;avr/power.h&amp;gt;
+#endif
+
+//neopixcel用の設定部分
+
+//neopixelを接続するPINを設定
+#define PIN_LED 4
+
+//neopixelのLEDの数を設定
+#define NUM_LEDS 12
+
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_LEDS, PIN_LED, NEO_GRB + NEO_KHZ800);
+
+bool oldState = HIGH;
+int showType = 0;
+
+void showStrip() {
+ #ifdef ADAFRUIT_NEOPIXEL_H
+   strip.show();
+ #endif
+ #ifndef ADAFRUIT_NEOPIXEL_H
+   FastLED.show();
+ #endif
+}
+
+void setPixel(int Pixel, byte red, byte green, byte blue) {
+ #ifdef ADAFRUIT_NEOPIXEL_H
+   strip.setPixelColor(Pixel, strip.Color(red, green, blue));
+ #endif
+ #ifndef ADAFRUIT_NEOPIXEL_H
+   leds[Pixel].r = red;
+   leds[Pixel].g = green;
+   leds[Pixel].b = blue;
+ #endif
+}
+
+void setAll(byte red, byte green, byte blue) {
+  for(int i = 0; i &amp;lt; 17; i++ ) {
+    setPixel(i, red, green, blue);
+  }
+  showStrip();
+}
+
+// ここからNeoPixelのアニメーション設定
+
+
+void FadeInOut(byte red, byte green, byte blue){
+  float r, g, b;
+
+  for(int k = 0; k &amp;lt; 256; k=k+1) {
+    r = (k/256.0)*red;
+    g = (k/256.0)*green;
+    b = (k/256.0)*blue;
+    setAll(r,g,b);
+    showStrip();
+  }
+
+  for(int k = 255; k &amp;gt;= 0; k=k-2) {
+    r = (k/256.0)*red;
+    g = (k/256.0)*green;
+    b = (k/256.0)*blue;
+    setAll(r,g,b);
+    showStrip();
+  }
+}
+
+void Strobe(byte red, byte green, byte blue, int StrobeCount, int FlashDelay, int EndPause){
+  for(int j = 0; j &amp;lt; StrobeCount; j++) {
+    setAll(red,green,blue);
+    showStrip();
+    delay(FlashDelay);
+    setAll(0,0,0);
+    showStrip();
+    delay(FlashDelay);
+  }
+
+ delay(EndPause);
+}
+
+void Twinkle(byte red, byte green, byte blue, int Count, int SpeedDelay, boolean OnlyOne) {
+  setAll(0,0,0);
+
+  for (int i=0; i&amp;lt;Count; i++) {
+     setPixel(random(NUM_LEDS),red,green,blue);
+     showStrip();
+     delay(SpeedDelay);
+     if(OnlyOne) {
+       setAll(0,0,0);
+     }
+   }
+}
+void TwinkleRandom(int Count, int SpeedDelay, boolean OnlyOne) {
+  setAll(0,0,0);
+
+  for (int i=0; i&amp;lt;Count; i++) {
+     setPixel(random(NUM_LEDS),random(0,255),random(0,255),random(0,255));
+     showStrip();
+     delay(SpeedDelay);
+     if(OnlyOne) {
+       setAll(0,0,0);
+     }
+   }
+}
+
+//
+
+void setup()
+{
+    pinMode(PIN_LED, OUTPUT);
+    digitalWrite(PIN_LED, LOW);
+   #if defined (__AVR_ATtiny85__)
+
+   if (F_CPU == 16000000) clock_prescale_set(clock_div_1);
+  #endif
+  strip.begin();
+  strip.show();
+}
+
+void loop()
+{
+    FadeInOut(0x1C, 0xFF, 0xB3);
+    FadeInOut(0x1C, 0xFF, 0xB3);
+    FadeInOut(0x1C, 0xFF, 0xB3);
+    FadeInOut(0x36, 0xEB, 0xFF);
+    FadeInOut(0x36, 0xEB, 0xFF);
+    FadeInOut(0x36, 0xEB, 0xFF);
+    Twinkle(0xff, 40, 99, 10, 50, false);
+    Twinkle(0xff, 40, 99, 10, 50, false);
+    TwinkleRandom(20, 100, false);
+    TwinkleRandom(20, 100, false);
+    Strobe(0xff, 0xff, 0xff, 10, 50, 1000);
+    Strobe(0xff, 0xff, 0xff, 10, 50, 1000);
+    Strobe(0xff, 0xAB, 0xf9, 10, 50, 1000);
+    Strobe(0xff, 0xAB, 0xf9, 10, 50, 1000);
+  }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;TrinketはGR-CITRUS用に書いたコードをコピペしたらスケッチが大きすぎ！って怒られたのでだいぶコードを削りました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/109/4.png&#34; alt=&#34;&#34; /&gt;
+配線のはんだ付けと動作テストが終わったら、ダクトテープで部品を大五郎に貼り付けます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/109/5.png&#34; alt=&#34;&#34; /&gt;
+大五郎の背面に貼り付けられたバッテリーとボード、LEDテープ類。ダクトテープと両面テープがあればなんでも貼り付けられて超便利です。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;一般的には不審物としかいいようのない見た目&lt;/strong&gt;のため、電車や駅のトイレ等の公共の場所への置き忘れは要注意です。&lt;/p&gt;
+
+&lt;h2 id=&#34;実際にパーティで大五郎を光らせてみよう&#34;&gt;実際にパーティで大五郎を光らせてみよう！&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/109/6.png&#34; alt=&#34;&#34; /&gt;
+作成した光る大五郎をさっそく現場(パーティ)に投入してみました。&lt;/p&gt;
+
+&lt;p&gt;結果、&lt;strong&gt;最＆高&lt;/strong&gt;！！！！！&lt;/p&gt;
+
+&lt;p&gt;暗いところで幻想的に光る大五郎は、インテリアとしても飲み物としても威力を発揮し新しいパーティアイテムとして流行る予感しかありませんでした。&lt;/p&gt;
+
+&lt;p&gt;残念ながら盛り上がって飲みすぎたため、写真があまり残っていません……。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;4ℓはなかなかに重い&lt;/strong&gt;ということと、&lt;strong&gt;酔っぱらったパリピにブレッドボードから配線を抜かれがち&lt;/strong&gt;ということ以外には特に問題なく使用できました。&lt;/p&gt;
+
+&lt;p&gt;飲み終わったら、ダクトテープをはがして新しい大五郎にLEDユニットを貼るスタイルでいつでも光る大五郎が楽しめるので、改良してまた新たなパーティに出かけようと思います。&lt;/p&gt;
+
+&lt;p&gt;みんなもさっそく作ってパーティにでかけちゃおう！パリピに超モテるよ☆&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Node.js製の静的サイトジェネレータ「Hexo」で無料ブログ開発 vol.1</title>
@@ -3140,381 +3619,6 @@ SEの金森さんが初めてIoTに挑戦した話！&lt;/p&gt;
 &lt;p&gt;そしてIoTLTを支えてくださる企業のみなさま、&lt;strong&gt;IoTLTでは会場を提供してくださる企業様を募集中です！！&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;来月は私も発表したいので、よろしくお願いします！（笑）&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>ハードウェア知識ゼロでも大丈夫。「Gravity」で始める電子工作入門</title>
-      <link>https://dotstud.io/blog/dfrobot-gravity-hands-on/</link>
-      <pubDate>Tue, 21 Feb 2017 10:00:50 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/dfrobot-gravity-hands-on/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、ちゃちゃまるです。&lt;/p&gt;
-
-&lt;p&gt;先日CodeZineさんで紹介した &lt;a href=&#34;http://codezine.jp/article/detail/9982&#34;&gt;ハードウェアの知識ゼロでもボードにセンサーをつなげられる「Gravity」シリーズ&lt;/a&gt; について、さらに詳しく使い方を説明していきたいと思います！&lt;/p&gt;
-
-&lt;p&gt;「&lt;a href=&#34;https://dotstudio.connpass.com/event/49147/&#34;&gt;今度こそ挫折しない！知識ゼロからの電子工作ハンズオン&lt;/a&gt;」の資料にもなっています。&lt;/p&gt;
-
-&lt;p&gt;※この記事は主に初心者の方・他のマイコンボードを使ってはみたが挫折してしまった方向けです。&lt;/p&gt;
-
-&lt;h2 id=&#34;gravity-のおさらい&#34;&gt;「Gravity」のおさらい&lt;/h2&gt;
-
-&lt;p&gt;「&lt;strong&gt;Gravity&lt;/strong&gt;」とは中国・上海のハードウェア系企業であるDFRobotが作ったコネクタの規格、またそのコネクタを搭載したセンサー等を指します。&lt;/p&gt;
-
-&lt;p&gt;簡単に言うと、開発ボードとコントローラー（ボタンなど）やセンサー（音センサーなど）を統一された規格でつなぐことができるシリーズです。つなぐ部分やコネクタ自体が色分けされているので、&lt;strong&gt;直感的に配線ができ、簡単に自分の思う通りのものができます&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;本記事では&lt;a href=&#34;https://www.dfrobot.com/product-1454.html&#34;&gt;Gravity: Stater Kit for Arduino&lt;/a&gt;を題材にしています。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/photo.png&#34; alt=&#34;Gravityシリーズ&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;開発環境を整える&#34;&gt;開発環境を整える&lt;/h2&gt;
-
-&lt;p&gt;Gravityのコントローラーやセンサーを使うには、PCにIDE（書き込み用アプリケーション）を用意し、PCとマイコンボードをつなげる必要があります。まずは開発環境から整えていきましょう！&lt;/p&gt;
-
-&lt;ul id=&#34;env&#34;&gt;
-    &lt;li&gt;Macbook Air Early 2014&lt;/li&gt;
-    &lt;li&gt;OS X El Capitan v10.11.6&lt;/li&gt;
-    &lt;li&gt;Arduino IDE v1.6.12&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;arduino-ideをインストール&#34;&gt;Arduino IDEをインストール&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://www.arduino.cc/en/Main/Software&#34;&gt;Arduino - Software&lt;/a&gt;から「Arduino IDE」をダウンロードしてインストールします。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/01.png&#34; alt=&#34;Download the Arduino IDE&#34; /&gt;
-「Download the Arduino IDE」からお使いのOSを選択してください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/02.png&#34; alt=&#34;JUST DOWNLOAD&#34; /&gt;
-Arduino IDEはドネーションウェア（ユーザーが任意の利用料を開発者に寄付するライセンス形態のソフトウェア）なので、寄付金額を選択する画面に移動します。今回はグレーで書かれている「JUST DOWNLOAD」をクリックしてダウンロードを開始します。&lt;/p&gt;
-
-&lt;h3 id=&#34;arduino-ideを起動&#34;&gt;Arduino IDEを起動&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/03.png&#34; alt=&#34;IDE初回起動画面&#34; /&gt;
-Arduino IDEをダウンロード後初回起動すると、上のような画面がでてきます。このテキストエリアにコードを書いていきます。&lt;/p&gt;
-
-&lt;p&gt;OSの言語を日本語以外に設定している場合、メニューバーの「Arduino」内の「Preferences」からArduino IDEの言語設定を変更できます。反映するにはOKを押した後アプリの再起動が必要です。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/04.png&#34; alt=&#34;IDE画面説明&#34; /&gt;
-基本的なArduino IDEの流れとしては、まずエディア部分にコードを書き、検証ボタンでコードを検証、その後「マイコンボードに書き込む」ボタンでマイコンにプログラムを送ります。エラーやメッセージなどはコンパイラ画面に出力されます。&lt;/p&gt;
-
-&lt;h3 id=&#34;pcとマイコンボードをつなげる&#34;&gt;PCとマイコンボードをつなげる&lt;/h3&gt;
-
-&lt;p&gt;PCとマイコンボードをつないで、PCからArduino IDE経由でプログラムを書き込めるようにします。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/05.png&#34; alt=&#34;ボードを選択&#34; /&gt;
-USBでDFRduinoとPCをつないだら、「ツール」から「Arduino/Genuino UNO」を選択するだけです。DFRduinoはArduinoと全く同じ（下で詳しく解説します）なので、これでボードと接続できました。&lt;/p&gt;
-
-&lt;h2 id=&#34;マイコンボードにプログラムを書き込む&#34;&gt;マイコンボードにプログラムを書き込む&lt;/h2&gt;
-
-&lt;p&gt;Arduino IDEではプログラムを書いたファイルのことを「スケッチ」と呼ぶのですが、実はアプリにいくつものスケッチサンプルが内蔵されています。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/06.png&#34; alt=&#34;&#34; /&gt;
-上の「スケッチ例」を見るとかなりの量があります。今回は「01.Basics」内の「Blink」というスケッチを呼び出してみましょう。「Blink」をクリックすると自動的にプログラムが書かれたウィンドウが出てきます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/07.png&#34; alt=&#34;Blinkサンプル&#34; /&gt;
-たくさんの文字が書かれていますが、実際のプログラムは色がついている部分です（&lt;code&gt;/* */&lt;/code&gt; で囲まれている部分や&lt;code&gt;//&lt;/code&gt;と行の先頭にあるのはコメントなので、実際の挙動には関係しません）。ここに書く言語はC言語ベースの&lt;strong&gt;Arduino言語&lt;/strong&gt;です。C言語自体の記述方法（&lt;code&gt;if&lt;/code&gt;文や&lt;code&gt;for&lt;/code&gt;文など）はここでは解説しませんので、他のサイトを参考にしてください。&lt;/p&gt;
-
-&lt;p&gt;さて、ここで本来なら「検証」ボタンを使ってプログラムに間違いがないかチェックするのですが、今回はサンプルスケッチを使っているのでエラーは出ません。一応画面左上の「検証」（チェックマークのボタン）を押してみましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/08.png&#34; alt=&#34;コンパイル完了&#34; /&gt;
-「コンパイルが完了しました。」と同時に色々出てきました。このような画面が出たらとりあえず「プログラムの検証は成功した」と認識していれば大丈夫です。ちなみに「コンパイル」とは、人間が理解できるプログラミング言語からコンピュータが理解できる機械語へとプログラムを変換することを指します。&lt;/p&gt;
-
-&lt;p&gt;コンパイルが完了したので、いよいよマイコンボードに書き込みましょう。「検証」の隣にある「マイコンボードに書き込む」（矢印マークのボタン）をクリックします。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/09.png&#34; alt=&#34;ボード上のLED&#34; /&gt;
-DFRduino UNOは上の赤で囲った部分がLEDとなっていて、さきほどのスケッチを書き込むとここが周期的に光ったり消えたりします。&lt;/p&gt;
-
-&lt;p&gt;マイコンボードに書き込んだプログラムは、Arduino IDEで新しいスケッチを書き込まない限り動き続けます。LEDのチカチカを止めたいときは「ファイル」から「新規ファイル」を開いて、空のスケッチを書き込みます。&lt;/p&gt;
-
-&lt;h3 id=&#34;シールドを取り付ける&#34;&gt;シールドを取り付ける&lt;/h3&gt;
-
-&lt;p&gt;「シールド」とは、マイコンボードの機能を拡張させるアドオンボードのことを指します。今回使うマイコンボードの「DFRduino UNO R3」はArduino互換（Arduinoと全く同じ動きをするもので、作っている会社・団体が違うだけ）なので、まだこのままではGravityシリーズのセンサーやコントローラーを使うことはできません。そこで、このボードに重ねる形でGravity用シールド「I/O Sensor Expansion Shield v7.1」を乗せます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/10.png&#34; alt=&#34;シールドを重ねた写真&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;このI/O Sensor Expansion Shield v7.1を詳しく見てみると、ピン（金属の出っ張っている部分）が「黒・赤・緑」や「黒・赤・青」に色分けされています。&lt;strong&gt;これがまさに、知識ゼロでもGravityで遊ぶことができる理由&lt;/strong&gt;です（後ほど配線をする際にこの色分けの恩恵を受けます）。この後のチュートリアルでは常にシールドをマイコンボードに乗せた状態で使います。&lt;/p&gt;
-
-&lt;h2 id=&#34;プログラムの実行&#34;&gt;プログラムの実行&lt;/h2&gt;
-
-&lt;p&gt;いよいよプログラムを実際に書いて実行していきましょう！&lt;/p&gt;
-
-&lt;h3 id=&#34;デジタル信号を取得する&#34;&gt;デジタル信号を取得する&lt;/h3&gt;
-
-&lt;p&gt;何かのデータを取得する際、センサーから送られてくる信号には「デジタル」と「アナログ」の二種類があります。デジタル信号は値が「0」もしくは「1」で、アナログ信号の場合は値が「0」から「1023」の1024段階で、センサーから送られています。信号を取得するモジュールのことを&lt;strong&gt;インプットデバイス&lt;/strong&gt;と呼びます。&lt;/p&gt;
-
-&lt;p&gt;使うパーツ：&lt;br /&gt;
-- DFRduino UNO + I/O Sensor Expansion Shield v7.1&lt;br /&gt;
-- Digital Push Button Module（以下ボタン）&lt;/p&gt;
-
-&lt;h4 id=&#34;実行編&#34;&gt;実行編&lt;/h4&gt;
-
-&lt;p&gt;では手始めに、&lt;strong&gt;ボタンが押されているかどうかを確認する&lt;/strong&gt;プログラムを動かしてみましょう！&lt;/p&gt;
-
-&lt;p&gt;まずは配線をします。ボタンに付属のコネクタを指し、もう片方をシールドのD側2番ピン（以下図参照）に、コネクタとピンの色が合うように挿してください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/11.png&#34; alt=&#34;回路図-ボタン&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ボタンに付属している「黒・赤・緑」のコネクタは、デジタル信号を送るときに使います。今回はボタンが押されているか押されていないか、の2パターンの値が送られてきます。センサーやコントローラーの基盤の上に「D」や「A」と書かれていますが、これらもそれぞれデジタルかアナログかを示しています。&lt;/p&gt;
-
-&lt;p&gt;次に、D側2番ピンにつながっているボタンが押されているかどうかを検知するプログラムをArduino IDEのエディタ部分に書きます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;void setup() {
-	Serial.begin(9600);
-	pinMode(2, INPUT);
-}
-
-void loop() {
-	int buttonState = digitalRead(2);
-	Serial.println(buttonState);
-	delay(1);  
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;「検証」と「ボードに書き込み」ボタンの列の右端の「シリアルモニタ」ボタン（虫眼鏡のアイコン）をクリックします。ここに&lt;code&gt;Serial.println()&lt;/code&gt;の括弧内の値が表示されるようになります。&lt;/p&gt;
-
-&lt;!--![シリアルモニタスクショ](/img/blog/087/12.png)--&gt;
-
-&lt;h4 id=&#34;プログラム解説編&#34;&gt;プログラム解説編&lt;/h4&gt;
-
-&lt;p&gt;Arduino IDEで作成するプログラムは大きく&lt;code&gt;void setup()&lt;/code&gt;と&lt;code&gt;void loop()&lt;/code&gt;の2つに分けることができます。&lt;code&gt;setup()&lt;/code&gt;に続く中括弧（&lt;code&gt;{}&lt;/code&gt;）の中は一度だけ実行され、&lt;code&gt;loop()&lt;/code&gt;内のコードは繰り返し実行されます。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;Serial.begin(9600);&lt;/code&gt;はシリアル通信の際データの転送速度を9600で指定しています。これはシリアルモニタを使用するのに必要です。おまじない的なものと解釈してもらって大丈夫です（笑）&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;pinMode()&lt;/code&gt;はどのピンを使ってどのようにデータを使うかを示しています。括弧内の一つ目にはピン番号を、二つ目には&lt;code&gt;INPUT&lt;/code&gt;（データを取得する）もしくは&lt;code&gt;OUTPUT&lt;/code&gt;（データを送信する）を指定します。今回の場合、&lt;strong&gt;D側2番ピン&lt;/strong&gt;からデータ（ボタンが押されたかどうか）を&lt;strong&gt;取得&lt;/strong&gt;したいので、&lt;code&gt;pinMode(2, INPUT);&lt;/code&gt;となります。ちなみにD側2番ピンの場合&lt;code&gt;2&lt;/code&gt;、A側2番ピンの場合&lt;code&gt;A2&lt;/code&gt;と書きます。&lt;/p&gt;
-
-&lt;p&gt;以上が&lt;code&gt;setup()&lt;/code&gt;になります。次は&lt;code&gt;loop()&lt;/code&gt;内を見ていきます。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;digitalRead()&lt;/code&gt;を使うと、括弧内で指定したピンの値を読み取ることができます。今回は2番ピンを読み取りたいので&lt;code&gt;digitalRead(2)&lt;/code&gt;ですね。この値を&lt;code&gt;buttonState&lt;/code&gt;に入れておきます。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;Serial.println()&lt;/code&gt;は括弧内の値をシリアルモニタに映します。&lt;code&gt;Serial.println(buttonState);&lt;/code&gt;の場合、&lt;code&gt;buttonState&lt;/code&gt;、つまりボタンが押されているかどうかを&lt;code&gt;0&lt;/code&gt;または&lt;code&gt;1&lt;/code&gt;でシリアルモニタに表示します。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;delay()&lt;/code&gt;は括弧内の時間実行を遅らせます。時間の単位はミリ秒（1000分の1秒）です。&lt;code&gt;delay(1);&lt;/code&gt;を&lt;code&gt;loop()&lt;/code&gt;の最後に書くことによって、このプログラムを1ミリ秒ごとに実行するよう指定できます。&lt;/p&gt;
-
-&lt;h3 id=&#34;アナログ信号を取得する&#34;&gt;アナログ信号を取得する&lt;/h3&gt;
-
-&lt;p&gt;次はアナログ信号（0から1023までの値）を取得して、シリアルモニタで表示させてみましょう！こちらも先程と同様、センサーをインプットデバイスとして使います。&lt;/p&gt;
-
-&lt;p&gt;使うパーツ：&lt;br /&gt;
-- DFRduino UNO + I/O Sensor Expansion Shield v7.1&lt;br /&gt;
-- Analog Rotation Sensor（以下回転センサー）&lt;/p&gt;
-
-&lt;h4 id=&#34;実行編-1&#34;&gt;実行編&lt;/h4&gt;
-
-&lt;p&gt;付属しているアナログ用（黒・赤・青）のコネクタで回転センサーとシールドのA側0番ピンをつなげます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/13.png&#34; alt=&#34;回路図-回転&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;次に以下のプログラムをエディタにコピーします。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;void setup() {
-  Serial.begin(9600);
-}
-void loop() {
-  int sensorValue = analogRead(A0);
-  Serial.println(sensorValue);
-  delay(1);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;作成したスケッチを検証後ボードに送信します。シリアルモニタを開いて回転センサーのツマミを回すと、0から1023の値が回転角度に合わせて表示されると思います。&lt;/p&gt;
-
-&lt;!--![シリアルモニタスクショ](/img/blog/087/14.png)--&gt;
-
-&lt;h4 id=&#34;プログラム解説編-1&#34;&gt;プログラム解説編&lt;/h4&gt;
-
-&lt;p&gt;前回は&lt;code&gt;digitalRead()&lt;/code&gt;を使いましたが、今回はアナログの値を取得したいので&lt;code&gt;analogRead()&lt;/code&gt;を使います。括弧内にはピン番号を入れます。&lt;/p&gt;
-
-&lt;p&gt;記事がとんでもなく長くなってしまうので、既出のコードは解説しません。分からない方はお手数ですが上に戻って確認してください m(._.)m&lt;/p&gt;
-
-&lt;h3 id=&#34;ledをチカチカさせる&#34;&gt;LEDをチカチカさせる&lt;/h3&gt;
-
-&lt;p&gt;LEDを周期的にチカチカ光らせてみます。今回はピンにつないだものから値を取得するのではなく、値をピンにつないだものに送信します。このようなモジュールを&lt;strong&gt;アウトプットデバイス&lt;/strong&gt;と呼びます。&lt;/p&gt;
-
-&lt;p&gt;使うパーツ：&lt;br /&gt;
-- DFRduino UNO + I/O Sensor Expansion Shield v7.1&lt;br /&gt;
-- Digital Piranha LED-R（以下赤LED）&lt;/p&gt;
-
-&lt;h4 id=&#34;実行編-2&#34;&gt;実行編&lt;/h4&gt;
-
-&lt;p&gt;赤LEDをシールドのD側13番につなげてください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/15.png&#34; alt=&#34;回路図-LED&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;プログラムは以下の通り。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;int ledPin = 13;
-void setup() {
-  pinMode(ledPin, OUTPUT);
-}
-void loop() {
-  digitalWrite(ledPin, HIGH);
-  delay(1000);
-  digitalWrite(ledPin, LOW);
-  delay(1000);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;検証→ボードに書き込みで、LEDが1秒周期でチカチカし始めます。&lt;/p&gt;
-
-&lt;h4 id=&#34;プログラム解説編-2&#34;&gt;プログラム解説編&lt;/h4&gt;
-
-&lt;p&gt;&lt;code&gt;digitalWrite()&lt;/code&gt;は、括弧内の一つ目に指定したピンに&lt;code&gt;HIGH&lt;/code&gt;もしくは&lt;code&gt;LOW&lt;/code&gt;の値を送ることができます。&lt;code&gt;HIGH&lt;/code&gt;は「1」、&lt;code&gt;LOW&lt;/code&gt;は「0」となります。&lt;/p&gt;
-
-&lt;p&gt;また、プログラム内で13番ピンの情報を何回か使うので、最初に&lt;code&gt;int ledPin = 13;&lt;/code&gt;と変数に入れておいてあげると、後々ピンの番号を変更したいときに便利です。&lt;/p&gt;
-
-&lt;h3 id=&#34;人感ライトを作る&#34;&gt;人感ライトを作る&lt;/h3&gt;
-
-&lt;p&gt;ここの辺りから電子工作っぽい感じになりますよ！次はインプットデバイスとアウトプットデバイスを同時に使い、&lt;strong&gt;一つのモジュールから値を取得して、その値を別のモジュールに送る&lt;/strong&gt;ような仕組みを作ってみます！&lt;/p&gt;
-
-&lt;p&gt;使うパーツ：&lt;br /&gt;
-- DFRduino UNO + I/O Sensor Expansion Shield v7.1&lt;br /&gt;
-- PIR Sensor（以下人感センサー）→インプットデバイス&lt;br /&gt;
-- Digital Piranha LED-R（以下赤LED）→アウトプットデバイス&lt;/p&gt;
-
-&lt;h4 id=&#34;実行編-3&#34;&gt;実行編&lt;/h4&gt;
-
-&lt;p&gt;人感センサーで動きを確認したら、赤LEDを点灯します。どちらもデジタルで良さそう（動いている・動いていない、点灯している・点灯していない、のそれぞれ2つの状態しかない）なので、人感センサーをD側2番ピンに、赤LEDをD側13番ピンにつなげます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/16.png&#34; alt=&#34;回路図-人感LED&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;プログラムは以下の通り。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;int sensorPin = 2;
-int ledPin =  13;
-int sensorState = 0;
-void setup() {
-  pinMode(ledPin, OUTPUT);
-  pinMode(sensorPin, INPUT);
-}
-
-void loop() {
-  sensorState = digitalRead(sensorPin);
-  if (sensorState == HIGH) {
-    digitalWrite(ledPin, HIGH);
-} else {
-    digitalWrite(ledPin, LOW);
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;検証→ボードに書き込んでみましょう。人感センサーに向かって動いたり手を振ったりするとLEDが付くはずです。&lt;/p&gt;
-
-&lt;h4 id=&#34;プログラム解説編-3&#34;&gt;プログラム解説編&lt;/h4&gt;
-
-&lt;p&gt;今回は変数を3つ作りました。ピン番号などは変数で管理すると、可読性も上がりピンの変更などもしやすいのでオススメです。最後に宣言した&lt;code&gt;sensorState&lt;/code&gt;は、人感センサーで読み取った値が入ります。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;digitalRead()&lt;/code&gt;で読み取った値は&lt;code&gt;HIGH&lt;/code&gt;または&lt;code&gt;LOW&lt;/code&gt;でかえってきます。なので&lt;code&gt;sensorState == HIGH&lt;/code&gt;や&lt;code&gt;sensorState == LOW&lt;/code&gt;としてあげると、&lt;code&gt;HIGH&lt;/code&gt;のとき、&lt;code&gt;LOW&lt;/code&gt;のとき、と条件によって別々の挙動を指定することができます。&lt;/p&gt;
-
-&lt;p&gt;まとめると、&lt;code&gt;digitalRead()&lt;/code&gt;で人感センサーからの値によって、赤LEDに&lt;code&gt;digitalWrite()&lt;/code&gt;でオンオフを指定しています。&lt;/p&gt;
-
-&lt;h3 id=&#34;音でledをつける&#34;&gt;音でLEDをつける&lt;/h3&gt;
-
-&lt;p&gt;だんだん慣れてきましたか？今度は音センサーを使って、一定の音量を超えたらLEDが光る仕組みを作りましょう！&lt;/p&gt;
-
-&lt;p&gt;使うパーツ：&lt;br /&gt;
-- DFRduino UNO + I/O Sensor Expansion Shield v7.1&lt;br /&gt;
-- Analog Sound Sensor（以下音センサー）→インプットデバイス&lt;br /&gt;
-- Digital Piranha LED-R（以下赤LED）→アウトプットデバイス&lt;/p&gt;
-
-&lt;h4 id=&#34;実行編-4&#34;&gt;実行編&lt;/h4&gt;
-
-&lt;p&gt;音センサーの基盤上に「A」と書かれているので、シールドのA側0番ピンに指します。赤LEDはいままで通りD側なので、D側13番に指します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/17.png&#34; alt=&#34;回路図-音LED&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;いままではD側何番、A側何番、と指定してきましたが、実はD側・A側さえ合っていれば基本何番でも大丈夫です。いくつものモジュールを近いピン番号にくっつけすぎるとごちゃごちゃするので、適当に間隔を空けて配線すると楽ですよ。&lt;/p&gt;
-
-&lt;p&gt;まずは以下のコードをエディタに入力してみてください。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;int soundPin = A0;
-int ledPin = 13;
-
-void setup() {
-	pinMode(ledPin, OUTPUT);
-	Serial.begin(9600);
-}
-void loop(){
-	int soundState = analogRead(soundPin);
-	Serial.println(soundState);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;このプログラムを検証して実行すると、音センサーが返したアナログの値がシリアルモニタに出てきます。今回は音が「ある一定以上の音量になった場合」LEDを光らせたいので、その「ある一定」を見つける必要があります。周りの環境によって返ってくる音量の値が変わるので、自分がこれ以上音が鳴ったら光らせたい！という値を見つけてください。&lt;/p&gt;
-
-&lt;p&gt;「ある一定」の数値が決まったらそれを反映させつつ以下のプログラムにします。先程まで使っていたコードは先頭に&lt;code&gt;//&lt;/code&gt;をつけることで無視することができます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;int soundPin = A0;
-int ledPin = 13;
-
-void setup() {
-	pinMode(ledPin, OUTPUT);
-	// Serial.begin(9600);
-}
-void loop(){
-	int soundState = analogRead(soundPin);
-	// Serial.println(soundState);
-	if (soundState &amp;gt; 「ある一定」の数値) {
-		digitalWrite(ledPin, HIGH);
-		delay(10000);
-	} else {
-		digitalWrite(ledPin, LOW);
-	}
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;もう一度検証→ボードに書き込むと、周りの音が一定ラインを超えるとLEDが光るようになります！&lt;/p&gt;
-
-&lt;h3 id=&#34;ledをゆっくりと点灯させる&#34;&gt;LEDをゆっくりと点灯させる&lt;/h3&gt;
-
-&lt;p&gt;序盤にLEDを点灯させるのをすでにやりましたが、今度は&lt;strong&gt;ゆっくりと&lt;/strong&gt;点灯させます。勘の良い方は「LEDにアナログの値を書き込めないのではないか」と気づくと思います。ゆっくり点灯ということはおそらく&lt;code&gt;analogWrite()&lt;/code&gt;を使うことは予想できますが、LEDはいままで&lt;code&gt;digitalWrite();&lt;/code&gt;で値を送っていたのでできないのではないか、と。&lt;/p&gt;
-
-&lt;p&gt;そこで&lt;strong&gt;PWN&lt;/strong&gt;（Pulse Width Modulation・パルス幅変調）を使います。ググってみると何やら難しい話が出てきますが、簡単に言うと&lt;strong&gt;デジタル信号で擬似的にアナログデータを送る&lt;/strong&gt;ことができます。&lt;/p&gt;
-
-&lt;p&gt;PWMに対応しているピンは、今回のシールド上ではD側のアスタリスク（&lt;code&gt;*&lt;/code&gt;）が付いている3番、5番、6番、9番、10番、11番です。&lt;/p&gt;
-
-&lt;p&gt;使うパーツ：&lt;br /&gt;
-- DFRduino UNO + I/O Sensor Expansion Shield v7.1&lt;br /&gt;
-- Digital Piranha LED-R（以下赤LED）→アウトプットデバイス&lt;/p&gt;
-
-&lt;h4 id=&#34;実行編-5&#34;&gt;実行編&lt;/h4&gt;
-
-&lt;p&gt;赤LEDをシールドのD側10番につなげます。PWM対応なのを確認してください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/18.png&#34; alt=&#34;回路図-LEDPWM&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;プログラムは以下の通り。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;int ledPin = 10;
-
-void setup() {
-	pinMode(ledPin,OUTPUT);
-}
-void loop(){
-	for (int value = 0 ; value &amp;lt; 255; value++) {
-		analogWrite(ledPin, value);
-		delay(5); }
-  for (int value = 255; value &amp;gt;0; value--){
- 		analogWrite(ledPin, value);
-	delay(5); }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;検証→ボードに書き込みで、ゆっくりLEDがついて、ゆっくりLEDが消えるようになります。プログラム自体はシンプルなので、解説は割愛します。&lt;/p&gt;
-
-&lt;h2 id=&#34;お疲れ様でした&#34;&gt;お疲れ様でした！&lt;/h2&gt;
-
-&lt;p&gt;ここまでかなり長い道のりでしたね！この記事を書くのにも結構時間かかりました（笑）&lt;/p&gt;
-
-&lt;p&gt;この記事を通して、インプットデバイスから値を取得して、アウトプットデバイスに値を渡す、という処理をできるようになりました。これさえできるようになれば、後は好きなモジュールを使って作りたいものを作るだけです！&lt;/p&gt;
-
-&lt;p&gt;この記事で学んだことだけでできるプロジェクトの一例として、&lt;strong&gt;流れている音楽の大きさを赤・青・緑のLEDで表す&lt;/strong&gt;なんてのはどうでしょうか。音センサーから値を取ってきて、いくつ以上の値で緑LEDを光らせて、いくつ以上で青を、いくつ以上で赤を…… と指定すればできそうですね！PWMを使うことで、さらに細かく音の大きさが表わせそうです。&lt;/p&gt;
-
-&lt;p&gt;2017年2月23日開催の &lt;a href=&#34;https://dotstudio.connpass.com/event/49147/&#34;&gt;今度こそ挫折しない！知識ゼロからの電子工作ハンズオン&lt;/a&gt;イベントに来てくださっている方で、チュートリアルを早く終わってしまった方もぜひやってみてください！&lt;/p&gt;
-
-&lt;p&gt;それではまた！お疲れ様でした！&lt;/p&gt;
 </description>
     </item>
     
