@@ -7,8 +7,370 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Thu, 08 Jun 2017 20:03:04 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 13 Jun 2017 19:28:32 +0900</lastBuildDate>
     <atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>ESP8266を使って京急が遅延すると光るガジェットを作ってみた</title>
+      <link>https://dotstud.io/blog/pokio-esp-keikyu-chien/</link>
+      <pubDate>Tue, 13 Jun 2017 19:28:32 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/pokio-esp-keikyu-chien/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、京急が大好きなポキオです。&lt;/p&gt;
+
+&lt;p&gt;普段はAndroidエンジニアをやってますが、週末は趣味でArduinoやESP8266を触って心を落ち着かせています。先日、「京急が遅延すると光るガジェット」を作って&lt;a href=&#34;https://iotlt.connpass.com/&#34;&gt;IoTLT&lt;/a&gt;で発表を行ってきました。&lt;/p&gt;
+
+&lt;p&gt;今回は、そこで発表したガジェットの作成段階や、技術的な仕組みを紹介します。（発表後に一部パーツ・コーディングを変更しています）&lt;/p&gt;
+
+&lt;h2 id=&#34;今回作るもの&#34;&gt;今回作るもの&lt;/h2&gt;
+
+&lt;p&gt;ESP8266というWi-Fiモジュールを搭載した開発ボード「ESPr® Developer」を使って京急のホームページから運行情報を取得し、遅延していたらLEDを光らせる仕組みを作ります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/099/01_map.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;筆者の環境&#34;&gt;筆者の環境&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;MacBook Air（13-inch、Mid 2013）&lt;/li&gt;
+&lt;li&gt;OS X Yosemite（v10.10.5）&lt;/li&gt;
+&lt;li&gt;Arduino IDE 1.8.0&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ESPr® DeveloperESP8266&lt;/li&gt;
+&lt;li&gt;マイコン内臓RGB LED&lt;/li&gt;
+&lt;li&gt;光らせたいガジェット（今回はBトレインショーティ）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;主なパーツ&#34;&gt;主なパーツ&lt;/h2&gt;
+
+&lt;h3 id=&#34;espr-developer&#34;&gt;ESPr® Developer&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/099/02_esper.png&#34; alt=&#34;画像&#34; /&gt;
+&lt;a href=&#34;https://www.switch-science.com/catalog/2500/&#34;&gt;スイッチサイエンス&lt;/a&gt;さんで売られている、ESP8266というWi-Fiモジュールを搭載した開発ボードです。素のESP8266を直接触るのはハードルが高いですが、USB-シリアル変換やレギュレータ、リセットスイッチなど実装済みで、Arduino IDEでも開発できるため便利です。&lt;/p&gt;
+
+&lt;p&gt;ただし、筆者の開発環境ではArduino IDEからコードを流し込む際に、一手間必要でした。詳しくはこちら。&lt;/p&gt;
+
+&lt;p&gt;参考: &lt;a href=&#34;http://qiita.com/shanonim/items/68fab6dc28b72b31a258&#34;&gt;ESPr Developer（ESP-WROOM-02開発ボード）で &amp;ldquo;warning: espcomm_sync failed&amp;rdquo; と表示される場合の対処&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;マイコン内蔵rgb-led&#34;&gt;マイコン内蔵RGB LED&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/099/03_led.png&#34; alt=&#34;画像&#34; /&gt;
+秋葉原の&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gI-08412/&#34;&gt;秋月電子通商&lt;/a&gt;さんで1個40円で売られているものを使用します。通常のLEDは足が2本ですが、こちらは足が4本。これらを制御することで、様々な色でLEDを光らせることができます。ESP8266（Arduino）向けに便利なライブラリが公開されているので、今回はこれを使ってコーディングしていきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/adafruit/Adafruit_NeoPixel&#34;&gt;Adafruit NeoPixel Library&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;bトレインショーティー&#34;&gt;Bトレインショーティー&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/099/04_train.png&#34; alt=&#34;画像&#34; /&gt;
+&lt;a href=&#34;https://bandai-hobby.net/train/&#34;&gt;Bトレインショーティー&lt;/a&gt;はバンダイさんから発売されている、自分で組み立てるタイプの鉄道模型です。特徴は、何と言っても可愛さ。実車のディテールを表現しつつ、車両の長さをギュッと縮めてコミカルなルックスになっています。今回は（もちろん京急の）2100形をチョイス。京急の中で好きな車両の一つです。&lt;/p&gt;
+
+&lt;h2 id=&#34;ガジェットを作ってみる&#34;&gt;ガジェットを作ってみる&lt;/h2&gt;
+
+&lt;h3 id=&#34;京急の2100形車両の組み立て&#34;&gt;京急の2100形車両の組み立て&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/099/05_keikyu1.png&#34; alt=&#34;画像&#34; /&gt;
+なにはともあれ、京急の車両を組み立てるところから始めます。Bトレインショーティーの京急2100形は、塗装済みで接着剤不要で組み立てができます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/099/06_keikyu2.png&#34; alt=&#34;画像&#34; /&gt;
+久しぶりのプラモデルにテンションがアガります。&lt;/p&gt;
+
+&lt;h3 id=&#34;マイコン内蔵rgb-ledを埋め込む&#34;&gt;マイコン内蔵RGB LEDを埋め込む&lt;/h3&gt;
+
+&lt;p&gt;出来上がった京急の車両にLEDを埋め込んでいきます。ここで便利なのがサンハヤトさんの&lt;a href=&#34;http://www.sunhayato.co.jp/material2/index.php/item?cell003=%E3%83%A6%E3%83%8B%E3%83%90%E3%83%BC%E3%82%B5%E3%83%AB%E5%9F%BA%E6%9D%BF%E8%A3%BD%E5%93%81&amp;amp;cell004=%E4%B8%AD%E5%9E%8B%E3%83%A6%E3%83%8B%E3%83%90%E3%83%BC%E3%82%B5%E3%83%AB%E5%9F%BA%E6%9D%BF&amp;amp;name=%E8%96%84%E5%9E%8B%E3%83%A6%E3%83%8B%E3%83%90%E3%83%BC%E3%82%B5%E3%83%AB%E5%9F%BA%E6%9D%BF+UB-THN01&amp;amp;id=722&amp;amp;label=1&#34;&gt;ハサミで切れるユニバーサル基板&lt;/a&gt;です。
+&lt;img src=&#34;https://dotstud.io/img/blog/099/07_universal1.png&#34; alt=&#34;画像&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;謳い文句の通り、ハサミで自由にカットができて、今回のような小さい車両にも基板を収めることができます。
+&lt;img src=&#34;https://dotstud.io/img/blog/099/08_universal2.png&#34; alt=&#34;画像&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;こんな感じで簡単に、そしてその場で車両ピッタリの基板ができました。
+&lt;img src=&#34;https://dotstud.io/img/blog/099/09_rgb_led.png&#34; alt=&#34;画像&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;配線&#34;&gt;配線&lt;/h3&gt;
+
+&lt;p&gt;マイコン内蔵RGB LEDは先述の通り足が4本あり、電源（VDD）とグラウンド（GND）に加えて、制御信号の入出力（DIN・DO）があります。DIN・DOは図のように数珠つなぎで配線します。
+&lt;img src=&#34;https://dotstud.io/img/blog/099/10_rgb_led2.png&#34; alt=&#34;画像&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;電源とグラウンドは共通で、それぞれESPr® DeveloperのVOUTとGNDに接続します。大元のDINはPIN4に接続します。&lt;/p&gt;
+
+&lt;h3 id=&#34;遅延情報の取得ロジック&#34;&gt;遅延情報の取得ロジック&lt;/h3&gt;
+
+&lt;p&gt;WebAPI等は使用せずに、10分に一度、&lt;a href=&#34;http://unkou.keikyu.co.jp/&#34;&gt;京急の運行情報ページ&lt;/a&gt;にアクセスして情報を取得します。&lt;/p&gt;
+
+&lt;p&gt;ESPr® Developerから運行情報の文言をHTTP-GETで取得して、その文言に&lt;strong&gt;特定の文字列&lt;/strong&gt;が含まれるかどうかで運行状態を推測します。具体的には・・・&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;「&lt;strong&gt;受託&lt;/strong&gt;」という文字列が含まれていたら、他社線からの振替輸送受託のために遅延していると判断する&lt;/li&gt;
+&lt;li&gt;「&lt;strong&gt;見合わせ&lt;/strong&gt;」という文字列が含まれていたら、運転見合わせが発生していると判断する&lt;/li&gt;
+&lt;li&gt;「&lt;strong&gt;乱れ&lt;/strong&gt;」という文字列が含まれていたら、ダイヤが大幅に乱れていると判断する&lt;/li&gt;
+&lt;li&gt;「&lt;strong&gt;遅れ&lt;/strong&gt;」や「&lt;strong&gt;運休&lt;/strong&gt;」が含まれていたら、ダイヤが少し乱れていると判断する&lt;/li&gt;
+&lt;li&gt;「&lt;strong&gt;平常&lt;/strong&gt;」が含まれていたら、平常運転であると判断する&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;このような感じです。そして、運転見合わせであれば赤い点滅、ダイヤが少し乱れているときは黄色い点滅をさせるといった感じで、運行状態に応じてマイコン内蔵RGB LEDの光り方を変えることで、運行状態をひと目で把握することができます。&lt;/p&gt;
+
+&lt;p&gt;ちなみに、他社線からの振替輸送受託が理由で京急が遅延しているときは、個人的にすこし残念な気持ちになるので、光り方を変えています（笑）&lt;/p&gt;
+
+&lt;h3 id=&#34;espr-developerのコーディング&#34;&gt;ESPr® Developerのコーディング&lt;/h3&gt;
+
+&lt;p&gt;かなり無理矢理ですが、こんな感じでコーディングしました。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;ESP8266WiFi.h&amp;gt;
+#include &amp;lt;WiFiClient.h&amp;gt;
+#include &amp;lt;Adafruit_NeoPixel.h&amp;gt;
+
+#define PIN 4 // DINを接続しているPIN
+#define NUMLED 4 // マイコン内蔵RGB LEDの個数
+#define SSID &amp;quot;（Wi-FiアクセスポイントのSSID）&amp;quot;
+#define PASSWORD &amp;quot;（Wi-Fiアクセスポイントのパスワード）&amp;quot;
+#define KEIKYU_PAGE &amp;quot;unkou.keikyu.co.jp&amp;quot; // 運行情報のページ
+#define INTERVAL_SEC 10 * 60 // ポーリング間隔
+
+Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMLED, PIN, NEO_RGB + NEO_KHZ800);
+
+void setup() {
+  // Serialの初期化
+  Serial.begin(115200);
+  Serial.println(&amp;quot;&amp;quot;);
+
+  // マイコン内蔵RGB LEDの初期化
+  pixels.begin();
+}
+
+void loop() {
+  // Wi-Fi接続開始
+  connectWifi();
+
+  // 京急の運行ページから運行情報取得
+  String trainInfo = getTrainInfo();
+
+  // Wi-Fi接続終了
+  disconnectWifi();
+
+  // 「受託」という文字が含まれていたら、他社からの振替輸送受託で遅延していると判断
+  if (trainInfo.indexOf(&amp;quot;受託&amp;quot;) &amp;gt; 0) {
+    Serial.println(&amp;quot;振替輸送受託！&amp;quot;);
+    blinkLikePartyPeople(INTERVAL_SEC);
+    return;
+  }
+
+  // 「見合わせ」という文字が含まれていたら、運転見合わせが発生していると判断
+  if (trainInfo.indexOf(&amp;quot;見合わせ&amp;quot;) &amp;gt; 0) {
+    Serial.println(&amp;quot;運転見合わせ！&amp;quot;);
+    blinkRed(INTERVAL_SEC);
+    return;
+  }
+
+  // 「乱れ」という文字が含まれていたら、ダイヤが大幅に乱れていると判断
+  if (trainInfo.indexOf(&amp;quot;乱れ&amp;quot;) &amp;gt; 0) {
+    Serial.println(&amp;quot;大幅に乱れている！&amp;quot;);
+    blinkYellowAndRed(INTERVAL_SEC);
+    return;
+  }
+
+  // 「遅れ」「運休」という文字が含まれていたら、ダイヤが少し乱れていると判断
+  if (trainInfo.indexOf(&amp;quot;遅れ&amp;quot;) &amp;gt; 0 || trainInfo.indexOf(&amp;quot;運休&amp;quot;) &amp;gt; 0) {
+    Serial.println(&amp;quot;遅延！&amp;quot;);
+    blinkYellow(INTERVAL_SEC);
+    return;
+  }
+
+  // 「平常」という文字が含まれていたら、平常運転をしていると判断
+  if (trainInfo.indexOf(&amp;quot;平常&amp;quot;) &amp;gt; 0) {
+    Serial.println(&amp;quot;たぶん平常通り運転！&amp;quot;);
+    delay(INTERVAL_SEC * 1000);
+    return;
+  }
+
+  // 運行情報取得エラーかもしれないので、10秒待ってもう一度取得する
+  blinkWhite(10);
+}
+
+// Wi-Fi接続
+void connectWifi() {
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(SSID, PASSWORD);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    Serial.print(&amp;quot;.&amp;quot;);
+    blinkWhite(3);
+  }
+
+  Serial.println(&amp;quot;Wi-Fi接続完了&amp;quot;);
+}
+
+// Wi-Fi切断
+void disconnectWifi() {
+  WiFi.disconnect();
+  Serial.println(&amp;quot;Wi-Fi切断完了&amp;quot;);
+}
+
+// 運行情報の文字列取得
+String getTrainInfo() {
+  WiFiClient client;
+
+  if ( !client.connect(KEIKYU_PAGE, 80) ) {
+    // 接続エラー
+    return String(&amp;quot;&amp;quot;);
+  }
+
+  // HTTP-GET
+  // レスポンスのLengthが長すぎるとエラーになることがあったのでRangeを指定している
+  client.print(String(&amp;quot;GET &amp;quot;) + &amp;quot;/&amp;quot; + &amp;quot; HTTP/1.1\r\n&amp;quot; +
+               &amp;quot;Host: &amp;quot; + KEIKYU_PAGE + &amp;quot;\r\n&amp;quot; +
+               &amp;quot;Range: bytes=8000-9000\r\n&amp;quot; +
+               &amp;quot;Connection: close\r\n\r\n&amp;quot;);
+  client.println();
+
+  delay(1000);
+
+  String body = &amp;quot;&amp;quot;;
+  String trainInfo = &amp;quot;&amp;lt;!-- ======================== 運行情報 =================================== --&amp;gt;&amp;quot;;
+
+  while (client.available()) {
+    body += client.readStringUntil(&#39;\r&#39;);
+  }
+
+  // レスポンスから運行情報部分だけを切り抜く
+  body = body.substring(body.indexOf(trainInfo) + trainInfo.length());
+  body = body.substring(0, body.indexOf(trainInfo));
+
+  return body;
+}
+
+// 白い点滅
+void blinkWhite(int sec) {
+  int count = 0;
+
+  while (count &amp;lt; sec) {
+    for (int i = 0; i &amp;lt; 256; i += 5) {
+      setColor( i, i, i);
+    }
+
+    for (int i = 255; i &amp;gt;= 0; i -= 5) {
+      setColor( i, i, i);
+    }
+
+    count++;
+  }
+}
+
+//　黄色い点滅
+void blinkYellow(int sec) {
+  int count = 0;
+
+  while (count &amp;lt; sec) {
+    for (int i = 0; i &amp;lt; 256; i += 5) {
+      setColor( i, i, 0);
+    }
+
+    for (int i = 255; i &amp;gt;= 0; i -= 5) {
+      setColor( i, i, 0);
+    }
+
+    count++;
+  }
+}
+
+// 黄色と赤の点滅
+void blinkYellowAndRed(int sec) {
+  int count = 0;
+
+  while (count &amp;lt; sec) {
+    for (int i = 0; i &amp;lt; 256; i += 5) {
+      setColor( i, 0, 0);
+    }
+
+    for (int i = 255; i &amp;gt;= 0; i -= 5) {
+      setColor( i, 0, 0);
+    }
+
+    for (int i = 0; i &amp;lt; 256; i += 5) {
+      setColor( i, i, 0);
+    }
+
+    for (int i = 255; i &amp;gt;= 0; i -= 5) {
+      setColor( i, i, 0);
+    }
+
+    count++;
+    count++;
+  }
+}
+
+// 赤い点滅
+void blinkRed(int sec) {
+  int count = 0;
+
+  while (count &amp;lt; sec) {
+    for (int i = 0; i &amp;lt; 256; i += 5) {
+      setColor( i, 0, 0);
+    }
+
+    for (int i = 255; i &amp;gt;= 0; i -= 5) {
+      setColor( i, 0, 0);
+    }
+
+    count++;
+  }
+}
+
+// パリピな輝き
+void blinkLikePartyPeople(int sec) {
+  int count = 0;
+
+  while (count &amp;lt; sec) {
+    for (int i = 0; i &amp;lt; 20; i++) {
+      setRandomColor();
+      delay(50);
+    }
+
+    count++;
+  }
+}
+
+// LEDを指定した色で光らせる
+void setColor(int r, int g, int b) {
+  for (int i = 0 ; i &amp;lt; NUMLED; i++) {
+    pixels.setPixelColor(i, pixels.Color(r, g, b));
+    pixels.show();
+  }
+  delay(10);
+}
+
+// LEDをランダムな色で光らせる
+void setRandomColor() {
+  for (int i = 0 ; i &amp;lt; NUMLED; i++) {
+    pixels.setPixelColor(i, pixels.Color(64 * random(1, 5) - 1 , 64 * random(1, 5) - 1 , 64 * random(1, 5) - 1 ));
+    pixels.show();
+  }
+  delay(10);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;実際に光らせてみたのがこちら。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/099/11_setting.png&#34; alt=&#34;画像&#34; /&gt;
+情報取得中に実行される白い点滅。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/099/12_late.png&#34; alt=&#34;画像&#34; /&gt;
+運転見合わせ時に実行される赤い点滅。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/099/13_transport.png&#34; alt=&#34;画像&#34; /&gt;
+最後は他社線からの振替輸送受託時に実行されるパリピ点滅。画像では少しわかりづらいですね……。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;今回は、京急が遅延していると光るガジェットをESPr® Developerをつかって作成しました。情報の取得方法はかなり力技でしたが、WEB上の情報を簡単に可視化できたことは良かったです。&lt;/p&gt;
+
+&lt;p&gt;実際にこのガジェットは、職場のデスクで稼働していて、いつも京急の運行情報を知らせてくれます。今後は他社線バージョンの作成を検討しています。&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>電子工作でパリピな夏を独り占め！サイバーパンク大五郎！！</title>
@@ -1129,7 +1491,7 @@ Nefryの作者わみ氏！！私のネコミミもNefryで実装（予定）で�
     </item>
     
     <item>
-      <title>dotstuidoオリジナルのパッケージができました！〜使い方編〜</title>
+      <title>dotstudioオリジナルのパッケージができました！〜使い方編〜</title>
       <link>https://dotstud.io/blog/howto-use-original-package/</link>
       <pubDate>Mon, 22 May 2017 21:20:43 +0900</pubDate>
       
@@ -3401,224 +3763,6 @@ $light.addEventListener(&#39;click&#39;, main);
 &lt;p&gt;是非みなさんも試してみて、この可能性を実感してみて下さい。&lt;/p&gt;
 
 &lt;p&gt;それでは。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>電子工作初心者からMA入賞者まで！夜のお供も登場した神回！？まとめ #IoTLT vol24</title>
-      <link>https://dotstud.io/blog/iotlt-vol24-chantoku-report/</link>
-      <pubDate>Thu, 23 Feb 2017 14:00:28 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/iotlt-vol24-chantoku-report/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、バックエンドエンジニアのちゃんとく（&lt;a href=&#34;https://twitter.com/tokutoku393&#34;&gt;@tokutoku393&lt;/a&gt;）です。&lt;/p&gt;
-
-&lt;p&gt;2月17日に開催されたIoTLT vol24（&lt;a href=&#34;https://iotlt.connpass.com/event/50098/&#34;&gt;IoT縛りの勉強会! IoTLT vol.21 @ NHNテコラス&lt;/a&gt;]）の様子をお届けします！&lt;/p&gt;
-
-&lt;p&gt;当日のツイートまとめは&lt;a href=&#34;https://togetter.com/li/1082342&#34;&gt;こちら&lt;/a&gt;。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;よし！今日はギャル電より光った。&lt;br&gt;光の色はアルコールで調整できます。 &lt;a href=&#34;https://twitter.com/hashtag/iotlt?src=hash&#34;&gt;#iotlt&lt;/a&gt; &lt;a href=&#34;https://t.co/NRCHosJNIl&#34;&gt;pic.twitter.com/NRCHosJNIl&lt;/a&gt;&lt;/p&gt; 大熊 元気 (@JNTEST23) &lt;a href=&#34;https://twitter.com/JNTEST23/status/832596234816745472&#34;&gt;2017年2月17日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;ギャル電の二人も遊びに来てくれました！&lt;/p&gt;
-
-&lt;h2 id=&#34;iotltとは&#34;&gt;IoTLTとは&lt;/h2&gt;
-
-&lt;p&gt;dotstudio代表のびすけとリレーションズの土屋さんが開催しているIoTの勉強会です。
-各回12人程度の登壇者が5分でLTをしており、参加者は毎回200人規模！&lt;/p&gt;
-
-&lt;p&gt;某研究所調べだと国内最大規模になっていて、年間の参加者で5000人くらいの規模になっています。
-「&lt;a href=&#34;http://www.slideshare.net/ssuserafaef6/connpasssummit2017&#34;&gt;connpass運営が選ぶこのコミュニティがすごい&lt;/a&gt;」では、コミュニティメンバー数と開催数の多さから「高橋名人級」認定をしていただきました！&lt;/p&gt;
-
-&lt;p&gt;今回は、&lt;strong&gt;会場は&lt;a href=&#34;http://www.drecom.co.jp/&#34;&gt;ドリコム&lt;/a&gt;さん&lt;/strong&gt;、&lt;strong&gt;懇親会は&lt;a href=&#34;https://linecorp.com/ja/&#34;&gt;LINE&lt;/a&gt;さん&lt;/strong&gt; に提供して頂きました。 ありがとうございます！&lt;/p&gt;
-
-&lt;h2 id=&#34;ちょっと怪しい発表の多い大人回&#34;&gt;ちょっと怪しい発表の多い大人回……！？&lt;/h2&gt;
-
-&lt;p&gt;「バイブしてるの？」「カメラが立つんです。」「コンドームLT」など、ちょっと怪しい臭いのする発表が多い回でした（笑）&lt;/p&gt;
-
-&lt;p&gt;（※IoTLTは女性の参加者も多い健全なIoTイベントです。安心してお越しください。）&lt;/p&gt;
-
-&lt;h3 id=&#34;移動情報のプラットフォームを目指すpass-とiotの可能性-by-吉田さん-at-ドリコム&#34;&gt;移動情報のプラットフォームを目指すPass!とIoTの可能性  by 吉田さん at ドリコム&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/088/01_yoshida.png&#34; alt=&#34;&#34; /&gt;
-会場提供のドリコムさんからスポンサーLT！&lt;/p&gt;
-
-&lt;p&gt;「Pass」というコミュニケーションアプリのご紹介でした。位置情報を使って友達を探したり持ち物を見つけたりできるそう！&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;位置偽装して仕事のアリバイ作ったりできるのかな() &lt;a href=&#34;https://twitter.com/hashtag/Iotlt?src=hash&#34;&gt;#Iotlt&lt;/a&gt;&lt;/p&gt; のびすけ / sugawara (@n0bisuke) &lt;a href=&#34;https://twitter.com/n0bisuke/status/832541430694359040&#34;&gt;2017年2月17日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;真面目に仕事してください。&lt;/p&gt;
-
-&lt;h3 id=&#34;新しいボードが発売されたので紹介させください-by-鈴木さん-at-がじぇるね&#34;&gt;新しいボードが発売されたので紹介させください  by 鈴木さん at がじぇるね&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/088/02_suzuki.png&#34; alt=&#34;&#34; /&gt;
-毎度お馴染み、がじぇるね鈴木さんのLT！Johnny-Fiveで開発できるGR-ADZUKIのご紹介。
-今回も女性と若者に優しいがじぇるね賞でボードを頒布していただきました！&lt;/p&gt;
-
-&lt;p&gt;発表中に出てきた「IchigoLatte」というボード、気になって後日秋葉原で実物を発見したのですが、「MapleSyrup」「IchigoJam」など美味しそうな名前のボードって多いんですね。（主に子供向けボードのようです）&lt;/p&gt;
-
-&lt;h3 id=&#34;ウェブ接客プラットフォーム-karte-に-line-beacon-繋いで遊んでみた-by-堀内さん-at-プレイド&#34;&gt;ウェブ接客プラットフォーム「KARTE」に「LINE Beacon」繋いで遊んでみた  by 堀内さん at プレイド&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/088/03_horiuchi.png&#34; alt=&#34;&#34; /&gt;
-KARTEというサービスに今話題のLINE Beaconを繋いでみた話！&lt;/p&gt;
-
-&lt;p&gt;O2Oに親和性の高いガジェットやサービスがどんどん増えてきていますね〜。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://karte.io/&#34;&gt;ウェブ接客プラットフォーム「KARTE」&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;androidスマートフォンでiotができるarduino-waffle-を使ってみた-by-しゃのん&#34;&gt;AndroidスマートフォンでIoTができるArduino「Waffle」を使ってみた by しゃのん&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/088/04_shanon.png&#34; alt=&#34;&#34; /&gt;
-dotstudio外部ライターとしても活動しているしのはらくんからWaffleの発表！WaffleはAndroid端末にボードを直接挿し、センサーの値を直接取得できるそうです。&lt;/p&gt;
-
-&lt;p&gt;このボードを使ってどんな漬物を作ってくれるのか楽しみですね。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Waffleの購入と詳細については近日dotstudioにて公開予定なので乞うご期待！&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;script async class=&#34;speakerdeck-embed&#34; data-id=&#34;db19c88022e54302a99cffe92fa2a5ac&#34; data-ratio=&#34;1.33333333333333&#34; src=&#34;//speakerdeck.com/assets/embed.js&#34;&gt;&lt;/script&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;痩せたくて震えるiot-by-やまちょさん&#34;&gt;痩せたくて震えるIoT by やまちょさん&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/088/05_yamacho.png&#34; alt=&#34;&#34; /&gt;
-ビール大好きやまちょさんから、ダイエットIoT話！お腹の力を緩めると恥ずかしい音がなる「痩せたくて震える君」の紹介と、結果の報告。&lt;/p&gt;
-
-&lt;p&gt;「&lt;strong&gt;結果にコミット　IoT&lt;/strong&gt;」で検索すると作り方記事がトップにヒットするようになったらしいので、コミットしてみましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://tech.innovator.jp.net/entry/commit2016&#34;&gt;忘年会シーズン到来！結果にコミットするモノを作ってみた&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;汎用機系ひとすじのエンジニアに何が出来るのか-そしてhulft-iot紹介-by-松岡さん&#34;&gt;汎用機系ひとすじのエンジニアに何が出来るのか？・・・そしてHULFT-IoT紹介    by 松岡さん&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/088/06_matsuoka.png&#34; alt=&#34;&#34; /&gt;
-COBOLエンジニアの松岡さんがIoTに挑戦！HULFTからもIoT向けサービスが登場したそうです。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://www.hulft.com/software/hulft-iot&#34;&gt;HULFT IoT&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;IoTって趣味から事業にすることへの障壁が高いと思うんですが、こういったサービスが増えると参入も増えてきそうです。&lt;/p&gt;
-
-&lt;h3 id=&#34;魔法のように-あらゆるものをノックでコントロールできる実世界指向インタフェース-by-hikaru-at-masuilab&#34;&gt;魔法のように、あらゆるものをノックでコントロールできる実世界指向インタフェース by Hikaru at masuilab&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/088/07_magicknock.png&#34; alt=&#34;&#34; /&gt;
-MashupAwardsのIoT部門で優勝した大学生のHikaruさんが来てくれました！&lt;/p&gt;
-
-&lt;p&gt;所属している研究室の増井教授は「フリック入力」や「Gyazo」などの開発者。筋金入りだ……！&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;机や壁に貼ってノックで機器を操作できるMagic knock。MAでも見ました。&lt;a href=&#34;https://twitter.com/hashtag/IoTLT?src=hash&#34;&gt;#IoTLT&lt;/a&gt; &lt;a href=&#34;https://t.co/Pae1HPaUQ6&#34;&gt;pic.twitter.com/Pae1HPaUQ6&lt;/a&gt;&lt;/p&gt; カサネタリウム Yosuke Hori (@kasanetarium) &lt;a href=&#34;https://twitter.com/kasanetarium/status/832551161618067456&#34;&gt;2017年2月17日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;圧電センサーを使って指のタップと拳のノックを取得しデバイスを操作。叩き方には個人差がありますが、入力をセットするトリガーで簡単に設定可能。&lt;/p&gt;
-
-&lt;p&gt;MashupAwardsでもプレゼンを見たのですが、本当によく作り込まれていて今すぐにでも欲しいです！&lt;/p&gt;
-
-&lt;p&gt;ちなみに懇親会で「ダイエットIoTのちゃんとくさんですよね」と声をかけていただいて、真面目なものを作らないとな……という気持ちになりました。頑張ります。&lt;/p&gt;
-
-&lt;h3 id=&#34;line-beaconおよびbot-awardについて-by-古田さん-at-line&#34;&gt;LINE BeaconおよびBot Awardについて by 古田さん at LINE&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/088/08_line_beacon.png&#34; alt=&#34;&#34; /&gt;
-懇親会スポンサーのLINEさんから、古田さんがLINE Beacon話。&lt;/p&gt;
-
-&lt;p&gt;RaspberryPiをLINE Beacon化できる「LINE Simple Beacon」を新たに発表！&lt;/p&gt;
-
-&lt;p&gt;LINE Beaconなかなか手に入らないなと思っていたのですが、一家に一台はある（？）RaspPiなら導入も簡単ですね！&lt;/p&gt;
-
-&lt;h3 id=&#34;型にはまった生活-by-河野さん-at-秘密結社オープンフォース&#34;&gt;型にはまった生活    by 河野さん at 秘密結社オープンフォース&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/088/09_soutou.png&#34; alt=&#34;&#34; /&gt;
-爆速スライドでお馴染みの河野総統が型話を持ってきてくれました！&lt;/p&gt;
-
-&lt;p&gt;ハードのプロトタイピング制作はとにかくお金がかかる……ということで粘土とシリコン（とレゴ）でモリモリ量産してみたお話でした。&lt;/p&gt;
-
-&lt;h3 id=&#34;iot初心者のwebエンジニアが夢を持って挑んでみたお話-by-cymerさん&#34;&gt;IoT初心者のWEBエンジニアが夢を持って挑んでみたお話    by cymerさん&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/088/10_cymer.png&#34; alt=&#34;&#34; /&gt;
-PHP仲間のしーめるさん！&lt;/p&gt;
-
-&lt;p&gt;電子工作は全然わからないけど初心者向けキットを買うのはなんか嫌、というあるあるなお話（笑）&lt;/p&gt;
-
-&lt;p&gt;Amaz◯nでArduino初心者キットが現在半額だそうですよ！&lt;/p&gt;
-
-&lt;h3 id=&#34;初心者から始めるbluemix-iot-by-kanamoriさん&#34;&gt;初心者から始めるBluemix × IoT   by Kanamoriさん&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/088/11_yukkin.png&#34; alt=&#34;&#34; /&gt;
-SEの金森さんが初めてIoTに挑戦した話！&lt;/p&gt;
-
-&lt;p&gt;ドラッグアンドドロップでInjection Nodeを繋いでプログラミングできるNode-REDとBluemixを使って、スマホの加速度で遊べるテトリスを簡単に作れたそうです。&lt;/p&gt;
-
-&lt;p&gt;発表中はファボやリツイートに反応して光るメガネを装着。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;ゆっきん &lt;a href=&#34;https://twitter.com/yukkin4649&#34;&gt;@yukkin4649&lt;/a&gt;ちゃんの、ファボに反応して光るメガネ！かわいい(◦ˉ ˘ ˉ◦)♡ &lt;a href=&#34;https://twitter.com/hashtag/iotlt?src=hash&#34;&gt;#iotlt&lt;/a&gt; &lt;a href=&#34;https://t.co/Hr64ZdzKTb&#34;&gt;pic.twitter.com/Hr64ZdzKTb&lt;/a&gt;&lt;/p&gt; ちゃんとく(∩◉﹏◉∩) (@tokutoku393) &lt;a href=&#34;https://twitter.com/tokutoku393/status/832569461337059328&#34;&gt;2017年2月17日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;メロメロです。&lt;/p&gt;
-
-&lt;h3 id=&#34;スマホでロボット操縦してみた-by-田村さん&#34;&gt;スマホでロボット操縦してみた  by 田村さん&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/088/12_tamura.png&#34; alt=&#34;&#34; /&gt;
-「人が思いつかないことか、思いつくけどできないことをやる」と豪語する田村さん。スマホから操作でき、立ち上がることもできるロボット「クロール」を制作。&lt;/p&gt;
-
-&lt;p&gt;そして完成したものがこちら。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;これは&amp;hellip;　笑　&lt;a href=&#34;https://twitter.com/hashtag/iotlt?src=hash&#34;&gt;#iotlt&lt;/a&gt; @ 株式会社ドリコム &lt;a href=&#34;https://t.co/9LzqxTth6y&#34;&gt;https://t.co/9LzqxTth6y&lt;/a&gt;&lt;/p&gt; のびすけ / sugawara (@n0bisuke) &lt;a href=&#34;https://twitter.com/n0bisuke/status/832560703064117248&#34;&gt;2017年2月17日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;……。確かに思いついても実現できないですね（笑）&lt;/p&gt;
-
-&lt;h3 id=&#34;作ったものいろいろ-by-岩崎さん&#34;&gt;作ったものいろいろ by 岩崎さん&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/088/13_iwasaki.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;筋トレ嫌いなもやっしーのために「筋トレで強くなるキャラが強くなるスマホゲーム」を作ったり、雨の日サービスをしているのに外が見えないメイドカフェのために「雨判定装置」を作ったり、家庭内売電のためにコンセントをハックしたり……。&lt;/p&gt;
-
-&lt;p&gt;すごいけど突っ込みどころの多いハックが満載でした。（笑）&lt;/p&gt;
-
-&lt;h3 id=&#34;実演-web-bluetooth-api-by-umahashiさん-at-cerevo&#34;&gt;実演 Web Bluetooth API    by Umahashiさん at Cerevo&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/088/14_umahashi.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ローカルのHTTPから呼び出せ、ブラウザでリアルタイムにペアリングできるWeb Bluetooth APIの紹介！&lt;/p&gt;
-
-&lt;p&gt;IoTの難しさであるペアリングの障壁が、これからどんどん低くなっていく気がしますね。&lt;/p&gt;
-
-&lt;h3 id=&#34;コンドームiot-by-のびすけ-at-dotstudio&#34;&gt;コンドームIoT by のびすけ at dotstudio&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/088/15_n0bi.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;代表のびすけはまさかの下ネタ……というわけではなく、amさんの記事で浮気男を抹殺するハックのお手伝いをしたよという真面目な（？）LTでした。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://t.co/d5X4lq5965&#34;&gt;【大島薫×IoT】浮気男に社会的制裁を加えるマシーンを作ってみた&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;使用したボードはフリスクサイズのNefry。小さくて軽いので、&lt;strong&gt;コンドームの箱に入れても違和感なし&lt;/strong&gt; です。Wi-Fiも搭載しているので、簡単にサーバにデータを送れますね！（笑）&lt;/p&gt;
-
-&lt;p&gt;Nefryはdotstudioの&lt;a href=&#34;https://dotstud.io/shop/nefry-connect-internet/&#34;&gt;こちらのページ&lt;/a&gt;から購入できます！&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;script async class=&#34;speakerdeck-embed&#34; data-id=&#34;f46eebcb43344bc6bff0634dfe34487c&#34; data-ratio=&#34;1.33333333333333&#34; src=&#34;//speakerdeck.com/assets/embed.js&#34;&gt;&lt;/script&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/088/16_konshin.png&#34; alt=&#34;&#34; /&gt;
-今回は初心者から受賞歴のあるすごい人まで幅広い方が登壇してくれました！内容も、かわいいボード話から危ない話まで様々でしたね（笑）&lt;/p&gt;
-
-&lt;p&gt;そんなIoTLTは &lt;strong&gt;24回目の開催となり、2周年を迎えたようです！&lt;/strong&gt; いろんな人がざっくばらんなものを持ち寄ってワイワイする会、最高に楽しいので皆さんもぜひいらしてください。&lt;/p&gt;
-
-&lt;p&gt;そしてIoTLTを支えてくださる企業のみなさま、&lt;strong&gt;IoTLTでは会場を提供してくださる企業様を募集中です！！&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;来月は私も発表したいので、よろしくお願いします！（笑）&lt;/p&gt;
 </description>
     </item>
     

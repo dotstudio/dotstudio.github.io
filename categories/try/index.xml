@@ -10,6 +10,368 @@
     <atom:link href="/categories/try/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>ESP8266を使って京急が遅延すると光るガジェットを作ってみた</title>
+      <link>https://dotstud.io/blog/pokio-esp-keikyu-chien/</link>
+      <pubDate>Tue, 13 Jun 2017 19:28:32 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/pokio-esp-keikyu-chien/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、京急が大好きなポキオです。&lt;/p&gt;
+
+&lt;p&gt;普段はAndroidエンジニアをやってますが、週末は趣味でArduinoやESP8266を触って心を落ち着かせています。先日、「京急が遅延すると光るガジェット」を作って&lt;a href=&#34;https://iotlt.connpass.com/&#34;&gt;IoTLT&lt;/a&gt;で発表を行ってきました。&lt;/p&gt;
+
+&lt;p&gt;今回は、そこで発表したガジェットの作成段階や、技術的な仕組みを紹介します。（発表後に一部パーツ・コーディングを変更しています）&lt;/p&gt;
+
+&lt;h2 id=&#34;今回作るもの&#34;&gt;今回作るもの&lt;/h2&gt;
+
+&lt;p&gt;ESP8266というWi-Fiモジュールを搭載した開発ボード「ESPr® Developer」を使って京急のホームページから運行情報を取得し、遅延していたらLEDを光らせる仕組みを作ります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/099/01_map.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;筆者の環境&#34;&gt;筆者の環境&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;MacBook Air（13-inch、Mid 2013）&lt;/li&gt;
+&lt;li&gt;OS X Yosemite（v10.10.5）&lt;/li&gt;
+&lt;li&gt;Arduino IDE 1.8.0&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ESPr® DeveloperESP8266&lt;/li&gt;
+&lt;li&gt;マイコン内臓RGB LED&lt;/li&gt;
+&lt;li&gt;光らせたいガジェット（今回はBトレインショーティ）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;主なパーツ&#34;&gt;主なパーツ&lt;/h2&gt;
+
+&lt;h3 id=&#34;espr-developer&#34;&gt;ESPr® Developer&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/099/02_esper.png&#34; alt=&#34;画像&#34; /&gt;
+&lt;a href=&#34;https://www.switch-science.com/catalog/2500/&#34;&gt;スイッチサイエンス&lt;/a&gt;さんで売られている、ESP8266というWi-Fiモジュールを搭載した開発ボードです。素のESP8266を直接触るのはハードルが高いですが、USB-シリアル変換やレギュレータ、リセットスイッチなど実装済みで、Arduino IDEでも開発できるため便利です。&lt;/p&gt;
+
+&lt;p&gt;ただし、筆者の開発環境ではArduino IDEからコードを流し込む際に、一手間必要でした。詳しくはこちら。&lt;/p&gt;
+
+&lt;p&gt;参考: &lt;a href=&#34;http://qiita.com/shanonim/items/68fab6dc28b72b31a258&#34;&gt;ESPr Developer（ESP-WROOM-02開発ボード）で &amp;ldquo;warning: espcomm_sync failed&amp;rdquo; と表示される場合の対処&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;マイコン内蔵rgb-led&#34;&gt;マイコン内蔵RGB LED&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/099/03_led.png&#34; alt=&#34;画像&#34; /&gt;
+秋葉原の&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gI-08412/&#34;&gt;秋月電子通商&lt;/a&gt;さんで1個40円で売られているものを使用します。通常のLEDは足が2本ですが、こちらは足が4本。これらを制御することで、様々な色でLEDを光らせることができます。ESP8266（Arduino）向けに便利なライブラリが公開されているので、今回はこれを使ってコーディングしていきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/adafruit/Adafruit_NeoPixel&#34;&gt;Adafruit NeoPixel Library&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;bトレインショーティー&#34;&gt;Bトレインショーティー&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/099/04_train.png&#34; alt=&#34;画像&#34; /&gt;
+&lt;a href=&#34;https://bandai-hobby.net/train/&#34;&gt;Bトレインショーティー&lt;/a&gt;はバンダイさんから発売されている、自分で組み立てるタイプの鉄道模型です。特徴は、何と言っても可愛さ。実車のディテールを表現しつつ、車両の長さをギュッと縮めてコミカルなルックスになっています。今回は（もちろん京急の）2100形をチョイス。京急の中で好きな車両の一つです。&lt;/p&gt;
+
+&lt;h2 id=&#34;ガジェットを作ってみる&#34;&gt;ガジェットを作ってみる&lt;/h2&gt;
+
+&lt;h3 id=&#34;京急の2100形車両の組み立て&#34;&gt;京急の2100形車両の組み立て&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/099/05_keikyu1.png&#34; alt=&#34;画像&#34; /&gt;
+なにはともあれ、京急の車両を組み立てるところから始めます。Bトレインショーティーの京急2100形は、塗装済みで接着剤不要で組み立てができます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/099/06_keikyu2.png&#34; alt=&#34;画像&#34; /&gt;
+久しぶりのプラモデルにテンションがアガります。&lt;/p&gt;
+
+&lt;h3 id=&#34;マイコン内蔵rgb-ledを埋め込む&#34;&gt;マイコン内蔵RGB LEDを埋め込む&lt;/h3&gt;
+
+&lt;p&gt;出来上がった京急の車両にLEDを埋め込んでいきます。ここで便利なのがサンハヤトさんの&lt;a href=&#34;http://www.sunhayato.co.jp/material2/index.php/item?cell003=%E3%83%A6%E3%83%8B%E3%83%90%E3%83%BC%E3%82%B5%E3%83%AB%E5%9F%BA%E6%9D%BF%E8%A3%BD%E5%93%81&amp;amp;cell004=%E4%B8%AD%E5%9E%8B%E3%83%A6%E3%83%8B%E3%83%90%E3%83%BC%E3%82%B5%E3%83%AB%E5%9F%BA%E6%9D%BF&amp;amp;name=%E8%96%84%E5%9E%8B%E3%83%A6%E3%83%8B%E3%83%90%E3%83%BC%E3%82%B5%E3%83%AB%E5%9F%BA%E6%9D%BF+UB-THN01&amp;amp;id=722&amp;amp;label=1&#34;&gt;ハサミで切れるユニバーサル基板&lt;/a&gt;です。
+&lt;img src=&#34;https://dotstud.io/img/blog/099/07_universal1.png&#34; alt=&#34;画像&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;謳い文句の通り、ハサミで自由にカットができて、今回のような小さい車両にも基板を収めることができます。
+&lt;img src=&#34;https://dotstud.io/img/blog/099/08_universal2.png&#34; alt=&#34;画像&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;こんな感じで簡単に、そしてその場で車両ピッタリの基板ができました。
+&lt;img src=&#34;https://dotstud.io/img/blog/099/09_rgb_led.png&#34; alt=&#34;画像&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;配線&#34;&gt;配線&lt;/h3&gt;
+
+&lt;p&gt;マイコン内蔵RGB LEDは先述の通り足が4本あり、電源（VDD）とグラウンド（GND）に加えて、制御信号の入出力（DIN・DO）があります。DIN・DOは図のように数珠つなぎで配線します。
+&lt;img src=&#34;https://dotstud.io/img/blog/099/10_rgb_led2.png&#34; alt=&#34;画像&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;電源とグラウンドは共通で、それぞれESPr® DeveloperのVOUTとGNDに接続します。大元のDINはPIN4に接続します。&lt;/p&gt;
+
+&lt;h3 id=&#34;遅延情報の取得ロジック&#34;&gt;遅延情報の取得ロジック&lt;/h3&gt;
+
+&lt;p&gt;WebAPI等は使用せずに、10分に一度、&lt;a href=&#34;http://unkou.keikyu.co.jp/&#34;&gt;京急の運行情報ページ&lt;/a&gt;にアクセスして情報を取得します。&lt;/p&gt;
+
+&lt;p&gt;ESPr® Developerから運行情報の文言をHTTP-GETで取得して、その文言に&lt;strong&gt;特定の文字列&lt;/strong&gt;が含まれるかどうかで運行状態を推測します。具体的には・・・&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;「&lt;strong&gt;受託&lt;/strong&gt;」という文字列が含まれていたら、他社線からの振替輸送受託のために遅延していると判断する&lt;/li&gt;
+&lt;li&gt;「&lt;strong&gt;見合わせ&lt;/strong&gt;」という文字列が含まれていたら、運転見合わせが発生していると判断する&lt;/li&gt;
+&lt;li&gt;「&lt;strong&gt;乱れ&lt;/strong&gt;」という文字列が含まれていたら、ダイヤが大幅に乱れていると判断する&lt;/li&gt;
+&lt;li&gt;「&lt;strong&gt;遅れ&lt;/strong&gt;」や「&lt;strong&gt;運休&lt;/strong&gt;」が含まれていたら、ダイヤが少し乱れていると判断する&lt;/li&gt;
+&lt;li&gt;「&lt;strong&gt;平常&lt;/strong&gt;」が含まれていたら、平常運転であると判断する&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;このような感じです。そして、運転見合わせであれば赤い点滅、ダイヤが少し乱れているときは黄色い点滅をさせるといった感じで、運行状態に応じてマイコン内蔵RGB LEDの光り方を変えることで、運行状態をひと目で把握することができます。&lt;/p&gt;
+
+&lt;p&gt;ちなみに、他社線からの振替輸送受託が理由で京急が遅延しているときは、個人的にすこし残念な気持ちになるので、光り方を変えています（笑）&lt;/p&gt;
+
+&lt;h3 id=&#34;espr-developerのコーディング&#34;&gt;ESPr® Developerのコーディング&lt;/h3&gt;
+
+&lt;p&gt;かなり無理矢理ですが、こんな感じでコーディングしました。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;ESP8266WiFi.h&amp;gt;
+#include &amp;lt;WiFiClient.h&amp;gt;
+#include &amp;lt;Adafruit_NeoPixel.h&amp;gt;
+
+#define PIN 4 // DINを接続しているPIN
+#define NUMLED 4 // マイコン内蔵RGB LEDの個数
+#define SSID &amp;quot;（Wi-FiアクセスポイントのSSID）&amp;quot;
+#define PASSWORD &amp;quot;（Wi-Fiアクセスポイントのパスワード）&amp;quot;
+#define KEIKYU_PAGE &amp;quot;unkou.keikyu.co.jp&amp;quot; // 運行情報のページ
+#define INTERVAL_SEC 10 * 60 // ポーリング間隔
+
+Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMLED, PIN, NEO_RGB + NEO_KHZ800);
+
+void setup() {
+  // Serialの初期化
+  Serial.begin(115200);
+  Serial.println(&amp;quot;&amp;quot;);
+
+  // マイコン内蔵RGB LEDの初期化
+  pixels.begin();
+}
+
+void loop() {
+  // Wi-Fi接続開始
+  connectWifi();
+
+  // 京急の運行ページから運行情報取得
+  String trainInfo = getTrainInfo();
+
+  // Wi-Fi接続終了
+  disconnectWifi();
+
+  // 「受託」という文字が含まれていたら、他社からの振替輸送受託で遅延していると判断
+  if (trainInfo.indexOf(&amp;quot;受託&amp;quot;) &amp;gt; 0) {
+    Serial.println(&amp;quot;振替輸送受託！&amp;quot;);
+    blinkLikePartyPeople(INTERVAL_SEC);
+    return;
+  }
+
+  // 「見合わせ」という文字が含まれていたら、運転見合わせが発生していると判断
+  if (trainInfo.indexOf(&amp;quot;見合わせ&amp;quot;) &amp;gt; 0) {
+    Serial.println(&amp;quot;運転見合わせ！&amp;quot;);
+    blinkRed(INTERVAL_SEC);
+    return;
+  }
+
+  // 「乱れ」という文字が含まれていたら、ダイヤが大幅に乱れていると判断
+  if (trainInfo.indexOf(&amp;quot;乱れ&amp;quot;) &amp;gt; 0) {
+    Serial.println(&amp;quot;大幅に乱れている！&amp;quot;);
+    blinkYellowAndRed(INTERVAL_SEC);
+    return;
+  }
+
+  // 「遅れ」「運休」という文字が含まれていたら、ダイヤが少し乱れていると判断
+  if (trainInfo.indexOf(&amp;quot;遅れ&amp;quot;) &amp;gt; 0 || trainInfo.indexOf(&amp;quot;運休&amp;quot;) &amp;gt; 0) {
+    Serial.println(&amp;quot;遅延！&amp;quot;);
+    blinkYellow(INTERVAL_SEC);
+    return;
+  }
+
+  // 「平常」という文字が含まれていたら、平常運転をしていると判断
+  if (trainInfo.indexOf(&amp;quot;平常&amp;quot;) &amp;gt; 0) {
+    Serial.println(&amp;quot;たぶん平常通り運転！&amp;quot;);
+    delay(INTERVAL_SEC * 1000);
+    return;
+  }
+
+  // 運行情報取得エラーかもしれないので、10秒待ってもう一度取得する
+  blinkWhite(10);
+}
+
+// Wi-Fi接続
+void connectWifi() {
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(SSID, PASSWORD);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    Serial.print(&amp;quot;.&amp;quot;);
+    blinkWhite(3);
+  }
+
+  Serial.println(&amp;quot;Wi-Fi接続完了&amp;quot;);
+}
+
+// Wi-Fi切断
+void disconnectWifi() {
+  WiFi.disconnect();
+  Serial.println(&amp;quot;Wi-Fi切断完了&amp;quot;);
+}
+
+// 運行情報の文字列取得
+String getTrainInfo() {
+  WiFiClient client;
+
+  if ( !client.connect(KEIKYU_PAGE, 80) ) {
+    // 接続エラー
+    return String(&amp;quot;&amp;quot;);
+  }
+
+  // HTTP-GET
+  // レスポンスのLengthが長すぎるとエラーになることがあったのでRangeを指定している
+  client.print(String(&amp;quot;GET &amp;quot;) + &amp;quot;/&amp;quot; + &amp;quot; HTTP/1.1\r\n&amp;quot; +
+               &amp;quot;Host: &amp;quot; + KEIKYU_PAGE + &amp;quot;\r\n&amp;quot; +
+               &amp;quot;Range: bytes=8000-9000\r\n&amp;quot; +
+               &amp;quot;Connection: close\r\n\r\n&amp;quot;);
+  client.println();
+
+  delay(1000);
+
+  String body = &amp;quot;&amp;quot;;
+  String trainInfo = &amp;quot;&amp;lt;!-- ======================== 運行情報 =================================== --&amp;gt;&amp;quot;;
+
+  while (client.available()) {
+    body += client.readStringUntil(&#39;\r&#39;);
+  }
+
+  // レスポンスから運行情報部分だけを切り抜く
+  body = body.substring(body.indexOf(trainInfo) + trainInfo.length());
+  body = body.substring(0, body.indexOf(trainInfo));
+
+  return body;
+}
+
+// 白い点滅
+void blinkWhite(int sec) {
+  int count = 0;
+
+  while (count &amp;lt; sec) {
+    for (int i = 0; i &amp;lt; 256; i += 5) {
+      setColor( i, i, i);
+    }
+
+    for (int i = 255; i &amp;gt;= 0; i -= 5) {
+      setColor( i, i, i);
+    }
+
+    count++;
+  }
+}
+
+//　黄色い点滅
+void blinkYellow(int sec) {
+  int count = 0;
+
+  while (count &amp;lt; sec) {
+    for (int i = 0; i &amp;lt; 256; i += 5) {
+      setColor( i, i, 0);
+    }
+
+    for (int i = 255; i &amp;gt;= 0; i -= 5) {
+      setColor( i, i, 0);
+    }
+
+    count++;
+  }
+}
+
+// 黄色と赤の点滅
+void blinkYellowAndRed(int sec) {
+  int count = 0;
+
+  while (count &amp;lt; sec) {
+    for (int i = 0; i &amp;lt; 256; i += 5) {
+      setColor( i, 0, 0);
+    }
+
+    for (int i = 255; i &amp;gt;= 0; i -= 5) {
+      setColor( i, 0, 0);
+    }
+
+    for (int i = 0; i &amp;lt; 256; i += 5) {
+      setColor( i, i, 0);
+    }
+
+    for (int i = 255; i &amp;gt;= 0; i -= 5) {
+      setColor( i, i, 0);
+    }
+
+    count++;
+    count++;
+  }
+}
+
+// 赤い点滅
+void blinkRed(int sec) {
+  int count = 0;
+
+  while (count &amp;lt; sec) {
+    for (int i = 0; i &amp;lt; 256; i += 5) {
+      setColor( i, 0, 0);
+    }
+
+    for (int i = 255; i &amp;gt;= 0; i -= 5) {
+      setColor( i, 0, 0);
+    }
+
+    count++;
+  }
+}
+
+// パリピな輝き
+void blinkLikePartyPeople(int sec) {
+  int count = 0;
+
+  while (count &amp;lt; sec) {
+    for (int i = 0; i &amp;lt; 20; i++) {
+      setRandomColor();
+      delay(50);
+    }
+
+    count++;
+  }
+}
+
+// LEDを指定した色で光らせる
+void setColor(int r, int g, int b) {
+  for (int i = 0 ; i &amp;lt; NUMLED; i++) {
+    pixels.setPixelColor(i, pixels.Color(r, g, b));
+    pixels.show();
+  }
+  delay(10);
+}
+
+// LEDをランダムな色で光らせる
+void setRandomColor() {
+  for (int i = 0 ; i &amp;lt; NUMLED; i++) {
+    pixels.setPixelColor(i, pixels.Color(64 * random(1, 5) - 1 , 64 * random(1, 5) - 1 , 64 * random(1, 5) - 1 ));
+    pixels.show();
+  }
+  delay(10);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;実際に光らせてみたのがこちら。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/099/11_setting.png&#34; alt=&#34;画像&#34; /&gt;
+情報取得中に実行される白い点滅。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/099/12_late.png&#34; alt=&#34;画像&#34; /&gt;
+運転見合わせ時に実行される赤い点滅。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/099/13_transport.png&#34; alt=&#34;画像&#34; /&gt;
+最後は他社線からの振替輸送受託時に実行されるパリピ点滅。画像では少しわかりづらいですね……。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;今回は、京急が遅延していると光るガジェットをESPr® Developerをつかって作成しました。情報の取得方法はかなり力技でしたが、WEB上の情報を簡単に可視化できたことは良かったです。&lt;/p&gt;
+
+&lt;p&gt;実際にこのガジェットは、職場のデスクで稼働していて、いつも京急の運行情報を知らせてくれます。今後は他社線バージョンの作成を検討しています。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>電子工作でパリピな夏を独り占め！サイバーパンク大五郎！！</title>
       <link>https://dotstud.io/blog/gyaruden-party-people-daigoro/</link>
       <pubDate>Thu, 08 Jun 2017 20:03:04 +0900</pubDate>
@@ -4381,270 +4743,6 @@ npm i
 &lt;p&gt;実際のところ、Pepperと同じネットワークにNode.js（とNightmare）が動く環境が必要なので、運用などは難しそうです。しかし、喋ってくれること自体は通知として気づきやすいので、かなりアリだと思っています。&lt;/p&gt;
 
 &lt;p&gt;試せる方はぜひ試してみてください！　それでは。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>電子回路を簡単に学べるlittleBitsをインターネットに繋げよう！「CocoaBit」を開発中</title>
-      <link>https://dotstud.io/blog/cocoabit-littlebits-milkcocoa-nefry/</link>
-      <pubDate>Mon, 05 Sep 2016 10:41:27 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/cocoabit-littlebits-milkcocoa-nefry/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、外部ライターのわみと申します。愛知県でネットワークの勉強をしている学生です。磁石で電子工作ができる「&lt;a href=&#34;http://jp.littlebits.com/&#34;&gt;littleBits&lt;/a&gt;」のモジュールとして、「&lt;strong&gt;CocoaBit&lt;/strong&gt;」というものを開発しています。&lt;/p&gt;
-
-&lt;p&gt;CocoaBitを使えばlittleBitsを簡単にインターネットへ接続できます。すでにlittleBitsをもっている方や、IoTに興味があるけれど「何から始めていいかわからない」「難しそう……」と思っている方はぜひご一読ください！&lt;/p&gt;
-
-&lt;h2 id=&#34;cocoabitって&#34;&gt;CocoaBitって？&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/09_littlebits.png&#34; alt=&#34;&#34; /&gt;
-磁石でパチパチとモジュールを繋げるだけで電子工作ができるデバイス「&lt;a href=&#34;http://jp.littlebits.com/&#34;&gt;littleBits&lt;/a&gt;」。これの拡張モジュールとして「CocoaBit」を開発しています。真ん中にがあるのがCocoaBitです。&lt;/p&gt;
-
-&lt;p&gt;CocoaBitは次のような特徴を持っています。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;littleBitsをインターネットに接続できる&lt;/li&gt;
-&lt;li&gt;バックエンドサービス「Milkcocoa」と簡単に連携できる&lt;/li&gt;
-&lt;li&gt;Arduinoの開発環境（ArduinoIDE）でプログラミングができる&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/01_cocoabit.png&#34; alt=&#34;&#34; /&gt;
-CocoaBitを使えばlittleBitsを簡単にインターネットと繋げられるので、データをアップロードしたり、インターネットからCocoaBitを制御したり、はたまたIFTTT連携なんかも試せたりできます。&lt;/p&gt;
-
-&lt;p&gt;「Nefry」というFRISKサイズのIoT向けデバイスをベースにして作っていますが、これも自分が自作しています。また、LIGブログでlittleBitsの連載をしている田中さんと共同開発をしています。私がNefryを作っていたことや、純粋に面白そう！という背景からCocoaBitが生まれました。（より詳しい背景は&lt;a href=&#34;http://www.1ft-seabass.jp/memo/2016/04/13/cocobit-first-contact/&#34;&gt;こちらの記事&lt;/a&gt;をどうぞ）&lt;/p&gt;
-
-&lt;h2 id=&#34;さっそくcocoabitでプログラミングしてみよう&#34;&gt;さっそくCocoaBitでプログラミングしてみよう&lt;/h2&gt;
-
-&lt;p&gt;ArduinoIDEを使って、CocoaBitのプログラムを作る流れを紹介します！　まずはArduinoIDEにCocoaBitをインストールするのですが、ArduinoIDEのダウンロード方法などについては&lt;a href=&#34;http://qiita.com/wamisnet/private/15062b2e7b23969797aa&#34;&gt;LIGブログ&lt;/a&gt;の記事で紹介されています。&lt;/p&gt;
-
-&lt;p&gt;Nefryとライブラリーが共通なのでNefryの名前が出てきますが、気にせずに読み進めてください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/02_arduino.png&#34; alt=&#34;&#34; /&gt;
-まずは、ArduinoIDEの環境設定を開きます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/03_arduino.png&#34; alt=&#34;&#34; /&gt;
-環境設定の &lt;strong&gt;追加のボードマネージャーのURL&lt;/strong&gt; に次のURL を入力します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;http://wamisnet.github.io/package_nefry_index.json
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/04_arduino.png&#34; alt=&#34;&#34; /&gt;
-入力が終わったら OK をクリックし、ツール内にあるボード選択のボードマネージャーをクリックします。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/05_arduino.png&#34; alt=&#34;&#34; /&gt;
-すると、ボードマネージャーの一覧の下部にNefryが追加されます。検索欄もあるのでそこに &lt;strong&gt;Nefry&lt;/strong&gt; と入力すると簡単に見つけられます。インストールをクリックすると、必要なファイルをダウンロードできます。（2016年8月現在の最新バージョンは2.0.1です）&lt;/p&gt;
-
-&lt;p&gt;インストールが完了すると &lt;strong&gt;INSTALLED&lt;/strong&gt; と表示されます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/08_arduino.png&#34; alt=&#34;&#34; /&gt;
-すると、ツール内にあるボードからCocoaBitが選択できるようになっているはずです！　これでボードのインストールも完了です！&lt;/p&gt;
-
-&lt;p&gt;ここまでで開発環境が整いましたので次はプログラムを書いていきます。&lt;/p&gt;
-
-&lt;h2 id=&#34;cocoabitのスイッチを押した時にledを光らせてみよう&#34;&gt;CocoaBitのスイッチを押した時にLEDを光らせてみよう&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/09_littlebits.png&#34; alt=&#34;&#34; /&gt;
-CocoaBitに写真のようにlittleBitsのボタンとLEDを繋げて、ボタンを押したらLEDが光るプログラムを書いてみましょう！　以下はプログラムの全体図です。&lt;/p&gt;
-
-&lt;h3 id=&#34;pushsw-ino&#34;&gt;pushSW.ino&lt;/h3&gt;
-
-&lt;pre&gt;&lt;code&gt;void setup() {
-  pinMode(D0, OUTPUT); //CocoaBitのD0を出力モードにする
-}
-void loop() {
-  //SWを押した時にLEDが点灯する
-  if (analogRead(A0) &amp;gt; 500) {//7(押してない)or970(押されてる)中間で分岐します
-    //押した時
-    digitalWrite(D0, HIGH); //LED点灯
-  } else {
-    //離した時
-    digitalWrite(D0, LOW); //LED消灯
-  }
-  delay(100);//0.1秒待つ
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;プログラムの解説&#34;&gt;プログラムの解説&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;setup()&lt;/strong&gt; の{}で囲まれている箇所は、CocoaBitが起動時に &lt;strong&gt;一度のみおこなう処理&lt;/strong&gt; です。今回はLEDを光らせるためにD0の入出力を使うので、それぞれが入力モードなのか、出力モードなのかを設定しています。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;void setup() {
-  pinMode(D0, OUTPUT); //CocoaBitのD0を出力モードにする
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;loop()&lt;/strong&gt; の{}かっこで囲まれている箇所、CocoaBitが起動中に &lt;strong&gt;繰り返しおこなう処理&lt;/strong&gt; です。littleBitsのボタンの状態をanalogRead(A0)というもので取得します。このanalogReadという関数で、0v-5vの電圧の変化を0-1023の範囲でA0から取得できます。&lt;/p&gt;
-
-&lt;p&gt;ボタンを押すとおおよそ970程度、押していないときは7程度になります。これをif文と呼ばれる条件式で処理を分岐します。digitalWriteでピンをHIGHかLOWに変更することができますので、スイッチの状態によりHIGHかLOWに変更していきます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;void loop() {
-  //SWを押した時にLEDが点灯する
-  if (analogRead(A0) &amp;gt; 500) {//7(押してない)or970(押されてる)中間で分岐します
-    //押した時
-    digitalWrite(D0, HIGH); //LED点灯
-  } else {
-    //離した時
-    digitalWrite(D0, LOW); //LED消灯
-  }
-  delay(100);//0.1秒待つ
-}
-
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;プログラムをcocoabitに書いてみよう&#34;&gt;プログラムをCocoaBitに書いてみよう&lt;/h3&gt;
-
-&lt;p&gt;上記のプログラムをArduinoIDEに貼り、CocoaBitで実行してみましょう。CocoaBitにプログラムを書き込んでいく流れを簡単に解説しますが、より詳しい書き込み方は&lt;a href=&#34;http://qiita.com/wamisnet/private/15062b2e7b23969797aa&#34;&gt;LIGブログ&lt;/a&gt;の記事をご覧ください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/10_cocoabit.png&#34; alt=&#34;&#34; /&gt;
-まずは、CocoaBitを写真を参考にしてpowerモジュールに繋いでください。しばらくしてWi-Fiを検索すると &lt;strong&gt;CocoaBit-○○○○&lt;/strong&gt; という名前があると思うので、そのWi-Fiに接続してください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/11_wifi.png&#34; alt=&#34;&#34; /&gt;
-接続すると自動的にこのページに移動します。時にうまくいかないときがあるのでその時はこちらのURLを入力してください。CocoaBitのメインページです。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;http://192.168.4.1&#34;&gt;http://192.168.4.1&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;このページから、さまざまな設定をおこなえます。プログラムを書き込むためには、CocoaBitを書き込みモードにします。（書き込みモードとは、CocoaBitのCoreプログラムだけ動作し、ユーザが書き込んだプログラムを実行しないモードです）&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/12_nefry.png&#34; alt=&#34;&#34; /&gt;
-書き込みモードに変更するには、&lt;strong&gt;setup Module&lt;/strong&gt; をクリックし、&lt;strong&gt;Write mode&lt;/strong&gt; を選択してください。すると、CocoaBitが再起動します。再起動が終わったら書き込みモードになっています。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/13_nefry.png&#34; alt=&#34;&#34; /&gt;
-CocoaBitが書き込みモードになったところでプログラムを書き込んでいきましょう。メインページの &lt;strong&gt;upload Sketch&lt;/strong&gt; をクリックしてこのページを開きます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/14_nefry.png&#34; alt=&#34;&#34; /&gt;
-開いたらページ中央にある &lt;strong&gt;参照&lt;/strong&gt; となっているボタンをクリックしてファイルを選びます。（Chromeなどブラウザによっては表示が異なることがあります）&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/15_nefry.png&#34; alt=&#34;&#34; /&gt;
-先ほどプログラムを保存した場所を開き、&lt;strong&gt;arduino.bin&lt;/strong&gt; となっているファイルを選びます。（きちんと確認してアップデートしてください。もし間違えてしまうと、最悪の場合起動しなくなります）&lt;/p&gt;
-
-&lt;p&gt;きちんとファイルを選べると、ファイルの場所を示す表示が出ます。あとは &lt;strong&gt;Upload&lt;/strong&gt; をクリックするだけです！　アップロードが完了すると自動的にCocoaBitが再起動してプログラムが更新されます。&lt;/p&gt;
-
-&lt;p&gt;これでCocoaBitのプログラムを書きかえることができました！　SWを押したときにLEDが光っているはずです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/17_cocoabit.gif&#34; alt=&#34;&#34; /&gt;
-LEDは上手く点滅しましたか？　これでCocoaBitから出力できたので、次はCocoaBitに入力をしてみようと思います。&lt;/p&gt;
-
-&lt;h2 id=&#34;cocoabitにスライダーを繋いでみる&#34;&gt;CocoaBitにスライダーを繋いでみる&lt;/h2&gt;
-
-&lt;p&gt;それでは次はCocoaBitを入力モードにして、入力された値をWebページで表示してみようと思います。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/18_littlebits.png&#34; alt=&#34;&#34; /&gt;
-今回は入力データを手軽に変更ができるlittleBitsのスライダーを使ってみようと思います。他にもボタンモジュールや明るさセンサーモジュールを繋ぐことも可能です。写真を参考に接続してみてください。&lt;/p&gt;
-
-&lt;p&gt;接続できたら、プログラムを書いていきましょう。&lt;/p&gt;
-
-&lt;h3 id=&#34;read-ino&#34;&gt;read.ino&lt;/h3&gt;
-
-&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
-int sensorValue;
-void setup() {
-}
-void loop() {
-  sensorValue = analogRead(A0);//アナログの入力を読みます。
-  Nefry.print(&amp;quot;sensor = &amp;quot; );
-  Nefry.println(sensorValue);//センサーデータを表示します。
-  Nefry.ndelay(500);//0.5秒待ちます
-  Nefry.setLed(sensorValue/4,255,0);//Red(sensorValue/4),Green(255),Blue(0)
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;プログラムの解説-1&#34;&gt;プログラムの解説&lt;/h3&gt;
-
-&lt;p&gt;analogReadという関数で、0v-5vの電圧の変化を0-1023の範囲でA0から取得することができます。その値をNefry.print関数で表示するようにしています。そのデータはWeb Consoleで見られます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/19_nefry.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Nefry.ndelay関数は、指定されたミリ秒処理を止めます。1000ミリ秒で1秒となります。
-Nefry.setLed関数は、CocoaBitについているLEDの光る色を指定することができ、赤・緑・青を0（消灯）から255（フル点灯）の範囲で光らせることができます。&lt;/p&gt;
-
-&lt;p&gt;また、例えば赤（255）と緑（255）を選ぶと黄色になるなど、光らせる色と強さの組み合わせによって色を変えられます。今回は、赤色をセンサーの入力により変更（sensorValue/4）、緑色を（255）、Blue（0）にして光らせてみます。Nefryの関数については&lt;a href=&#34;http://qiita.com/wamisnet/items/e44812eb6d6fded7af26&#34;&gt;こちら&lt;/a&gt;を参照してください。&lt;/p&gt;
-
-&lt;p&gt;このプログラムは、0.5秒ごとにA0ピンの状態を取得して、sensor = A0ピンの状態をweb consoleで表示、LEDの色がスライダによって緑から黄色に変化していくプログラムになります。こちらがプログラムの全体になります。&lt;/p&gt;
-
-&lt;h3 id=&#34;実際に動かしてみよう&#34;&gt;実際に動かしてみよう&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/20_cocoabit.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/21_nefry.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;成功するとこのように数値が変わります。&lt;/p&gt;
-
-&lt;p&gt;さて、最後に今のセンサーデータをMilkcocoaに送ってみようと思います。&lt;/p&gt;
-
-&lt;h2 id=&#34;cocoabitにmilkcocoaを繋げてみる&#34;&gt;CocoaBitにMilkcocoaを繋げてみる&lt;/h2&gt;
-
-&lt;p&gt;今度はセンサーの値を表示するだけではなくMilkcocoaの方に送ってみようと思います。&lt;/p&gt;
-
-&lt;h3 id=&#34;milkcocoaとは&#34;&gt;Milkcocoaとは？&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/22_milkcocoa.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://mlkcca.com&#34;&gt;Milkcocoa&lt;/a&gt;とは、デバイス・スマートフォン・PC間で簡単にリアルタイム通信ができるWebサービスです。リアルタイム通信では複雑なプログラミングが必要ですが、MilkcocoaではJavaScriptを1行追記するだけでデータの保存＆やり取りができるようになるんです。&lt;/p&gt;
-
-&lt;p&gt;さて、Milkcocoaにセンサーの値を送れるようにするため、CocoaBitにWi-Fiを教えてあげましょう。&lt;/p&gt;
-
-&lt;h3 id=&#34;wi-fiの設定&#34;&gt;Wi-Fiの設定&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/23_nefry.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;この項目は、一度設定すればアクセスするWi-Fiが変わらない限り再設定する必要はありません。 &lt;a href=&#34;http://192.168.4.1&#34;&gt;http://192.168.4.1&lt;/a&gt; に接続し、Setup WiFiのリンクをクリックします。&lt;/p&gt;
-
-&lt;p&gt;SSIDの入力欄をクリックすると、検出されたWi-Fiを選べます。Passがある場合はそちらも入力して、Saveをクリックします。Saveを押すと再起動するのでしばらく待ちましょう。&lt;/p&gt;
-
-&lt;p&gt;Wi-Fiの設定が完了したところでプログラムを書いていきます。&lt;/p&gt;
-
-&lt;h4 id=&#34;milkcocoabit-ino&#34;&gt;milkcocoabit.ino&lt;/h4&gt;
-
-&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
-#include &amp;lt;Nefry_Milkcocoa.h&amp;gt;
-
-Nefry_Milkcocoa *milkcocoa;
-
-char *datastore;
-int sensorValue;
-
-void setup() {
-  milkcocoa-&amp;gt;print();//Setup ModuleページにAPPIDの表示をする
-  milkcocoa = Nefry_Milkcocoa::begin();//milkcocoaと接続に必要になる処理をします。
-  datastore = Nefry.getConfStr(3);//Setup Moduleページに入力されたデータストア名を保存します。
- }
-
-void loop() {
-  sensorValue = analogRead(A0);//アナログの入力を読みます。
-  Nefry.print(&amp;quot;sensor = &amp;quot; );
-  Nefry.println(sensorValue);//センサーデータを表示します。
-  Nefry.println( milkcocoa-&amp;gt;loop(10000) ? &amp;quot;Milkcocoa Connect OK&amp;quot; : &amp;quot;Milkcocoa Connect NG&amp;quot; ); //10秒以内にMilkcocoaに接続できればokと表示されます。
-  DataElement elem = DataElement();
-  elem.setValue(&amp;quot;sensor&amp;quot;, sensorValue);//センサーの状態を送信できる形に変換
-  milkcocoa-&amp;gt;push(datastore, &amp;amp;elem);//Milkcocoaに送信
-  Nefry.setLed(sensorValue/4,255,0);//Red(sensorValue/4),Green(255),Blue(0)
-  Nefry.ndelay(2000);//2秒待つ
-}
-
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;実際にプログラムを書き込み、Web Consoleを確認すると &lt;strong&gt;Milkcocoa Send Data Lack&lt;/strong&gt; と表示されます。Milkcocoaに接続するために、必要な情報が足りないという意味なので、必要な情報を集める必要があります。詳しく知りたい方は&lt;a href=&#34;http://liginc.co.jp/282918&#34;&gt;こちらの記事&lt;/a&gt;をご覧ください。&lt;/p&gt;
-
-&lt;p&gt;MilkcocoaのサイトにアクセスしてそれぞれAPPID、APIKey、APISecretを取得します。その3つが分かったら、今度はCocoaBitのSetup ModuleでAPPID、APIKey、APISecretの入力欄に先ほどのIDとKeyを入力します。もう一つDataStoreという入力欄がありますので、そこには &lt;strong&gt;CocoaBit&lt;/strong&gt; と入力します。&lt;/p&gt;
-
-&lt;p&gt;入力が完了しSaveボタンをクリックすると、自動的に再起動してMilkcocoaにセンサーの値を送ってくれるはずです。うまく送れない場合、CocoaBitがインターネットに繋がっていないか、先ほどの入力が間違っていないかが原因として挙げられます。&lt;/p&gt;
-
-&lt;h3 id=&#34;実際に動かしてみよう-1&#34;&gt;実際に動かしてみよう&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/24_cocoabit.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/25_milkcocoa.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Milkcocoaのデータストアを確認するとlittleBitsで取得した数値が表示されているはずです。このデータを使い、Web連携をすると面白くなるのではないでしょうか。&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/01_cocoabit.png&#34; alt=&#34;&#34; /&gt;
-ということで今回はCocoaBitについてを紹介しました。CocoaBitを使えば、これくらい簡単にlittleBitsをインターネットと繋げられます。&lt;/p&gt;
-
-&lt;p&gt;CocoaBitはまだ開発中ではありますが、進展があればまたこちらで報告しようと思っております。応援よろしくお願いします！&lt;/p&gt;
 </description>
     </item>
     
