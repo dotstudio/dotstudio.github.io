@@ -1,0 +1,1628 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
+  <meta charset="utf-8">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+    
+
+    
+    
+      
+      
+      
+      
+      
+      
+      
+      
+      
+        
+      
+      
+
+      
+      
+    
+
+    
+    
+
+    
+    
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="京急を愛し、京急に愛された（？）男ぉー！京急にちなんだオリジナルIoTガジェットを作ってみました。">
+    <meta name="author" content="dotstudio Inc.">
+    <meta content="https://dotstud.io/img/blog/099/00_eyecatch.png">
+    
+    <meta itemprop="name" content="ESP8266を使って京急が遅延すると光るガジェットを作ってみた | dotstudio"/>
+    <meta itemprop="image" content="https://dotstud.io/img/blog/099/00_eyecatch.png"/>
+    
+    <meta property="og:title" content="ESP8266を使って京急が遅延すると光るガジェットを作ってみた | dotstudio" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://dotstud.io/blog/pokio-esp-keikyu-chien/" />
+    <meta property="og:site_name" content="dotstudio（ドットスタジオ）" />
+    <meta property="og:image" content="https://dotstud.io/img/blog/099/00_eyecatch.png" />
+    <meta property="og:image:secure_url" content="https://dotstud.io/img/blog/099/00_eyecatch.png" />
+    <meta property="og:description" content="京急を愛し、京急に愛された（？）男ぉー！京急にちなんだオリジナルIoTガジェットを作ってみました。" />
+    <meta property="article:author" content="https://www.facebook.com/dotstud10/" /> 
+    <meta property="fb:app_id" content="296336307370435" />
+    <meta property="fb:pages" content="1013196712108753" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image:src" content="https://dotstud.io/img/blog/099/00_eyecatch.png">
+    <meta name="twitter:site" content="@dotstud_io" />
+    <meta name="twitter:url" content="https://dotstud.io/blog/pokio-esp-keikyu-chien/">
+    <meta name="twitter:description" content="京急を愛し、京急に愛された（？）男ぉー！京急にちなんだオリジナルIoTガジェットを作ってみました。">
+    <meta name="twitter:title" content="ESP8266を使って京急が遅延すると光るガジェットを作ってみた | dotstudio">
+    <meta name="twitter:creator" content="@dotstud_io" />
+
+    
+    <meta name="google-site-verification" content="oW2fcSG1fFnkDoRCGFJ0IGGebtBr8FjV2twoFMd7Skc" />
+    <title>ESP8266を使って京急が遅延すると光るガジェットを作ってみた | dotstudio</title>
+    
+
+    <link rel="stylesheet" href="/css/loader.css"> 
+    
+    <link rel="stylesheet" href='/css/master.css'>
+    <link rel="stylesheet" href="/css/icon-font.css"> 
+    
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+
+    <link rel="shortcut icon" type="image/png" href="/img/resources/favicon.png"/>
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="preload" as="style" onload="this.rel='stylesheet'">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel="preload" as="style" onload="this.rel='stylesheet'">
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel="preload" as="style" onload="this.rel='stylesheet'">
+    
+    <link href="/css/lib/hljs.css" rel="preload" as="style" onload="this.rel='stylesheet'">
+    
+
+    
+    
+    
+
+    
+    
+
+    
+    
+    
+    
+    
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-K5TRM9Q');</script>
+    
+</head>
+
+<body>
+  
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K5TRM9Q"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  
+
+  
+  <div id="fb-root"></div>
+  <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v2.8";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));</script>
+
+  
+
+  <header>
+    <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<symbol id="icon-arrow-right" viewBox="0 0 32 32">
+<title>arrow-right</title>
+<path class="path1" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M5.143 5.143l10.349 10.349"></path>
+<path class="path2" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M5.143 26.857l10.349-10.349"></path>
+<path class="path3" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M16.571 26.857l10.349-10.349"></path>
+<path class="path4" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M16.571 5.143l10.349 10.349"></path>
+</symbol>
+<symbol id="icon-hamburger" viewBox="0 0 60 32">
+<title>hamburger</title>
+<path class="path1" fill="none" stroke="#808080" stroke-width="7.1111" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M3.556 3.556h53.333"></path>
+<path class="path2" fill="none" stroke="#808080" stroke-width="7.1111" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M3.556 28.444h53.333"></path>
+</symbol>
+<symbol id="icon-logo-mark" viewBox="0 0 32 32">
+<title>logo-mark</title>
+<path class="path1" d="M19.731 28.8h-19.731v-19.699h19.731zM1.53 27.302h16.672v-16.672h-16.672z"></path>
+<path class="path2" d="M32 22.899h-19.731v-19.699h19.731zM13.798 21.37h16.672v-16.672h-16.672z"></path>
+</symbol>
+<symbol id="icon-social-facebook" viewBox="0 0 32 32">
+<title>social-facebook</title>
+<path class="path1" d="M30.1 0.12h-28.46c-0.974 0.011-1.76 0.804-1.76 1.78 0 0 0 0 0 0v28.46c0 0.983 0.797 1.78 1.78 1.78h15.32v-12.4h-4.16v-4.82h4.16v-3.58c-0.020-0.179-0.031-0.386-0.031-0.596 0-3.203 2.597-5.8 5.8-5.8 0.152 0 0.302 0.006 0.45 0.017-0.016-0.001-0.013-0.001-0.009-0.001 1.3 0 2.582 0.073 3.844 0.214l-0.155 4.286h-2.54c-2 0-2.36 0.96-2.36 2.36v3.1h4.76l-0.62 4.8h-4.12v12.4h8.12c0.983 0 1.78-0.797 1.78-1.78v-28.44c0-0.983-0.797-1.78-1.78-1.78z"></path>
+</symbol>
+<symbol id="icon-social-github" viewBox="0 0 32 32">
+<title>social-github</title>
+<path class="path1" d="M16 0.4c-0.001 0-0.002 0-0.004 0-8.837 0-16 7.163-16 16 0 7.028 4.531 12.997 10.831 15.147 0.913 0.173 1.213-0.307 1.213-0.747s-0.040-1.38-0.040-2.8c-4.44 1.060-5.38-2-5.38-2-0.308-0.987-0.937-1.798-1.763-2.33-1.477-1.010 0.103-0.99 0.103-0.99 1.055 0.144 1.941 0.76 2.451 1.624 0.607 1.039 1.701 1.715 2.953 1.715 0.6 0 1.164-0.155 1.653-0.428 0.062-0.836 0.437-1.58 1.002-2.13-3.559-0.401-7.279-1.781-7.279-8.001-0.001-0.032-0.001-0.069-0.001-0.106 0-1.621 0.624-3.096 1.645-4.198-0.181-0.526-0.283-1.135-0.283-1.769 0-0.85 0.184-1.657 0.514-2.383s1.325-0.404 4.385 1.676c1.199-0.341 2.577-0.537 4-0.537s2.801 0.196 4.107 0.562c2.953-2.026 4.293-1.666 4.293-1.666 0.31 0.683 0.49 1.481 0.49 2.321 0 0.688-0.121 1.348-0.343 1.959 1.030 1.058 1.654 2.533 1.654 4.154 0 0.037-0 0.075-0.001 0.112 0 6.134-3.74 7.494-7.3 7.894 0.685 0.69 1.108 1.641 1.108 2.69 0 0.088-0.003 0.175-0.009 0.261 0.001 2.128 0.001 3.848 0.001 4.368s0.28 0.92 1.1 0.78c6.413-2.183 10.944-8.152 10.944-15.18 0-8.837-7.163-16-16-16-0.015 0-0.031 0-0.046 0z"></path>
+</symbol>
+<symbol id="icon-social-twitter" viewBox="0 0 32 32">
+<title>social-twitter</title>
+<path class="path1" d="M10 29c0.036 0 0.078 0 0.12 0 10.25 0 18.56-8.31 18.56-18.56 0-0.042-0-0.085-0-0.127 0-0.274 0-0.554 0-0.834 1.312-0.959 2.414-2.113 3.289-3.431-1.070 0.454-2.347 0.82-3.686 0.984 1.293-0.819 2.312-2.084 2.804-3.587-1.184 0.679-2.577 1.234-4.062 1.539-1.286-1.244-2.976-2.027-4.849-2.027-3.634 0-6.58 2.946-6.58 6.58 0 0.518 0.060 1.022 0.173 1.506-5.473-0.309-10.286-2.887-13.523-6.813-0.587 0.917-0.919 2.059-0.919 3.278 0 2.258 1.137 4.25 2.871 5.435-1.063-0.025-2.070-0.325-2.95-0.822l0.032 0.017c-0 0.027-0.001 0.058-0.001 0.090 0 3.163 2.239 5.803 5.218 6.423-0.479 0.156-1.078 0.242-1.696 0.242-0.432 0-0.854-0.042-1.263-0.121 0.908 2.637 3.319 4.512 6.175 4.567-2.208 1.746-5.039 2.8-8.116 2.8-0.013 0-0.027-0-0.040-0-0.566-0.018-1.104-0.068-1.633-0.149 2.897 1.868 6.353 2.984 10.068 3.009z"></path>
+</symbol>
+</defs>
+</svg>
+
+    <div class="header">
+  <span class="logo"><a href="/"><svg id="icon-logo" width="100%"><use xlink:href="#icon-logo-mark"></svg></a></span>
+
+  <div class="menu">
+    <input type="checkbox" id="menu-toggle">
+      <label for="menu-toggle" class='label-toggle'>
+        <svg class="icon-hamburger"><use xlink:href="#icon-hamburger"></svg>
+      </label>
+    </input>
+    <ul>
+      <li class="menu-item"><a href="/blog">Blog</a></li>
+      <li class="menu-item"><a href="/shop">Shop</a></li>
+      <li class="menu-item"><a href="/docs">Docs</a></li>
+      <li class="menu-item"><a href="/about">About</a></li>
+      <li class="menu-item"><a href="/service">Service</a></li>
+      
+    </ul>
+  </div>
+
+</div>
+  </header>
+
+
+
+ 
+ 
+
+
+	
+		
+	
+
+
+
+
+<ul class="categories">
+	
+	<li><a href="/categories/try/" class="selected">
+		やってみるIoT
+	</a></li>
+	
+	<li><a href="/categories/learn/" class="">
+		IoTを知ろう
+	</a></li>
+	
+	<li><a href="/categories/event/" class="">
+		イベントレポート
+	</a></li>
+	
+	<li><a href="/categories/tips/" class="">
+		Tips
+	</a></li>
+	
+</ul>
+
+
+
+
+  
+    
+  
+
+
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+<article class="blog-single">
+  <div class="date">2017.06.13</div>
+
+  <img class="blog-single--eyecatch" src="/img/blog/099/00_eyecatch.png" alt="" width="710px">
+  
+  <h1 class="blog-single--title">ESP8266を使って京急が遅延すると光るガジェットを作ってみた</h1>
+
+  <div class="blog-single--information">
+    <a class="author" href="/members/pokio">
+      <img src="/img/members/pokio/author.png" alt="" class="author--avatar">
+      <p class="author--name">ポキオ</p>
+    </a>
+
+    
+    <a class="series" href="/series/handson">
+        作ってみた
+    </a>
+    
+
+  </div>
+  
+  <div class="blog-single--content markdown">
+
+<p>こんにちは、京急が大好きなポキオです。</p>
+
+<p>普段はAndroidエンジニアをやってますが、週末は趣味でArduinoやESP8266を触って心を落ち着かせています。先日、「京急が遅延すると光るガジェット」を作って<a href="https://iotlt.connpass.com/">IoTLT</a>で発表を行ってきました。</p>
+
+<p>今回は、そこで発表したガジェットの作成段階や、技術的な仕組みを紹介します。（発表後に一部パーツ・コーディングを変更しています）</p>
+
+<h2 id="今回作るもの">今回作るもの</h2>
+
+<p>ESP8266というWi-Fiモジュールを搭載した開発ボード「ESPr® Developer」を使って京急のホームページから運行情報を取得し、遅延していたらLEDを光らせる仕組みを作ります。</p>
+
+<p><img src="/img/blog/099/01_map.png" alt="" /></p>
+
+<h3 id="筆者の環境">筆者の環境</h3>
+
+<ul>
+<li>MacBook Air（13-inch、Mid 2013）</li>
+<li>OS X Yosemite（v10.10.5）</li>
+<li>Arduino IDE 1.8.0</li>
+</ul>
+
+<h3 id="用意するもの">用意するもの</h3>
+
+<ul>
+<li>ESPr® DeveloperESP8266</li>
+<li>マイコン内臓RGB LED</li>
+<li>光らせたいガジェット（今回はBトレインショーティ）</li>
+</ul>
+
+<h2 id="主なパーツ">主なパーツ</h2>
+
+<h3 id="espr-developer">ESPr® Developer</h3>
+
+<p><img src="/img/blog/099/02_esper.png" alt="画像" />
+<a href="https://www.switch-science.com/catalog/2500/">スイッチサイエンス</a>さんで売られている、ESP8266というWi-Fiモジュールを搭載した開発ボードです。素のESP8266を直接触るのはハードルが高いですが、USB-シリアル変換やレギュレータ、リセットスイッチなど実装済みで、Arduino IDEでも開発できるため便利です。</p>
+
+<p>ただし、筆者の開発環境ではArduino IDEからコードを流し込む際に、一手間必要でした。詳しくはこちら。</p>
+
+<p>参考: <a href="http://qiita.com/shanonim/items/68fab6dc28b72b31a258">ESPr Developer（ESP-WROOM-02開発ボード）で &ldquo;warning: espcomm_sync failed&rdquo; と表示される場合の対処</a></p>
+
+<h3 id="マイコン内蔵rgb-led">マイコン内蔵RGB LED</h3>
+
+<p><img src="/img/blog/099/03_led.png" alt="画像" />
+秋葉原の<a href="http://akizukidenshi.com/catalog/g/gI-08412/">秋月電子通商</a>さんで1個40円で売られているものを使用します。通常のLEDは足が2本ですが、こちらは足が4本。これらを制御することで、様々な色でLEDを光らせることができます。ESP8266（Arduino）向けに便利なライブラリが公開されているので、今回はこれを使ってコーディングしていきます。</p>
+
+<p><a href="https://github.com/adafruit/Adafruit_NeoPixel">Adafruit NeoPixel Library</a></p>
+
+<h3 id="bトレインショーティー">Bトレインショーティー</h3>
+
+<p><img src="/img/blog/099/04_train.png" alt="画像" />
+<a href="https://bandai-hobby.net/train/">Bトレインショーティー</a>はバンダイさんから発売されている、自分で組み立てるタイプの鉄道模型です。特徴は、何と言っても可愛さ。実車のディテールを表現しつつ、車両の長さをギュッと縮めてコミカルなルックスになっています。今回は（もちろん京急の）2100形をチョイス。京急の中で好きな車両の一つです。</p>
+
+<h2 id="ガジェットを作ってみる">ガジェットを作ってみる</h2>
+
+<h3 id="京急の2100形車両の組み立て">京急の2100形車両の組み立て</h3>
+
+<p><img src="/img/blog/099/05_keikyu1.png" alt="画像" />
+なにはともあれ、京急の車両を組み立てるところから始めます。Bトレインショーティーの京急2100形は、塗装済みで接着剤不要で組み立てができます。</p>
+
+<p><img src="/img/blog/099/06_keikyu2.png" alt="画像" />
+久しぶりのプラモデルにテンションがアガります。</p>
+
+<h3 id="マイコン内蔵rgb-ledを埋め込む">マイコン内蔵RGB LEDを埋め込む</h3>
+
+<p>出来上がった京急の車両にLEDを埋め込んでいきます。ここで便利なのがサンハヤトさんの<a href="http://www.sunhayato.co.jp/material2/index.php/item?cell003=%E3%83%A6%E3%83%8B%E3%83%90%E3%83%BC%E3%82%B5%E3%83%AB%E5%9F%BA%E6%9D%BF%E8%A3%BD%E5%93%81&amp;cell004=%E4%B8%AD%E5%9E%8B%E3%83%A6%E3%83%8B%E3%83%90%E3%83%BC%E3%82%B5%E3%83%AB%E5%9F%BA%E6%9D%BF&amp;name=%E8%96%84%E5%9E%8B%E3%83%A6%E3%83%8B%E3%83%90%E3%83%BC%E3%82%B5%E3%83%AB%E5%9F%BA%E6%9D%BF+UB-THN01&amp;id=722&amp;label=1">ハサミで切れるユニバーサル基板</a>です。
+<img src="/img/blog/099/07_universal1.png" alt="画像" /></p>
+
+<p>謳い文句の通り、ハサミで自由にカットができて、今回のような小さい車両にも基板を収めることができます。
+<img src="/img/blog/099/08_universal2.png" alt="画像" /></p>
+
+<p>こんな感じで簡単に、そしてその場で車両ピッタリの基板ができました。
+<img src="/img/blog/099/09_rgb_led.png" alt="画像" /></p>
+
+<h3 id="配線">配線</h3>
+
+<p>マイコン内蔵RGB LEDは先述の通り足が4本あり、電源（VDD）とグラウンド（GND）に加えて、制御信号の入出力（DIN・DO）があります。DIN・DOは図のように数珠つなぎで配線します。
+<img src="/img/blog/099/10_rgb_led2.png" alt="画像" /></p>
+
+<p>電源とグラウンドは共通で、それぞれESPr® DeveloperのVOUTとGNDに接続します。大元のDINはPIN4に接続します。</p>
+
+<h3 id="遅延情報の取得ロジック">遅延情報の取得ロジック</h3>
+
+<p>WebAPI等は使用せずに、10分に一度、<a href="http://unkou.keikyu.co.jp/">京急の運行情報ページ</a>にアクセスして情報を取得します。</p>
+
+<p>ESPr® Developerから運行情報の文言をHTTP-GETで取得して、その文言に<strong>特定の文字列</strong>が含まれるかどうかで運行状態を推測します。具体的には・・・</p>
+
+<ul>
+<li>「<strong>受託</strong>」という文字列が含まれていたら、他社線からの振替輸送受託のために遅延していると判断する</li>
+<li>「<strong>見合わせ</strong>」という文字列が含まれていたら、運転見合わせが発生していると判断する</li>
+<li>「<strong>乱れ</strong>」という文字列が含まれていたら、ダイヤが大幅に乱れていると判断する</li>
+<li>「<strong>遅れ</strong>」や「<strong>運休</strong>」が含まれていたら、ダイヤが少し乱れていると判断する</li>
+<li>「<strong>平常</strong>」が含まれていたら、平常運転であると判断する</li>
+</ul>
+
+<p>このような感じです。そして、運転見合わせであれば赤い点滅、ダイヤが少し乱れているときは黄色い点滅をさせるといった感じで、運行状態に応じてマイコン内蔵RGB LEDの光り方を変えることで、運行状態をひと目で把握することができます。</p>
+
+<p>ちなみに、他社線からの振替輸送受託が理由で京急が遅延しているときは、個人的にすこし残念な気持ちになるので、光り方を変えています（笑）</p>
+
+<h3 id="espr-developerのコーディング">ESPr® Developerのコーディング</h3>
+
+<p>かなり無理矢理ですが、こんな感じでコーディングしました。</p>
+
+<pre><code>#include &lt;ESP8266WiFi.h&gt;
+#include &lt;WiFiClient.h&gt;
+#include &lt;Adafruit_NeoPixel.h&gt;
+
+#define PIN 4 // DINを接続しているPIN
+#define NUMLED 4 // マイコン内蔵RGB LEDの個数
+#define SSID &quot;（Wi-FiアクセスポイントのSSID）&quot;
+#define PASSWORD &quot;（Wi-Fiアクセスポイントのパスワード）&quot;
+#define KEIKYU_PAGE &quot;unkou.keikyu.co.jp&quot; // 運行情報のページ
+#define INTERVAL_SEC 10 * 60 // ポーリング間隔
+
+Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMLED, PIN, NEO_RGB + NEO_KHZ800);
+
+void setup() {
+  // Serialの初期化
+  Serial.begin(115200);
+  Serial.println(&quot;&quot;);
+
+  // マイコン内蔵RGB LEDの初期化
+  pixels.begin();
+}
+
+void loop() {
+  // Wi-Fi接続開始
+  connectWifi();
+
+  // 京急の運行ページから運行情報取得
+  String trainInfo = getTrainInfo();
+
+  // Wi-Fi接続終了
+  disconnectWifi();
+
+  // 「受託」という文字が含まれていたら、他社からの振替輸送受託で遅延していると判断
+  if (trainInfo.indexOf(&quot;受託&quot;) &gt; 0) {
+    Serial.println(&quot;振替輸送受託！&quot;);
+    blinkLikePartyPeople(INTERVAL_SEC);
+    return;
+  }
+
+  // 「見合わせ」という文字が含まれていたら、運転見合わせが発生していると判断
+  if (trainInfo.indexOf(&quot;見合わせ&quot;) &gt; 0) {
+    Serial.println(&quot;運転見合わせ！&quot;);
+    blinkRed(INTERVAL_SEC);
+    return;
+  }
+
+  // 「乱れ」という文字が含まれていたら、ダイヤが大幅に乱れていると判断
+  if (trainInfo.indexOf(&quot;乱れ&quot;) &gt; 0) {
+    Serial.println(&quot;大幅に乱れている！&quot;);
+    blinkYellowAndRed(INTERVAL_SEC);
+    return;
+  }
+
+  // 「遅れ」「運休」という文字が含まれていたら、ダイヤが少し乱れていると判断
+  if (trainInfo.indexOf(&quot;遅れ&quot;) &gt; 0 || trainInfo.indexOf(&quot;運休&quot;) &gt; 0) {
+    Serial.println(&quot;遅延！&quot;);
+    blinkYellow(INTERVAL_SEC);
+    return;
+  }
+
+  // 「平常」という文字が含まれていたら、平常運転をしていると判断
+  if (trainInfo.indexOf(&quot;平常&quot;) &gt; 0) {
+    Serial.println(&quot;たぶん平常通り運転！&quot;);
+    delay(INTERVAL_SEC * 1000);
+    return;
+  }
+
+  // 運行情報取得エラーかもしれないので、10秒待ってもう一度取得する
+  blinkWhite(10);
+}
+
+// Wi-Fi接続
+void connectWifi() {
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(SSID, PASSWORD);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    Serial.print(&quot;.&quot;);
+    blinkWhite(3);
+  }
+
+  Serial.println(&quot;Wi-Fi接続完了&quot;);
+}
+
+// Wi-Fi切断
+void disconnectWifi() {
+  WiFi.disconnect();
+  Serial.println(&quot;Wi-Fi切断完了&quot;);
+}
+
+// 運行情報の文字列取得
+String getTrainInfo() {
+  WiFiClient client;
+
+  if ( !client.connect(KEIKYU_PAGE, 80) ) {
+    // 接続エラー
+    return String(&quot;&quot;);
+  }
+
+  // HTTP-GET
+  // レスポンスのLengthが長すぎるとエラーになることがあったのでRangeを指定している
+  client.print(String(&quot;GET &quot;) + &quot;/&quot; + &quot; HTTP/1.1\r\n&quot; +
+               &quot;Host: &quot; + KEIKYU_PAGE + &quot;\r\n&quot; +
+               &quot;Range: bytes=8000-9000\r\n&quot; +
+               &quot;Connection: close\r\n\r\n&quot;);
+  client.println();
+
+  delay(1000);
+
+  String body = &quot;&quot;;
+  String trainInfo = &quot;&lt;!-- ======================== 運行情報 =================================== --&gt;&quot;;
+
+  while (client.available()) {
+    body += client.readStringUntil('\r');
+  }
+
+  // レスポンスから運行情報部分だけを切り抜く
+  body = body.substring(body.indexOf(trainInfo) + trainInfo.length());
+  body = body.substring(0, body.indexOf(trainInfo));
+
+  return body;
+}
+
+// 白い点滅
+void blinkWhite(int sec) {
+  int count = 0;
+
+  while (count &lt; sec) {
+    for (int i = 0; i &lt; 256; i += 5) {
+      setColor( i, i, i);
+    }
+
+    for (int i = 255; i &gt;= 0; i -= 5) {
+      setColor( i, i, i);
+    }
+
+    count++;
+  }
+}
+
+//　黄色い点滅
+void blinkYellow(int sec) {
+  int count = 0;
+
+  while (count &lt; sec) {
+    for (int i = 0; i &lt; 256; i += 5) {
+      setColor( i, i, 0);
+    }
+
+    for (int i = 255; i &gt;= 0; i -= 5) {
+      setColor( i, i, 0);
+    }
+
+    count++;
+  }
+}
+
+// 黄色と赤の点滅
+void blinkYellowAndRed(int sec) {
+  int count = 0;
+
+  while (count &lt; sec) {
+    for (int i = 0; i &lt; 256; i += 5) {
+      setColor( i, 0, 0);
+    }
+
+    for (int i = 255; i &gt;= 0; i -= 5) {
+      setColor( i, 0, 0);
+    }
+
+    for (int i = 0; i &lt; 256; i += 5) {
+      setColor( i, i, 0);
+    }
+
+    for (int i = 255; i &gt;= 0; i -= 5) {
+      setColor( i, i, 0);
+    }
+
+    count++;
+    count++;
+  }
+}
+
+// 赤い点滅
+void blinkRed(int sec) {
+  int count = 0;
+
+  while (count &lt; sec) {
+    for (int i = 0; i &lt; 256; i += 5) {
+      setColor( i, 0, 0);
+    }
+
+    for (int i = 255; i &gt;= 0; i -= 5) {
+      setColor( i, 0, 0);
+    }
+
+    count++;
+  }
+}
+
+// パリピな輝き
+void blinkLikePartyPeople(int sec) {
+  int count = 0;
+
+  while (count &lt; sec) {
+    for (int i = 0; i &lt; 20; i++) {
+      setRandomColor();
+      delay(50);
+    }
+
+    count++;
+  }
+}
+
+// LEDを指定した色で光らせる
+void setColor(int r, int g, int b) {
+  for (int i = 0 ; i &lt; NUMLED; i++) {
+    pixels.setPixelColor(i, pixels.Color(r, g, b));
+    pixels.show();
+  }
+  delay(10);
+}
+
+// LEDをランダムな色で光らせる
+void setRandomColor() {
+  for (int i = 0 ; i &lt; NUMLED; i++) {
+    pixels.setPixelColor(i, pixels.Color(64 * random(1, 5) - 1 , 64 * random(1, 5) - 1 , 64 * random(1, 5) - 1 ));
+    pixels.show();
+  }
+  delay(10);
+}
+</code></pre>
+
+<p>実際に光らせてみたのがこちら。</p>
+
+<p><img src="/img/blog/099/11_setting.png" alt="画像" />
+情報取得中に実行される白い点滅。</p>
+
+<p><img src="/img/blog/099/12_late.png" alt="画像" />
+運転見合わせ時に実行される赤い点滅。</p>
+
+<p><img src="/img/blog/099/13_transport.png" alt="画像" />
+最後は他社線からの振替輸送受託時に実行されるパリピ点滅。画像では少しわかりづらいですね……。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>今回は、京急が遅延していると光るガジェットをESPr® Developerをつかって作成しました。情報の取得方法はかなり力技でしたが、WEB上の情報を簡単に可視化できたことは良かったです。</p>
+
+<p>実際にこのガジェットは、職場のデスクで稼働していて、いつも京急の運行情報を知らせてくれます。今後は他社線バージョンの作成を検討しています。</p>
+</div>
+
+  
+
+
+
+    
+    
+    
+    <nav class="related">
+      <h2 class="">関連記事</h2>
+      <ul class="cards-related">
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/wionode-ifttt-uv-ornament/">
+                <img class="card-related--thumbnail" src="/img/blog/106/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">Wio NodeとIFTTTで簡単IoT！紫外線情報を取得してみよう</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/seeed-wionode-hands-on/">
+                <img class="card-related--thumbnail" src="/img/blog/095/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">「Wio Node」で半田付けなしの電子工作！温度計作りでIoTはじめの一歩</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/web-bluetooth-remote-blink/">
+                <img class="card-related--thumbnail" src="/img/blog/090/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">話題のWebBluetoothでGenuino101をブラウザからリモートコントロールしてみよう</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/dfrobot-gravity-hands-on/">
+                <img class="card-related--thumbnail" src="/img/blog/087/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">ハードウェア知識ゼロでも大丈夫。「Gravity」で始める電子工作入門</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/littlebits-arduino-analog-number/">
+                <img class="card-related--thumbnail" src="/img/blog/060/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">littleBits Arduinoモジュールでより細かく値を入出力して状況を伝えよう</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+        </ul>
+      </nav>
+
+
+
+  <div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v2.7&appId=296336307370435";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+  <div class="share">
+    <a href="https://twitter.com/share" class="twitter-share-button" data-size="large" data-hashtags="dotstudio">Tweet</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    &nbsp;
+    <div class="fb-like" data-href="https://dotstud.io/blog/pokio-esp-keikyu-chien/" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
+
+    &nbsp;
+
+    <div class="hatena-b">
+      <a href="http://b.hatena.ne.jp/entry/s/dotstud.io/blog/pokio-esp-keikyu-chien" class="hatena-bookmark-button" data-hatena-bookmark-title="ESP8266を使って京急が遅延すると光るガジェットを作ってみた" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
+        <img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" />
+      </a>
+      <script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+    </div>    
+  </div>
+
+</article>
+
+
+
+<footer class="footer">
+  <p class="footer-info">
+    <a class="footer-info--item" href="/about">会社概要</a>
+    <a class="footer-info--item" href="/members">メンバー</a>
+    <a class="footer-info--item" href="/legal#tos">利用規約</a>
+    <a class="footer-info--item" href="/legal#sct">特定商取引</a>
+    <a class="footer-info--item" href="/legal#pp">プライバシーポリシー</a>
+  </p>
+  <p class="footer-cr">© 2016 dotstudio inc.</p>
+</footer>
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+
+
+
+
+
+<script src="/js/app.js"></script>
+
+
+<script src="/js/lib/hljs.js"></script>
+<script src="/js/lib/hljs-numbers.js"></script>
+<script>
+  hljs.initHighlightingOnLoad();
+  hljs.initLineNumbersOnLoad();
+</script>
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-78080011-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+
