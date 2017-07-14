@@ -51,23 +51,26 @@ function appendToc(){
 
 //blogページにGoogle Adsenseを挿入
 function appendGoogleAds(){
-    var $adsCode = '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"><\/script>'
-      + '<!-- ads-wide -->'
-      + '<ins class="adsbygoogle"\
-           style="display:inline-block;width:728px;height:90px"\
-           data-ad-client="ca-pub-5922216421588455"\
-           data-ad-slot="8463856924"></ins>'
-      + '<script>\
-          (adsbygoogle = window.adsbygoogle || []).push({});\
-          <\/script>';
-
-    var $div = document.createElement('div');
-    $div.className = 'ads-wide';
-    // $div.appendChild($adsCode);
-    $div.innerHTML = $adsCode;
-
     var $firstHeader = document.querySelector('.blog-single--content h2');
-    $firstHeader.parentNode.insertBefore($div,$firstHeader);
+
+    if ($firstHeader !== null) {
+      var $adsCode = '<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"><\/script>'
+        + '<!-- ads-wide -->'
+        + '<ins class="adsbygoogle"\
+             style="display:inline-block;width:728px;height:90px"\
+             data-ad-client="ca-pub-5922216421588455"\
+             data-ad-slot="8463856924"></ins>'
+        + '<script>\
+            (adsbygoogle = window.adsbygoogle || []).push({});\
+            <\/script>';
+
+      var $div = document.createElement('div');
+      $div.className = 'ads-wide';
+      // $div.appendChild($adsCode);
+      $div.innerHTML = $adsCode;
+
+      $firstHeader.parentNode.insertBefore($div,$firstHeader);
+    }
 }
 
 (function(){
