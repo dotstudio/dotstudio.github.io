@@ -68,7 +68,7 @@ function appendGoogleAds(){
       $adsIns.style.display = 'inline-block';
       $adsIns.style.width = '728px';
       $adsIns.style.height = '90px';
-      $adIns.dataset.adClient = 'ca-pub-5922216421588455';
+      $adsIns.dataset.adClient = 'ca-pub-5922216421588455';
       $adsIns.dataset.adSlot = '8463856924';
       $adsIns.dataset.adFormat = 'auto';
 
