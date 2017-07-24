@@ -81,34 +81,33 @@ Nefryシリーズは、「&lt;strong&gt;簡単にインターネットにつな�
 
 &lt;h4 id=&#34;トリガーとnefry-btを紐付けるキーの取得&#34;&gt;トリガーとNefry BTを紐付けるキーの取得&lt;/h4&gt;
 
-&lt;p&gt;今回はトリガーとして自作のWebサービスを利用できる「Maker Webhooks」を使います。&lt;/p&gt;
+&lt;p&gt;今回はトリガーとして自作のWebサービスを利用できる「Webhooks」を使います。&lt;/p&gt;
 
-&lt;p&gt;まずはMaker WebhooksをあとでNefry BTと紐付けるために、Secret Keyというキーを取得します。&lt;a href=&#34;https://ifttt.com/discover&#34;&gt;IFTTT公式サイト&lt;/a&gt;上部の「Search」から、Maker Webhooksを検索しクリックしましょう。（&amp;rdquo;make&amp;rdquo;で候補に出てきます。）
-&lt;img src=&#34;https://dotstud.io/img/blog/100/02_ifttt1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;まずはWebhooksをあとでNefry BTと紐付けるために、Secret Keyというキーを取得します。&lt;a href=&#34;https://ifttt.com/discover&#34;&gt;IFTTT公式サイト&lt;/a&gt;上部の「Search」から、Webhooksを検索しクリックしましょう。（&amp;rdquo;web&amp;rdquo;で候補に出てきます。）
+&lt;img src=&#34;https://dotstud.io/img/blog/100/if1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Maker Webhooksのページに移動したら右上にある「Setting」から設定します。
-&lt;img src=&#34;https://dotstud.io/img/blog/100/03_ifttt2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;設定ページに移動しました。このとき初めての方はこのような認証画面が表示されます。ページ中央の「Connect」をクリックしてWebhooksを有効にしましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/if2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;設定ページに移動しました。このとき初めての方はこのような認証画面が表示されます。ページ中央の「Connect」をクリックしてMaker Webhooksを有効にしましょう。
-&lt;img src=&#34;https://dotstud.io/img/blog/100/04_ifttt3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Settingをクリックし、移動します。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/if3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;有効になるとAccount Infoのページに移動します。
-&lt;img src=&#34;https://dotstud.io/img/blog/100/05_ifttt4.png&#34; alt=&#34;&#34; /&gt;
-アカウントごとに割り当てられるSecret KeyがURLのuse/以下に記載されているのでコピーしておきます。今回の例ではSecret Keyは &lt;code&gt;c1kgN-ZOhUAxA6B7TpyiKc&lt;/code&gt; の部分です。（このSecret Keyはサンプルです。既に無効になっていますので自身で取得してください。）&lt;/p&gt;
+&lt;p&gt;アカウントごとに割り当てられるSecret KeyがURLのuse/以下に記載されているのでコピーしておきます。今回の例ではSecret Keyは &lt;code&gt;GnzpClq0nDwt4WEdTyTmt&lt;/code&gt; の部分です。（このSecret Keyはサンプルです。既に無効になっていますので自身で取得してください。）
+&lt;img src=&#34;https://dotstud.io/img/blog/100/if4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
 &lt;h4 id=&#34;トリガーの作成&#34;&gt;トリガーの作成&lt;/h4&gt;
 
-&lt;p&gt;続いてトリガーとなるMaker Webhooksの詳細を作成します。
+&lt;p&gt;続いてトリガーとなるWebhooksの詳細を作成します。
 &lt;img src=&#34;https://dotstud.io/img/blog/100/06_ifttt5.png&#34; alt=&#34;&#34; /&gt;
 &lt;a href=&#34;https://ifttt.com/create&#34;&gt;IFTTTのレシピ作成ページ&lt;/a&gt;から、「+this」のリンクをクリックします。&lt;/p&gt;
 
-&lt;p&gt;「Choose a service」から再度Maker Webhooksを検索しましょう。
-&lt;img src=&#34;https://dotstud.io/img/blog/100/07_ifttt6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;「Choose a service」から再度Webhooksを検索しましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/if5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Maker WebhooksはEventという単位でトリガーとなります。今回はEvent Nameを&amp;rdquo;Nefry&amp;rdquo;とし、「Create trigger」をクリックし作成します。Event NameはあとでNefry BTにも同じ名前で入力します。
-&lt;img src=&#34;https://dotstud.io/img/blog/100/08_ifttt7.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;WebhooksはEventという単位でトリガーとなります。今回はEvent Nameを&amp;rdquo;Nefry&amp;rdquo;とし、「Create trigger」をクリックし作成します。Event NameはあとでNefry BTにも同じ名前で入力します。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/if6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
@@ -197,7 +196,7 @@ void loop() {
 
 &lt;p&gt;設定が完了したら、トップページに戻り「Data Store」のページに移動します。
 &lt;img src=&#34;https://dotstud.io/img/blog/100/19_nefry.png&#34; alt=&#34;&#34; /&gt;
-SecretKeyにはMaker Webhooksで確認した値を、EventにはLINEと連携した際に入力したEvent Name（今回は”Nefry”）を入力します。Saveをクリックし値を保存するとNefry BTが再起動します。&lt;/p&gt;
+SecretKeyにはWebhooksで確認した値を、EventにはLINEと連携した際に入力したEvent Name（今回は”Nefry”）を入力します。Saveをクリックし値を保存するとNefry BTが再起動します。&lt;/p&gt;
 
 &lt;p&gt;いよいよNefry BTについているスイッチを押してLINEにメッセージを送ってみましょう！&lt;/p&gt;
 
