@@ -7,8 +7,169 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Fri, 21 Jul 2017 18:09:27 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 25 Jul 2017 13:19:25 +0900</lastBuildDate>
     <atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Node.js製の静的サイトジェネレータ「Hexo」で無料ブログ開発 vol.2</title>
+      <link>https://dotstud.io/blog/hexo-static-site-vol2/</link>
+      <pubDate>Tue, 25 Jul 2017 13:19:25 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/hexo-static-site-vol2/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、エンジニアのちゃんとくです。ひょんなことから&lt;a href=&#34;https://nodejs.connpass.com/&#34;&gt;&lt;strong&gt;Node女学園&lt;/strong&gt;&lt;/a&gt;というNode.jsを学ぶ女性のためのコミュニティを立ち上げました。&lt;/p&gt;
+
+&lt;p&gt;このシリーズではNode女学園のブログを作りながら、&lt;strong&gt;Node.js製の静的サイトジェネレータ「Hexo」&lt;/strong&gt;の使い方を紹介していきます！&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/hexo-static-site-vol1&#34;&gt;&lt;strong&gt;前回&lt;/strong&gt;&lt;/a&gt;は環境構築とデプロイまでやってみました。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/pre_art.png&#34; alt=&#34;&#34; /&gt;
+&lt;center&gt;
+&lt;a href=&#34;https://dotstud.io/blog/hexo-static-site-vol1&#34;&gt;&lt;strong&gt;Node.js製の静的サイトジェネレータ「Hexo」で無料ブログ開発 vol.1&lt;/strong&gt;&lt;/a&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;今回はテーマを当ててブログデザインをカスタマイズしてみます。&lt;/p&gt;
+
+&lt;h2 id=&#34;テーマの探し方&#34;&gt;テーマの探し方&lt;/h2&gt;
+
+&lt;p&gt;Hexoでは既存のテーマを使うことで簡単にデザインを適用できます。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://hexo.io/themes/&#34;&gt;Hexoの公式サイト&lt;/a&gt;では130以上のテーマが紹介されています。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/themes.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;また&lt;a href=&#34;https://github.com&#34;&gt;github&lt;/a&gt;で&lt;code&gt;hexo-theme&lt;/code&gt;を検索するとユーザが制作したテーマを探すことができます。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/search.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;LICENSEに注意しつつ、好きなテーマを探しましょう。&lt;/p&gt;
+
+&lt;p&gt;今回Node女学園のブログは「ロゴに合わせてオレンジ系統」「ポップな感じ」にしたかったので、こちらの&lt;strong&gt;pacman&lt;/strong&gt;のテーマを使うことにしました。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/demo.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/A-limon/pacman&#34;&gt;github - A-limon/pacman&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://a-limon.github.io/pacman/&#34;&gt;demoページ&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;テーマをダウンロード&#34;&gt;テーマをダウンロード&lt;/h2&gt;
+
+&lt;p&gt;まずはテーマをダウンロードします。cloneして取ってきましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git clone https://github.com/A-limon/pacman.git themes/pacman
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;git URLとディレクトリ名は適宜自分のダウンロードしたいテーマのものに置き換えてください。（大体のテーマはREADMEに記載があるはずです。）&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/107/clone_theme.png&#34; alt=&#34;&#34; /&gt;
+cloneして&lt;code&gt;/themes&lt;/code&gt;の下に&lt;code&gt;/pacman&lt;/code&gt;ディレクトリができました。デフォルトの&lt;code&gt;/landscape&lt;/code&gt;は使わないので消してしまいます。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;_config.yml&lt;/code&gt;ファイルの&lt;code&gt;theme:&lt;/code&gt;をダウンロードしたテーマ名に書き換えます。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/chose_theme.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;この状態でローカルサーバを起動してみましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/pacman.png&#34; alt=&#34;&#34; /&gt;
+pacmanのテーマが適用されました！&lt;/p&gt;
+
+&lt;h2 id=&#34;カスタマイズ&#34;&gt;カスタマイズ&lt;/h2&gt;
+
+&lt;p&gt;デフォルトでは言語が違っていたり不要なリンクがあったりするので、自分の好みに編集していきます。&lt;/p&gt;
+
+&lt;p&gt;今回はカスタマイズの一例としてpacmanに沿って紹介します。テーマによって方法が異なる場合があるので、各READMEを見つつこの以下は参考程度に見てください。&lt;/p&gt;
+
+&lt;h3 id=&#34;author情報を設定&#34;&gt;Author情報を設定&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;themes/pacman/_config.yml&lt;/code&gt;を編集していきます。先ほどまでの&lt;code&gt;_config.yml&lt;/code&gt;とは違うファイルなので混同しないようにしてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;author:&lt;/code&gt;の部分を変更します。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/author_before.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;intro_line&lt;/code&gt;はフッタに表示されるメッセージです。適宜SNSのアカウントを記載して不要な項目は消去します。&lt;/p&gt;
+
+&lt;p&gt;以下のように設定しました。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/author_after.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;続いて&lt;code&gt;author_img&lt;/code&gt;を編集します。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/author_img.png&#34; alt=&#34;&#34; /&gt;
+画像データをURLで指定する場合は&lt;code&gt;dataURI: true&lt;/code&gt;にして&lt;code&gt;author_img_data:&lt;/code&gt;のあとにURLを記述します。&lt;/p&gt;
+
+&lt;p&gt;ローカルに画像を置く場合は&lt;code&gt;dataURI: false&lt;/code&gt;のまま&lt;code&gt;author_img:&lt;/code&gt;のあとにコメントに習ってPATHを記載しましょう。&lt;/p&gt;
+
+&lt;p&gt;変更を確認してみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/footer.png&#34; alt=&#34;&#34; /&gt;
+フッターに画像、メッセージ、SNSが表示されました！&lt;/p&gt;
+
+&lt;h3 id=&#34;言語を設定&#34;&gt;言語を設定&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;/themes/pacman/languages&lt;/code&gt;以下で、&lt;code&gt;default.yml&lt;/code&gt;を残して他の言語ファイルを消去します。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/lang.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;確認してみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/en.png&#34; alt=&#34;&#34; /&gt;
+&lt;code&gt;default.yml&lt;/code&gt;の内容が適用されました。日本語などにしたい場合は&lt;code&gt;default.yml&lt;/code&gt;の中を編集しましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;サイドバーを編集&#34;&gt;サイドバーを編集&lt;/h3&gt;
+
+&lt;p&gt;続いてサイドバーを変更します。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/del_rss_be.png&#34; alt=&#34;&#34; /&gt;
+今回RSSは不要なので消してみます。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;/themes/pacman/layout/_widget&lt;/code&gt;の下の&lt;code&gt;rss.ejs&lt;/code&gt;を消去します。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/del_rss1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;themes/pacman/_config.yml&lt;/code&gt;の&lt;code&gt;widget:&lt;/code&gt;からrssを消去します。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/del_rss2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;RSSの表示が消えました。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/del_rss_af.png&#34; alt=&#34;&#34; /&gt;
+続いてタグの記事数を表す数字も消してみます。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;/themes/pacman/layout/_widget/tag.ejs&lt;/code&gt;で数字を記述している部分を消去します。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/del_tag.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;記事数を表す数字が消えました。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/del_tag_af.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;記事の表示を編集&#34;&gt;記事の表示を編集&lt;/h3&gt;
+
+&lt;p&gt;記事をクリックして各記事ページもカスタマイズしましょう。&lt;/p&gt;
+
+&lt;p&gt;まず記事内に表示されている目次（Contents）を消してみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/del_content_be.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;/themes/pacman/layout/_partial/post/article.ejs&lt;/code&gt;を編集します。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/del_content.png&#34; alt=&#34;&#34; /&gt;
+&lt;code&gt;contents&lt;/code&gt;を表示させている部分を消去します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/107/del_contents.png&#34; alt=&#34;&#34; /&gt;
+目次が消えました。&lt;/p&gt;
+
+&lt;h3 id=&#34;記事のフッタを編集&#34;&gt;記事のフッタを編集&lt;/h3&gt;
+
+&lt;p&gt;記事のフッタにはあまり馴染みのないSNSのシェアリンクがあるので変更します。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/art_footer_before.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;/themes/pacman/layout/_partial/after_footer.ejs&lt;/code&gt;の90行目あたりを見てみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/del_share.png&#34; alt=&#34;&#34; /&gt;
+リンクを追加している部分があるので不要なものを消します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/107/del_share_af.png&#34; alt=&#34;&#34; /&gt;
+FacebookとTwitterのみ残しました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/107/art_footer_after.png&#34; alt=&#34;&#34; /&gt;
+ブログ側もFacebookとTwitterのみになっています。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;hexo deploy -g&lt;/code&gt;でデプロイしましょう！&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;カスタマイズを加えて自分のブログらしさを出すことができました！
+&lt;img src=&#34;https://dotstud.io/img/blog/107/done.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;テーマによって編集箇所が変わりますが、&lt;strong&gt;基本はHTMLとJavaScriptで構成されている&lt;/strong&gt;のでREADMEを読みつつ焦らず直していきましょう。&lt;/p&gt;
+
+&lt;p&gt;次回はルーティングをやってみたいと思います。&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>ライブで大活躍！音に反応して光るサバゲーマスク！</title>
@@ -2756,335 +2917,6 @@ IT業界と飲食業界とのコラボがおそらく初であろう「養老乃
 &lt;p&gt;&lt;center&gt;
 &lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;おいしそうな料理と総料理長！ありがとうございました！ &lt;a href=&#34;https://twitter.com/hashtag/yoro_hack?src=hash&#34;&gt;#yoro_hack&lt;/a&gt; &lt;a href=&#34;https://t.co/NRvYjaP7Lh&#34;&gt;pic.twitter.com/NRvYjaP7Lh&lt;/a&gt;&lt;/p&gt; 4689 (@4689thon) &lt;a href=&#34;https://twitter.com/4689thon/status/860098794163118080&#34;&gt;2017年5月4日&lt;/a&gt;&lt;/blockquote&gt; &lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
 &lt;/center&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>【話題の土善旅館】Go開発合宿2017 #golangjp</title>
-      <link>https://dotstud.io/blog/go-beginners-camp-report/</link>
-      <pubDate>Thu, 27 Apr 2017 22:08:08 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/go-beginners-camp-report/</guid>
-      
-      <description>
-
-&lt;p&gt;【Go合宿】 土善旅館は最高だったしさらにパワーアップしていた【25人でGo！】&lt;/p&gt;
-
-&lt;h2 id=&#34;4-22-4-23-goビギナーズ開発合宿&#34;&gt;4/22〜4/23 Goビギナーズ開発合宿！&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/097/01_event_page.png&#34; alt=&#34;&#34; /&gt;
-&lt;a href=&#34;https://go-beginners.connpass.com/event/47481/&#34;&gt;Go合宿募集ページ&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Swift愛好会の&lt;a href=&#34;http://qiita.com/gotou015/items/40081f33b68f616491b8&#34;&gt;開発合宿&lt;/a&gt;に当てられて、&lt;strong&gt;Goビギナーズでも開発合宿を開催した&lt;/strong&gt;のでレポートします！&lt;/p&gt;
-
-&lt;p&gt;なおあまりビギナーはいなかった模様。&lt;/p&gt;
-
-&lt;p&gt;土善旅館さんの神っぷりについては至る所でまとめられているのですが、&lt;strong&gt;想像よりずっと神だった&lt;/strong&gt;&amp;amp;&amp;amp;&lt;strong&gt;さらにパワーアップしていた&lt;/strong&gt;のでみんなマジで行こう！という思いで綴ります。そして&lt;strong&gt;合宿を開催したい幹事さん向け&lt;/strong&gt;に備忘録を！&lt;/p&gt;
-
-&lt;p&gt;当日のTogetterまとめはこちら。 -&amp;gt; &lt;a href=&#34;https://togetter.com/li/1104119&#34;&gt;【土善旅館】25人でGo開発合宿！【isGOD】&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;短いまとめ&#34;&gt;短いまとめ&lt;/h2&gt;
-
-&lt;p&gt;長くなること必至なので、絶対に知って欲しい点だけ先にまとめ。&lt;/p&gt;
-
-&lt;h3 id=&#34;土善旅館は最高&#34;&gt;土善旅館は最高&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;思ってたよりずっとキレイ、かつキレイにしようとしている感がある（至る所がリフォーム済み）&lt;/li&gt;
-&lt;li&gt;静か。広い。庭がすごい。&lt;/li&gt;
-&lt;li&gt;ご飯超豪華。夜は前菜にお造りに煮付けにしゃぶしゃぶに、とただ最高だった。&lt;/li&gt;
-&lt;li&gt;設備充。お風呂は24H、いつでもコーヒー、マンガ、マッサージ機。できなかったけど卓球も。&lt;/li&gt;
-&lt;li&gt;旅館の人の対応がすごい。送迎も人数変更も超柔軟で、&lt;strong&gt;冷蔵庫（本体）まで貸してくれた&lt;/strong&gt;。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;土善旅館の開発環境はまじ最高&#34;&gt;土善旅館の開発環境はまじ最高&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;備品言うことなし、且つ高機能&lt;/strong&gt;。爆速のWi-Fi、でかいスクリーン、モニタ複数、変換ケーブル、Macでも競合しない延長コンセントetc.&lt;/li&gt;
-&lt;li&gt;開発部屋がめちゃ広い。椅子と畳がいい感じ。&lt;/li&gt;
-&lt;li&gt;クッション（&lt;a href=&#34;https://yogibo.jp/&#34;&gt;Yogibo&lt;/a&gt;）・毛布等充実。&lt;/li&gt;
-&lt;li&gt;開発部屋は&lt;strong&gt;ずーっと開放で一律500円。ヤッッッッス&lt;/strong&gt;。寝たり起きたりもうここで仕事したい。&lt;/li&gt;
-&lt;li&gt;いい塩梅でにゃーんが癒しを運んでくる。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;ありがとうline&#34;&gt;ありがとうLINE&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;全体連絡はLINEグループ&amp;amp;金銭徴収はLINE Pay。（一部希望者はPayPal）&lt;/li&gt;
-&lt;li&gt;LINE Payは手数料なし・徴収が簡単・履歴が残る・キャッシュバックも簡単。&lt;/li&gt;
-&lt;li&gt;LINEアルバムで写真即シェア。&lt;/li&gt;
-&lt;li&gt;スタンプ押せるので会話が盛り上がりやすい。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;安定のスプレッドシート&#34;&gt;安定のスプレッドシート&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;connpassIDとLINEアカウントの照合、集金済みフラグなど管理&lt;/li&gt;
-&lt;li&gt;支払い金額を管理&lt;/li&gt;
-&lt;li&gt;LTエントリーを各自記入してもらう&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;行程を追いながら要点まとめ&#34;&gt;行程を追いながら要点まとめ&lt;/h2&gt;
-
-&lt;h3 id=&#34;募集-集金&#34;&gt;募集&amp;amp;集金&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/097/02_pay_sheet.png&#34; alt=&#34;&#34; /&gt;
-募集はconnpass＆集金はLINE PayとPayPalで。&lt;/p&gt;
-
-&lt;p&gt;connpassで申し込みがあっても連絡がつかないとまずいので、今回は&lt;strong&gt;集金した人を宿泊人数として計算&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;アカウントと集金フラグはスプレッドシートで管理。&lt;/p&gt;
-
-&lt;p&gt;旅館さんに&lt;strong&gt;男女の数（部屋割り）を聞かれる&lt;/strong&gt;のでconnpassなら申込時アンケートにするといいかも。&lt;/p&gt;
-
-&lt;h3 id=&#34;役割分担&#34;&gt;役割分担&lt;/h3&gt;
-
-&lt;p&gt;結構やることが多いのでしっかり分担。今回は以下。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;リーダー、コンテンツ企画: tenntennさん&lt;/li&gt;
-&lt;li&gt;旅館との連絡: しーめるさん&lt;/li&gt;
-&lt;li&gt;買い出し: 木下さん&lt;/li&gt;
-&lt;li&gt;LINE招待, 会計: のびすけさん&lt;/li&gt;
-&lt;li&gt;賑やかし: ちゃんとく&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;すみませんすみません&lt;/p&gt;
-
-&lt;h3 id=&#34;旅のプランを考える&#34;&gt;旅のプランを考える&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/097/03_time_schedule.png&#34; alt=&#34;&#34; /&gt;
-&lt;a href=&#34;https://gist.github.com/tokutoku393/1afea0a7f4649bd5b0349e76a78833df&#34;&gt;Go合宿2017しおり&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;時間や持ち物共有のためのしおりがこちら。Swift愛好会のしおりを&lt;del&gt;パク&lt;/del&gt;参考に作成。後藤神まじ感謝！&lt;/p&gt;
-
-&lt;p&gt;基本的に時間はゆるふわ、旅館さんも「来て欲しい頃に送迎呼んで〜」とかなり柔軟に対応してくれる。&lt;/p&gt;
-
-&lt;p&gt;旅館とのやりとりは電話。&lt;strong&gt;電話できるタイプのエンジニアがいるとつよい&lt;/strong&gt;。しーめるさん本当にありがとう！&lt;/p&gt;
-
-&lt;h2 id=&#34;1日目&#34;&gt;1日目&lt;/h2&gt;
-
-&lt;h3 id=&#34;10-10-日暮里駅集合&#34;&gt;10:10 日暮里駅集合&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/097/04_nippori.png&#34; alt=&#34;&#34; /&gt;
-渋谷を経由すると遠くなる人が多かったので、日暮里駅に集合。&lt;/p&gt;
-
-&lt;p&gt;JR日暮里駅-&amp;gt;京成日暮里駅の乗り換え改札が大きくて集合しやすい感じ。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;この時点で数人は遅刻する&lt;/strong&gt;。まあ異国に行くわけではないのでOKだ！&lt;/p&gt;
-
-&lt;h3 id=&#34;11-25-成田組合流&#34;&gt;11:25 成田組合流&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/097/05_narita.png&#34; alt=&#34;&#34; /&gt;
-京成成田駅-&amp;gt;JR成田駅への乗り換えポイントで合流する人ちらほら。恒例（？）の記念写真を撮る。&lt;/p&gt;
-
-&lt;p&gt;乗り換え時間が短い中で焦ってコンビニで買い物したけど、&lt;strong&gt;笹川にも普通にコンビニはあるぞ！&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;11-40-笹川まで鈍行に揺られる&#34;&gt;11:40 笹川まで鈍行に揺られる&lt;/h3&gt;
-
-&lt;p&gt;外はのどかな田園風景、電車の乗客も少なくなって合宿感にテンション上がる。&lt;/p&gt;
-
-&lt;p&gt;全員では無理だったけどちょこちょこ固まって座って開発したりお喋りしたり。&lt;/p&gt;
-
-&lt;p&gt;Wantedly風写真撮りポイント。&lt;/p&gt;
-
-&lt;h3 id=&#34;12-30-笹川駅着-青柳亭で腹ごしらえ&#34;&gt;12:30 笹川駅着、青柳亭で腹ごしらえ！&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/097/06_aoyagi.png&#34; alt=&#34;&#34; /&gt;
-駅から歩いて数分の青柳亭で昼食。手前にアオヤギっていう服屋があるけどそれは偽物だ！（見ればわかる）&lt;/p&gt;
-
-&lt;p&gt;Swift愛好会の方で「メニュー取りまとめが大変なので全員同じにすればよかった」とあったけど、私が違うのを注文したかったので取りまとめを申し出た。&lt;strong&gt;すぐに後悔した。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;「丼もの+セット麺」が基本のメニューで、種類がありすぎてまじで大変。あつ/ひや/うどん/そば/かけ/もり、などなど色々あるし違うのもできるよって言ってくれる。&lt;/p&gt;
-
-&lt;p&gt;メニューを入手したので参考にしてください。（※変更の可能性大いにありです）
-&lt;img src=&#34;https://dotstud.io/img/blog/097/07_menu.png&#34; alt=&#34;&#34; /&gt;
-（これ以外にもあるよ！）&lt;/p&gt;
-
-&lt;h3 id=&#34;14-00-食事後にコンビニへ&#34;&gt;14:00 食事後にコンビニへ&lt;/h3&gt;
-
-&lt;p&gt;青柳亭の目の前にセブンイレブンがある。みんなで歩いて行って適宜買い物。&lt;/p&gt;
-
-&lt;p&gt;土善旅館さんへ伝えると&lt;strong&gt;こちらへお迎えに来てくれた&lt;/strong&gt;。GOD。&lt;/p&gt;
-
-&lt;p&gt;ここで一次遅刻組合流。&lt;/p&gt;
-
-&lt;h3 id=&#34;14-30-旅館着-充実っぷりに驚愕&#34;&gt;14:30 旅館着、充実っぷりに驚愕&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/097/08_ryokan_all.png&#34; alt=&#34;&#34; /&gt;
-長旅を経て旅館着！看板の合宿感にテンション上がる！&lt;/p&gt;
-
-&lt;p&gt;とりあえず男女それぞれお部屋に移動。&lt;/p&gt;
-
-&lt;p&gt;女子4人だったのでお部屋を相当広く使えて最高だった。部屋内に洗面台×2とトイレもある充実っぷり。ドライヤー、ヘアアイロン、選べる浴衣とネコみみを貸してもらえた。（男性は同じお部屋を10人で使ったっぽい）
-&lt;img src=&#34;https://dotstud.io/img/blog/097/09_ryokan_heya.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;男性の浴衣と、タオル、歯ブラシは有料なので忘れずにね！&lt;/p&gt;
-
-&lt;p&gt;&lt;br&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;memo-お会計&#34;&gt;memo: お会計&lt;/h4&gt;
-
-&lt;p&gt;到着した時点でお会計。&lt;/p&gt;
-
-&lt;p&gt;Go合宿時のお値段は、&lt;strong&gt;宿泊費8200円＋設備使用量500円/1人+税&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;それ以外に夕食時のお酒を&lt;strong&gt;全体で7000円分&lt;/strong&gt;と、2日目にお願いした&lt;strong&gt;おにぎり250円/1人&lt;/strong&gt;を合わせても安すぎる！！！しかもなぜか70円引きされていた。&lt;/p&gt;
-
-&lt;h3 id=&#34;15-00-乾杯-開発スタート&#34;&gt;15:00 乾杯＆開発スタート！&lt;/h3&gt;
-
-&lt;p&gt;ハイネケンのビールサーバで乾杯して開発スタート！
-&lt;img src=&#34;https://dotstud.io/img/blog/097/10_kanpai1.png&#34; alt=&#34;&#34; /&gt;
-乾杯後一人ずつ軽く自己紹介と旅の目標共有。&lt;/p&gt;
-
-&lt;p&gt;開発部屋ひんろい！！足りないものがないくらい充実！&lt;/p&gt;
-
-&lt;p&gt;延長コード、変換ケーブル、モニタ、クッション等々欲しいものは一通り揃ってる。&lt;/p&gt;
-
-&lt;p&gt;そして「この後買い出しに行く」旨を伝えると、&lt;strong&gt;冷蔵庫（本体）を貸してくれる&lt;/strong&gt;という神ハプニング。代車で運ばれてきました。&lt;/p&gt;
-
-&lt;h3 id=&#34;15-15-初心者講座開催&#34;&gt;15:15 初心者講座開催&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/097/11_wantedly.png&#34; alt=&#34;&#34; /&gt;
-主催tenntennさんによりGo初めての人向け講座。&lt;/p&gt;
-
-&lt;p&gt;基本の項目をザックリまとめて30分くらい（体感）で教えてくれました。圧倒的感謝……！
-&lt;center&gt;
-&lt;iframe src=&#34;//www.slideshare.net/slideshow/embed_code/key/efg9YT4fSkYUU6&#34; width=&#34;595&#34; height=&#34;485&#34; frameborder=&#34;0&#34; marginwidth=&#34;0&#34; marginheight=&#34;0&#34; scrolling=&#34;no&#34; style=&#34;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&#34; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&#34;margin-bottom:5px&#34;&gt; &lt;strong&gt; &lt;a href=&#34;//www.slideshare.net/takuyaueda967/2016-go&#34; title=&#34;Go入門&#34; target=&#34;_blank&#34;&gt;Go入門&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a target=&#34;_blank&#34; href=&#34;https://www.slideshare.net/takuyaueda967&#34;&gt;Takuya Ueda&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;17-00-買い出し班スーパーへ&#34;&gt;17:00 買い出し班スーパーへ&lt;/h3&gt;
-
-&lt;p&gt;土善旅館さんのご好意で車を借りて買い出しへ。飲まない運転者が必要だね！&lt;/p&gt;
-
-&lt;p&gt;と思いきや旅館さんが「&lt;strong&gt;買い出しも送迎しますよ&lt;/strong&gt;」と言ってくれる。&lt;/p&gt;
-
-&lt;p&gt;なぜかちょうどよく運営の木下さんが現れたので、今回はお気持ちだけいただきスーパーへ。&lt;/p&gt;
-
-&lt;p&gt;&lt;br&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;memo-買い出しの量決めるの結構大変&#34;&gt;memo: 買い出しの量決めるの結構大変&lt;/h4&gt;
-
-&lt;p&gt;事前にビール飲まない人だけアンケート取って車で5分くらいのスーパーへ買い出しへ。&lt;/p&gt;
-
-&lt;p&gt;だいたい人数×3本くらいのお酒を購入。ビール7:カクテル3くらいか。ボトル等は特になし。&lt;/p&gt;
-
-&lt;p&gt;つまみを8000円分くらい購入。PC触るので、お値段はるけどスナックよりチーズとかサラミとかナッツとかが嬉しいかも。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;スーパーはクレジットカード使えないので要注意&lt;/strong&gt;。（※合宿時点）&lt;/p&gt;
-
-&lt;p&gt;今回お酒の量はちょうどいい感じだったけど、参加者の雰囲気によってかなり前後しそう。&lt;/p&gt;
-
-&lt;h3 id=&#34;17-30-夕飯までもくもく&#34;&gt;17:30 夕飯までもくもく&lt;/h3&gt;
-
-&lt;p&gt;買い出し後、仕切り直し乾杯！&lt;/p&gt;
-
-&lt;p&gt;夕飯を19:00（遅い方）にしたので、それまでもくもく。&lt;/p&gt;
-
-&lt;p&gt;Yogiboを駆使したゴロ寝スタイルとか、ヘッドフォンで集中したりとか、思い思いに開発。
-&lt;img src=&#34;https://dotstud.io/img/blog/097/12_mkmk.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;19-00-豪勢なお夕飯&#34;&gt;19:00 豪勢なお夕飯！&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/097/13_dinner.png&#34; alt=&#34;&#34; /&gt;
-結構お菓子食べてしまっていたのを後悔。つまみ解放は夕食後が正解だったか？&lt;/p&gt;
-
-&lt;p&gt;前菜、お造り、天ぷら、肉、魚、本当にたまらんでした。&lt;/p&gt;
-
-&lt;p&gt;夕食後はそのまま飲んだりお風呂はいったり自由時間。&lt;/p&gt;
-
-&lt;h3 id=&#34;21-00-仕切り直し乾杯&#34;&gt;21:00 仕切り直し乾杯&lt;/h3&gt;
-
-&lt;p&gt;改めて乾杯！ここで旅の締めとして&lt;strong&gt;2日目にLT大会を開催&lt;/strong&gt;することを告知、参加者を募る。&lt;/p&gt;
-
-&lt;p&gt;タイムリミットがあると頑張れるしプレッシャーも少なくていいね！&lt;/p&gt;
-
-&lt;h3 id=&#34;24-00-峠越え&#34;&gt;24:00 峠越え&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/097/14_allnight.png&#34; alt=&#34;&#34; /&gt;
-24時だよ全員集合！！&lt;/p&gt;
-
-&lt;p&gt;飲んだり書いたり飲んだり書いたり、最終組はその後4:30頃まで開発していた模様。&lt;/p&gt;
-
-&lt;p&gt;Swift愛好会の時は開発部屋で雑魚寝班が多かったみたいだけど、今回は結構お部屋に戻っていました。&lt;/p&gt;
-
-&lt;p&gt;開発部屋でゴロ寝してたらこんなハプニングも(//ω//)
-&lt;center&gt;
-&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;開発部屋で寝てたらこうなってた☺️ &lt;a href=&#34;https://twitter.com/hashtag/golangjp?src=hash&#34;&gt;#golangjp&lt;/a&gt; &lt;a href=&#34;https://t.co/vbAkRUCIiK&#34;&gt;pic.twitter.com/vbAkRUCIiK&lt;/a&gt;&lt;/p&gt; ちゃんとく( ˙꒳​˙ ) (@tokutoku393) &lt;a href=&#34;https://twitter.com/tokutoku393/status/855918202760474625&#34;&gt;2017年4月22日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;2日目&#34;&gt;2日目&lt;/h2&gt;
-
-&lt;h3 id=&#34;8-00-朝食&#34;&gt;8:00 朝食&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/097/15_morning.png&#34; alt=&#34;&#34; /&gt;
-朝からお鍋（アサリ出汁湯豆腐）とか最高か！！&lt;/p&gt;
-
-&lt;p&gt;今回は朝早かったからか5人くらい来なかったかな？なんだかんだ8:30くらいまでに来れば食べれた。&lt;/p&gt;
-
-&lt;h3 id=&#34;9-00-追い込みもくもく開始&#34;&gt;9:00 追い込みもくもく開始&lt;/h3&gt;
-
-&lt;p&gt;開発合宿も終盤、気合いを入れ直す乾杯！&lt;/p&gt;
-
-&lt;p&gt;みんなちゃんと起きて開発してた。エンジニアのそういうとこ最高。（その間朝風呂してた）&lt;/p&gt;
-
-&lt;h3 id=&#34;11-00-lt大会で成果発表&#34;&gt;11:00 LT大会で成果発表&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/097/16_lt.png&#34; alt=&#34;&#34; /&gt;
-計14名がエントリー！成果出せた人も出せなかった人も和やかなムードで発表。&lt;/p&gt;
-
-&lt;p&gt;今回は「一番楽しかったを感じたLT」「一番今後頑張って欲しいと思ったLT」「一番Goへの愛を感じたLT」へ投票を用意。（googleフォーム）&lt;/p&gt;
-
-&lt;p&gt;初心者〜玄人までいろんな話を聞けたし投票も結構ばらけてかなり良かったのでは！！&lt;/p&gt;
-
-&lt;h3 id=&#34;11-30-追いうちの神デザート&#34;&gt;11:30 追いうちの神デザート&lt;/h3&gt;
-
-&lt;p&gt;ここで旅館さんサービスのデザート登場。
-&lt;img src=&#34;https://dotstud.io/img/blog/097/17_desert.png&#34; alt=&#34;&#34; /&gt;
-聞いていた話よりグレードアップしている。しゅごい。。&lt;/p&gt;
-
-&lt;h3 id=&#34;12-30-お昼-まったり開発&#34;&gt;12:30 お昼＆まったり開発&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/097/18_onigiri.png&#34; alt=&#34;&#34; /&gt;
-お願いしたおにぎり+残りのお酒でラスト乾杯！&lt;/p&gt;
-
-&lt;p&gt;おにぎりの沁みる美味しさ・・。&lt;/p&gt;
-
-&lt;p&gt;そして全てのお会計が終わったので余った分一人当たり494円をキャッシュバック。&lt;/p&gt;
-
-&lt;p&gt;端数のキャッシュバックも簡単、&lt;strong&gt;そうLINE Payならね&lt;/strong&gt;。
-（一括送金はできないようなので個別対応。ありがとうのびすけさん！）&lt;/p&gt;
-
-&lt;h3 id=&#34;14-10-宿発-笹川駅へ&#34;&gt;14:10 宿発、笹川駅へ&lt;/h3&gt;
-
-&lt;p&gt;チェックアウトは15:00＆電車は1時間に一本なので、時間を決めて送迎をお願いすればok。&lt;/p&gt;
-
-&lt;h3 id=&#34;14-30-笹川駅で恒例のやつ&#34;&gt;14:30 笹川駅で恒例のやつ&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/097/19_sasagawa.png&#34; alt=&#34;&#34; /&gt;
-Swift愛好会に敬意を払い、恒例の集合写真。守りたいこの伝統。&lt;/p&gt;
-
-&lt;h3 id=&#34;after-記事書くまでが合宿&#34;&gt;After 記事書くまでが合宿！&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://qiita.com/ShirataHikaru/items/639ed865ee30765c7f43&#34;&gt;GoビギナーがPDFのクローラー作った&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://medium.com/@maro_kt/go%E5%90%88%E5%AE%BF-%E5%9C%9F%E5%96%84%E6%97%85%E9%A4%A8%E3%81%AB%E5%8F%82%E5%8A%A0%E3%81%97%E3%81%A6%E3%81%8D%E3%81%9F-7607bf5d8342&#34;&gt;Go合宿＠土善旅館に参加してきた&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://tikasan.hatenablog.com/entry/2017/04/23/231512&#34;&gt;Go合宿でビール駆動開発してきた@土善旅館&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://shanonim.hatenablog.com/entry/2017/04/24/000648&#34;&gt;Go合宿2017@ 土善旅館に参加しました #golangjp&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;その日のうちにたくさんまとめブログを書いてもらいました！！！&lt;/p&gt;
-
-&lt;p&gt;充実した旅になったようでよかったです（泣）&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;土善旅館最高とは聞いていたが、よもやここまでとは……。本当に言うこと無しな旅でした。&lt;/p&gt;
-
-&lt;p&gt;百聞は一見にしかず、&lt;strong&gt;みんなとにかく土善旅館さんに行ってくれ。最高だけが待っている！！&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;（ちなみにちゃんとくは体調不良で合宿中12時間くらい寝て過ごしたのでハロー世界しかできませんでした。みんな体調管理はしっかりね！！）&lt;/p&gt;
 </description>
     </item>
     
