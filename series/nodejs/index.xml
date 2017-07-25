@@ -10,6 +10,167 @@
     <atom:link href="/series/nodejs/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Node.js製の静的サイトジェネレータ「Hexo」で無料ブログ開発 vol.2</title>
+      <link>https://dotstud.io/blog/hexo-static-site-vol2/</link>
+      <pubDate>Tue, 25 Jul 2017 13:19:25 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/hexo-static-site-vol2/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、エンジニアのちゃんとくです。ひょんなことから&lt;a href=&#34;https://nodejs.connpass.com/&#34;&gt;&lt;strong&gt;Node女学園&lt;/strong&gt;&lt;/a&gt;というNode.jsを学ぶ女性のためのコミュニティを立ち上げました。&lt;/p&gt;
+
+&lt;p&gt;このシリーズではNode女学園のブログを作りながら、&lt;strong&gt;Node.js製の静的サイトジェネレータ「Hexo」&lt;/strong&gt;の使い方を紹介していきます！&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/hexo-static-site-vol1&#34;&gt;&lt;strong&gt;前回&lt;/strong&gt;&lt;/a&gt;は環境構築とデプロイまでやってみました。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/pre_art.png&#34; alt=&#34;&#34; /&gt;
+&lt;center&gt;
+&lt;a href=&#34;https://dotstud.io/blog/hexo-static-site-vol1&#34;&gt;&lt;strong&gt;Node.js製の静的サイトジェネレータ「Hexo」で無料ブログ開発 vol.1&lt;/strong&gt;&lt;/a&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;今回はテーマを当ててブログデザインをカスタマイズしてみます。&lt;/p&gt;
+
+&lt;h2 id=&#34;テーマの探し方&#34;&gt;テーマの探し方&lt;/h2&gt;
+
+&lt;p&gt;Hexoでは既存のテーマを使うことで簡単にデザインを適用できます。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://hexo.io/themes/&#34;&gt;Hexoの公式サイト&lt;/a&gt;では130以上のテーマが紹介されています。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/themes.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;また&lt;a href=&#34;https://github.com&#34;&gt;github&lt;/a&gt;で&lt;code&gt;hexo-theme&lt;/code&gt;を検索するとユーザが制作したテーマを探すことができます。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/search.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;LICENSEに注意しつつ、好きなテーマを探しましょう。&lt;/p&gt;
+
+&lt;p&gt;今回Node女学園のブログは「ロゴに合わせてオレンジ系統」「ポップな感じ」にしたかったので、こちらの&lt;strong&gt;pacman&lt;/strong&gt;のテーマを使うことにしました。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/demo.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/A-limon/pacman&#34;&gt;github - A-limon/pacman&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://a-limon.github.io/pacman/&#34;&gt;demoページ&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;テーマをダウンロード&#34;&gt;テーマをダウンロード&lt;/h2&gt;
+
+&lt;p&gt;まずはテーマをダウンロードします。cloneして取ってきましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git clone https://github.com/A-limon/pacman.git themes/pacman
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;git URLとディレクトリ名は適宜自分のダウンロードしたいテーマのものに置き換えてください。（大体のテーマはREADMEに記載があるはずです。）&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/107/clone_theme.png&#34; alt=&#34;&#34; /&gt;
+cloneして&lt;code&gt;/themes&lt;/code&gt;の下に&lt;code&gt;/pacman&lt;/code&gt;ディレクトリができました。デフォルトの&lt;code&gt;/landscape&lt;/code&gt;は使わないので消してしまいます。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;_config.yml&lt;/code&gt;ファイルの&lt;code&gt;theme:&lt;/code&gt;をダウンロードしたテーマ名に書き換えます。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/chose_theme.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;この状態でローカルサーバを起動してみましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/pacman.png&#34; alt=&#34;&#34; /&gt;
+pacmanのテーマが適用されました！&lt;/p&gt;
+
+&lt;h2 id=&#34;カスタマイズ&#34;&gt;カスタマイズ&lt;/h2&gt;
+
+&lt;p&gt;デフォルトでは言語が違っていたり不要なリンクがあったりするので、自分の好みに編集していきます。&lt;/p&gt;
+
+&lt;p&gt;今回はカスタマイズの一例としてpacmanに沿って紹介します。テーマによって方法が異なる場合があるので、各READMEを見つつこの以下は参考程度に見てください。&lt;/p&gt;
+
+&lt;h3 id=&#34;author情報を設定&#34;&gt;Author情報を設定&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;themes/pacman/_config.yml&lt;/code&gt;を編集していきます。先ほどまでの&lt;code&gt;_config.yml&lt;/code&gt;とは違うファイルなので混同しないようにしてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;author:&lt;/code&gt;の部分を変更します。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/author_before.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;intro_line&lt;/code&gt;はフッタに表示されるメッセージです。適宜SNSのアカウントを記載して不要な項目は消去します。&lt;/p&gt;
+
+&lt;p&gt;以下のように設定しました。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/author_after.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;続いて&lt;code&gt;author_img&lt;/code&gt;を編集します。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/author_img.png&#34; alt=&#34;&#34; /&gt;
+画像データをURLで指定する場合は&lt;code&gt;dataURI: true&lt;/code&gt;にして&lt;code&gt;author_img_data:&lt;/code&gt;のあとにURLを記述します。&lt;/p&gt;
+
+&lt;p&gt;ローカルに画像を置く場合は&lt;code&gt;dataURI: false&lt;/code&gt;のまま&lt;code&gt;author_img:&lt;/code&gt;のあとにコメントに習ってPATHを記載しましょう。&lt;/p&gt;
+
+&lt;p&gt;変更を確認してみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/footer.png&#34; alt=&#34;&#34; /&gt;
+フッターに画像、メッセージ、SNSが表示されました！&lt;/p&gt;
+
+&lt;h3 id=&#34;言語を設定&#34;&gt;言語を設定&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;/themes/pacman/languages&lt;/code&gt;以下で、&lt;code&gt;default.yml&lt;/code&gt;を残して他の言語ファイルを消去します。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/lang.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;確認してみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/en.png&#34; alt=&#34;&#34; /&gt;
+&lt;code&gt;default.yml&lt;/code&gt;の内容が適用されました。日本語などにしたい場合は&lt;code&gt;default.yml&lt;/code&gt;の中を編集しましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;サイドバーを編集&#34;&gt;サイドバーを編集&lt;/h3&gt;
+
+&lt;p&gt;続いてサイドバーを変更します。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/del_rss_be.png&#34; alt=&#34;&#34; /&gt;
+今回RSSは不要なので消してみます。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;/themes/pacman/layout/_widget&lt;/code&gt;の下の&lt;code&gt;rss.ejs&lt;/code&gt;を消去します。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/del_rss1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;themes/pacman/_config.yml&lt;/code&gt;の&lt;code&gt;widget:&lt;/code&gt;からrssを消去します。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/del_rss2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;RSSの表示が消えました。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/del_rss_af.png&#34; alt=&#34;&#34; /&gt;
+続いてタグの記事数を表す数字も消してみます。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;/themes/pacman/layout/_widget/tag.ejs&lt;/code&gt;で数字を記述している部分を消去します。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/del_tag.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;記事数を表す数字が消えました。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/del_tag_af.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;記事の表示を編集&#34;&gt;記事の表示を編集&lt;/h3&gt;
+
+&lt;p&gt;記事をクリックして各記事ページもカスタマイズしましょう。&lt;/p&gt;
+
+&lt;p&gt;まず記事内に表示されている目次（Contents）を消してみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/del_content_be.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;/themes/pacman/layout/_partial/post/article.ejs&lt;/code&gt;を編集します。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/del_content.png&#34; alt=&#34;&#34; /&gt;
+&lt;code&gt;contents&lt;/code&gt;を表示させている部分を消去します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/107/del_contents.png&#34; alt=&#34;&#34; /&gt;
+目次が消えました。&lt;/p&gt;
+
+&lt;h3 id=&#34;記事のフッタを編集&#34;&gt;記事のフッタを編集&lt;/h3&gt;
+
+&lt;p&gt;記事のフッタにはあまり馴染みのないSNSのシェアリンクがあるので変更します。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/art_footer_before.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;/themes/pacman/layout/_partial/after_footer.ejs&lt;/code&gt;の90行目あたりを見てみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/107/del_share.png&#34; alt=&#34;&#34; /&gt;
+リンクを追加している部分があるので不要なものを消します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/107/del_share_af.png&#34; alt=&#34;&#34; /&gt;
+FacebookとTwitterのみ残しました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/107/art_footer_after.png&#34; alt=&#34;&#34; /&gt;
+ブログ側もFacebookとTwitterのみになっています。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;hexo deploy -g&lt;/code&gt;でデプロイしましょう！&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;カスタマイズを加えて自分のブログらしさを出すことができました！
+&lt;img src=&#34;https://dotstud.io/img/blog/107/done.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;テーマによって編集箇所が変わりますが、&lt;strong&gt;基本はHTMLとJavaScriptで構成されている&lt;/strong&gt;のでREADMEを読みつつ焦らず直していきましょう。&lt;/p&gt;
+
+&lt;p&gt;次回はルーティングをやってみたいと思います。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Node.js製の静的サイトジェネレータ「Hexo」で無料ブログ開発 vol.1</title>
       <link>https://dotstud.io/blog/hexo-static-site-vol1/</link>
       <pubDate>Wed, 07 Jun 2017 17:15:30 +0900</pubDate>
