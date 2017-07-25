@@ -49,7 +49,42 @@ function appendToc(){
     $firstHeader.parentNode.insertBefore($div,$firstHeader);
 }
 
+//blogページにGoogle Adsenseを挿入
+function appendGoogleAds(){
+    var $firstHeader = document.querySelector('.blog-single--content h2');
+
+    if ($firstHeader !== null) {
+      var $div = document.createElement('div');
+      $div.className = 'ads-wide';
+
+      // create script tag
+      var $adsScr = document.createElement('script');
+      $adsScr.async = true;
+      $adsScr.src = '//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
+
+      // create ins tag
+      var $adsIns = document.createElement('ins');
+      $adsIns.className = 'adsbygoogle';
+      $adsIns.style.display = 'inline-block';
+      $adsIns.style.width = '728px';
+      $adsIns.style.height = '90px';
+      $adsIns.dataset.adClient = 'ca-pub-5922216421588455';
+      $adsIns.dataset.adSlot = '8463856924';
+      $adsIns.dataset.adFormat = 'auto';
+
+      // create script tag
+      var $adsGgl = document.createElement('script');
+      $adsGgl.text = '(adsbygoogle = window.adsbygoogle || []).push({});';
+
+      $div.appendChild($adsScr);
+      $div.appendChild($adsIns);
+      $div.appendChild($adsGgl);
+
+      $firstHeader.parentNode.insertBefore($div,$firstHeader);
+    }
+}
+
 (function(){
     appendToc();
+    appendGoogleAds();
 })();
-

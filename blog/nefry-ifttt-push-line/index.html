@@ -380,34 +380,33 @@ Nefryシリーズは、「<strong>簡単にインターネットにつながる�
 
 <h4 id="トリガーとnefry-btを紐付けるキーの取得">トリガーとNefry BTを紐付けるキーの取得</h4>
 
-<p>今回はトリガーとして自作のWebサービスを利用できる「Maker Webhooks」を使います。</p>
+<p>今回はトリガーとして自作のWebサービスを利用できる「Webhooks」を使います。</p>
 
-<p>まずはMaker WebhooksをあとでNefry BTと紐付けるために、Secret Keyというキーを取得します。<a href="https://ifttt.com/discover">IFTTT公式サイト</a>上部の「Search」から、Maker Webhooksを検索しクリックしましょう。（&rdquo;make&rdquo;で候補に出てきます。）
-<img src="/img/blog/100/02_ifttt1.png" alt="" /></p>
+<p>まずはWebhooksをあとでNefry BTと紐付けるために、Secret Keyというキーを取得します。<a href="https://ifttt.com/discover">IFTTT公式サイト</a>上部の「Search」から、Webhooksを検索しクリックしましょう。（&rdquo;web&rdquo;で候補に出てきます。）
+<img src="/img/blog/100/if1.png" alt="" /></p>
 
-<p>Maker Webhooksのページに移動したら右上にある「Setting」から設定します。
-<img src="/img/blog/100/03_ifttt2.png" alt="" /></p>
+<p>設定ページに移動しました。このとき初めての方はこのような認証画面が表示されます。ページ中央の「Connect」をクリックしてWebhooksを有効にしましょう。
+<img src="/img/blog/100/if2.png" alt="" /></p>
 
-<p>設定ページに移動しました。このとき初めての方はこのような認証画面が表示されます。ページ中央の「Connect」をクリックしてMaker Webhooksを有効にしましょう。
-<img src="/img/blog/100/04_ifttt3.png" alt="" /></p>
+<p>Settingをクリックし、移動します。
+<img src="/img/blog/100/if3.png" alt="" /></p>
 
-<p>有効になるとAccount Infoのページに移動します。
-<img src="/img/blog/100/05_ifttt4.png" alt="" />
-アカウントごとに割り当てられるSecret KeyがURLのuse/以下に記載されているのでコピーしておきます。今回の例ではSecret Keyは <code>c1kgN-ZOhUAxA6B7TpyiKc</code> の部分です。（このSecret Keyはサンプルです。既に無効になっていますので自身で取得してください。）</p>
+<p>アカウントごとに割り当てられるSecret KeyがURLのuse/以下に記載されているのでコピーしておきます。今回の例ではSecret Keyは <code>GnzpClq0nDwt4WEdTyTmt</code> の部分です。（このSecret Keyはサンプルです。既に無効になっていますので自身で取得してください。）
+<img src="/img/blog/100/if4.png" alt="" /></p>
 
 <p><br /></p>
 
 <h4 id="トリガーの作成">トリガーの作成</h4>
 
-<p>続いてトリガーとなるMaker Webhooksの詳細を作成します。
+<p>続いてトリガーとなるWebhooksの詳細を作成します。
 <img src="/img/blog/100/06_ifttt5.png" alt="" />
 <a href="https://ifttt.com/create">IFTTTのレシピ作成ページ</a>から、「+this」のリンクをクリックします。</p>
 
-<p>「Choose a service」から再度Maker Webhooksを検索しましょう。
-<img src="/img/blog/100/07_ifttt6.png" alt="" /></p>
+<p>「Choose a service」から再度Webhooksを検索しましょう。
+<img src="/img/blog/100/if5.png" alt="" /></p>
 
-<p>Maker WebhooksはEventという単位でトリガーとなります。今回はEvent Nameを&rdquo;Nefry&rdquo;とし、「Create trigger」をクリックし作成します。Event NameはあとでNefry BTにも同じ名前で入力します。
-<img src="/img/blog/100/08_ifttt7.png" alt="" /></p>
+<p>WebhooksはEventという単位でトリガーとなります。今回はEvent Nameを&rdquo;Nefry&rdquo;とし、「Create trigger」をクリックし作成します。Event NameはあとでNefry BTにも同じ名前で入力します。
+<img src="/img/blog/100/if6.png" alt="" /></p>
 
 <p><br /></p>
 
@@ -496,7 +495,7 @@ void loop() {
 
 <p>設定が完了したら、トップページに戻り「Data Store」のページに移動します。
 <img src="/img/blog/100/19_nefry.png" alt="" />
-SecretKeyにはMaker Webhooksで確認した値を、EventにはLINEと連携した際に入力したEvent Name（今回は”Nefry”）を入力します。Saveをクリックし値を保存するとNefry BTが再起動します。</p>
+SecretKeyにはWebhooksで確認した値を、EventにはLINEと連携した際に入力したEvent Name（今回は”Nefry”）を入力します。Saveをクリックし値を保存するとNefry BTが再起動します。</p>
 
 <p>いよいよNefry BTについているスイッチを押してLINEにメッセージを送ってみましょう！</p>
 
@@ -526,6 +525,14 @@ Nefry BTのスイッチを押すとLEDの色が変わり送信を始めます。
     <nav class="related">
       <h2 class="">関連記事</h2>
       <ul class="cards-related">
+        
+          
+          
+          
+        
+          
+          
+          
         
           
           
