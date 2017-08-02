@@ -1,0 +1,1627 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
+  <meta charset="utf-8">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+    
+
+    
+    
+      
+      
+      
+      
+
+      
+      
+      
+      
+        
+      
+      
+
+      
+      
+    
+
+    
+    
+
+    
+    
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="フォトダイオードとArduinoを使ってテレビやエアコンなど様々なリモコンの信号を読み取ってみましょう！">
+    <meta name="author" content="dotstudio Inc.">
+    <meta content="https://dotstud.io/img/blog/117/00_eyecatch.png">
+
+    <meta itemprop="name" content="フォトダイオードでリモコンの信号を検出してみよう | dotstudio"/>
+    <meta itemprop="image" content="https://dotstud.io/img/blog/117/00_eyecatch.png"/>
+    
+    <meta property="og:title" content="フォトダイオードでリモコンの信号を検出してみよう | dotstudio" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://dotstud.io/blog/photodiode-remote-controll-signal/" />
+    <meta property="og:site_name" content="dotstudio（ドットスタジオ）" />
+    <meta property="og:image" content="https://dotstud.io/img/blog/117/00_eyecatch.png" />
+    <meta property="og:image:secure_url" content="https://dotstud.io/img/blog/117/00_eyecatch.png" />
+    <meta property="og:description" content="フォトダイオードとArduinoを使ってテレビやエアコンなど様々なリモコンの信号を読み取ってみましょう！" />
+    <meta property="article:author" content="https://www.facebook.com/dotstud10/" />
+    <meta property="fb:app_id" content="296336307370435" />
+    <meta property="fb:pages" content="1013196712108753" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image:src" content="https://dotstud.io/img/blog/117/00_eyecatch.png">
+    <meta name="twitter:site" content="@dotstud_io" />
+    <meta name="twitter:url" content="https://dotstud.io/blog/photodiode-remote-controll-signal/">
+    <meta name="twitter:description" content="フォトダイオードとArduinoを使ってテレビやエアコンなど様々なリモコンの信号を読み取ってみましょう！">
+    <meta name="twitter:title" content="フォトダイオードでリモコンの信号を検出してみよう | dotstudio">
+    <meta name="twitter:creator" content="@dotstud_io" />
+
+    
+    <meta name="google-site-verification" content="oW2fcSG1fFnkDoRCGFJ0IGGebtBr8FjV2twoFMd7Skc" />
+    <title>フォトダイオードでリモコンの信号を検出してみよう | dotstudio</title>
+    
+
+    <link rel="stylesheet" href="/css/loader.css">
+    
+    <link rel="stylesheet" href='/css/master.css'>
+    <link rel="stylesheet" href="/css/icon-font.css">
+    
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+
+    <link rel="shortcut icon" type="image/png" href="/img/resources/favicon.png"/>
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="preload" as="style" onload="this.rel='stylesheet'">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel="preload" as="style" onload="this.rel='stylesheet'">
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel="preload" as="style" onload="this.rel='stylesheet'">
+    
+    <link href="/css/lib/hljs.css" rel="preload" as="style" onload="this.rel='stylesheet'">
+    
+
+    
+    
+    
+
+    
+    
+
+    
+    
+    
+    
+
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-K5TRM9Q');</script>
+    
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-5922216421588455",
+        enable_page_level_ads: true
+      });
+    </script>
+</head>
+
+<body>
+  
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K5TRM9Q"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  
+
+  
+  <div id="fb-root"></div>
+  <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v2.8";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));</script>
+
+  
+
+  <header>
+    <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<symbol id="icon-arrow-right" viewBox="0 0 32 32">
+<title>arrow-right</title>
+<path class="path1" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M5.143 5.143l10.349 10.349"></path>
+<path class="path2" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M5.143 26.857l10.349-10.349"></path>
+<path class="path3" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M16.571 26.857l10.349-10.349"></path>
+<path class="path4" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M16.571 5.143l10.349 10.349"></path>
+</symbol>
+<symbol id="icon-hamburger" viewBox="0 0 60 32">
+<title>hamburger</title>
+<path class="path1" fill="none" stroke="#808080" stroke-width="7.1111" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M3.556 3.556h53.333"></path>
+<path class="path2" fill="none" stroke="#808080" stroke-width="7.1111" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M3.556 28.444h53.333"></path>
+</symbol>
+<symbol id="icon-logo-mark" viewBox="0 0 32 32">
+<title>logo-mark</title>
+<path class="path1" d="M19.731 28.8h-19.731v-19.699h19.731zM1.53 27.302h16.672v-16.672h-16.672z"></path>
+<path class="path2" d="M32 22.899h-19.731v-19.699h19.731zM13.798 21.37h16.672v-16.672h-16.672z"></path>
+</symbol>
+<symbol id="icon-social-facebook" viewBox="0 0 32 32">
+<title>social-facebook</title>
+<path class="path1" d="M30.1 0.12h-28.46c-0.974 0.011-1.76 0.804-1.76 1.78 0 0 0 0 0 0v28.46c0 0.983 0.797 1.78 1.78 1.78h15.32v-12.4h-4.16v-4.82h4.16v-3.58c-0.020-0.179-0.031-0.386-0.031-0.596 0-3.203 2.597-5.8 5.8-5.8 0.152 0 0.302 0.006 0.45 0.017-0.016-0.001-0.013-0.001-0.009-0.001 1.3 0 2.582 0.073 3.844 0.214l-0.155 4.286h-2.54c-2 0-2.36 0.96-2.36 2.36v3.1h4.76l-0.62 4.8h-4.12v12.4h8.12c0.983 0 1.78-0.797 1.78-1.78v-28.44c0-0.983-0.797-1.78-1.78-1.78z"></path>
+</symbol>
+<symbol id="icon-social-github" viewBox="0 0 32 32">
+<title>social-github</title>
+<path class="path1" d="M16 0.4c-0.001 0-0.002 0-0.004 0-8.837 0-16 7.163-16 16 0 7.028 4.531 12.997 10.831 15.147 0.913 0.173 1.213-0.307 1.213-0.747s-0.040-1.38-0.040-2.8c-4.44 1.060-5.38-2-5.38-2-0.308-0.987-0.937-1.798-1.763-2.33-1.477-1.010 0.103-0.99 0.103-0.99 1.055 0.144 1.941 0.76 2.451 1.624 0.607 1.039 1.701 1.715 2.953 1.715 0.6 0 1.164-0.155 1.653-0.428 0.062-0.836 0.437-1.58 1.002-2.13-3.559-0.401-7.279-1.781-7.279-8.001-0.001-0.032-0.001-0.069-0.001-0.106 0-1.621 0.624-3.096 1.645-4.198-0.181-0.526-0.283-1.135-0.283-1.769 0-0.85 0.184-1.657 0.514-2.383s1.325-0.404 4.385 1.676c1.199-0.341 2.577-0.537 4-0.537s2.801 0.196 4.107 0.562c2.953-2.026 4.293-1.666 4.293-1.666 0.31 0.683 0.49 1.481 0.49 2.321 0 0.688-0.121 1.348-0.343 1.959 1.030 1.058 1.654 2.533 1.654 4.154 0 0.037-0 0.075-0.001 0.112 0 6.134-3.74 7.494-7.3 7.894 0.685 0.69 1.108 1.641 1.108 2.69 0 0.088-0.003 0.175-0.009 0.261 0.001 2.128 0.001 3.848 0.001 4.368s0.28 0.92 1.1 0.78c6.413-2.183 10.944-8.152 10.944-15.18 0-8.837-7.163-16-16-16-0.015 0-0.031 0-0.046 0z"></path>
+</symbol>
+<symbol id="icon-social-twitter" viewBox="0 0 32 32">
+<title>social-twitter</title>
+<path class="path1" d="M10 29c0.036 0 0.078 0 0.12 0 10.25 0 18.56-8.31 18.56-18.56 0-0.042-0-0.085-0-0.127 0-0.274 0-0.554 0-0.834 1.312-0.959 2.414-2.113 3.289-3.431-1.070 0.454-2.347 0.82-3.686 0.984 1.293-0.819 2.312-2.084 2.804-3.587-1.184 0.679-2.577 1.234-4.062 1.539-1.286-1.244-2.976-2.027-4.849-2.027-3.634 0-6.58 2.946-6.58 6.58 0 0.518 0.060 1.022 0.173 1.506-5.473-0.309-10.286-2.887-13.523-6.813-0.587 0.917-0.919 2.059-0.919 3.278 0 2.258 1.137 4.25 2.871 5.435-1.063-0.025-2.070-0.325-2.95-0.822l0.032 0.017c-0 0.027-0.001 0.058-0.001 0.090 0 3.163 2.239 5.803 5.218 6.423-0.479 0.156-1.078 0.242-1.696 0.242-0.432 0-0.854-0.042-1.263-0.121 0.908 2.637 3.319 4.512 6.175 4.567-2.208 1.746-5.039 2.8-8.116 2.8-0.013 0-0.027-0-0.040-0-0.566-0.018-1.104-0.068-1.633-0.149 2.897 1.868 6.353 2.984 10.068 3.009z"></path>
+</symbol>
+</defs>
+</svg>
+
+    <div class="header">
+  <span class="logo"><a href="/"><svg id="icon-logo" width="100%"><use xlink:href="#icon-logo-mark"></svg></a></span>
+
+  <div class="menu">
+    <input type="checkbox" id="menu-toggle">
+      <label for="menu-toggle" class='label-toggle'>
+        <svg class="icon-hamburger"><use xlink:href="#icon-hamburger"></svg>
+      </label>
+    </input>
+    <ul>
+      <li class="menu-item"><a href="/blog">Blog</a></li>
+      <li class="menu-item"><a href="/shop">Shop</a></li>
+      <li class="menu-item"><a href="/docs">Docs</a></li>
+      <li class="menu-item"><a href="/about">About</a></li>
+      <li class="menu-item"><a href="/service">Service</a></li>
+      
+    </ul>
+  </div>
+
+</div>
+  </header>
+
+
+
+
+ 
+ 
+
+
+	
+		
+	
+
+
+
+
+<ul class="categories">
+	
+	<li><a href="/categories/try/" class="selected">
+		やってみるIoT
+	</a></li>
+	
+	<li><a href="/categories/learn/" class="">
+		IoTを知ろう
+	</a></li>
+	
+	<li><a href="/categories/event/" class="">
+		イベントレポート
+	</a></li>
+	
+	<li><a href="/categories/tips/" class="">
+		Tips
+	</a></li>
+	
+</ul>
+
+
+
+
+  
+    
+  
+
+
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+<article class="blog-single">
+  <div class="date">2017.08.02</div>
+
+  <img class="blog-single--eyecatch" src="/img/blog/117/00_eyecatch.png" alt="" width="710px">
+  
+  <h1 class="blog-single--title">フォトダイオードでリモコンの信号を検出してみよう</h1>
+
+  <div class="blog-single--information">
+    <a class="author" href="/members/ukkz">
+      <img src="/img/members/ukkz/author.png" alt="" class="author--avatar">
+      <p class="author--name">うこ</p>
+    </a>
+
+    
+    <a class="series" href="/series/handson">
+        作ってみた
+    </a>
+    
+
+  </div>
+  
+  <div class="blog-single--content markdown">
+
+<p>こんにちは、ものづくり担当のうこ（<a href="https://twitter.com/harmoniko/">@harmoniko</a>）です。</p>
+
+<p>今回は、フォトダイオードというパーツを使ってリモコンの信号を読み取る方法を紹介します！</p>
+
+<h2 id="フォトダイオードとは">フォトダイオードとは？</h2>
+
+<p>半導体素子のひとつで、照射される光の強さによって流れる電流の強さが変化します。太陽光パネルと仕組みはほとんど同じで、光によって電流を発生しますが、非常に小さいため電源としては使用されません。</p>
+
+<p>一口にフォトダイオードと言っても様々な種類があります。（参考：<a href="http://jp.rs-online.com/web/c/displays-optoelectronics/optocouplers-photodetectors-photointerrupters/photodiodes/">RSコンポーネンツ</a>。多種の取り扱いがあります。） 光を検出するセンサとしてはほかにCdSなどがありますが、応答の速さ・感度・信号強度特性・対応する波長などに優位性があり、リモコンの受光器などとして産業用途に幅広く利用されています。</p>
+
+<p>今回はそんなリモコンの受光器を作り、信号の中身をみてみましょう。</p>
+
+<h2 id="リモコンの仕組み">リモコンの仕組み</h2>
+
+<p>リモコンは、赤外線LEDを高速で点滅させて家電などに信号を送っています。信号の中身は、国内ではNECが開発した方式が主流で、次いで家電製品協会の方式、ソニーなどの独自方式があります。今回は、最も普及しているNEC方式を用いたリモコン信号検出システムを作ってみます。</p>
+
+<p>このフォーマットを採用している主なメーカーとして、NEC・東芝・日立などがあります。これらのメーカーのリモコンなどをお持ちでしたら、ぜひ作ってみてください。</p>
+
+<p>【参考】</p>
+
+<ul>
+<li><a href="http://www.asahi-net.or.jp/~gt3n-tnk/IR_TX1.html">赤外線リモコンのフォーマット</a></li>
+</ul>
+
+<h2 id="作ってみよう">作ってみよう</h2>
+
+<h3 id="準備するもの">準備するもの</h3>
+
+<p><img src="/img/blog/117/1.png" alt="" /></p>
+
+<ul>
+<li>Arduino Due × 1</li>
+<li>ブレッドボード × 1</li>
+<li>抵抗1kΩ × 1</li>
+<li>フォトダイオード S5971 × 1</li>
+<li>ジャンパワイヤ × 4</li>
+<li>黒画用紙(3cm×6cmぐらい)</li>
+<li>USBマイクロBケーブル</li>
+</ul>
+
+<h3 id="作り方">作り方</h3>
+
+<h4 id="フォトダイオードに黒画用紙を巻く">フォトダイオードに黒画用紙を巻く</h4>
+
+<p><img src="/img/blog/117/2.png" alt="" /></p>
+
+<p><img src="/img/blog/117/3.png" alt="" /></p>
+
+<p>フォトダイオードには、細長く切った黒画用紙を巻き寿司のように巻きつけてテープで固定します。こうすることでフォトダイオードを常に暗い状態にし、光の誤検出を防ぎます。</p>
+
+<h4 id="配線">配線</h4>
+
+<p><img src="/img/blog/117/4.png" alt="" />
+まずはじめに、ブレッドボード上に抵抗器とフォトダイオードを、上の写真のように配置します。フォトダイオードは向きに注意してください。
+<img src="/img/blog/117/5.png" alt="" /></p>
+
+<p>次に、4つのジャンパワイヤを使って、ブレッドボードとArduino Dueを接続します。
+<img src="/img/blog/117/6.png" alt="" /></p>
+
+<p>接続が終わったら、このような感じになっています。
+<img src="/img/blog/117/7.png" alt="" /></p>
+
+<p>最後に、USBのマイクロBケーブルでArduino Dueとパソコンを接続して完了です。USBは、Arduino Due側は、黒いコネクタに近い方のUSBポート「Programming Port」に接続してください。</p>
+
+<h3 id="arduino-dueボード対応化">Arduino Dueボード対応化</h3>
+
+<p>Arduino IDEでプログラムを作成し書き込んでいきます。Arduino IDEのインストールが済んでいない方は、<a href="https://www.arduino.cc/en/Main/Software">公式サイト</a>からダウンロードして進めてください。</p>
+
+<p><img src="/img/blog/117/8.png" alt="" />
+Arduino IDEのメニューから、
+Tools -&gt; Boards:&ldquo;&hellip;&rdquo; -&gt; Board Manager&hellip;
+を選択すると、小さい画面が表示されます。検索窓に「due」と打ち込むと、ひとつだけヒットするパッケージがありますので、最新版をインストールしてください。</p>
+
+<p>次に、
+Tools -&gt; Boards&rdquo;&hellip;&rdquo;
+で、&rdquo;Arduino Due (Programming Port)&ldquo;を選択しておきます。</p>
+
+<h3 id="ソースコードを書き込む">ソースコードを書き込む</h3>
+
+<p>以下のソースコードをコピーし、スケッチにコピーしてください。</p>
+
+<pre><code>const int thresholdH = 30;     // フォトダイオードの閾値(Off-&gt;On)
+const int thresholdL = 20;     // フォトダイオードの閾値(On-&gt;Off)
+const int input = A0;          // フォトダイオードの入力ピン
+int signalCnt = -1;            // 信号カウンタ
+int level = 0;                 // フォトダイオードのanalogRead値
+unsigned long offSpan;         // 信号L値持続時間(計測用)
+unsigned long offTime;         // 信号Off時間(計測用)
+unsigned long startTime;       // 時間計算用
+unsigned long signals = 0;     // 信号保存(カスタム16bit+データ8bit+反転データ8bit)
+bool now = false;              // フォトダイオード状態遷移フラグ1
+bool prev = false;             // フォトダイオード状態遷移フラグ2
+bool detected = false;         // リーダコード検出フラグ
+
+
+
+
+// フォトダイオードからアナログ値を読んで論理値に変換
+bool photoRead() {
+  level = analogRead(input);
+  if (level &gt; thresholdH) return true;
+  if (level &lt; thresholdL) return false;
+}
+
+
+// リーダコード認識
+bool leaderDetect() {
+  // 積分
+  unsigned long integral0 = 0;
+  unsigned long integral1 = 0;
+  startTime = micros();
+  // 9msループ(0.1msおまけ)
+  while (micros() &lt; (startTime+9100)) {
+    if (photoRead()) integral1++;
+    else integral0++;
+  }
+  /*
+    副搬送波38kHz変調のデューティ比は1:2である
+    また信号で0を表す場合はPPM方式によりHとLがそれぞれ0.56ms(1:1)であるため
+    リーダコード以外の部分でフォトダイオードで得られるOnとOffの時間比は
+    Onが1に対してOffが6である
+    リーダコード部分は常にHであるのでOnが1に対してOffが3である
+    よってOnとOffの差がおおむね4倍以下であればリーダコードを判定することができる
+  */
+  if (integral1 &gt; ((integral0)/4)) return true;
+  else return false;
+}
+
+
+void setup() {
+  // シリアルポートを開く
+  Serial.begin(115200);
+  // アナログ入力の細かさを12bit(4096段階)に設定
+  analogReadResolution(12);
+}
+
+
+void loop() {
+  // ダイオードの状態確認ループ
+  while(now == prev) {
+    now = photoRead();
+    // 一度検出できたらループを極力回さずにディレイさせたい
+    // 副搬送波のL値を誤検出しないようにするため
+    if (now) {
+      if (!detected) {
+        // Off-&gt;On遷移かつリーダコード未検出
+        if (leaderDetect()) {
+          Serial.println(&quot;------- LEADER -------&quot;);
+          detected = true;
+          signalCnt = -1;
+        }
+      }
+    }
+  }
+
+  // 以下は状態変化した瞬間だけ実行される
+  //
+  if (detected) {
+    if (now) {
+      // Off-&gt;On遷移かつリーダコード検出済
+      offSpan = micros() - offTime;
+      // 最初のリーダコードの直後のL値
+      if (signalCnt &lt; 0) {
+        // リピートの検出(3ms未満)
+        if (offSpan &lt; 3000) {
+          Serial.println(&quot;------- REPEAT -------&quot;);
+          Serial.println(&quot;&quot;);
+          signals = 0;
+          signalCnt = -1;
+          detected = false;
+        } else {
+          signalCnt++;
+        }
+      } else {
+        // off時間が1000msより多いか少ないか
+        if (offSpan &lt; 1000) {
+          // 1判定
+          signals += 1&lt;&lt;(31-signalCnt);
+        } else {
+          // 0判定
+        }
+        signalCnt++;
+      }
+      // 570msも待てば必ずLになり次のコード先頭までHにならないので誤検出しない
+      delayMicroseconds(570);
+    } else {
+      // On-&gt;Off遷移かつリーダコード検出済
+      offTime = micros();
+    }
+  }
+  // 反転
+  prev = now;
+
+  // 最後まで読めたら表示する
+  if (signalCnt &gt;= 31) {
+    // カスタムコード16bit
+    int custom = (int)(signals&gt;&gt;16);
+    Serial.print(&quot;Custom code: &quot;); Serial.println(custom,HEX);
+    Serial.print(&quot;    &quot;); Serial.println(custom,BIN);
+    // データコード8bit
+    byte data1 = (byte)((signals&gt;&gt;8)&amp;B11111111);
+    Serial.println(&quot;Data code:&quot;);
+    Serial.print(&quot;    &quot;); Serial.print(data1,BIN); Serial.print(&quot; = &quot;); Serial.println(data1,HEX);
+    // データコード(反転)8bit
+    byte data2 = (byte)(signals&amp;B11111111);
+    Serial.print(&quot;    &quot;); Serial.print(data2,BIN); Serial.print(&quot; = &quot;); Serial.println(data2,HEX);
+    // データ検証
+    byte vf = data1^data2;
+    Serial.println(&quot;Data verify: &quot;);
+    Serial.print(&quot;    &quot;); Serial.print(data1,HEX); Serial.print(&quot; xor &quot;); Serial.print(data2,HEX); Serial.print(&quot; = &quot;); Serial.println(vf,HEX);
+    if (vf == 0xFF) Serial.println(&quot;     [ VERIFIED ]&quot;);
+    else Serial.println(&quot;     [ ERROR ]&quot;);
+    // おわり
+    Serial.println(&quot;------- ------ -------&quot;);
+    Serial.println(&quot;&quot;);
+    signals = 0;
+    signalCnt = -1;
+    detected = false;
+  }
+}
+</code></pre>
+
+<h2 id="試してみよう">試してみよう</h2>
+
+<p><img src="/img/blog/117/9.png" alt="" />
+アップロードが完了したら、Tools -&gt; Serial Monitor からシリアルモニタを表示させ、通信速度を「115200bps」に変更します。その状態のまま、リモコンをフォトダイオードに近づけてボタンを押すと……</p>
+
+<p><img src="/img/blog/117/10.png" alt="" />
+いくつか値が表示されましたね！
+点線で囲まれたブロックが信号の1セットで、中身には「Custom code」「Data code」「Data verify」が入っています。
+「Custom code」は製品固有のコードで、同じリモコンだと基本的に固定の値です。</p>
+
+<p>色々ボタンを押していると、「Data code」が変化するようすがわかります。「Data verify」は、信号に含まれている2つのデータを照合して、信号が壊れていないかを確認するためのものです。
+<img src="/img/blog/117/11.png" alt="" />
+自宅の扇風機のリモコンで試してみたところ、確かにボタンで値が変わっていることがわかりました。</p>
+
+<h2 id="応用編">応用編</h2>
+
+<p><img src="/img/blog/117/12.png" alt="" />
+Arduino IDEには「シリアルプロッタ」という、グラフを描画できる機能が備わっています。それを利用して、リモコンの信号波形を描画してみるとこんな感じになりました。規則的な波形をところどころに確認することができます。</p>
+
+<p>また、今回使用したマイコンボード「Arduino Due」は、USB接続の外付けマウス・外付けキーボードとして簡単に動作させることができるライブラリが備わっています。例えば、今回のプログラムにこの機能を取り入れて少し書き換えるだけで、普段使っているTVリモコンでパソコンの動画プレイヤーを制御、なんてこともすぐにできちゃいます。</p>
+
+<h2 id="おわりに">おわりに</h2>
+
+<p>いかがでしたでしょうか？
+フォトダイオードはいろんな種類がありますが、Arduinoのようなマイコンボードを使えば意外と簡単に光センサを作ることができます。この機会にぜひ作ってみては。</p>
+</div>
+
+  
+
+
+
+    
+    
+    
+    <nav class="related">
+      <h2 class="">関連記事</h2>
+      <ul class="cards-related">
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/pokio-esp-keikyu-chien/">
+                <img class="card-related--thumbnail" src="/img/blog/099/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">ESP8266を使って京急が遅延すると光るガジェットを作ってみた</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/wionode-ifttt-uv-ornament/">
+                <img class="card-related--thumbnail" src="/img/blog/106/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">Wio NodeとIFTTTで簡単IoT！紫外線情報を取得してみよう</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/seeed-wionode-hands-on/">
+                <img class="card-related--thumbnail" src="/img/blog/095/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">「Wio Node」で半田付けなしの電子工作！温度計作りでIoTはじめの一歩</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/web-bluetooth-remote-blink/">
+                <img class="card-related--thumbnail" src="/img/blog/090/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">話題のWebBluetoothでGenuino101をブラウザからリモートコントロールしてみよう</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/dfrobot-gravity-hands-on/">
+                <img class="card-related--thumbnail" src="/img/blog/087/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">ハードウェア知識ゼロでも大丈夫。「Gravity」で始める電子工作入門</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/littlebits-arduino-analog-number/">
+                <img class="card-related--thumbnail" src="/img/blog/060/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">littleBits Arduinoモジュールでより細かく値を入出力して状況を伝えよう</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+        </ul>
+      </nav>
+
+
+
+  <div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v2.7&appId=296336307370435";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+  <div class="share">
+    <a href="https://twitter.com/share" class="twitter-share-button" data-size="large" data-hashtags="dotstudio">Tweet</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    &nbsp;
+    <div class="fb-like" data-href="https://dotstud.io/blog/photodiode-remote-controll-signal/" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
+
+    &nbsp;
+
+    <div class="hatena-b">
+      <a href="http://b.hatena.ne.jp/entry/s/dotstud.io/blog/photodiode-remote-controll-signal" class="hatena-bookmark-button" data-hatena-bookmark-title="フォトダイオードでリモコンの信号を検出してみよう" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
+        <img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" />
+      </a>
+      <script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+    </div>    
+  </div>
+
+</article>
+
+
+
+<footer class="footer">
+  <p class="footer-info">
+    <a class="footer-info--item" href="/about">会社概要</a>
+    <a class="footer-info--item" href="/members">メンバー</a>
+    <a class="footer-info--item" href="/legal#tos">利用規約</a>
+    <a class="footer-info--item" href="/legal#sct">特定商取引</a>
+    <a class="footer-info--item" href="/legal#pp">プライバシーポリシー</a>
+  </p>
+  <p class="footer-cr">© 2016 dotstudio inc.</p>
+</footer>
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+
+
+
+
+
+<script src="/js/app.js"></script>
+
+
+<script src="/js/lib/hljs.js"></script>
+<script src="/js/lib/hljs-numbers.js"></script>
+<script>
+  hljs.initHighlightingOnLoad();
+  hljs.initLineNumbersOnLoad();
+</script>
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-78080011-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+
