@@ -377,7 +377,7 @@
             
             
                     
-                        <li class="wip">Nefry BTでLチカを試す <span>[WIP]</span></li>
+                        <li><a href="https://dotstud.io/docs/nefrybt-led/">Nefry BTでLチカを試す</a></li>
                     
             
         
@@ -1245,7 +1245,69 @@
 
 
 
-    <div class="content markdown"></div>
+    <div class="content markdown">
+
+<p>このページではNefry BTでLEDを制御する方法を紹介します。
+Nefry BTをArduino IDEで開発するにあたり、<a href="/docs/nefrybt-arduino-ide-setup/">こちらのドキュメントの内容</a>を見てセットアップを済ませておいてください。</p>
+
+<h2 id="ボードの選択">ボードの選択</h2>
+
+<p>メニューの<code>ツール</code> &gt; <code>ボード</code> &gt; <code>Nefry BT</code>を選択します。</p>
+
+<p><img src="https://i.gyazo.com/0b6439948f14c13edf7b5af4254a7ab5.png" alt="" /></p>
+
+<h2 id="nefry-btをpcのusbポートにさしてください">Nefry BTをPCのUSBポートにさしてください。</h2>
+
+<ul>
+<li>Nefry BTをPCのUSBポートにさしてください。</li>
+<li>メニューの<code>ツール</code> &gt; <code>シリアルポート</code> &gt; <code>/dev/tty.usbserial</code> を選択します。</li>
+</ul>
+
+<p>(Windowsだと表記が違うようです。)</p>
+
+<h2 id="プログラムの書き込み">プログラムの書き込み</h2>
+
+<p>メニューの<code>ファイル</code> &gt; <code>新規ファイル</code>を選択します。</p>
+
+<p>以下のようなウインドウが表示されます。</p>
+
+<p><img src="https://i.gyazo.com/64ebbce11ab3b3efacfd83c86c194483.png" alt="" /></p>
+
+<p>初期状態で書かれている現状のコードを削除して、以下のコードに差し替えましょう。</p>
+
+<pre><code>#include &lt;Nefry.h&gt;
+//フルカラーLED　ランダムにカラーが変わります。
+#define LED_PIN A0
+
+void setup() {
+  randomSeed(analogRead(LED_PIN));
+}
+
+int red,green,blue;
+void loop() {
+  red=random(255);//random関数は0-255の数値をランダムに返します。
+  green=random(255);
+  blue=random(255);
+  Nefry.setLed(red,green,blue);//LEDがランダムに点灯します。
+  String color=&quot;Red:&quot;;color+=red;
+  color+=&quot; Green:&quot;;color+=green;
+  color+=&quot; Blue:&quot;;color+=blue;
+  Nefry.ndelay(1000);//1秒待つ
+}
+</code></pre>
+
+<p><img src="https://i.gyazo.com/fa18b49acacf5f71425078a96ae4c470.gif" alt="" /></p>
+
+<h2 id="プログラムの保存とボードに書き込み">プログラムの保存とボードに書き込み</h2>
+
+<p>左上の<code>→</code>ボタンを押してボード（Nefry BT）にプログラムを書き込みます。</p>
+
+<h2 id="確認">確認</h2>
+
+<p>無事にプログラム書き込みが終わると、Nefry BTに内蔵してあるLEDがカラフルに光ります。</p>
+
+<p>お疲れ様でした。</p>
+</div>
 
     <div class="information">
       <span>Last edited on 2017.07.25 by</span>

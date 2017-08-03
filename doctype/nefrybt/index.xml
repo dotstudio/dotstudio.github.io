@@ -118,7 +118,69 @@
       
       <guid>https://dotstud.io/docs/nefrybt-led/</guid>
       
-      <description></description>
+      <description>
+
+&lt;p&gt;このページではNefry BTでLEDを制御する方法を紹介します。
+Nefry BTをArduino IDEで開発するにあたり、&lt;a href=&#34;https://dotstud.io/docs/nefrybt-arduino-ide-setup/&#34;&gt;こちらのドキュメントの内容&lt;/a&gt;を見てセットアップを済ませておいてください。&lt;/p&gt;
+
+&lt;h2 id=&#34;ボードの選択&#34;&gt;ボードの選択&lt;/h2&gt;
+
+&lt;p&gt;メニューの&lt;code&gt;ツール&lt;/code&gt; &amp;gt; &lt;code&gt;ボード&lt;/code&gt; &amp;gt; &lt;code&gt;Nefry BT&lt;/code&gt;を選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/0b6439948f14c13edf7b5af4254a7ab5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;nefry-btをpcのusbポートにさしてください&#34;&gt;Nefry BTをPCのUSBポートにさしてください。&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Nefry BTをPCのUSBポートにさしてください。&lt;/li&gt;
+&lt;li&gt;メニューの&lt;code&gt;ツール&lt;/code&gt; &amp;gt; &lt;code&gt;シリアルポート&lt;/code&gt; &amp;gt; &lt;code&gt;/dev/tty.usbserial&lt;/code&gt; を選択します。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;(Windowsだと表記が違うようです。)&lt;/p&gt;
+
+&lt;h2 id=&#34;プログラムの書き込み&#34;&gt;プログラムの書き込み&lt;/h2&gt;
+
+&lt;p&gt;メニューの&lt;code&gt;ファイル&lt;/code&gt; &amp;gt; &lt;code&gt;新規ファイル&lt;/code&gt;を選択します。&lt;/p&gt;
+
+&lt;p&gt;以下のようなウインドウが表示されます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/64ebbce11ab3b3efacfd83c86c194483.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;初期状態で書かれている現状のコードを削除して、以下のコードに差し替えましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+//フルカラーLED　ランダムにカラーが変わります。
+#define LED_PIN A0
+
+void setup() {
+  randomSeed(analogRead(LED_PIN));
+}
+
+int red,green,blue;
+void loop() {
+  red=random(255);//random関数は0-255の数値をランダムに返します。
+  green=random(255);
+  blue=random(255);
+  Nefry.setLed(red,green,blue);//LEDがランダムに点灯します。
+  String color=&amp;quot;Red:&amp;quot;;color+=red;
+  color+=&amp;quot; Green:&amp;quot;;color+=green;
+  color+=&amp;quot; Blue:&amp;quot;;color+=blue;
+  Nefry.ndelay(1000);//1秒待つ
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/fa18b49acacf5f71425078a96ae4c470.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;プログラムの保存とボードに書き込み&#34;&gt;プログラムの保存とボードに書き込み&lt;/h2&gt;
+
+&lt;p&gt;左上の&lt;code&gt;→&lt;/code&gt;ボタンを押してボード（Nefry BT）にプログラムを書き込みます。&lt;/p&gt;
+
+&lt;h2 id=&#34;確認&#34;&gt;確認&lt;/h2&gt;
+
+&lt;p&gt;無事にプログラム書き込みが終わると、Nefry BTに内蔵してあるLEDがカラフルに光ります。&lt;/p&gt;
+
+&lt;p&gt;お疲れ様でした。&lt;/p&gt;
+</description>
     </item>
     
     <item>
