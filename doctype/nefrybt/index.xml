@@ -108,7 +108,232 @@
       
       <guid>https://dotstud.io/docs/nefrybt-line-notify/</guid>
       
-      <description></description>
+      <description>
+
+&lt;p&gt;このページではNefry BTにデフォルトで書き込まれているプログラムを利用して、LINEに通知する仕組みを紹介します。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;プログラミング不要でLINE通知までできます。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;line-notifyとは&#34;&gt;LINE Notifyとは&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/109f4aa667871bcdb82342d6e2ac3233.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;色々なサービスからのLINEに通知する仕組みです。
+今回はこの仕組みを使って&lt;strong&gt;Nefry BTのスイッチを押したらLINEに通知が来る仕組みを紹介&lt;/strong&gt;します。&lt;/p&gt;
+
+&lt;h2 id=&#34;line-notifyと友達になる&#34;&gt;LINE Notifyと友達になる&lt;/h2&gt;
+
+&lt;p&gt;↑の画面キャプチャにあるQRコードを読み取って&lt;strong&gt;LINE Notifyアカウントと友達になりましょう。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;line-notifyのトークンを取得する&#34;&gt;LINE Notifyのトークンを取得する&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://notify-bot.line.me/my/&#34;&gt;こちら&lt;/a&gt;からトークンを取得できます。&lt;/p&gt;
+
+&lt;p&gt;URLにアクセスしたら、画面下部の&lt;code&gt;トークンを発行する&lt;/code&gt;を選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/2ebc6d9f716ba319bcf8322d44d095d0.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;以下のようなモーダルウィンドウが表示されます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/c74fe282bae7c550afd842f4912a838c.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;トークン名を記入してください&lt;/code&gt;と書いてあるフォームに&lt;code&gt;任意の文字列&lt;/code&gt;を入力し、通知を送信するトークルームを選択します。とりあえず今回は&lt;code&gt;1:1でLINE Notifyから通知を受け取る&lt;/code&gt;を選択しましょう。&lt;/p&gt;
+
+&lt;p&gt;ちなみに、グループチャットを選択すればグループチャットに通知させることもできます。&lt;/p&gt;
+
+&lt;p&gt;選択したら&lt;code&gt;発行する&lt;/code&gt;を選択します。&lt;/p&gt;
+
+&lt;p&gt;次の画面でトークンが表示されます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/ae9a2dcdd6c1ba9d5b30d31d9b1a0ff3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;このタイミングで、LINEアプリ側にも&lt;code&gt;Personal Access Tokenを発行しました。&lt;/code&gt;などの通知も来るはずです。&lt;/p&gt;
+
+&lt;p&gt;このトークンはLINE Notifyが設定したチャットグループや自分のアカウントに対して通知を行う認証キーなので、他の人には知られないようにしましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;トークンはコピーして控えておいてください。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;nefry-btをwi-fiに接続する&#34;&gt;Nefry BTをWi-Fiに接続する&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/nefry-ifttt-push-line/&#34;&gt;こちらの記事&lt;/a&gt;などを参考にNefry BTをWi-Fiに接続してください。
+接続できたらIPアドレスを確認しましょう。
+ディスプレイを接続している場合はディスプレイにIPアドレスが表示されます。&lt;/p&gt;
+
+&lt;h2 id=&#34;設定画面にアクセスする&#34;&gt;設定画面にアクセスする&lt;/h2&gt;
+
+&lt;p&gt;筆者がの環境ではIPアドレスが&lt;code&gt;192.168.43.44&lt;/code&gt;でした。
+同じWi-Fiに接続しているPCやスマートフォンなどのブラウザから&lt;code&gt;http://192.168.43.44&lt;/code&gt;にアクセスします。（各自の環境によって読み替えてください。）&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/64288e03650616dfa32b1ee32fb080d5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;このような設定画面が表示されます。&lt;/p&gt;
+
+&lt;h2 id=&#34;line-notifyのトークンを設定する&#34;&gt;LINE Notifyのトークンを設定する&lt;/h2&gt;
+
+&lt;p&gt;設定画面から&lt;code&gt;Data Store&lt;/code&gt;を選択します。&lt;/p&gt;
+
+&lt;p&gt;すると次のような設定画面になります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/295505fd7f4eb5a65988eb6ed3385a03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ここで&lt;code&gt;LINE Auth&lt;/code&gt;の項目に&lt;strong&gt;先ほどのLINE Notifyのトークン&lt;/strong&gt;を貼り付けましょう。
+また、&lt;code&gt;LINE Message&lt;/code&gt;の項目に通知させたいメッセージを入力して&lt;code&gt;Save&lt;/code&gt;を選択して保存します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/3b659226685adad768214ba700d21819.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;このような画面に切り替わり、Nefry BTが再起動します。&lt;/p&gt;
+
+&lt;p&gt;これで設定は完了です。&lt;/p&gt;
+
+&lt;h2 id=&#34;line通知を試す&#34;&gt;LINE通知を試す&lt;/h2&gt;
+
+&lt;p&gt;Nefry BTのスイッチ（ResetではなくSWと書いてある方）を押してみましょう。
+このとき、1秒程度の長押しの方が良いかもしれません。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/1a1e9a4a9c93e3e2b233fbc6f510cdb0.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;するとこのようにLINE Notify経由でLINEに通知がきます。&lt;/p&gt;
+
+&lt;p&gt;お疲れ様でした。&lt;/p&gt;
+
+&lt;h2 id=&#34;付録-デフォルトプログラム&#34;&gt;付録: デフォルトプログラム&lt;/h2&gt;
+
+&lt;p&gt;デフォルトでは以下のプログラムが書き込まれています。
+実装の際の参考にしてみてください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;NefryIFTTT.h&amp;gt;
+#include &amp;lt;WiFiClientSecure.h&amp;gt;
+
+String Event, SecretKey, LineAuth, SendMessageLINE;
+WiFiClientSecure client;
+String StrPerEncord(const char* c_str);
+String escapeParameter(String param);
+void LineSend();
+
+void setup() {
+  Nefry.setStoreTitle(&amp;quot;SecretKey&amp;quot;, 0); //Nefry DataStoreのタイトルを指定
+  Nefry.setStoreTitle(&amp;quot;Event&amp;quot;, 1);    //Nefry DataStoreのタイトルを指定
+  Nefry.setStoreTitle(&amp;quot;LINE Auth&amp;quot;, 2); //Nefry DataStoreのタイトルを指定
+  Nefry.setStoreTitle(&amp;quot;LINEMessage&amp;quot;, 3);    //Nefry DataStoreのタイトルを指定
+  SecretKey = Nefry.getStoreStr(0);   //Nefry DataStoreからデータを取得
+  Event = Nefry.getStoreStr(1);       //Nefry DataStoreからデータを取得
+  LineAuth = Nefry.getStoreStr(2);   //Nefry DataStoreからデータを取得
+  SendMessageLINE = Nefry.getStoreStr(3);       //Nefry DataStoreからデータを取得
+  Nefry.enableSW();                   //SW有効化
+  Nefry.setProgramName(&amp;quot;NefryBT Default Program&amp;quot;);
+}
+
+void loop() {
+  if (Nefry.readSW()) {               //SWを押した時
+    if (!SecretKey.equals(&amp;quot;&amp;quot;) &amp;amp;&amp;amp; !Event.equals(&amp;quot;&amp;quot;)) {
+      if (!IFTTT.send(Event, SecretKey)) {//IFTTTにデータを送信
+        Nefry.setLed(255, 0, 0);        //Errの時、赤色点灯
+      }
+    }
+    if (!LineAuth.equals(&amp;quot;&amp;quot;)) {
+      if (SendMessageLINE.equals(&amp;quot;&amp;quot;))SendMessageLINE = &amp;quot;Welcome to the NefryBT world!&amp;quot;;
+      LineSend();                     //LINE送信
+    }
+    Nefry.ndelay(1000);               //送信後1秒間待つ
+  }
+  Nefry.setLed(random(255), random(255), random(255));
+  Nefry.ndelay(500);               //送信後0.5秒間待つ
+}
+
+void LineSend() {
+  const char* host = &amp;quot;notify-api.line.me&amp;quot;;
+  Serial.println(&amp;quot;\nStarting connection to server...&amp;quot;);
+  if (!client.connect(host, 443)) {
+    Serial.println(&amp;quot;Connection failed!&amp;quot;);
+  } else {
+    Serial.println(&amp;quot;Connected to server!&amp;quot;);
+    String url = &amp;quot;/api/notify&amp;quot;;
+    url += &amp;quot;?message=&amp;quot;;
+    url += StrPerEncord(escapeParameter(SendMessageLINE).c_str());
+    Serial.println(StrPerEncord(SendMessageLINE.c_str()));
+    Serial.println(url);
+    client.print(String(&amp;quot;POST &amp;quot;) + url + &amp;quot; HTTP/1.1\r\n&amp;quot; +
+                 &amp;quot;Authorization: Bearer &amp;quot; + LineAuth + &amp;quot;\r\n&amp;quot; +
+                 &amp;quot;Content-Type: application/x-www-form-urlencoded\r\n&amp;quot; +
+                 &amp;quot;Host: &amp;quot; + host + &amp;quot;\r\n&amp;quot; +
+                 &amp;quot;Connection: close\r\n\r\n&amp;quot;);
+    client.println();
+    unsigned long timeout = millis();
+    while (client.available() == 0) {
+      if (millis() - timeout &amp;gt; 5000) {
+        Serial.println(&amp;quot;&amp;gt;&amp;gt;&amp;gt; Client Timeout !&amp;quot;);
+        client.stop();
+        return;
+      }
+    }
+    // Read all the lines of the reply from server and print them to Serial
+    while (client.available()) {
+      String line = client.readStringUntil(&#39;\r&#39;);
+      Serial.print(line);
+    }
+    Serial.println();
+    Serial.println(&amp;quot;closing connection&amp;quot;);
+  }
+}
+//********************UTF-8文字列をパーセントエンコード*************************
+String StrPerEncord(const char* c_str) {
+  uint16_t i = 0;
+  String str_ret = &amp;quot;&amp;quot;;
+  char c1[3], c2[3], c3[3];
+
+  while (c_str[i] != &#39;\0&#39;) {
+    if (c_str[i] &amp;gt;= 0xC2 &amp;amp;&amp;amp; c_str[i] &amp;lt;= 0xD1) { //2バイト文字
+      sprintf(c1, &amp;quot;%2x&amp;quot;, c_str[i]);
+      sprintf(c2, &amp;quot;%2x&amp;quot;, c_str[i + 1]);
+      str_ret += &amp;quot;%&amp;quot; + String(c1) + &amp;quot;%&amp;quot; + String(c2);
+      i = i + 2;
+    } else if (c_str[i] &amp;gt;= 0xE2 &amp;amp;&amp;amp; c_str[i] &amp;lt;= 0xEF) {
+      sprintf(c1, &amp;quot;%2x&amp;quot;, c_str[i]);
+      sprintf(c2, &amp;quot;%2x&amp;quot;, c_str[i + 1]);
+      sprintf(c3, &amp;quot;%2x&amp;quot;, c_str[i + 2]);
+      str_ret += &amp;quot;%&amp;quot; + String(c1) + &amp;quot;%&amp;quot; + String(c2) + &amp;quot;%&amp;quot; + String(c3);
+      i = i + 3;
+    } else {
+      str_ret += String(c_str[i]);
+      i++;
+    }
+  }
+  return str_ret;
+}
+
+String escapeParameter(String param) {
+  param.replace(&amp;quot;%&amp;quot;, &amp;quot;%25&amp;quot;);
+  param.replace(&amp;quot;+&amp;quot;, &amp;quot;%2B&amp;quot;);
+  param.replace(&amp;quot; &amp;quot;, &amp;quot;+&amp;quot;);
+  param.replace(&amp;quot;\&amp;quot;&amp;quot;, &amp;quot;%22&amp;quot;);
+  param.replace(&amp;quot;#&amp;quot;, &amp;quot;%23&amp;quot;);
+  param.replace(&amp;quot;$&amp;quot;, &amp;quot;%24&amp;quot;);
+  param.replace(&amp;quot;&amp;amp;&amp;quot;, &amp;quot;%26&amp;quot;);
+  param.replace(&amp;quot;&#39;&amp;quot;, &amp;quot;%27&amp;quot;);
+  param.replace(&amp;quot;(&amp;quot;, &amp;quot;%28&amp;quot;);
+  param.replace(&amp;quot;)&amp;quot;, &amp;quot;%29&amp;quot;);
+  param.replace(&amp;quot;*&amp;quot;, &amp;quot;%2A&amp;quot;);
+  param.replace(&amp;quot;,&amp;quot;, &amp;quot;%2C&amp;quot;);
+  param.replace(&amp;quot;/&amp;quot;, &amp;quot;%2F&amp;quot;);
+  param.replace(&amp;quot;:&amp;quot;, &amp;quot;%3A&amp;quot;);
+  param.replace(&amp;quot;;&amp;quot;, &amp;quot;%3B&amp;quot;);
+  param.replace(&amp;quot;&amp;lt;&amp;quot;, &amp;quot;%3C&amp;quot;);
+  param.replace(&amp;quot;=&amp;quot;, &amp;quot;%3D&amp;quot;);
+  param.replace(&amp;quot;&amp;gt;&amp;quot;, &amp;quot;%3E&amp;quot;);
+  param.replace(&amp;quot;?&amp;quot;, &amp;quot;%3F&amp;quot;);
+  param.replace(&amp;quot;@&amp;quot;, &amp;quot;%40&amp;quot;);
+  param.replace(&amp;quot;[&amp;quot;, &amp;quot;%5B&amp;quot;);
+  param.replace(&amp;quot;\\&amp;quot;, &amp;quot;%5C&amp;quot;);
+  param.replace(&amp;quot;]&amp;quot;, &amp;quot;%5D&amp;quot;);
+  param.replace(&amp;quot;^&amp;quot;, &amp;quot;%5E&amp;quot;);
+  param.replace(&amp;quot;&#39;&amp;quot;, &amp;quot;%60&amp;quot;);
+  param.replace(&amp;quot;{&amp;quot;, &amp;quot;%7B&amp;quot;);
+  param.replace(&amp;quot;|&amp;quot;, &amp;quot;%7C&amp;quot;);
+  param.replace(&amp;quot;}&amp;quot;, &amp;quot;%7D&amp;quot;);
+  return param;
+}
+&lt;/code&gt;&lt;/pre&gt;
+</description>
     </item>
     
     <item>
@@ -133,7 +358,7 @@ Nefry BTをArduino IDEで開発するにあたり、&lt;a href=&#34;https://dots
 
 &lt;ul&gt;
 &lt;li&gt;Nefry BTをPCのUSBポートにさしてください。&lt;/li&gt;
-&lt;li&gt;メニューの&lt;code&gt;ツール&lt;/code&gt; &amp;gt; &lt;code&gt;シリアルポート&lt;/code&gt; &amp;gt; &lt;code&gt;/dev/tty.usbserial&lt;/code&gt; を選択します。&lt;/li&gt;
+&lt;li&gt;メニューの&lt;code&gt;ツール&lt;/code&gt; &amp;gt; &lt;code&gt;シリアルポート&lt;/code&gt; &amp;gt; &lt;code&gt;/dev/cu.usbserial-xxxxxx&lt;/code&gt; を選択します。環境によっては &lt;code&gt;/dev/tty.usbserial-xxxxxx&lt;/code&gt;などの場合もあります。&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;(Windowsだと表記が違うようです。)&lt;/p&gt;
