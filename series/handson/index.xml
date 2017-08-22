@@ -10,6 +10,224 @@
     <atom:link href="/series/handson/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>日本上陸！littleBits cloudBitモジュールでIFTTT連携してみた！</title>
+      <link>https://dotstud.io/blog/littlebits-cloudbit-ifttt-blink/</link>
+      <pubDate>Tue, 22 Aug 2017 19:43:42 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/littlebits-cloudbit-ifttt-blink/</guid>
+      
+      <description>
+
+&lt;p&gt;littleBits cloudBitモジュールの技適が通りまして、ついに日本でも使えることになったということで、早速littleBits cloudBitモジュールを購入してIFTTTと連携してみました。
+&lt;img src=&#34;https://dotstud.io/img/blog/119/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;littlebits-cloudbitモジュールとは&#34;&gt;littleBits cloudBitモジュールとは&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/2.png&#34; alt=&#34;&#34; /&gt;
+littleBits cloudBitモジュールは、磁石でつなげて簡単に電子工作ができる知育ブロックlittleBitsのモジュールのひとつ、littleBits Cloudが橋渡しとなってインターネットとやり取りできるモジュールです。&lt;/p&gt;
+
+&lt;p&gt;詳しくはこちら → &lt;a href=&#34;https://littlebits.cc/cloudstart&#34;&gt;Getting Started with your CloudBit&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/3.png&#34; alt=&#34;&#34; /&gt;
+橋渡しとなるlittleBits Cloudは、スマートフォンやPCからWEBアクセスできる CLOUD CONTROL APP や、LITTLEBITS APIによってREST APIでさらに深いところまで操作できるプログラミングできるLITTLEBITS APIといった入り口があります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/4.png&#34; alt=&#34;&#34; /&gt;
+今回ご紹介するのは、もうひとつ。ノンプログラミングでインターネットのいろいろなことに接続できる&lt;a href=&#34;https://ifttt.com/login&#34;&gt;IFTTT&lt;/a&gt;とlittleBitsの連携についてお伝えします。&lt;/p&gt;
+
+&lt;p&gt;たとえば、littleBitsモジュールでボタンを押すとメールが送られたり、SNSでいいねが押されるとlittleBitsのLEDが反応するようなIoTの仕組みをさっと作ることができます。&lt;/p&gt;
+
+&lt;h2 id=&#34;今回の仕組み&#34;&gt;今回の仕組み&lt;/h2&gt;
+
+&lt;p&gt;今回の仕組みはGitHubでissueが上がるとBARGRAPH LEDが点灯する仕組みです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/5.png&#34; alt=&#34;&#34; /&gt;
+ですが、ただBARGRAPH LEDが光るだけだと見落としてしまうので、100円ショップで買った光で動くソーラーゆらゆら（がいこつ）にLEDを照らして動かしてよりわかりやすくします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/6.png&#34; alt=&#34;&#34; /&gt;
+このような仕組みです。&lt;/p&gt;
+
+&lt;h2 id=&#34;準備&#34;&gt;準備&lt;/h2&gt;
+
+&lt;h3 id=&#34;littlebitsの準備&#34;&gt;littleBitsの準備&lt;/h3&gt;
+
+&lt;p&gt;セットアップについてはすでに行われているものとします。&lt;a href=&#34;http://www.1ft-seabass.jp/memo/2017/08/09/cloudbit-setup-step-memo/&#34;&gt;cloudBitモジュールのセットアップについてのメモ&lt;/a&gt;についてもご参考下さい。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/7.png&#34; alt=&#34;&#34; /&gt;
+CLOUDBITパッケージに入っているものはcloudBitモジュール関連だけなので、別途写真のようにlittleBitから入力させるボタンモジュールや、出力を反応させるBARGRAPHモジュールは別途揃えておきましょう。また今回はソーラーゆらゆら（がいこつ）へうまくつなげるためにWIREモジュールも用意しておきます。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;CLOUDBITパッケージにあるもの
+
+&lt;ul&gt;
+&lt;li&gt;USB power adapter ケーブル&lt;/li&gt;
+&lt;li&gt;USB POWER モジュール&lt;/li&gt;
+&lt;li&gt;cloudBitモジュール&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;別途必要なもの
+
+&lt;ul&gt;
+&lt;li&gt;ボタンモジュール&lt;/li&gt;
+&lt;li&gt;BARGRAPHモジュール&lt;/li&gt;
+&lt;li&gt;WIREモジュール&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/8.png&#34; alt=&#34;&#34; /&gt;
+ソーラーゆらゆらを準備します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/9.png&#34; alt=&#34;&#34; /&gt;
+コンセントをつないだアダプターからUSBケーブルを差し込みます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/10.png&#34; alt=&#34;&#34; /&gt;
+USB POWERモジュールにUSBケーブルをつなぎます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/11.png&#34; alt=&#34;&#34; /&gt;
+USB POWERモジュール→ボタンモジュール→cloudBitモジュールまでつないで、接続されるまで待ちます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/12.png&#34; alt=&#34;&#34; /&gt;
+つづいて、cloudBitモジュールの先にWIREモジュールとBARGRAPH LEDモジュールをつなぎます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/13.png&#34; alt=&#34;&#34; /&gt;
+ソーラーゆらゆら（がいこつ）のソーラーパネル部分にガッとBARGRAPH LEDモジュールを当てます。マスキングテープで補強します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/14.png&#34; alt=&#34;&#34; /&gt;
+これで準備完了です。&lt;/p&gt;
+
+&lt;h3 id=&#34;cloud-control-appの準備&#34;&gt;CLOUD CONTROL APPの準備&lt;/h3&gt;
+
+&lt;p&gt;cloudBitを管理している CLOUD CONTROL APP ページにログインしておきます。
+&lt;img src=&#34;https://dotstud.io/img/blog/119/15.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/16.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/17.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;iftttの準備&#34;&gt;IFTTTの準備&lt;/h3&gt;
+
+&lt;p&gt;IFTTTもlittleBitsとの関連付けを行うのでログインしておきます。
+&lt;img src=&#34;https://dotstud.io/img/blog/119/18.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;こちらで準備完了です。&lt;/p&gt;
+
+&lt;h2 id=&#34;littlebits-cloudbitモジュールとiftttの関連付け&#34;&gt;littleBits CloudBitモジュールとIFTTTの関連付け&lt;/h2&gt;
+
+&lt;p&gt;さきほどログインしたCLOUD CONTROL APP ページでlittleBits CloudBitモジュールとIFTTTの関連付けを行います。
+&lt;img src=&#34;https://dotstud.io/img/blog/119/19.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;下部のメニューでAUTOMATEを押します。
+&lt;img src=&#34;https://dotstud.io/img/blog/119/20.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;AUTOMATEページに遷移するとIFTTTとのアクティベートを促されるので GO TO IFTTT.COM ボタンを押します。
+&lt;img src=&#34;https://dotstud.io/img/blog/119/21.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;IFTTTのlittleBitsチャンネルに遷移するので、CONNECTを押します。
+&lt;img src=&#34;https://dotstud.io/img/blog/119/22.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;すでにIFTTTとCLOUD CONTROL APPがログインしてあるので、アクティベート確認ページに遷移します。AUTHORIZEボタンを押して認証します。
+&lt;img src=&#34;https://dotstud.io/img/blog/119/23.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ログインが完了します。これで、IFTTTでlittleBitsと連携することができます。&lt;/p&gt;
+
+&lt;h2 id=&#34;githubサービスのiftttでの認証をする&#34;&gt;GitHubサービスのIFTTTでの認証をする&lt;/h2&gt;
+
+&lt;p&gt;GitHubでもIFTTTで使えるようにしておきましょう。上部のSearchからgithubを検索します。
+&lt;img src=&#34;https://dotstud.io/img/blog/119/24.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Servicesに出てきたGitHubをクリックします。
+&lt;img src=&#34;https://dotstud.io/img/blog/119/25.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;GitHubのページに移動するのでConnectボタンを押します。
+&lt;img src=&#34;https://dotstud.io/img/blog/119/26.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;GitHubのAuthrize IFTTTページに移動します。
+&lt;img src=&#34;https://dotstud.io/img/blog/119/27.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Authrize IFTTTCHannelsボタンを押して認証を済ませておきます。&lt;/p&gt;
+
+&lt;h2 id=&#34;littlebitsのifttt連携の設定&#34;&gt;littleBitsのIFTTT連携の設定&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/28.png&#34; alt=&#34;&#34; /&gt;
+右上にある自分のプロフィールメニューからNew Appletを選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/29.png&#34; alt=&#34;&#34; /&gt;
+New Appletをつくる画面に行きます。thisボタンをクリックします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/30.png&#34; alt=&#34;&#34; /&gt;
+Choose a serviceではgitと検索しGitHubをクリックします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/31.png&#34; alt=&#34;&#34; /&gt;
+今回は自分にissueが来たときに動作するようにしたいので、Any new issueをクリックします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/32.png&#34; alt=&#34;&#34; /&gt;
+つづいて動作のきっかけ this が作れたので、なにが起こるかの that を設定するため that ボタンを押します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/33.png&#34; alt=&#34;&#34; /&gt;
+Choose action service画面になるので、littleBitsと検索し、littleBitsアクションをクリックします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/34.png&#34; alt=&#34;&#34; /&gt;
+Choose action画面になるので、Set Output Levelをクリックします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/35.png&#34; alt=&#34;&#34; /&gt;
+Complete action fields画面になるので以下のように設定します。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Which cloudBit?
+
+&lt;ul&gt;
+&lt;li&gt;動かしたいcloudBit&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Level
+
+&lt;ul&gt;
+&lt;li&gt;100&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;Duration
+
+&lt;ul&gt;
+&lt;li&gt;20 seconds&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/36.png&#34; alt=&#34;&#34; /&gt;
+設定が終わったら、下の方のCreate Actionボタンを押します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/37.png&#34; alt=&#34;&#34; /&gt;
+Review and finish画面に来るので、設定を確認します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/38.png&#34; alt=&#34;&#34; /&gt;
+問題なければ、下の方のFinishボタンを押します。&lt;/p&gt;
+
+&lt;p&gt;これで設定は完了です。&lt;/p&gt;
+
+&lt;h2 id=&#34;動かしてみる&#34;&gt;動かしてみる&lt;/h2&gt;
+
+&lt;p&gt;早速試しにissueをGitHubで作ってみましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/119/39.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;今回は適当に作ってみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/119/40.png&#34; alt=&#34;&#34; /&gt;
+issues発行します。&lt;/p&gt;
+
+&lt;p&gt;多少タイムラグがあるので5～10秒ほど待ってみます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/demo.gif&#34; alt=&#34;&#34; /&gt;
+無事動きました！&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;ということで、技適が通り日本上陸となった、littleBits cloudBitモジュールのIFTTT連携をお伝えしました。&lt;/p&gt;
+
+&lt;p&gt;今回はIoTでも実装に手間がかかるインターネット上の反応をlittleBitsに降ろす仕組みを軸にお伝えしましたがIFTTTとlittleBits Cloudの連携は手軽に作れますね。IoTにおけるいろいろな技術要素が裏側でしっかり作られています。&lt;/p&gt;
+
+&lt;p&gt;もちろん、IFTTTと連携するとAmazon Dash Buttonのような、ボタンを押すとツイートがされるようなlittleBitsからインターネットを動かす仕組みについても実現可能です。&lt;/p&gt;
+
+&lt;p&gt;littleBitsの持つブロックを組み合わせて電子工作ができる手軽さに加えて、IFTTTが組み合わさることでインターネットもあたかもブロックのように扱えてるlittleBits cloudBitモジュール、ぜひ試してみてください！&lt;/p&gt;
+
+&lt;p&gt;※今回の図表の一部では&lt;a href=&#34;http://icooon-mono.com/&#34;&gt;アイコン素材ダウンロードサイト「icooon-mono」&lt;/a&gt;さんの画像を利用いたしました。ありがとうございます。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>フォトダイオードでリモコンの信号を検出してみよう</title>
       <link>https://dotstud.io/blog/photodiode-remote-controll-signal/</link>
       <pubDate>Wed, 02 Aug 2017 16:42:19 +0900</pubDate>
@@ -1811,8 +2029,6 @@ $light.addEventListener(&#39;click&#39;, main);
 &lt;p&gt;こんにちは、ちゃちゃまるです。&lt;/p&gt;
 
 &lt;p&gt;先日CodeZineさんで紹介した &lt;a href=&#34;http://codezine.jp/article/detail/9982&#34;&gt;ハードウェアの知識ゼロでもボードにセンサーをつなげられる「Gravity」シリーズ&lt;/a&gt; について、さらに詳しく使い方を説明していきたいと思います！&lt;/p&gt;
-
-&lt;p&gt;「&lt;a href=&#34;https://dotstudio.connpass.com/event/49147/&#34;&gt;今度こそ挫折しない！知識ゼロからの電子工作ハンズオン&lt;/a&gt;」の資料にもなっています。&lt;/p&gt;
 
 &lt;p&gt;※この記事は主に初心者の方・他のマイコンボードを使ってはみたが挫折してしまった方向けです。&lt;/p&gt;
 
