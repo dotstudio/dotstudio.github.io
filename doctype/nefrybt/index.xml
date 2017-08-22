@@ -703,16 +703,6 @@ void loop() {
     </item>
     
     <item>
-      <title>Nefry BTでモジュール名の変更</title>
-      <link>https://dotstud.io/docs/nefrybt-module-config/</link>
-      <pubDate>Tue, 25 Jul 2017 01:02:41 +0900</pubDate>
-      
-      <guid>https://dotstud.io/docs/nefrybt-module-config/</guid>
-      
-      <description></description>
-    </item>
-    
-    <item>
       <title>Nefry BTで環境変数を使う</title>
       <link>https://dotstud.io/docs/nefrybt-env-val/</link>
       <pubDate>Tue, 25 Jul 2017 01:02:41 +0900</pubDate>
@@ -723,11 +713,51 @@ void loop() {
     </item>
     
     <item>
-      <title>プログラムのオンラインアップロードを行う</title>
-      <link>https://dotstud.io/docs/nefrybt-online-upload/</link>
+      <title>ライブラリアップデート後の書き込みエラー</title>
+      <link>https://dotstud.io/docs/nefrybt-error-handling-1/</link>
+      <pubDate>Tue, 22 Aug 2017 01:02:41 +0900</pubDate>
+      
+      <guid>https://dotstud.io/docs/nefrybt-error-handling-1/</guid>
+      
+      <description>
+
+&lt;h2 id=&#34;エラー内容&#34;&gt;エラー内容&lt;/h2&gt;
+
+&lt;p&gt;Nefry BTのライブラリを&lt;code&gt;0.9.6&lt;/code&gt;から&lt;code&gt;1.0.1&lt;/code&gt;にアップデートしまたところ、プログラム書き込み時にエラーが発生しました。&lt;/p&gt;
+
+&lt;p&gt;Arduino IDEのログは以下の内容です。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Arduino：1.8.3 (Mac OS X), ボード：&amp;quot;Nefry BT, 921600, None&amp;quot;
+ボードnefrybt (プラットフォームesp32、パッケージNefry(ESP32))は不明です
+ボードNefry BTに対するコンパイル時にエラーが発生しました。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ライブラリをアップデートした際のゴミが残っていることが原因です。&lt;/p&gt;
+
+&lt;h2 id=&#34;対処法&#34;&gt;対処法&lt;/h2&gt;
+
+&lt;p&gt;Arduinoの設定（Preferences）を開き、&lt;code&gt;以下のファイルを編集すれば~&lt;/code&gt;と書いている部分のパスをクリックしましょう。そうするとArduino IDEのライブラリがあるフォルダが開かれます。ここでは&lt;code&gt;Arduino15&lt;/code&gt;というフォルダが開かれました。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;この時点でArduino IDEは一度終了させましょう。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/35831bcfd1a9849cd52c587fb5196925.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;その後&lt;code&gt;packages &amp;gt; Nefy(ESP32) &amp;gt; hardware &amp;gt; esp32&lt;/code&gt;とフォルダをたどっていくと、&lt;code&gt;0.9.6&lt;/code&gt;、&lt;code&gt;1.0.1&lt;/code&gt;などのライブラリバージョン名のフォルダがあります。&lt;/p&gt;
+
+&lt;p&gt;最新版以外は削除してください。今回は&lt;code&gt;0.9.6&lt;/code&gt;をフォルダごと削除します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/3e2f7a9f0588817787ba3d4cf85acb24.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;これで再度Arduino IDEを起動してプログラムを書き込み直すとエラーが解消されます。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Nefry BTでモジュール名の変更</title>
+      <link>https://dotstud.io/docs/nefrybt-module-config/</link>
       <pubDate>Tue, 25 Jul 2017 01:02:41 +0900</pubDate>
       
-      <guid>https://dotstud.io/docs/nefrybt-online-upload/</guid>
+      <guid>https://dotstud.io/docs/nefrybt-module-config/</guid>
       
       <description></description>
     </item>
