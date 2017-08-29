@@ -151,6 +151,8 @@
 
 &lt;p&gt;このような形でささります。ディスプレイからはNefry BTのIPやWi-Fi情報などを確認できます。
 &lt;img src=&#34;https://dotstud.io/img/docs/nefrybt/display3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;NefryBTのピンでD0とD1がありますが、その二つのピンはディスプレイの制御（I2C通信）に使用されているため正常に動作しないことがあります。&lt;/p&gt;
 </description>
     </item>
     
@@ -517,110 +519,6 @@ String escapeParameter(String param) {
     </item>
     
     <item>
-      <title>Nefry BT向けのArduino IDEセットアップ方法</title>
-      <link>https://dotstud.io/docs/nefrybt-arduino-ide-setup/</link>
-      <pubDate>Tue, 25 Jul 2017 01:02:41 +0900</pubDate>
-      
-      <guid>https://dotstud.io/docs/nefrybt-arduino-ide-setup/</guid>
-      
-      <description>
-
-&lt;p&gt;このページでは、Arduino IDEにNefry BTの開発環境をインストールする方法を紹介します。&lt;strong&gt;Arduino IDEでNefry BTの開発をする際に必須になる項目です。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Arduino IDEのインストールは&lt;a href=&#34;https://dotstud.io/docs/arduinoide-setup/&#34;&gt;こちらのドキュメント&lt;/a&gt;を参照してください。&lt;/p&gt;
-
-&lt;h2 id=&#34;ボードマネージャの追加&#34;&gt;ボードマネージャの追加&lt;/h2&gt;
-
-&lt;p&gt;メニューの&lt;code&gt;Arduino&lt;/code&gt; &amp;gt; &lt;code&gt;Preferences&lt;/code&gt;を選択します。環境設定のダイアログが開きます。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;追加のボードマネージャのURL&lt;/code&gt;のフォームに以下のURLを追加しましょう。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;http://nefry.studio/package_nefrybt_index.json
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/97340ffab8e27b01fcaab1b4a1a7b0fd.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;追加できたらOKを選択します。&lt;/p&gt;
-
-&lt;h2 id=&#34;ボードマネージャを開く&#34;&gt;ボードマネージャを開く&lt;/h2&gt;
-
-&lt;p&gt;メニューの&lt;code&gt;ツール&lt;/code&gt; &amp;gt; &lt;code&gt;ボード&lt;/code&gt; &amp;gt; &lt;code&gt;ボードマネージャ&lt;/code&gt;を選択します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/7aec4d50fe882e6faec6009492b03eea.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;するとこのようなボードマネージャダイアログが表示されます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/94270bbcce718a52061c544f39ea2c5e.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;nefry-bt用の開発環境を追加する&#34;&gt;Nefry BT用の開発環境を追加する&lt;/h2&gt;
-
-&lt;p&gt;フォームに&lt;code&gt;Nefry&lt;/code&gt;と入力して検索すると項目が表示されます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/5232ee346a7232cdea75a96569333cc4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;インストール&lt;/code&gt;を押すとインストールが開始されます。横のプルダウンメニューでバージョンを指定できますが、最新のものを選択するようにしましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/29a35f129c73926c160c1e948369308d.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;あとはインストールが完了するまで待つだけです。&lt;/p&gt;
-
-&lt;h2 id=&#34;確認&#34;&gt;確認&lt;/h2&gt;
-
-&lt;p&gt;メニューの&lt;code&gt;ツール&lt;/code&gt; &amp;gt; &lt;code&gt;ボード&lt;/code&gt;を選択したときに&lt;code&gt;Nefry BT&lt;/code&gt;の項目が追加されていればOKです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/0b6439948f14c13edf7b5af4254a7ab5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;お疲れ様でした。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Nefry BTで通常のアナログLEDのLチカを試す</title>
-      <link>https://dotstud.io/docs/nefrybt-led-analog/</link>
-      <pubDate>Tue, 22 Aug 2017 01:02:41 +0900</pubDate>
-      
-      <guid>https://dotstud.io/docs/nefrybt-led-analog/</guid>
-      
-      <description>
-
-&lt;p&gt;このページではNefry BTでLEDを制御する方法を紹介します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/58d5ff01a0669eb82394d41af9afb214.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;事前に、Nefry BTに組み込まれているフルカラーLEDを利用したLチカを&lt;a href=&#34;https://dotstud.io/docs/nefrybt-led&#34;&gt;こちらのドキュメント&lt;/a&gt;を参照して試してみましょう。&lt;/p&gt;
-
-&lt;h2 id=&#34;アナログled&#34;&gt;アナログLED&lt;/h2&gt;
-
-&lt;p&gt;通常のLEDです。&lt;/p&gt;
-
-&lt;p&gt;LEDについては&lt;a href=&#34;https://dotstud.io/docs/led/&#34;&gt;こちらのドキュメント&lt;/a&gt;を参照してください。&lt;/p&gt;
-
-&lt;h2 id=&#34;配線&#34;&gt;配線&lt;/h2&gt;
-
-&lt;p&gt;Nefry BTのA1ピンソケットにカソード（+側、足の長い方）ピンを、隣のGNDピンソケットにアノード（-側、足の短い方）&lt;/p&gt;
-
-&lt;h2 id=&#34;コード&#34;&gt;コード&lt;/h2&gt;
-
-&lt;p&gt;以下のコードでこのページ上部のようなLEDの点灯になります。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;#define LED_PIN A1
-#define DELAY_TIME 1000
-
-void setup() {
-  pinMode(LED_PIN, OUTPUT);
-}
-
-void loop() {
-  digitalWrite(LED_PIN, HIGH);
-  delay(DELAY_TIME);
-  digitalWrite(LED_PIN, LOW);
-  delay(DELAY_TIME);
-}
-&lt;/code&gt;&lt;/pre&gt;
-</description>
-    </item>
-    
-    <item>
       <title>Nefry BTでLチカを試す</title>
       <link>https://dotstud.io/docs/nefrybt-led/</link>
       <pubDate>Tue, 25 Jul 2017 01:02:41 +0900</pubDate>
@@ -693,11 +591,127 @@ void loop() {
     </item>
     
     <item>
+      <title>Nefry BT向けのArduino IDEセットアップ方法</title>
+      <link>https://dotstud.io/docs/nefrybt-arduino-ide-setup/</link>
+      <pubDate>Tue, 25 Jul 2017 01:02:41 +0900</pubDate>
+      
+      <guid>https://dotstud.io/docs/nefrybt-arduino-ide-setup/</guid>
+      
+      <description>
+
+&lt;p&gt;このページでは、Arduino IDEにNefry BTの開発環境をインストールする方法を紹介します。&lt;strong&gt;Arduino IDEでNefry BTの開発をする際に必須になる項目です。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Arduino IDEのインストールは&lt;a href=&#34;https://dotstud.io/docs/arduinoide-setup/&#34;&gt;こちらのドキュメント&lt;/a&gt;を参照してください。&lt;/p&gt;
+
+&lt;h2 id=&#34;ボードマネージャの追加&#34;&gt;ボードマネージャの追加&lt;/h2&gt;
+
+&lt;p&gt;メニューの&lt;code&gt;Arduino&lt;/code&gt; &amp;gt; &lt;code&gt;Preferences&lt;/code&gt;を選択します。環境設定のダイアログが開きます。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;追加のボードマネージャのURL&lt;/code&gt;のフォームに以下のURLを追加しましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;http://nefry.studio/package_nefrybt_index.json
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/97340ffab8e27b01fcaab1b4a1a7b0fd.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;追加できたらOKを選択します。&lt;/p&gt;
+
+&lt;h2 id=&#34;ボードマネージャを開く&#34;&gt;ボードマネージャを開く&lt;/h2&gt;
+
+&lt;p&gt;メニューの&lt;code&gt;ツール&lt;/code&gt; &amp;gt; &lt;code&gt;ボード&lt;/code&gt; &amp;gt; &lt;code&gt;ボードマネージャ&lt;/code&gt;を選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/7aec4d50fe882e6faec6009492b03eea.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;するとこのようなボードマネージャダイアログが表示されます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/94270bbcce718a52061c544f39ea2c5e.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;nefry-bt用の開発環境を追加する&#34;&gt;Nefry BT用の開発環境を追加する&lt;/h2&gt;
+
+&lt;p&gt;フォームに&lt;code&gt;Nefry&lt;/code&gt;と入力して検索すると項目が表示されます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/5232ee346a7232cdea75a96569333cc4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;インストール&lt;/code&gt;を押すとインストールが開始されます。横のプルダウンメニューでバージョンを指定できますが、最新のものを選択するようにしましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/29a35f129c73926c160c1e948369308d.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;あとはインストールが完了するまで待つだけです。&lt;/p&gt;
+
+&lt;h2 id=&#34;確認&#34;&gt;確認&lt;/h2&gt;
+
+&lt;p&gt;メニューの&lt;code&gt;ツール&lt;/code&gt; &amp;gt; &lt;code&gt;ボード&lt;/code&gt;を選択したときに&lt;code&gt;Nefry BT&lt;/code&gt;の項目が追加されていればOKです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/0b6439948f14c13edf7b5af4254a7ab5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;お疲れ様でした。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Nefry BTで通常のアナログLEDのLチカを試す</title>
+      <link>https://dotstud.io/docs/nefrybt-led-analog/</link>
+      <pubDate>Tue, 22 Aug 2017 01:02:41 +0900</pubDate>
+      
+      <guid>https://dotstud.io/docs/nefrybt-led-analog/</guid>
+      
+      <description>
+
+&lt;p&gt;このページではNefry BTでLEDを制御する方法を紹介します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/58d5ff01a0669eb82394d41af9afb214.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;事前に、Nefry BTに組み込まれているフルカラーLEDを利用したLチカを&lt;a href=&#34;https://dotstud.io/docs/nefrybt-led&#34;&gt;こちらのドキュメント&lt;/a&gt;を参照して試してみましょう。&lt;/p&gt;
+
+&lt;p&gt;ちなみにNefryBTのピンでD0とD1がありますが、その二つのピンはディスプレイの制御(I2C通信)のために使用されているため正常に動作しないことがあります。&lt;/p&gt;
+
+&lt;h2 id=&#34;アナログled&#34;&gt;アナログLED&lt;/h2&gt;
+
+&lt;p&gt;通常のLEDです。&lt;/p&gt;
+
+&lt;p&gt;LEDについては&lt;a href=&#34;https://dotstud.io/docs/led/&#34;&gt;こちらのドキュメント&lt;/a&gt;を参照してください。&lt;/p&gt;
+
+&lt;h2 id=&#34;配線&#34;&gt;配線&lt;/h2&gt;
+
+&lt;p&gt;Nefry BTのA1ピンソケットにカソード（+側、足の長い方）ピンを、隣のGNDピンソケットにアノード（-側、足の短い方）&lt;/p&gt;
+
+&lt;h2 id=&#34;コード&#34;&gt;コード&lt;/h2&gt;
+
+&lt;p&gt;以下のコードでこのページ上部のようなLEDの点灯になります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#define LED_PIN A1
+#define DELAY_TIME 1000
+
+void setup() {
+  pinMode(LED_PIN, OUTPUT);
+}
+
+void loop() {
+  digitalWrite(LED_PIN, HIGH);
+  delay(DELAY_TIME);
+  digitalWrite(LED_PIN, LOW);
+  delay(DELAY_TIME);
+}
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Nefry BTでコンソールを使う</title>
       <link>https://dotstud.io/docs/nefrybt-console/</link>
       <pubDate>Tue, 25 Jul 2017 01:02:41 +0900</pubDate>
       
       <guid>https://dotstud.io/docs/nefrybt-console/</guid>
+      
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Nefry BTでモジュール名の変更</title>
+      <link>https://dotstud.io/docs/nefrybt-module-config/</link>
+      <pubDate>Tue, 25 Jul 2017 01:02:41 +0900</pubDate>
+      
+      <guid>https://dotstud.io/docs/nefrybt-module-config/</guid>
       
       <description></description>
     </item>
@@ -713,51 +727,11 @@ void loop() {
     </item>
     
     <item>
-      <title>ライブラリアップデート後の書き込みエラー</title>
-      <link>https://dotstud.io/docs/nefrybt-error-handling-1/</link>
-      <pubDate>Tue, 22 Aug 2017 01:02:41 +0900</pubDate>
-      
-      <guid>https://dotstud.io/docs/nefrybt-error-handling-1/</guid>
-      
-      <description>
-
-&lt;h2 id=&#34;エラー内容&#34;&gt;エラー内容&lt;/h2&gt;
-
-&lt;p&gt;Nefry BTのライブラリを&lt;code&gt;0.9.6&lt;/code&gt;から&lt;code&gt;1.0.1&lt;/code&gt;にアップデートしまたところ、プログラム書き込み時にエラーが発生しました。&lt;/p&gt;
-
-&lt;p&gt;Arduino IDEのログは以下の内容です。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;Arduino：1.8.3 (Mac OS X), ボード：&amp;quot;Nefry BT, 921600, None&amp;quot;
-ボードnefrybt (プラットフォームesp32、パッケージNefry(ESP32))は不明です
-ボードNefry BTに対するコンパイル時にエラーが発生しました。
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;ライブラリをアップデートした際のゴミが残っていることが原因です。&lt;/p&gt;
-
-&lt;h2 id=&#34;対処法&#34;&gt;対処法&lt;/h2&gt;
-
-&lt;p&gt;Arduinoの設定（Preferences）を開き、&lt;code&gt;以下のファイルを編集すれば~&lt;/code&gt;と書いている部分のパスをクリックしましょう。そうするとArduino IDEのライブラリがあるフォルダが開かれます。ここでは&lt;code&gt;Arduino15&lt;/code&gt;というフォルダが開かれました。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;この時点でArduino IDEは一度終了させましょう。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/35831bcfd1a9849cd52c587fb5196925.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;その後&lt;code&gt;packages &amp;gt; Nefy(ESP32) &amp;gt; hardware &amp;gt; esp32&lt;/code&gt;とフォルダをたどっていくと、&lt;code&gt;0.9.6&lt;/code&gt;、&lt;code&gt;1.0.1&lt;/code&gt;などのライブラリバージョン名のフォルダがあります。&lt;/p&gt;
-
-&lt;p&gt;最新版以外は削除してください。今回は&lt;code&gt;0.9.6&lt;/code&gt;をフォルダごと削除します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/3e2f7a9f0588817787ba3d4cf85acb24.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;これで再度Arduino IDEを起動してプログラムを書き込み直すとエラーが解消されます。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Nefry BTでモジュール名の変更</title>
-      <link>https://dotstud.io/docs/nefrybt-module-config/</link>
+      <title>プログラムのオンラインアップロードを行う</title>
+      <link>https://dotstud.io/docs/nefrybt-online-upload/</link>
       <pubDate>Tue, 25 Jul 2017 01:02:41 +0900</pubDate>
       
-      <guid>https://dotstud.io/docs/nefrybt-module-config/</guid>
+      <guid>https://dotstud.io/docs/nefrybt-online-upload/</guid>
       
       <description></description>
     </item>
