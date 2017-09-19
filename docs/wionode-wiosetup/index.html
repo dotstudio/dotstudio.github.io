@@ -232,12 +232,14 @@
     
     
 
+
     
 
 <div class="nav">　　
 <ul>
 
 
+
         
             
             
@@ -259,7 +261,7 @@
             
             
                     
-                        <li><a href="https://dotstud.io/docs/wionode/">Wio Node</a></li>
+                        <li ><a href="https://dotstud.io/docs/wionode/">Wio Node</a></li>
                     
             
         
@@ -279,7 +281,7 @@
             
             
                     
-                        <li><a href="https://dotstud.io/docs/wionode-android/">Wio Node設定 - Android編</a></li>
+                        <li ><a href="https://dotstud.io/docs/wionode-android/">Wio Node設定 - Android編</a></li>
                     
             
         
@@ -299,7 +301,7 @@
             
             
                     
-                        <li><a href="https://dotstud.io/docs/wionode-ios/">Wio Node設定 - iOS編</a></li>
+                        <li ><a href="https://dotstud.io/docs/wionode-ios/">Wio Node設定 - iOS編</a></li>
                     
             
         
@@ -331,8 +333,16 @@
             
             
                     
-                        <li><a href="https://dotstud.io/docs/wionode-wiosetup/">Wio Node設定 - 繋がらない場合</a></li>
+                        <li class="selected"><a href="https://dotstud.io/docs/wionode-wiosetup/">Wio Node設定 - 繋がらない場合</a></li>
                     
+            
+        
+            
+            
+            
+        
+            
+            
             
         
             
@@ -1227,6 +1237,7 @@
 </ul>
 </div>
 
+
     
     
     
@@ -1268,10 +1279,8 @@
       <div class="line"></div>
       <span class="en"></span>
     </div>
-    
+
     <img class="eyecatch" src="" alt="">
-
-
 
     <div class="content markdown">
 
@@ -1433,8 +1442,1219 @@ access_token for 'wio-n0bisuke' is 'xxxxxxxxxxxxxxxxxxxxx'.
 
 </article>
 
-<div class="sp-warning">
-	dotstudio documentsはPCからご利用ください。
+<div class="sp-docs-single">
+  <div class="main">
+    <div class="title">
+      <h1 class="jp">Wio Node設定 - 繋がらない場合</h1>
+      <div class="line"></div>
+      <span class="en"></span>
+    </div>
+
+    <img class="eyecatch" src="" alt="">
+
+    <div class="content markdown">
+
+<p>Wio NodeはiOSアプリとAndroidアプリでWi-Fi設定を行いますが、稀にアプリの不具合でWi-Fi設定ができない場合があります。</p>
+
+<p>その場合に利用すると便利なのが<a href="https://github.com/horihiro/wio-setup">Wio-Setup</a>というコマンドラインツールです。</p>
+
+<p><strong>スマートフォンアプリを使わずにパソコンを使ってWio NodeのWi-Fi設定ができます。</strong></p>
+
+<h2 id="wio-setupの使い方">Wio-Setupの使い方</h2>
+
+<p>※以下はmacOS Sierra 10.12を利用しています。</p>
+
+<h3 id="インストール">インストール</h3>
+
+<pre><code>$ npm i -g wio-setup
+</code></pre>
+
+<p>インストールができたら確認してみましょう。</p>
+
+<pre><code>$ wio-setup -h
+
+  Usage: wio-setup [options]
+
+  Options:
+
+    -h, --help              output usage information
+    -V, --version           output the version number
+    -e, --email [value]     email address
+    -p, --password [value]  password
+    -s, --wifiSsid [value]  wifi ssid
+    -P, --wifiPwd [value]   wifi password
+    -n, --wioName [value]   wio-node name
+    -l, --list              list your wio-node
+</code></pre>
+
+<p>これでインストールは完了です。</p>
+
+<h3 id="認証">認証</h3>
+
+<p>事前にWio Linkアプリからユーザー登録をしておきましょう。</p>
+
+<pre><code>$ wio-setup
+</code></pre>
+
+<p>で実行できます。以下は対話式のインターフェイスで質問に答えていきます。</p>
+
+<pre><code>email: &lt;登録したメールアドレス&gt;
+password: &lt;登録したパスワード&gt;
+wifi ssid: &lt;現時点でパソコンが接続しているSSID&gt;
+wifi password for '&lt;SSID&gt;': &lt;SSIDのパスワード&gt;
+</code></pre>
+
+<p>ここでエンターを押すと、自分が過去に登録したWio Nodeのリストが表示されます。今回は新規のWio Nodeデバイスなので<code>0</code>を選択します。</p>
+
+<pre><code>[1] Wio Node 2
+[2] Wio Node 3
+[3] Wio Node 17
+[0] creating new one
+
+select [0-3]: &lt;数字を入力&gt;
+</code></pre>
+
+<p>次にWio Nodeに名前を付けます。今回は<code>Wio-n0bisuke</code>としました。</p>
+
+<pre><code>wio-node name: &lt;自分のWio Nodeに名前を付ける&gt;
+</code></pre>
+
+<p>ここまで出来たら、Wio Nodeの左側のボタンを4秒間長押ししましょう。
+そうすると、LEDの点滅パターンが緩やかになり、Wio Node自体がWi-Fiのアクセスポイントとして機能します。</p>
+
+<p><img src="https://i.gyazo.com/9659129f3236e924011d2685950a79e2.gif" alt="" /></p>
+
+<pre><code>                          　    ／＼
+                              ／　／＼
+hold down this button      =&gt; |　＼／|
+ until blue-light breathes    ＼　　／
+                              　＼／
+                           　    ┃
+
+connect to Wio-Node AP, 'Wio_XXXXXX'
+
+checking SSID your machine connected...
+</code></pre>
+
+<p><img src="https://dotstud.io/img/blog/095/06_func.png" alt="" /></p>
+
+<p>パソコンから周辺のアクセスポイントを確認してみると<code>Wio_XXXXXX</code>というSSIDがあることが確認できます。これはWio Node自身がWi-Fiのアクセスポイントになっていて、情報の書き込みを受け付けている状態です。</p>
+
+<p><img src="https://i.gyazo.com/7092c4b2695bb83e49d52ae018c2ce11.png" alt="" /></p>
+
+<p><code>Wio_XXXXXX</code>にパソコンから接続してみましょう。</p>
+
+<p><img src="https://i.gyazo.com/0b573c2df4e16443ae579037d33f5170.png" alt="" /></p>
+
+<p>接続するとターミナルで以下の情報が表示されます。</p>
+
+<pre><code>now connected to SSID 'Wio_XXXXXX', ok? [Y/n]
+</code></pre>
+
+<p><code>Y</code>を入力して進みます。
+接続が完了すると以下の情報が表示され、アクセストークンの情報も表示されます。</p>
+
+<pre><code>done.
+access_token for 'wio-n0bisuke' is 'xxxxxxxxxxxxxxxxxxxxx'.
+</code></pre>
+
+<p>繋がらない場合は再度<code>Y</code>を押して再接続してみましょう。</p>
+
+<h2 id="確認">確認</h2>
+
+<p>成功するとアプリ画面に名前を設定したWio Nodeデバイスの項目が追加されています。</p>
+
+<p><img src="https://i.gyazo.com/937a9d95323200c133a1b689d4fa4ede.png" alt="" /></p>
+
+<p>これが確認できれば成功です。</p>
+
+<h2 id="謝辞">謝辞</h2>
+
+<p><a href="https://twitter.com/hori__hiro">@horihiro</a>さんが<a href="https://iotlt.connpass.com/event/52082/">#iotlt vol27</a>で公開して下さいました。</p>
+
+<p><blockquote class="twitter-tweet" data-lang="ja"><p lang="ja" dir="ltr"><a href="https://twitter.com/hashtag/iotlt?src=hash">#iotlt</a> 今朝リリースされたそうです❗ <a href="https://t.co/HuB2BNIaBL">pic.twitter.com/HuB2BNIaBL</a></p>&mdash; 大熊 元気 (@JNTEST23) <a href="https://twitter.com/JNTEST23/status/865524586166665218">2017年5月19日</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script></p>
+</div>
+
+    <div class="information">
+      <p>Last edited on 2017.05.20</p>
+      <a href="/members/n0bisuke">
+        <span>by</span>
+        <img src="/img/members/n0bisuke/author.png" alt=""><span class="author">のびすけ</span>
+      </a>
+    </div>
+    <div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v2.7&appId=296336307370435";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+  <div class="share">
+    <a href="https://twitter.com/share" class="twitter-share-button" data-size="large" data-hashtags="dotstudio">Tweet</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    &nbsp;
+    <div class="fb-like" data-href="https://dotstud.io/docs/wionode-wiosetup/" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
+
+    &nbsp;
+
+    <div class="hatena-b">
+      <a href="http://b.hatena.ne.jp/entry/s/dotstud.io/blog/wionode-wiosetup" class="hatena-bookmark-button" data-hatena-bookmark-title="Wio Node設定 - 繋がらない場合" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
+        <img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" />
+      </a>
+      <script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+    </div>    
+  </div>
+  </div>
+
+  <div class="sp-under-index">
+    <p class="index"><span class="index-title">Wionode</span>-index-</p>
+    
+    
+
+
+    
+
+<div class="nav">　　
+<ul>
+
+
+
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+                    
+                        <li ><a href="https://dotstud.io/docs/wionode/">Wio Node</a></li>
+                    
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+                    
+                        <li ><a href="https://dotstud.io/docs/wionode-android/">Wio Node設定 - Android編</a></li>
+                    
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+                    
+                        <li ><a href="https://dotstud.io/docs/wionode-ios/">Wio Node設定 - iOS編</a></li>
+                    
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+                    
+                        <li class="selected"><a href="https://dotstud.io/docs/wionode-wiosetup/">Wio Node設定 - 繋がらない場合</a></li>
+                    
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+            
+            
+            
+        
+
+</ul>
+</div>
+
+
+    
+    
+    
+
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
 </div>
 
 
