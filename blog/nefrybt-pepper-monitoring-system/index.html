@@ -75,35 +75,35 @@
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="FRISKサイズのWi-Fi搭載IoTデバイス「Nefry」とクラウドサービスAmbientを使ってデータのグラフ化を試してみました！">
+    <meta name="description" content="Nefry BTでネットワークカメラっぽいものを作ります。">
     <meta name="author" content="dotstudio Inc.">
-    <meta content="https://dotstud.io/img/blog/092/00_eyecatch.png">
+    <meta content="https://dotstud.io/img/blog/127/00_eyecatch.png">
 
-    <meta itemprop="name" content="Nefryで取得したセンサーデータをAmbientで簡単にグラフ化しよう！ | dotstudio"/>
-    <meta itemprop="image" content="https://dotstud.io/img/blog/092/00_eyecatch.png"/>
+    <meta itemprop="name" content="Node.jsとNefry BTで監視システムを作ろう！ for Pepper #iotlt | dotstudio"/>
+    <meta itemprop="image" content="https://dotstud.io/img/blog/127/00_eyecatch.png"/>
     
-    <meta property="og:title" content="Nefryで取得したセンサーデータをAmbientで簡単にグラフ化しよう！ | dotstudio" />
+    <meta property="og:title" content="Node.jsとNefry BTで監視システムを作ろう！ for Pepper #iotlt | dotstudio" />
     <meta property="og:locale" content="ja_JP" />
     <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://dotstud.io/blog/nefry-data-show-graphically/" />
+    <meta property="og:url" content="https://dotstud.io/blog/nefrybt-pepper-monitoring-system/" />
     <meta property="og:site_name" content="dotstudio（ドットスタジオ）" />
-    <meta property="og:image" content="https://dotstud.io/img/blog/092/00_eyecatch.png" />
-    <meta property="og:image:secure_url" content="https://dotstud.io/img/blog/092/00_eyecatch.png" />
-    <meta property="og:description" content="FRISKサイズのWi-Fi搭載IoTデバイス「Nefry」とクラウドサービスAmbientを使ってデータのグラフ化を試してみました！" />
+    <meta property="og:image" content="https://dotstud.io/img/blog/127/00_eyecatch.png" />
+    <meta property="og:image:secure_url" content="https://dotstud.io/img/blog/127/00_eyecatch.png" />
+    <meta property="og:description" content="Nefry BTでネットワークカメラっぽいものを作ります。" />
     <meta property="article:author" content="https://www.facebook.com/dotstud10/" />
     <meta property="fb:app_id" content="296336307370435" />
     <meta property="fb:pages" content="1013196712108753" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image:src" content="https://dotstud.io/img/blog/092/00_eyecatch.png">
+    <meta name="twitter:image:src" content="https://dotstud.io/img/blog/127/00_eyecatch.png">
     <meta name="twitter:site" content="@dotstud_io" />
-    <meta name="twitter:url" content="https://dotstud.io/blog/nefry-data-show-graphically/">
-    <meta name="twitter:description" content="FRISKサイズのWi-Fi搭載IoTデバイス「Nefry」とクラウドサービスAmbientを使ってデータのグラフ化を試してみました！">
-    <meta name="twitter:title" content="Nefryで取得したセンサーデータをAmbientで簡単にグラフ化しよう！ | dotstudio">
+    <meta name="twitter:url" content="https://dotstud.io/blog/nefrybt-pepper-monitoring-system/">
+    <meta name="twitter:description" content="Nefry BTでネットワークカメラっぽいものを作ります。">
+    <meta name="twitter:title" content="Node.jsとNefry BTで監視システムを作ろう！ for Pepper #iotlt | dotstudio">
     <meta name="twitter:creator" content="@dotstud_io" />
 
     
     <meta name="google-site-verification" content="oW2fcSG1fFnkDoRCGFJ0IGGebtBr8FjV2twoFMd7Skc" />
-    <title>Nefryで取得したセンサーデータをAmbientで簡単にグラフ化しよう！ | dotstudio</title>
+    <title>Node.jsとNefry BTで監視システムを作ろう！ for Pepper #iotlt | dotstudio</title>
     
 
     <link rel="stylesheet" href="/css/loader.css">
@@ -299,16 +299,16 @@
 
 
 <article class="blog-single">
-  <div class="date">2017.03.21</div>
+  <div class="date">2017.09.21</div>
 
-  <img class="blog-single--eyecatch" src="/img/blog/092/00_eyecatch.png" alt="" width="710px">
+  <img class="blog-single--eyecatch" src="/img/blog/127/00_eyecatch.png" alt="" width="710px">
   
-  <h1 class="blog-single--title">Nefryで取得したセンサーデータをAmbientで簡単にグラフ化しよう！</h1>
+  <h1 class="blog-single--title">Node.jsとNefry BTで監視システムを作ろう！ for Pepper #iotlt</h1>
 
   <div class="blog-single--information">
-    <a class="author" href="/members/wami">
-      <img src="/img/members/wami/author.png" alt="" class="author--avatar">
-      <p class="author--name">わみ</p>
+    <a class="author" href="/members/n0bisuke">
+      <img src="/img/members/n0bisuke/author.png" alt="" class="author--avatar">
+      <p class="author--name">のびすけ</p>
     </a>
 
     
@@ -321,187 +321,220 @@
   
   <div class="blog-single--content markdown">
 
-<p>こんにちは、外部ライターのわみ（<a href="http://twitter.com/wamisnet">@wamisnet</a>）です。愛知県でネットワークの勉強をしている学生です。2014年ごろから電子工作を始め、今回紹介するFRISKサイズのIoT向けデバイス「Nefry（ねふりー）」を自作しました。</p>
+<p>こんにちは、のびすけです。</p>
 
-<p>IoTといえば、データを取ることはもちろんですが、データの蓄積や分析が大切です。</p>
+<p>IoTLT vol31で話をしたNefry BT（ESP32系ボード）を使ってネットワークカメラを作ってみたいと思います。</p>
 
-<p>今回は、<strong>簡単にデータを蓄積・グラフ化してくれる「Ambient」</strong> というサービスを使って、Nefryで取得したセンサーのデータをグラフ化する方法を紹介します。</p>
+<p>発表資料もご参照ください。</p>
 
-<h2 id="nefryとは">Nefryとは</h2>
-
-<p><img src="https://dotstud.io/img/blog/059/01.png" alt="" /></p>
-
-<p>「Nefry（ねふりー）」は手軽にIoTに挑戦できるFRISKサイズのデバイスです。</p>
-
-<p><a href="http://nefry.studio/">公式サイト</a>から、詳細なドキュメントや制作例を確認できます。</p>
-
-<h3 id="wi-fiを初期搭載">Wi-Fiを初期搭載</h3>
-
-<p>Nefryは、Wi-Fiモジュールの <strong>ESP-WROOM-02を初期搭載</strong> しています。簡単にインターネットに接続できるので、接続に時間をとられることなくあなたのアイデア実現に集中できます。</p>
-
-<h3 id="スタンドアロンで動かせる">スタンドアロンで動かせる</h3>
-
-<p>スマートフォンで使うようなモバイルバッテリー（5V）から給電できます。<strong>モバイルバッテリー＋Nefryの2つで動作する</strong> ので、場所を選ばずに使うことができる優れものです！</p>
-
-<h3 id="外部サービス連携が簡単">外部サービス連携が簡単</h3>
-
-<p>NefryはGroveセンサの規格に対応しています。専用のソケットを使い、はんだづけ不要で楽しめます。また、リアルタイム通信を簡単に実現できる「Milkcocoa」や、様々なWebサービス同士を連携できる「IFTTT」などとも組み合わせることもできます。</p>
-
-<p>実際に使ってみた例は以下をご覧ください。</p>
-
-<p><a href="http://liginc.co.jp/263899">Webサービス同士を連携できる「IFTTT」と自作IoTデバイスを繋いで生活を便利にしてみた</a></p>
-
-<p><a href="https://dotstud.io/blog/iotlt-vol24-chantoku-report/">【大島薫×IoT】浮気男に社会的制裁を加えるマシーンを作ってみた</a></p>
-
-<p><strong><a href="https://dotstud.io/projects/nefry-connect-internet/">Nefryの購入はこちら！</a></strong></p>
-
-<h2 id="ambientとは">Ambientとは</h2>
-
-<p>Ambient（アンビエント）は、<strong>センサーデータを蓄積・グラフ化してくれるIoTに特化したクラウドサービス</strong> です。</p>
-
-<p>Ambientから発行される「チャネルID」「ライトキー」の <strong>たった2つの情報をプログラムに書き込むだけ</strong> で、いとも簡単にセンサーデータをグラフ化することができます！</p>
-
-<p><img src="/img/blog/092/01_ambient.png" alt="" /></p>
-
-<p>このようなグラフを公開したり、簡単にカスタマイズしたりすることができるので、オススメのサービスです。</p>
-
-<p><strong><a href="https://ambidata.io/">Ambient公式サイト</a></strong></p>
-
-<h2 id="つくってみよう">つくってみよう！</h2>
-
-<p>Nefryで取得したデータをグラフ化するために、今回は以下の4ステップを試します。</p>
-
-<ul>
-<li>事前準備</li>
-<li>Ambientにチャネルを作成</li>
-<li>プログラムの書き込み</li>
-<li>NefryとAmbientの連携</li>
-</ul>
-
-<p>筆者の開発環境は以下です。</p>
-
-<ul>
-<li>windows 10</li>
-<li>Nefry version 2.3.0</li>
-</ul>
-
-<h2 id="事前準備">事前準備</h2>
-
-<p>開発を始める前に、NefryとAmbientのセットアップをします。</p>
-
-<p>NefryのWi-Fi接続とAmbientのユーザ登録が完了している方は、<a href="/blog/nefry-data-show-graphically/#ambientにチャネルを作成">Ambientにチャネルを作成</a>から開始してください。</p>
-
-<h3 id="nefryのセットアップ">Nefryのセットアップ</h3>
-
-<p>PCやスマートフォンから、Wi-FiのSSIDが <strong>Nefry-XXXX</strong>（変更した場合はその名前）になっているものを探し、接続します。</p>
-
-<p>接続できるとこのようなページが表示されます。表示されない場合は <a href="http://192.168.4.1">http://192.168.4.1</a> に接続してみてください。</p>
-
-<p><img src="/img/blog/092/02_nefry_menu.png" alt="" />
-このトップページでNefryに関するいろいろな設定ができます。まずは「Setup WiFi」をクリックして、Wi-Fiの設定をします。</p>
-
-<p>Setup WiFiのページはこのようになっています。
-<img src="/img/blog/092/03_nefry_wifi.png" alt="" />
-接続したいWi-Fiを選び、パスワードがある場合は入力をします。入力が完了したら「Save」をクリックしてください。設定が保存され、Nefryが再起動します。</p>
-
-<p>おまけですが、<strong>Nefry library 2.3.0</strong> 以降であると5つまでのWi-Fiを記憶することができ、自動的に最も強いWi-Fiに自動接続する機能を搭載しています。Nefryを持っていて <strong>ライブラリが古い場合は、更新することをオススメします</strong>。</p>
-
-<p>その他のセットアップや使い方の詳細は以下の記事をご覧ください。</p>
-
-<p><a href="http://liginc.co.jp/236620">自作したオリジナルIoTデバイス「Nefry」とインターネットを繋いでみた</a></p>
-
-<h3 id="ambientの登録">Ambientの登録</h3>
-
-<p>グラフ化に必要な情報を取得するために、まずAmbientに登録します。</p>
-
-<p><strong><a href="https://ambidata.io/">Ambient公式サイト</a></strong> の「ユーザー登録」から登録を進めます。</p>
-
-<p><img src="/img/blog/092/04_ambient_acount.png" alt="" /></p>
-
-<p>メールアドレス認証が必要なので、各自アカウントを用意してください。</p>
-
-<h2 id="ambientにチャネルを作成">Ambientにチャネルを作成</h2>
-
-<p>Ambientでは <strong>チャネルという単位で送信するデーターを管理・グラフ化する</strong> ため、まずはチャネルを作成します。「チャネルを作る」ボタンから作成します。
-<img src="/img/blog/092/05_ambient_channel.png" alt="" /></p>
-
-<p>チャネルが無事に作成されると、先ほどのページに情報が追加されています。「チャネルID」と「ライトキー」をあとで使うので控えておきましょう。
-<img src="/img/blog/092/06_ambient_list.png" alt="" /></p>
-
-<h2 id="プログラムの書き込み">プログラムの書き込み</h2>
-
-<p>今回はNefryについている <strong>アナログ入力</strong> を使ってみます。アナログ入力を扱えるセンサであればどのようなセンサでも大丈夫ですが、この記事ではGroveの明るさセンサを扱います。</p>
-
-<p>全体のプログラムはこちら。</p>
-
-<pre><code>&lt;script src=&quot;https://gist-it.appspot.com/github/Nefry-Community/ProgramMaster/blob/gh-pages/Nefry/Ambient/Analog/Analog.ino&quot;&gt;&lt;/script&gt;
-</code></pre>
-
-<p>Nefryにプログラムを書き込む方法は２つあります。</p>
-
-<h3 id="arduino-ideを使う">Arduino IDEを使う</h3>
-
-<p>プログラムを編集したい場合などは、Arduino IDEに上のプログラムを貼り、編集します。</p>
-
-<p>Arduino IDEでコンパイルしたプログラムはNefryトップページの「Upload　Sketch」からアップロードすることができます。</p>
-
-<p>Arduino IDEにNefryの設定を追加する方法は、以下の記事を確認してください。</p>
+<script async class="speakerdeck-embed" data-id="a4d673e00b57428ebe22543efda38f6f" data-ratio="1.33333333333333" src="//speakerdeck.com/assets/embed.js"></script>
 
 <blockquote>
-<p><img src="https://cdn.liginc.co.jp/wp-content/uploads/2016/07/20160728-nefry.png" alt="" />
-<a href="https://liginc.co.jp/298161"><strong>さくっと生活を便利にする！FRISKサイズのIoT向けデバイス「Nefry」を使ってみよう【環境構築編】</strong></a></p>
+<p><a href="https://speakerdeck.com/n0bisuke/pepperlian-xi-falsejian-shi-sisutemu-number-iotlt">Pepper連携の監視システム? #iotlt by n0bisuke</a></p>
 </blockquote>
 
-<h3 id="プログラムをダウンロードして使う">プログラムをダウンロードして使う</h3>
+<h2 id="やりたいこと">やりたいこと</h2>
 
-<p>もっと簡単に試したい場合、トップページから「Web Sketch Download」のページに移動し以下を入力してください。</p>
+<p><strong>Pepperを監視したい。</strong></p>
 
-<ul>
-<li>ドメイン :  program.nefry.studio</li>
-<li>URL :  /Nefry/Ambient/Analog</li>
-</ul>
+<p>謎ですが、Pepperを監視したいです。</p>
 
-<p><img src="/img/blog/092/07_nefry_websketch.png" alt="" /></p>
+<p><a href="https://iotlt.connpass.com/event/65379/">IoTLT vol31</a>で話をした内容ですが、Pepperが動いてくれないので、Pepperがいつ動き出しても大丈夫なように<strong>Pepperを見守り</strong>します。</p>
 
-<p><a href="http://program.nefry.studio/">Nefry Platform</a>というサイトでは他にも様々なプログラムを公開していますので、ぜひご覧ください。</p>
+<p>巷では「Pepperが見守り」だったり、「Pepperが防犯」みたいな先進的な取り組みがありますが、僕は<strong>あえてPepperを見守ります。</strong></p>
 
-<h2 id="nefryとambientの連携">NefryとAmbientの連携</h2>
+<h2 id="完成イメージ">完成イメージ</h2>
 
-<p>プログラムが書き込めたら、Ambientの情報をNefryに登録します。</p>
+<p>こんな感じで見守ります。</p>
 
-<p>トップページから「Setup Module」をクリックしページを移動します。
-<img src="/img/blog/092/08_nefry_module.png" alt="" />
-設定項目の中から「WriteKey」と「ChannelID」となっている欄を見つけ、そこにAmbientで取得したライトキーとチャネルIDをそれぞれ入力します。</p>
+<p><img src="https://i.gyazo.com/c3fa7c7bb7dbdd5bba505e7a3de3b54b.png" alt="" /></p>
 
-<p>Saveをクリックすると、Nefryが再起動してAmbientにデータを送るようになります。</p>
+<p>そして、外からでもブラウザでPepperを見守るストリーミングサービスっぽいものを作ります。</p>
 
-<p><strong>これで準備は完了です！</strong></p>
+<p><img src="https://i.gyazo.com/09e912583e26710a13f0d49f4a866b55.png" alt="" /></p>
 
-<h2 id="ambientでグラフを見てみよう">Ambientでグラフを見てみよう</h2>
+<h2 id="使うもの">使うもの</h2>
 
-<p>Nefryに接続した明るさセンサーの値のグラフです！
-<img src="/img/blog/092/09_product.png" alt="" /></p>
+<p>デバイスはNefry BTとGroveカメラの二つです。
+（ちょっとジャンパワイヤ使います。）</p>
 
-<p>右側がAmbientのグラフ、左側がNefryの取得したアナログ値をWebConsoleで表示しています。
-<img src="http://program.nefry.studio/Nefry/Ambient/pic/ambientnefry.gif" alt="Ambient×Nefry.git" />
-Nefryにライトを当てたり遠ざけたりすると、わりと <strong>リアルタイムにどんどんグラフが生成されていく</strong> のが分かります。<a href="https://ambidata.io/ch/channel.html?id=785">こちらのページ</a>でで今回撮影したグラフをみることができます。</p>
+<h3 id="nefry-bt">Nefry BT</h3>
 
-<p>Ambientでは <strong>グラフの自動スケールやグラフの公開機能、画像の添付</strong> など、今回紹介しきれないほど様々な機能が作成されています。</p>
+<p>ESP32ベースのArduino互換開発ボードです。
+<a href="http://sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-55W8">千石電商さん</a>でも購入できます。</p>
 
-<p>詳しくはAmbientの公式サイトやドキュメントを確認してください。</p>
+<p><img src="https://i.gyazo.com/d43d9926b0e5293b1045890bdd7fbc6c.png" alt="" /></p>
 
-<ul>
-<li><a href="https://ambidata.io/">Ambient公式サイト</a></li>
-<li><a href="https://ambidata.io/docs/">ドキュメント</a></li>
-</ul>
+<h3 id="grove-シリアルカメラキット">Grove シリアルカメラキット</h3>
+
+<p>Grove対応のカメラです。</p>
+
+<p><a href="https://www.switch-science.com/catalog/1626/">スイッチサイエンスさん</a>などで購入できます。</p>
+
+<p><img src="https://i.gyazo.com/99ad24d2ffcfd62c8407d7db7fb753c5.png" alt="" /></p>
+
+<h2 id="構成イメージ">構成イメージ</h2>
+
+<p>カメラで撮影した画像をNefry BT経由でサーバーにアップロードします。
+アップロードされた画像はNode.jsで立てたサーバーで受け取り、WebSocket(Socket.io)でブラウザに配信します。</p>
+
+<p><img src="https://i.gyazo.com/bfdd4f3e37898144268c2edd086320dc.png" alt="" /></p>
+
+<h2 id="作り方">作り方</h2>
+
+<p>3つに分けて紹介します。</p>
+
+<p>デバイス（Nefry BT）で撮影した画像をサーバーに送りサーバーからブラウザに配信します。</p>
+
+<p>データの流れ的に<code>デバイス -&gt; サーバー -&gt; ブラウザ</code>という流れです。</p>
+
+<p>全体のコードは<a href="https://github.com/dotstudio/nefrybt_camera_server">こちらのGitHubリポジトリ</a>にあります。</p>
+
+<h3 id="デバイス側-arduino">デバイス側 - Arduino</h3>
+
+<p>デバイス側は<a href="http://wiki.seeed.cc/Grove-Serial_Camera_Kit/">Grove - Serial Camera Kitの公式Wiki</a>にあるサンプルコードをもとに作っています。</p>
+
+<p>dotstudioの<a href="https://dotstud.io/members/ukkz/">ものづくりアーティストうこ</a>さんがメインで作ってくれました。</p>
+
+<p>少し長いので<a href="https://github.com/dotstudio/nefrybt_camera_server/blob/master/nefry/nefrybt_grove_camera/nefrybt_grove_camera.ino">GitHubのリポジトリ</a>を参照しましょう。</p>
+
+<p>このプログラムをNefry BTに書き込みましょう。</p>
+
+<p><code>host</code>の箇所に画像アップロード先のサーバーを指定します。</p>
+
+<h4 id="配線">配線</h4>
+
+<p>配線はD3,D4に繋ぎます。</p>
+
+<p>プログラム的には</p>
+
+<pre><code>#define SEREAL_RX 19 //Nefry BT D3
+#define SEREAL_TX 18 //Nefry BT D4
+</code></pre>
+
+<p>の部分が該当します。NefryBTの<a href="https://drive.google.com/file/d/0B_mvDQF8yaQRLVprUHl4WTFLWVE/view">仕様書</a>を見ると分かりますが、ESP32のGPIO 19番がNefryBTのD3にあたり、18番がD4になります。</p>
+
+<h3 id="サーバー側-node-js">サーバー側 - Node.js</h3>
+
+<p>Node.jsで画像を受信するサーバーを作ります。</p>
+
+<p>無難にSocket.ioとexpressを使います。 Node.jsのバージョンは8.4です。
+7系以前だと動かない可能性があります。</p>
+
+<pre><code>npm i --save socket.io express
+</code></pre>
+
+<pre><code>//server.js
+'use strict';
+
+const fs = require('fs');
+const app = require('express')();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+const express = require('express');
+const PORT = process.env.PORT || 3000;
+app.use(express.static(__dirname));
+
+const {promisify} = require('util');
+const writeFileAsync = promisify(fs.writeFile);
+
+io.on('connection', (socket) =&gt; console.log('a user connected')); //socket.ioのコネクション
+
+app.get('/', (req, res) =&gt; res.sendFile('./index.thml'));
+app.post('/', (req, res) =&gt; {
+    let buffers = [];
+    let cur = 0;
+    const len = parseInt(req.headers['content-length'], 10);
+
+    req.on('data', (chunk) =&gt; {
+        buffers.push(chunk);
+        cur += chunk.length;
+        console.log(`Downloading...${(100.0 * cur / len).toFixed(2)}%`);
+    });
+
+    req.on('end', async () =&gt; {
+        console.log(`\n[done] Image upload`);
+        req.rawBody = Buffer.concat(buffers);
+        const base64image = req.rawBody.toString('base64'); //base64変換
+        await writeFileAsync('./img.jpeg', req.rawBody, 'utf-8')
+        console.log(`[done] Image Save`);
+        io.sockets.emit('new image',base64image); //画像送信
+    });
+    
+});
+ 
+http.listen(PORT, () =&gt; console.log(`listening on *:${PORT}`));
+</code></pre>
+
+<p>通常Expressを使う際に<a href="https://github.com/expressjs/body-parser">body-parser</a>をよく使いますが、今回はあえて使わずに、<code>dataイベント</code>で<code>chunk</code>を拾って画像アップロードのプログレス表示を実装しています。</p>
+
+<p>Nefry BTも含めてこういったマイコンボードはスマートフォンやPCに比べるとCPUパワーが弱いため、画像アップロードに時間がかかることがあります。</p>
+
+<p>サーバー側でどれくらいのデータ送信が完了しているのかの進捗が分かると安心して開発できます。
+画像を受信したら<code>toString('base64')</code>でBase64の文字列に変換をしています。</p>
+
+<p><code>io.sockets.emit()</code>の箇所では変換した文字列をSocket.io経由でブラウザに配信しています。</p>
+
+<h3 id="ブラウザ側-javascript">ブラウザ側 - JavaScript</h3>
+
+<p>ブラウザ側では、文字列で送られた画像データを受け取り、Canvasに流し込みます。
+HTML側では<code>id=&quot;myCanvas&quot;</code>のcanvasを作り、<code>socket.io</code>の読み込みと以下で作る<code>app.js</code>の読み込みをします。</p>
+
+<pre><code>&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot; /&gt;
+    &lt;title&gt;Nefry BT Camera&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body style=&quot;background-color:#D0D0D0;&quot;&gt;
+    &lt;canvas id=&quot;myCanvas&quot; width=&quot;640&quot; height=&quot;480&quot; style=&quot;background-color:#FFFFFF;&quot;&gt;&lt;/canvas&gt;
+    &lt;script src=&quot;/socket.io/socket.io.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;/public/app.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p><code>draw()</code>では、canvasに<code>drawImage()</code>で画像を描画します。
+Base64の場合はsrcが画像パスではなく<code>data:image/jpeg;base64,~~~~~</code>という指定方法です。</p>
+
+<pre><code>// /public/app.js
+'use strict';
+
+const socket = io();
+
+const draw = (imageData = '') =&gt; {
+    const canvas = document.getElementById('myCanvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    img.src = `data:image/jpeg;base64,${imageData}`; //基本base64の文字列
+    if(imageData === 'init') img.src = `./img.jpeg`; //初期実行時のみサーバーのimg.jpegを取得
+    img.onload = () =&gt; {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0, 640, 480);
+    }
+    console.log(`update ${new Date()}`);
+}
+
+socket.on('new image', draw); //画像更新時
+draw('init'); //初期実行
+</code></pre>
+
+<p><code>socket.on('new image', draw)</code>でサーバーからデータが送られてくるたびに<code>draw()</code>を実行します。</p>
+
+<h2 id="使ってみた感想">使ってみた感想</h2>
+
+<p>1週間ほど動かしていますが、問題なくずっと稼働写真を送り続けてくれるので意外と<strong>ラズパイなどで作るシステムより安定しているかも</strong>しれません。</p>
+
+<p>あと、発表のオチだったのですが、Pepperの調子が悪く被写体が動かないので成功してるのか分かりにくいです苦笑</p>
+
+<p><img src="https://i.gyazo.com/b2fb0a60f31c12e61e99b51d442dd563.png" alt="" /></p>
 
 <h2 id="まとめ">まとめ</h2>
 
-<p>今回は、なんとハードウエアもWeb側も <strong>コードを一切書かずにグラフ化する</strong> ことができました。</p>
+<p>Nefry BTとNode.jsを使ってネットワークカメラを作ることができました。</p>
 
-<p>紹介したのは折れ線グラフですが、<strong>棒グラフや散布図などもお手軽にグラフを作れるAmbient</strong> と <strong>Webへの接続が簡単なNefry</strong> でぜひぜひ遊んでみてください。</p>
-
-<p>Ambientを運営されている下島さん、記事にさせていただく許可を頂きありがとうございました。</p>
+<p>GroveのカメラとNefry V2を使って過去に<a href="https://am-our.com/love/110/13945/">【大島薫×IoT】浮気男を社会的に制裁するマシーンを作ってみた</a>こともありましたが、ネットワークカメラを作りたい需要はそこそこあると思うので、その際の参考になれば幸いです。</p>
 </div>
 
   
@@ -846,16 +879,6 @@ Nefryにライトを当てたり遠ざけたりすると、わりと <strong>リ
           
           
           
-          <li class="js-items">
-            <article class="card-related">
-              <a class="" href="https://dotstud.io/blog/nefrybt-pepper-monitoring-system/">
-                <img class="card-related--thumbnail" src="/img/blog/127/00_thumbnail.png" alt="サムネイル">
-                <h3 class="card-related--title">Node.jsとNefry BTで監視システムを作ろう！ for Pepper #iotlt</h3>
-              </a>
-              
-            </article>
-          </li>
-        
         
           
           
@@ -1002,6 +1025,16 @@ Nefryにライトを当てたり遠ざけたりすると、わりと <strong>リ
           
           
           
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/nefry-data-show-graphically/">
+                <img class="card-related--thumbnail" src="/img/blog/092/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">Nefryで取得したセンサーデータをAmbientで簡単にグラフ化しよう！</h3>
+              </a>
+              
+            </article>
+          </li>
+        
         
           
           
@@ -1564,12 +1597,12 @@ Nefryにライトを当てたり遠ざけたりすると、わりと <strong>リ
     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 
     &nbsp;
-    <div class="fb-like" data-href="https://dotstud.io/blog/nefry-data-show-graphically/" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
+    <div class="fb-like" data-href="https://dotstud.io/blog/nefrybt-pepper-monitoring-system/" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
 
     &nbsp;
 
     <div class="hatena-b">
-      <a href="http://b.hatena.ne.jp/entry/s/dotstud.io/blog/nefry-data-show-graphically" class="hatena-bookmark-button" data-hatena-bookmark-title="Nefryで取得したセンサーデータをAmbientで簡単にグラフ化しよう！" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
+      <a href="http://b.hatena.ne.jp/entry/s/dotstud.io/blog/nefrybt-pepper-monitoring-system" class="hatena-bookmark-button" data-hatena-bookmark-title="Node.jsとNefry BTで監視システムを作ろう！ for Pepper #iotlt" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
         <img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" />
       </a>
       <script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>

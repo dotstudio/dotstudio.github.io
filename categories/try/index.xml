@@ -10,6 +10,232 @@
     <atom:link href="/categories/try/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Node.jsとNefry BTで監視システムを作ろう！ for Pepper #iotlt</title>
+      <link>https://dotstud.io/blog/nefrybt-pepper-monitoring-system/</link>
+      <pubDate>Thu, 21 Sep 2017 18:40:38 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nefrybt-pepper-monitoring-system/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、のびすけです。&lt;/p&gt;
+
+&lt;p&gt;IoTLT vol31で話をしたNefry BT（ESP32系ボード）を使ってネットワークカメラを作ってみたいと思います。&lt;/p&gt;
+
+&lt;p&gt;発表資料もご参照ください。&lt;/p&gt;
+
+&lt;script async class=&#34;speakerdeck-embed&#34; data-id=&#34;a4d673e00b57428ebe22543efda38f6f&#34; data-ratio=&#34;1.33333333333333&#34; src=&#34;//speakerdeck.com/assets/embed.js&#34;&gt;&lt;/script&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://speakerdeck.com/n0bisuke/pepperlian-xi-falsejian-shi-sisutemu-number-iotlt&#34;&gt;Pepper連携の監視システム? #iotlt by n0bisuke&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;やりたいこと&#34;&gt;やりたいこと&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Pepperを監視したい。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;謎ですが、Pepperを監視したいです。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://iotlt.connpass.com/event/65379/&#34;&gt;IoTLT vol31&lt;/a&gt;で話をした内容ですが、Pepperが動いてくれないので、Pepperがいつ動き出しても大丈夫なように&lt;strong&gt;Pepperを見守り&lt;/strong&gt;します。&lt;/p&gt;
+
+&lt;p&gt;巷では「Pepperが見守り」だったり、「Pepperが防犯」みたいな先進的な取り組みがありますが、僕は&lt;strong&gt;あえてPepperを見守ります。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;完成イメージ&#34;&gt;完成イメージ&lt;/h2&gt;
+
+&lt;p&gt;こんな感じで見守ります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/c3fa7c7bb7dbdd5bba505e7a3de3b54b.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;そして、外からでもブラウザでPepperを見守るストリーミングサービスっぽいものを作ります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/09e912583e26710a13f0d49f4a866b55.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;使うもの&#34;&gt;使うもの&lt;/h2&gt;
+
+&lt;p&gt;デバイスはNefry BTとGroveカメラの二つです。
+（ちょっとジャンパワイヤ使います。）&lt;/p&gt;
+
+&lt;h3 id=&#34;nefry-bt&#34;&gt;Nefry BT&lt;/h3&gt;
+
+&lt;p&gt;ESP32ベースのArduino互換開発ボードです。
+&lt;a href=&#34;http://sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-55W8&#34;&gt;千石電商さん&lt;/a&gt;でも購入できます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/d43d9926b0e5293b1045890bdd7fbc6c.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;grove-シリアルカメラキット&#34;&gt;Grove シリアルカメラキット&lt;/h3&gt;
+
+&lt;p&gt;Grove対応のカメラです。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.switch-science.com/catalog/1626/&#34;&gt;スイッチサイエンスさん&lt;/a&gt;などで購入できます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/99ad24d2ffcfd62c8407d7db7fb753c5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;構成イメージ&#34;&gt;構成イメージ&lt;/h2&gt;
+
+&lt;p&gt;カメラで撮影した画像をNefry BT経由でサーバーにアップロードします。
+アップロードされた画像はNode.jsで立てたサーバーで受け取り、WebSocket(Socket.io)でブラウザに配信します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/bfdd4f3e37898144268c2edd086320dc.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;作り方&#34;&gt;作り方&lt;/h2&gt;
+
+&lt;p&gt;3つに分けて紹介します。&lt;/p&gt;
+
+&lt;p&gt;デバイス（Nefry BT）で撮影した画像をサーバーに送りサーバーからブラウザに配信します。&lt;/p&gt;
+
+&lt;p&gt;データの流れ的に&lt;code&gt;デバイス -&amp;gt; サーバー -&amp;gt; ブラウザ&lt;/code&gt;という流れです。&lt;/p&gt;
+
+&lt;p&gt;全体のコードは&lt;a href=&#34;https://github.com/dotstudio/nefrybt_camera_server&#34;&gt;こちらのGitHubリポジトリ&lt;/a&gt;にあります。&lt;/p&gt;
+
+&lt;h3 id=&#34;デバイス側-arduino&#34;&gt;デバイス側 - Arduino&lt;/h3&gt;
+
+&lt;p&gt;デバイス側は&lt;a href=&#34;http://wiki.seeed.cc/Grove-Serial_Camera_Kit/&#34;&gt;Grove - Serial Camera Kitの公式Wiki&lt;/a&gt;にあるサンプルコードをもとに作っています。&lt;/p&gt;
+
+&lt;p&gt;dotstudioの&lt;a href=&#34;https://dotstud.io/members/ukkz/&#34;&gt;ものづくりアーティストうこ&lt;/a&gt;さんがメインで作ってくれました。&lt;/p&gt;
+
+&lt;p&gt;少し長いので&lt;a href=&#34;https://github.com/dotstudio/nefrybt_camera_server/blob/master/nefry/nefrybt_grove_camera/nefrybt_grove_camera.ino&#34;&gt;GitHubのリポジトリ&lt;/a&gt;を参照しましょう。&lt;/p&gt;
+
+&lt;p&gt;このプログラムをNefry BTに書き込みましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;host&lt;/code&gt;の箇所に画像アップロード先のサーバーを指定します。&lt;/p&gt;
+
+&lt;h4 id=&#34;配線&#34;&gt;配線&lt;/h4&gt;
+
+&lt;p&gt;配線はD3,D4に繋ぎます。&lt;/p&gt;
+
+&lt;p&gt;プログラム的には&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#define SEREAL_RX 19 //Nefry BT D3
+#define SEREAL_TX 18 //Nefry BT D4
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;の部分が該当します。NefryBTの&lt;a href=&#34;https://drive.google.com/file/d/0B_mvDQF8yaQRLVprUHl4WTFLWVE/view&#34;&gt;仕様書&lt;/a&gt;を見ると分かりますが、ESP32のGPIO 19番がNefryBTのD3にあたり、18番がD4になります。&lt;/p&gt;
+
+&lt;h3 id=&#34;サーバー側-node-js&#34;&gt;サーバー側 - Node.js&lt;/h3&gt;
+
+&lt;p&gt;Node.jsで画像を受信するサーバーを作ります。&lt;/p&gt;
+
+&lt;p&gt;無難にSocket.ioとexpressを使います。 Node.jsのバージョンは8.4です。
+7系以前だと動かない可能性があります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;npm i --save socket.io express
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;//server.js
+&#39;use strict&#39;;
+
+const fs = require(&#39;fs&#39;);
+const app = require(&#39;express&#39;)();
+const http = require(&#39;http&#39;).Server(app);
+const io = require(&#39;socket.io&#39;)(http);
+const express = require(&#39;express&#39;);
+const PORT = process.env.PORT || 3000;
+app.use(express.static(__dirname));
+
+const {promisify} = require(&#39;util&#39;);
+const writeFileAsync = promisify(fs.writeFile);
+
+io.on(&#39;connection&#39;, (socket) =&amp;gt; console.log(&#39;a user connected&#39;)); //socket.ioのコネクション
+
+app.get(&#39;/&#39;, (req, res) =&amp;gt; res.sendFile(&#39;./index.thml&#39;));
+app.post(&#39;/&#39;, (req, res) =&amp;gt; {
+    let buffers = [];
+    let cur = 0;
+    const len = parseInt(req.headers[&#39;content-length&#39;], 10);
+
+    req.on(&#39;data&#39;, (chunk) =&amp;gt; {
+        buffers.push(chunk);
+        cur += chunk.length;
+        console.log(`Downloading...${(100.0 * cur / len).toFixed(2)}%`);
+    });
+
+    req.on(&#39;end&#39;, async () =&amp;gt; {
+        console.log(`\n[done] Image upload`);
+        req.rawBody = Buffer.concat(buffers);
+        const base64image = req.rawBody.toString(&#39;base64&#39;); //base64変換
+        await writeFileAsync(&#39;./img.jpeg&#39;, req.rawBody, &#39;utf-8&#39;)
+        console.log(`[done] Image Save`);
+        io.sockets.emit(&#39;new image&#39;,base64image); //画像送信
+    });
+    
+});
+ 
+http.listen(PORT, () =&amp;gt; console.log(`listening on *:${PORT}`));
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;通常Expressを使う際に&lt;a href=&#34;https://github.com/expressjs/body-parser&#34;&gt;body-parser&lt;/a&gt;をよく使いますが、今回はあえて使わずに、&lt;code&gt;dataイベント&lt;/code&gt;で&lt;code&gt;chunk&lt;/code&gt;を拾って画像アップロードのプログレス表示を実装しています。&lt;/p&gt;
+
+&lt;p&gt;Nefry BTも含めてこういったマイコンボードはスマートフォンやPCに比べるとCPUパワーが弱いため、画像アップロードに時間がかかることがあります。&lt;/p&gt;
+
+&lt;p&gt;サーバー側でどれくらいのデータ送信が完了しているのかの進捗が分かると安心して開発できます。
+画像を受信したら&lt;code&gt;toString(&#39;base64&#39;)&lt;/code&gt;でBase64の文字列に変換をしています。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;io.sockets.emit()&lt;/code&gt;の箇所では変換した文字列をSocket.io経由でブラウザに配信しています。&lt;/p&gt;
+
+&lt;h3 id=&#34;ブラウザ側-javascript&#34;&gt;ブラウザ側 - JavaScript&lt;/h3&gt;
+
+&lt;p&gt;ブラウザ側では、文字列で送られた画像データを受け取り、Canvasに流し込みます。
+HTML側では&lt;code&gt;id=&amp;quot;myCanvas&amp;quot;&lt;/code&gt;のcanvasを作り、&lt;code&gt;socket.io&lt;/code&gt;の読み込みと以下で作る&lt;code&gt;app.js&lt;/code&gt;の読み込みをします。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;
+    &amp;lt;meta charset=&amp;quot;utf-8&amp;quot; /&amp;gt;
+    &amp;lt;title&amp;gt;Nefry BT Camera&amp;lt;/title&amp;gt;
+&amp;lt;/head&amp;gt;
+
+&amp;lt;body style=&amp;quot;background-color:#D0D0D0;&amp;quot;&amp;gt;
+    &amp;lt;canvas id=&amp;quot;myCanvas&amp;quot; width=&amp;quot;640&amp;quot; height=&amp;quot;480&amp;quot; style=&amp;quot;background-color:#FFFFFF;&amp;quot;&amp;gt;&amp;lt;/canvas&amp;gt;
+    &amp;lt;script src=&amp;quot;/socket.io/socket.io.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+    &amp;lt;script src=&amp;quot;/public/app.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;draw()&lt;/code&gt;では、canvasに&lt;code&gt;drawImage()&lt;/code&gt;で画像を描画します。
+Base64の場合はsrcが画像パスではなく&lt;code&gt;data:image/jpeg;base64,~~~~~&lt;/code&gt;という指定方法です。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;// /public/app.js
+&#39;use strict&#39;;
+
+const socket = io();
+
+const draw = (imageData = &#39;&#39;) =&amp;gt; {
+    const canvas = document.getElementById(&#39;myCanvas&#39;);
+    const ctx = canvas.getContext(&#39;2d&#39;);
+    const img = new Image();
+    img.src = `data:image/jpeg;base64,${imageData}`; //基本base64の文字列
+    if(imageData === &#39;init&#39;) img.src = `./img.jpeg`; //初期実行時のみサーバーのimg.jpegを取得
+    img.onload = () =&amp;gt; {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0, 640, 480);
+    }
+    console.log(`update ${new Date()}`);
+}
+
+socket.on(&#39;new image&#39;, draw); //画像更新時
+draw(&#39;init&#39;); //初期実行
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;socket.on(&#39;new image&#39;, draw)&lt;/code&gt;でサーバーからデータが送られてくるたびに&lt;code&gt;draw()&lt;/code&gt;を実行します。&lt;/p&gt;
+
+&lt;h2 id=&#34;使ってみた感想&#34;&gt;使ってみた感想&lt;/h2&gt;
+
+&lt;p&gt;1週間ほど動かしていますが、問題なくずっと稼働写真を送り続けてくれるので意外と&lt;strong&gt;ラズパイなどで作るシステムより安定しているかも&lt;/strong&gt;しれません。&lt;/p&gt;
+
+&lt;p&gt;あと、発表のオチだったのですが、Pepperの調子が悪く被写体が動かないので成功してるのか分かりにくいです苦笑&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/b2fb0a60f31c12e61e99b51d442dd563.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;Nefry BTとNode.jsを使ってネットワークカメラを作ることができました。&lt;/p&gt;
+
+&lt;p&gt;GroveのカメラとNefry V2を使って過去に&lt;a href=&#34;https://am-our.com/love/110/13945/&#34;&gt;【大島薫×IoT】浮気男を社会的に制裁するマシーンを作ってみた&lt;/a&gt;こともありましたが、ネットワークカメラを作りたい需要はそこそこあると思うので、その際の参考になれば幸いです。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>日本上陸！littleBits cloudBitモジュールでIFTTT連携してみた！</title>
       <link>https://dotstud.io/blog/littlebits-cloudbit-ifttt-blink/</link>
       <pubDate>Tue, 22 Aug 2017 19:43:42 +0900</pubDate>
@@ -4265,312 +4491,6 @@ void loop() {
 &lt;p&gt;Thanks for reading and hope Nefry helps you to try IoT easier.&lt;/p&gt;
 
 &lt;p&gt;Original Article (Japanese) : &lt;a href=&#34;https://liginc.co.jp/298161&#34;&gt;https://liginc.co.jp/298161&lt;/a&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>GR-COTTONで見た目も可愛く電子工作！部屋の温度をブラウザからチェックしてみよう</title>
-      <link>https://dotstud.io/blog/milkcocoa-grcotton-realtime-temperature/</link>
-      <pubDate>Thu, 03 Nov 2016 10:00:00 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/milkcocoa-grcotton-realtime-temperature/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは！　dotstudioのエディターのうららです。先日、バックエンドサービス「Milkcocoa」を題材にしたLT大会「 &lt;strong&gt;&lt;a href=&#34;http://mlkcca.connpass.com/event/34936/&#34;&gt;紅白Milkcocoa合戦&lt;/a&gt;&lt;/strong&gt; 」に参加してきました。&lt;/p&gt;
-
-&lt;p&gt;そこで発表した &lt;strong&gt;Webサイト上から部屋の温度がわかる&lt;/strong&gt; という仕組みが何かしらに役に立つ気がするので本記事にまとめておこうと思います。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;こんな人におすすめ&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;部屋の気温をブラウザ上からチェックできるようにしたり、データとして貯めたい人（ペットを飼ってる人や観葉植物を育てている人におすすめ）&lt;/li&gt;
-&lt;li&gt;電子工作には興味があるけれど、せっかくなら見た目が可愛いアイテムで挑戦したい人&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;全体の構成&#34;&gt;全体の構成&lt;/h2&gt;
-
-&lt;p&gt;マイコンボード「GR-COTTON」でセンサーの値を取得し、バックエンドサービス「Milkcocoa」を使いブラウザ側にデータを送ります。&lt;/p&gt;
-
-&lt;p&gt;MacとGR-COTTONをUSB接続し、Node.jsを経由してMilkcocoaにデータを送ります。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;milkcocoa&#34;&gt;Milkcocoa&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/01_milkcocoa.png&#34; alt=&#34;&#34; /&gt;
-&lt;a href=&#34;https://mlkcca.com&#34;&gt;milkcocoa&lt;/a&gt;とは、&lt;strong&gt;JavaScriptのソースコードを1行挿入するだけで、リアルタイム通信ができるようになる&lt;/strong&gt; サービスです。リアルタイム通信にはバックエンドの構築が必要ですが、そこの手間が省けます。&lt;/p&gt;
-
-&lt;h3 id=&#34;gr-cotton&#34;&gt;GR-COTTON&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/02_cotton.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;こちらが今回使うマイコンボード「&lt;a href=&#34;http://gadget.renesas.com/ja/product/cotton.html&#34;&gt;GR-COTTON&lt;/a&gt;」です。ルネサスエレクトロニクスが企画する「&lt;a href=&#34;http://gadget.renesas.com/ja/&#34;&gt;がじぇっとるねさす&lt;/a&gt;（通称がじぇるね）」が作っています。&lt;/p&gt;
-
-&lt;p&gt;最初からタッチセンサーや気温センサー、フルカラーLEDを搭載しています。しかもその &lt;strong&gt;タッチセンサーが星型&lt;/strong&gt; で、基盤も白をベースにしているので、見た目がものすごく可愛いんです！　&lt;/p&gt;
-
-&lt;h2 id=&#34;作り方&#34;&gt;作り方&lt;/h2&gt;
-
-&lt;p&gt;では早速作ってみましょう！　大きく分けると次の4つの作業をします。&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Milkcocoaの登録をする&lt;/li&gt;
-&lt;li&gt;GR-COTTONのチュートリアル1〜10をおこなう&lt;/li&gt;
-&lt;li&gt;app.jsをビルドする&lt;/li&gt;
-&lt;li&gt;Webサイトを作る（HTMLのみでOK）&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&#34;1-milkcocoaの登録をする&#34;&gt;1. Milkcocoaの登録をする&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/04_milkcocoa.png&#34; alt=&#34;&#34; /&gt;
-&lt;a href=&#34;https://mlkcca.com/&#34;&gt;トップページ&lt;/a&gt;からログインして、「新しいアプリを作る」をクリックします。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/05_milkcocoa.png&#34; alt=&#34;&#34; /&gt;
-アプリ名は自分で好きなものを登録します。ここでは「GR-COTTON」にしました。&lt;/p&gt;
-
-&lt;p&gt;これだけでMilkcocoa側の準備はOKです。&lt;/p&gt;
-
-&lt;h3 id=&#34;2-gr-cottonのチュートリアル1-10をおこなう&#34;&gt;2. GR-COTTONのチュートリアル1〜10をおこなう&lt;/h3&gt;
-
-&lt;p&gt;がじぇっとるねさすが提供している、こちらの&lt;a href=&#34;http://gadget.renesas.com/ja/product/cotton_sp1.html&#34;&gt;チュートリアル&lt;/a&gt;を参考に、1〜10まで進めてください。&lt;/p&gt;
-
-&lt;h3 id=&#34;3-node-jsのプログラムを用意する&#34;&gt;3. Node.jsのプログラムを用意する&lt;/h3&gt;
-
-&lt;p&gt;シリアル通信でCOTTONとMilkcocoaの橋渡しをするプログラムを用意します。以下のapp.jsをプログラムに記入して実行してみてください。Node.jsで作成しています。&lt;/p&gt;
-
-&lt;h4 id=&#34;app-js&#34;&gt;app.js&lt;/h4&gt;
-
-&lt;pre&gt;&lt;code&gt;// Milkcocoaの設定
-const MilkCocoa = require(&#39;milkcocoa&#39;);
-const milkcocoa = new MilkCocoa(&#39;your api key&#39;);
-const ds = milkcocoa.dataStore(&#39;status&#39;);
-
-// シリアル通信の設定
-const SerialPort = require(&#39;serialport&#39;);
-const portName = &#39;COM6&#39;; // IDE for GRとかで調べる
-const serial = new SerialPort(portName, {
-  baudrate: 9600,
-  flowcontrol: false,
-  parser: SerialPort.parsers.readline(&amp;quot;\n&amp;quot;)
-});
-
-serial.on(&#39;open&#39;, () =&amp;gt; {
-  console.log(&#39;open&#39;);
-});
-
-// シリアル通信でデータを受信したに呼び出される関数を定義
-serial.on(&#39;data&#39;, (input) =&amp;gt; {
-  console.log(input);
-  ds.send({message: input});
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;ターミナルを開いて、以下のコマンドでインストールします。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;npm init
-npm i serialport milkcocoa
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;app.jsを動かしたいときは、以下のコマンドを使います。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;node app.js
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;4-webサイトを作る-htmlのみでok&#34;&gt;4. Webサイトを作る（HTMLのみでOK）&lt;/h3&gt;
-
-&lt;p&gt;最後はフロント側を作ります！&lt;/p&gt;
-
-&lt;h4 id=&#34;index-html&#34;&gt;index.html&lt;/h4&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;!doctype html&amp;gt;
-&amp;lt;html&amp;gt;
-  &amp;lt;head&amp;gt;
-    &amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
-    &amp;lt;title&amp;gt;フロント&amp;lt;/title&amp;gt;
-  &amp;lt;/head&amp;gt;
-  &amp;lt;body&amp;gt;
-    &amp;lt;div id=&amp;quot;log&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
-    &amp;lt;script src=&amp;quot;https://code.jquery.com/jquery-2.2.4.min.js&amp;quot;   integrity=&amp;quot;sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=&amp;quot;   crossorigin=&amp;quot;anonymous&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-    &amp;lt;script src=&#39;https://cdn.mlkcca.com/v2.0.0/milkcocoa.js&#39;&amp;gt;&amp;lt;/script&amp;gt;
-    &amp;lt;script&amp;gt;
-    window.onload = () =&amp;gt; {
-      // Milkcocoa
-      const milkcocoa = new MilkCocoa(&#39;your api key&#39;);
-      const ds = milkcocoa.dataStore(&#39;status&#39;);
-
-      // Milkcocoaからデータが送られてきた時のコールバック
-      ds.on(&#39;send&#39;, (data) =&amp;gt; {
-        console.log(data.value);
-        // ここでhtmlのDOMを操作する
-
-     })
-    }
-    &amp;lt;/script&amp;gt;
-  &amp;lt;/body&amp;gt;
-&amp;lt;/html&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/07_milkcocoa.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;14行目の&lt;code&gt;your api key&lt;/code&gt;には、先ほど登録したMilkcocoaのこの箇所の文字列を入れます。&lt;/p&gt;
-
-&lt;p&gt;これで、&lt;code&gt;node app.js&lt;/code&gt;を打つと、コンソールに気温がリアルタイムで表示されるようになります！  ちなみに、&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;!doctype html&amp;gt;
-&amp;lt;html&amp;gt;
-  &amp;lt;head&amp;gt;
-    &amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
-    &amp;lt;title&amp;gt;うららフロント&amp;lt;/title&amp;gt;
-  &amp;lt;/head&amp;gt;
-
-
-  &amp;lt;body&amp;gt;
-	// ここに書き込める
-    &amp;lt;div id=&amp;quot;log&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
-    &amp;lt;script src=&amp;quot;https://code.jquery.com/jquery-2.2.4.min.js&amp;quot;   integrity=&amp;quot;sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=&amp;quot;   crossorigin=&amp;quot;anonymous&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-    &amp;lt;script src=&#39;https://cdn.mlkcca.com/v2.0.0/milkcocoa.js&#39;&amp;gt;&amp;lt;/script&amp;gt;
-    &amp;lt;script&amp;gt;
-    window.onload = () =&amp;gt; {
-      const milkcocoa = new MilkCocoa(&#39;your api key&#39;);
-      const ds = milkcocoa.dataStore(&#39;status&#39;);
-
-      ds.on(&#39;send&#39;, (data) =&amp;gt; {
-        console.log(data.value);
-     })
-    }
-    &amp;lt;/script&amp;gt;
-	// ここに書き込める
-  &amp;lt;/body&amp;gt;
-
-&amp;lt;/html&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;// ここに書き込める&lt;/code&gt; にHTMLなどを書くと、フロント側をいじることができます。&lt;/p&gt;
-
-&lt;h4 id=&#34;わたしが作ったフロント側のソースコード-cotton-html&#34;&gt;わたしが作ったフロント側のソースコード cotton.html&lt;/h4&gt;
-
-&lt;p&gt;完全に余談ですが、私が作ったフロント側のソースコードも載せておきます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;!doctype html&amp;gt;
-&amp;lt;html&amp;gt;
-  &amp;lt;head&amp;gt;
-    &amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
-    &amp;lt;title&amp;gt;部屋の温度なう&amp;lt;/title&amp;gt;
-    &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;http://fonts.googleapis.com/earlyaccess/notosansjp.css&amp;quot;&amp;gt; // googleフォントを入れてみた
-    &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; type=&amp;quot;text/css&amp;quot; href=&amp;quot;cotton.css&amp;quot;&amp;gt;
-  &amp;lt;/head&amp;gt;
-
-  &amp;lt;body&amp;gt;
-    &amp;lt;div id=&amp;quot;welcome&amp;quot;&amp;gt;Temperature Now&amp;lt;/div&amp;gt;
-    &amp;lt;div id=&amp;quot;log&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
-    &amp;lt;marquee&amp;gt;あなたは10573人目の訪問者です！&amp;lt;/marquee&amp;gt; // 文字が流れます
-    &amp;lt;div id=&amp;quot;you&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;br&amp;gt;
-    &amp;lt;center&amp;gt;&amp;lt;table border=&amp;quot;0&amp;quot; cellspacing=&amp;quot;0&amp;quot; cellpadding=&amp;quot;0&amp;quot;&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td align=&amp;quot;center&amp;quot;&amp;gt;&amp;lt;a href=&amp;quot;http://www.rays-counter.com/&amp;quot;&amp;gt;&amp;lt;img src=&amp;quot;http://www.rays-counter.com/d350_f6_022/578cc94f09357/&amp;quot; alt=&amp;quot;アクセスカウンター&amp;quot; border=&amp;quot;0&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td align=&amp;quot;center&amp;quot; style=&amp;quot;font-size:xx-small&amp;quot;&amp;gt;&amp;lt;img src=&amp;quot;http://www.rays-counter.com/images/counter_01.gif&amp;quot; border=&amp;quot;0&amp;quot;&amp;gt;&amp;lt;img src=&amp;quot;http://www.rays-counter.com/images/counter_02.gif&amp;quot; border=&amp;quot;0&amp;quot;&amp;gt;&amp;lt;img src=&amp;quot;http://www.rays-counter.com/images/counter_03.gif&amp;quot; border=&amp;quot;0&amp;quot;&amp;gt;&amp;lt;img src=&amp;quot;http://www.rays-counter.com/images/counter_04.gif&amp;quot; border=&amp;quot;0&amp;quot;&amp;gt;&amp;lt;img src=&amp;quot;http://www.rays-counter.com/images/counter_05.gif&amp;quot; border=&amp;quot;0&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/center&amp;gt; // アクセスカウンターです、フリーのを使いました
-    &amp;lt;script src=&amp;quot;https://code.jquery.com/jquery-2.2.4.min.js&amp;quot;   integrity=&amp;quot;sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=&amp;quot;   crossorigin=&amp;quot;anonymous&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-    &amp;lt;script src=&#39;https://cdn.mlkcca.com/v2.0.0/milkcocoa.js&#39;&amp;gt;&amp;lt;/script&amp;gt;
-    &amp;lt;script&amp;gt;
-    $(document).ready(function(){
-      // Milkcocoa
-      const milkcocoa = new MilkCocoa(&#39;yieldiq29oxas.mlkcca.com&#39;);
-      const ds = milkcocoa.dataStore(&#39;status&#39;);
-
-      // Milkcocoaからデータが送られてきた時のコールバック
-      ds.on(&#39;send&#39;, (data) =&amp;gt; {
-        console.log(data.value);
-        const temp=data.value.message;
-        if (temp&amp;gt;29){
-          $(&#39;#log&#39;).css(&#39;color&#39;, &#39;red&#39;);
-          $(&#39;#you&#39;).text(&#39;あついね！&#39;) // 29度以上になると「あついね！」というコメントが表示されます
-        }
-        else if (temp&amp;lt;27){
-          $(&#39;#log&#39;).css(&#39;color&#39;, &#39;blue&#39;);
-          $(&#39;#you&#39;).text(&#39;さむいね！&#39;)　// 27度以下になると「さむいね！」というコメントが表示されます
-        }
-        else {
-          $(&#39;#log&#39;).css(&#39;color&#39;, &#39;#eebbcb&#39;);
-          $(&#39;#you&#39;).text(&#39;ちょうどいいね！&#39;) // 27&amp;amp;28度になると「ちょうどいいね！」というコメントが表示されます
-        }
-        $(&#39;#log&#39;).text(&#39;今の温度は&#39;+data.value.message+&#39;度☆&#39;); // 今の温度が表示されます
-        // ここでhtmlのDOMを操作する
-        // milkcocoa と push でカウンター（javascript）
-
-     })
-   　});
-    &amp;lt;/script&amp;gt;
-  &amp;lt;/body&amp;gt;
-&amp;lt;/html&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;style-css&#34;&gt;style.css&lt;/h4&gt;
-
-&lt;pre&gt;&lt;code&gt;body {
-  font-family: &#39;Noto Sans Japanese&#39;, sans-serif;
-}
-
-#log {
-  font-size: 30px;
-  text-align: center;
-}
-
-#welcome {
-  font-size: 50px;
-  text-align: center;
-  color: darkblue
-}
-
-#you {
-    text-align: center;
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;見た目&#34;&gt;見た目&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/08_website.png&#34; alt=&#34;&#34; /&gt;
-このような感じの見た目になります。1990年代のサイトを目指しました。全然可愛くないですね。アクセスカウンタは無料で配布されていた「&lt;a href=&#34;http://www.rays-counter.com/&#34;&gt;無料アクセスカウンター&lt;/a&gt;」を使っています。&lt;/p&gt;
-
-&lt;p&gt;ということで、Webサイトの見た目はこのように自分でアレンジできます。HTMLの技術が少し必要になりますが、自由にいじって自分好みのサイトにしてみてください。（CSSもあればなおよしですね）&lt;/p&gt;
-
-&lt;p&gt;この状態ではサーバーにアップされていないのでローカル環境でないとサイトを見られませんが、これをアップすれば家の外からでもスマホやPCなどで室温を確認することができます。&lt;/p&gt;
-
-&lt;h2 id=&#34;注意点&#34;&gt;注意点&lt;/h2&gt;
-
-&lt;p&gt;ここからは私が詰んだ箇所を紹介します。全部で3つあります。&lt;/p&gt;
-
-&lt;h3 id=&#34;gr-cottonのジャンパを配線する&#34;&gt;GR-COTTONのジャンパを配線する&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/09_jumper.png&#34; alt=&#34;&#34; /&gt;
-通常はこのパーツを反対側に刺さないといけないです。チュートリアルにも載っていますが見落とすと操作できなくなります。&lt;/p&gt;
-
-&lt;h3 id=&#34;ケーブルは純正のものを使う&#34;&gt;ケーブルは純正のものを使う&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/10_cable.png&#34; alt=&#34;&#34; /&gt;
-コンビニで売っているモバイルバッテリーに付属しているようなケーブルだと、認識されないのです……。&lt;/p&gt;
-
-&lt;p&gt;データ通信が可能なタイプを用意しましょう。（GR-COTTONには純正のケーブルが付属していません）&lt;/p&gt;
-
-&lt;h3 id=&#34;kurumiwriterにチェックを入れる&#34;&gt;KurumiWriterにチェックを入れる&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/11_notfound.png&#34; alt=&#34;&#34; /&gt;
-ケーブルを純正にしたのにPCからUSBドライバが表示されない、ということがありました。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;FTDIの仕様上USBポートが開いた/閉じたときでDTR(COTTONのリセット)がハイ/ロウが排他的になります。KurumiWriterでその設定ができますがデフォルト(チェックなし)ではポートが開いたときDTRがロウになります。 &lt;a href=&#34;https://t.co/aWANpSdJka&#34;&gt;https://t.co/aWANpSdJka&lt;/a&gt;&lt;/p&gt; Renesas_FUN (@Renesas_FUN) &lt;a href=&#34;https://twitter.com/Renesas_FUN/status/750323606601609216&#34;&gt;2016年7月5日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;これをTwitterでつぶやいたところ、がじぇっとるねさすさんの公式アカウントからご回答いただきました。KurumiWriterのチェックボックスにチェックをいれていなかったことが原因でした……。&lt;/p&gt;
-
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-
-&lt;p&gt;自分が詰んだところの余談が長くなってしまったのですが、部屋の温度をGR-COTTONで取得してブラウザに表示する方法を紹介しました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/06_code.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;余談ですが、今回使った app.jsとhtmlは、知り合いの元組み込みエンジニアいわたんさん（&lt;a href=&#34;twitter.com/iwata_n&#34;&gt;@iwata_n&lt;/a&gt;）にお願いして作ってもらいました。いわたんさんありがとうございます！&lt;/p&gt;
-
-&lt;script async class=&#34;speakerdeck-embed&#34; data-id=&#34;aa68f3d1934d480f9a3a26a6062ffa9b&#34; data-ratio=&#34;1.33333333333333&#34; src=&#34;//speakerdeck.com/assets/embed.js&#34;&gt;&lt;/script&gt;
-
-&lt;p&gt;また、当日発表したプレゼン資料はこちらから見られます。&lt;/p&gt;
-
-&lt;p&gt;みなさんぜひ試してみてください！&lt;/p&gt;
 </description>
     </item>
     
