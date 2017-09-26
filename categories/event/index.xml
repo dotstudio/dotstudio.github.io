@@ -10,6 +10,148 @@
     <atom:link href="/categories/event/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>【報告】青山学院大学で4日間集中IoT講習を行いました</title>
+      <link>https://dotstud.io/blog/aogaku-iot-summer-report/</link>
+      <pubDate>Tue, 26 Sep 2017 19:31:51 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/aogaku-iot-summer-report/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、ちゃちゃまるです。
+&lt;a href=&#34;https://dotstud.io/blog/aogaku-iot-course-report/&#34;&gt;前回の体験講習会&lt;/a&gt;に引き続き、青山学院大学でIoT講習会を行ったので、その様子をお伝えしたいと思います！&lt;/p&gt;
+
+&lt;h2 id=&#34;テーマは-宅配便の不在通知を自分のlineに送る&#34;&gt;テーマは「宅配便の不在通知を自分のLINEに送る」&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.aim.aoyama.ac.jp/info/lect/7141/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/124/title.png&#34; alt=&#34;title.png&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;IoT講習会は3時間 x 4日間で実施しました。「IoT」「電子工作」「プログラミング」の基礎知識を固めながら「宅配便の不在通知を自分のLINEに送る」仕組みを作るのが目標です。&lt;/p&gt;
+
+&lt;p&gt;まずは座学で「IoT」の定義や概要を学んでアイデアを実現する方法を探り、その後は実際にセンサを使ったりLINE通知を送るプログラムを作ったりしながら実装を学んでいきます。&lt;/p&gt;
+
+&lt;h2 id=&#34;1日目-基礎知識を身につける&#34;&gt;1日目：基礎知識を身につける&lt;/h2&gt;
+
+&lt;p&gt;講座の序章として、まずは座学で基礎を学習していきます。
+&lt;center&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/124/iot.png&#34; alt=&#34;iot.png&#34; /&gt;
+世界各国の事例 - 画像は「ゴミの量を計測して収集を最適化する街」の例。
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;IoTの定義や概要、世界各国のIoT事例を紹介し、IoTへの理解を深めます。電子工作、プログラミング、開発環境の構築についても学び、1日目はNode.jsの環境を作成して実行するところまでトライしました。&lt;/p&gt;
+
+&lt;h2 id=&#34;2日目-電子工作にトライ&#34;&gt;2日目：電子工作にトライ&lt;/h2&gt;
+
+&lt;p&gt;続いて2日目からは、「不在通知を受け取ったことの取得」と「LINE通知」の実装に必要な仕組みを実際に作りながら学んでいきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/124/overview.png&#34; alt=&#34;overview.png&#34; /&gt;
+実装の構成を説明
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;音のデータを取得する&lt;/li&gt;
+&lt;li&gt;取得したデータをWi-Fi通信でサーバに送る&lt;/li&gt;
+&lt;li&gt;サーバにデータが送られたらLINEで通知する&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;といったように、機能ごとに分けてトライしていきます。&lt;/p&gt;
+
+&lt;h3 id=&#34;使用したのはwionodeとarduino-uno&#34;&gt;使用したのはWioNodeとArduino UNO&lt;/h3&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/124/device2.png&#34; alt=&#34;device2.png&#34; /&gt;
+今回使用したデバイスの一部
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;今回は「Arduino UNO」という入門向きのデバイスに、「Grove」というコネクタの拡張シールドを取り付け実装してみます。Wi-Fi接続には、こちらもGroveで配線できるWioNodeを利用。難しい配線やプログラミングを行わずとも自作IoTデバイスを作ることができます。&lt;/p&gt;
+
+&lt;p&gt;Arduino UNOを使った簡単なプログラムから始め、ステップバイステップで学んでいきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/124/device.png&#34; alt=&#34;device.png&#34; /&gt;
+Arduino UNOでLチカ（初歩的なプログラム）を試している様子
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;今回は上記の入門向きなデバイスやセンサ、パーツ類をセットにしたキットを用意しました。
+&lt;img src=&#34;https://dotstud.io/img/blog/124/kit.png&#34; alt=&#34;kit.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Arduino UNO&lt;/strong&gt;・・・専用ソフトウェアを使い、簡単にプログラムを書き込むことができるマイコンボード&lt;br /&gt;
+&lt;strong&gt;Grove&lt;/strong&gt;・・・Seeed社が作ったセンサ等を繋げるコネクタ規格。様々なセンサとの配線部分を規格化することで難しい配線が不要に&lt;br /&gt;
+&lt;strong&gt;Groveベースシールド&lt;/strong&gt;・・・Arduino UNOに取り付けることで、Groveコネクタを使えるようにする基盤&lt;br /&gt;
+&lt;strong&gt;WioNode&lt;/strong&gt;・・・専用スマホアプリのみで設定ができるGrove対応マイコンボード&lt;/p&gt;
+
+&lt;h2 id=&#34;3日目-デバイスを使ってiotを体感する&#34;&gt;3日目：デバイスを使ってIoTを体感する&lt;/h2&gt;
+
+&lt;p&gt;3日目は実際にデバイスを使って人の動きや音を感知するセンサのデータを取得し、LINEやブラウザで確認してIoTを肌で体験してもらいました。&lt;/p&gt;
+
+&lt;p&gt;Arduinoへのプログラムの書き込みやNode.jsを使ったサーバ構築に少し苦戦する学生もいましたが、徐々に慣れ参加者全員がデバイスの使い方とプログラミングの基本をマスターすることができました。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/124/jinkan.png&#34; alt=&#34;jinkan.png&#34; /&gt;
+手元の照度センサが光を検知するとブラウザ上のLEDが光るプログラムを試している様子
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/124/teach2.png&#34; alt=&#34;teach2.png&#34; /&gt;
+講師をつとめたちゃちゃまると参加してくれた学生さん。一様に真剣に取り組んでくれました。
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;柔軟なアイデアが飛び出した-不在通知を取得する方法&#34;&gt;柔軟なアイデアが飛び出した「不在通知を取得する方法」&lt;/h3&gt;
+
+&lt;p&gt;基本を学んだあとはグループに分かれ、どうやったら「不在通知を受け取ったこと」がわかるかアイデアを出し合いました。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/124/idea.png&#34; alt=&#34;idea.png&#34; /&gt;
+考えたアイデアを発表して共有
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ポストが開けられた時の光の変化を取得する&lt;/li&gt;
+&lt;li&gt;不在の場合は2回インターホンを押してもらう&lt;/li&gt;
+&lt;li&gt;配達のトラックの音を機械学習で判定する&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;など、独創的なアイデアがたくさん飛び出しました。&lt;/p&gt;
+
+&lt;p&gt;一緒に参加していただいていた根本先生、槌屋先生から「夜で照度の違いがない場合はどうするか」「車じゃなかった場合はどうか」などのフィードバックをいただきましたが、&lt;strong&gt;自分で出したアイデアだからこそIoTの課題が身近に見えてくる&lt;/strong&gt;ように感じました！&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/124/award.png&#34; alt=&#34;award.png&#34; /&gt;
+優秀チームに先生方から授賞式！
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;4日目-iotの課題や精度を考える&#34;&gt;4日目：IoTの課題や精度を考える&lt;/h2&gt;
+
+&lt;p&gt;全ての機能の実装とデプロイが完了したあとは、発展として「不在通知を受け取ったこと」を取得する際の精度について考えてみました。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/124/data.png&#34; alt=&#34;data.png&#34; /&gt;
+音センサを使った場合の閾値について
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;IoTデバイスは、昼・夜、静かな場所・うるさい場所など様々な環境で使われることが想定されます。今回は環境に順応できる相対的なデータを利用した実装方法を学びました。&lt;/p&gt;
+
+&lt;p&gt;追加課題として出したArduinoの発展的なプログラムを解いてきてくれた学生さんもいて、今後につながる学習ができたのではないかと思います。&lt;/p&gt;
+
+&lt;h2 id=&#34;文系でもiot&#34;&gt;文系でもIoT！？&lt;/h2&gt;
+
+&lt;p&gt;参加してくれた学生さんのほとんどが文系で、今回の講習会で初めてプログラミングをしたという方もちらほら。
+&lt;img src=&#34;https://dotstud.io/img/blog/124/teach.png&#34; alt=&#34;teach.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ArduinoやGroveなどの登場で、もはや専門知識ゼロでもIoTの仕組みを作ることができてしまう時代です。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめと感想&#34;&gt;まとめと感想&lt;/h2&gt;
+
+&lt;p&gt;四日間を通して、ほぼ全ての工程でスムーズに講習会を行うことができ、最後には無事参加してくれた全員がカリキュラムを完了することができました。&lt;/p&gt;
+
+&lt;p&gt;想定していたペースよりかなり早く進めることができ、学生さんたちの知識の吸収力・応用力に僕たちも驚きました！
+&lt;img src=&#34;https://dotstud.io/img/blog/124/all.png&#34; alt=&#34;all.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;弊社dotstudioでは、このような形で大学や企業でのIoT研修を行っております。ご興味のある方は是非弊社までお問い合わせください。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>【報告】セゾン情報システムズでIoT研修として体験会を行いました</title>
       <link>https://dotstud.io/blog/saison-iot-course-report/</link>
       <pubDate>Fri, 15 Sep 2017 14:52:26 +0900</pubDate>
@@ -2123,133 +2265,6 @@ IoTLTではお馴染みポキオ氏。京急線が遅延すると光るが当日
 &lt;p&gt;&lt;a href=&#34;http://mashupaward.jp/2016/11/category-iot/&#34;&gt;Internet of Awesome Things 部門賞（by IoTLT）&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;関係ないですけどMashup Awardsが正式名称みたいですけど、ドメインはMashupAwardで単数形みたいなのでお間違えの無いように！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>かなり盛り上がった！ものづくりの祭典＠中国 #MakerFaireShenZhen</title>
-      <link>https://dotstud.io/blog/maker-faire-shenzhen-report/</link>
-      <pubDate>Tue, 08 Nov 2016 19:30:18 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/maker-faire-shenzhen-report/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、dotstudioエディターのうらら（&lt;a href=&#34;http://twitter.com/uraranbon&#34;&gt;@uraranbon&lt;/a&gt;）です。&lt;/p&gt;
-
-&lt;p&gt;2006年から始まったものづくりの祭典「Maker Faire」は、いまや世界の20カ国くらいに広まり、勢いを伸ばし続けています。日本でも毎年夏におこなわれる恒例行事となりましたが、dotstudioは日本を飛び出し、中国・深センでおこなわれた「&lt;a href=&#34;http://www.makerfaireshenzhen.com/&#34;&gt;Maker Faire Shenzhen 2016&lt;/a&gt;（MFSZ）」に参加してきました！　80以上ものブースに世界各国からのものづくりが展示されていました〜〜！&lt;/p&gt;
-
-&lt;h2 id=&#34;会場の-海上世界-の広さに絶句&#34;&gt;会場の「海上世界」の広さに絶句&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;今回、中国の深センでおこなわれた「Maker Faire Shenzhen」。香港の近くの場所にあり、日本から飛行機では4時間程度の距離です。会場となるのは「海上世界」。中国に到着してからすぐに、何十個ものブースが出展されるイベント会場へ下見に行ったのですが……&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;街中に突然、船がある場所でした。でかっ！　&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;なかなか広そうです。この一角は、地元の人が集まるショッピングモールとのこと。一周してみましたがなかなか広かったです。あっ奥の方にブースが見える。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;入り口発見。設営がかなりしっかりしてます。&lt;/p&gt;
-
-&lt;h2 id=&#34;microsoftやintelといった大手企業も参加&#34;&gt;MicrosoftやIntelといった大手企業も参加&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/04-2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;もともと予定していた開催日は、10月21日（金）〜10月23日（日）でしたが、台風「Haima」の影響で10月23日（日）〜10月24日（月）に後ろ倒し。3日間開催予定が、2日間に圧縮。帰りの飛行機の都合もあり、私たちは23日のみの参加となりました。幸いにも1日で1周できる広さではありました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;いろんな企業が参加していましたが、会場のゲート近くには大手企業が軒を連ねていました。まずはintel。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;こちらはMicrosoft。顔認識する自動販売機を実演していました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;GROVEやWio Node、でおなじみの&lt;a href=&#34;https://www.seeedstudio.com&#34;&gt;Seeed&lt;/a&gt;。いろんなガジェットが紹介されていました！&lt;/p&gt;
-
-&lt;h2 id=&#34;見たことのないガジェットがあちこちに&#34;&gt;見たことのないガジェットがあちこちに&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/08.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;地面に砂で字を書きながら進むマシン。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/09.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;きれいな字です。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;こちらはペット用のスマート首輪。文字が流れるようです。詳細が読めない。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;台湾発の超小型のゲーム機「WiFiBoy（ESP32）」というもの。子供がプレイしているところを覗いたら、テトリスやってました。これMaker Faire Tokyoにも出展していたそうです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/12.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;こちらのブースは全て木でできていました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/13.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;プラネタリウムもやってました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/14.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ドラムや楽器を演奏するロボット。体を揺らしながらリズムを刻む様子をみんなカメラに収めていました。Maker Faire Tokyoでも見かけた気がします！&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/15.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;VRの体験コーナーもありました！（3回100元）&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/16.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ロボット同士のバトルも開催されていました！　周りには人だかりが。&lt;/p&gt;
-
-&lt;p&gt;という感じで、日本で見たことがあるものも出展されていましたが、ほとんどが初見のガジェットでした。（でも説明が読めなくて悔しい）アートとおもちゃ系が多かったように感じました。&lt;/p&gt;
-
-&lt;h2 id=&#34;来場者は-たまたま来た地元の人-が多かった印象&#34;&gt;来場者は「たまたま来た地元の人」が多かった印象&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/17.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;dotstudioとして展示したのは、私たちが普段PRしたり販売しているIoTガジェットらです。幸いにもdotstudioは人通りの多い場所で展示できて、人が途絶えませんでした。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/18.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;そして、本当にたまたま、私たちも日本で販売している &lt;strong&gt;Wio Nodeを作ったSeeedのエンジニアさんと会いました&lt;/strong&gt;。驚いた。手に持っている箱が裏向きですね。&lt;/p&gt;
-
-&lt;h2 id=&#34;あっと言う間に終わったmfsz-締めはaki-party&#34;&gt;あっと言う間に終わったMFSZ、締めはAki Party！&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/19.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;17時くらい閉めるムードに。Maker Faire Tokyoの後に秋葉原でおこなわれた「Aki Party」がここでも開催されるということで参加しました。日本からの参加者さんらと交流できました。&lt;/p&gt;
-
-&lt;p&gt;室内で &lt;strong&gt;ドローンが飛ぶなど&lt;/strong&gt; 、みんな楽しそうでした。&lt;/p&gt;
-
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/20.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;▲Aki Partyにて：床に投影されたMaker Faireのマスコットキャラクター&lt;/p&gt;
-
-&lt;p&gt;ということで1日しか参加できなかったMaker Faire Shenzhenですが、中国にも電子工作やテクノロジーが盛り上がっていることが認識できた素敵なイベントでした。&lt;/p&gt;
-
-&lt;p&gt;ショッピングモール周辺で開催されたこともあり、モールに来たついでにイベントも周ってみているという人が多そうな印象でした。「&lt;strong&gt;IoTってなに？&lt;/strong&gt;」という人も。反対に、おもちゃをスマホアプリから操作できる日本のデバイス「Mabeee」を知っている人もいるなど幅広いお客さんが集まりました。それって超素敵。&lt;/p&gt;
-
-&lt;p&gt;日本は幕張メッセなどのイベント会場でおこなわれ、しかも入場料もかかるので参加する人はおのずとテクノロジー関連に興味のある方になると思います。そういった意味では、&lt;strong&gt;深センのMaker Faireは広い人に解放されていて、新しい技術に触れる場になっていた&lt;/strong&gt; ように感じました。&lt;/p&gt;
-
-&lt;p&gt;今度はまた別の国のMaker Faireに参加してみたいです！&lt;/p&gt;
-
-&lt;p&gt;[]()&lt;/p&gt;
-
-&lt;p&gt;ではまた！&lt;/p&gt;
 </description>
     </item>
     
