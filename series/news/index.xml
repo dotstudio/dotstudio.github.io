@@ -52,17 +52,105 @@
 
 &lt;p&gt;さらに&lt;a href=&#34;https://nefry.studio/&#34;&gt;ドキュメント&lt;/a&gt;では、便利な関数が多数公開されています。たとえば実装済みのフルカラーLEDは、コード上で複雑な初期化不要で、&lt;a href=&#34;https://nefry.studio/NefryLibrary/%E3%83%8F%E3%83%BC%E3%83%89%E3%82%A6%E3%82%A8%E3%82%A2%E9%96%A2%E9%80%A3%E9%96%A2%E6%95%B0/#setled&#34;&gt;簡単に色を指定&lt;/a&gt;できます。&lt;/p&gt;
 
+&lt;h2 id=&#34;準備&#34;&gt;準備&lt;/h2&gt;
+
+&lt;h3 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;電車のおもちゃ（ダイソーで売ってる&lt;strong&gt;プチ電車シリーズ&lt;/strong&gt;）&lt;/li&gt;
+&lt;li&gt;Nefry BT&lt;/li&gt;
+&lt;li&gt;USB延長ケーブル&lt;/li&gt;
+&lt;li&gt;トレーシングペーパー&lt;/li&gt;
+&lt;li&gt;両面テープ&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;筆者の環境&#34;&gt;筆者の環境&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;MacBook Air (13-inch, Mid 2013)&lt;/li&gt;
+&lt;li&gt;OS X Yosemite 10.10.5&lt;/li&gt;
+&lt;li&gt;Arduino IDE 1.8.4&lt;/li&gt;
+&lt;/ul&gt;
+
 &lt;h2 id=&#34;電車の中にnefry-btをセット&#34;&gt;電車の中にNefry BTをセット&lt;/h2&gt;
 
 &lt;p&gt;そんなNefry BTですが、実はダイソーで売っている電車のおもちゃの内部にピッタリ入ります。
 &lt;img src=&#34;https://dotstud.io/img/blog/130/4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;今回は、このおもちゃを使ってガジェットを作りました！
-&lt;img src=&#34;https://dotstud.io/img/blog/130/5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Nefry BTのUSBコネクター部分が電車の外に出るように、電車のおもちゃには少し加工をしています。USBコネクターにはUSB延長ケーブルを接続して、給電を行います。&lt;/p&gt;
 
-&lt;p&gt;皆さん、もくもくと作成中！
-&lt;img src=&#34;https://dotstud.io/img/blog/130/6.png&#34; alt=&#34;&#34; /&gt;
-ハンズオンでは特定の路線に遅延が発生したら光らせるプログラムを書き込みました。Nefry BTに実装されているLEDだけでも、こんな感じで電車を光らせる事ができます！&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/130/6.png&#34; alt=&#34;&#34; /&gt;
+また、LEDの光が拡散するように、電車の窓部分には内側からトレーシングペーパーを貼り付けています。Nefry BTに実装されているLEDだけでも、こんな感じで電車を光らせる事ができます！&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/130/5.png&#34; alt=&#34;&#34; /&gt;
+皆さん、もくもくと作成中！&lt;/p&gt;
+
+&lt;h2 id=&#34;肝心のコーディング&#34;&gt;肝心のコーディング&lt;/h2&gt;
+
+&lt;p&gt;ハンズオンでは特定の路線に遅延が発生したら光らせるプログラムを書き込みました。書き込みはArduino IDEより行いました。ちなみに、&lt;a href=&#34;https://dotstud.io/docs/nefrybt-wifi-setup/&#34;&gt;&lt;strong&gt;このページ&lt;/strong&gt;&lt;/a&gt;を参考にNefry BTのセットアップを済ませておくと、コード上でWi-Fi接続のシーケンスを実装しなくて済むので、非常に便利です。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+#include &amp;lt;WiFiClientSecure.h&amp;gt; // HTTPS通信のために必要
+
+void setup() {
+  // 何もしない
+}
+
+void loop() {
+  // JSONを取得する
+  String trainDelayJson = getTrainDelayJson();
+
+  // JSONに特定の路線名が含まれているか確認する
+  if (trainDelayJson.indexOf(&amp;quot;（好きな路線名）&amp;quot;) &amp;gt; 0) {
+    blinkFor30Sec(255, 0, 0); // 赤く光らせる
+  } else {
+    blinkFor30Sec(0, 0, 255); // 青く光らせる
+  }
+}
+
+// 鉄道遅延情報のjsonさんから、遅延情報（JSON）を取得する
+String getTrainDelayJson() {
+  WiFiClientSecure client; // 変数を宣言
+
+  // サーバーにHTTPSのデフォルトポート（443）でアクセスしてみる
+  if ( !client.connect(&amp;quot;rti-giken.jp&amp;quot;, 443) ) {
+    Nefry.println(&amp;quot;接続失敗&amp;quot;);
+    return &amp;quot;&amp;quot;;
+  }
+
+  client.print(String(&amp;quot;GET /fhc/api/train_tetsudo/delay.json HTTP/1.1\r\n&amp;quot;) +
+               &amp;quot;Host: rti-giken.jp\r\n&amp;quot; +
+               &amp;quot;Connection: close\r\n\r\n&amp;quot;); // HTTP-GETのリクエストメッセージを書く
+
+  // レスポンスが来るまでちょっと待つ
+  Nefry.ndelay(1000);
+
+  // HTTP-GETのレスポンスを保存しておく変数
+  String response = &amp;quot;&amp;quot;;
+
+  // レスポンスを変数に格納する
+  while (client.available()) {
+    response += client.readStringUntil(&#39;\r&#39;);
+  }
+
+  Nefry.println(&amp;quot;接続成功&amp;quot;);
+  Nefry.println(response);
+
+  return response;
+}
+
+// 30秒間、500msecおきに点灯と消灯を繰り返します
+void blinkFor30Sec(int r, int g, int b) {
+  for (int i = 0; i &amp;lt; 30; i++) {
+    Nefry.setLed(r, g, b);
+    Nefry.ndelay(500);
+    Nefry.setLed(0, 0, 0);
+    Nefry.ndelay(500);
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Nefry BTから定期的にWi-Fi経由で鉄道の遅延情報を取得し、特定の路線が遅れているかどうかを監視するようにしています。遅延情報は&lt;a href=&#34;https://rti-giken.jp/fhc/api/train_tetsudo/&#34;&gt;&lt;strong&gt;鉄道遅延情報のjson&lt;/strong&gt;&lt;/a&gt;さんより、JSON形式のデータを受信することで実現しています。&lt;/p&gt;
 
 &lt;h2 id=&#34;拡張性で広がるiot工作&#34;&gt;拡張性で広がるIoT工作&lt;/h2&gt;
 

@@ -354,17 +354,105 @@
 
 <p>さらに<a href="https://nefry.studio/">ドキュメント</a>では、便利な関数が多数公開されています。たとえば実装済みのフルカラーLEDは、コード上で複雑な初期化不要で、<a href="https://nefry.studio/NefryLibrary/%E3%83%8F%E3%83%BC%E3%83%89%E3%82%A6%E3%82%A8%E3%82%A2%E9%96%A2%E9%80%A3%E9%96%A2%E6%95%B0/#setled">簡単に色を指定</a>できます。</p>
 
+<h2 id="準備">準備</h2>
+
+<h3 id="用意するもの">用意するもの</h3>
+
+<ul>
+<li>電車のおもちゃ（ダイソーで売ってる<strong>プチ電車シリーズ</strong>）</li>
+<li>Nefry BT</li>
+<li>USB延長ケーブル</li>
+<li>トレーシングペーパー</li>
+<li>両面テープ</li>
+</ul>
+
+<h3 id="筆者の環境">筆者の環境</h3>
+
+<ul>
+<li>MacBook Air (13-inch, Mid 2013)</li>
+<li>OS X Yosemite 10.10.5</li>
+<li>Arduino IDE 1.8.4</li>
+</ul>
+
 <h2 id="電車の中にnefry-btをセット">電車の中にNefry BTをセット</h2>
 
 <p>そんなNefry BTですが、実はダイソーで売っている電車のおもちゃの内部にピッタリ入ります。
 <img src="/img/blog/130/4.png" alt="" /></p>
 
-<p>今回は、このおもちゃを使ってガジェットを作りました！
-<img src="/img/blog/130/5.png" alt="" /></p>
+<p>Nefry BTのUSBコネクター部分が電車の外に出るように、電車のおもちゃには少し加工をしています。USBコネクターにはUSB延長ケーブルを接続して、給電を行います。</p>
 
-<p>皆さん、もくもくと作成中！
-<img src="/img/blog/130/6.png" alt="" />
-ハンズオンでは特定の路線に遅延が発生したら光らせるプログラムを書き込みました。Nefry BTに実装されているLEDだけでも、こんな感じで電車を光らせる事ができます！</p>
+<p><img src="/img/blog/130/6.png" alt="" />
+また、LEDの光が拡散するように、電車の窓部分には内側からトレーシングペーパーを貼り付けています。Nefry BTに実装されているLEDだけでも、こんな感じで電車を光らせる事ができます！</p>
+
+<p><img src="/img/blog/130/5.png" alt="" />
+皆さん、もくもくと作成中！</p>
+
+<h2 id="肝心のコーディング">肝心のコーディング</h2>
+
+<p>ハンズオンでは特定の路線に遅延が発生したら光らせるプログラムを書き込みました。書き込みはArduino IDEより行いました。ちなみに、<a href="https://dotstud.io/docs/nefrybt-wifi-setup/"><strong>このページ</strong></a>を参考にNefry BTのセットアップを済ませておくと、コード上でWi-Fi接続のシーケンスを実装しなくて済むので、非常に便利です。</p>
+
+<pre><code>#include &lt;Nefry.h&gt;
+#include &lt;WiFiClientSecure.h&gt; // HTTPS通信のために必要
+
+void setup() {
+  // 何もしない
+}
+
+void loop() {
+  // JSONを取得する
+  String trainDelayJson = getTrainDelayJson();
+
+  // JSONに特定の路線名が含まれているか確認する
+  if (trainDelayJson.indexOf(&quot;（好きな路線名）&quot;) &gt; 0) {
+    blinkFor30Sec(255, 0, 0); // 赤く光らせる
+  } else {
+    blinkFor30Sec(0, 0, 255); // 青く光らせる
+  }
+}
+
+// 鉄道遅延情報のjsonさんから、遅延情報（JSON）を取得する
+String getTrainDelayJson() {
+  WiFiClientSecure client; // 変数を宣言
+
+  // サーバーにHTTPSのデフォルトポート（443）でアクセスしてみる
+  if ( !client.connect(&quot;rti-giken.jp&quot;, 443) ) {
+    Nefry.println(&quot;接続失敗&quot;);
+    return &quot;&quot;;
+  }
+
+  client.print(String(&quot;GET /fhc/api/train_tetsudo/delay.json HTTP/1.1\r\n&quot;) +
+               &quot;Host: rti-giken.jp\r\n&quot; +
+               &quot;Connection: close\r\n\r\n&quot;); // HTTP-GETのリクエストメッセージを書く
+
+  // レスポンスが来るまでちょっと待つ
+  Nefry.ndelay(1000);
+
+  // HTTP-GETのレスポンスを保存しておく変数
+  String response = &quot;&quot;;
+
+  // レスポンスを変数に格納する
+  while (client.available()) {
+    response += client.readStringUntil('\r');
+  }
+
+  Nefry.println(&quot;接続成功&quot;);
+  Nefry.println(response);
+
+  return response;
+}
+
+// 30秒間、500msecおきに点灯と消灯を繰り返します
+void blinkFor30Sec(int r, int g, int b) {
+  for (int i = 0; i &lt; 30; i++) {
+    Nefry.setLed(r, g, b);
+    Nefry.ndelay(500);
+    Nefry.setLed(0, 0, 0);
+    Nefry.ndelay(500);
+  }
+}
+</code></pre>
+
+<p>Nefry BTから定期的にWi-Fi経由で鉄道の遅延情報を取得し、特定の路線が遅れているかどうかを監視するようにしています。遅延情報は<a href="https://rti-giken.jp/fhc/api/train_tetsudo/"><strong>鉄道遅延情報のjson</strong></a>さんより、JSON形式のデータを受信することで実現しています。</p>
 
 <h2 id="拡張性で広がるiot工作">拡張性で広がるIoT工作</h2>
 
