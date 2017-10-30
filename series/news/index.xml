@@ -10,6 +10,156 @@
     <atom:link href="/series/news/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>みんなでﾀﾞｧｼｴﾘｲｪｽ！遅延すると光るガジェットをつくるIoTハンズオンを開催しました！</title>
+      <link>https://dotstud.io/blog/train-nefry-ihandson-report/</link>
+      <pubDate>Thu, 12 Oct 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://dotstud.io/blog/train-nefry-ihandson-report/</guid>
+      
+      <description>
+
+&lt;p&gt;どうも、ポキオです。9月27日に、Nefry BTを使ったIoT初心者向けハンズオンを開催しました。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;a href=&#34;https://dotstudio.connpass.com/event/61189/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/130/1.png&#34; alt=&#34;IoTハンズオン！【ﾀﾞｧ】Nefry BTで電車遅延すると光るガジェットを作ろう【ｼｪｲﾘｲｪｽ】&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;https://dotstudio.connpass.com/event/61189/&#34;&gt;IoTハンズオン！【ﾀﾞｧ】Nefry BTで電車遅延すると光るガジェットを作ろう【ｼｪｲﾘｲｪｽ】&lt;/a&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;今回、ハンズオンのお題は&lt;strong&gt;遅延すると光るガジェット&lt;/strong&gt;。IoTLTでおなじみ（？）のガジェットをみんなで作りました！&lt;/p&gt;
+
+&lt;h2 id=&#34;イベント概要&#34;&gt;イベント概要&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/wionode-ifttt-handson-report/&#34;&gt;ゆっきんさんのハンズオン&lt;/a&gt;と同じく、&lt;strong&gt;デジタルハリウッド大学のLabProto&lt;/strong&gt;をお借りしてハンズオンを開催しました。色々なツールが所狭しと並び、机や椅子もまさに&lt;strong&gt;ラボ&lt;/strong&gt;な雰囲気を醸し出してる、お洒落な会場でした。
+&lt;img src=&#34;https://dotstud.io/img/blog/130/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;IoTLTでは、私はもっぱら京急ネタで登壇させていただきましたが、今回は参加者の好きな路線を設定して、その路線が遅延したらNefry BTのLEDが光るようなガジェットを作成してみました。&lt;/p&gt;
+
+&lt;h2 id=&#34;nefry-btって&#34;&gt;Nefry BTって？&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/nefrybt/&#34;&gt;Nefry BT&lt;/a&gt;とは、ESP32というWi-FiとBLEと搭載したチップが載った、フリスクサイズの開発ボードのこと。&lt;a href=&#34;https://kibidango.com/513&#34;&gt;過去に行われたクラウドファンディング&lt;/a&gt;では437%を達成した、今話題のモジュールです。
+&lt;img src=&#34;https://dotstud.io/img/blog/130/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;大切なものはすべて実装済み&#34;&gt;大切なものはすべて実装済み&lt;/h3&gt;
+
+&lt;p&gt;IoTなガジェットを作る上で、ハードウェアの知識が無いと困ることも多いと思います。&lt;/p&gt;
+
+&lt;p&gt;Nefry BTは開発ボードでよくある&lt;strong&gt;GPIO&lt;/strong&gt;はもちろん搭載していて、さらに&lt;strong&gt;フルカラーのLED&lt;/strong&gt;や&lt;strong&gt;ディスプレイ&lt;/strong&gt;、そして半田ごて不要で様々なセンサーを接続できる&lt;strong&gt;Groveシステム&lt;/strong&gt;にも対応。買ってすぐLチカや開発が始められる上に、Groveのセンサーを接続すれば色々なガジェットを作ることができます。&lt;/p&gt;
+
+&lt;h3 id=&#34;便利な関数で楽々プログラミング&#34;&gt;便利な関数で楽々プログラミング&lt;/h3&gt;
+
+&lt;p&gt;Nefry BTは設定がWebブラウザ上からできるなど、&lt;strong&gt;初心者にも非常に優しい作り&lt;/strong&gt;になっています。&lt;/p&gt;
+
+&lt;p&gt;さらに&lt;a href=&#34;https://nefry.studio/&#34;&gt;ドキュメント&lt;/a&gt;では、便利な関数が多数公開されています。たとえば実装済みのフルカラーLEDは、コード上で複雑な初期化不要で、&lt;a href=&#34;https://nefry.studio/NefryLibrary/%E3%83%8F%E3%83%BC%E3%83%89%E3%82%A6%E3%82%A8%E3%82%A2%E9%96%A2%E9%80%A3%E9%96%A2%E6%95%B0/#setled&#34;&gt;簡単に色を指定&lt;/a&gt;できます。&lt;/p&gt;
+
+&lt;h2 id=&#34;準備&#34;&gt;準備&lt;/h2&gt;
+
+&lt;h3 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;電車のおもちゃ（ダイソーで売ってる&lt;strong&gt;プチ電車シリーズ&lt;/strong&gt;）&lt;/li&gt;
+&lt;li&gt;Nefry BT&lt;/li&gt;
+&lt;li&gt;USB延長ケーブル&lt;/li&gt;
+&lt;li&gt;トレーシングペーパー&lt;/li&gt;
+&lt;li&gt;両面テープ&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;筆者の環境&#34;&gt;筆者の環境&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;MacBook Air (13-inch, Mid 2013)&lt;/li&gt;
+&lt;li&gt;OS X Yosemite 10.10.5&lt;/li&gt;
+&lt;li&gt;Arduino IDE 1.8.4&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;電車の中にnefry-btをセット&#34;&gt;電車の中にNefry BTをセット&lt;/h2&gt;
+
+&lt;p&gt;そんなNefry BTですが、実はダイソーで売っている電車のおもちゃの内部にピッタリ入ります。
+&lt;img src=&#34;https://dotstud.io/img/blog/130/4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Nefry BTのUSBコネクター部分が電車の外に出るように、電車のおもちゃには少し加工をしています。USBコネクターにはUSB延長ケーブルを接続して、給電を行います。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/130/6.png&#34; alt=&#34;&#34; /&gt;
+また、LEDの光が拡散するように、電車の窓部分には内側からトレーシングペーパーを貼り付けています。Nefry BTに実装されているLEDだけでも、こんな感じで電車を光らせる事ができます！&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/130/5.png&#34; alt=&#34;&#34; /&gt;
+皆さん、もくもくと作成中！&lt;/p&gt;
+
+&lt;h2 id=&#34;肝心のコーディング&#34;&gt;肝心のコーディング&lt;/h2&gt;
+
+&lt;p&gt;ハンズオンでは特定の路線に遅延が発生したら光らせるプログラムを書き込みました。書き込みはArduino IDEより行いました。ちなみに、&lt;a href=&#34;https://dotstud.io/docs/nefrybt-wifi-setup/&#34;&gt;&lt;strong&gt;このページ&lt;/strong&gt;&lt;/a&gt;を参考にNefry BTのセットアップを済ませておくと、コード上でWi-Fi接続のシーケンスを実装しなくて済むので、非常に便利です。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+#include &amp;lt;WiFiClientSecure.h&amp;gt; // HTTPS通信のために必要
+
+void setup() {
+  // 何もしない
+}
+
+void loop() {
+  // JSONを取得する
+  String trainDelayJson = getTrainDelayJson();
+
+  // JSONに特定の路線名が含まれているか確認する
+  if (trainDelayJson.indexOf(&amp;quot;（好きな路線名）&amp;quot;) &amp;gt; 0) {
+    blinkFor30Sec(255, 0, 0); // 赤く光らせる
+  } else {
+    blinkFor30Sec(0, 0, 255); // 青く光らせる
+  }
+}
+
+// 鉄道遅延情報のjsonさんから、遅延情報（JSON）を取得する
+String getTrainDelayJson() {
+  WiFiClientSecure client; // 変数を宣言
+
+  // サーバーにHTTPSのデフォルトポート（443）でアクセスしてみる
+  if ( !client.connect(&amp;quot;rti-giken.jp&amp;quot;, 443) ) {
+    Nefry.println(&amp;quot;接続失敗&amp;quot;);
+    return &amp;quot;&amp;quot;;
+  }
+
+  client.print(String(&amp;quot;GET /fhc/api/train_tetsudo/delay.json HTTP/1.1\r\n&amp;quot;) +
+               &amp;quot;Host: rti-giken.jp\r\n&amp;quot; +
+               &amp;quot;Connection: close\r\n\r\n&amp;quot;); // HTTP-GETのリクエストメッセージを書く
+
+  // レスポンスが来るまでちょっと待つ
+  Nefry.ndelay(1000);
+
+  // HTTP-GETのレスポンスを保存しておく変数
+  String response = &amp;quot;&amp;quot;;
+
+  // レスポンスを変数に格納する
+  while (client.available()) {
+    response += client.readStringUntil(&#39;\r&#39;);
+  }
+
+  Nefry.println(&amp;quot;接続成功&amp;quot;);
+  Nefry.println(response);
+
+  return response;
+}
+
+// 30秒間、500msecおきに点灯と消灯を繰り返します
+void blinkFor30Sec(int r, int g, int b) {
+  for (int i = 0; i &amp;lt; 30; i++) {
+    Nefry.setLed(r, g, b);
+    Nefry.ndelay(500);
+    Nefry.setLed(0, 0, 0);
+    Nefry.ndelay(500);
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Nefry BTから定期的にWi-Fi経由で鉄道の遅延情報を取得し、特定の路線が遅れているかどうかを監視するようにしています。遅延情報は&lt;a href=&#34;https://rti-giken.jp/fhc/api/train_tetsudo/&#34;&gt;&lt;strong&gt;鉄道遅延情報のjson&lt;/strong&gt;&lt;/a&gt;さんより、JSON形式のデータを受信することで実現しています。&lt;/p&gt;
+
+&lt;h2 id=&#34;拡張性で広がるiot工作&#34;&gt;拡張性で広がるIoT工作&lt;/h2&gt;
+
+&lt;p&gt;今回は、Nefry BTに乗っているハードウェアを使って工作をしました。前途の通り、Nefry BTにはGPIOとGroveシステムにも対応しているので、LEDを増設したり、センサーを追加するなどして、簡単に拡張できます。&lt;/p&gt;
+
+&lt;p&gt;みなさんもNefry BTでIoT工作に踏み出してみませんか？&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>【報告】青山学院大学で4日間集中IoT講習を行いました</title>
       <link>https://dotstud.io/blog/aogaku-iot-summer-report/</link>
       <pubDate>Tue, 26 Sep 2017 19:31:51 +0900</pubDate>
@@ -1570,133 +1720,6 @@ IoTLTではお馴染みポキオ氏。京急線が遅延すると光るが当日
 &lt;p&gt;「&lt;strong&gt;野生のPDCA&lt;/strong&gt;」「&lt;strong&gt;とりあえず光っとけばパリピにモテる&lt;/strong&gt;」などのパワーワードで今回も会場をざわつかせていました。&lt;/p&gt;
 
 &lt;p&gt;ギャル電の公開収録についての詳細は別記事にまとめます！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>かなり盛り上がった！ものづくりの祭典＠中国 #MakerFaireShenZhen</title>
-      <link>https://dotstud.io/blog/maker-faire-shenzhen-report/</link>
-      <pubDate>Tue, 08 Nov 2016 19:30:18 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/maker-faire-shenzhen-report/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、dotstudioエディターのうらら（&lt;a href=&#34;http://twitter.com/uraranbon&#34;&gt;@uraranbon&lt;/a&gt;）です。&lt;/p&gt;
-
-&lt;p&gt;2006年から始まったものづくりの祭典「Maker Faire」は、いまや世界の20カ国くらいに広まり、勢いを伸ばし続けています。日本でも毎年夏におこなわれる恒例行事となりましたが、dotstudioは日本を飛び出し、中国・深センでおこなわれた「&lt;a href=&#34;http://www.makerfaireshenzhen.com/&#34;&gt;Maker Faire Shenzhen 2016&lt;/a&gt;（MFSZ）」に参加してきました！　80以上ものブースに世界各国からのものづくりが展示されていました〜〜！&lt;/p&gt;
-
-&lt;h2 id=&#34;会場の-海上世界-の広さに絶句&#34;&gt;会場の「海上世界」の広さに絶句&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;今回、中国の深センでおこなわれた「Maker Faire Shenzhen」。香港の近くの場所にあり、日本から飛行機では4時間程度の距離です。会場となるのは「海上世界」。中国に到着してからすぐに、何十個ものブースが出展されるイベント会場へ下見に行ったのですが……&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;街中に突然、船がある場所でした。でかっ！　&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;なかなか広そうです。この一角は、地元の人が集まるショッピングモールとのこと。一周してみましたがなかなか広かったです。あっ奥の方にブースが見える。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;入り口発見。設営がかなりしっかりしてます。&lt;/p&gt;
-
-&lt;h2 id=&#34;microsoftやintelといった大手企業も参加&#34;&gt;MicrosoftやIntelといった大手企業も参加&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/04-2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;もともと予定していた開催日は、10月21日（金）〜10月23日（日）でしたが、台風「Haima」の影響で10月23日（日）〜10月24日（月）に後ろ倒し。3日間開催予定が、2日間に圧縮。帰りの飛行機の都合もあり、私たちは23日のみの参加となりました。幸いにも1日で1周できる広さではありました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;いろんな企業が参加していましたが、会場のゲート近くには大手企業が軒を連ねていました。まずはintel。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;こちらはMicrosoft。顔認識する自動販売機を実演していました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;GROVEやWio Node、でおなじみの&lt;a href=&#34;https://www.seeedstudio.com&#34;&gt;Seeed&lt;/a&gt;。いろんなガジェットが紹介されていました！&lt;/p&gt;
-
-&lt;h2 id=&#34;見たことのないガジェットがあちこちに&#34;&gt;見たことのないガジェットがあちこちに&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/08.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;地面に砂で字を書きながら進むマシン。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/09.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;きれいな字です。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;こちらはペット用のスマート首輪。文字が流れるようです。詳細が読めない。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;台湾発の超小型のゲーム機「WiFiBoy（ESP32）」というもの。子供がプレイしているところを覗いたら、テトリスやってました。これMaker Faire Tokyoにも出展していたそうです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/12.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;こちらのブースは全て木でできていました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/13.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;プラネタリウムもやってました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/14.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ドラムや楽器を演奏するロボット。体を揺らしながらリズムを刻む様子をみんなカメラに収めていました。Maker Faire Tokyoでも見かけた気がします！&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/15.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;VRの体験コーナーもありました！（3回100元）&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/16.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ロボット同士のバトルも開催されていました！　周りには人だかりが。&lt;/p&gt;
-
-&lt;p&gt;という感じで、日本で見たことがあるものも出展されていましたが、ほとんどが初見のガジェットでした。（でも説明が読めなくて悔しい）アートとおもちゃ系が多かったように感じました。&lt;/p&gt;
-
-&lt;h2 id=&#34;来場者は-たまたま来た地元の人-が多かった印象&#34;&gt;来場者は「たまたま来た地元の人」が多かった印象&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/17.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;dotstudioとして展示したのは、私たちが普段PRしたり販売しているIoTガジェットらです。幸いにもdotstudioは人通りの多い場所で展示できて、人が途絶えませんでした。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/18.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;そして、本当にたまたま、私たちも日本で販売している &lt;strong&gt;Wio Nodeを作ったSeeedのエンジニアさんと会いました&lt;/strong&gt;。驚いた。手に持っている箱が裏向きですね。&lt;/p&gt;
-
-&lt;h2 id=&#34;あっと言う間に終わったmfsz-締めはaki-party&#34;&gt;あっと言う間に終わったMFSZ、締めはAki Party！&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/19.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;17時くらい閉めるムードに。Maker Faire Tokyoの後に秋葉原でおこなわれた「Aki Party」がここでも開催されるということで参加しました。日本からの参加者さんらと交流できました。&lt;/p&gt;
-
-&lt;p&gt;室内で &lt;strong&gt;ドローンが飛ぶなど&lt;/strong&gt; 、みんな楽しそうでした。&lt;/p&gt;
-
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/051/20.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;▲Aki Partyにて：床に投影されたMaker Faireのマスコットキャラクター&lt;/p&gt;
-
-&lt;p&gt;ということで1日しか参加できなかったMaker Faire Shenzhenですが、中国にも電子工作やテクノロジーが盛り上がっていることが認識できた素敵なイベントでした。&lt;/p&gt;
-
-&lt;p&gt;ショッピングモール周辺で開催されたこともあり、モールに来たついでにイベントも周ってみているという人が多そうな印象でした。「&lt;strong&gt;IoTってなに？&lt;/strong&gt;」という人も。反対に、おもちゃをスマホアプリから操作できる日本のデバイス「Mabeee」を知っている人もいるなど幅広いお客さんが集まりました。それって超素敵。&lt;/p&gt;
-
-&lt;p&gt;日本は幕張メッセなどのイベント会場でおこなわれ、しかも入場料もかかるので参加する人はおのずとテクノロジー関連に興味のある方になると思います。そういった意味では、&lt;strong&gt;深センのMaker Faireは広い人に解放されていて、新しい技術に触れる場になっていた&lt;/strong&gt; ように感じました。&lt;/p&gt;
-
-&lt;p&gt;今度はまた別の国のMaker Faireに参加してみたいです！&lt;/p&gt;
-
-&lt;p&gt;[]()&lt;/p&gt;
-
-&lt;p&gt;ではまた！&lt;/p&gt;
 </description>
     </item>
     

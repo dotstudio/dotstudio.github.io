@@ -10,6 +10,156 @@
     <atom:link href="/categories/event/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>みんなでﾀﾞｧｼｴﾘｲｪｽ！遅延すると光るガジェットをつくるIoTハンズオンを開催しました！</title>
+      <link>https://dotstud.io/blog/train-nefry-ihandson-report/</link>
+      <pubDate>Thu, 12 Oct 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://dotstud.io/blog/train-nefry-ihandson-report/</guid>
+      
+      <description>
+
+&lt;p&gt;どうも、ポキオです。9月27日に、Nefry BTを使ったIoT初心者向けハンズオンを開催しました。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;a href=&#34;https://dotstudio.connpass.com/event/61189/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/130/1.png&#34; alt=&#34;IoTハンズオン！【ﾀﾞｧ】Nefry BTで電車遅延すると光るガジェットを作ろう【ｼｪｲﾘｲｪｽ】&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;https://dotstudio.connpass.com/event/61189/&#34;&gt;IoTハンズオン！【ﾀﾞｧ】Nefry BTで電車遅延すると光るガジェットを作ろう【ｼｪｲﾘｲｪｽ】&lt;/a&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;今回、ハンズオンのお題は&lt;strong&gt;遅延すると光るガジェット&lt;/strong&gt;。IoTLTでおなじみ（？）のガジェットをみんなで作りました！&lt;/p&gt;
+
+&lt;h2 id=&#34;イベント概要&#34;&gt;イベント概要&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/wionode-ifttt-handson-report/&#34;&gt;ゆっきんさんのハンズオン&lt;/a&gt;と同じく、&lt;strong&gt;デジタルハリウッド大学のLabProto&lt;/strong&gt;をお借りしてハンズオンを開催しました。色々なツールが所狭しと並び、机や椅子もまさに&lt;strong&gt;ラボ&lt;/strong&gt;な雰囲気を醸し出してる、お洒落な会場でした。
+&lt;img src=&#34;https://dotstud.io/img/blog/130/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;IoTLTでは、私はもっぱら京急ネタで登壇させていただきましたが、今回は参加者の好きな路線を設定して、その路線が遅延したらNefry BTのLEDが光るようなガジェットを作成してみました。&lt;/p&gt;
+
+&lt;h2 id=&#34;nefry-btって&#34;&gt;Nefry BTって？&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/nefrybt/&#34;&gt;Nefry BT&lt;/a&gt;とは、ESP32というWi-FiとBLEと搭載したチップが載った、フリスクサイズの開発ボードのこと。&lt;a href=&#34;https://kibidango.com/513&#34;&gt;過去に行われたクラウドファンディング&lt;/a&gt;では437%を達成した、今話題のモジュールです。
+&lt;img src=&#34;https://dotstud.io/img/blog/130/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;大切なものはすべて実装済み&#34;&gt;大切なものはすべて実装済み&lt;/h3&gt;
+
+&lt;p&gt;IoTなガジェットを作る上で、ハードウェアの知識が無いと困ることも多いと思います。&lt;/p&gt;
+
+&lt;p&gt;Nefry BTは開発ボードでよくある&lt;strong&gt;GPIO&lt;/strong&gt;はもちろん搭載していて、さらに&lt;strong&gt;フルカラーのLED&lt;/strong&gt;や&lt;strong&gt;ディスプレイ&lt;/strong&gt;、そして半田ごて不要で様々なセンサーを接続できる&lt;strong&gt;Groveシステム&lt;/strong&gt;にも対応。買ってすぐLチカや開発が始められる上に、Groveのセンサーを接続すれば色々なガジェットを作ることができます。&lt;/p&gt;
+
+&lt;h3 id=&#34;便利な関数で楽々プログラミング&#34;&gt;便利な関数で楽々プログラミング&lt;/h3&gt;
+
+&lt;p&gt;Nefry BTは設定がWebブラウザ上からできるなど、&lt;strong&gt;初心者にも非常に優しい作り&lt;/strong&gt;になっています。&lt;/p&gt;
+
+&lt;p&gt;さらに&lt;a href=&#34;https://nefry.studio/&#34;&gt;ドキュメント&lt;/a&gt;では、便利な関数が多数公開されています。たとえば実装済みのフルカラーLEDは、コード上で複雑な初期化不要で、&lt;a href=&#34;https://nefry.studio/NefryLibrary/%E3%83%8F%E3%83%BC%E3%83%89%E3%82%A6%E3%82%A8%E3%82%A2%E9%96%A2%E9%80%A3%E9%96%A2%E6%95%B0/#setled&#34;&gt;簡単に色を指定&lt;/a&gt;できます。&lt;/p&gt;
+
+&lt;h2 id=&#34;準備&#34;&gt;準備&lt;/h2&gt;
+
+&lt;h3 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;電車のおもちゃ（ダイソーで売ってる&lt;strong&gt;プチ電車シリーズ&lt;/strong&gt;）&lt;/li&gt;
+&lt;li&gt;Nefry BT&lt;/li&gt;
+&lt;li&gt;USB延長ケーブル&lt;/li&gt;
+&lt;li&gt;トレーシングペーパー&lt;/li&gt;
+&lt;li&gt;両面テープ&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;筆者の環境&#34;&gt;筆者の環境&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;MacBook Air (13-inch, Mid 2013)&lt;/li&gt;
+&lt;li&gt;OS X Yosemite 10.10.5&lt;/li&gt;
+&lt;li&gt;Arduino IDE 1.8.4&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;電車の中にnefry-btをセット&#34;&gt;電車の中にNefry BTをセット&lt;/h2&gt;
+
+&lt;p&gt;そんなNefry BTですが、実はダイソーで売っている電車のおもちゃの内部にピッタリ入ります。
+&lt;img src=&#34;https://dotstud.io/img/blog/130/4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Nefry BTのUSBコネクター部分が電車の外に出るように、電車のおもちゃには少し加工をしています。USBコネクターにはUSB延長ケーブルを接続して、給電を行います。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/130/6.png&#34; alt=&#34;&#34; /&gt;
+また、LEDの光が拡散するように、電車の窓部分には内側からトレーシングペーパーを貼り付けています。Nefry BTに実装されているLEDだけでも、こんな感じで電車を光らせる事ができます！&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/130/5.png&#34; alt=&#34;&#34; /&gt;
+皆さん、もくもくと作成中！&lt;/p&gt;
+
+&lt;h2 id=&#34;肝心のコーディング&#34;&gt;肝心のコーディング&lt;/h2&gt;
+
+&lt;p&gt;ハンズオンでは特定の路線に遅延が発生したら光らせるプログラムを書き込みました。書き込みはArduino IDEより行いました。ちなみに、&lt;a href=&#34;https://dotstud.io/docs/nefrybt-wifi-setup/&#34;&gt;&lt;strong&gt;このページ&lt;/strong&gt;&lt;/a&gt;を参考にNefry BTのセットアップを済ませておくと、コード上でWi-Fi接続のシーケンスを実装しなくて済むので、非常に便利です。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+#include &amp;lt;WiFiClientSecure.h&amp;gt; // HTTPS通信のために必要
+
+void setup() {
+  // 何もしない
+}
+
+void loop() {
+  // JSONを取得する
+  String trainDelayJson = getTrainDelayJson();
+
+  // JSONに特定の路線名が含まれているか確認する
+  if (trainDelayJson.indexOf(&amp;quot;（好きな路線名）&amp;quot;) &amp;gt; 0) {
+    blinkFor30Sec(255, 0, 0); // 赤く光らせる
+  } else {
+    blinkFor30Sec(0, 0, 255); // 青く光らせる
+  }
+}
+
+// 鉄道遅延情報のjsonさんから、遅延情報（JSON）を取得する
+String getTrainDelayJson() {
+  WiFiClientSecure client; // 変数を宣言
+
+  // サーバーにHTTPSのデフォルトポート（443）でアクセスしてみる
+  if ( !client.connect(&amp;quot;rti-giken.jp&amp;quot;, 443) ) {
+    Nefry.println(&amp;quot;接続失敗&amp;quot;);
+    return &amp;quot;&amp;quot;;
+  }
+
+  client.print(String(&amp;quot;GET /fhc/api/train_tetsudo/delay.json HTTP/1.1\r\n&amp;quot;) +
+               &amp;quot;Host: rti-giken.jp\r\n&amp;quot; +
+               &amp;quot;Connection: close\r\n\r\n&amp;quot;); // HTTP-GETのリクエストメッセージを書く
+
+  // レスポンスが来るまでちょっと待つ
+  Nefry.ndelay(1000);
+
+  // HTTP-GETのレスポンスを保存しておく変数
+  String response = &amp;quot;&amp;quot;;
+
+  // レスポンスを変数に格納する
+  while (client.available()) {
+    response += client.readStringUntil(&#39;\r&#39;);
+  }
+
+  Nefry.println(&amp;quot;接続成功&amp;quot;);
+  Nefry.println(response);
+
+  return response;
+}
+
+// 30秒間、500msecおきに点灯と消灯を繰り返します
+void blinkFor30Sec(int r, int g, int b) {
+  for (int i = 0; i &amp;lt; 30; i++) {
+    Nefry.setLed(r, g, b);
+    Nefry.ndelay(500);
+    Nefry.setLed(0, 0, 0);
+    Nefry.ndelay(500);
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Nefry BTから定期的にWi-Fi経由で鉄道の遅延情報を取得し、特定の路線が遅れているかどうかを監視するようにしています。遅延情報は&lt;a href=&#34;https://rti-giken.jp/fhc/api/train_tetsudo/&#34;&gt;&lt;strong&gt;鉄道遅延情報のjson&lt;/strong&gt;&lt;/a&gt;さんより、JSON形式のデータを受信することで実現しています。&lt;/p&gt;
+
+&lt;h2 id=&#34;拡張性で広がるiot工作&#34;&gt;拡張性で広がるIoT工作&lt;/h2&gt;
+
+&lt;p&gt;今回は、Nefry BTに乗っているハードウェアを使って工作をしました。前途の通り、Nefry BTにはGPIOとGroveシステムにも対応しているので、LEDを増設したり、センサーを追加するなどして、簡単に拡張できます。&lt;/p&gt;
+
+&lt;p&gt;みなさんもNefry BTでIoT工作に踏み出してみませんか？&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>#linedevday 2017レポート！ Clova連携で期待のGateboxの技術話を聞いてみたよ</title>
       <link>https://dotstud.io/blog/linedevday-report-2017-gatebox/</link>
       <pubDate>Thu, 28 Sep 2017 14:45:35 +0900</pubDate>
@@ -2062,92 +2212,6 @@ SEの金森さんが初めてIoTに挑戦した話！&lt;/p&gt;
 &lt;p&gt;そしてIoTLTを支えてくださる企業のみなさま、&lt;strong&gt;IoTLTでは会場を提供してくださる企業様を募集中です！！&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;来月は私も発表したいので、よろしくお願いします！（笑）&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>年に一度のITエンジニアのお祭り！デブサミ2017にIoTLTが出展しました！</title>
-      <link>https://dotstud.io/blog/devsumi-2017-chantoku-report/</link>
-      <pubDate>Mon, 20 Feb 2017 10:00:02 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/devsumi-2017-chantoku-report/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、バックエンドエンジニアのちゃんとく（&lt;a href=&#34;https://twitter.com/tokutoku393&#34;&gt;@tokutoku393&lt;/a&gt;）です。&lt;/p&gt;
-
-&lt;p&gt;先日（2017年2月16日）開催された「デブサミ2017」一日目に、代表のびすけの主催する&lt;a href=&#34;https://iotlt.connpass.com/&#34;&gt;IoT縛りの勉強会! IoTLT&lt;/a&gt;がコミュニティとして出展しました。&lt;/p&gt;
-
-&lt;p&gt;当日のコミュニティ出展ブースやイベントの様子をお届けします！&lt;/p&gt;
-
-&lt;h2 id=&#34;デブサミとは&#34;&gt;デブサミとは&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://event.shoeisha.jp/devsumi/20170216/&#34;&gt;デブサミ2017 公式サイト&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;ウェブサービスに関してはもちろん、IoT、人工知能、VRまで、最新のテクノロジーが集結する年に一度のITエンジニアのお祭り！&lt;/p&gt;
-
-&lt;p&gt;2日間、6会場に渡って開催され、2000名規模のエンジニアが参加しているそうです。（公式サイトより）&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/086/01_kaijyo.png&#34; alt=&#34;&#34; /&gt;
-今年の会場は目黒雅叙園。本当にテック系イベントがここで……！？&lt;/p&gt;
-
-&lt;h2 id=&#34;特別展示展-エンジニアコミュニティ特集&#34;&gt;特別展示展 - エンジニアコミュニティ特集&lt;/h2&gt;
-
-&lt;p&gt;デブサミ2017では、特別企画展としてエンジニアコミュニティ特集が開催されました。（一日目のみ）&lt;/p&gt;
-
-&lt;p&gt;「五感で体験できるテクノロジー」をテーマに、各コミュニティの参加者が自作のIoTガジェットを持ち寄り展示しました！&lt;/p&gt;
-
-&lt;h3 id=&#34;参加コミュニティ&#34;&gt;参加コミュニティ&lt;/h3&gt;
-
-&lt;h4 id=&#34;tmcn&#34;&gt;TMCN&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/086/02_TMCN.png&#34; alt=&#34;&#34; /&gt;
-センサ好きの飲み会から生まれた、最新ガジェットに関心のある個人をネットワークするコミュニティ。「Tokyo Motion Controll Network」の略だそうです。&lt;/p&gt;
-
-&lt;p&gt;MashupAwards入賞者や、デブサミスピーカーも擁するTMCNさんですが、作られるガジェットから「技術の無駄遣い」との声も……？（いい意味で）&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/086/03_hightouch.png&#34; alt=&#34;&#34; /&gt;
-ハイタッチする感覚を味わえるグローブ。使いどころは不明。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/086/04_pingpong.png&#34; alt=&#34;&#34; /&gt;
-体育館の「キュッキュ」音が楽しめるスリッパと、振動・エフェクト音を発する卓球ラケットで擬似スポーツを体験。&lt;/p&gt;
-
-&lt;h4 id=&#34;iot縛りの勉強会-iotlt&#34;&gt;IoT縛りの勉強会! IoTLT&lt;/h4&gt;
-
-&lt;p&gt;dotstudio代表のびすけが主催するIoTコミュニティ。IoTをテーマに毎月様々な分野の人たちがLTをしています。詳細な概要や開催の経緯については、CodeIQ MAGAZINEで取材していただいたこちらの記事をご覧ください。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://codeiq.jp/magazine/2016/03/38409/&#34;&gt;「IoT縛りの勉強会！IoTLT」が、毎月200人規模のエンジニア・クリエイターを集める人気の秘密&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;dotstudioからはちゃんとくとしゃのんが出展させていただきました！
-&lt;img src=&#34;https://dotstud.io/img/blog/086/05_chantoku.png&#34; alt=&#34;&#34; /&gt;
-体重計のデータをサーバに転送しLINEに通知を送るガジェット。自分のダイエット用。（ちゃんとく）&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/086/06_shanon.png&#34; alt=&#34;&#34; /&gt;
-Android端末に挿して直接センサーの値を取れるWaffle！土の水分状況を取得なう。（しゃのん）&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/086/07_pokio.png&#34; alt=&#34;&#34; /&gt;
-IoTLTではお馴染みポキオ氏。京急線が遅延すると光るが当日は遅延せず。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/086/08_iotlt.png&#34; alt=&#34;&#34; /&gt;
-目的地に向かって倒れる傘や、Slackの会話に反応して動くPickupon、遠足カメラマンアプリなど、たくさん展示していただきました！&lt;/p&gt;
-
-&lt;h3 id=&#34;来場者の反応&#34;&gt;来場者の反応&lt;/h3&gt;
-
-&lt;p&gt;来訪者はエンジニアの方はもちろん、技術やIoTにあまり馴染みのない方まで様々。一日目のみの参加でしたが、幅広い分野の方たちに展示を楽しんでいただきました！&lt;/p&gt;
-
-&lt;p&gt;「子供に電子工作させたい」「買えるんですか？」「これ使って痩せたいです（笑）」など、たくさんの反響が。技術のしくみも面白いけれど、「とりあえず遊んでみたら楽しい！」 ということから興味を持ってくれた方が多かったように思います。&lt;/p&gt;
-
-&lt;p&gt;IoTという言葉がバズワードになって久しく、企業や大規模サービスのものだと捉えがちですが、 &lt;strong&gt;身近で、楽しくて、誰でもできる&lt;/strong&gt; のがIoTなんだと再認識しました。 IoT、まだまだ流行るぞー！！&lt;/p&gt;
-
-&lt;h2 id=&#34;我らがギャル電はデブラジに生出演&#34;&gt;我らがギャル電はデブラジに生出演！&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/086/09_gyaruden.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;IoTLT発のギャル電子工作ユニット、「ギャル電」はなんとデブラジ公開収録に出演！&lt;/p&gt;
-
-&lt;p&gt;「&lt;strong&gt;野生のPDCA&lt;/strong&gt;」「&lt;strong&gt;とりあえず光っとけばパリピにモテる&lt;/strong&gt;」などのパワーワードで今回も会場をざわつかせていました。&lt;/p&gt;
-
-&lt;p&gt;ギャル電の公開収録についての詳細は別記事にまとめます！&lt;/p&gt;
 </description>
     </item>
     
