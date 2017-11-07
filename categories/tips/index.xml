@@ -2,12 +2,110 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tips on dotstudio（ドットスタジオ）</title>
-    <link>https://dotstud.io/categories/tips/index.xml</link>
+    <link>https://dotstud.io/categories/tips/</link>
     <description>Recent content in Tips on dotstudio（ドットスタジオ）</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <atom:link href="/categories/tips/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 31 Oct 2017 17:53:15 +0900</lastBuildDate>
+    <atom:link href="/categories/tips/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Node.js製の静的サイトジェネレータ「Hexo」で無料ブログ開発 vol.3</title>
+      <link>https://dotstud.io/blog/hexo-static-site-vol3/</link>
+      <pubDate>Tue, 31 Oct 2017 17:53:15 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/hexo-static-site-vol3/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、エンジニアのちゃんとくです。ひょんなことから&lt;a href=&#34;https://nodejs.connpass.com/&#34;&gt;&lt;strong&gt;Node女学園&lt;/strong&gt;&lt;/a&gt;というNode.jsを学ぶ女性のためのコミュニティを立ち上げました。&lt;/p&gt;
+
+&lt;p&gt;このシリーズではNode女学園のブログを作りながら、&lt;strong&gt;Node.js製の静的サイトジェネレータ「Hexo」&lt;/strong&gt;の使い方を紹介していきます！&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/hexo-static-site-vol2&#34;&gt;&lt;strong&gt;前回&lt;/strong&gt;&lt;/a&gt;はデザインを当ててブログのカスタマイズをしてみました。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/pre_art.png&#34; alt=&#34;&#34; /&gt;
+&lt;center&gt;
+&lt;a href=&#34;https://dotstud.io/blog/hexo-static-site-vol2&#34;&gt;Node.js製の静的サイトジェネレータ「Hexo」で無料ブログ開発 vol.2&lt;/a&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;今回はルートを追加してブログ記事以外のページを作ってみます。&lt;/p&gt;
+
+&lt;h2 id=&#34;今回やること&#34;&gt;今回やること&lt;/h2&gt;
+
+&lt;p&gt;現在はコマンドで記事を追加すると&lt;code&gt;サイトURL/:YYYY/:MM/:DD&lt;/code&gt;という記事が作成されるようになっています。&lt;/p&gt;
+
+&lt;p&gt;これを変更して、&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;サイトURL/about/&lt;/code&gt;という情報ページを追加&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;サイトURL/blog/:title&lt;/code&gt;に記事を生成&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;というのをやってみます。&lt;/p&gt;
+
+&lt;h2 id=&#34;新しいルートを追加&#34;&gt;新しいルートを追加&lt;/h2&gt;
+
+&lt;p&gt;ルートの追加は、&lt;code&gt;hexo new page &amp;quot;[新しいルート]&amp;quot;&lt;/code&gt;というコマンドで簡単にできます。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/new_route.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;コマンドを実行すると&lt;code&gt;/source&lt;/code&gt;の下に新しいディレクトリが作成されます。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/about_dir.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;作成された&lt;code&gt;about/index.md&lt;/code&gt;にページ内容を記載します。&lt;/p&gt;
+
+&lt;p&gt;ローカルサーバを起動して&lt;a href=&#34;http://localhost:4000/about/&#34;&gt;http://localhost:4000/about/&lt;/a&gt; を見てみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/about.png&#34; alt=&#34;&#34; /&gt;
+新しいページができました！&lt;/p&gt;
+
+&lt;h2 id=&#34;メニューに追加&#34;&gt;メニューに追加&lt;/h2&gt;
+
+&lt;p&gt;今のままではどこからもリンクがないのでメニューのHomeの横に追加してみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/menu_before.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;/themes/pacman/_config.yml&lt;/code&gt;の&lt;code&gt;menu:&lt;/code&gt;に表示名とPATHを記載します。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/menu.png&#34; alt=&#34;&#34; /&gt;
+Archivesはしばらく不要なので消しました。ついでにEventsとStaffページも追加してみます。&lt;/p&gt;
+
+&lt;p&gt;表示を確認します。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/menu_after.png&#34; alt=&#34;&#34; /&gt;
+メニューができました！各リンクが正しいかも確認しておきましょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;blog記事のurlを変更する&#34;&gt;blog記事のURLを変更する&lt;/h2&gt;
+
+&lt;p&gt;続いてブログ記事が&lt;code&gt;サイトURL/blog/:title&lt;/code&gt;となるように変更していきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;プロジェクト/_config.yml&lt;/code&gt;を変更しましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/title.png&#34; alt=&#34;&#34; /&gt;
+&lt;code&gt;permalink:&lt;/code&gt;を&lt;code&gt;/:title/&lt;/code&gt;に変更します。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;new_post_name:&lt;/code&gt;の項目を&lt;code&gt;blog/:title.md&lt;/code&gt;に変更します。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/blog_title.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;新しい記事を作成してみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/new_post.png&#34; alt=&#34;&#34; /&gt;
+&lt;code&gt;/source/blog&lt;/code&gt;の下に記事が追加されるようになりました。&lt;/p&gt;
+
+&lt;p&gt;トップページを確認してみましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/top.png&#34; alt=&#34;&#34; /&gt;
+&lt;a href=&#34;http://localhost:4000&#34;&gt;http://localhost:4000&lt;/a&gt; にはブログ一覧が表示されます。&lt;/p&gt;
+
+&lt;p&gt;記事をクリックして飛んでみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/art.png&#34; alt=&#34;&#34; /&gt;
+&lt;code&gt;サイトURL/blog/:title&lt;/code&gt;の形で記事が発行されました！&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;hexo deploy -g&lt;/code&gt;でデプロイです。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/108/done.png&#34; alt=&#34;&#34; /&gt;
+今回もコマンドと設定ファイルの編集で簡単にルーティングをすることができました。&lt;/p&gt;
+
+&lt;p&gt;かなりサイトらしくなってきましたね！&lt;/p&gt;
+
+&lt;p&gt;次回はサイドバーをカスタマイズしてみたいと思います。&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Node.js製の静的サイトジェネレータ「Hexo」で無料ブログ開発 vol.2</title>
@@ -2022,169 +2120,6 @@ Hugoディレクトリ内に変更があったとき自動でブラウザをリ�
 &lt;p&gt;次回は個別記事のページ作成や、ジャンル、タグなどの仕組みをつくっていきたいと思います。&lt;/p&gt;
 
 &lt;p&gt;それではまた次回お会いしましょう！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Node.jsでコマンドラインツール作るときに使いやすいreadline-sync</title>
-      <link>https://dotstud.io/blog/nodejs-npm-readline-sync/</link>
-      <pubDate>Wed, 05 Oct 2016 10:00:00 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/nodejs-npm-readline-sync/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke/&#34;&gt;のびすけ&lt;/a&gt;です。
-&lt;a href=&#34;https://dotstud.io/series/nodejs/&#34;&gt;Node.js Magazine&lt;/a&gt;という連載を作ったのでNode.js系のTipsを紹介していく予定です。&lt;/p&gt;
-
-&lt;p&gt;今日はNode.jsでコマンドラインツールを作る際に役立つreadline-syncというパッケージを紹介します。&lt;/p&gt;
-
-&lt;p&gt;実際にサンプルを動かして見ましょう。&lt;/p&gt;
-
-&lt;h2 id=&#34;執筆時点のマシンスペック&#34;&gt;執筆時点のマシンスペック&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;macOS Sierra (v10.12)&lt;/li&gt;
-&lt;li&gt;Node.js v6.6.0&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;何か不具合があったときに参照してください。&lt;/p&gt;
-
-&lt;h2 id=&#34;インストール&#34;&gt;インストール&lt;/h2&gt;
-
-&lt;p&gt;URL: &lt;a href=&#34;https://www.npmjs.com/package/readline-sync&#34;&gt;https://www.npmjs.com/package/readline-sync&lt;/a&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;npm i readline-sync
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;サンプルを動かしてみる&#34;&gt;サンプルを動かしてみる&lt;/h2&gt;
-
-&lt;p&gt;まずは基本的なサンプルです。&lt;code&gt;.question()&lt;/code&gt;で質問して入力結果をそのまま変数に入れ込めます。このサンプルでいうと&lt;code&gt;userName&lt;/code&gt;と&lt;code&gt;favFood&lt;/code&gt;の変数に入力した値が入ります。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;//app.js
-const readlineSync = require(&#39;readline-sync&#39;);
-
-let userName = readlineSync.question(&#39;あなたの名前は? &#39;);
-console.log(`-&amp;gt;こんにちは ${userName}!`);
-
-let favFood = readlineSync.question(&#39;好きな食べ物は? &#39;, {hideEchoBack: true});
-console.log(`-&amp;gt;${userName}は${favFood}が好きなんだね!`);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;{hideEchoBack: true}&lt;/code&gt;というオプションをつけると入力時は&lt;code&gt;*&lt;/code&gt;で表示されます。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;実行&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/024/01_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;選択肢を出して選ばせる&#34;&gt;選択肢を出して選ばせる&lt;/h2&gt;
-
-&lt;p&gt;選択肢を提示してユーザーに選ばせる方法もよく使われます。&lt;/p&gt;
-
-&lt;p&gt;keyInSelectメソッドを使います。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;//app.js
-const readlineSync = require(&#39;readline-sync&#39;);
-
-let animals = [&#39;のびすけ&#39;, &#39;うらら&#39;, &#39;ちゃちゃまる&#39;, &#39;うこ&#39;, &#39;ギャル電&#39;];
-let index = readlineSync.keyInSelect(animals, &#39;誰に連絡しますか?&#39;);
-console.log(`${animals[index]}に連絡します。`);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;実行してみる&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/024/02_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;人の名前を選択肢して、その人に連絡をする&lt;/strong&gt;みたいなインターフェイスを作って見ました。変数がanimalsなのは気にしません。&lt;/p&gt;
-
-&lt;h2 id=&#34;cliループでサブコマンドを作る&#34;&gt;CLIループでサブコマンドを作る&lt;/h2&gt;
-
-&lt;p&gt;コマンド終了のタイミングをユーザーに委ねたいときに使えます。&lt;/p&gt;
-
-&lt;p&gt;promptCLLoopメソッドで関数を引数に渡すと関数をループ実行してくれます。&lt;/p&gt;
-
-&lt;p&gt;このサンプルだと&lt;code&gt;bye&lt;/code&gt;というサブコマンドを入力すると終了します。&lt;/p&gt;
-
-&lt;p&gt;逆に言えば&lt;code&gt;bye&lt;/code&gt;を入力するまではずっとその他コマンドの入力を待ち受けます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;//app.js
-
-const readlineSync = require(&#39;readline-sync&#39;);
-readlineSync.promptCLLoop({
-  add: (target, into) =&amp;gt; {
-    console.log(`${target}を${into}に追加します。`);
-    // Do something...
-  },
-  remove: (target) =&amp;gt; {
-    console.log(`${target}を削除します。`);
-    // Do something...
-  },
-  bye: () =&amp;gt; { return true; }
-});
-console.log(&#39;終了します。&#39;);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;実行してみる&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/024/03_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;こんな感じで&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;gt; コマンド名 変数1 変数2 ...
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;という入力を受け付けて紐づけられている関数の引数として変数が渡されます。&lt;/p&gt;
-
-&lt;h2 id=&#34;キー入力で値を選んでもらう&#34;&gt;キー入力で値を選んでもらう&lt;/h2&gt;
-
-&lt;p&gt;この表現がいいのか分からないですけど、、、見ればわかります。&lt;/p&gt;
-
-&lt;p&gt;keyInメソッドでキー入力の待ち受けを実現しています。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;//app.js
-
-const readlineSync = require(&#39;readline-sync&#39;);
-
-const MAX = 60, MIN = 0;
-let value = 30, key;
-console.log(`\n\n${(new Array(20)).join(&#39; &#39;)}[Z] &amp;lt;- -&amp;gt; [X]  決定: [SPACE]\n`);
-while (true) {
-  console.log(&#39;\x1B[1A\x1B[K|&#39; +
-    (new Array(value + 1)).join(&#39;-&#39;) + &#39;O&#39; +
-    (new Array(MAX - value + 1)).join(&#39;-&#39;) + &#39;| &#39; + value);
-  key = readlineSync.keyIn(&#39;&#39;,
-    {hideEchoBack: true, mask: &#39;&#39;, limit: &#39;zx &#39;});
-  if (key === &#39;z&#39;) { if (value &amp;gt; MIN) { value--; } }
-  else if (key === &#39;x&#39;) { if (value &amp;lt; MAX) { value++; } }
-  else { break; }
-}
-console.log(`\nあなたが決めた値: ${value}`);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;実行してみる&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/024/04_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;zとxで値を調節してスペースで決定です。&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;簡単でしたが以上になります。&lt;/p&gt;
-
-&lt;p&gt;いかがでしたでしょうか。
-非同期が基本になっているJavaScriptでコマンドラインからの入力受付を同期的にやる場合にはかなり使いやすいパッケージだと思います。&lt;/p&gt;
-
-&lt;p&gt;readline-syncでコマンドラインツールを作って見ましょう！&lt;/p&gt;
-
-&lt;p&gt;もっとこっちの方がオススメだよ！ってものがあれば是非&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;@n0bisuke&lt;/a&gt;に教えてください :)&lt;/p&gt;
 </description>
     </item>
     

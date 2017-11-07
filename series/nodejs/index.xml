@@ -2,12 +2,110 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Nodejs on dotstudio（ドットスタジオ）</title>
-    <link>https://dotstud.io/series/nodejs/index.xml</link>
+    <link>https://dotstud.io/series/nodejs/</link>
     <description>Recent content in Nodejs on dotstudio（ドットスタジオ）</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <atom:link href="/series/nodejs/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 31 Oct 2017 17:53:15 +0900</lastBuildDate>
+    <atom:link href="/series/nodejs/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Node.js製の静的サイトジェネレータ「Hexo」で無料ブログ開発 vol.3</title>
+      <link>https://dotstud.io/blog/hexo-static-site-vol3/</link>
+      <pubDate>Tue, 31 Oct 2017 17:53:15 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/hexo-static-site-vol3/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、エンジニアのちゃんとくです。ひょんなことから&lt;a href=&#34;https://nodejs.connpass.com/&#34;&gt;&lt;strong&gt;Node女学園&lt;/strong&gt;&lt;/a&gt;というNode.jsを学ぶ女性のためのコミュニティを立ち上げました。&lt;/p&gt;
+
+&lt;p&gt;このシリーズではNode女学園のブログを作りながら、&lt;strong&gt;Node.js製の静的サイトジェネレータ「Hexo」&lt;/strong&gt;の使い方を紹介していきます！&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/hexo-static-site-vol2&#34;&gt;&lt;strong&gt;前回&lt;/strong&gt;&lt;/a&gt;はデザインを当ててブログのカスタマイズをしてみました。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/pre_art.png&#34; alt=&#34;&#34; /&gt;
+&lt;center&gt;
+&lt;a href=&#34;https://dotstud.io/blog/hexo-static-site-vol2&#34;&gt;Node.js製の静的サイトジェネレータ「Hexo」で無料ブログ開発 vol.2&lt;/a&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;今回はルートを追加してブログ記事以外のページを作ってみます。&lt;/p&gt;
+
+&lt;h2 id=&#34;今回やること&#34;&gt;今回やること&lt;/h2&gt;
+
+&lt;p&gt;現在はコマンドで記事を追加すると&lt;code&gt;サイトURL/:YYYY/:MM/:DD&lt;/code&gt;という記事が作成されるようになっています。&lt;/p&gt;
+
+&lt;p&gt;これを変更して、&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;サイトURL/about/&lt;/code&gt;という情報ページを追加&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;サイトURL/blog/:title&lt;/code&gt;に記事を生成&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;というのをやってみます。&lt;/p&gt;
+
+&lt;h2 id=&#34;新しいルートを追加&#34;&gt;新しいルートを追加&lt;/h2&gt;
+
+&lt;p&gt;ルートの追加は、&lt;code&gt;hexo new page &amp;quot;[新しいルート]&amp;quot;&lt;/code&gt;というコマンドで簡単にできます。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/new_route.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;コマンドを実行すると&lt;code&gt;/source&lt;/code&gt;の下に新しいディレクトリが作成されます。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/about_dir.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;作成された&lt;code&gt;about/index.md&lt;/code&gt;にページ内容を記載します。&lt;/p&gt;
+
+&lt;p&gt;ローカルサーバを起動して&lt;a href=&#34;http://localhost:4000/about/&#34;&gt;http://localhost:4000/about/&lt;/a&gt; を見てみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/about.png&#34; alt=&#34;&#34; /&gt;
+新しいページができました！&lt;/p&gt;
+
+&lt;h2 id=&#34;メニューに追加&#34;&gt;メニューに追加&lt;/h2&gt;
+
+&lt;p&gt;今のままではどこからもリンクがないのでメニューのHomeの横に追加してみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/menu_before.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;/themes/pacman/_config.yml&lt;/code&gt;の&lt;code&gt;menu:&lt;/code&gt;に表示名とPATHを記載します。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/menu.png&#34; alt=&#34;&#34; /&gt;
+Archivesはしばらく不要なので消しました。ついでにEventsとStaffページも追加してみます。&lt;/p&gt;
+
+&lt;p&gt;表示を確認します。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/menu_after.png&#34; alt=&#34;&#34; /&gt;
+メニューができました！各リンクが正しいかも確認しておきましょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;blog記事のurlを変更する&#34;&gt;blog記事のURLを変更する&lt;/h2&gt;
+
+&lt;p&gt;続いてブログ記事が&lt;code&gt;サイトURL/blog/:title&lt;/code&gt;となるように変更していきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;プロジェクト/_config.yml&lt;/code&gt;を変更しましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/title.png&#34; alt=&#34;&#34; /&gt;
+&lt;code&gt;permalink:&lt;/code&gt;を&lt;code&gt;/:title/&lt;/code&gt;に変更します。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;new_post_name:&lt;/code&gt;の項目を&lt;code&gt;blog/:title.md&lt;/code&gt;に変更します。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/blog_title.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;新しい記事を作成してみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/new_post.png&#34; alt=&#34;&#34; /&gt;
+&lt;code&gt;/source/blog&lt;/code&gt;の下に記事が追加されるようになりました。&lt;/p&gt;
+
+&lt;p&gt;トップページを確認してみましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/top.png&#34; alt=&#34;&#34; /&gt;
+&lt;a href=&#34;http://localhost:4000&#34;&gt;http://localhost:4000&lt;/a&gt; にはブログ一覧が表示されます。&lt;/p&gt;
+
+&lt;p&gt;記事をクリックして飛んでみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/art.png&#34; alt=&#34;&#34; /&gt;
+&lt;code&gt;サイトURL/blog/:title&lt;/code&gt;の形で記事が発行されました！&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;hexo deploy -g&lt;/code&gt;でデプロイです。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/108/done.png&#34; alt=&#34;&#34; /&gt;
+今回もコマンドと設定ファイルの編集で簡単にルーティングをすることができました。&lt;/p&gt;
+
+&lt;p&gt;かなりサイトらしくなってきましたね！&lt;/p&gt;
+
+&lt;p&gt;次回はサイドバーをカスタマイズしてみたいと思います。&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>#linedevday 2017レポート！ Clova連携で期待のGateboxの技術話を聞いてみたよ</title>
