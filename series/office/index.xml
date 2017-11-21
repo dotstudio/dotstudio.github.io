@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Office on dotstudio（ドットスタジオ）</title>
+    <link>https://dotstud.io/series/office/</link>
+    <description>Recent content in Office on dotstudio（ドットスタジオ）</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>© 2016 dotstudio inc.</copyright>
+    <lastBuildDate>Mon, 20 Nov 2017 00:00:00 +0000</lastBuildDate>
+    <atom:link href="/series/office/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>オフィス移転したらインターホンがなかったので作ってみた</title>
+      <link>https://dotstud.io/blog/office-new-door-notification/</link>
+      <pubDate>Mon, 20 Nov 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://dotstud.io/blog/office-new-door-notification/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudioモノづくり担当・うこです。&lt;/p&gt;
+
+&lt;p&gt;dotstudioは&lt;a href=&#34;https://dotstud.io/blog/office-relocation-for-akihabara/&#34;&gt;&lt;strong&gt;めでたく新オフィスに移転したのですが&lt;/strong&gt;&lt;/a&gt;、インターホンがついておらず不便なんですよね。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/133/10.png&#34; alt=&#34;&#34; /&gt;
+代表・のびすけ「&lt;strong&gt;うこ先生、これRaspberry Piでインターホン作れない？&lt;/strong&gt;」&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/133/1.png&#34; alt=&#34;&#34; /&gt;
+僕「&lt;strong&gt;秒でいけます&lt;/strong&gt;」&lt;/p&gt;
+
+&lt;p&gt;ということで作ってみました！&lt;/p&gt;
+
+&lt;h2 id=&#34;全体の構成&#34;&gt;全体の構成&lt;/h2&gt;
+
+&lt;p&gt;今回は&lt;strong&gt;ボタンを押したら室内のスピーカに音がなる機能&lt;/strong&gt;に加えて、&lt;strong&gt;押した人の姿が見えるカメラ機能&lt;/strong&gt;も搭載してみました。&lt;/p&gt;
+
+&lt;p&gt;全体の構成はこんな感じです。
+&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/116011/a7707b67-176f-8dc6-cf32-8323a56e860c.png&#34; alt=&#34;いんたーほん.png&#34; title=&#34;いんたーほん.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Raspberry Pi 3（以下ラズパイ）をベースにして、Grove接続されたタッチセンサに触れると室内のBluetoothスピーカー（今回はBASE EGG）から音が流れる仕組みを作ります。&lt;/p&gt;
+
+&lt;p&gt;さらに、ラズパイカメラをドアの外に出して、外の様子がオフィス内のモニタから見られるようにします。&lt;/p&gt;
+
+&lt;h3 id=&#34;使ったもの&#34;&gt;使ったもの&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Raspberry Pi 3&lt;/li&gt;
+&lt;li&gt;Raspberry Pi カメラモジュール&lt;/li&gt;
+&lt;li&gt;Grove タッチセンサ&lt;/li&gt;
+&lt;li&gt;Bluetoothオーディオトランスミッタ&lt;/li&gt;
+&lt;li&gt;Bluetoothスピーカー（今回はBASS EGG）&lt;/li&gt;
+&lt;li&gt;スピーカー（100円）&lt;/li&gt;
+&lt;li&gt;オーディオ分岐プラグ（100円）&lt;/li&gt;
+&lt;li&gt;マグネット付きプラスチックケース（100円）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;呼び鈴の製作&#34;&gt;呼び鈴の製作&lt;/h2&gt;
+
+&lt;h3 id=&#34;ハードウェア部分&#34;&gt;ハードウェア部分&lt;/h3&gt;
+
+&lt;p&gt;まずはじめに、&lt;strong&gt;来客者がボタンを押すと室内で音が鳴って訪問を知らせるようにする機能&lt;/strong&gt;を作ります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/133/12.png&#34; alt=&#34;&#34; /&gt;
+ラズパイはマグネット付きのプラスチックケースに入れて、金属製のドアの内側に貼り付けます。ケースはケーブルが引き出せるように適宜加工します。&lt;/p&gt;
+
+&lt;p&gt;次にGroveタッチセンサですが、そのままだとラズパイに接続できないためジャンパワイヤを3本用意します。接続するピンは以下のとおりです。&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;left&#34;&gt;タッチセンサのピン&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;ラズパイGPIO&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;VCC&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;3.3V&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;GND&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Ground&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;NC&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;SIG&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;24&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;ラズパイGPIOのピン番号と位置については、以下の公式ページにある2番目の図を参照してください。&lt;/p&gt;
+
+&lt;p&gt;参考：&lt;a href=&#34;https://www.raspberrypi.org/documentation/usage/gpio-plus-and-raspi2/&#34;&gt;GPIO: MODELS A+, B+, RASPBERRY PI 2 B AND RASPBERRY PI 3 B&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;次に、100円程度で売られているオーディオ出力分岐器をラズパイのオーディオ出力に接続し、さらにBluetoothのオーディオトランスミッタと小型のスピーカーに接続します。
+&lt;center&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/133/11.png&#34; alt=&#34;&#34; /&gt;
+実証の結果、「押した人にも音が鳴ったことがわかる」ことが必要とわかった
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;オーディオトランスミッタは室内に来客を知らせるスピーカーを鳴らす用、小型スピーカーはドアの外に出して来客者に「呼び鈴が鳴った」ことを知らせる用です。USB接続のアンプ付きスピーカーなどで大きな音が出せるのならそれで代用することができます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/133/5.png&#34; alt=&#34;&#34; /&gt;
+最後に電源を近くのコンセントからUSBアダプタ経由で接続してハードウェア部分は完了です！&lt;/p&gt;
+
+&lt;h3 id=&#34;ソフトウェア部分&#34;&gt;ソフトウェア部分&lt;/h3&gt;
+
+&lt;p&gt;まず、適当なインターフォンの音となるmp3を用意しましょう。簡単なピンポン音でも、ネタのような効果音でもいいです。dotstudioでは、「ファミマ入店音」が好評だったため採用しました。&lt;/p&gt;
+
+&lt;p&gt;mp3が用意できたら、&lt;code&gt;/home/pi&lt;/code&gt;などのディレクトリに&lt;code&gt;sounds&lt;/code&gt;というフォルダを作ってその中にmp3を入れましょう。&lt;/p&gt;
+
+&lt;p&gt;次に、&lt;code&gt;sudo apt-get install mpg321&lt;/code&gt;を実行し、サウンド再生用のソフトウェア「mpg321」をインストールします。&lt;code&gt;mpg321 sounds/サウンド.mp3&lt;/code&gt;などと実行して、スピーカーから音が出ていればOKです。もしここで音が小さい場合は、&lt;code&gt;alsamixer&lt;/code&gt;コマンドを実行すると音量調整ができますので、矢印キーで大きくしておきます。&lt;/p&gt;
+
+&lt;p&gt;音の再生が確認できたら、以下のPythonプログラムを&lt;code&gt;sounds&lt;/code&gt;ディレクトリと同じ場所に保存して実行します。タッチセンサを触ると同時に、音が鳴ってターミナル上に&amp;rsquo;Ping-pon!&amp;lsquo;と表示されれば成功です。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-/home/pi/interphone.py&#34;&gt;#!/usr/bin/python
+
+import RPi.GPIO as GPIO
+import glob
+import subprocess
+from time import sleep
+from random import shuffle
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(24, GPIO.IN)
+
+# mp3が保存されているディレクトリは適宜変更してください
+soundlist = glob.glob(&amp;quot;./sounds/*.mp3&amp;quot;)
+
+while True:
+    if GPIO.input(24) == GPIO.HIGH:
+        shuffle(soundlist)
+        print(&#39;Ping-pon!&#39;)
+        subprocess.call(&amp;quot;mpg321 -q &amp;quot;+soundlist[0], shell=True)
+    else:
+        sleep(0.01)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最後に、再起動しても動くように、&lt;code&gt;/etc/rc.local&lt;/code&gt;ファイルの末尾に&lt;code&gt;/usr/bin/python /home/pi/interphone.py &amp;amp;&lt;/code&gt;と追記しておきましょう。
+ちなみにですが、上記のコードでは&lt;code&gt;sounds&lt;/code&gt;ディレクトリ内に複数のmp3が入っているとランダムで再生されるような仕組みにしています。&lt;/p&gt;
+
+&lt;h2 id=&#34;監視カメラ部分の製作&#34;&gt;監視カメラ部分の製作&lt;/h2&gt;
+
+&lt;p&gt;監視カメラはラズパイ専用カメラを使用します。接続はとても簡単で、HDMI端子とオーディオ端子の間にある細長い端子にケーブルを差し込むだけです。&lt;code&gt;sudo raspi-config&lt;/code&gt;コマンドで、カメラを使うことができるように設定を変更しておきましょう。&lt;code&gt;raspistill -p&lt;/code&gt;コマンドを実行し、特にエラーが出なければ正常に接続されています。&lt;/p&gt;
+
+&lt;p&gt;今回はカメラと呼び鈴部分は連動させず、カメラは&lt;a href=&#34;https://github.com/ccrisan/motioneye/wiki&#34;&gt;motionEye&lt;/a&gt;というオープンソースウェアを使って単独で動作させます。
+motionEyeのインストールは以下を参考にしました。&lt;/p&gt;
+
+&lt;p&gt;参考：&lt;a href=&#34;https://qiita.com/mt08/items/96207abfba91954b50d4&#34;&gt;らずぱい motionEye (Web UIベースのカメラサーバ) - Qiita&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;こちらのページにも書かれていますが、ラズパイのカメラモジュールを使用するので、以下のコマンドを実行しておくのを忘れないようにしましょう。
+&lt;code&gt;grep bcm2835-v4l2 /etc/modules || echo bcm2835-v4l2 | sudo tee -a /etc/modules&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/133/4.png&#34; alt=&#34;&#34; /&gt;
+インストールが完了して、室内に常設してあるPCのブラウザからアクセスしてみました。
+ばっちりドアの外が撮影されていますね！
+1秒おきに更新されていますが、python上で動作しているためか、少々重たいようです。&lt;/p&gt;
+
+&lt;h2 id=&#34;試してみる&#34;&gt;試してみる&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/133/7.png&#34; alt=&#34;&#34; /&gt;
+インターホンを押すと……&lt;/p&gt;
+
+&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/4W4pJ0bZVGY&#34; frameborder=&#34;0&#34; gesture=&#34;media&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;入店っぽい音が流れます！&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/133/13.png&#34; alt=&#34;&#34; /&gt;
+旧スタイルに比べるとだいぶ未来になりました。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;今回は数時間ほどでこのシステムを作ることができました。カメラと呼び鈴が独立してしまっていますが、可能ならば「呼び鈴を押した瞬間の画像を保存してhipchatにアップロード」するような仕組みを作ってみたいです。
+&lt;img src=&#34;https://dotstud.io/img/blog/133/3.png&#34; alt=&#34;&#34; /&gt;
+次は何をつくってやろうか……。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
