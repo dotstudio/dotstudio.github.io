@@ -10,6 +10,462 @@
     <atom:link href="/series/nodejs/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>GASを使わずにNode.jsでGoogle SpreadSheetを操作してみよう。</title>
+      <link>https://dotstud.io/blog/google-spreadsheets-from-nodejs/</link>
+      <pubDate>Mon, 04 Dec 2017 13:14:41 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/google-spreadsheets-from-nodejs/</guid>
+      
+      <description>
+
+&lt;p&gt;Node.jsでGoogle Spread Sheet&lt;/p&gt;
+
+&lt;p&gt;こんにちは、代表ののびすけです。&lt;/p&gt;
+
+&lt;p&gt;この記事は&lt;a href=&#34;https://qiita.com/advent-calendar/2017/nodejs&#34;&gt;Node.jsアドベントカレンダー2017&lt;/a&gt;の記事になります。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://developers.google.com/apps-script/&#34;&gt;GAS&lt;/a&gt;じゃなくてNode.jsから直接スプレッドシートにアクセスしたい！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;そう思って調べると&lt;a href=&#34;https://developers.google.com/sheets/api/quickstart/nodejs&#34;&gt;Node.js Quickstart | Sheets API | Google Developers&lt;/a&gt;が出て来ますが、JS記述も古いし英語なので少しとっつきにくいです。&lt;/p&gt;
+
+&lt;p&gt;ということでちょっと試して記録残そうと思います。&lt;/p&gt;
+
+&lt;h2 id=&#34;google-sheets-api1&#34;&gt;Google Sheets API1&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://developers.google.com/sheets/guides/concepts?hl=ja&#34;&gt;Google Sheets API&lt;/a&gt;はスプレッドシートにアクセスできるようになるAPIです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/81dd3461cd263ea7e4d63f06fef54747.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Google Sheets API を使用すると、スプレッドシートの要素を読み取って変更できます。 スプレッドシートは多くの設定を備えており、美しく機能的なシートを作成することができます。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;普段慣れている言語でスプレッドシートにアクセス出来まるので、簡単な操作であれば、GASを使う必要もないです。&lt;/p&gt;
+
+&lt;p&gt;今回のサンプルは&lt;a href=&#34;https://github.com/n0bisuke/google-spread-sheet-node.js-sample&#34;&gt;こちら&lt;/a&gt;に置いておきます。&lt;/p&gt;
+
+&lt;h2 id=&#34;環境&#34;&gt;環境&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Node.js v9.2.0&lt;/li&gt;
+&lt;li&gt;macOS High Sierra&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;参考までに今回の僕の環境です。&lt;/p&gt;
+
+&lt;p&gt;では実際に作っていきます。&lt;/p&gt;
+
+&lt;h2 id=&#34;1-google-sheets-apiを使えるようにする&#34;&gt;1. Google Sheets APIを使えるようにする&lt;/h2&gt;
+
+&lt;p&gt;ちなみに2017年12月時点でのウィザードです。こういうのはアップデートによって画面遷移変わるので適宜読み替えてください。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Use this wizard to create or select a project in the Google Developers Console and automatically turn on the API. Click Continue, then Go to credentials.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://console.developers.google.com/start/api?id=sheets.googleapis.com&#34;&gt;こちらのリンク&lt;/a&gt;からディベロッパーコンソールにいき、&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/31e8011951d1552b8f7126eb459da474.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;新機能のお知らせ、パフォーマンスに関するアドバイス、フィードバック調査、特典に関する最新情報をメールで受け取ります。&lt;/code&gt;の質問はいいえでもたぶん大丈夫です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/60c5bf6a1e772473dc9fc6d4d7526077.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;認証情報に進む&lt;/code&gt;を選択&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/848f8f79460aac991b46956111f0da07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;この画面が出ますが、&lt;code&gt;キャンセル&lt;/code&gt;を選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/35387/e827d6ab-d728-1016-d22a-76cef4e4972e.png&#34; alt=&#34;スクリーンショット 2017-12-03 21.00.17.png&#34; title=&#34;スクリーンショット 2017-12-03 21.00.17.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;OAuth同意画面&lt;/code&gt;のタブを選択し、メールアドレスを確認し、&lt;code&gt;ユーザーに表示するサービス名&lt;/code&gt;を入力します。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;保存&lt;/code&gt;を選択しましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/35387/1ca3a2d5-b639-bb6c-9508-225d162c96ff.png&#34; alt=&#34;スクリーンショット 2017-12-03 21.01.07.png&#34; title=&#34;スクリーンショット 2017-12-03 21.01.07.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;次に、&lt;code&gt;認証情報&lt;/code&gt;のタブを選択し、 &lt;code&gt;認証情報を作成&lt;/code&gt; -&amp;gt; &lt;code&gt;OAuthクライアントID&lt;/code&gt;を選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/3d5b6da9cf3086b11c728cdc31307268.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;その他&lt;/code&gt;を選択し、任意の名前をつけて&lt;code&gt;作成&lt;/code&gt;。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/35387/a8a25dd3-a194-d4a3-ac57-909f8d7712e0.png&#34; alt=&#34;スクリーンショット 2017-12-03 21.06.47.png&#34; title=&#34;スクリーンショット 2017-12-03 21.06.47.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;OK&lt;/code&gt;で進みます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/35387/93c1e777-682e-434e-444d-a3aa8659bd54.png&#34; alt=&#34;スクリーンショット 2017-12-03 21.07.25.png&#34; title=&#34;スクリーンショット 2017-12-03 21.07.25.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;client_secret_xxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com.json&lt;/code&gt;のようなファイルがダウンロードされます。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;これを&lt;code&gt;client_secret.json&lt;/code&gt;にリネームしましょう。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;2-node-jsプロジェクトの準備&#34;&gt;2. Node.jsプロジェクトの準備&lt;/h2&gt;
+
+&lt;p&gt;任意のディレクトリを作成して移動します。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;sheetstest&lt;/code&gt;としました。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mkdir sheetstest
+cd sheetstest
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;npm init -y&lt;/code&gt;で&lt;code&gt;package.json&lt;/code&gt;を作成します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;npm init -y
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;このディレクトリに先ほどの&lt;code&gt;client_secret.json&lt;/code&gt;を移動させます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ls
+
+package.json client_secret.json
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/3d796ef0005ef28b914a83517772c65e.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;こんな感じです。&lt;/p&gt;
+
+&lt;p&gt;利用するモジュールを追加します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;npm i googleapis google-auth-library --save
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;3-トークンの作成-保存-最初だけ&#34;&gt;3. トークンの作成&amp;amp;保存 (最初だけ)&lt;/h2&gt;
+
+&lt;p&gt;本家とは少し違うやり方です。&lt;/p&gt;
+
+&lt;p&gt;本家のコードだと&lt;code&gt;トークンの作成&amp;amp;保存&lt;/code&gt;作業と実際のAPI呼び出しが一緒になったコードですが&lt;code&gt;トークンの作成&amp;amp;保存&lt;/code&gt;は最初のみ行えば良いので手順を分けて紹介します。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;getAndStoreToken.js&lt;/code&gt;を作成します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//getAndStoreToken.js
+&#39;use strict&#39;;
+
+const fs = require(&#39;fs&#39;);
+const readline = require(&#39;readline&#39;);
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+const {promisify} = require(&#39;util&#39;);
+
+const google = require(&#39;googleapis&#39;);
+const googleAuth = require(&#39;google-auth-library&#39;);
+
+//promisifyでプロミス化
+const readFileAsync = promisify(fs.readFile);
+const writeFileAsync = promisify(fs.writeFile);
+const rlQuestionAsync = promisify(rl.question);
+
+const SCOPES = [&#39;https://www.googleapis.com/auth/spreadsheets.readonly&#39;];
+const TOKEN_DIR = __dirname;
+const TOKEN_PATH = TOKEN_DIR+&#39;/sheets.googleapis.com-nodejs-quickstart.json&#39;;
+
+const main = async () =&amp;gt; {
+    const content = await readFileAsync(__dirname+&#39;/client_secret.json&#39;);
+    const credentials = JSON.parse(content); //クレデンシャル
+    //認証
+    const clientSecret = credentials.installed.client_secret;
+    const clientId = credentials.installed.client_id;
+    const redirectUrl = credentials.installed.redirect_uris[0];
+    const auth = new googleAuth();
+    const oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
+    
+    //get new token
+    const authUrl = oauth2Client.generateAuthUrl({
+        access_type: &#39;offline&#39;,
+        scope: SCOPES
+    });
+
+    console.log(&#39;Authorize this app by visiting this url: &#39;, authUrl);
+
+    rl.question(&#39;Enter the code from that page here: &#39;, (code) =&amp;gt; {
+        rl.close();
+        
+        oauth2Client.getToken(code, async (err, token) =&amp;gt; {
+            if (err) {
+                console.log(&#39;Error while trying to retrieve access token&#39;, err);
+                return;
+            }
+
+            oauth2Client.credentials = token;
+
+            try {
+                fs.mkdirSync(TOKEN_DIR);
+            } catch (err) {
+                if (err.code != &#39;EEXIST&#39;) throw err;
+            }
+
+            await writeFileAsync(TOKEN_PATH, JSON.stringify(token));
+            console.log(&#39;Token stored to &#39; + TOKEN_PATH);
+        });
+    });
+};
+
+main();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;このプログラムを実行します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;node getAndStoreToken.js
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/379de8711e19b5510225e167de555ab6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;https://accounts.google.com/~&lt;/code&gt;で始まるURLが表示されるのでこれをコピーしてブラウザで開きます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/35387/06afa961-4789-535b-3fee-8eaf67a997af.png&#34; alt=&#34;スクリーンショット 2017-12-04 11.52.54.png&#34; title=&#34;スクリーンショット 2017-12-04 11.52.54.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;アカウント選択画面になります。
+複数Googleアカウントを持っている人は、今回アクセスしようとしているアカウントを選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/35387/18729d60-e4a6-8996-9519-f9f4750ae1f4.png&#34; alt=&#34;スクリーンショット 2017-12-04 11.53.02.png&#34; title=&#34;スクリーンショット 2017-12-04 11.53.02.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;許可&lt;/code&gt;で進みます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/35387/6058bd3e-258f-1d8d-a7c6-68962617f1b2.png&#34; alt=&#34;スクリーンショット 2017-12-04 11.53.09.png&#34; title=&#34;スクリーンショット 2017-12-04 11.53.09.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;認証用のコードが発行されます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/35387/fd612d7c-0b45-3d09-64ab-c1e02315fe81.png&#34; alt=&#34;スクリーンショット 2017-12-04 11.53.27.png&#34; title=&#34;スクリーンショット 2017-12-04 11.53.27.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;これをコピーしてターミナルに貼り付けてエンターキーで進みます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Token stored to /Users/n0bisuke/dotstudio/playground/sheetstest/sheets.googleapis.com-nodejs-quickstart.json
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;などと表示されてjsonファイルが保存されます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/35387/830452dc-ad36-83ef-8cf8-8c80bc9637dd.png&#34; alt=&#34;スクリーンショット 2017-12-04 11.57.50.png&#34; title=&#34;スクリーンショット 2017-12-04 11.57.50.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;sheets.googleapis.com-nodejs-quickstart.json&lt;/code&gt;がフォルダ内に確認できればOKです。&lt;/p&gt;
+
+&lt;h2 id=&#34;4-いよいよシートにアクセス&#34;&gt;4. いよいよシートにアクセス&lt;/h2&gt;
+
+&lt;p&gt;さて最後の手順です。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;getSheetsData.js&lt;/code&gt;を作成しましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//getSheetsData.js
+&#39;use strict&#39;;
+
+const fs = require(&#39;fs&#39;);
+const {promisify} = require(&#39;util&#39;);
+const google = require(&#39;googleapis&#39;);
+const googleAuth = require(&#39;google-auth-library&#39;);
+const sheets = google.sheets(&#39;v4&#39;);
+
+//promisifyでプロミス化
+const readFileAsync = promisify(fs.readFile);
+const ssValuesGetAsync = promisify(sheets.spreadsheets.values.get);
+
+const TOKEN_DIR = __dirname;
+const TOKEN_PATH = TOKEN_DIR + &#39;/sheets.googleapis.com-nodejs-quickstart.json&#39;;
+
+const main = async () =&amp;gt; {
+    //クレデンシャル情報の取得
+    const content = await readFileAsync(__dirname+&#39;/client_secret.json&#39;);
+    const credentials = JSON.parse(content); //クレデンシャル
+
+    //認証
+    const clientSecret = credentials.installed.client_secret;
+    const clientId = credentials.installed.client_id;
+    const redirectUrl = credentials.installed.redirect_uris[0];
+    const auth = new googleAuth();
+    const oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
+    const token = await readFileAsync(TOKEN_PATH);
+    oauth2Client.credentials = JSON.parse(token);
+
+    //API経由でシートにアクセス
+    const apiOptions = {
+        auth: oauth2Client,
+        spreadsheetId: &#39;1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms&#39;,
+        range: &#39;Class Data!A2:E&#39;,
+    };
+    const response = await ssValuesGetAsync(apiOptions);
+
+    //結果を表示
+    console.log(response);
+};
+
+main();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これを実行します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ node getSheetsData.js
+
+{ range: &#39;\&#39;Class Data\&#39;!A2:E101&#39;,
+  majorDimension: &#39;ROWS&#39;,
+  values:
+   [ [ &#39;Alexandra&#39;, &#39;Female&#39;, &#39;4. Senior&#39;, &#39;CA&#39;, &#39;English&#39; ],
+     [ &#39;Andrew&#39;, &#39;Male&#39;, &#39;1. Freshman&#39;, &#39;SD&#39;, &#39;Math&#39; ],
+     [ &#39;Anna&#39;, &#39;Female&#39;, &#39;1. Freshman&#39;, &#39;NC&#39;, &#39;English&#39; ],
+     [ &#39;Becky&#39;, &#39;Female&#39;, &#39;2. Sophomore&#39;, &#39;SD&#39;, &#39;Art&#39; ],
+     [ &#39;Benjamin&#39;, &#39;Male&#39;, &#39;4. Senior&#39;, &#39;WI&#39;, &#39;English&#39; ],
+     [ &#39;Carl&#39;, &#39;Male&#39;, &#39;3. Junior&#39;, &#39;MD&#39;, &#39;Art&#39; ],
+     [ &#39;Carrie&#39;, &#39;Female&#39;, &#39;3. Junior&#39;, &#39;NE&#39;, &#39;English&#39; ],
+     [ &#39;Dorothy&#39;, &#39;Female&#39;, &#39;4. Senior&#39;, &#39;MD&#39;, &#39;Math&#39; ],
+     [ &#39;Dylan&#39;, &#39;Male&#39;, &#39;1. Freshman&#39;, &#39;MA&#39;, &#39;Math&#39; ],
+     [ &#39;Edward&#39;, &#39;Male&#39;, &#39;3. Junior&#39;, &#39;FL&#39;, &#39;English&#39; ],
+     [ &#39;Ellen&#39;, &#39;Female&#39;, &#39;1. Freshman&#39;, &#39;WI&#39;, &#39;Physics&#39; ],
+     [ &#39;Fiona&#39;, &#39;Female&#39;, &#39;1. Freshman&#39;, &#39;MA&#39;, &#39;Art&#39; ],
+     [ &#39;John&#39;, &#39;Male&#39;, &#39;3. Junior&#39;, &#39;CA&#39;, &#39;Physics&#39; ],
+     [ &#39;Jonathan&#39;, &#39;Male&#39;, &#39;2. Sophomore&#39;, &#39;SC&#39;, &#39;Math&#39; ],
+     [ &#39;Joseph&#39;, &#39;Male&#39;, &#39;1. Freshman&#39;, &#39;AK&#39;, &#39;English&#39; ],
+     [ &#39;Josephine&#39;, &#39;Female&#39;, &#39;1. Freshman&#39;, &#39;NY&#39;, &#39;Math&#39; ],
+     [ &#39;Karen&#39;, &#39;Female&#39;, &#39;2. Sophomore&#39;, &#39;NH&#39;, &#39;English&#39; ],
+     [ &#39;Kevin&#39;, &#39;Male&#39;, &#39;2. Sophomore&#39;, &#39;NE&#39;, &#39;Physics&#39; ],
+     [ &#39;Lisa&#39;, &#39;Female&#39;, &#39;3. Junior&#39;, &#39;SC&#39;, &#39;Art&#39; ],
+     [ &#39;Mary&#39;, &#39;Female&#39;, &#39;2. Sophomore&#39;, &#39;AK&#39;, &#39;Physics&#39; ],
+     [ &#39;Maureen&#39;, &#39;Female&#39;, &#39;1. Freshman&#39;, &#39;CA&#39;, &#39;Physics&#39; ],
+     [ &#39;Nick&#39;, &#39;Male&#39;, &#39;4. Senior&#39;, &#39;NY&#39;, &#39;Art&#39; ],
+     [ &#39;Olivia&#39;, &#39;Female&#39;, &#39;4. Senior&#39;, &#39;NC&#39;, &#39;Physics&#39; ],
+     [ &#39;Pamela&#39;, &#39;Female&#39;, &#39;3. Junior&#39;, &#39;RI&#39;, &#39;Math&#39; ],
+     [ &#39;Patrick&#39;, &#39;Male&#39;, &#39;1. Freshman&#39;, &#39;NY&#39;, &#39;Art&#39; ],
+     [ &#39;Robert&#39;, &#39;Male&#39;, &#39;1. Freshman&#39;, &#39;CA&#39;, &#39;English&#39; ],
+     [ &#39;Sean&#39;, &#39;Male&#39;, &#39;1. Freshman&#39;, &#39;NH&#39;, &#39;Physics&#39; ],
+     [ &#39;Stacy&#39;, &#39;Female&#39;, &#39;1. Freshman&#39;, &#39;NY&#39;, &#39;Math&#39; ],
+     [ &#39;Thomas&#39;, &#39;Male&#39;, &#39;2. Sophomore&#39;, &#39;RI&#39;, &#39;Art&#39; ],
+     [ &#39;Will&#39;, &#39;Male&#39;, &#39;4. Senior&#39;, &#39;FL&#39;, &#39;Math&#39; ] ] }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;このサンプルでは&lt;a href=&#34;https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit#gid=0&#34;&gt;こちらのワークブック&lt;/a&gt;へアクセスして情報を取得しています。&lt;/p&gt;
+
+&lt;p&gt;ちなみに用語的には&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ワークブック＝Googleスプレッドシートの１ファイル&lt;/li&gt;
+&lt;li&gt;シート＝ワークブック内のタブ、シート&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;というニュアンスです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//省略
+
+    const apiOptions = {
+        auth: oauth2Client,
+        spreadsheetId: &#39;1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms&#39;,
+        range: &#39;Class Data!A2:E&#39;,
+    };
+
+//省略
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ほかのワークブックにアクセスする場合は&lt;code&gt;https://docs.google.com/spreadsheets/d/&lt;/code&gt;の後に続くIDを&lt;code&gt;spreadsheetId&lt;/code&gt;に指定して実行しましょう。&lt;code&gt;range&lt;/code&gt;は&lt;code&gt;シート名:取得する範囲&lt;/code&gt;という形式で指定して、指定したシートの指定した範囲からセルの情報を取得します。&lt;/p&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;これで次回以降は4番目の手順だけでスプレッドシートにアクセスできます。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;client_secret.json&lt;/code&gt;や&lt;code&gt;sheets.googleapis.com-nodejs-quickstart.json&lt;/code&gt;をコピーしてサーバー設置しておけば自動更新する仕組みなども作れます。&lt;/p&gt;
+
+&lt;p&gt;スプレッドシートは色々な場面で利用されているツールなので是非システム連携などに活用してみて下さい。&lt;/p&gt;
+
+&lt;p&gt;それでは！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Node.js製の静的サイトジェネレータ「Hexo」で無料ブログ開発 vol.3</title>
+      <link>https://dotstud.io/blog/hexo-static-site-vol3/</link>
+      <pubDate>Tue, 31 Oct 2017 17:53:15 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/hexo-static-site-vol3/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、エンジニアのちゃんとくです。ひょんなことから&lt;a href=&#34;https://nodejs.connpass.com/&#34;&gt;&lt;strong&gt;Node女学園&lt;/strong&gt;&lt;/a&gt;というNode.jsを学ぶ女性のためのコミュニティを立ち上げました。&lt;/p&gt;
+
+&lt;p&gt;このシリーズではNode女学園のブログを作りながら、&lt;strong&gt;Node.js製の静的サイトジェネレータ「Hexo」&lt;/strong&gt;の使い方を紹介していきます！&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/hexo-static-site-vol2&#34;&gt;&lt;strong&gt;前回&lt;/strong&gt;&lt;/a&gt;はデザインを当ててブログのカスタマイズをしてみました。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/pre_art.png&#34; alt=&#34;&#34; /&gt;
+&lt;center&gt;
+&lt;a href=&#34;https://dotstud.io/blog/hexo-static-site-vol2&#34;&gt;Node.js製の静的サイトジェネレータ「Hexo」で無料ブログ開発 vol.2&lt;/a&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;今回はルートを追加してブログ記事以外のページを作ってみます。&lt;/p&gt;
+
+&lt;h2 id=&#34;今回やること&#34;&gt;今回やること&lt;/h2&gt;
+
+&lt;p&gt;現在はコマンドで記事を追加すると&lt;code&gt;サイトURL/:YYYY/:MM/:DD&lt;/code&gt;という記事が作成されるようになっています。&lt;/p&gt;
+
+&lt;p&gt;これを変更して、&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;サイトURL/about/&lt;/code&gt;という情報ページを追加&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;サイトURL/blog/:title&lt;/code&gt;に記事を生成&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;というのをやってみます。&lt;/p&gt;
+
+&lt;h2 id=&#34;新しいルートを追加&#34;&gt;新しいルートを追加&lt;/h2&gt;
+
+&lt;p&gt;ルートの追加は、&lt;code&gt;hexo new page &amp;quot;[新しいルート]&amp;quot;&lt;/code&gt;というコマンドで簡単にできます。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/new_route.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;コマンドを実行すると&lt;code&gt;/source&lt;/code&gt;の下に新しいディレクトリが作成されます。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/about_dir.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;作成された&lt;code&gt;about/index.md&lt;/code&gt;にページ内容を記載します。&lt;/p&gt;
+
+&lt;p&gt;ローカルサーバを起動して&lt;a href=&#34;http://localhost:4000/about/&#34;&gt;http://localhost:4000/about/&lt;/a&gt; を見てみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/about.png&#34; alt=&#34;&#34; /&gt;
+新しいページができました！&lt;/p&gt;
+
+&lt;h2 id=&#34;メニューに追加&#34;&gt;メニューに追加&lt;/h2&gt;
+
+&lt;p&gt;今のままではどこからもリンクがないのでメニューのHomeの横に追加してみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/menu_before.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;/themes/pacman/_config.yml&lt;/code&gt;の&lt;code&gt;menu:&lt;/code&gt;に表示名とPATHを記載します。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/menu.png&#34; alt=&#34;&#34; /&gt;
+Archivesはしばらく不要なので消しました。ついでにEventsとStaffページも追加してみます。&lt;/p&gt;
+
+&lt;p&gt;表示を確認します。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/menu_after.png&#34; alt=&#34;&#34; /&gt;
+メニューができました！各リンクが正しいかも確認しておきましょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;blog記事のurlを変更する&#34;&gt;blog記事のURLを変更する&lt;/h2&gt;
+
+&lt;p&gt;続いてブログ記事が&lt;code&gt;サイトURL/blog/:title&lt;/code&gt;となるように変更していきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;プロジェクト/_config.yml&lt;/code&gt;を変更しましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/title.png&#34; alt=&#34;&#34; /&gt;
+&lt;code&gt;permalink:&lt;/code&gt;を&lt;code&gt;/:title/&lt;/code&gt;に変更します。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;new_post_name:&lt;/code&gt;の項目を&lt;code&gt;blog/:title.md&lt;/code&gt;に変更します。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/blog_title.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;新しい記事を作成してみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/new_post.png&#34; alt=&#34;&#34; /&gt;
+&lt;code&gt;/source/blog&lt;/code&gt;の下に記事が追加されるようになりました。&lt;/p&gt;
+
+&lt;p&gt;トップページを確認してみましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/top.png&#34; alt=&#34;&#34; /&gt;
+&lt;a href=&#34;http://localhost:4000&#34;&gt;http://localhost:4000&lt;/a&gt; にはブログ一覧が表示されます。&lt;/p&gt;
+
+&lt;p&gt;記事をクリックして飛んでみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/108/art.png&#34; alt=&#34;&#34; /&gt;
+&lt;code&gt;サイトURL/blog/:title&lt;/code&gt;の形で記事が発行されました！&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;hexo deploy -g&lt;/code&gt;でデプロイです。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/108/done.png&#34; alt=&#34;&#34; /&gt;
+今回もコマンドと設定ファイルの編集で簡単にルーティングをすることができました。&lt;/p&gt;
+
+&lt;p&gt;かなりサイトらしくなってきましたね！&lt;/p&gt;
+
+&lt;p&gt;次回はサイドバーをカスタマイズしてみたいと思います。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>#linedevday 2017レポート！ Clova連携で期待のGateboxの技術話を聞いてみたよ</title>
       <link>https://dotstud.io/blog/linedevday-report-2017-gatebox/</link>
       <pubDate>Thu, 28 Sep 2017 14:45:35 +0900</pubDate>

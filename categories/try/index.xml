@@ -10,6 +10,181 @@
     <atom:link href="/categories/try/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>オフィス移転したらインターホンがなかったのでRaspbeerry Piでカメラ付きインターホン作ってみた</title>
+      <link>https://dotstud.io/blog/office-new-door-notification/</link>
+      <pubDate>Mon, 20 Nov 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://dotstud.io/blog/office-new-door-notification/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、dotstudioモノづくり担当・うこです。&lt;/p&gt;
+
+&lt;p&gt;dotstudioは&lt;a href=&#34;https://dotstud.io/blog/office-relocation-for-akihabara/&#34;&gt;&lt;strong&gt;めでたく新オフィスに移転したのですが&lt;/strong&gt;&lt;/a&gt;、インターホンがついておらず不便なんですよね。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/133/10.png&#34; alt=&#34;&#34; /&gt;
+代表・のびすけ「&lt;strong&gt;うこ先生、これRaspberry Piでインターホン作れない？&lt;/strong&gt;」&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/133/1.png&#34; alt=&#34;&#34; /&gt;
+僕「&lt;strong&gt;秒でいけます&lt;/strong&gt;」&lt;/p&gt;
+
+&lt;p&gt;ということで作ってみました！&lt;/p&gt;
+
+&lt;h2 id=&#34;全体の構成&#34;&gt;全体の構成&lt;/h2&gt;
+
+&lt;p&gt;今回は&lt;strong&gt;ボタンを押したら室内のスピーカに音がなる機能&lt;/strong&gt;に加えて、&lt;strong&gt;押した人の姿が見えるカメラ機能&lt;/strong&gt;も搭載してみました。&lt;/p&gt;
+
+&lt;p&gt;全体の構成はこんな感じです。
+&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/116011/a7707b67-176f-8dc6-cf32-8323a56e860c.png&#34; alt=&#34;いんたーほん.png&#34; title=&#34;いんたーほん.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Raspberry Pi 3（以下ラズパイ）をベースにして、Grove接続されたタッチセンサに触れると室内のBluetoothスピーカー（今回はBASE EGG）から音が流れる仕組みを作ります。&lt;/p&gt;
+
+&lt;p&gt;さらに、ラズパイカメラをドアの外に出して、外の様子がオフィス内のモニタから見られるようにします。&lt;/p&gt;
+
+&lt;h3 id=&#34;使ったもの&#34;&gt;使ったもの&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Raspberry Pi 3&lt;/li&gt;
+&lt;li&gt;Raspberry Pi カメラモジュール&lt;/li&gt;
+&lt;li&gt;Grove タッチセンサ&lt;/li&gt;
+&lt;li&gt;Bluetoothオーディオトランスミッタ&lt;/li&gt;
+&lt;li&gt;Bluetoothスピーカー（今回はBASS EGG）&lt;/li&gt;
+&lt;li&gt;スピーカー（100円）&lt;/li&gt;
+&lt;li&gt;オーディオ分岐プラグ（100円）&lt;/li&gt;
+&lt;li&gt;マグネット付きプラスチックケース（100円）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;呼び鈴の製作&#34;&gt;呼び鈴の製作&lt;/h2&gt;
+
+&lt;h3 id=&#34;ハードウェア部分&#34;&gt;ハードウェア部分&lt;/h3&gt;
+
+&lt;p&gt;まずはじめに、&lt;strong&gt;来客者がボタンを押すと室内で音が鳴って訪問を知らせるようにする機能&lt;/strong&gt;を作ります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/133/12.png&#34; alt=&#34;&#34; /&gt;
+ラズパイはマグネット付きのプラスチックケースに入れて、金属製のドアの内側に貼り付けます。ケースはケーブルが引き出せるように適宜加工します。&lt;/p&gt;
+
+&lt;p&gt;次にGroveタッチセンサですが、そのままだとラズパイに接続できないためジャンパワイヤを3本用意します。接続するピンは以下のとおりです。&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;left&#34;&gt;タッチセンサのピン&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;ラズパイGPIO&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;VCC&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;3.3V&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;GND&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Ground&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;NC&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;SIG&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;24&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;ラズパイGPIOのピン番号と位置については、以下の公式ページにある2番目の図を参照してください。&lt;/p&gt;
+
+&lt;p&gt;参考：&lt;a href=&#34;https://www.raspberrypi.org/documentation/usage/gpio-plus-and-raspi2/&#34;&gt;GPIO: MODELS A+, B+, RASPBERRY PI 2 B AND RASPBERRY PI 3 B&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;次に、100円程度で売られているオーディオ出力分岐器をラズパイのオーディオ出力に接続し、さらにBluetoothのオーディオトランスミッタと小型のスピーカーに接続します。
+&lt;center&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/133/11.png&#34; alt=&#34;&#34; /&gt;
+実証の結果、「押した人にも音が鳴ったことがわかる」ことが必要とわかった
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;オーディオトランスミッタは室内に来客を知らせるスピーカーを鳴らす用、小型スピーカーはドアの外に出して来客者に「呼び鈴が鳴った」ことを知らせる用です。USB接続のアンプ付きスピーカーなどで大きな音が出せるのならそれで代用することができます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/133/5.png&#34; alt=&#34;&#34; /&gt;
+最後に電源を近くのコンセントからUSBアダプタ経由で接続してハードウェア部分は完了です！&lt;/p&gt;
+
+&lt;h3 id=&#34;ソフトウェア部分&#34;&gt;ソフトウェア部分&lt;/h3&gt;
+
+&lt;p&gt;まず、適当なインターフォンの音となるmp3を用意しましょう。簡単なピンポン音でも、ネタのような効果音でもいいです。dotstudioでは、「ファミマ入店音」が好評だったため採用しました。&lt;/p&gt;
+
+&lt;p&gt;mp3が用意できたら、&lt;code&gt;/home/pi&lt;/code&gt;などのディレクトリに&lt;code&gt;sounds&lt;/code&gt;というフォルダを作ってその中にmp3を入れましょう。&lt;/p&gt;
+
+&lt;p&gt;次に、&lt;code&gt;sudo apt-get install mpg321&lt;/code&gt;を実行し、サウンド再生用のソフトウェア「mpg321」をインストールします。&lt;code&gt;mpg321 sounds/サウンド.mp3&lt;/code&gt;などと実行して、スピーカーから音が出ていればOKです。もしここで音が小さい場合は、&lt;code&gt;alsamixer&lt;/code&gt;コマンドを実行すると音量調整ができますので、矢印キーで大きくしておきます。&lt;/p&gt;
+
+&lt;p&gt;音の再生が確認できたら、以下のPythonプログラムを&lt;code&gt;sounds&lt;/code&gt;ディレクトリと同じ場所に保存して実行します。タッチセンサを触ると同時に、音が鳴ってターミナル上に&amp;rsquo;Ping-pon!&amp;lsquo;と表示されれば成功です。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-/home/pi/interphone.py&#34;&gt;#!/usr/bin/python
+
+import RPi.GPIO as GPIO
+import glob
+import subprocess
+from time import sleep
+from random import shuffle
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(24, GPIO.IN)
+
+# mp3が保存されているディレクトリは適宜変更してください
+soundlist = glob.glob(&amp;quot;./sounds/*.mp3&amp;quot;)
+
+while True:
+    if GPIO.input(24) == GPIO.HIGH:
+        shuffle(soundlist)
+        print(&#39;Ping-pon!&#39;)
+        subprocess.call(&amp;quot;mpg321 -q &amp;quot;+soundlist[0], shell=True)
+    else:
+        sleep(0.01)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最後に、再起動しても動くように、&lt;code&gt;/etc/rc.local&lt;/code&gt;ファイルの末尾に&lt;code&gt;/usr/bin/python /home/pi/interphone.py &amp;amp;&lt;/code&gt;と追記しておきましょう。
+ちなみにですが、上記のコードでは&lt;code&gt;sounds&lt;/code&gt;ディレクトリ内に複数のmp3が入っているとランダムで再生されるような仕組みにしています。&lt;/p&gt;
+
+&lt;h2 id=&#34;監視カメラ部分の製作&#34;&gt;監視カメラ部分の製作&lt;/h2&gt;
+
+&lt;p&gt;監視カメラはラズパイ専用カメラを使用します。接続はとても簡単で、HDMI端子とオーディオ端子の間にある細長い端子にケーブルを差し込むだけです。&lt;code&gt;sudo raspi-config&lt;/code&gt;コマンドで、カメラを使うことができるように設定を変更しておきましょう。&lt;code&gt;raspistill -p&lt;/code&gt;コマンドを実行し、特にエラーが出なければ正常に接続されています。&lt;/p&gt;
+
+&lt;p&gt;今回はカメラと呼び鈴部分は連動させず、カメラは&lt;a href=&#34;https://github.com/ccrisan/motioneye/wiki&#34;&gt;motionEye&lt;/a&gt;というオープンソースウェアを使って単独で動作させます。
+motionEyeのインストールは以下を参考にしました。&lt;/p&gt;
+
+&lt;p&gt;参考：&lt;a href=&#34;https://qiita.com/mt08/items/96207abfba91954b50d4&#34;&gt;らずぱい motionEye (Web UIベースのカメラサーバ) - Qiita&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;こちらのページにも書かれていますが、ラズパイのカメラモジュールを使用するので、以下のコマンドを実行しておくのを忘れないようにしましょう。
+&lt;code&gt;grep bcm2835-v4l2 /etc/modules || echo bcm2835-v4l2 | sudo tee -a /etc/modules&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/133/4.png&#34; alt=&#34;&#34; /&gt;
+インストールが完了して、室内に常設してあるPCのブラウザからアクセスしてみました。
+ばっちりドアの外が撮影されていますね！
+1秒おきに更新されていますが、python上で動作しているためか、少々重たいようです。&lt;/p&gt;
+
+&lt;h2 id=&#34;試してみる&#34;&gt;試してみる&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/133/7.png&#34; alt=&#34;&#34; /&gt;
+インターホンを押すと……&lt;/p&gt;
+
+&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/4W4pJ0bZVGY&#34; frameborder=&#34;0&#34; gesture=&#34;media&#34; allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;入店っぽい音が流れます！&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/133/13.png&#34; alt=&#34;&#34; /&gt;
+旧スタイルに比べるとだいぶ未来になりました。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;今回は数時間ほどでこのシステムを作ることができました。カメラと呼び鈴が独立してしまっていますが、可能ならば「呼び鈴を押した瞬間の画像を保存してhipchatにアップロード」するような仕組みを作ってみたいです。
+&lt;img src=&#34;https://dotstud.io/img/blog/133/3.png&#34; alt=&#34;&#34; /&gt;
+次は何をつくってやろうか……。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>フェスでテンあげ☆ 光るカセットテープ</title>
       <link>https://dotstud.io/blog/gyaruden-kyoko-led-cassette/</link>
       <pubDate>Tue, 10 Oct 2017 00:00:00 +0000</pubDate>
@@ -4238,329 +4413,6 @@ void loop() {
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/12.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;littleBitsのハックには、LIGブログの&lt;a href=&#34;https://liginc.co.jp/series/littlebits&#34;&gt;littleBitsではじめるArduino&lt;/a&gt;連載、ならびに拙著『&lt;a href=&#34;http://www.1ft-seabass.jp/memo/2016/10/11/littlebits-book-release/?utm_content=bufferec8bb&amp;amp;utm_medium=social&amp;amp;utm_source=twitter.com&amp;amp;utm_campaign=buffer&#34;&gt;「littleBits」ではじめる電子工作&lt;/a&gt;』もぜひご参照ください。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>URLを入れるだけ！REST APIでNefryを簡単に制御してみよう！</title>
-      <link>https://dotstud.io/blog/nefry-rest-api-tutorial/</link>
-      <pubDate>Mon, 21 Nov 2016 08:00:00 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/nefry-rest-api-tutorial/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、外部ライターのわみ（&lt;a href=&#34;http://twitter.com/wamisnet&#34;&gt;@wamisnet&lt;/a&gt;）と申します。愛知県でネットワークの勉強をしている学生です。2014年ごろから電子工作を始め、FRISKサイズのIoT向けデバイス「Nefry（ねふりー）」を自作しました。&lt;/p&gt;
-
-&lt;p&gt;そんな「Nefry」をWeb系のエンジニアでも触れられるように、REST APIでハードウエアをいじれるようにしてみました。C言語を使わずに、JavaScriptやC#から簡単に試せるのでぜひ遊んでみてください。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;※Nefry library version 2.2.2以上の場合使用できます。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;nefryとは&#34;&gt;Nefryとは&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/059/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;「Nefry（ねふりー）」は手軽にIoTに挑戦できるFRISKサイズのデバイスです。Wi-Fiを搭載しておりインターネットに接続しやすいため、接続に時間をとられることなくあなたのアイデア実現に集中できます。&lt;em&gt;日本の技適に通ったESP-WROOM-02を使っています。&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;また、スマートフォンで使うようなモバイルバッテリーで動作するので、場所を選ばずに使えるという優れものです！　Groveセンサー対応しており、はんだ付け不要で楽しめます。（&lt;strong&gt;&lt;a href=&#34;https://dotstud.io/projects/nefry-connect-internet/&#34;&gt;dotstudioのECサイト&lt;/a&gt;にて販売中です！！&lt;/strong&gt;）&lt;/p&gt;
-
-&lt;p&gt;LIGブログにいくつか記事を載せていますのでご覧ください。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://liginc.co.jp/236620&#34;&gt;自作したオリジナルIoTデバイス「Nefry」とインターネットを繋いでみた&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://liginc.co.jp/263899&#34;&gt;Webサービス同士を連携できる「IFTTT」と自作IoTデバイスを繋いで生活を便利にしてみた&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;rest-apiとは&#34;&gt;REST APIとは&lt;/h2&gt;
-
-&lt;p&gt;REST APIとは、簡単なURLを叩くだけでそこにある情報や資源にアクセスできる仕組みのことです。TwitterのREST APIで例えてみましょう！&lt;/p&gt;
-
-&lt;p&gt;Twitterでフォロワーの一覧を取得したい場合はこちらのREST API&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;api.twitter.com/1.1/&lt;strong&gt;followers/list&lt;/strong&gt;.json&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;ツイートを検索したい場合はこちらのREST API&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;api.twitter.com/1.1/&lt;strong&gt;search/tweets&lt;/strong&gt;.json&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;認証情報など必要な引数を渡せばTwitterにアクセスできるのです。URLを見るだけで、何ができるかがわかるのがREST APIのよさの一つだと思います。&lt;/p&gt;
-
-&lt;p&gt;そんなREST APIにNefryも対応し、より簡単にいろんなことを試せるようにしてみました。以下で、どんなことができるのかを簡単に紹介します。&lt;/p&gt;
-
-&lt;h2 id=&#34;nefryのおすすめrest-api&#34;&gt;NefryのおすすめREST API&lt;/h2&gt;
-
-&lt;p&gt;今回紹介するのは、今実装されている機能の一部のみです。実装されているすべての機能は&lt;a href=&#34;http://qiita.com/wamisnet/private/5483d14bf21cd3193ae0&#34;&gt;こちらのQiitaの記事&lt;/a&gt;にまとめていますので興味があればご覧ください。&lt;/p&gt;
-
-&lt;p&gt;デフォルトのままのREST APIであると、URLさえわかれば別の人も簡単に制御できてしまうので、基本的にはPasswordをかけて使用してください。（かけ方は後ほど紹介します）&lt;/p&gt;
-
-&lt;h3 id=&#34;gpio-入出力ピン&#34;&gt;GPIO（入出力ピン）&lt;/h3&gt;
-
-&lt;p&gt;Nefryについている入出力ピンを制御することができるAPIのまとめです。&lt;/p&gt;
-
-&lt;h3 id=&#34;入力&#34;&gt;入力&lt;/h3&gt;
-
-&lt;p&gt;Nefryの入力ピンがどうなっているかを取得できます。スイッチや明るさセンサーのような簡単なセンサーを手軽に試すことができます。&lt;/p&gt;
-
-&lt;h4 id=&#34;デジタル&#34;&gt;デジタル&lt;/h4&gt;
-
-&lt;p&gt;NefryのD0-D5の入力を取得できます。&lt;/p&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th align=&#34;left&#34;&gt;項目&lt;/th&gt;
-&lt;th align=&#34;left&#34;&gt;内容&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;URL&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;/api/1.0/digitalRead&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;引数&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;pin(範囲：D0-D5)&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;具体例&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;/api/1.0/digitalRead?pin=D1&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;返り値&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;{&amp;ldquo;mode&amp;rdquo;:&amp;ldquo;digitalRead&amp;rdquo;,&amp;ldquo;pin&amp;rdquo;:&amp;ldquo;D1&amp;rdquo;,&amp;ldquo;value&amp;rdquo;:0}&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;pin名と状態がvalueに含まれて返答されます。valueの範囲は0(low)-1(high)となります。 &lt;strong&gt;スイッチの状態を取得するのに向いています。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;アナログ&#34;&gt;アナログ&lt;/h4&gt;
-
-&lt;p&gt;NefryのA0の入力を取得できます。&lt;/p&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th align=&#34;left&#34;&gt;項目&lt;/th&gt;
-&lt;th align=&#34;left&#34;&gt;内容&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;URL&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;/api/1.0/analogRead&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;引数&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;なし&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;具体例&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;/api/1.0/analogRead&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;返り値&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;{&amp;ldquo;mode&amp;rdquo;:&amp;ldquo;analogRead&amp;rdquo;,&amp;ldquo;&amp;ldquo;value&amp;rdquo;:0}&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;状態がvalueに含まれて返答されます。valueの範囲は0-255となります。&lt;strong&gt;明るさセンサーを取得するのに向いています。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;出力&#34;&gt;出力&lt;/h3&gt;
-
-&lt;h4 id=&#34;デジタル-1&#34;&gt;デジタル&lt;/h4&gt;
-
-&lt;p&gt;NefryのD0-D5ピンの出力を制御できます。HIGH(3.3v)かLOW(0v)のどちらかを出力します。&lt;/p&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th align=&#34;left&#34;&gt;項目&lt;/th&gt;
-&lt;th align=&#34;left&#34;&gt;内容&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;URL&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;/api/1.0/digitalWrite&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;引数&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;pin(範囲：D0-D5)　state(範囲：HIGH(1)-LOW(0))&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;具体例&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;/api/1.0/digitalWrite?pin=D1&amp;amp;state=HIGH&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;返り値&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;{&amp;ldquo;mode&amp;rdquo;:&amp;ldquo;digitalWrite&amp;rdquo;,&amp;ldquo;pin&amp;rdquo;:&amp;ldquo;D1&amp;rdquo;,&amp;ldquo;value&amp;rdquo;:1}&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;pin名と状態がvalueに含まれて返答されます。&lt;strong&gt;LEDを点滅させることができます。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;アナログ-pwm&#34;&gt;アナログ(PWM)&lt;/h4&gt;
-
-&lt;p&gt;NefryのD0-D5ピンの出力を制御できます。1023(3.3v)から0(0v)の指定された出力します。&lt;/p&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th align=&#34;left&#34;&gt;項目&lt;/th&gt;
-&lt;th align=&#34;left&#34;&gt;内容&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;URL&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;/api/1.0/analogWrite&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;引数&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;pin(範囲：D0-D5)　state(範囲：0-1023)&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;具体例&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;/api/1.0/analogWrite?pin=D1&amp;amp;state=500&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;返り値&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;{&amp;ldquo;mode&amp;rdquo;:&amp;ldquo;analogWrite&amp;rdquo;,&amp;ldquo;pin&amp;rdquo;:&amp;ldquo;D1&amp;rdquo;,&amp;ldquo;value&amp;rdquo;:500}&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;pin名と状態がvalueに含まれて返答されます。&lt;strong&gt;LEDを徐々に明るくしたり、暗くしたりできます。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;nefry関数&#34;&gt;Nefry関数&lt;/h2&gt;
-
-&lt;h3 id=&#34;nefry-led&#34;&gt;Nefry LED&lt;/h3&gt;
-
-&lt;p&gt;NefryについているLEDの色を変更することができます。&lt;/p&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th align=&#34;left&#34;&gt;項目&lt;/th&gt;
-&lt;th align=&#34;left&#34;&gt;内容&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;URL&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;/api/1.0/NefrysetLed&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;引数&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;r (範囲：0-255) g (範囲：0-255) b (範囲：0-255)&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;具体例&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;/api/1.0/NefrysetLed?r=255&amp;amp;g=0&amp;amp;b=0&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;返り値&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;{&amp;ldquo;mode&amp;rdquo;:&amp;ldquo;NefrysetLed&amp;rdquo;,&amp;ldquo;r&amp;rdquo;:255,&amp;ldquo;g&amp;rdquo;:0,&amp;ldquo;b&amp;rdquo;:0}&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;設定した値が返答されます。&lt;strong&gt;NefryについているLEDを制御することができます。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;使い方&#34;&gt;使い方&lt;/h2&gt;
-
-&lt;p&gt;NefryでREST APIを使う際には、前もってプログラムを書き込んでおく必要があります。
-Nefryにプログラムを書き込む際に必要な環境については、下の記事をご覧ください。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/298161&#34;&gt;さくっと生活を便利にする！FRISKサイズのIoT向けデバイス「Nefry」を使ってみよう【環境構築編】&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;環境ができたところで、Nefryのプログラムを紹介していきます。まずはシンプルなパスワード &lt;strong&gt;なし&lt;/strong&gt; から。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;NefryRESTAPI.h&amp;gt;
-void setup() {
-  NefryRESTAPI.begin();//RES TAPIを使うのに必要な初期化をおこないます。
-}
-
-void loop() {
-
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;ものすごくシンプルですね、&lt;code&gt;#include&amp;lt;NefryRESTAPI.h&amp;gt;&lt;/code&gt;こちらでライブラリーを読み込み、&lt;code&gt;NefryRESTAPI.begin();&lt;/code&gt;にてライブラリーを使うのに必要な処理をするための関数を呼び出すだけでREST APIを使用できるようになります。&lt;/p&gt;
-
-&lt;h3 id=&#34;パスワードをつけてみる&#34;&gt;パスワードをつけてみる&lt;/h3&gt;
-
-&lt;p&gt;次にパスワード &lt;strong&gt;あり&lt;/strong&gt; のプログラムを紹介します。&lt;/p&gt;
-
-&lt;p&gt;※ 現状http通信での通信であるため、セキュリティ的には大変弱いです。あくまでパスワードは誰もが簡単にアクセスできないようにするためのものです。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;#include &amp;lt;NefryRESTAPI.h&amp;gt;
-void setup() {
-  NefryRESTAPI.begin();//REST APIを使うのに必要な初期化をおこないます。
-  NefryRESTAPI.setPassword(&amp;quot;Nefry&amp;quot;);//接続時にパスワードが必要になります。
-}
-
-void loop() {
-
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;先ほどのプログラムに&lt;code&gt;NefryRESTAPI.setPassword(&amp;quot;Nefry&amp;quot;);&lt;/code&gt;この一行をプラスするだけです。この場合のパスワードは、&lt;strong&gt;Nefry&lt;/strong&gt; となります。&lt;/p&gt;
-
-&lt;p&gt;ダブルクォーテーションの間にパスワードを入力して、Nefryに書き込めば準備完了です！　パスワードありはAPIを使用する際にURLにpass=(プログラム内のパスワード)を追記してください。&lt;/p&gt;
-
-&lt;p&gt;具体例1：　/api/1.0/NefrysetLed?r=255&amp;amp;g=0&amp;amp;b=255&amp;amp;pass=Nefry&lt;br /&gt;
-具体例2：　/api/1.0/analogRead?pass=Nefry&lt;/p&gt;
-
-&lt;h3 id=&#34;実際に動かしてみる&#34;&gt;実際に動かしてみる&lt;/h3&gt;
-
-&lt;p&gt;&lt;blockquote class=&#34;twitter-video&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;NefryにRESTAPIぽいものを実装してみた！&lt;br&gt;&lt;br&gt;APIを叩くとNefryにもともとついているledが青から緑に変化して、そのあとD5ピンに繋がってる赤色のledが点灯します &lt;a href=&#34;https://t.co/2Pe4yWuF1I&#34;&gt;pic.twitter.com/2Pe4yWuF1I&lt;/a&gt;&lt;/p&gt; わみ (@wamisnet) &lt;a href=&#34;https://twitter.com/wamisnet/status/796955915966525441&#34;&gt;2016年11月11日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
-
-&lt;p&gt;AndroidのchromeでNefryのREST APIを叩いてみました。初めにNefryついているLEDが青から緑になり、次のAPIの指示でD5ピンに接続されているLEDが点灯する流れを撮影しました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/059/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;私の環境では、はじめに&lt;strong&gt;&lt;a href=&#34;http://192.168.4.1/api/1.0/NefrysetLed?g=255&#34;&gt;http://192.168.4.1/api/1.0/NefrysetLed?g=255&lt;/a&gt;&lt;/strong&gt;でNefryのLEDの色を変更して、&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/059/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;つぎに&lt;strong&gt;&lt;a href=&#34;http://192.168.4.1/api/1.0/digitalWrite?pin=d5&amp;amp;state=high&#34;&gt;http://192.168.4.1/api/1.0/digitalWrite?pin=d5&amp;amp;state=high&lt;/a&gt;&lt;/strong&gt;で赤色のLEDを光らせています。URLを送信すると驚くくらい即反応します。&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;ブラウザさえあれば、REST APIで明るさセンサーの値が取れたり、NefryのLEDをいじったりとハードウエアを簡単にいじることができます。また、ArduinoIDEでプログラムが書けなくても手軽に触れるのでちょっと試したいことがあるときなんかにもいいです。&lt;/p&gt;
-
-&lt;p&gt;REST APIはJavaScriptやC#から制御できます。既存のものにハードウエアを制御させることもできるのでぜひ遊んでみてください。&lt;/p&gt;
 </description>
     </item>
     
