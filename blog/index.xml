@@ -7,8 +7,148 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Thu, 14 Dec 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 15 Dec 2017 00:00:00 +0000</lastBuildDate>
     <atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Node.jsを始めよう！nodebrewを使って5分で環境構築</title>
+      <link>https://dotstud.io/blog/nodejs-install-use-nodebrew/</link>
+      <pubDate>Fri, 15 Dec 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://dotstud.io/blog/nodejs-install-use-nodebrew/</guid>
+      
+      <description>
+
+&lt;p&gt;この記事は&lt;a href=&#34;https://qiita.com/advent-calendar/2017/nodejs2&#34;&gt;Node.js Advent Calendar 2017&lt;/a&gt;に参加しています！&lt;/p&gt;
+
+&lt;p&gt;こんにちは、エンジニアのちゃんとくです。「これからNode.jsを始めたい！」という人向けに導入記事をまとめていきたいと思います。まずは環境構築からはじめましょう！&lt;/p&gt;
+
+&lt;p&gt;今回はNode.jsのバージョンを管理できる「&lt;strong&gt;nodebrew&lt;/strong&gt;」を使ったインストール手順を紹介します。&lt;/p&gt;
+
+&lt;h2 id=&#34;普通のダウンロードじゃダメなの&#34;&gt;普通のダウンロードじゃダメなの？&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://nodejs.org/ja/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/136/1.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;https://nodejs.org/ja/&#34;&gt;Node.js公式ページ&lt;/a&gt;にアクセスすると、どーんとダウンロードボタンがありますね。これをクリックすると、表記のバージョンのNode.jsパッケージが降ってきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;しかし！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Node.jsはバージョンアップの頻度が高く、その都度ダウンロードし直すのは大変ですよね。&lt;/p&gt;
+
+&lt;p&gt;プロジェクトによっては古いバージョンを使いたかったり、プロジェクトごとにバージョンを変えたかったりしたいときもあります。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;そこで役に立つのがNode.jsのバージョン管理ツールです&lt;/strong&gt;！&lt;/p&gt;
+
+&lt;p&gt;今回紹介する&lt;strong&gt;nodebrew&lt;/strong&gt;以外にも、世界的に利用者の多い&lt;strong&gt;NVM&lt;/strong&gt;（Node Version Manager）やWindows向けの&lt;strong&gt;nodist&lt;/strong&gt;などがあります。&lt;/p&gt;
+
+&lt;p&gt;今回は日本人コミッタが多く困ったときにも質問しやすいnodebrewでやってみます！&lt;/p&gt;
+
+&lt;h2 id=&#34;nodebrewをインストール&#34;&gt;nodebrewをインストール&lt;/h2&gt;
+
+&lt;p&gt;さっそくnodebrewをインストールしましょう！以下のコマンドを実行します。（&lt;code&gt;$&lt;/code&gt;マークはCLIであることを表しているのでコピペの際は不要です！）&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ curl -L git.io/nodebrew | perl - setup
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;完了するとこんなことを言われます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/136/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;「&lt;code&gt;~/.nodebrew&lt;/code&gt;にインストールしたからPATH通してね！」というようなことを言っています。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;~/.bash_profile&lt;/code&gt;などの設定ファイルに&lt;code&gt;export PATH=$HOME/.nodebrew/current/bin:$PATH&lt;/code&gt;を追加しましょう。&lt;/p&gt;
+
+&lt;p&gt;追記したらターミナルを開き直すか&lt;code&gt;source&lt;/code&gt;コマンドで更新します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ source ~/.bash_profile
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;nodebrewコマンドが使えるか確認してみます。&lt;code&gt;command not found&lt;/code&gt;が出なければOKです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ nodebrew help
+nodebrew 0.9.8
+
+Usage:
+…
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;nodebrewでnode-jsをインストール&#34;&gt;nodebrewでNode.jsをインストール&lt;/h2&gt;
+
+&lt;p&gt;まずは&lt;code&gt;nodebrew ls-remote&lt;/code&gt;コマンドでダウンロード可能なNode.jsのバージョンを確認してみます。&lt;/p&gt;
+
+&lt;p&gt;Node.jsは偶数のバージョンがLTS（安定板）、奇数のバージョンが最新版となっています。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ nodebrew ls-remote
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/136/3.png&#34; alt=&#34;&#34; /&gt;
+実行するとべろーっとバージョンが出てきますね。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/136/4.png&#34; alt=&#34;&#34; /&gt;
+下の方まで見ると2017年12月15日現在はLTSがv8.9.3、最新がv9.3.0であることがわかりました。（io.jsはNode.jsのForkですが、一旦気にしなくてOK）&lt;/p&gt;
+
+&lt;p&gt;今回は最新版のv9.3.0をインストールしてみます。&lt;code&gt;nodebrew install-binary&lt;/code&gt;コマンドを利用します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ nodebrew install-binary v9.3.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;1分くらいでインストールは完了します。（ダメ回線なので、もっと速いかもしれません）&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;nodebrew ls&lt;/code&gt;コマンドで状態を確認します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ nodebrew ls
+v9.3.0
+
+current: none
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;使用するバージョンの&lt;code&gt;current&lt;/code&gt;がnoneになっているので指定します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ nodebrew use v9.3.0
+$ node -v
+v9.3.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これでNode.jsのインストールは完了です！&lt;/p&gt;
+
+&lt;h2 id=&#34;バージョン切り替え&#34;&gt;バージョン切り替え&lt;/h2&gt;
+
+&lt;p&gt;別のバージョンを使いたくなったら、nodebrewでバージョンを切り替えてみましょう。&lt;/p&gt;
+
+&lt;p&gt;試しにLTSのv8.9.3を使えるようにしてみます。まずはインストール。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ nodebrew install-binary v8.9.3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;v8.9.3とv9.3.0が使えるようになりましたが、まだ&lt;code&gt;current&lt;/code&gt;はv9.3.0のままです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ nodebrew list
+v8.9.3
+v9.3.0
+
+current: v9.3.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;nodebrew use&lt;/code&gt;でv8.9.3を指定します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ nodebrew use v8.9.3
+$ nodebrew list
+v8.9.3
+v9.3.0
+
+current: v8.9.3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これでバージョンが切り替えられました！listにあるバージョンは再インストールすることなく切り替えられます。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;ここまで特にむずかしいところなく環境構築できたのではないかと思います！はじめるまでの手軽さもNode.jsの魅力のひとつですよね。&lt;/p&gt;
+
+&lt;p&gt;次回はNode.jsをはじめたばかりの人向けチュートリアルをやってみたいと思います。&lt;/p&gt;
+
+&lt;p&gt;それではまた！&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>【予測変換】Macで日本語の変換ウィンドウが消えなくなったときの対処法【邪魔】</title>
@@ -2170,93 +2310,6 @@ draw(&#39;init&#39;); //初期実行
 &lt;p&gt;検証のために30分ぐらいつけていましたが、特に違和感なく装着していることができました。&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;目立つことは間違いなしなので気になる方はぜひ試してみてください！！！&lt;/strong&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>【報告】子供も大人も楽しめる！モノづくりの祭典「Maker Faire Tokyo2017」に出展してきました！</title>
-      <link>https://dotstud.io/blog/maker-fair-tokyo-2017/</link>
-      <pubDate>Mon, 11 Sep 2017 14:51:21 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/maker-fair-tokyo-2017/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは！バックエンドエンジニアのちゃんとくです。8月5日・6日に実施された&lt;strong&gt;モノづくりの祭典・Maker Faire Tokyo 2017&lt;/strong&gt;にdostudioで出展してきました！&lt;/p&gt;
-
-&lt;p&gt;会場の雰囲気も交えつつ、当日の様子をレポートしたいと思います！&lt;/p&gt;
-
-&lt;h2 id=&#34;maker-faire-tokyoとは&#34;&gt;Maker Faire Tokyoとは&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/120/mft1.png&#34; alt=&#34;&#34; /&gt;
-雑誌「Make」を発端に、世界の190ヶ所以上で開催されているDIYイベント「Maker Faire」の東京版です！&lt;/p&gt;
-
-&lt;p&gt;「モノづくり」のイベントとしてクラフト、工作から最新のガジェットまで550組もの出展者が2日間に渡って出展します。&lt;/p&gt;
-
-&lt;p&gt;世界最大の電脳都市・&lt;a href=&#34;https://dotstud.io/blog/maker-faire-shenzhen-report/&#34;&gt;&lt;strong&gt;深センのMaker Faireの様子&lt;/strong&gt;&lt;/a&gt;や&lt;a href=&#34;https://dotstud.io/blog/uko-exhibited-at-mft2016/&#34;&gt;&lt;strong&gt;Maker Faire Tokyo 2016に出展した様子&lt;/strong&gt;&lt;/a&gt;も合わせてご覧ください！&lt;/p&gt;
-
-&lt;h2 id=&#34;dotstudioとしてブースを出展&#34;&gt;dotstudioとしてブースを出展！&lt;/h2&gt;
-
-&lt;p&gt;今年のMaker Faire Tokyoは、dotstudioとして初出展しました！&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/120/dotstudio_booth.png&#34; alt=&#34;&#34; /&gt;
-dotstudioブースの様子。お陰さまで大盛況でした。
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;当日はdotstudioで開発しているAndroid開発者向けボード「&lt;a href=&#34;https://dotstud.io/shop/android-iot-board-waffle/&#34;&gt;&lt;strong&gt;Waffle&lt;/strong&gt;&lt;/a&gt;」やESP8266の乗ったWi-fiボード「&lt;a href=&#34;https://dotstud.io/shop/nefry-connect-internet/&#34;&gt;&lt;strong&gt;Nefry v2.0&lt;/strong&gt;&lt;/a&gt;」を展示・販売。&lt;/p&gt;
-
-&lt;p&gt;さらに、かねてより開発中だったESP32ボード「&lt;a href=&#34;https://dotstud.io/shop/nefry-bt-single/&#34;&gt;&lt;strong&gt;Nefry BT&lt;/strong&gt;&lt;/a&gt;」の先行販売を行いました！&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/120/dotstudio_booth2.png&#34; alt=&#34;&#34; /&gt;
-ブースではNefryシリーズ、Waffle、Wio Nodeなどを販売。
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;現在はWaffle・Nefryともにdotstudioのショップや千石電商さん、ツクモさん等で購入できますが、買ってくれる方の生の声を聞けるのはとても嬉しいですね。&lt;/p&gt;
-
-&lt;p&gt;dotstudioで制作した「&lt;a href=&#34;https://dotstud.io/blog/gyaruden-hadeike-display-cap/&#34;&gt;IoT派手イケディスプレーキャップ&lt;/a&gt;」も展示し、ギャル電マオが登場するサプライズもありました！
-&lt;center&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/120/mft_cap.png&#34; alt=&#34;&#34; /&gt;
-Maker Faire TokyoバージョンのIoT派手イケディスプレーキャップ。
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/120/mao_uko.png&#34; alt=&#34;&#34; /&gt;
-ギャル電マオ×ギャル男uko
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;お声がけしてくださったみなさま、本当にありがとうございました！！&lt;/p&gt;
-
-&lt;h2 id=&#34;変なモノからガチなモノまで今年も盛りだくさんだった&#34;&gt;変なモノからガチなモノまで今年も盛りだくさんだった&lt;/h2&gt;
-
-&lt;p&gt;会場はとにかくたくさんのアイデアで溢れていて、どのブースも個性的な展示が盛りだくさんでした！&lt;/p&gt;
-
-&lt;p&gt;実際に手を動かしてつくれるブースや、かわいい工作グッズを購入できるブースもあります。
-&lt;center&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/120/girls_booth.png&#34; alt=&#34;&#34; /&gt;
-ちょっと未来なドレッサー（乙女電芸部）や、LEDを使ったアクセサリー、デコジャンパなど
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;子供が遊んで楽しめるおもちゃやプログラミングを学べるプロダクトも販売されていました。
-&lt;center&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/120/kids_booth.png&#34; alt=&#34;&#34; /&gt;
-壁を走るライントレースロボ、楽しくプログラミングを学べるPETS、ストローを使った工作
-&lt;/centr&gt;&lt;/p&gt;
-
-&lt;p&gt;お祭りらしく、ブースを飛び越えた展示？も盛りだくさん。
-&lt;center&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/120/others.png&#34; alt=&#34;&#34; /&gt;
-会場を飛び回るツル、リズムロボ？、ロボットに連れられた人？？
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;まだまだ紹介しきれませんが、たくさんの素敵な展示が行われていました！実際に体験できるブースも多く、大人も子供も新しい発見を楽しめること間違いなしです！&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;2日間のイベントを通して、たくさんのアイデアや愛に溢れたプロダクトに出会うことができました。モノづくりをする側にとっても、作ったモノをたくさんの人に発表できる場があるのは素晴らしいことですね。&lt;/p&gt;
-
-&lt;p&gt;最新技術に触れたい人、体験してみたい人、とにかく変なモノを見てみたい人、ぜひ来年のMaker Faire Tokyoも参加してみてください！&lt;/p&gt;
 </description>
     </item>
     

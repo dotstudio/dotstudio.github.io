@@ -10,6 +10,146 @@
     <atom:link href="/categories/tips/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Node.jsを始めよう！nodebrewを使って5分で環境構築</title>
+      <link>https://dotstud.io/blog/nodejs-install-use-nodebrew/</link>
+      <pubDate>Fri, 15 Dec 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://dotstud.io/blog/nodejs-install-use-nodebrew/</guid>
+      
+      <description>
+
+&lt;p&gt;この記事は&lt;a href=&#34;https://qiita.com/advent-calendar/2017/nodejs2&#34;&gt;Node.js Advent Calendar 2017&lt;/a&gt;に参加しています！&lt;/p&gt;
+
+&lt;p&gt;こんにちは、エンジニアのちゃんとくです。「これからNode.jsを始めたい！」という人向けに導入記事をまとめていきたいと思います。まずは環境構築からはじめましょう！&lt;/p&gt;
+
+&lt;p&gt;今回はNode.jsのバージョンを管理できる「&lt;strong&gt;nodebrew&lt;/strong&gt;」を使ったインストール手順を紹介します。&lt;/p&gt;
+
+&lt;h2 id=&#34;普通のダウンロードじゃダメなの&#34;&gt;普通のダウンロードじゃダメなの？&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://nodejs.org/ja/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/136/1.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;https://nodejs.org/ja/&#34;&gt;Node.js公式ページ&lt;/a&gt;にアクセスすると、どーんとダウンロードボタンがありますね。これをクリックすると、表記のバージョンのNode.jsパッケージが降ってきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;しかし！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Node.jsはバージョンアップの頻度が高く、その都度ダウンロードし直すのは大変ですよね。&lt;/p&gt;
+
+&lt;p&gt;プロジェクトによっては古いバージョンを使いたかったり、プロジェクトごとにバージョンを変えたかったりしたいときもあります。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;そこで役に立つのがNode.jsのバージョン管理ツールです&lt;/strong&gt;！&lt;/p&gt;
+
+&lt;p&gt;今回紹介する&lt;strong&gt;nodebrew&lt;/strong&gt;以外にも、世界的に利用者の多い&lt;strong&gt;NVM&lt;/strong&gt;（Node Version Manager）やWindows向けの&lt;strong&gt;nodist&lt;/strong&gt;などがあります。&lt;/p&gt;
+
+&lt;p&gt;今回は日本人コミッタが多く困ったときにも質問しやすいnodebrewでやってみます！&lt;/p&gt;
+
+&lt;h2 id=&#34;nodebrewをインストール&#34;&gt;nodebrewをインストール&lt;/h2&gt;
+
+&lt;p&gt;さっそくnodebrewをインストールしましょう！以下のコマンドを実行します。（&lt;code&gt;$&lt;/code&gt;マークはCLIであることを表しているのでコピペの際は不要です！）&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ curl -L git.io/nodebrew | perl - setup
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;完了するとこんなことを言われます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/136/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;「&lt;code&gt;~/.nodebrew&lt;/code&gt;にインストールしたからPATH通してね！」というようなことを言っています。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;~/.bash_profile&lt;/code&gt;などの設定ファイルに&lt;code&gt;export PATH=$HOME/.nodebrew/current/bin:$PATH&lt;/code&gt;を追加しましょう。&lt;/p&gt;
+
+&lt;p&gt;追記したらターミナルを開き直すか&lt;code&gt;source&lt;/code&gt;コマンドで更新します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ source ~/.bash_profile
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;nodebrewコマンドが使えるか確認してみます。&lt;code&gt;command not found&lt;/code&gt;が出なければOKです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ nodebrew help
+nodebrew 0.9.8
+
+Usage:
+…
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;nodebrewでnode-jsをインストール&#34;&gt;nodebrewでNode.jsをインストール&lt;/h2&gt;
+
+&lt;p&gt;まずは&lt;code&gt;nodebrew ls-remote&lt;/code&gt;コマンドでダウンロード可能なNode.jsのバージョンを確認してみます。&lt;/p&gt;
+
+&lt;p&gt;Node.jsは偶数のバージョンがLTS（安定板）、奇数のバージョンが最新版となっています。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ nodebrew ls-remote
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/136/3.png&#34; alt=&#34;&#34; /&gt;
+実行するとべろーっとバージョンが出てきますね。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/136/4.png&#34; alt=&#34;&#34; /&gt;
+下の方まで見ると2017年12月15日現在はLTSがv8.9.3、最新がv9.3.0であることがわかりました。（io.jsはNode.jsのForkですが、一旦気にしなくてOK）&lt;/p&gt;
+
+&lt;p&gt;今回は最新版のv9.3.0をインストールしてみます。&lt;code&gt;nodebrew install-binary&lt;/code&gt;コマンドを利用します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ nodebrew install-binary v9.3.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;1分くらいでインストールは完了します。（ダメ回線なので、もっと速いかもしれません）&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;nodebrew ls&lt;/code&gt;コマンドで状態を確認します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ nodebrew ls
+v9.3.0
+
+current: none
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;使用するバージョンの&lt;code&gt;current&lt;/code&gt;がnoneになっているので指定します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ nodebrew use v9.3.0
+$ node -v
+v9.3.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これでNode.jsのインストールは完了です！&lt;/p&gt;
+
+&lt;h2 id=&#34;バージョン切り替え&#34;&gt;バージョン切り替え&lt;/h2&gt;
+
+&lt;p&gt;別のバージョンを使いたくなったら、nodebrewでバージョンを切り替えてみましょう。&lt;/p&gt;
+
+&lt;p&gt;試しにLTSのv8.9.3を使えるようにしてみます。まずはインストール。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ nodebrew install-binary v8.9.3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;v8.9.3とv9.3.0が使えるようになりましたが、まだ&lt;code&gt;current&lt;/code&gt;はv9.3.0のままです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ nodebrew list
+v8.9.3
+v9.3.0
+
+current: v9.3.0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;nodebrew use&lt;/code&gt;でv8.9.3を指定します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ nodebrew use v8.9.3
+$ nodebrew list
+v8.9.3
+v9.3.0
+
+current: v8.9.3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これでバージョンが切り替えられました！listにあるバージョンは再インストールすることなく切り替えられます。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;ここまで特にむずかしいところなく環境構築できたのではないかと思います！はじめるまでの手軽さもNode.jsの魅力のひとつですよね。&lt;/p&gt;
+
+&lt;p&gt;次回はNode.jsをはじめたばかりの人向けチュートリアルをやってみたいと思います。&lt;/p&gt;
+
+&lt;p&gt;それではまた！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>【予測変換】Macで日本語の変換ウィンドウが消えなくなったときの対処法【邪魔】</title>
       <link>https://dotstud.io/blog/mac-nihongo-window-error/</link>
       <pubDate>Thu, 14 Dec 2017 00:00:00 +0000</pubDate>
@@ -1900,128 +2040,6 @@ LINEなど、エンジニア以外にも使われているツールだとプロ�
 &lt;/ul&gt;
 
 &lt;p&gt;ドタキャン問題と向き合って、皆さんが主催するイベントも楽しいイベントになるといいですね！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Azure WebAppsにGitLab連携でデプロイしてみよう</title>
-      <link>https://dotstud.io/blog/azure-webapps-gitlab-connect/</link>
-      <pubDate>Tue, 18 Oct 2016 10:00:30 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/azure-webapps-gitlab-connect/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、dotstudio代表の&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
-
-&lt;p&gt;最近&lt;a href=&#34;https://azure.microsoft.com/ja-jp/documentation/articles/app-service-web-overview/&#34;&gt;Azure WebApps&lt;/a&gt;を使って開発をしています。dotstudioではGitLabを利用してソースコード管理をしているのでGitLabとWebAppsを連携し自動デプロイをする方法を紹介します。&lt;/p&gt;
-
-&lt;p&gt;「&lt;a href=&#34;https://christianliebel.com/2016/05/auto-deploying-to-azure-app-services-from-gitlab/&#34;&gt;Auto-Deploying to Azure App Services from GitLab&lt;/a&gt;」を参考にしましたが、調べても英語記事しかなかったので日本語記事は初めてだと思います！&lt;/p&gt;
-
-&lt;h2 id=&#34;今回やること&#34;&gt;今回やること&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://gitlab.com/&#34;&gt;GitLab&lt;/a&gt;はGitHubやBitbucketのようなGitのホスティングサービスです。
-GitHubとBitbucketはWebAppsが公式対応しているため簡単に設定できますが、GitLabは公式対応していないため少しやり方が特殊です。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;やりたいことはこの図の通りで、作業者がGitLabにPushしたら自動的にWebAppsにデプロイされる仕組みを作ります。&lt;/p&gt;
-
-&lt;h2 id=&#34;事前準備&#34;&gt;事前準備&lt;/h2&gt;
-
-&lt;p&gt;以下の内容を事前に済ませておきましょう。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;WebAppsのアプリケーションを作成しておく&lt;/li&gt;
-&lt;li&gt;GitLabでリポジトリを作成しておく&lt;/li&gt;
-&lt;li&gt;GitLabに手元のマシンからPushできる状態にしておく&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;設定してみよう&#34;&gt;設定してみよう&lt;/h2&gt;
-
-&lt;h3 id=&#34;1-webappsにgitlabのurlを紐付ける&#34;&gt;1. WebAppsにGitLabのURLを紐付ける&lt;/h3&gt;
-
-&lt;p&gt;WebAppsのデプロイ設定をします。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;アプリのデプロイ &amp;gt; デプロイオプション &amp;gt; ソースの選択 &amp;gt; 外部リポジトリ&lt;/strong&gt;を選択します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;GitLabのリポジトリURLを入力しましょう。 https形式とSSH形式のどちらでも大丈夫です。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;無事に設定が完了すると、メニューの &lt;strong&gt;概要 &amp;gt; 外部リポジトリプロジェクト&lt;/strong&gt;にリポジトリのURLが設定されます。&lt;/p&gt;
-
-&lt;h3 id=&#34;2-webappsのデプロイ用ssh公開鍵を取得する&#34;&gt;2. WebAppsのデプロイ用SSH公開鍵を取得する&lt;/h3&gt;
-
-&lt;p&gt;WebAppsに外部からアクセスするためにWebAppsのSSH公開鍵を取得します。&lt;/p&gt;
-
-&lt;p&gt;通常WebAppsの公開URLにアクセスする場合&lt;code&gt;http://アプリケーション名.azurewebsites.net&lt;/code&gt;というドメインにアクセスしますが、ここでは通常のURLに&lt;code&gt;.scm&lt;/code&gt;が追加されたドメインにアクセスします。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;https://アプリケーション名.scm.azurewebsites.net/api/sshkey?ensurePublicKey=1&lt;/code&gt; にアクセスしてみましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;このssh-rsaから始まるダブルクォートで囲まれている部分が公開鍵になります。&lt;/p&gt;
-
-&lt;p&gt;ちなみに、アプリケーション名がn0bisukeの場合は&lt;code&gt;https://n0bisuke.scm.azurewebsites.net/api/sshkey?ensurePublicKey=1&lt;/code&gt;になります。&lt;/p&gt;
-
-&lt;h3 id=&#34;3-gitlabの対象リポジトリにデプロイ用ssh公開鍵を設定する&#34;&gt;3. GitLabの対象リポジトリにデプロイ用SSH公開鍵を設定する&lt;/h3&gt;
-
-&lt;p&gt;先ほどのSSH公開鍵をGitLabに設定します。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;https://gitlab.com/ユーザー名/リポジトリ名/deploy_keys&lt;/code&gt;にアクセスしましょう。
-リポジトリの &lt;strong&gt;設定(歯車マーク) &amp;gt; Deploy Keys&lt;/strong&gt;からもアクセスできます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Titleの項目に任意の名前を入力し、Keyの項目に先ほどのSSH公開鍵を貼りましょう。&lt;/p&gt;
-
-&lt;p&gt;これでGitLabのリポジトリに鍵を紐付けられ、GitLabからWebAppsにデプロイすることが出来るようになります。&lt;/p&gt;
-
-&lt;h3 id=&#34;4-webappsのwebhookアドレスをgitlabに紐付ける&#34;&gt;4. WebAppsのWebhookアドレスをGitLabに紐付ける&lt;/h3&gt;
-
-&lt;p&gt;ここまでの作業でWebAppsとGitLabの連携は出来ているのですが、今回は作業者がGitLabにPushしたらデプロイされる仕組みにしたいため、Pushを検知するための設定をします。&lt;/p&gt;
-
-&lt;p&gt;WebAppsのメニューから &lt;strong&gt;設定 &amp;gt; プロパティ &amp;gt; デプロイ開始のURL&lt;/strong&gt;の項目にあるURLをコピーしましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;https://$アプリケーション名:パスワード@アプリケーション名.scm.azurewebsites.net/deploy&lt;/code&gt;というURLが設定されているはずです。&lt;/p&gt;
-
-&lt;p&gt;GitLab側に移動し、 &lt;code&gt;https://gitlab.com/ユーザー名/リポジトリ名/hooks&lt;/code&gt;にアクセスしましょう。
-リポジトリの &lt;strong&gt;設定(歯車マーク) &amp;gt; Webhooks&lt;/strong&gt;からもアクセスできます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/08.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;URLの項目に先ほどのWebAppsのWebHookアドレス(&lt;code&gt;https://$アプリケーション名:パスワード@アプリケーション名.scm.azurewebsites.net/deploy&lt;/code&gt;)を貼り付けます。 他の項目は特に変更せずに&lt;code&gt;Add Webhook&lt;/code&gt;で追加します。&lt;/p&gt;
-
-&lt;p&gt;これで設定は完了です。&lt;/p&gt;
-
-&lt;h3 id=&#34;5-試してみる&#34;&gt;5. 試してみる&lt;/h3&gt;
-
-&lt;p&gt;Gitで適当にPushしてみましょう。するとWebAppsのデプロイオプションの項目で同期が確認できます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/09.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;http://アプリケーション名.azurewebsites.net&lt;/code&gt;にアクセスしてみるとソースコードが反映されていることが分かると思います。&lt;/p&gt;
-
-&lt;p&gt;お疲れ様でした！&lt;/p&gt;
-
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-
-&lt;p&gt;イメージのしやすさから「GitLabからWebAppsにデプロイ」という表現を使いましたが、実際には「WebAppsがGitLab上のソースコードをPullしている」という表現の方が正しいと思います。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;GitLab側はPushがあったことをWebhookでWebAppsに声を掛けてあげて、WebApps側はGitLabから声が掛かったらPullしにいく、という流れです。&lt;/p&gt;
-
-&lt;p&gt;ちなみに今回はWebhookの設定でかなりハマって、「&lt;a href=&#34;https://github.com/projectkudu/kudu/wiki/Continuous-deployment&#34;&gt;projectkudu/kudu&lt;/a&gt;」や「&lt;a href=&#34;http://stackoverflow.com/questions/31538152/publishing-to-azure-web-apps-from-gitlab-repository-on-trigger&#34;&gt;Publishing to Azure Web Apps from GitLab repository on trigger&lt;/a&gt;」に&lt;code&gt;https://$mysite:BigRandomPassword@mysite.scm.azurewebsites.net/deploy&lt;/code&gt;がWebhookのURLだという記載があるのですが、&lt;code&gt;BigRandomPassword&lt;/code&gt;が謎すぎてかなり詰んでました。 WebApps側で「デプロイ開始のURL」という表現になってるのも分かりにくい気がしますね（苦笑）。&lt;/p&gt;
-
-&lt;p&gt;WebAppsとGitLabの仕様が変わるまではしばらくこの手順が生きるはずですので、参考になれば幸いです。&lt;/p&gt;
 </description>
     </item>
     
