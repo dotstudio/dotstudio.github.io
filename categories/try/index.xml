@@ -10,6 +10,197 @@
     <atom:link href="/categories/try/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Nefry BTでMQTTを使ってみよう Subscribe編</title>
+      <link>https://dotstud.io/blog/nefry-bt-connect-mqtt/</link>
+      <pubDate>Sat, 06 Jan 2018 14:28:04 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nefry-bt-connect-mqtt/</guid>
+      
+      <description>
+
+&lt;p&gt;あけましておめでとうございます。 代表ののびすけ（&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;@n0bisuke&lt;/a&gt;）です。&lt;/p&gt;
+
+&lt;p&gt;Nefry BTを使ってMQTTを利用する方法を紹介します。&lt;/p&gt;
+
+&lt;p&gt;今回はMQTT経由でNefry BTに&lt;/p&gt;
+
+&lt;h2 id=&#34;mqttの登場人物&#34;&gt;MQTTの登場人物&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Broker - 通信のサーバー&lt;/li&gt;
+&lt;li&gt;Publisher - 情報の送信側&lt;/li&gt;
+&lt;li&gt;Subscriber - 情報の受信側&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;WebSocketではサーバーとクライアントだけで双方向通信をしますが、MQTTではサーバーはBrocker、クライアント側が送信者のPublisherと受信者のSubscriberに分かれます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/141/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;今回はNefry BTをSubscriber（受信者）にして、外部からNefry BTに情報を送ってみたいと思います。&lt;/p&gt;
+
+&lt;h2 id=&#34;環境&#34;&gt;環境&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Arduino IDE 1.8.5&lt;/li&gt;
+&lt;li&gt;Nefry ライブラリ 1.1.4&lt;/li&gt;
+&lt;li&gt;Nefry BT R2&lt;/li&gt;
+&lt;li&gt;macOS High Sierra&lt;/li&gt;
+&lt;li&gt;Node.js v9.2.0&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;subscriberの作成&#34;&gt;Subscriberの作成&lt;/h2&gt;
+
+&lt;h3 id=&#34;arduino向けのmqttライブラリをインストール&#34;&gt;Arduino向けのMQTTライブラリをインストール&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/knolleary/pubsubclient&#34;&gt;knolleary/pubsubclient&lt;/a&gt;を利用します。&lt;/p&gt;
+
+&lt;p&gt;zipファイルをダウンロードしたら、 &lt;code&gt;スケッチ &amp;gt; ライブラリのインポート &amp;gt; .ZIP形式のライブラリをインストール&lt;/code&gt;からArduino IDEにライブラリをインストールします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/141/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;nefry-btのスケッチ&#34;&gt;Nefry BTのスケッチ&lt;/h3&gt;
+
+&lt;p&gt;ブローカーは&lt;a href=&#34;https://mosquitto.org/&#34;&gt;Mosquitto&lt;/a&gt;を利用します。&lt;/p&gt;
+
+&lt;p&gt;&amp;ldquo;mosquitto.org&amp;rdquo;の&amp;rdquo;n0bisuke&amp;rdquo;という名前のトピックに情報が送信されたら受信します。&lt;/p&gt;
+
+&lt;p&gt;MQTTはデフォルト1883ポートを利用するので、1883ポートを指定します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+#include &amp;lt;PubSubClient.h&amp;gt;
+
+WiFiClient httpsClient;
+PubSubClient mqttClient(httpsClient);
+
+#define TOPIC &amp;quot;n0bisuke&amp;quot;
+#define QOS 0
+#define URL &amp;quot;mosquitto.org&amp;quot;
+#define PORT 1883
+
+void setup() {
+  mqttClient.setServer(URL, PORT);
+  mqttClient.setCallback(callback);
+}
+
+void loop() {
+  if(!mqttClient.connected()) {
+    if (mqttClient.connect(TOPIC)) {
+      Serial.println(&amp;quot;Connected.&amp;quot;);    
+      mqttClient.subscribe(TOPIC, QOS);
+      Serial.println(&amp;quot;Subscribed.&amp;quot;);
+    }
+    else {
+      errorReport();
+    }
+  }
+  
+  mqttClient.loop();
+}
+
+void callback(char* topic, byte* payload, unsigned int length) {
+  Serial.print(&amp;quot;Message arrived [&amp;quot;);
+  Serial.print(topic);
+  Serial.print(&amp;quot;] &amp;quot;);
+  for (int i = 0; i &amp;lt; length; i++) {
+    Serial.print((char)payload[i]);
+  }
+  Serial.println();
+}
+
+void errorReport(){
+  Serial.print(&amp;quot;Failed. Error state = &amp;quot;);
+  
+  switch (mqttClient.state()) {
+    case MQTT_CONNECT_UNAUTHORIZED:
+      Serial.println(&amp;quot;MQTT_CONNECT_UNAUTHORIZED&amp;quot;);
+      break;
+    case MQTT_CONNECT_BAD_CREDENTIALS:
+      Serial.println(&amp;quot;MQTT_CONNECT_BAD_CREDENTIALS&amp;quot;);
+      break;
+    case MQTT_CONNECT_UNAVAILABLE:
+      Serial.println(&amp;quot;MQTT_CONNECT_UNAVAILABLE&amp;quot;);
+      break;
+    case MQTT_CONNECT_BAD_CLIENT_ID:
+      Serial.println(&amp;quot;MQTT_CONNECT_BAD_CLIENT_ID&amp;quot;);
+      break;
+    case MQTT_CONNECT_BAD_PROTOCOL:
+      Serial.println(&amp;quot;MQTT_CONNECT_BAD_PROTOCOL&amp;quot;);
+      break;
+    case MQTT_CONNECTED:
+      Serial.println(&amp;quot;MQTT_CONNECTED&amp;quot;);
+      break;
+    case MQTT_DISCONNECTED:
+      Serial.println(&amp;quot;MQTT_DISCONNECTED&amp;quot;);
+      break;
+    case MQTT_CONNECT_FAILED:
+      Serial.println(&amp;quot;MQTT_CONNECT_FAILED&amp;quot;);
+      break;
+    case MQTT_CONNECTION_LOST:
+      Serial.println(&amp;quot;MQTT_CONNECTION_LOST&amp;quot;);
+      break;
+    case MQTT_CONNECTION_TIMEOUT:
+      Serial.println(&amp;quot;MQTT_CONNECTION_TIMEOUT&amp;quot;);
+      break;
+  }
+      
+  delay(5000); // Wait 5 seconds before retrying
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;publisherの作成&#34;&gt;Publisherの作成&lt;/h2&gt;
+
+&lt;p&gt;情報の送信側であるPublisherは手元のMac Book上のNode.jsで作成しました。&lt;/p&gt;
+
+&lt;p&gt;Node.jsでMQTTを利用する場合は&lt;a href=&#34;https://www.npmjs.com/package/mqtt&#34;&gt;mqtt.js&lt;/a&gt;を利用するのが手頃です。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mkdir mqtt-test
+cd mqtt-test
+npm init -y
+npm i --save mqtt
+touch publisher.js
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;//publisher.js
+&#39;use strict&#39;;
+
+const mqtt = require(&#39;mqtt&#39;);
+const client = mqtt.connect(&#39;mqtt://mosquitto.org&#39;);
+
+client.on(&#39;connect&#39;, () =&amp;gt; console.log(&#39;publisher.connected.&#39;));
+
+setInterval(() =&amp;gt; {
+    const message = Date.now().toString();
+    client.publish(&#39;n0bisuke&#39;, message);
+    console.log(&#39;publisher.publish:&#39;, message);
+}, 1000);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これで実行すると、以下のように時間の情報をパブリッシュ（送信）し始めます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;node publisher.js
+
+publisher.publish: 1515219086876
+publisher.publish: 1515219087879
+publisher.publish: 1515219088880
+publisher.publish: 1515219089882
+・
+・
+・
+(省略)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/141/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;所感&#34;&gt;所感&lt;/h2&gt;
+
+&lt;p&gt;思ってたより簡単に実装出来ました。
+これを参考にNefry BTとWebサービスの連携などに活用していきましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.mosca.io/&#34;&gt;Mosca&lt;/a&gt;などを使うとBrokerも自分で作成することが出来るので試してみると良いかもしれません。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>オフィス移転したらインターホンがなかったのでRaspbeerry Piでカメラ付きインターホン作ってみた</title>
       <link>https://dotstud.io/blog/office-new-door-notification/</link>
       <pubDate>Mon, 20 Nov 2017 00:00:00 +0000</pubDate>
@@ -4275,144 +4466,6 @@ void loop(){
 &lt;p&gt;2017年2月23日開催の &lt;a href=&#34;https://dotstudio.connpass.com/event/49147/&#34;&gt;今度こそ挫折しない！知識ゼロからの電子工作ハンズオン&lt;/a&gt;イベントに来てくださっている方で、チュートリアルを早く終わってしまった方もぜひやってみてください！&lt;/p&gt;
 
 &lt;p&gt;それではまた！お疲れ様でした！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>littleBits Arduinoモジュールでより細かく値を入出力して状況を伝えよう</title>
-      <link>https://dotstud.io/blog/littlebits-arduino-analog-number/</link>
-      <pubDate>Thu, 15 Dec 2016 10:00:00 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/littlebits-arduino-analog-number/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、dotstudioライターの田中正吾です。電子回路のパーツを磁石でパチパチとつなげるだけで電子工作ができる「littleBits」の連載をLIGブログでおこなっています。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/235644&#34;&gt;littleBitsのArduinoモジュールで簡単にプログラミングをはじめてみよう&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/259378&#34;&gt;ArduinoモジュールでLチカしてみた（Windows・Mac）&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/268909&#34;&gt;ArduinoモジュールでON・OFFの入力値を取得してみよう&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/280761&#34;&gt;Arduinoモジュールで入出力の連携をしてみよう&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/295334&#34;&gt;シリアルモニタとNode.jsでlittleBits Arduinoモジュールを動かしてみよう&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/315934&#34;&gt;littleBitsのボタンを押すとIFTTT経由でLINEにメッセージが飛ぶ仕組みを作ってみよう&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;本記事では、これでの連載とは少し視点を変えて、 &lt;strong&gt;littleBits Arduinoモジュールでより細かく値を入出力するアナログ入出力&lt;/strong&gt; をご紹介します。では、さっそく始めていきましょう！&lt;/p&gt;
-
-&lt;h2 id=&#34;より細かく状況を伝えるアナログ値&#34;&gt;より細かく状況を伝えるアナログ値&lt;/h2&gt;
-
-&lt;p&gt;いままで、ボタンを押すと何かが起こるON/OFFの反応で説明していましたが、実は&lt;a href=&#34;http://jp.littlebits.com/kits/arduino-coding-kit/&#34;&gt;ARDUINO CODING KIT&lt;/a&gt;には、より細かく状況を伝えるアナログ値を扱う入出力モジュールがあります。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;たとえば、DIMMERモジュール（真ん中にあるダイヤル状のツマミのモジュール）は、ツマミを回すことで電気の流れが0～100%と変わります。またBAR GRAPHモジュール（右）は流れる電気によって光るLEDの数が変わります。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;つまみを回しきったとき。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;半分ぐらいまでひねったとき。電流50%のときですね。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ON/OFFではセンサーが「反応した」「反応していない」という2つの情報しか伝えられませんでした。しかし、このように電流の量によって度合いを伝えることができると、たとえば光センサーモジュールを使ったときに明るさを「暗い」「やや暗い」「やや明るい」「とても明るい」といったように、より細かく伝えることができます。&lt;/p&gt;
-
-&lt;h2 id=&#34;アナログ値をarduinoモジュールで計測してみる&#34;&gt;アナログ値をArduinoモジュールで計測してみる&lt;/h2&gt;
-
-&lt;p&gt;それでは早速アナログ値をArduinoモジュールで計測してみましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;DIMMERモジュールをArduinoモジュールの入力2番目のA0に取り付けます。&lt;/p&gt;
-
-&lt;p&gt;Arduinoモジュールでアナログ値を計測するには &lt;code&gt;analogRead&lt;/code&gt; 関数を使います。Arduinoモジュールで計測できるアナログ値は0%は0として、100%は1023として計測できます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;void setup() {
-  Serial.begin(9600);
-}
-
-void loop() {
-  int sensorValue = analogRead(A0);
-  if(sensorValue&amp;gt;0){
-    Serial.println(sensorValue);
-  }
-  delay(1);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;このコードを書き込んで、シリアルモニタで数値を見てみます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;DIMMERをひねると値が変わります。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;シリアルプロッタのほうがよりわかりやすいですね。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/08.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/09.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;dimmerモジュールのツマミにあわせて点滅を変えてみる&#34;&gt;DIMMERモジュールのツマミにあわせて点滅を変えてみる&lt;/h2&gt;
-
-&lt;p&gt;DIMMERモジュールのツマミの度合いが取れるようになったので、ツマミに合わせてBARGRAPHモジュールの点滅の仕方を変えてみましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;このように、さきほどのDIMMERモジュールとArduinoモジュールをつないだものに、BAR GRAPHモジュールも加えます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;void setup() {
-  Serial.begin(9600);
-  pinMode(5,OUTPUT);
-}
-
-void loop() {
-  int sensorValue = analogRead(A0);
-  if(sensorValue&amp;gt;0){
-    Serial.println(sensorValue);
-    digitalWrite(5,HIGH);
-    delay(sensorValue);
-    digitalWrite(5,LOW);
-  }
-  delay(sensorValue);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;このように書いたコードをArduinoモジュールに書き込みます。&lt;/p&gt;
-
-&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/PircFP-OsQY&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
-
-&lt;p&gt;DIMMERモジュールのつまみに対応して、点滅の仕方が変わるようになりました。&lt;/p&gt;
-
-&lt;h2 id=&#34;さらにサーボに変えてみる&#34;&gt;さらにサーボに変えてみる&lt;/h2&gt;
-
-&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/FVonwS3pb-E&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://jp.littlebits.com/kits/arduino-coding-kit/&#34;&gt;ARDUINO CODING KIT&lt;/a&gt;のサーボに変えてみました。LEDよりもわかりやすくなりますね。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;サーボに顔をつけてみます。&lt;/p&gt;
-
-&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/coAm51UmCo0&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
-
-&lt;p&gt;ツマミに合わせて顔がビクビクするものに早変わりします！　&lt;a href=&#34;https://liginc.co.jp/280761&#34;&gt;磁石で電子工作できる「littleBits」のArduinoモジュールで、入出力の連携をしてみよう&lt;/a&gt;で試した「三三七拍子するパンダ」はまだ動物らしい動きに見えましたが、この顔ネタはなかなかに気持ち悪いです。夢に出そう。&lt;/p&gt;
-
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-
-&lt;p&gt;今回はlittleBits Arduinoモジュールで &lt;strong&gt;より細かく値を入出力するアナログ入出力&lt;/strong&gt; をお伝えしました。ネタはひとつなのに、モジュールを付け替えるだけで光から動力へと変化します。工作物によって伝わる印象も変わるのがlittleBitsの面白いところです。&lt;/p&gt;
-
-&lt;p&gt;そして、アナログ値を扱うとON/OFFよりも細かく状況を伝えることができたり、動きにもアクセントを持たせるたりすることができます。&lt;/p&gt;
-
-&lt;p&gt;みなさんも、ぜひいろいろなことを試してみてはいかがでしょうか。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/12.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;littleBitsのハックには、LIGブログの&lt;a href=&#34;https://liginc.co.jp/series/littlebits&#34;&gt;littleBitsではじめるArduino&lt;/a&gt;連載、ならびに拙著『&lt;a href=&#34;http://www.1ft-seabass.jp/memo/2016/10/11/littlebits-book-release/?utm_content=bufferec8bb&amp;amp;utm_medium=social&amp;amp;utm_source=twitter.com&amp;amp;utm_campaign=buffer&#34;&gt;「littleBits」ではじめる電子工作&lt;/a&gt;』もぜひご参照ください。&lt;/p&gt;
 </description>
     </item>
     
