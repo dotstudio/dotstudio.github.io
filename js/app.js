@@ -88,3 +88,13 @@ function appendGoogleAds(){
     appendToc();
     appendGoogleAds();
 })();
+
+// $(document).ready(function() {
+// 	$('code.hljs').each(function(i, block) {
+//         hljs.lineNumbersBlock(block);
+//         hljs.initLineNumbersOnLoad({
+//             singleLine: false
+//         });
+// 	});
+// });
+
