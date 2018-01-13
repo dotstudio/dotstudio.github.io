@@ -7,11 +7,547 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Sat, 06 Jan 2018 14:28:04 +0900</lastBuildDate>
+    <lastBuildDate>Fri, 12 Jan 2018 23:58:16 +0900</lastBuildDate>
     <atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>Nefry BTでMQTTを使ってみよう Subscribe編</title>
+      <title>Nefry BT（ESP32）からBLEでNode.jsにデータを送ってみよう</title>
+      <link>https://dotstud.io/blog/nefrybt-ble-bluetooth-peripheral/</link>
+      <pubDate>Fri, 12 Jan 2018 23:58:16 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nefrybt-ble-bluetooth-peripheral/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、代表ののびすけ（&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;@n0bisuke&lt;/a&gt;）です。Nefry BTを使ってBluetooth / BLEを利用する方法を紹介します。&lt;/p&gt;
+
+&lt;p&gt;ほぼESP32のコードなので、検証してませんが他のESP32系のボードでも動作すると思います。&lt;/p&gt;
+
+&lt;h2 id=&#34;bleについて&#34;&gt;BLEについて&lt;/h2&gt;
+
+&lt;p&gt;BLEには大きく分け&lt;strong&gt;Peripheral （ペリフェラル）&lt;/strong&gt;と&lt;strong&gt;Central（セントラル）&lt;/strong&gt;という二つの役割があります。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Peripheral: 発信側端末、ビーコンやBLEタグなど受信端末に対して情報を送る側&lt;/li&gt;
+&lt;li&gt;Central: 受信側端末、iPhoneやMacなどBLEデバイスの情報を探して受け取る側&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/143/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Nefry BTは書き込むコードによって、PeripheralにもCentralにもなることができます。&lt;/p&gt;
+
+&lt;h2 id=&#34;環境&#34;&gt;環境&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Arduino IDE 1.8.5&lt;/li&gt;
+&lt;li&gt;Nefry ライブラリ 1.1.4&lt;/li&gt;
+&lt;li&gt;Nefry BT R2&lt;/li&gt;
+&lt;li&gt;macOS High Sierra&lt;/li&gt;
+&lt;li&gt;Node.js v9.2.0&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;peripheralの作成&#34;&gt;Peripheralの作成&lt;/h2&gt;
+
+&lt;p&gt;情報発信側のPeripheralをNefry BTで作成します。&lt;/p&gt;
+
+&lt;h3 id=&#34;uuidの作成&#34;&gt;UUIDの作成&lt;/h3&gt;
+
+&lt;p&gt;BLEを利用するためには&lt;strong&gt;SERVICE（サービス）&lt;/strong&gt;と&lt;strong&gt;CHARACTERISTIC（キャラクタリスティック）&lt;/strong&gt;という各機能を司るUUIDを設定する必要があります。プログラミングでいうクラスとメソッドの関係だと思うと良いかもしれません。&lt;/p&gt;
+
+&lt;p&gt;BLEデバイスは部屋の中やカフェ、駅などいたるところに存在するのでそれらのデバイスと自分が所持しているデバイスのIDが競合しないようにユニークな値にする必要があります。そこでUUIDを作成し、設定する必要があります。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.uuidgenerator.net/&#34;&gt;https://www.uuidgenerator.net/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/143/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;このサイトでUUIDが作成出きるので各自作成しましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;nefry-btのスケッチ&#34;&gt;Nefry BTのスケッチ&lt;/h3&gt;
+
+&lt;p&gt;大元のコードはnkolban氏の&lt;a href=&#34;https://github.com/nkolban/ESP32_BLE_Arduino/blob/f8fe9d7cdfb20caa54b70849826d1ac6e375ff78/examples/BLE_notify/BLE_notify.ino&#34;&gt;こちらのコード&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;#define SERVICE_UUID&lt;/code&gt;の箇所と&lt;code&gt;#define CHARACTERISTIC_UUID&lt;/code&gt;の箇所に先ほど作成したUUIDを指定します。&lt;/p&gt;
+
+&lt;p&gt;また&lt;code&gt;BLEDevice::init(&amp;quot;&amp;quot;);&lt;/code&gt;の箇所にBLEデバイスの名前を設定できます。
+以下のコードではNefryBT-n0bisukeという名前を指定しています。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;BLEDevice.h&amp;gt;
+#include &amp;lt;BLEServer.h&amp;gt;
+#include &amp;lt;BLEUtils.h&amp;gt;
+#include &amp;lt;BLE2902.h&amp;gt;
+
+BLECharacteristic *pCharacteristic;
+bool deviceConnected = false;
+uint8_t value = 0;
+
+// See the following for generating UUIDs:
+// https://www.uuidgenerator.net/
+
+#define SERVICE_UUID        &amp;quot;D5875408-FA51-4763-A75D-7D33CECEBC31&amp;quot;
+#define CHARACTERISTIC_UUID &amp;quot;A4F01D8C-A037-43B6-9050-1876A8C23584&amp;quot;
+
+class MyServerCallbacks: public BLEServerCallbacks {
+    void onConnect(BLEServer* pServer) {
+      deviceConnected = true;
+    };
+
+    void onDisconnect(BLEServer* pServer) {
+      deviceConnected = false;
+    }
+};
+
+void setup() {
+  Serial.begin(115200);
+
+  // Create the BLE Device
+  BLEDevice::init(&amp;quot;NefryBT-n0bisuke&amp;quot;);
+
+  // Create the BLE Server
+  BLEServer *pServer = BLEDevice::createServer();
+  pServer-&amp;gt;setCallbacks(new MyServerCallbacks());
+
+  // Create the BLE Service
+  BLEService *pService = pServer-&amp;gt;createService(SERVICE_UUID);
+
+  // Create a BLE Characteristic
+  pCharacteristic = pService-&amp;gt;createCharacteristic(
+                      CHARACTERISTIC_UUID,
+                      BLECharacteristic::PROPERTY_READ   |
+                      BLECharacteristic::PROPERTY_WRITE  |
+                      BLECharacteristic::PROPERTY_NOTIFY |
+                      BLECharacteristic::PROPERTY_INDICATE
+                    );
+
+  // https://www.bluetooth.com/specifications/gatt/viewer?attributeXmlFile=org.bluetooth.descriptor.gatt.client_characteristic_configuration.xml
+  // Create a BLE Descriptor
+  pCharacteristic-&amp;gt;addDescriptor(new BLE2902());
+
+  // Start the service
+  pService-&amp;gt;start();
+
+  // Start advertising
+  pServer-&amp;gt;getAdvertising()-&amp;gt;start();
+  Serial.println(&amp;quot;Waiting a client connection to notify...&amp;quot;);
+}
+
+void loop() {
+
+  if (deviceConnected) {
+    Serial.printf(&amp;quot;*** NOTIFY: %d ***\n&amp;quot;, value);
+    char buffer[10];
+    sprintf(buffer, &amp;quot;{\&amp;quot;val\&amp;quot;:%d}&amp;quot;, value);
+    Serial.printf(buffer);
+    pCharacteristic-&amp;gt;setValue(buffer);
+    pCharacteristic-&amp;gt;notify();
+    //pCharacteristic-&amp;gt;indicate();
+    value++;
+  }
+  delay(2000);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;コンパイルエラーが出ないで書き込みが出来ればOKです。&lt;/p&gt;
+
+&lt;h3 id=&#34;確認&#34;&gt;確認&lt;/h3&gt;
+
+&lt;p&gt;デバッグには&lt;a href=&#34;https://itunes.apple.com/jp/app/lightblue/id639944780?mt=12&#34;&gt;LightBlue&lt;/a&gt;などのBLEデバッグ用のアプリケーションを利用することをお勧めします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/143/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Nefry BTが起動すると先ほど指定した&lt;strong&gt;NefryBT-n0bisuke&lt;/strong&gt;という名前でBLEデバイスが検出されます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/143/4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;SERVICEのUUIDやCHARACTERISTICのUUIDも先ほど指定したものが表示されていると思います。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;これで問題なく、Nefry BTから情報が発信されていることが確認出来ました。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;centralの作成&#34;&gt;Centralの作成&lt;/h2&gt;
+
+&lt;p&gt;次は受信側のCentralを作成していきます。
+データの確認だけであれば先ほどのLightBlueなどのアプリで確認でも良いのですが、自分のサービスに組み込む際には何かしらのプログラミング言語でアクセスできた方が都合が良いです。&lt;/p&gt;
+
+&lt;h3 id=&#34;nobleの利用&#34;&gt;nobleの利用&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/sandeepmistry/noble&#34;&gt;noble&lt;/a&gt;はNode.js向けのBLEライブラリです。MacやWindows、Raspberry PiなどのデバイスをBLEのCentralにすることができます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mkdir ble_central
+cd ble_central
+touch app.js
+npm init -y
+npm i --save noble
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これで準備とnobleのインストールが完了しました。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;app.js&lt;/code&gt;に以下を記述します。SERVICE_UUIDやCHARACTERISTIC_UUIDは自分で作成したNefry BT側に書き込んだUUIDと同様のものを指定しましょう。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;[WIP] Async/Awaitに書き換えたい。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
+
+const noble = require(&#39;noble&#39;);
+const serviceuuid = `d5875408fa514763a75d7d33cecebc31`;
+const charauuid = `a4f01d8ca03743b690501876a8c23584`;
+
+//キャラクタリスティックにアクセスしてデータやりとり
+const accessChara = (chara) =&amp;gt; {
+    console.log(&#39;-----Start GATT Access-----&#39;)
+    chara.notify(true, (err) =&amp;gt; {
+        if (err) {
+          console.log(&#39;listen notif error&#39;, err)
+        } else {
+          console.log(&#39;listen notif&#39;)
+        }
+    });
+    chara.on(&#39;data&#39;, (data, isNotif) =&amp;gt; {
+        const jsonStr = data.toString(&#39;utf-8&#39;);
+        const jsonData = JSON.parse(jsonStr);
+        console.log(jsonData);
+    });
+}
+
+
+//discovered BLE device
+const discovered = (peripheral) =&amp;gt; {
+    console.log(`BLE Device Found: ${peripheral.advertisement.localName}(${peripheral.uuid}) RSSI${peripheral.rssi}`);
+
+    if(peripheral.advertisement.localName === &#39;NefryBT-n0bisuke&#39;){
+        noble.stopScanning();
+        console.log(&#39;device found&#39;);
+        console.log(`service discover...`);
+        
+        peripheral.connect(error =&amp;gt; {
+            if (error) {
+                console.log(&amp;quot;connection error:&amp;quot;, error)
+            } else {
+                console.log(&amp;quot;device connected&amp;quot;);
+            }
+            
+            peripheral.discoverServices([],(err, services) =&amp;gt; {
+                if (error) {
+                    console.log(&amp;quot;discover service error&amp;quot;, error)
+                }
+                console.log(&#39;discover service&#39;);               
+                services.forEach(service =&amp;gt; {
+                    if(service.uuid === serviceuuid){
+                        service.discoverCharacteristics([], (error, charas) =&amp;gt; {
+                            console.log(&#39;discover chara&#39;);
+                            charas.forEach(chara =&amp;gt; {
+                                if(chara.uuid === charauuid){
+                                    console.log(&amp;quot;found chara: &amp;quot;, chara.uuid)
+                                    accessChara(chara);
+                                }
+                            });
+                        });
+                    }
+                });
+            });
+        });
+    }
+}
+
+//BLE scan start
+const scanStart = () =&amp;gt; {
+    noble.startScanning();
+    noble.on(&#39;discover&#39;, discovered);
+}
+
+if(noble.state === &#39;poweredOn&#39;){
+    scanStart();
+}else{
+    noble.on(&#39;stateChange&#39;, scanStart);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;実行&#34;&gt;実行&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;node app.js
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;で実行します。この時、先ほどのLightBlueなどのアプリでNefryBTにBLEアクセスしていると上手くいかないのでアプリ側の接続は解除しましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/143/5.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Mac側のNode.jsのログはこんな感じで表示されます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;BLE Device Found: LED(59aa15c3a3274ed7b11d334b5c0d0900) RSSI-68
+BLE Device Found: NefryBT-n0bisuke(d0b77d4611f54380b8b63e6d05765ad6) RSSI-49
+device found
+service discover...
+device connected
+discover service
+discover chara
+found chara:  a4f01d8ca03743b690501876a8c23584
+-----Start GATT Access-----
+listen notif
+{ val: 147 }
+{ val: 148 }
+・
+・
+・
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;解説&#34;&gt;解説&lt;/h3&gt;
+
+&lt;p&gt;NefryBT側ではデバイスにアクセスがありCentralとのコネクションが確立すると、&lt;code&gt;変数value&lt;/code&gt;の値をセット(pCharacteristic-&amp;gt;setValue)して送信（pCharacteristic-&amp;gt;notify）し、valueの値をインクリメントします。&lt;/p&gt;
+
+&lt;p&gt;これを2秒ごとに行うので2秒間隔でNefryBTからMacのNode.jsに情報が送信されます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;・
+(省略)
+・
+・
+void loop() {
+
+  if (deviceConnected) {
+    Serial.printf(&amp;quot;*** NOTIFY: %d ***\n&amp;quot;, value);
+    char buffer[10];
+    sprintf(buffer, &amp;quot;{\&amp;quot;val\&amp;quot;:%d}&amp;quot;, value);
+    Serial.printf(buffer);
+    pCharacteristic-&amp;gt;setValue(buffer);
+    pCharacteristic-&amp;gt;notify();
+    //pCharacteristic-&amp;gt;indicate();
+    value++;
+  }
+  delay(2000);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Node.js（noble）側では、PERIPHERAL -&amp;gt; SERVICE -&amp;gt; CHARACTERISTICと階層的にアクセスしていき、CHARACTERISTICまでアクセスが出きると、accessChara関数が呼ばれます。&lt;/p&gt;
+
+&lt;p&gt;この中の&lt;code&gt;chara.on(&#39;data&#39;)&lt;/code&gt;の箇所でデータが送られてくるたびにイベントが発火して、データの中身を確認できます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;・
+・
+(省略)
+・
+const accessChara = (chara) =&amp;gt; {
+    console.log(&#39;-----Start GATT Access-----&#39;)
+    chara.notify(true, (err) =&amp;gt; {
+        if (err) {
+          console.log(&#39;listen notif error&#39;, err)
+        } else {
+          console.log(&#39;listen notif&#39;)
+        }
+    });
+    chara.on(&#39;data&#39;, (data, isNotif) =&amp;gt; {
+        const jsonStr = data.toString(&#39;utf-8&#39;);
+        const jsonData = JSON.parse(jsonStr);
+        console.log(jsonData);
+    });
+}
+・
+・
+(省略)
+・
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;Nefry BTでBLEを利用する方法を紹介しました。
+Nefry BTでセンサーのデータを取得し、Centralに送信する方法なども応用して作れそうですね。&lt;/p&gt;
+
+&lt;p&gt;これを参考にNefry BTとBLEデバイスの連携などに活用していきましょう。&lt;/p&gt;
+
+&lt;p&gt;今回はNefry BTをPeripheralにする実装でしたが、別の機会でCentralにする方法も紹介できればと思っています。&lt;/p&gt;
+
+&lt;p&gt;それでは！&lt;/p&gt;
+
+&lt;h2 id=&#34;所感&#34;&gt;所感&lt;/h2&gt;
+
+&lt;p&gt;今回の実装ですが色々と途中でのハマりが多いかつ、調べてもまだまだESP32のBLE利用をArduinoでやってる事例は少なくけっこう大変でした。この辺の大変だった知見はQiitaなどでまとめらたらと思っています。お疲れ様です笑&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>レーザーカッターで自分だけのRaspberryPiケースを作ってみよう！</title>
+      <link>https://dotstud.io/blog/raspberry-pi-case-making/</link>
+      <pubDate>Thu, 11 Jan 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dotstud.io/blog/raspberry-pi-case-making/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、Webデザイナーの3yakaです。自宅の猫が心配すぎてラズパイ（Raspberry Pi）で監視するアプリを作ったら、&lt;strong&gt;ラズパイにはまってしまったラズパイ女子です&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;ものづくりをする方は、Raspberry PiやらArduinoやら、いろいろ使っているとケースに困ることはないでしょうか？&lt;/p&gt;
+
+&lt;p&gt;しかしなかなか可愛いいケースがない……。&lt;strong&gt;ないなら、作ってしまえばいい！！！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;ということで可愛いケースを作りましょう！今回はレーザーカッターを使ったRaspberry Pi3用ケースの作り方を紹介します。アクリルや型の扱いは他のケースにも応用できるのでぜひ見てみてください！&lt;/p&gt;
+
+&lt;h2 id=&#34;レーザーカッターを使える場所を探そう&#34;&gt;レーザーカッターを使える場所を探そう&lt;/h2&gt;
+
+&lt;p&gt;今回はアクリルをレーザーカッターで切り抜いてケースにします。レーザーカッターを持っている人は少ないと思うので、&lt;strong&gt;工作機械を気軽に利用できるFabスペース&lt;/strong&gt;を利用してみましょう！&lt;/p&gt;
+
+&lt;p&gt;レーザーカッターはとても難しそうですが、実はそんなに難しくないんですよ。細かいデータの作り方のルールは機械によって異なるので、パスでできたデータ（Adobe Illustratorのai形式）さえ持っていけば大丈夫です。（Illustratorも合わせて貸してくれるスペースもあります。）&lt;/p&gt;
+
+&lt;p&gt;何ポイントで何色で……などは、優しい店員さんが使い方をレクチャーしてくれるので心配しなくても大丈夫です。（※使用前に講習があるお店もあります。）&lt;/p&gt;
+
+&lt;h3 id=&#34;レーザーカッターが使える初心者向けオススメfabスペース&#34;&gt;レーザーカッターが使える初心者向けオススメFabスペース&lt;/h3&gt;
+
+&lt;p&gt;初心者の方でも気軽に入れるFabスペースをご紹介します！&lt;/p&gt;
+
+&lt;h4 id=&#34;fabcafe-https-fabcafe-com-tokyo&#34;&gt;&lt;a href=&#34;https://fabcafe.com/tokyo/&#34;&gt;◆FabCafe&lt;/a&gt;&lt;/h4&gt;
+
+&lt;p&gt;渋谷のおしゃれカフェといった感じなのでとっても入りやすいです。最初はお茶だけしに行きました。&lt;/p&gt;
+
+&lt;h4 id=&#34;iotlab-https-cami-jp-iotlab&#34;&gt;&lt;a href=&#34;https://cami.jp/iotlab/&#34;&gt;◆IoTLab&lt;/a&gt;&lt;/h4&gt;
+
+&lt;p&gt;できたばかりのFabスペース。五反田のオフィス街でふらっと立ち寄れる場所で便利。今回はこちらで作成しました！&lt;/p&gt;
+
+&lt;h4 id=&#34;techshop-http-www-techshop-jp&#34;&gt;&lt;a href=&#34;http://www.techshop.jp/&#34;&gt;◆TechShop&lt;/a&gt;&lt;/h4&gt;
+
+&lt;p&gt;プロ仕様です！広いです！UVプリンターもあるので好きなデザインのアクリルから作りたい人にオススメです。&lt;/p&gt;
+
+&lt;h2 id=&#34;ケースの形について調べてみよう&#34;&gt;ケースの形について調べてみよう&lt;/h2&gt;
+
+&lt;p&gt;一口に「ケース」といっても、素材や形などいろいろな種類があります。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/142/1.png&#34; alt=&#34;&#34; /&gt;
+「Raspberry Pi  ケース」を検索
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;ケースの形によってはかなり難易度が高そうです……。&lt;/p&gt;
+
+&lt;h3 id=&#34;初心者にも作りやすいケースの形&#34;&gt;初心者にも作りやすいケースの形&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;凹凸の多い形や局面のある形のケースは加工が難しそう。&lt;/li&gt;
+&lt;li&gt;ラズパイは発熱するので、放熱を考えると覆わない形がよさそう。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;ということで、上蓋・下蓋・支柱で作るシンプルな形が初心者には優しそうです！&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/142/2.png&#34; alt=&#34;&#34; /&gt;
+上蓋と下蓋を支柱で支えるタイプのケース　　
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;部材を集めよう&#34;&gt;部材を集めよう&lt;/h2&gt;
+
+&lt;h3 id=&#34;かわいいアクリルで作れば-かわいいケースになる-はず&#34;&gt;かわいいアクリルで作れば、かわいいケースになる（はず）！！&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;かわいいアクリルで作ればかわいいケースになる&lt;/strong&gt;と信じて、素敵なアクリルを用意しましょう。&lt;/p&gt;
+
+&lt;p&gt;アクリルには、透明/色つき透明、不透明/乳白、ミラー、表面プリント、とたくさんの種類があります。ネットではあまりサイズ展開がないことも多いので、&lt;strong&gt;実際に店舗に行ってみるのがオススメ&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;ラメ入りやレース入り、パール入りなどのデザイン性の高いアクリルを取り扱う「&lt;a href=&#34;https://www.miyukiacryl.tokyo/tokyo-acryl&#34;&gt;デザインアクリル専門店 ミユキアクリル&lt;/a&gt;」さんのような&lt;strong&gt;デザインアクリル専門店&lt;/strong&gt;もあるので、興味のある方は覗いてみましょう！&lt;/p&gt;
+
+&lt;p&gt;※デザインアクリルの価格は普通のクリアアクリルの２〜４倍くらい&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/142/3.png&#34; alt=&#34;&#34; /&gt;
+自分好みのアクリルを選ぼう
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;アクリルの厚みは、今回のケースの場合3ミリが一番作りやすくバランスがいいです（アクリルの中に入るものによって厚みが異なります）。5ミリだと重厚感が出て、2ミリだとちょっと薄く感じます。&lt;/p&gt;
+
+&lt;p&gt;厚みを変えて楽しむこともできますが、ネジの長さが変わりますので注意してください！（今回は３ミリで作りますよ！）&lt;/p&gt;
+
+&lt;p&gt;好みのアクリルがない場合は、&lt;strong&gt;UVプリンターを使ってオリジナルのアクリルを作る&lt;/strong&gt;という手もあります。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/142/4.png&#34; alt=&#34;&#34; /&gt;
+UVプリンターでイラストや写真を転写
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;UVプリンターを使えば写真もイラストもだいたいプリントできます。&lt;/p&gt;
+
+&lt;h3 id=&#34;ネジやスペーサーなどのパーツ&#34;&gt;ネジやスペーサーなどのパーツ&lt;/h3&gt;
+
+&lt;p&gt;支柱となるスペーサーは、プラスチックの白や、金属のシルバー、ゴールドなどがあるので、上のアクリルの色や柄によって好みで選びましょう。ネジも色や素材、形などたくさんの種類があります。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/142/5.png&#34; alt=&#34;&#34; /&gt;
+上：真鍮黒ネジ、シルバーの六角スペーサー の組み合わせ&lt;br /&gt;
+下：プラネジ、白のプラスチックのスペーサー&lt;br /&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;必要なパーツ一覧&#34;&gt;必要なパーツ一覧&lt;/h3&gt;
+
+&lt;p&gt;好みのネジ、スペーサー、アクリルを選んでパーツを揃えましょう！&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ラズパイ固定用・ネジ M2.6（8mm）8本&lt;/li&gt;
+&lt;li&gt;ラズパイ固定用・両メススペーサー M2.6（7mm）４個&lt;/li&gt;
+&lt;li&gt;アクリル板固定・ネジ M3（8mm）8本&lt;/li&gt;
+&lt;li&gt;アクリル板固定・両メススペーサー M3（30mm） 4本&lt;/li&gt;
+&lt;li&gt;アクリル（今回は厚さ3mmのもの）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;アクリルはケースのサイズ分あればOKですが、A4サイズが扱いやすくオススメです！&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/142/parts.png&#34; alt=&#34;&#34; /&gt;
+デザインによりけりですが、上をデザインアクリル、下をクリアアクリルで作成した場合1,600円ほどで作れることができました！&lt;/p&gt;
+
+&lt;h2 id=&#34;作り方&#34;&gt;作り方&lt;/h2&gt;
+
+&lt;h3 id=&#34;step1-型の準備&#34;&gt;step1. 型の準備&lt;/h3&gt;
+
+&lt;p&gt;Illustratorでアクリルの型データをパスで作ります。Illustratorをお持ちでない方はレーザーカッターと合わせて貸してくれるfabスペースもあるので探してみてください！&lt;/p&gt;
+
+&lt;p&gt;ラズパイの実寸を測りながら、上蓋と下蓋、ネジ穴をそれぞれ型どります。&lt;a href=&#34;https://drive.google.com/open?id=1_jcM5kPaZ1AGNdrkMTUWEc8vrxDtU1-Y&#34;&gt;&lt;strong&gt;こちらのaiデータ&lt;/strong&gt;&lt;/a&gt;をそのまま使うこともできます。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/142/6.png&#34; alt=&#34;&#34; /&gt;
+左：下蓋 / 右：上蓋
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;カメラとGPIOがそのまま使えるようしたいので、実寸に少し余裕をもたせて追加します。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;カメラ：幅0.9mm × 高さ28mm&lt;/li&gt;
+&lt;li&gt;GPIO：幅55mm × 高さ12mm&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/142/7.png&#34; alt=&#34;&#34; /&gt;
+上蓋にカメラとGPIOの部分を追加
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;レーザーカッターには切る順番があり、「&lt;strong&gt;彫刻 → 穴 → 切り落とし&lt;/strong&gt;」の順番になります。データもレーザーカッターが切る順番を認識できるように、最初に切る線を赤で、次に切る線を青という風に分けて作ります。&lt;/p&gt;
+
+&lt;p&gt;これはレーザーカッターの機械によってルールが異なるので、お店の人に確認してみてください！&lt;/p&gt;
+
+&lt;h3 id=&#34;step2-アクリルを裁断&#34;&gt;step2. アクリルを裁断&lt;/h3&gt;
+
+&lt;p&gt;今回は彫刻作業はないので最初にネジ穴とカメラの穴から切り、続いて外枠を切り落とします。切った穴は熱でくっついて外れなくなってしまうので、早めに外しましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/142/8.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;step3-組み立てる&#34;&gt;step3. 組み立てる&lt;/h3&gt;
+
+&lt;p&gt;まず下の蓋とラズパイを固定します。短い方のスペーサーを下蓋にM2.6のネジで固定します。ラズパイを乗せ、上からもM2.6のネジで固定します。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/142/9.png&#34; alt=&#34;&#34; /&gt;
+短いスペーサーでラズパイを下蓋に固定
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;次に長い方のスペーサーをM3のネジで下蓋に固定し、上蓋を乗せて上からも固定します。&lt;/p&gt;
+
+&lt;h3 id=&#34;完成&#34;&gt;完成&lt;/h3&gt;
+
+&lt;p&gt;自分だけのラズパイケースが完成しました！カメラもGPIOも問題なく使えますよ〜！
+&lt;img src=&#34;https://dotstud.io/img/blog/142/10.png&#34; alt=&#34;&#34; /&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/142/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/142/12.png&#34; alt=&#34;&#34; /&gt;
+アクリルとパーツを選ぶだけで、ケースの雰囲気はずいぶんと変わります！枠線さえ作ればばあとはすんなりと進めますので、ぜひぜひ試してみてください。&lt;/p&gt;
+
+&lt;p&gt;日替わりで変えられるくらいケースを作りすぎてしまいましたが、&lt;strong&gt;どこに連れて行ってもかわいいと言ってもらえる&lt;/strong&gt;ので作りがいがありました。何より愛着がわきますね〜！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Nefry BT（ESP32）でMQTTを使ってみよう Subscribe編</title>
       <link>https://dotstud.io/blog/nefry-bt-connect-mqtt/</link>
       <pubDate>Sat, 06 Jan 2018 14:28:04 +0900</pubDate>
       
@@ -24,6 +560,8 @@
 &lt;p&gt;Nefry BTを使ってMQTTを利用する方法を紹介します。&lt;/p&gt;
 
 &lt;p&gt;今回はMQTTでNefry BTに情報を送信してみます。&lt;/p&gt;
+
+&lt;p&gt;ほぼESP32のコードなので、ESP32系の他のボードを利用している人の参考にもなると思います。&lt;/p&gt;
 
 &lt;h2 id=&#34;mqttの登場人物&#34;&gt;MQTTの登場人物&lt;/h2&gt;
 
@@ -2259,147 +2797,6 @@ draw(&#39;init&#39;); //初期実行
 &lt;p&gt;Nefry BTとNode.jsを使ってネットワークカメラを作ることができました。&lt;/p&gt;
 
 &lt;p&gt;GroveのカメラとNefry V2を使って過去に&lt;a href=&#34;https://am-our.com/love/110/13945/&#34;&gt;【大島薫×IoT】浮気男を社会的に制裁するマシーンを作ってみた&lt;/a&gt;こともありましたが、ネットワークカメラを作りたい需要はそこそこあると思うので、その際の参考になれば幸いです。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>【報告】セゾン情報システムズでIoT研修として体験会を行いました</title>
-      <link>https://dotstud.io/blog/saison-iot-course-report/</link>
-      <pubDate>Fri, 15 Sep 2017 14:52:26 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/saison-iot-course-report/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、ちゃちゃまるです。先日、セゾン情報システムズさんにてIoT体験会を開かせていただきました。&lt;/p&gt;
-
-&lt;p&gt;当日の概要や雰囲気をレポートします！
-&lt;img src=&#34;https://dotstud.io/img/blog/121/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;要望に沿ったカリキュラムを作成&#34;&gt;要望に沿ったカリキュラムを作成&lt;/h2&gt;
-
-&lt;p&gt;今回のIoT体験会開催を進めてくださったのは、IoTLTでも良くお話をしてくださる松岡さん！事前に伺った「&lt;strong&gt;IoTの楽しさを社内に広めて、新しいことに挑むモチベーションを高めたい&lt;/strong&gt;」という要望に沿ってカリキュラムを作成しました。&lt;/p&gt;
-
-&lt;p&gt;まずは兎にも角にも楽しんでもらうということで、マイコンボードとセンサーを使って色々な仕組みを作っていく体験会にしました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/121/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;二時間のお手軽カリキュラム&#34;&gt;二時間のお手軽カリキュラム&lt;/h2&gt;
-
-&lt;p&gt;最初30分は座学で、IoTの事例の紹介やWeb技術の話などをしました。&lt;/p&gt;
-
-&lt;p&gt;その後は実際にマイコンボードとセンサーやLEDなどを使い、配線とプログラミングを実践しました。今回はとりあえずIoTに向け第一歩を、ということだったので、インターネットには繋げず電子工作のみのハンズオンとなっています。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/121/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;使用したのは-gravity&#34;&gt;使用したのは「Gravity」&lt;/h2&gt;
-
-&lt;p&gt;今回使用したのはDFRobot社製の「Gravityシリーズ」。Gravityとはマイコンボードとセンサー等を繋ぐコネクタ規格で、これにより難しい配線知識無しで電子工作を行うことができます。
-&lt;img src=&#34;https://dotstud.io/img/blog/121/gravity.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;電子工作やプログラミングが初めての方もいましたが、サポートをしつつ順調に進めることができました。
-&lt;img src=&#34;https://dotstud.io/img/blog/121/4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;二時間と短い時間ではありましたが、全員が記事の最後まで到達することができました。余裕がある人向けに用意した追加課題もクリアした方もちらほら。楽しかったという声をたくさんいただけたので、何らかのモチベーションに繋がっていれば幸いです。&lt;/p&gt;
-
-&lt;p&gt;弊社ではこのような研修を企業や大学に向けて行っています。ご興味のある方は、ぜひお問い合わせください！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>流通科学大学にて高校生向けIoT講習会を実施しました！</title>
-      <link>https://dotstud.io/blog/ryuka-iot-handson-report/</link>
-      <pubDate>Wed, 13 Sep 2017 14:55:22 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/ryuka-iot-handson-report/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、のびすけです。&lt;/p&gt;
-
-&lt;p&gt;dotstudioではここ最近大学生や高校生向けにIoT講習会を実施していますが、&lt;strong&gt;今回は初の神戸&lt;/strong&gt;での開催でした。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/668dd83eb46c3ed82dcf47c8a6d2a98d.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;既に掲載されているレポートもあるのでご参照下さい！&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://www.umds.ac.jp/news/2017/0824_01.html&#34;&gt;【高大連携事業】上田ゼミ　「LINE×IoT」をテーマにワークショップを実施&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.facebook.com/mayumiueda.lab/posts/3471027566252228&#34;&gt;上田ゼミレポート&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;流通科学大学&#34;&gt;流通科学大学&lt;/h2&gt;
-
-&lt;p&gt;兵庫県神戸市西区に本部を置く私立大学です。大学の略称は流科大、流通科学、RYUKA、UMDSなどがあるようです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/1ef21a086ccf64a78ee0b40f5ed18015.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ダイエーグループ創始者が設立した大学で、学内にはダイエーホークス（現ソフトバンクホークス）の王貞治さんのユニホームが飾ってあったのが印象的でした。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://www.umds.ac.jp/&#34;&gt;流通科学大学公式HP&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://ja.wikipedia.org/wiki/%E6%B5%81%E9%80%9A%E7%A7%91%E5%AD%A6%E5%A4%A7%E5%AD%A6&#34;&gt;流通科学大学Wikipedia&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;高大連携の一環として高校生向けに講習を実施&#34;&gt;高大連携の一環として高校生向けに講習を実施&lt;/h2&gt;
-
-&lt;p&gt;大学ではオープンキャンパスなどを実施して、高校生向けに大学の紹介をしたりしますが、似たような文脈で流通科学大学では大学での取り組みを高校生向けに体験させる高大連携という取り組みを行なっています。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/327c8954b0e6050860f8bd09764fcf64.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;この日、流通科学大学に来たのは&lt;a href=&#34;http://www.hyogo-c.ed.jp/~hikami-hs/&#34;&gt;兵庫県立氷上高等学校&lt;/a&gt;の学生さんたちです。&lt;/p&gt;
-
-&lt;p&gt;今回は僕が大学時代から大変お世話になっている&lt;a href=&#34;https://www.facebook.com/mayumiueda.lab/&#34;&gt;上田先生&lt;/a&gt;にお声がけ頂き、開催することができました。&lt;/p&gt;
-
-&lt;h2 id=&#34;wionode-line-bot&#34;&gt;WioNode + LINE BOT&lt;/h2&gt;
-
-&lt;p&gt;内容は&lt;a href=&#34;http://www.aim.aoyama.ac.jp/info/lect/6889/?cat=18&#34;&gt;青山学院大学で実施した内容&lt;/a&gt;と同様でWioNodeとLINE BOTを使ったワークショップです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/fca6cefaa997d7f97515d2efcfbf02e9.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;始めて触る機器たちに高校生たちは戸惑いながらも、上田先生やゼミの学生さん（大学生）がサポートしてくれてスムーズに進めることができました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/ba47706bb7a75016572f0902ee699ccf.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;前半のIoT概論的な座学は学生さんの反応が薄くて戸惑いましたが、ハンズオンに入ってからはすごく反応がよく、LINEでセンサーの測定結果が届くと高校生から「凄い！面白い！」といった声が上がりました。&lt;/p&gt;
-
-&lt;p&gt;やはりLINEをやっている人は100%で、FacebookやTwitterと比べて若年層の普及率が圧倒的でした。高校生や大学生向けにはしばらくはLINEが使えるなと再認識です。&lt;/p&gt;
-
-&lt;h2 id=&#34;アイディアワークショップ&#34;&gt;アイディアワークショップ&lt;/h2&gt;
-
-&lt;p&gt;最後に今回体験した内容をもとにアイディアワークショップ。&lt;/p&gt;
-
-&lt;p&gt;今回のテーマは上田先生から提示して頂いた &lt;strong&gt;「お年寄りを助ける」&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;3人人組みでディスカッションしてお年寄りの課題をIoTでどう解決できるかを考えます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/80f77bc1abd75471d0c7ab798a36f77d.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;最後に全チームから発表してもらい、表彰までを行いました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/d87d47fa6d6f00f1365e45d2c0315a05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;色々なアイディアが出たのですが、個人的には枕にセンサーを仕込んで寝相などで健康管理や見守りを行う&lt;strong&gt;IoT枕&lt;/strong&gt;が好きでした。&lt;/p&gt;
-
-&lt;p&gt;他の機会でもこういったワークショップはやるのですが、アンケートを取るとアイディアワークショップが特に楽しいという意見が多く、&lt;strong&gt;ハンズオンで手を動かすだけよりも自分たちで考える時間を取る&lt;/strong&gt;ことも重要だなと思っています。&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://www.facebook.com/sugawara.ryousuke/posts/1645855885449406&#34;&gt;こんな感じ&lt;/a&gt;で高校生向けに講習会を実施してきました。&lt;/p&gt;
-
-&lt;p&gt;普段は関東圏でしか活動できてないので西側での活動ももっと増やしていきたいですね。&lt;/p&gt;
-
-&lt;p&gt;dotstudioでは教育機関や企業向けのIoT研修、講習などを実施していますので、気になる方がいたら是非お問い合わせください！&lt;/p&gt;
-
-&lt;p&gt;こちらも合わせて見ていただけると幸いです。&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/aogaku-iot-course-report/&#34;&gt;【報告】青山学院大学でIoT体験講習会を開催しました。&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;それでは！&lt;/p&gt;
 </description>
     </item>
     
