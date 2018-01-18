@@ -77,35 +77,35 @@
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
+    <meta name="description" content="電子工作を始める際に共通して使われるArduino。Arduinoのコードの基本的な部分を解説します。">
     <meta name="author" content="dotstudio Inc.">
     <meta content="https://dotstud.io/img/docs/%!s(&lt;nil&gt;)/00_eyecatch.png">
 
-    <meta itemprop="name" content="マイコンボード | dotstudio"/>
+    <meta itemprop="name" content="Arduino言語の基本コード | dotstudio"/>
     <meta itemprop="image" content="https://dotstud.io/img/docs/%!s(&lt;nil&gt;)/00_eyecatch.png"/>
     
-    <meta property="og:title" content="マイコンボード | dotstudio" />
+    <meta property="og:title" content="Arduino言語の基本コード | dotstudio" />
     <meta property="og:locale" content="ja_JP" />
     <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://dotstud.io/docs/microcon/" />
+    <meta property="og:url" content="https://dotstud.io/docs/arduino-basic-code/" />
     <meta property="og:site_name" content="dotstudio（ドットスタジオ）" />
     <meta property="og:image" content="https://dotstud.io/img/docs/%!s(&lt;nil&gt;)/00_eyecatch.png" />
     <meta property="og:image:secure_url" content="https://dotstud.io/img/docs/%!s(&lt;nil&gt;)/00_eyecatch.png" />
-    <meta property="og:description" content="" />
+    <meta property="og:description" content="電子工作を始める際に共通して使われるArduino。Arduinoのコードの基本的な部分を解説します。" />
     <meta property="article:author" content="https://www.facebook.com/dotstud10/" />
     <meta property="fb:app_id" content="296336307370435" />
     <meta property="fb:pages" content="1013196712108753" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image:src" content="https://dotstud.io/img/docs/%!s(&lt;nil&gt;)/00_eyecatch.png">
     <meta name="twitter:site" content="@dotstud_io" />
-    <meta name="twitter:url" content="https://dotstud.io/docs/microcon/">
-    <meta name="twitter:description" content="">
-    <meta name="twitter:title" content="マイコンボード | dotstudio">
+    <meta name="twitter:url" content="https://dotstud.io/docs/arduino-basic-code/">
+    <meta name="twitter:description" content="電子工作を始める際に共通して使われるArduino。Arduinoのコードの基本的な部分を解説します。">
+    <meta name="twitter:title" content="Arduino言語の基本コード | dotstudio">
     <meta name="twitter:creator" content="@dotstud_io" />
 
     
     <meta name="google-site-verification" content="oW2fcSG1fFnkDoRCGFJ0IGGebtBr8FjV2twoFMd7Skc" />
-    <title>マイコンボード | dotstudio</title>
+    <title>Arduino言語の基本コード | dotstudio</title>
     
 
     <link rel="stylesheet" href="/css/loader.css">
@@ -455,7 +455,7 @@
             
             
                     
-                        <li class="selected"><a href="https://dotstud.io/docs/microcon/">マイコンボード</a></li>
+                        <li ><a href="https://dotstud.io/docs/microcon/">マイコンボード</a></li>
                     
             
         
@@ -651,7 +651,7 @@
             
             
                     
-                        <li ><a href="https://dotstud.io/docs/arduino-basic-code/">Arduino言語の基本コード</a></li>
+                        <li class="selected"><a href="https://dotstud.io/docs/arduino-basic-code/">Arduino言語の基本コード</a></li>
                     
             
         
@@ -1435,114 +1435,27 @@
 
   <div class="main">
     <div class="title">
-      <h1 class="jp">マイコンボード</h1>
+      <h1 class="jp">Arduino言語の基本コード</h1>
       <div class="line"></div>
-      <span class="en">Microcontroller Board</span>
+      <span class="en">Arduino basic code</span>
     </div>
 
     <img class="eyecatch" src="" alt="">
 
-    <div class="content markdown">
-
-<p>マイコンボードとは、マイクロコンピュータ（マイコン）と入出力回路などの周辺回路を1枚の基板に乗せ、手軽にマイコンを利用するための回路です。</p>
-
-<p>一昔前は、主に小型・低価格のマイコンを積んだものを指していました。</p>
-
-<p>最近では広義な意味でのマイコンボードとして、ArduinoやRaspberry Piなど、スマートフォンと同様の高性能なCPUを積んでいるものを含みます。</p>
-
-<h2 id="構成要素">構成要素</h2>
-
-<p>ボードによって異なりますが、マイコンボードにはマイコンを動かすための最低限の機能が備わっています。</p>
-
-<h3 id="cpu">CPU</h3>
-
-<p>プログラムを動かす部分です。</p>
-
-<p>入出力PINやメモリなどを１個のICに集積したマイコンを使用している物が主でしたが、最近では高性能なCPUを使用しているボードも多くあります。</p>
-
-<h3 id="メモリ">メモリ</h3>
-
-<h4 id="rom-read-only-memory">ROM（Read Only Memory）</h4>
-
-<p>読み込み専用のメモリです。プログラムの格納や、プログラム内の定数を保存しておくのに利用され、 <strong>電源が切れてもデータは残ります。</strong></p>
-
-<h4 id="ram-random-access-memory">RAM（Random Access Memory）</h4>
-
-<p>読み書きが可能なメモリです。プログラムの変数を格納するのに利用され、 <strong>電源が切れるとデータは消えてしまいます。</strong></p>
-
-<h3 id="周辺回路">周辺回路</h3>
-
-<p>電源やクロック回路など、CPUと組み合わせて利用する回路のことです。</p>
-
-<p>アナログ-デジタル変換やデジタル-アナログ変換、クロック、UARTなどのよく利用する機能はCPUに内蔵されている事が多く、「内蔵ペリフェラル」と呼ばれます。</p>
-
-<h3 id="ネットワークインターフェース">ネットワークインターフェース</h3>
-
-<p>マイコンボードが、外部の回路や他の機器との通信を行うためのインターフェースです。</p>
-
-<p>仕組みや構造はそれぞれの章を参照してください。</p>
+    <div class="content markdown"><p>Arduinoのコードの基本です。</p>
 
 <ul>
-<li><a href="https://dotstud.io/docs/serial/">シリアル通信</a></li>
-<li>USBケーブル [WIP]</li>
-<li>イーサネット [WIP]</li>
+<li>setup関数: プログラムの起動時にのみ呼ばれます。</li>
+<li>loop関数: プログラムが起動してからずっと繰り返し呼ばれます。</li>
 </ul>
 
-<h3 id="gpio">GPIO</h3>
-
-<p>センサやLEDなどとCPU間の信号のやり取りを行うための、汎用的な入出力ピンのことです。</p>
-
-<p>マイコンボードによっては、１つのピンにGPIOと内蔵ペリフェラルの複数の機能を割り当てていることがあります。</p>
-
-<p>排他的な利用となりピン数がたりなくなることもあるため、 <strong>実現したい機能に応じたマイコンボードを用意することが大切です。</strong></p>
-
-<h2 id="マイコンボードの分類">マイコンボードの分類</h2>
-
-<h3 id="安価でosが乗らない単機能なマイコンボード">安価でOSが乗らない単機能なマイコンボード</h3>
-
-<blockquote>
-<p>例：Arduino、mbed、ESPer、Nefry、WioNodeなど</p>
-</blockquote>
-
-<p>安いCPU（マイコン）を搭載しており、OSは乗っておらず、独自言語でプログラミングをします。</p>
-
-<p>電源を入れるとマイコンに書き込まれているプログラムが自動的に起動します。</p>
-
-<p>シリアル通信は簡単ですが、TCP/IPやUDP/IPといったIP通信は難易度が上がります。</p>
-
-<p>しかし最近では、ESPerというWi-Fiモジュールが出て無線LANやBluetoothが容易に扱えるため、人気になっています。</p>
-
-<p><strong>電飾系やモータを回すといった単機能な用途</strong> に向いています。</p>
-
-<h3 id="比較的高価でosが乗る多機能なマイコンボード">比較的高価でOSが乗る多機能なマイコンボード</h3>
-
-<blockquote>
-<p>例：Raspberry Pi、DragonBoardなど</p>
-</blockquote>
-
-<p>高機能なCPUを搭載しており、LinuxやWindows 10 IoT Coreなど様々なOSが動きます。</p>
-
-<p>「シングルボードコンピュータ」とも呼ばれることもあります。</p>
-
-<p>ディスプレイ出力、USBや無線LANといったリッチな外部通信I/Fを備えています。</p>
-
-<p><strong>複雑で多機能な用途</strong> に向いています。</p>
-
-<h2 id="使い方">使い方</h2>
-
-<p>dotstudioで販売しているマイコンボードなどの使い方は、それぞれの章を参照してみてください。</p>
-
-<ul>
-<li><a href="https://dotstud.io/docs/nefry/">Nefry</a></li>
-<li>WIO Node [WIP]</li>
-<li>Seeeduino v4.2 [WIP]</li>
-</ul>
+<p><img src="https://i.gyazo.com/af1083cf310bb9c44aba07799433a109.png" alt="" /></p>
 </div>
 
     <div class="information">
-      <span>Last edited on 2017.02.14 by</span>
-      <a href="/members/iwata_n">
-        <img src="/img/members/iwata_n/author.png" alt=""><span>いわたん</span>
+      <span>Last edited on 2018.01.18 by</span>
+      <a href="/members/n0bisuke">
+        <img src="/img/members/n0bisuke/author.png" alt=""><span>のびすけ</span>
       </a>
     </div>
     <div id="fb-root"></div>
@@ -1559,12 +1472,12 @@
     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 
     &nbsp;
-    <div class="fb-like" data-href="https://dotstud.io/docs/microcon/" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
+    <div class="fb-like" data-href="https://dotstud.io/docs/arduino-basic-code/" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
 
     &nbsp;
 
     <div class="hatena-b">
-      <a href="http://b.hatena.ne.jp/entry/s/dotstud.io/blog/microcon" class="hatena-bookmark-button" data-hatena-bookmark-title="マイコンボード" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
+      <a href="http://b.hatena.ne.jp/entry/s/dotstud.io/blog/arduino-basic-code" class="hatena-bookmark-button" data-hatena-bookmark-title="Arduino言語の基本コード" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
         <img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" />
       </a>
       <script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
@@ -1578,115 +1491,28 @@
 <div class="sp-docs-single">
   <div class="main">
     <div class="title">
-      <h1 class="jp">マイコンボード</h1>
+      <h1 class="jp">Arduino言語の基本コード</h1>
       <div class="line"></div>
-      <span class="en">Microcontroller Board</span>
+      <span class="en">Arduino basic code</span>
     </div>
 
     <img class="eyecatch" src="" alt="">
 
-    <div class="content markdown">
-
-<p>マイコンボードとは、マイクロコンピュータ（マイコン）と入出力回路などの周辺回路を1枚の基板に乗せ、手軽にマイコンを利用するための回路です。</p>
-
-<p>一昔前は、主に小型・低価格のマイコンを積んだものを指していました。</p>
-
-<p>最近では広義な意味でのマイコンボードとして、ArduinoやRaspberry Piなど、スマートフォンと同様の高性能なCPUを積んでいるものを含みます。</p>
-
-<h2 id="構成要素">構成要素</h2>
-
-<p>ボードによって異なりますが、マイコンボードにはマイコンを動かすための最低限の機能が備わっています。</p>
-
-<h3 id="cpu">CPU</h3>
-
-<p>プログラムを動かす部分です。</p>
-
-<p>入出力PINやメモリなどを１個のICに集積したマイコンを使用している物が主でしたが、最近では高性能なCPUを使用しているボードも多くあります。</p>
-
-<h3 id="メモリ">メモリ</h3>
-
-<h4 id="rom-read-only-memory">ROM（Read Only Memory）</h4>
-
-<p>読み込み専用のメモリです。プログラムの格納や、プログラム内の定数を保存しておくのに利用され、 <strong>電源が切れてもデータは残ります。</strong></p>
-
-<h4 id="ram-random-access-memory">RAM（Random Access Memory）</h4>
-
-<p>読み書きが可能なメモリです。プログラムの変数を格納するのに利用され、 <strong>電源が切れるとデータは消えてしまいます。</strong></p>
-
-<h3 id="周辺回路">周辺回路</h3>
-
-<p>電源やクロック回路など、CPUと組み合わせて利用する回路のことです。</p>
-
-<p>アナログ-デジタル変換やデジタル-アナログ変換、クロック、UARTなどのよく利用する機能はCPUに内蔵されている事が多く、「内蔵ペリフェラル」と呼ばれます。</p>
-
-<h3 id="ネットワークインターフェース">ネットワークインターフェース</h3>
-
-<p>マイコンボードが、外部の回路や他の機器との通信を行うためのインターフェースです。</p>
-
-<p>仕組みや構造はそれぞれの章を参照してください。</p>
+    <div class="content markdown"><p>Arduinoのコードの基本です。</p>
 
 <ul>
-<li><a href="https://dotstud.io/docs/serial/">シリアル通信</a></li>
-<li>USBケーブル [WIP]</li>
-<li>イーサネット [WIP]</li>
+<li>setup関数: プログラムの起動時にのみ呼ばれます。</li>
+<li>loop関数: プログラムが起動してからずっと繰り返し呼ばれます。</li>
 </ul>
 
-<h3 id="gpio">GPIO</h3>
-
-<p>センサやLEDなどとCPU間の信号のやり取りを行うための、汎用的な入出力ピンのことです。</p>
-
-<p>マイコンボードによっては、１つのピンにGPIOと内蔵ペリフェラルの複数の機能を割り当てていることがあります。</p>
-
-<p>排他的な利用となりピン数がたりなくなることもあるため、 <strong>実現したい機能に応じたマイコンボードを用意することが大切です。</strong></p>
-
-<h2 id="マイコンボードの分類">マイコンボードの分類</h2>
-
-<h3 id="安価でosが乗らない単機能なマイコンボード">安価でOSが乗らない単機能なマイコンボード</h3>
-
-<blockquote>
-<p>例：Arduino、mbed、ESPer、Nefry、WioNodeなど</p>
-</blockquote>
-
-<p>安いCPU（マイコン）を搭載しており、OSは乗っておらず、独自言語でプログラミングをします。</p>
-
-<p>電源を入れるとマイコンに書き込まれているプログラムが自動的に起動します。</p>
-
-<p>シリアル通信は簡単ですが、TCP/IPやUDP/IPといったIP通信は難易度が上がります。</p>
-
-<p>しかし最近では、ESPerというWi-Fiモジュールが出て無線LANやBluetoothが容易に扱えるため、人気になっています。</p>
-
-<p><strong>電飾系やモータを回すといった単機能な用途</strong> に向いています。</p>
-
-<h3 id="比較的高価でosが乗る多機能なマイコンボード">比較的高価でOSが乗る多機能なマイコンボード</h3>
-
-<blockquote>
-<p>例：Raspberry Pi、DragonBoardなど</p>
-</blockquote>
-
-<p>高機能なCPUを搭載しており、LinuxやWindows 10 IoT Coreなど様々なOSが動きます。</p>
-
-<p>「シングルボードコンピュータ」とも呼ばれることもあります。</p>
-
-<p>ディスプレイ出力、USBや無線LANといったリッチな外部通信I/Fを備えています。</p>
-
-<p><strong>複雑で多機能な用途</strong> に向いています。</p>
-
-<h2 id="使い方">使い方</h2>
-
-<p>dotstudioで販売しているマイコンボードなどの使い方は、それぞれの章を参照してみてください。</p>
-
-<ul>
-<li><a href="https://dotstud.io/docs/nefry/">Nefry</a></li>
-<li>WIO Node [WIP]</li>
-<li>Seeeduino v4.2 [WIP]</li>
-</ul>
+<p><img src="https://i.gyazo.com/af1083cf310bb9c44aba07799433a109.png" alt="" /></p>
 </div>
 
     <div class="information">
-      <p>Last edited on 2017.02.14</p>
-      <a href="/members/iwata_n">
+      <p>Last edited on 2018.01.18</p>
+      <a href="/members/n0bisuke">
         <span>by</span>
-        <img src="/img/members/iwata_n/author.png" alt=""><span class="author">いわたん</span>
+        <img src="/img/members/n0bisuke/author.png" alt=""><span class="author">のびすけ</span>
       </a>
     </div>
     <div id="fb-root"></div>
@@ -1703,12 +1529,12 @@
     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 
     &nbsp;
-    <div class="fb-like" data-href="https://dotstud.io/docs/microcon/" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
+    <div class="fb-like" data-href="https://dotstud.io/docs/arduino-basic-code/" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
 
     &nbsp;
 
     <div class="hatena-b">
-      <a href="http://b.hatena.ne.jp/entry/s/dotstud.io/blog/microcon" class="hatena-bookmark-button" data-hatena-bookmark-title="マイコンボード" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
+      <a href="http://b.hatena.ne.jp/entry/s/dotstud.io/blog/arduino-basic-code" class="hatena-bookmark-button" data-hatena-bookmark-title="Arduino言語の基本コード" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
         <img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" />
       </a>
       <script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
@@ -1942,7 +1768,7 @@
             
             
                     
-                        <li class="selected"><a href="https://dotstud.io/docs/microcon/">マイコンボード</a></li>
+                        <li ><a href="https://dotstud.io/docs/microcon/">マイコンボード</a></li>
                     
             
         
@@ -2138,7 +1964,7 @@
             
             
                     
-                        <li ><a href="https://dotstud.io/docs/arduino-basic-code/">Arduino言語の基本コード</a></li>
+                        <li class="selected"><a href="https://dotstud.io/docs/arduino-basic-code/">Arduino言語の基本コード</a></li>
                     
             
         
