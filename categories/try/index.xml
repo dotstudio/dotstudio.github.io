@@ -461,14 +461,14 @@ const discovered = (peripheral) =&amp;gt; {
         noble.stopScanning();
         console.log(&#39;device found&#39;);
         console.log(`service discover...`);
-        
+
         peripheral.connect(error =&amp;gt; {
             if (error) {
                 console.log(&amp;quot;connection error:&amp;quot;, error)
             } else {
                 console.log(&amp;quot;device connected&amp;quot;);
             }
-            
+
             peripheral.discoverServices([],(err, services) =&amp;gt; {
                 if (error) {
                     console.log(&amp;quot;discover service error&amp;quot;, error)
@@ -875,7 +875,7 @@ void loop() {
       errorReport();
     }
   }
-  
+
   mqttClient.loop();
 }
 
@@ -891,7 +891,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
 void errorReport(){
   Serial.print(&amp;quot;Failed. Error state = &amp;quot;);
-  
+
   switch (mqttClient.state()) {
     case MQTT_CONNECT_UNAUTHORIZED:
       Serial.println(&amp;quot;MQTT_CONNECT_UNAUTHORIZED&amp;quot;);
@@ -924,7 +924,7 @@ void errorReport(){
       Serial.println(&amp;quot;MQTT_CONNECTION_TIMEOUT&amp;quot;);
       break;
   }
-      
+
   delay(5000); // Wait 5 seconds before retrying
 }
 &lt;/code&gt;&lt;/pre&gt;
@@ -1648,9 +1648,9 @@ app.post(&#39;/&#39;, (req, res) =&amp;gt; {
         console.log(`[done] Image Save`);
         io.sockets.emit(&#39;new image&#39;,base64image); //画像送信
     });
-    
+
 });
- 
+
 http.listen(PORT, () =&amp;gt; console.log(`listening on *:${PORT}`));
 &lt;/code&gt;&lt;/pre&gt;
 

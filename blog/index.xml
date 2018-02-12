@@ -591,14 +591,14 @@ const discovered = (peripheral) =&amp;gt; {
         noble.stopScanning();
         console.log(&#39;device found&#39;);
         console.log(`service discover...`);
-        
+
         peripheral.connect(error =&amp;gt; {
             if (error) {
                 console.log(&amp;quot;connection error:&amp;quot;, error)
             } else {
                 console.log(&amp;quot;device connected&amp;quot;);
             }
-            
+
             peripheral.discoverServices([],(err, services) =&amp;gt; {
                 if (error) {
                     console.log(&amp;quot;discover service error&amp;quot;, error)
@@ -1005,7 +1005,7 @@ void loop() {
       errorReport();
     }
   }
-  
+
   mqttClient.loop();
 }
 
@@ -1021,7 +1021,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
 void errorReport(){
   Serial.print(&amp;quot;Failed. Error state = &amp;quot;);
-  
+
   switch (mqttClient.state()) {
     case MQTT_CONNECT_UNAUTHORIZED:
       Serial.println(&amp;quot;MQTT_CONNECT_UNAUTHORIZED&amp;quot;);
@@ -1054,7 +1054,7 @@ void errorReport(){
       Serial.println(&amp;quot;MQTT_CONNECTION_TIMEOUT&amp;quot;);
       break;
   }
-      
+
   delay(5000); // Wait 5 seconds before retrying
 }
 &lt;/code&gt;&lt;/pre&gt;

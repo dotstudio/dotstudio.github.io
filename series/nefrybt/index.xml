@@ -1,0 +1,1238 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Nefrybt on dotstudio（ドットスタジオ）</title>
+    <link>https://dotstud.io/series/nefrybt/</link>
+    <description>Recent content in Nefrybt on dotstudio（ドットスタジオ）</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>© 2016 dotstudio inc.</copyright>
+    <lastBuildDate>Thu, 08 Feb 2018 00:00:00 +0000</lastBuildDate>
+    <atom:link href="/series/nefrybt/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>JavaScriptで開発できる！Mongoose OSでNefry BTをLチカしよう</title>
+      <link>https://dotstud.io/blog/mongoose-os-nefry-blink/</link>
+      <pubDate>Thu, 08 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dotstud.io/blog/mongoose-os-nefry-blink/</guid>
+      
+      <description>
+
+&lt;p&gt;唐突ですが、森田(&lt;a href=&#34;https://twitter.com/morita_pac&#34;&gt;@morita_pac&lt;/a&gt;)と申します。&lt;/p&gt;
+
+&lt;p&gt;ヘビーNefryBTユーザです。持ち歩いていろんな場所でNefry BTを利用したり、ケースを作ったりもしています。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/145/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;通常Nefry BTはArduino言語でプログラムするのですが、今回はJavaScriptで書き込めるようにしたいと思います。&lt;/p&gt;
+
+&lt;p&gt;※この記事内のプログラムはNefy BT（無印）向けです。Nefry BT R2向けのプログラムは別途準備中です。&lt;/p&gt;
+
+&lt;h2 id=&#34;javascriptで開発できるmongoose-osとは&#34;&gt;JavaScriptで開発できるMongoose OSとは&lt;/h2&gt;
+
+&lt;p&gt;今回は&lt;a href=&#34;https://mongoose-os.com/&#34;&gt;Mongoose OS&lt;/a&gt;というIoTのプロト開発を簡単にできるサービスを利用します。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;a href=&#34;https://mongoose-os.com/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/145/2.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;
+▲ Mongoose OS公式サイト
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;Mongoose OSでは、ESP32やESP8266へJavaScript（&lt;a href=&#34;https://github.com/cesanta/mjs&#34;&gt;mJS&lt;/a&gt;）でコードを書き込めます。
+さらには、セキュアで、AWS IoTやGoogleのCloud IoT Coreなどとも連携設定がシンプルにできます。&lt;/p&gt;
+
+&lt;p&gt;Mongoose OSをインストールしている間は元のNefry BTのプログラムは利用できなくなります。（Arduino IDEで書き込むことですぐに戻せます。）&lt;/p&gt;
+
+&lt;h2 id=&#34;mongoose-osの開発環境をセットアップ&#34;&gt;Mongoose OSの開発環境をセットアップ&lt;/h2&gt;
+
+&lt;h3 id=&#34;windowsの場合&#34;&gt;Windowsの場合&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://mongoose-os.com/software.html&#34;&gt;Download Page&lt;/a&gt;から、exeをダウンロードするだけで使えます。（アンチウイルス系のソフトが反応するかもしれません。）なお、以降MacOSでの説明になります。
+&lt;img src=&#34;https://dotstud.io/img/blog/145/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;mac-osの場合&#34;&gt;Mac OSの場合&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://mongoose-os.com/software.html&#34;&gt;Download Page&lt;/a&gt;の、MacOS/Linuxのcurlコマンドをターミナルで実行します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ curl -fsSL https://mongoose-os.com/downloads/mos/install.sh | /bin/bash
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/145/4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ターミナルで以下のようになれば無事完了です。開く場合は、Runの&lt;code&gt;/xxx/.mos/bin/mos&lt;/code&gt;を実行するとWeb UIが開きます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ curl -fsSL https://mongoose-os.com/downloads/mos/install.sh | /bin/bash
+Downloading https://mongoose-os.com/downloads/mos-release/mac/mos ...
+########################################################################
+ 100.0%
+Installing into /xxx/.mos/bin/mos ...
+Adding /xxx/.mos/bin to your PATH in /xxx/.profile
+SUCCESS: /xxx/.mos/bin/mos is installed.
+Run &#39;/xxx/.mos/bin/mos --help&#39; to see all available commands.
+Run &#39;/xxx/.mos/bin/mos&#39; without arguments to start a simplified Web UI installer.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;いざ-mongoose-osをnefry-btに入れてみよう&#34;&gt;いざ、Mongoose  OSをNefry BTに入れてみよう&lt;/h2&gt;
+
+&lt;p&gt;Nefry BTをUSBポートに差し込み、Mongose OSとサンプルコードをFlashします。（次回起動時は、ポート選択のみで利用可能です。）&lt;/p&gt;
+
+&lt;p&gt;Mongoose OSのWeb UIは、ブラウザで開きます。①②③の設定が完了すれば無事、JavaScriptで書き込む準備完了です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/145/5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;①は、Nefry BTのポートを選択します。ポートが見つからない場合はUSBを認識させるための&lt;a href=&#34;https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers&#34;&gt;ドライバ&lt;/a&gt;をインストールする必要があります。
+②では、Platformで「esp32」とapp「demo-js」を選択し「Flash」ボタンをクリックし、処理が終わるまで待ちます。
+③では、Wi-fi設定を行います。（今回は必須ではないです。）
+全ての設定が完了したら、「Done」ボタンをおしてdevice setupを閉じます。&lt;/p&gt;
+
+&lt;h1 id=&#34;4-基本的なweb-uiとサンプルプログラム&#34;&gt;4. 基本的なWeb UIとサンプルプログラム&lt;/h1&gt;
+
+&lt;h3 id=&#34;web-uiについて&#34;&gt;Web UIについて&lt;/h3&gt;
+
+&lt;p&gt;まず、画面左側Device Filesを選択します。すると、init.jsが選択され、メインプログラムが表示されます。init.jsファイルをメインで編集します。&lt;/p&gt;
+
+&lt;p&gt;編集後、書き込みたい場合は、Save + Rebootボタンで行えます。このコードやファイルの情報は、端末から読んでいますので、コードを書き換えたら、書き込む前にバックアップを取っておくことをお勧めします。
+&lt;img src=&#34;https://dotstud.io/img/blog/145/6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;サンプルプログラムについて&#34;&gt;サンプルプログラムについて&lt;/h3&gt;
+
+&lt;p&gt;デフォルトプログラムを僕の感性でコメントしましたので、ご確認ください。なお、色々と制限付きのJSなので、仕様は&lt;a href=&#34;https://github.com/cesanta/mjs&#34;&gt;こちら&lt;/a&gt;で確認ください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js:init.js&#34;&gt;// 利用するAPIを読み出します。Flashした時点のサンプルAPIが呼ばれています。
+// 各APIの仕様やサンプルは画面左のファイル一覧で参照可能です。
+load(&#39;api_config.js&#39;);
+load(&#39;api_events.js&#39;);
+load(&#39;api_gpio.js&#39;);
+load(&#39;api_mqtt.js&#39;);
+load(&#39;api_net.js&#39;);
+load(&#39;api_sys.js&#39;);
+load(&#39;api_timer.js&#39;);
+
+// 変数宣言はletのみです。const, varは使えません。
+let led = Cfg.get(&#39;pins.led&#39;);
+let button = Cfg.get(&#39;pins.button&#39;);
+let topic = &#39;/devices/&#39; + Cfg.get(&#39;device.id&#39;) + &#39;/events&#39;;
+
+print(&#39;LED GPIO:&#39;, led, &#39;button GPIO:&#39;, button);
+
+let getInfo = function() {
+  return JSON.stringify({
+    total_ram: Sys.total_ram(),
+    free_ram: Sys.free_ram()
+  });
+};
+
+// 1秒おきにLEDをチカチカさせてます。ついでにチクタク時を刻んでいます。
+GPIO.set_mode(led, GPIO.MODE_OUTPUT);
+Timer.set(1000 /* 1 sec */, Timer.REPEAT, function() {
+  let value = GPIO.toggle(led);
+  print(value ? &#39;Tick&#39; : &#39;Tock&#39;, &#39;uptime:&#39;, Sys.uptime(), getInfo());
+}, null);
+
+// リセットボタンではない方のボタンを押すとMQTTでpublishします。
+GPIO.set_button_handler(button, GPIO.PULL_UP, GPIO.INT_EDGE_NEG, 200, function() {
+  let message = getInfo();
+  let ok = MQTT.pub(topic, message, 1);
+  print(&#39;Published:&#39;, ok, topic, &#39;-&amp;gt;&#39;, message);
+}, null);
+
+// ネットワークモニタです。
+Event.addGroupHandler(Net.EVENT_GRP, function(ev, evdata, arg) {
+  let evs = &#39;???&#39;;
+  if (ev === Net.STATUS_DISCONNECTED) {
+    evs = &#39;DISCONNECTED&#39;;
+  } else if (ev === Net.STATUS_CONNECTING) {
+    evs = &#39;CONNECTING&#39;;
+  } else if (ev === Net.STATUS_CONNECTED) {
+    evs = &#39;CONNECTED&#39;;
+  } else if (ev === Net.STATUS_GOT_IP) {
+    evs = &#39;GOT_IP&#39;;
+  }
+  print(&#39;== Net event:&#39;, ev, evs);
+}, null);
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;nefry-btのフルカラーledを点灯しよう&#34;&gt;Nefry BTのフルカラーLEDを点灯しよう&lt;/h2&gt;
+
+&lt;p&gt;やっと本題に入ります。&lt;/p&gt;
+
+&lt;p&gt;Mongoose OSでは、様々なオープンソースコードがあり、それをインポートすることができます。今回は、NefryBTのフルカラーLEDを点灯させるためにNeoPixelのサンプルコードを入手します。&lt;/p&gt;
+
+&lt;p&gt;画面左のProjectsを選択し、Importをクリックします。
+&lt;img src=&#34;https://dotstud.io/img/blog/145/7.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;App Managerのサーチ部分に「neopixel」と入力し、HARDWAREから「example-neopixel-js」をimportします。完了したらApp Managerの画面を閉じます。
+&lt;img src=&#34;https://dotstud.io/img/blog/145/8.png&#34; alt=&#34;&#34; /&gt;
+次に、サンプルプログラムをNefryBTに書き込みます。&lt;/p&gt;
+
+&lt;p&gt;今ImportしたAppが選択されていることを確認し、①Rebuildアイコンと②Flashアイコンを処理が完了次第、順番にクリックすることで書き込み完了です。（それぞれ少々時間がかかります。）
+&lt;img src=&#34;https://dotstud.io/img/blog/145/9.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Device Filesのinit.jsの内容を以下の内容に書き換えます。Nefry BTのボタンを押したらフルカラーLEDが点灯するという内容のプログラムです。&lt;/p&gt;
+
+&lt;p&gt;※なお、R2に関しては動作確認中ですので、確認次第内容を変更いたします。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js:init.js&#34;&gt;load(&#39;api_config.js&#39;);
+load(&#39;api_events.js&#39;);
+load(&#39;api_gpio.js&#39;);
+load(&#39;api_sys.js&#39;);
+load(&#39;api_timer.js&#39;);
+load(&#39;api_neopixel.js&#39;);
+
+// 今回は一部しか利用していませんが、NefryのピンNoです。
+let pin = {
+    &amp;quot;nefrybt&amp;quot;:{
+      &amp;quot;sw&amp;quot;: 4,
+      &amp;quot;d0&amp;quot;:22,
+      &amp;quot;d1&amp;quot;:21,
+      &amp;quot;d2&amp;quot;:23,
+      &amp;quot;d3&amp;quot;:19,
+      &amp;quot;d4&amp;quot;:18,
+      &amp;quot;a0&amp;quot;:25,
+      &amp;quot;a1&amp;quot;:26,
+      &amp;quot;a2&amp;quot;:32,
+      &amp;quot;a3&amp;quot;:33,
+      &amp;quot;a4&amp;quot;:27,
+      &amp;quot;a5&amp;quot;:14,
+      &amp;quot;a6&amp;quot;:13,
+      &amp;quot;a7&amp;quot;:35,
+      &amp;quot;LED&amp;quot;:16
+    },
+    &amp;quot;nefrybtR2&amp;quot;:{
+      &amp;quot;sw&amp;quot;: 4,
+      &amp;quot;d0&amp;quot;:22,
+      &amp;quot;d1&amp;quot;:21,
+      &amp;quot;d2&amp;quot;:23,
+      &amp;quot;d3&amp;quot;:19,
+      &amp;quot;d4&amp;quot;:18,
+      &amp;quot;d5&amp;quot;:25,
+      &amp;quot;d6&amp;quot;:26,
+      &amp;quot;d7&amp;quot;:13,
+      &amp;quot;d8&amp;quot;:14,
+      &amp;quot;a0&amp;quot;:33,
+      &amp;quot;a1&amp;quot;:32,
+      &amp;quot;a2&amp;quot;:39,
+      &amp;quot;a3&amp;quot;:36,
+      &amp;quot;LED&amp;quot;:16
+    }
+  };
+
+
+// フルカラーLEDのピンと個数、オーダーを指定しています。
+let Lpin = pin.nefrybt.LED, numPixels = 1, colorOrder = NeoPixel.GRB;
+
+// api_neopixel.jsに基づき初期化を行います。
+let strip = NeoPixel.create(Lpin, numPixels, colorOrder);
+strip.clear();
+strip.setPixel(0,0,0,0);
+strip.show();
+
+// ボタンを押したら赤色をつけます。setpixel(0,0,0,0)は、ピクセルナンバーとRGBになっています。Redの数字は20としていますが、数字をあげるとかなり明るくなります。
+// GPIO.set_button_handlerの仕様は、
+GPIO.set_button_handler(4, GPIO.PULL_UP, GPIO.INT_EDGE_NEG, 200, function() {
+    strip.clear();
+    strip.setPixel(0,20,0,0);
+    strip.show();
+}, null);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;困った時は&#34;&gt;困った時は&lt;/h2&gt;
+
+&lt;p&gt;Q. DeviceLogsにエラーがでている。&lt;/p&gt;
+
+&lt;p&gt;A. Mongoose OS画面右上のdevice setupより、ポートを選択し直してください。それでも治らない場合は、ターミナルにて、&lt;code&gt;control+c&lt;/code&gt;でMongoose OSを一度終わらせて、再起動をしてみてください。&lt;/p&gt;
+
+&lt;p&gt;それでもエラーが発生する場合は、一度Arduino IDEからNefry BTをボードに選択し、何も書いていないコードで書き込み直してください。なお、Nefry BTの状態に戻したい場合もArduino IDEから書き込むことで初期状態にもどせます。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;Nefry BTをJavaScriptでプログラムして、LEDを点灯させるところまでできました。&lt;/p&gt;
+
+&lt;p&gt;ディスプレイも表示させることができるので、次回は、Mongoose OSを使ったディスプレイの表示方法をご紹介しようと思います。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Nefry BT（ESP32）からBLEでNode.jsにデータを送ってみよう</title>
+      <link>https://dotstud.io/blog/nefrybt-ble-bluetooth-peripheral/</link>
+      <pubDate>Fri, 12 Jan 2018 23:58:16 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nefrybt-ble-bluetooth-peripheral/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、代表ののびすけ（&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;@n0bisuke&lt;/a&gt;）です。Nefry BTを使ってBluetooth / BLEを利用する方法を紹介します。&lt;/p&gt;
+
+&lt;p&gt;ほぼESP32のコードなので、検証してませんが他のESP32系のボードでも動作すると思います。&lt;/p&gt;
+
+&lt;h2 id=&#34;bleについて&#34;&gt;BLEについて&lt;/h2&gt;
+
+&lt;p&gt;BLEには大きく分け&lt;strong&gt;Peripheral （ペリフェラル）&lt;/strong&gt;と&lt;strong&gt;Central（セントラル）&lt;/strong&gt;という二つの役割があります。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Peripheral: 発信側端末、ビーコンやBLEタグなど受信端末に対して情報を送る側&lt;/li&gt;
+&lt;li&gt;Central: 受信側端末、iPhoneやMacなどBLEデバイスの情報を探して受け取る側&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/143/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Nefry BTは書き込むコードによって、PeripheralにもCentralにもなることができます。&lt;/p&gt;
+
+&lt;h2 id=&#34;環境&#34;&gt;環境&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Arduino IDE 1.8.5&lt;/li&gt;
+&lt;li&gt;Nefry ライブラリ 1.1.4&lt;/li&gt;
+&lt;li&gt;Nefry BT R2&lt;/li&gt;
+&lt;li&gt;macOS High Sierra&lt;/li&gt;
+&lt;li&gt;Node.js v9.2.0&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;peripheralの作成&#34;&gt;Peripheralの作成&lt;/h2&gt;
+
+&lt;p&gt;情報発信側のPeripheralをNefry BTで作成します。&lt;/p&gt;
+
+&lt;h3 id=&#34;uuidの作成&#34;&gt;UUIDの作成&lt;/h3&gt;
+
+&lt;p&gt;BLEを利用するためには&lt;strong&gt;SERVICE（サービス）&lt;/strong&gt;と&lt;strong&gt;CHARACTERISTIC（キャラクタリスティック）&lt;/strong&gt;という各機能を司るUUIDを設定する必要があります。プログラミングでいうクラスとメソッドの関係だと思うと良いかもしれません。&lt;/p&gt;
+
+&lt;p&gt;BLEデバイスは部屋の中やカフェ、駅などいたるところに存在するのでそれらのデバイスと自分が所持しているデバイスのIDが競合しないようにユニークな値にする必要があります。そこでUUIDを作成し、設定する必要があります。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.uuidgenerator.net/&#34;&gt;https://www.uuidgenerator.net/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/143/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;このサイトでUUIDが作成出きるので各自作成しましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;nefry-btのスケッチ&#34;&gt;Nefry BTのスケッチ&lt;/h3&gt;
+
+&lt;p&gt;大元のコードはnkolban氏の&lt;a href=&#34;https://github.com/nkolban/ESP32_BLE_Arduino/blob/f8fe9d7cdfb20caa54b70849826d1ac6e375ff78/examples/BLE_notify/BLE_notify.ino&#34;&gt;こちらのコード&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;#define SERVICE_UUID&lt;/code&gt;の箇所と&lt;code&gt;#define CHARACTERISTIC_UUID&lt;/code&gt;の箇所に先ほど作成したUUIDを指定します。&lt;/p&gt;
+
+&lt;p&gt;また&lt;code&gt;BLEDevice::init(&amp;quot;&amp;quot;);&lt;/code&gt;の箇所にBLEデバイスの名前を設定できます。
+以下のコードではNefryBT-n0bisukeという名前を指定しています。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;BLEDevice.h&amp;gt;
+#include &amp;lt;BLEServer.h&amp;gt;
+#include &amp;lt;BLEUtils.h&amp;gt;
+#include &amp;lt;BLE2902.h&amp;gt;
+
+BLECharacteristic *pCharacteristic;
+bool deviceConnected = false;
+uint8_t value = 0;
+
+// See the following for generating UUIDs:
+// https://www.uuidgenerator.net/
+
+#define SERVICE_UUID        &amp;quot;D5875408-FA51-4763-A75D-7D33CECEBC31&amp;quot;
+#define CHARACTERISTIC_UUID &amp;quot;A4F01D8C-A037-43B6-9050-1876A8C23584&amp;quot;
+
+class MyServerCallbacks: public BLEServerCallbacks {
+    void onConnect(BLEServer* pServer) {
+      deviceConnected = true;
+    };
+
+    void onDisconnect(BLEServer* pServer) {
+      deviceConnected = false;
+    }
+};
+
+void setup() {
+  Serial.begin(115200);
+
+  // Create the BLE Device
+  BLEDevice::init(&amp;quot;NefryBT-n0bisuke&amp;quot;);
+
+  // Create the BLE Server
+  BLEServer *pServer = BLEDevice::createServer();
+  pServer-&amp;gt;setCallbacks(new MyServerCallbacks());
+
+  // Create the BLE Service
+  BLEService *pService = pServer-&amp;gt;createService(SERVICE_UUID);
+
+  // Create a BLE Characteristic
+  pCharacteristic = pService-&amp;gt;createCharacteristic(
+                      CHARACTERISTIC_UUID,
+                      BLECharacteristic::PROPERTY_READ   |
+                      BLECharacteristic::PROPERTY_WRITE  |
+                      BLECharacteristic::PROPERTY_NOTIFY |
+                      BLECharacteristic::PROPERTY_INDICATE
+                    );
+
+  // https://www.bluetooth.com/specifications/gatt/viewer?attributeXmlFile=org.bluetooth.descriptor.gatt.client_characteristic_configuration.xml
+  // Create a BLE Descriptor
+  pCharacteristic-&amp;gt;addDescriptor(new BLE2902());
+
+  // Start the service
+  pService-&amp;gt;start();
+
+  // Start advertising
+  pServer-&amp;gt;getAdvertising()-&amp;gt;start();
+  Serial.println(&amp;quot;Waiting a client connection to notify...&amp;quot;);
+}
+
+void loop() {
+
+  if (deviceConnected) {
+    Serial.printf(&amp;quot;*** NOTIFY: %d ***\n&amp;quot;, value);
+    char buffer[10];
+    sprintf(buffer, &amp;quot;{\&amp;quot;val\&amp;quot;:%d}&amp;quot;, value);
+    Serial.printf(buffer);
+    pCharacteristic-&amp;gt;setValue(buffer);
+    pCharacteristic-&amp;gt;notify();
+    //pCharacteristic-&amp;gt;indicate();
+    value++;
+  }
+  delay(2000);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;コンパイルエラーが出ないで書き込みが出来ればOKです。&lt;/p&gt;
+
+&lt;h3 id=&#34;確認&#34;&gt;確認&lt;/h3&gt;
+
+&lt;p&gt;デバッグには&lt;a href=&#34;https://itunes.apple.com/jp/app/lightblue/id639944780?mt=12&#34;&gt;LightBlue&lt;/a&gt;などのBLEデバッグ用のアプリケーションを利用することをお勧めします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/143/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Nefry BTが起動すると先ほど指定した&lt;strong&gt;NefryBT-n0bisuke&lt;/strong&gt;という名前でBLEデバイスが検出されます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/143/4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;SERVICEのUUIDやCHARACTERISTICのUUIDも先ほど指定したものが表示されていると思います。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;これで問題なく、Nefry BTから情報が発信されていることが確認出来ました。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;centralの作成&#34;&gt;Centralの作成&lt;/h2&gt;
+
+&lt;p&gt;次は受信側のCentralを作成していきます。
+データの確認だけであれば先ほどのLightBlueなどのアプリで確認でも良いのですが、自分のサービスに組み込む際には何かしらのプログラミング言語でアクセスできた方が都合が良いです。&lt;/p&gt;
+
+&lt;h3 id=&#34;nobleの利用&#34;&gt;nobleの利用&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/sandeepmistry/noble&#34;&gt;noble&lt;/a&gt;はNode.js向けのBLEライブラリです。MacやWindows、Raspberry PiなどのデバイスをBLEのCentralにすることができます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mkdir ble_central
+cd ble_central
+touch app.js
+npm init -y
+npm i --save noble
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これで準備とnobleのインストールが完了しました。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;app.js&lt;/code&gt;に以下を記述します。SERVICE_UUIDやCHARACTERISTIC_UUIDは自分で作成したNefry BT側に書き込んだUUIDと同様のものを指定しましょう。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;[WIP] Async/Awaitに書き換えたい。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
+
+const noble = require(&#39;noble&#39;);
+const serviceuuid = `d5875408fa514763a75d7d33cecebc31`;
+const charauuid = `a4f01d8ca03743b690501876a8c23584`;
+
+//キャラクタリスティックにアクセスしてデータやりとり
+const accessChara = (chara) =&amp;gt; {
+    console.log(&#39;-----Start GATT Access-----&#39;)
+    chara.notify(true, (err) =&amp;gt; {
+        if (err) {
+          console.log(&#39;listen notif error&#39;, err)
+        } else {
+          console.log(&#39;listen notif&#39;)
+        }
+    });
+    chara.on(&#39;data&#39;, (data, isNotif) =&amp;gt; {
+        const jsonStr = data.toString(&#39;utf-8&#39;);
+        const jsonData = JSON.parse(jsonStr);
+        console.log(jsonData);
+    });
+}
+
+
+//discovered BLE device
+const discovered = (peripheral) =&amp;gt; {
+    console.log(`BLE Device Found: ${peripheral.advertisement.localName}(${peripheral.uuid}) RSSI${peripheral.rssi}`);
+
+    if(peripheral.advertisement.localName === &#39;NefryBT-n0bisuke&#39;){
+        noble.stopScanning();
+        console.log(&#39;device found&#39;);
+        console.log(`service discover...`);
+
+        peripheral.connect(error =&amp;gt; {
+            if (error) {
+                console.log(&amp;quot;connection error:&amp;quot;, error)
+            } else {
+                console.log(&amp;quot;device connected&amp;quot;);
+            }
+
+            peripheral.discoverServices([],(err, services) =&amp;gt; {
+                if (error) {
+                    console.log(&amp;quot;discover service error&amp;quot;, error)
+                }
+                console.log(&#39;discover service&#39;);               
+                services.forEach(service =&amp;gt; {
+                    if(service.uuid === serviceuuid){
+                        service.discoverCharacteristics([], (error, charas) =&amp;gt; {
+                            console.log(&#39;discover chara&#39;);
+                            charas.forEach(chara =&amp;gt; {
+                                if(chara.uuid === charauuid){
+                                    console.log(&amp;quot;found chara: &amp;quot;, chara.uuid)
+                                    accessChara(chara);
+                                }
+                            });
+                        });
+                    }
+                });
+            });
+        });
+    }
+}
+
+//BLE scan start
+const scanStart = () =&amp;gt; {
+    noble.startScanning();
+    noble.on(&#39;discover&#39;, discovered);
+}
+
+if(noble.state === &#39;poweredOn&#39;){
+    scanStart();
+}else{
+    noble.on(&#39;stateChange&#39;, scanStart);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;実行&#34;&gt;実行&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;node app.js
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;で実行します。この時、先ほどのLightBlueなどのアプリでNefryBTにBLEアクセスしていると上手くいかないのでアプリ側の接続は解除しましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/143/5.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Mac側のNode.jsのログはこんな感じで表示されます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;BLE Device Found: LED(59aa15c3a3274ed7b11d334b5c0d0900) RSSI-68
+BLE Device Found: NefryBT-n0bisuke(d0b77d4611f54380b8b63e6d05765ad6) RSSI-49
+device found
+service discover...
+device connected
+discover service
+discover chara
+found chara:  a4f01d8ca03743b690501876a8c23584
+-----Start GATT Access-----
+listen notif
+{ val: 147 }
+{ val: 148 }
+・
+・
+・
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;解説&#34;&gt;解説&lt;/h3&gt;
+
+&lt;p&gt;NefryBT側ではデバイスにアクセスがありCentralとのコネクションが確立すると、&lt;code&gt;変数value&lt;/code&gt;の値をセット(pCharacteristic-&amp;gt;setValue)して送信（pCharacteristic-&amp;gt;notify）し、valueの値をインクリメントします。&lt;/p&gt;
+
+&lt;p&gt;これを2秒ごとに行うので2秒間隔でNefryBTからMacのNode.jsに情報が送信されます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;・
+(省略)
+・
+・
+void loop() {
+
+  if (deviceConnected) {
+    Serial.printf(&amp;quot;*** NOTIFY: %d ***\n&amp;quot;, value);
+    char buffer[10];
+    sprintf(buffer, &amp;quot;{\&amp;quot;val\&amp;quot;:%d}&amp;quot;, value);
+    Serial.printf(buffer);
+    pCharacteristic-&amp;gt;setValue(buffer);
+    pCharacteristic-&amp;gt;notify();
+    //pCharacteristic-&amp;gt;indicate();
+    value++;
+  }
+  delay(2000);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Node.js（noble）側では、PERIPHERAL -&amp;gt; SERVICE -&amp;gt; CHARACTERISTICと階層的にアクセスしていき、CHARACTERISTICまでアクセスが出きると、accessChara関数が呼ばれます。&lt;/p&gt;
+
+&lt;p&gt;この中の&lt;code&gt;chara.on(&#39;data&#39;)&lt;/code&gt;の箇所でデータが送られてくるたびにイベントが発火して、データの中身を確認できます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;・
+・
+(省略)
+・
+const accessChara = (chara) =&amp;gt; {
+    console.log(&#39;-----Start GATT Access-----&#39;)
+    chara.notify(true, (err) =&amp;gt; {
+        if (err) {
+          console.log(&#39;listen notif error&#39;, err)
+        } else {
+          console.log(&#39;listen notif&#39;)
+        }
+    });
+    chara.on(&#39;data&#39;, (data, isNotif) =&amp;gt; {
+        const jsonStr = data.toString(&#39;utf-8&#39;);
+        const jsonData = JSON.parse(jsonStr);
+        console.log(jsonData);
+    });
+}
+・
+・
+(省略)
+・
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;Nefry BTでBLEを利用する方法を紹介しました。
+Nefry BTでセンサーのデータを取得し、Centralに送信する方法なども応用して作れそうですね。&lt;/p&gt;
+
+&lt;p&gt;これを参考にNefry BTとBLEデバイスの連携などに活用していきましょう。&lt;/p&gt;
+
+&lt;p&gt;今回はNefry BTをPeripheralにする実装でしたが、別の機会でCentralにする方法も紹介できればと思っています。&lt;/p&gt;
+
+&lt;p&gt;それでは！&lt;/p&gt;
+
+&lt;h2 id=&#34;所感&#34;&gt;所感&lt;/h2&gt;
+
+&lt;p&gt;今回の実装ですが色々と途中でのハマりが多いかつ、調べてもまだまだESP32のBLE利用をArduinoでやってる事例は少なくけっこう大変でした。この辺の大変だった知見はQiitaなどでまとめらたらと思っています。お疲れ様です笑&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Nefry BT（ESP32）でMQTTを使ってみよう Subscribe編</title>
+      <link>https://dotstud.io/blog/nefry-bt-connect-mqtt/</link>
+      <pubDate>Sat, 06 Jan 2018 14:28:04 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nefry-bt-connect-mqtt/</guid>
+      
+      <description>
+
+&lt;p&gt;あけましておめでとうございます。 代表ののびすけ（&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;@n0bisuke&lt;/a&gt;）です。&lt;/p&gt;
+
+&lt;p&gt;Nefry BTを使ってMQTTを利用する方法を紹介します。&lt;/p&gt;
+
+&lt;p&gt;今回はMQTTでNefry BTに情報を送信してみます。&lt;/p&gt;
+
+&lt;p&gt;ほぼESP32のコードなので、ESP32系の他のボードを利用している人の参考にもなると思います。&lt;/p&gt;
+
+&lt;h2 id=&#34;mqttの登場人物&#34;&gt;MQTTの登場人物&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Broker - 通信のサーバー&lt;/li&gt;
+&lt;li&gt;Publisher - 情報の送信側&lt;/li&gt;
+&lt;li&gt;Subscriber - 情報の受信側&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;WebSocketではサーバーとクライアントだけで双方向通信をしますが、MQTTではサーバーはBrocker、クライアント側が送信者のPublisherと受信者のSubscriberに分かれます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/141/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;今回はNefry BTをSubscriber（受信者）にして、外部からNefry BTに情報を送ってみたいと思います。&lt;/p&gt;
+
+&lt;h2 id=&#34;環境&#34;&gt;環境&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Arduino IDE 1.8.5&lt;/li&gt;
+&lt;li&gt;Nefry ライブラリ 1.1.4&lt;/li&gt;
+&lt;li&gt;Nefry BT R2&lt;/li&gt;
+&lt;li&gt;macOS High Sierra&lt;/li&gt;
+&lt;li&gt;Node.js v9.2.0&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;subscriberの作成&#34;&gt;Subscriberの作成&lt;/h2&gt;
+
+&lt;h3 id=&#34;arduino向けのmqttライブラリをインストール&#34;&gt;Arduino向けのMQTTライブラリをインストール&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/knolleary/pubsubclient&#34;&gt;knolleary/pubsubclient&lt;/a&gt;を利用します。&lt;/p&gt;
+
+&lt;p&gt;zipファイルをダウンロードしたら、 &lt;code&gt;スケッチ &amp;gt; ライブラリのインポート &amp;gt; .ZIP形式のライブラリをインストール&lt;/code&gt;からArduino IDEにライブラリをインストールします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/141/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;nefry-btのスケッチ&#34;&gt;Nefry BTのスケッチ&lt;/h3&gt;
+
+&lt;p&gt;ブローカーは&lt;a href=&#34;https://mosquitto.org/&#34;&gt;Mosquitto&lt;/a&gt;を利用します。&lt;/p&gt;
+
+&lt;p&gt;&amp;ldquo;mosquitto.org&amp;rdquo;の&amp;rdquo;n0bisuke&amp;rdquo;という名前のトピックに情報が送信されたら受信します。&lt;/p&gt;
+
+&lt;p&gt;MQTTはデフォルト1883ポートを利用するので、1883ポートを指定します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+#include &amp;lt;PubSubClient.h&amp;gt;
+
+WiFiClient httpsClient;
+PubSubClient mqttClient(httpsClient);
+
+#define TOPIC &amp;quot;n0bisuke&amp;quot;
+#define QOS 0
+#define URL &amp;quot;mosquitto.org&amp;quot;
+#define PORT 1883
+
+void setup() {
+  mqttClient.setServer(URL, PORT);
+  mqttClient.setCallback(callback);
+}
+
+void loop() {
+  if(!mqttClient.connected()) {
+    if (mqttClient.connect(TOPIC)) {
+      Serial.println(&amp;quot;Connected.&amp;quot;);    
+      mqttClient.subscribe(TOPIC, QOS);
+      Serial.println(&amp;quot;Subscribed.&amp;quot;);
+    }
+    else {
+      errorReport();
+    }
+  }
+
+  mqttClient.loop();
+}
+
+void callback(char* topic, byte* payload, unsigned int length) {
+  Serial.print(&amp;quot;Message arrived [&amp;quot;);
+  Serial.print(topic);
+  Serial.print(&amp;quot;] &amp;quot;);
+  for (int i = 0; i &amp;lt; length; i++) {
+    Serial.print((char)payload[i]);
+  }
+  Serial.println();
+}
+
+void errorReport(){
+  Serial.print(&amp;quot;Failed. Error state = &amp;quot;);
+
+  switch (mqttClient.state()) {
+    case MQTT_CONNECT_UNAUTHORIZED:
+      Serial.println(&amp;quot;MQTT_CONNECT_UNAUTHORIZED&amp;quot;);
+      break;
+    case MQTT_CONNECT_BAD_CREDENTIALS:
+      Serial.println(&amp;quot;MQTT_CONNECT_BAD_CREDENTIALS&amp;quot;);
+      break;
+    case MQTT_CONNECT_UNAVAILABLE:
+      Serial.println(&amp;quot;MQTT_CONNECT_UNAVAILABLE&amp;quot;);
+      break;
+    case MQTT_CONNECT_BAD_CLIENT_ID:
+      Serial.println(&amp;quot;MQTT_CONNECT_BAD_CLIENT_ID&amp;quot;);
+      break;
+    case MQTT_CONNECT_BAD_PROTOCOL:
+      Serial.println(&amp;quot;MQTT_CONNECT_BAD_PROTOCOL&amp;quot;);
+      break;
+    case MQTT_CONNECTED:
+      Serial.println(&amp;quot;MQTT_CONNECTED&amp;quot;);
+      break;
+    case MQTT_DISCONNECTED:
+      Serial.println(&amp;quot;MQTT_DISCONNECTED&amp;quot;);
+      break;
+    case MQTT_CONNECT_FAILED:
+      Serial.println(&amp;quot;MQTT_CONNECT_FAILED&amp;quot;);
+      break;
+    case MQTT_CONNECTION_LOST:
+      Serial.println(&amp;quot;MQTT_CONNECTION_LOST&amp;quot;);
+      break;
+    case MQTT_CONNECTION_TIMEOUT:
+      Serial.println(&amp;quot;MQTT_CONNECTION_TIMEOUT&amp;quot;);
+      break;
+  }
+
+  delay(5000); // Wait 5 seconds before retrying
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;publisherの作成&#34;&gt;Publisherの作成&lt;/h2&gt;
+
+&lt;p&gt;情報の送信側であるPublisherは手元のMac Book上のNode.jsで作成しました。&lt;/p&gt;
+
+&lt;p&gt;Node.jsでMQTTを利用する場合は&lt;a href=&#34;https://www.npmjs.com/package/mqtt&#34;&gt;mqtt.js&lt;/a&gt;を利用するのが手頃です。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mkdir mqtt-test
+cd mqtt-test
+npm init -y
+npm i --save mqtt
+touch publisher.js
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;//publisher.js
+&#39;use strict&#39;;
+
+const mqtt = require(&#39;mqtt&#39;);
+const client = mqtt.connect(&#39;mqtt://mosquitto.org&#39;);
+
+client.on(&#39;connect&#39;, () =&amp;gt; console.log(&#39;publisher.connected.&#39;));
+
+setInterval(() =&amp;gt; {
+    const message = Date.now().toString();
+    client.publish(&#39;n0bisuke&#39;, message);
+    console.log(&#39;publisher.publish:&#39;, message);
+}, 1000);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これで実行すると、以下のように時間の情報をパブリッシュ（送信）し始めます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;node publisher.js
+
+publisher.publish: 1515219086876
+publisher.publish: 1515219087879
+publisher.publish: 1515219088880
+publisher.publish: 1515219089882
+・
+・
+・
+(省略)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/141/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;所感&#34;&gt;所感&lt;/h2&gt;
+
+&lt;p&gt;思ってたより簡単に実装出来ました。
+これを参考にNefry BTとWebサービスの連携などに活用していきましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.mosca.io/&#34;&gt;Mosca&lt;/a&gt;などを使うとBrokerも自分で作成することが出来るので試してみると良いかもしれません。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Node.jsとNefry BTで監視システムを作ろう！ for Pepper #iotlt</title>
+      <link>https://dotstud.io/blog/nefrybt-pepper-monitoring-system/</link>
+      <pubDate>Thu, 21 Sep 2017 18:40:38 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nefrybt-pepper-monitoring-system/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、のびすけです。&lt;/p&gt;
+
+&lt;p&gt;IoTLT vol31で話をしたNefry BT（ESP32系ボード）を使ってネットワークカメラを作ってみたいと思います。&lt;/p&gt;
+
+&lt;p&gt;発表資料もご参照ください。&lt;/p&gt;
+
+&lt;script async class=&#34;speakerdeck-embed&#34; data-id=&#34;a4d673e00b57428ebe22543efda38f6f&#34; data-ratio=&#34;1.33333333333333&#34; src=&#34;//speakerdeck.com/assets/embed.js&#34;&gt;&lt;/script&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://speakerdeck.com/n0bisuke/pepperlian-xi-falsejian-shi-sisutemu-number-iotlt&#34;&gt;Pepper連携の監視システム? #iotlt by n0bisuke&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstudio.connpass.com/event/61189/&#34;&gt;Nefry BTのハンズオン&lt;/a&gt;も開催しますので合わせてご覧ください。&lt;/p&gt;
+
+&lt;h2 id=&#34;やりたいこと&#34;&gt;やりたいこと&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Pepperを監視したい。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;謎ですが、Pepperを監視したいです。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://iotlt.connpass.com/event/65379/&#34;&gt;IoTLT vol31&lt;/a&gt;で話をした内容ですが、Pepperが動いてくれないので、Pepperがいつ動き出しても大丈夫なように&lt;strong&gt;Pepperを見守り&lt;/strong&gt;します。&lt;/p&gt;
+
+&lt;p&gt;巷では「Pepperが見守り」だったり、「Pepperが防犯」みたいな先進的な取り組みがありますが、僕は&lt;strong&gt;あえてPepperを見守ります。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;完成イメージ&#34;&gt;完成イメージ&lt;/h2&gt;
+
+&lt;p&gt;こんな感じで見守ります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/c3fa7c7bb7dbdd5bba505e7a3de3b54b.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;そして、外からでもブラウザでPepperを見守るストリーミングサービスっぽいものを作ります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/09e912583e26710a13f0d49f4a866b55.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;使うもの&#34;&gt;使うもの&lt;/h2&gt;
+
+&lt;p&gt;デバイスはNefry BTとGroveカメラの二つです。
+（ちょっとジャンパワイヤ使います。）&lt;/p&gt;
+
+&lt;h3 id=&#34;nefry-bt&#34;&gt;Nefry BT&lt;/h3&gt;
+
+&lt;p&gt;ESP32ベースのArduino互換開発ボードです。
+&lt;a href=&#34;http://sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-55W8&#34;&gt;千石電商さん&lt;/a&gt;でも購入できます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/d43d9926b0e5293b1045890bdd7fbc6c.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;grove-シリアルカメラキット&#34;&gt;Grove シリアルカメラキット&lt;/h3&gt;
+
+&lt;p&gt;Grove対応のカメラです。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.switch-science.com/catalog/1626/&#34;&gt;スイッチサイエンスさん&lt;/a&gt;などで購入できます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/99ad24d2ffcfd62c8407d7db7fb753c5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;構成イメージ&#34;&gt;構成イメージ&lt;/h2&gt;
+
+&lt;p&gt;カメラで撮影した画像をNefry BT経由でサーバーにアップロードします。
+アップロードされた画像はNode.jsで立てたサーバーで受け取り、WebSocket(Socket.io)でブラウザに配信します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/bfdd4f3e37898144268c2edd086320dc.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;作り方&#34;&gt;作り方&lt;/h2&gt;
+
+&lt;p&gt;3つに分けて紹介します。&lt;/p&gt;
+
+&lt;p&gt;デバイス（Nefry BT）で撮影した画像をサーバーに送りサーバーからブラウザに配信します。&lt;/p&gt;
+
+&lt;p&gt;データの流れ的に&lt;code&gt;デバイス -&amp;gt; サーバー -&amp;gt; ブラウザ&lt;/code&gt;という流れです。&lt;/p&gt;
+
+&lt;p&gt;全体のコードは&lt;a href=&#34;https://github.com/dotstudio/nefrybt_camera_server&#34;&gt;こちらのGitHubリポジトリ&lt;/a&gt;にあります。&lt;/p&gt;
+
+&lt;h3 id=&#34;デバイス側-arduino&#34;&gt;デバイス側 - Arduino&lt;/h3&gt;
+
+&lt;p&gt;デバイス側は&lt;a href=&#34;http://wiki.seeed.cc/Grove-Serial_Camera_Kit/&#34;&gt;Grove - Serial Camera Kitの公式Wiki&lt;/a&gt;にあるサンプルコードをもとに作っています。&lt;/p&gt;
+
+&lt;p&gt;dotstudioの&lt;a href=&#34;https://dotstud.io/members/ukkz/&#34;&gt;ものづくりアーティストうこ&lt;/a&gt;さんがメインで作ってくれました。&lt;/p&gt;
+
+&lt;p&gt;少し長いので&lt;a href=&#34;https://github.com/dotstudio/nefrybt_camera_server/blob/master/nefry/nefrybt_grove_camera/nefrybt_grove_camera.ino&#34;&gt;GitHubのリポジトリ&lt;/a&gt;を参照しましょう。&lt;/p&gt;
+
+&lt;p&gt;このプログラムをNefry BTに書き込みましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;host&lt;/code&gt;の箇所に画像アップロード先のサーバーを指定します。&lt;/p&gt;
+
+&lt;h4 id=&#34;配線&#34;&gt;配線&lt;/h4&gt;
+
+&lt;p&gt;配線はD3,D4に繋ぎます。&lt;/p&gt;
+
+&lt;p&gt;プログラム的には&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#define SEREAL_RX 19 //Nefry BT D3
+#define SEREAL_TX 18 //Nefry BT D4
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;の部分が該当します。NefryBTの&lt;a href=&#34;https://drive.google.com/file/d/0B_mvDQF8yaQRLVprUHl4WTFLWVE/view&#34;&gt;仕様書&lt;/a&gt;を見ると分かりますが、ESP32のGPIO 19番がNefryBTのD3にあたり、18番がD4になります。&lt;/p&gt;
+
+&lt;h3 id=&#34;サーバー側-node-js&#34;&gt;サーバー側 - Node.js&lt;/h3&gt;
+
+&lt;p&gt;Node.jsで画像を受信するサーバーを作ります。&lt;/p&gt;
+
+&lt;p&gt;無難にSocket.ioとexpressを使います。 Node.jsのバージョンは8.4です。
+7系以前だと動かない可能性があります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;npm i --save socket.io express
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;//server.js
+&#39;use strict&#39;;
+
+const fs = require(&#39;fs&#39;);
+const app = require(&#39;express&#39;)();
+const http = require(&#39;http&#39;).Server(app);
+const io = require(&#39;socket.io&#39;)(http);
+const express = require(&#39;express&#39;);
+const PORT = process.env.PORT || 3000;
+app.use(express.static(__dirname));
+
+const {promisify} = require(&#39;util&#39;);
+const writeFileAsync = promisify(fs.writeFile);
+
+io.on(&#39;connection&#39;, (socket) =&amp;gt; console.log(&#39;a user connected&#39;)); //socket.ioのコネクション
+
+app.get(&#39;/&#39;, (req, res) =&amp;gt; res.sendFile(&#39;./index.thml&#39;));
+app.post(&#39;/&#39;, (req, res) =&amp;gt; {
+    let buffers = [];
+    let cur = 0;
+    const len = parseInt(req.headers[&#39;content-length&#39;], 10);
+
+    req.on(&#39;data&#39;, (chunk) =&amp;gt; {
+        buffers.push(chunk);
+        cur += chunk.length;
+        console.log(`Downloading...${(100.0 * cur / len).toFixed(2)}%`);
+    });
+
+    req.on(&#39;end&#39;, async () =&amp;gt; {
+        console.log(`\n[done] Image upload`);
+        req.rawBody = Buffer.concat(buffers);
+        const base64image = req.rawBody.toString(&#39;base64&#39;); //base64変換
+        await writeFileAsync(&#39;./img.jpeg&#39;, req.rawBody, &#39;utf-8&#39;)
+        console.log(`[done] Image Save`);
+        io.sockets.emit(&#39;new image&#39;,base64image); //画像送信
+    });
+
+});
+
+http.listen(PORT, () =&amp;gt; console.log(`listening on *:${PORT}`));
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;通常Expressを使う際に&lt;a href=&#34;https://github.com/expressjs/body-parser&#34;&gt;body-parser&lt;/a&gt;をよく使いますが、今回はあえて使わずに、&lt;code&gt;dataイベント&lt;/code&gt;で&lt;code&gt;chunk&lt;/code&gt;を拾って画像アップロードのプログレス表示を実装しています。&lt;/p&gt;
+
+&lt;p&gt;Nefry BTも含めてこういったマイコンボードはスマートフォンやPCに比べるとCPUパワーが弱いため、画像アップロードに時間がかかることがあります。&lt;/p&gt;
+
+&lt;p&gt;サーバー側でどれくらいのデータ送信が完了しているのかの進捗が分かると安心して開発できます。
+画像を受信したら&lt;code&gt;toString(&#39;base64&#39;)&lt;/code&gt;でBase64の文字列に変換をしています。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;io.sockets.emit()&lt;/code&gt;の箇所では変換した文字列をSocket.io経由でブラウザに配信しています。&lt;/p&gt;
+
+&lt;h3 id=&#34;ブラウザ側-javascript&#34;&gt;ブラウザ側 - JavaScript&lt;/h3&gt;
+
+&lt;p&gt;ブラウザ側では、文字列で送られた画像データを受け取り、Canvasに流し込みます。
+HTML側では&lt;code&gt;id=&amp;quot;myCanvas&amp;quot;&lt;/code&gt;のcanvasを作り、&lt;code&gt;socket.io&lt;/code&gt;の読み込みと以下で作る&lt;code&gt;app.js&lt;/code&gt;の読み込みをします。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;
+    &amp;lt;meta charset=&amp;quot;utf-8&amp;quot; /&amp;gt;
+    &amp;lt;title&amp;gt;Nefry BT Camera&amp;lt;/title&amp;gt;
+&amp;lt;/head&amp;gt;
+
+&amp;lt;body style=&amp;quot;background-color:#D0D0D0;&amp;quot;&amp;gt;
+    &amp;lt;canvas id=&amp;quot;myCanvas&amp;quot; width=&amp;quot;640&amp;quot; height=&amp;quot;480&amp;quot; style=&amp;quot;background-color:#FFFFFF;&amp;quot;&amp;gt;&amp;lt;/canvas&amp;gt;
+    &amp;lt;script src=&amp;quot;/socket.io/socket.io.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+    &amp;lt;script src=&amp;quot;/public/app.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;draw()&lt;/code&gt;では、canvasに&lt;code&gt;drawImage()&lt;/code&gt;で画像を描画します。
+Base64の場合はsrcが画像パスではなく&lt;code&gt;data:image/jpeg;base64,~~~~~&lt;/code&gt;という指定方法です。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;// /public/app.js
+&#39;use strict&#39;;
+
+const socket = io();
+
+const draw = (imageData = &#39;&#39;) =&amp;gt; {
+    const canvas = document.getElementById(&#39;myCanvas&#39;);
+    const ctx = canvas.getContext(&#39;2d&#39;);
+    const img = new Image();
+    img.src = `data:image/jpeg;base64,${imageData}`; //基本base64の文字列
+    if(imageData === &#39;init&#39;) img.src = `./img.jpeg`; //初期実行時のみサーバーのimg.jpegを取得
+    img.onload = () =&amp;gt; {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0, 640, 480);
+    }
+    console.log(`update ${new Date()}`);
+}
+
+socket.on(&#39;new image&#39;, draw); //画像更新時
+draw(&#39;init&#39;); //初期実行
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;socket.on(&#39;new image&#39;, draw)&lt;/code&gt;でサーバーからデータが送られてくるたびに&lt;code&gt;draw()&lt;/code&gt;を実行します。&lt;/p&gt;
+
+&lt;h2 id=&#34;使ってみた感想&#34;&gt;使ってみた感想&lt;/h2&gt;
+
+&lt;p&gt;1週間ほど動かしていますが、問題なくずっと稼働写真を送り続けてくれるので意外と&lt;strong&gt;ラズパイなどで作るシステムより安定しているかも&lt;/strong&gt;しれません。&lt;/p&gt;
+
+&lt;p&gt;あと、発表のオチだったのですが、Pepperの調子が悪く被写体が動かないので成功してるのか分かりにくいです苦笑&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/b2fb0a60f31c12e61e99b51d442dd563.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;Nefry BTとNode.jsを使ってネットワークカメラを作ることができました。&lt;/p&gt;
+
+&lt;p&gt;GroveのカメラとNefry V2を使って過去に&lt;a href=&#34;https://am-our.com/love/110/13945/&#34;&gt;【大島薫×IoT】浮気男を社会的に制裁するマシーンを作ってみた&lt;/a&gt;こともありましたが、ネットワークカメラを作りたい需要はそこそこあると思うので、その際の参考になれば幸いです。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Nefry BTとIFTTTでスイッチを押したらLINEを送る仕組みを作ってみよう</title>
+      <link>https://dotstud.io/blog/nefry-ifttt-push-line/</link>
+      <pubDate>Thu, 18 May 2017 02:51:27 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nefry-ifttt-push-line/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは。外部ライターのわみ（&lt;a href=&#34;https://twitter.com/wamisnet&#34;&gt;@wamisnet&lt;/a&gt;）です。Unirobot株式会社でロボットのソフトウェアエンジニアをやりながら、dotstudioでは私が作成しているIoTデバイス「Nefry」シリーズの販売やチュートリアル記事の執筆をしています。&lt;/p&gt;
+
+&lt;p&gt;Nefryは、ユーザの皆様からのフィードバックを頂き成長しています。新たなWi-Fi・BLEモジュール「ESP-WROOM-32」の発売もあり、このたび&lt;strong&gt;新機能と改良を加えた次世代の「Nefry BT」を発表&lt;/strong&gt;する事になりました。&lt;/p&gt;
+
+&lt;p&gt;今回は新しい「Nefry BT」を使って、Amazon Dash Buttonのようにスイッチを押した時にLINEに通知が行く仕組みを作ってみます。&lt;/p&gt;
+
+&lt;h2 id=&#34;nefry-btとは&#34;&gt;Nefry BTとは&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/100/01_nefry.png&#34; alt=&#34;&#34; /&gt;
+Nefryシリーズは、「&lt;strong&gt;簡単にインターネットにつながること&lt;/strong&gt;」をテーマにしたFRISKサイズのIoTデバイスです。Nefry BTからはWi-Fiに加えてBLE（Bluetooth Low Energy）に対応し、I/O機能も増えて開発の幅がさらに広がりました！&lt;/p&gt;
+
+&lt;p&gt;ハードウェアをできるだけ意識しなくて済むよう設計され、はんだづけや複雑な接続なしで動かすことができるため、初めてハードウェアを触る方にオススメのデバイスです。&lt;/p&gt;
+
+&lt;h2 id=&#34;作ってみる&#34;&gt;作ってみる&lt;/h2&gt;
+
+&lt;p&gt;今回試す流れは以下です。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;IFTTTにレシピを作成する&lt;/li&gt;
+&lt;li&gt;開発環境（Arduino IDE）を整える&lt;/li&gt;
+&lt;li&gt;プログラムを書き込む&lt;/li&gt;
+&lt;li&gt;Nefry BTとIFTTTを紐付ける&lt;/li&gt;
+&lt;li&gt;スイッチを押してLINEにメッセージを送ってみる&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Nefry BT&lt;/li&gt;
+&lt;li&gt;IFTTTのアカウント&lt;/li&gt;
+&lt;li&gt;LINEのアカウント&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;筆者の環境&#34;&gt;筆者の環境&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Nefry BT library Version 0.6.1&lt;/li&gt;
+&lt;li&gt;Windows 10&lt;/li&gt;
+&lt;li&gt;Arduino IDE 1.8.2&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&#34;注意&#34;&gt;注意&lt;/h4&gt;
+
+&lt;p&gt;Nefry BTは開発中のため、実際のコードや画面と異なる可能性があります。&lt;/p&gt;
+
+&lt;h3 id=&#34;iftttにレシピを作成する&#34;&gt;IFTTTにレシピを作成する&lt;/h3&gt;
+
+&lt;p&gt;IFTTTは様々なWebサービス同士を簡単に連携できるサービスです。連携したものは「レシピ」と呼ばれ、自分で新しいレシピを作成することもできます。今回はNefry BTとLINEを連携するレシピを作ってみます。&lt;/p&gt;
+
+&lt;p&gt;アカウントを持っていない場合は下記の記事を参考にアカウントを取得してください。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;参考: &lt;a href=&#34;https://liginc.co.jp/263899&#34;&gt;Webサービス同士を連携できる「IFTTT」と自作IoTデバイスを繋いで生活を便利にしてみた&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;アカウントを取得したら、Nefry BTとLINEを連携させるレシピを登録していきましょう。&lt;/p&gt;
+
+&lt;p&gt;IFTTTのレシピは「〇〇が起きたら△△する」というようにトリガーとアクションに分けられます。今回のトリガーは「&lt;strong&gt;Nefry BTのスイッチをクリックしたら&lt;/strong&gt;」、アクションは「&lt;strong&gt;LINEに通知する&lt;/strong&gt;」となります。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;トリガーとnefry-btを紐付けるキーの取得&#34;&gt;トリガーとNefry BTを紐付けるキーの取得&lt;/h4&gt;
+
+&lt;p&gt;今回はトリガーとして自作のWebサービスを利用できる「Webhooks」を使います。&lt;/p&gt;
+
+&lt;p&gt;まずはWebhooksをあとでNefry BTと紐付けるために、Secret Keyというキーを取得します。&lt;a href=&#34;https://ifttt.com/discover&#34;&gt;IFTTT公式サイト&lt;/a&gt;上部の「Search」から、Webhooksを検索しクリックしましょう。（&amp;rdquo;web&amp;rdquo;で候補に出てきます。）
+&lt;img src=&#34;https://dotstud.io/img/blog/100/if1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;設定ページに移動しました。このとき初めての方はこのような認証画面が表示されます。ページ中央の「Connect」をクリックしてWebhooksを有効にしましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/if2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Settingをクリックし、移動します。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/if3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;アカウントごとに割り当てられるSecret KeyがURLのuse/以下に記載されているのでコピーしておきます。今回の例ではSecret Keyは &lt;code&gt;GnzpClq0nDwt4WEdTyTmt&lt;/code&gt; の部分です。（このSecret Keyはサンプルです。既に無効になっていますので自身で取得してください。）
+&lt;img src=&#34;https://dotstud.io/img/blog/100/if4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;トリガーの作成&#34;&gt;トリガーの作成&lt;/h4&gt;
+
+&lt;p&gt;続いてトリガーとなるWebhooksの詳細を作成します。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/06_ifttt5.png&#34; alt=&#34;&#34; /&gt;
+&lt;a href=&#34;https://ifttt.com/create&#34;&gt;IFTTTのレシピ作成ページ&lt;/a&gt;から、「+this」のリンクをクリックします。&lt;/p&gt;
+
+&lt;p&gt;「Choose a service」から再度Webhooksを検索しましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/if5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;WebhooksはEventという単位でトリガーとなります。今回はEvent Nameを&amp;rdquo;Nefry&amp;rdquo;とし、「Create trigger」をクリックし作成します。Event NameはあとでNefry BTにも同じ名前で入力します。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/if6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;アクションの作成&#34;&gt;アクションの作成&lt;/h4&gt;
+
+&lt;p&gt;最後に、トリガーが生じた時に起こすアクションを登録します。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/09_ifttt8.png&#34; alt=&#34;&#34; /&gt;
+「+that」のリンクをクリックして、検索欄からLINEを検索しましょう。ここでTwitterやGmailなどを選択すると、それぞれのサービスと連携させることが出来ます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/100/10_ifttt9.png&#34; alt=&#34;&#34; /&gt;
+Recipientと書かれた欄にメッセージを送るLINEの送信先を選択します。&lt;/p&gt;
+
+&lt;p&gt;Messageと書かれた欄には送信するメッセージを入力します。MessageのValueにはプログラムから値を渡すことができるので、温度センサや明るさセンサなどの値をメッセージに組み込むことが可能です。写真のURLがあれば写真を送信することもできます。&lt;/p&gt;
+
+&lt;p&gt;入力が完了したら、Create actionをクリックして保存します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/100/11_ifttt10.png&#34; alt=&#34;&#34; /&gt;
+最後にFinishを押し、IFTTTのレシピの作成は完了です。&lt;/p&gt;
+
+&lt;h3 id=&#34;開発環境-arduino-ide-を整える&#34;&gt;開発環境（Arduino IDE）を整える&lt;/h3&gt;
+
+&lt;p&gt;続いてNefy BTにプログラムを書く環境を整えます。プログラムの書き込みにはArduino IDEと呼ばれるエディタを使用します。&lt;a href=&#34;https://www.arduino.cc/en/Main/Software&#34;&gt;公式サイト&lt;/a&gt;からダウンロードし、以下の手順でNefry BT用の設定を追加してください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/100/12_program.png&#34; alt=&#34;&#34; /&gt;
+Arduino IDEの「環境設定」のページから、「追加のボードマネージャのURL」に以下のリンクを入力して検索します。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;https://nefry.studio/package_nefrybt_index.json&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;メニューバーの[ツール]から、[ボード] -&amp;gt; [ボードマネージャー]を選択します。選択肢に「Nefry by Nefry Community」が表示されているので、インストールします。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/13_library.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;これでプログラムを書き込む準備が整いました。&lt;/p&gt;
+
+&lt;h3 id=&#34;プログラムを書き込む&#34;&gt;プログラムを書き込む&lt;/h3&gt;
+
+&lt;p&gt;以下はNefry BTに搭載されている「スイッチ」を押したときにIFTTTのEventを呼ぶプログラムです。&lt;/p&gt;
+
+&lt;p&gt;Arduino IDEを開き、以下のコードを貼り付けます。（//以降の部分はコメントです。）&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-cpp:&#34;&gt;#include &amp;lt;Nefry.h&amp;gt;
+#include &amp;lt;NefryIFTTT.h&amp;gt;
+String Event, SecretKey;
+int counter =0;                       //送信データのカウンタ
+
+void setup() {
+  Nefry.setStoreTitle(&amp;quot;SecretKey&amp;quot;,0); //Nefry DataStoreのタイトルを指定
+  Nefry.setStoreTitle(&amp;quot;Event&amp;quot;,1);     //Nefry DataStoreのタイトルを指定
+  SecretKey = Nefry.getStoreStr(0);   //Nefry DataStoreからデータを取得
+  Event = Nefry.getStoreStr(1);       //Nefry DataStoreからデータを取得
+  Nefry.enableSW();                   //SW有効化
+}
+
+void loop() {
+  if (Nefry.readSW()) {               //SWを押した時
+    counter++;                        //送信回数加算
+    bool sendData = IFTTT.send(Event, SecretKey,&amp;quot;Nefry&amp;quot;,(String)(micros()/1000000)+&amp;quot;秒&amp;quot;,(String)counter);//IFTTTにデータを送信
+                                      //Value1:Nefry,Value2:Nefryが起動してからの秒数,Value3:送信カウンタ
+    if (!sendData) {//IFTTTにデータを送信が成功したか失敗したかの判定
+      Nefry.setLed(255, 0, 0);        //Errの時、赤色点灯
+    }
+    Nefry.ndelay(1000);               //送信後1秒間待つ
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;貼り付けできたら[ツール] -&amp;gt; [ボード]から「Nefry BT」を選択します。Nefry BTとPCを繋ぎ、[ツール] -&amp;gt; [シリアルポート]でNefry BTのシリアルポートを選択しましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/14_arduinoide.png&#34; alt=&#34;&#34; /&gt;
+ボードとシリアルポートを選んだらArduino IDEの左上にある「→」を押しプログラムを書き込みます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/100/15_arduinoide2.png&#34; alt=&#34;&#34; /&gt;
+「ボードへの書き込みが完了しました。」と表示されたら、Nefry BTへのプログラムの書き込みは完了です。&lt;/p&gt;
+
+&lt;p&gt;最後にNefry BTにIFTTTとの連携情報を入力します。あと少しですので頑張っていきましょう！&lt;/p&gt;
+
+&lt;h3 id=&#34;nefry-btとiftttを紐付ける&#34;&gt;Nefry BTとIFTTTを紐付ける&lt;/h3&gt;
+
+&lt;p&gt;Nefry BTから&amp;rdquo;Nefry-OOOO&amp;rdquo;というWi-Fiの信号が発信されているので接続します。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/16_wifi.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;接続できたらChromeやIEなどのWebブラウザで&lt;a href=&#34;http://192.168.4.1&#34;&gt;Nefry BTのサイト&lt;/a&gt;にアクセスしましょう。&lt;code&gt;http://192.168.4.1&lt;/code&gt;にアクセスするとNefry BTの設定サイトが表示されます。このページからNefry BTに関する様々な設定ができます。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/17_nefry.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;まずは「Setup WiFi」をクリックし、Wi-Fiの設定をしましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/18_nefry.png&#34; alt=&#34;&#34; /&gt;
+接続するWi-Fiを入力して「Save」をクリックすると、Nefry BTに設定を保存＆再起動します。Wi-Fiが切断したら再接続してください。&lt;/p&gt;
+
+&lt;p&gt;設定が完了したら、トップページに戻り「Data Store」のページに移動します。
+&lt;img src=&#34;https://dotstud.io/img/blog/100/19_nefry.png&#34; alt=&#34;&#34; /&gt;
+SecretKeyにはWebhooksで確認した値を、EventにはLINEと連携した際に入力したEvent Name（今回は”Nefry”）を入力します。Saveをクリックし値を保存するとNefry BTが再起動します。&lt;/p&gt;
+
+&lt;p&gt;いよいよNefry BTについているスイッチを押してLINEにメッセージを送ってみましょう！&lt;/p&gt;
+
+&lt;h3 id=&#34;スイッチを押してlineにメッセージを送ってみる&#34;&gt;スイッチを押してLINEにメッセージを送ってみる&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/100/20_nefry.gif&#34; alt=&#34;&#34; /&gt;
+Nefry BTのスイッチを押すとLEDの色が変わり送信を始めます。送信が完了するとLEDが水色になり、LINEに通知されました！IFTTTのサーバ状態により応答が悪い場合もありますが、その時はIFTTTのページにてリロードをすると反応してくれます。&lt;/p&gt;
+
+&lt;p&gt;初回は登録が多く時間がかかりますが、今後はサクっと作れるでしょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;さいごに&#34;&gt;さいごに&lt;/h2&gt;
+
+&lt;p&gt;半田付けや複雑な設定なしで、ハードウェアをきっかけにしてLINEへメッセージを投稿する連携をサクッと試すことができました。今回紹介したNefry BTとIFTTTの連携を応用すればTwitterやGmailなどにもメッセージを送信できます。&lt;/p&gt;
+
+&lt;p&gt;リアルタイム通信が得意な「Milkcocoa」やクラウドサービスMicrosoft AzureのIoT向け機能である「Azure IoT Hub」などを使うとより幅広い開発ができるでしょう。&lt;/p&gt;
+
+&lt;p&gt;今後の更新で簡単に接続できるライブラリやサンプルコードを追加していく予定です。生まれたばかりでまだまだヒヨッコですが、進化していくNefry BTを応援していただけたらと思います。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
