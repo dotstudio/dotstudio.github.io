@@ -2,12 +2,256 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Try on dotstudio（ドットスタジオ）</title>
-    <link>https://dotstud.io/categories/try/index.xml</link>
+    <link>https://dotstud.io/categories/try/</link>
     <description>Recent content in Try on dotstudio（ドットスタジオ）</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <atom:link href="/categories/try/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 08 Feb 2018 00:00:00 +0000</lastBuildDate>
+    <atom:link href="/categories/try/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>JavaScriptで開発できる！Mongoose OSでNefry BTをLチカしよう</title>
+      <link>https://dotstud.io/blog/mongoose-os-nefry-blink/</link>
+      <pubDate>Thu, 08 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dotstud.io/blog/mongoose-os-nefry-blink/</guid>
+      
+      <description>
+
+&lt;p&gt;唐突ですが、森田(&lt;a href=&#34;https://twitter.com/morita_pac&#34;&gt;@morita_pac&lt;/a&gt;)と申します。&lt;/p&gt;
+
+&lt;p&gt;ヘビーNefryBTユーザです。持ち歩いていろんな場所でNefry BTを利用したり、ケースを作ったりもしています。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/145/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;通常Nefry BTはArduino言語でプログラムするのですが、今回はJavaScriptで書き込めるようにしたいと思います。&lt;/p&gt;
+
+&lt;p&gt;※この記事内のプログラムはNefy BT（無印）向けです。Nefry BT R2向けのプログラムは別途準備中です。&lt;/p&gt;
+
+&lt;h2 id=&#34;javascriptで開発できるmongoose-osとは&#34;&gt;JavaScriptで開発できるMongoose OSとは&lt;/h2&gt;
+
+&lt;p&gt;今回は&lt;a href=&#34;https://mongoose-os.com/&#34;&gt;Mongoose OS&lt;/a&gt;というIoTのプロト開発を簡単にできるサービスを利用します。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;a href=&#34;https://mongoose-os.com/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/145/2.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;
+▲ Mongoose OS公式サイト
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;Mongoose OSでは、ESP32やESP8266へJavaScript（&lt;a href=&#34;https://github.com/cesanta/mjs&#34;&gt;mJS&lt;/a&gt;）でコードを書き込めます。
+さらには、セキュアで、AWS IoTやGoogleのCloud IoT Coreなどとも連携設定がシンプルにできます。&lt;/p&gt;
+
+&lt;p&gt;Mongoose OSをインストールしている間は元のNefry BTのプログラムは利用できなくなります。（Arduino IDEで書き込むことですぐに戻せます。）&lt;/p&gt;
+
+&lt;h2 id=&#34;mongoose-osの開発環境をセットアップ&#34;&gt;Mongoose OSの開発環境をセットアップ&lt;/h2&gt;
+
+&lt;h3 id=&#34;windowsの場合&#34;&gt;Windowsの場合&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://mongoose-os.com/software.html&#34;&gt;Download Page&lt;/a&gt;から、exeをダウンロードするだけで使えます。（アンチウイルス系のソフトが反応するかもしれません。）なお、以降MacOSでの説明になります。
+&lt;img src=&#34;https://dotstud.io/img/blog/145/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;mac-osの場合&#34;&gt;Mac OSの場合&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://mongoose-os.com/software.html&#34;&gt;Download Page&lt;/a&gt;の、MacOS/Linuxのcurlコマンドをターミナルで実行します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ curl -fsSL https://mongoose-os.com/downloads/mos/install.sh | /bin/bash
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/145/4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ターミナルで以下のようになれば無事完了です。開く場合は、Runの&lt;code&gt;/xxx/.mos/bin/mos&lt;/code&gt;を実行するとWeb UIが開きます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ curl -fsSL https://mongoose-os.com/downloads/mos/install.sh | /bin/bash
+Downloading https://mongoose-os.com/downloads/mos-release/mac/mos ...
+########################################################################
+ 100.0%
+Installing into /xxx/.mos/bin/mos ...
+Adding /xxx/.mos/bin to your PATH in /xxx/.profile
+SUCCESS: /xxx/.mos/bin/mos is installed.
+Run &#39;/xxx/.mos/bin/mos --help&#39; to see all available commands.
+Run &#39;/xxx/.mos/bin/mos&#39; without arguments to start a simplified Web UI installer.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;いざ-mongoose-osをnefry-btに入れてみよう&#34;&gt;いざ、Mongoose  OSをNefry BTに入れてみよう&lt;/h2&gt;
+
+&lt;p&gt;Nefry BTをUSBポートに差し込み、Mongose OSとサンプルコードをFlashします。（次回起動時は、ポート選択のみで利用可能です。）&lt;/p&gt;
+
+&lt;p&gt;Mongoose OSのWeb UIは、ブラウザで開きます。①②③の設定が完了すれば無事、JavaScriptで書き込む準備完了です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/145/5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;①は、Nefry BTのポートを選択します。ポートが見つからない場合はUSBを認識させるための&lt;a href=&#34;https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers&#34;&gt;ドライバ&lt;/a&gt;をインストールする必要があります。
+②では、Platformで「esp32」とapp「demo-js」を選択し「Flash」ボタンをクリックし、処理が終わるまで待ちます。
+③では、Wi-fi設定を行います。（今回は必須ではないです。）
+全ての設定が完了したら、「Done」ボタンをおしてdevice setupを閉じます。&lt;/p&gt;
+
+&lt;h1 id=&#34;4-基本的なweb-uiとサンプルプログラム&#34;&gt;4. 基本的なWeb UIとサンプルプログラム&lt;/h1&gt;
+
+&lt;h3 id=&#34;web-uiについて&#34;&gt;Web UIについて&lt;/h3&gt;
+
+&lt;p&gt;まず、画面左側Device Filesを選択します。すると、init.jsが選択され、メインプログラムが表示されます。init.jsファイルをメインで編集します。&lt;/p&gt;
+
+&lt;p&gt;編集後、書き込みたい場合は、Save + Rebootボタンで行えます。このコードやファイルの情報は、端末から読んでいますので、コードを書き換えたら、書き込む前にバックアップを取っておくことをお勧めします。
+&lt;img src=&#34;https://dotstud.io/img/blog/145/6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;サンプルプログラムについて&#34;&gt;サンプルプログラムについて&lt;/h3&gt;
+
+&lt;p&gt;デフォルトプログラムを僕の感性でコメントしましたので、ご確認ください。なお、色々と制限付きのJSなので、仕様は&lt;a href=&#34;https://github.com/cesanta/mjs&#34;&gt;こちら&lt;/a&gt;で確認ください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js:init.js&#34;&gt;// 利用するAPIを読み出します。Flashした時点のサンプルAPIが呼ばれています。
+// 各APIの仕様やサンプルは画面左のファイル一覧で参照可能です。
+load(&#39;api_config.js&#39;);
+load(&#39;api_events.js&#39;);
+load(&#39;api_gpio.js&#39;);
+load(&#39;api_mqtt.js&#39;);
+load(&#39;api_net.js&#39;);
+load(&#39;api_sys.js&#39;);
+load(&#39;api_timer.js&#39;);
+
+// 変数宣言はletのみです。const, varは使えません。
+let led = Cfg.get(&#39;pins.led&#39;);
+let button = Cfg.get(&#39;pins.button&#39;);
+let topic = &#39;/devices/&#39; + Cfg.get(&#39;device.id&#39;) + &#39;/events&#39;;
+
+print(&#39;LED GPIO:&#39;, led, &#39;button GPIO:&#39;, button);
+
+let getInfo = function() {
+  return JSON.stringify({
+    total_ram: Sys.total_ram(),
+    free_ram: Sys.free_ram()
+  });
+};
+
+// 1秒おきにLEDをチカチカさせてます。ついでにチクタク時を刻んでいます。
+GPIO.set_mode(led, GPIO.MODE_OUTPUT);
+Timer.set(1000 /* 1 sec */, Timer.REPEAT, function() {
+  let value = GPIO.toggle(led);
+  print(value ? &#39;Tick&#39; : &#39;Tock&#39;, &#39;uptime:&#39;, Sys.uptime(), getInfo());
+}, null);
+
+// リセットボタンではない方のボタンを押すとMQTTでpublishします。
+GPIO.set_button_handler(button, GPIO.PULL_UP, GPIO.INT_EDGE_NEG, 200, function() {
+  let message = getInfo();
+  let ok = MQTT.pub(topic, message, 1);
+  print(&#39;Published:&#39;, ok, topic, &#39;-&amp;gt;&#39;, message);
+}, null);
+
+// ネットワークモニタです。
+Event.addGroupHandler(Net.EVENT_GRP, function(ev, evdata, arg) {
+  let evs = &#39;???&#39;;
+  if (ev === Net.STATUS_DISCONNECTED) {
+    evs = &#39;DISCONNECTED&#39;;
+  } else if (ev === Net.STATUS_CONNECTING) {
+    evs = &#39;CONNECTING&#39;;
+  } else if (ev === Net.STATUS_CONNECTED) {
+    evs = &#39;CONNECTED&#39;;
+  } else if (ev === Net.STATUS_GOT_IP) {
+    evs = &#39;GOT_IP&#39;;
+  }
+  print(&#39;== Net event:&#39;, ev, evs);
+}, null);
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;nefry-btのフルカラーledを点灯しよう&#34;&gt;Nefry BTのフルカラーLEDを点灯しよう&lt;/h2&gt;
+
+&lt;p&gt;やっと本題に入ります。&lt;/p&gt;
+
+&lt;p&gt;Mongoose OSでは、様々なオープンソースコードがあり、それをインポートすることができます。今回は、NefryBTのフルカラーLEDを点灯させるためにNeoPixelのサンプルコードを入手します。&lt;/p&gt;
+
+&lt;p&gt;画面左のProjectsを選択し、Importをクリックします。
+&lt;img src=&#34;https://dotstud.io/img/blog/145/7.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;App Managerのサーチ部分に「neopixel」と入力し、HARDWAREから「example-neopixel-js」をimportします。完了したらApp Managerの画面を閉じます。
+&lt;img src=&#34;https://dotstud.io/img/blog/145/8.png&#34; alt=&#34;&#34; /&gt;
+次に、サンプルプログラムをNefryBTに書き込みます。&lt;/p&gt;
+
+&lt;p&gt;今ImportしたAppが選択されていることを確認し、①Rebuildアイコンと②Flashアイコンを処理が完了次第、順番にクリックすることで書き込み完了です。（それぞれ少々時間がかかります。）
+&lt;img src=&#34;https://dotstud.io/img/blog/145/9.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Device Filesのinit.jsの内容を以下の内容に書き換えます。Nefry BTのボタンを押したらフルカラーLEDが点灯するという内容のプログラムです。&lt;/p&gt;
+
+&lt;p&gt;※なお、R2に関しては動作確認中ですので、確認次第内容を変更いたします。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js:init.js&#34;&gt;load(&#39;api_config.js&#39;);
+load(&#39;api_events.js&#39;);
+load(&#39;api_gpio.js&#39;);
+load(&#39;api_sys.js&#39;);
+load(&#39;api_timer.js&#39;);
+load(&#39;api_neopixel.js&#39;);
+
+// 今回は一部しか利用していませんが、NefryのピンNoです。
+let pin = {
+    &amp;quot;nefrybt&amp;quot;:{
+      &amp;quot;sw&amp;quot;: 4,
+      &amp;quot;d0&amp;quot;:22,
+      &amp;quot;d1&amp;quot;:21,
+      &amp;quot;d2&amp;quot;:23,
+      &amp;quot;d3&amp;quot;:19,
+      &amp;quot;d4&amp;quot;:18,
+      &amp;quot;a0&amp;quot;:25,
+      &amp;quot;a1&amp;quot;:26,
+      &amp;quot;a2&amp;quot;:32,
+      &amp;quot;a3&amp;quot;:33,
+      &amp;quot;a4&amp;quot;:27,
+      &amp;quot;a5&amp;quot;:14,
+      &amp;quot;a6&amp;quot;:13,
+      &amp;quot;a7&amp;quot;:35,
+      &amp;quot;LED&amp;quot;:16
+    },
+    &amp;quot;nefrybtR2&amp;quot;:{
+      &amp;quot;sw&amp;quot;: 4,
+      &amp;quot;d0&amp;quot;:22,
+      &amp;quot;d1&amp;quot;:21,
+      &amp;quot;d2&amp;quot;:23,
+      &amp;quot;d3&amp;quot;:19,
+      &amp;quot;d4&amp;quot;:18,
+      &amp;quot;d5&amp;quot;:25,
+      &amp;quot;d6&amp;quot;:26,
+      &amp;quot;d7&amp;quot;:13,
+      &amp;quot;d8&amp;quot;:14,
+      &amp;quot;a0&amp;quot;:33,
+      &amp;quot;a1&amp;quot;:32,
+      &amp;quot;a2&amp;quot;:39,
+      &amp;quot;a3&amp;quot;:36,
+      &amp;quot;LED&amp;quot;:16
+    }
+  };
+
+
+// フルカラーLEDのピンと個数、オーダーを指定しています。
+let Lpin = pin.nefrybt.LED, numPixels = 1, colorOrder = NeoPixel.GRB;
+
+// api_neopixel.jsに基づき初期化を行います。
+let strip = NeoPixel.create(Lpin, numPixels, colorOrder);
+strip.clear();
+strip.setPixel(0,0,0,0);
+strip.show();
+
+// ボタンを押したら赤色をつけます。setpixel(0,0,0,0)は、ピクセルナンバーとRGBになっています。Redの数字は20としていますが、数字をあげるとかなり明るくなります。
+// GPIO.set_button_handlerの仕様は、
+GPIO.set_button_handler(4, GPIO.PULL_UP, GPIO.INT_EDGE_NEG, 200, function() {
+    strip.clear();
+    strip.setPixel(0,20,0,0);
+    strip.show();
+}, null);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;困った時は&#34;&gt;困った時は&lt;/h2&gt;
+
+&lt;p&gt;Q. DeviceLogsにエラーがでている。&lt;/p&gt;
+
+&lt;p&gt;A. Mongoose OS画面右上のdevice setupより、ポートを選択し直してください。それでも治らない場合は、ターミナルにて、&lt;code&gt;control+c&lt;/code&gt;でMongoose OSを一度終わらせて、再起動をしてみてください。&lt;/p&gt;
+
+&lt;p&gt;それでもエラーが発生する場合は、一度Arduino IDEからNefry BTをボードに選択し、何も書いていないコードで書き込み直してください。なお、Nefry BTの状態に戻したい場合もArduino IDEから書き込むことで初期状態にもどせます。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;Nefry BTをJavaScriptでプログラムして、LEDを点灯させるところまでできました。&lt;/p&gt;
+
+&lt;p&gt;ディスプレイも表示させることができるので、次回は、Mongoose OSを使ったディスプレイの表示方法をご紹介しようと思います。&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Nefry BT（ESP32）からBLEでNode.jsにデータを送ってみよう</title>
@@ -217,14 +461,14 @@ const discovered = (peripheral) =&amp;gt; {
         noble.stopScanning();
         console.log(&#39;device found&#39;);
         console.log(`service discover...`);
-        
+
         peripheral.connect(error =&amp;gt; {
             if (error) {
                 console.log(&amp;quot;connection error:&amp;quot;, error)
             } else {
                 console.log(&amp;quot;device connected&amp;quot;);
             }
-            
+
             peripheral.discoverServices([],(err, services) =&amp;gt; {
                 if (error) {
                     console.log(&amp;quot;discover service error&amp;quot;, error)
@@ -631,7 +875,7 @@ void loop() {
       errorReport();
     }
   }
-  
+
   mqttClient.loop();
 }
 
@@ -647,7 +891,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
 void errorReport(){
   Serial.print(&amp;quot;Failed. Error state = &amp;quot;);
-  
+
   switch (mqttClient.state()) {
     case MQTT_CONNECT_UNAUTHORIZED:
       Serial.println(&amp;quot;MQTT_CONNECT_UNAUTHORIZED&amp;quot;);
@@ -680,7 +924,7 @@ void errorReport(){
       Serial.println(&amp;quot;MQTT_CONNECTION_TIMEOUT&amp;quot;);
       break;
   }
-      
+
   delay(5000); // Wait 5 seconds before retrying
 }
 &lt;/code&gt;&lt;/pre&gt;
@@ -1404,9 +1648,9 @@ app.post(&#39;/&#39;, (req, res) =&amp;gt; {
         console.log(`[done] Image Save`);
         io.sockets.emit(&#39;new image&#39;,base64image); //画像送信
     });
-    
+
 });
- 
+
 http.listen(PORT, () =&amp;gt; console.log(`listening on *:${PORT}`));
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -4170,199 +4414,6 @@ setInterval(() =&amp;gt; {
 &lt;p&gt;IoTの世界には、まだまだたくさんの楽しいデバイスやアイディアが待っています。&lt;strong&gt;作っても使っても楽しい電子工作をやっていきましょう！&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;最後まで読んでくださりありがとうございました！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Nefryで取得したセンサーデータをAmbientで簡単にグラフ化しよう！</title>
-      <link>https://dotstud.io/blog/nefry-data-show-graphically/</link>
-      <pubDate>Tue, 21 Mar 2017 13:48:05 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/nefry-data-show-graphically/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、外部ライターのわみ（&lt;a href=&#34;http://twitter.com/wamisnet&#34;&gt;@wamisnet&lt;/a&gt;）です。愛知県でネットワークの勉強をしている学生です。2014年ごろから電子工作を始め、今回紹介するFRISKサイズのIoT向けデバイス「Nefry（ねふりー）」を自作しました。&lt;/p&gt;
-
-&lt;p&gt;IoTといえば、データを取ることはもちろんですが、データの蓄積や分析が大切です。&lt;/p&gt;
-
-&lt;p&gt;今回は、&lt;strong&gt;簡単にデータを蓄積・グラフ化してくれる「Ambient」&lt;/strong&gt; というサービスを使って、Nefryで取得したセンサーのデータをグラフ化する方法を紹介します。&lt;/p&gt;
-
-&lt;h2 id=&#34;nefryとは&#34;&gt;Nefryとは&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/059/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;「Nefry（ねふりー）」は手軽にIoTに挑戦できるFRISKサイズのデバイスです。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://nefry.studio/&#34;&gt;公式サイト&lt;/a&gt;から、詳細なドキュメントや制作例を確認できます。&lt;/p&gt;
-
-&lt;h3 id=&#34;wi-fiを初期搭載&#34;&gt;Wi-Fiを初期搭載&lt;/h3&gt;
-
-&lt;p&gt;Nefryは、Wi-Fiモジュールの &lt;strong&gt;ESP-WROOM-02を初期搭載&lt;/strong&gt; しています。簡単にインターネットに接続できるので、接続に時間をとられることなくあなたのアイデア実現に集中できます。&lt;/p&gt;
-
-&lt;h3 id=&#34;スタンドアロンで動かせる&#34;&gt;スタンドアロンで動かせる&lt;/h3&gt;
-
-&lt;p&gt;スマートフォンで使うようなモバイルバッテリー（5V）から給電できます。&lt;strong&gt;モバイルバッテリー＋Nefryの2つで動作する&lt;/strong&gt; ので、場所を選ばずに使うことができる優れものです！&lt;/p&gt;
-
-&lt;h3 id=&#34;外部サービス連携が簡単&#34;&gt;外部サービス連携が簡単&lt;/h3&gt;
-
-&lt;p&gt;NefryはGroveセンサの規格に対応しています。専用のソケットを使い、はんだづけ不要で楽しめます。また、リアルタイム通信を簡単に実現できる「Milkcocoa」や、様々なWebサービス同士を連携できる「IFTTT」などとも組み合わせることもできます。&lt;/p&gt;
-
-&lt;p&gt;実際に使ってみた例は以下をご覧ください。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://liginc.co.jp/263899&#34;&gt;Webサービス同士を連携できる「IFTTT」と自作IoTデバイスを繋いで生活を便利にしてみた&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/iotlt-vol24-chantoku-report/&#34;&gt;【大島薫×IoT】浮気男に社会的制裁を加えるマシーンを作ってみた&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://dotstud.io/projects/nefry-connect-internet/&#34;&gt;Nefryの購入はこちら！&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;ambientとは&#34;&gt;Ambientとは&lt;/h2&gt;
-
-&lt;p&gt;Ambient（アンビエント）は、&lt;strong&gt;センサーデータを蓄積・グラフ化してくれるIoTに特化したクラウドサービス&lt;/strong&gt; です。&lt;/p&gt;
-
-&lt;p&gt;Ambientから発行される「チャネルID」「ライトキー」の &lt;strong&gt;たった2つの情報をプログラムに書き込むだけ&lt;/strong&gt; で、いとも簡単にセンサーデータをグラフ化することができます！&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/092/01_ambient.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;このようなグラフを公開したり、簡単にカスタマイズしたりすることができるので、オススメのサービスです。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://ambidata.io/&#34;&gt;Ambient公式サイト&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;つくってみよう&#34;&gt;つくってみよう！&lt;/h2&gt;
-
-&lt;p&gt;Nefryで取得したデータをグラフ化するために、今回は以下の4ステップを試します。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;事前準備&lt;/li&gt;
-&lt;li&gt;Ambientにチャネルを作成&lt;/li&gt;
-&lt;li&gt;プログラムの書き込み&lt;/li&gt;
-&lt;li&gt;NefryとAmbientの連携&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;筆者の開発環境は以下です。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;windows 10&lt;/li&gt;
-&lt;li&gt;Nefry version 2.3.0&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;事前準備&#34;&gt;事前準備&lt;/h2&gt;
-
-&lt;p&gt;開発を始める前に、NefryとAmbientのセットアップをします。&lt;/p&gt;
-
-&lt;p&gt;NefryのWi-Fi接続とAmbientのユーザ登録が完了している方は、&lt;a href=&#34;https://dotstud.io/blog/nefry-data-show-graphically/#ambientにチャネルを作成&#34;&gt;Ambientにチャネルを作成&lt;/a&gt;から開始してください。&lt;/p&gt;
-
-&lt;h3 id=&#34;nefryのセットアップ&#34;&gt;Nefryのセットアップ&lt;/h3&gt;
-
-&lt;p&gt;PCやスマートフォンから、Wi-FiのSSIDが &lt;strong&gt;Nefry-XXXX&lt;/strong&gt;（変更した場合はその名前）になっているものを探し、接続します。&lt;/p&gt;
-
-&lt;p&gt;接続できるとこのようなページが表示されます。表示されない場合は &lt;a href=&#34;http://192.168.4.1&#34;&gt;http://192.168.4.1&lt;/a&gt; に接続してみてください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/092/02_nefry_menu.png&#34; alt=&#34;&#34; /&gt;
-このトップページでNefryに関するいろいろな設定ができます。まずは「Setup WiFi」をクリックして、Wi-Fiの設定をします。&lt;/p&gt;
-
-&lt;p&gt;Setup WiFiのページはこのようになっています。
-&lt;img src=&#34;https://dotstud.io/img/blog/092/03_nefry_wifi.png&#34; alt=&#34;&#34; /&gt;
-接続したいWi-Fiを選び、パスワードがある場合は入力をします。入力が完了したら「Save」をクリックしてください。設定が保存され、Nefryが再起動します。&lt;/p&gt;
-
-&lt;p&gt;おまけですが、&lt;strong&gt;Nefry library 2.3.0&lt;/strong&gt; 以降であると5つまでのWi-Fiを記憶することができ、自動的に最も強いWi-Fiに自動接続する機能を搭載しています。Nefryを持っていて &lt;strong&gt;ライブラリが古い場合は、更新することをオススメします&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;その他のセットアップや使い方の詳細は以下の記事をご覧ください。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://liginc.co.jp/236620&#34;&gt;自作したオリジナルIoTデバイス「Nefry」とインターネットを繋いでみた&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;ambientの登録&#34;&gt;Ambientの登録&lt;/h3&gt;
-
-&lt;p&gt;グラフ化に必要な情報を取得するために、まずAmbientに登録します。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://ambidata.io/&#34;&gt;Ambient公式サイト&lt;/a&gt;&lt;/strong&gt; の「ユーザー登録」から登録を進めます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/092/04_ambient_acount.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;メールアドレス認証が必要なので、各自アカウントを用意してください。&lt;/p&gt;
-
-&lt;h2 id=&#34;ambientにチャネルを作成&#34;&gt;Ambientにチャネルを作成&lt;/h2&gt;
-
-&lt;p&gt;Ambientでは &lt;strong&gt;チャネルという単位で送信するデーターを管理・グラフ化する&lt;/strong&gt; ため、まずはチャネルを作成します。「チャネルを作る」ボタンから作成します。
-&lt;img src=&#34;https://dotstud.io/img/blog/092/05_ambient_channel.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;チャネルが無事に作成されると、先ほどのページに情報が追加されています。「チャネルID」と「ライトキー」をあとで使うので控えておきましょう。
-&lt;img src=&#34;https://dotstud.io/img/blog/092/06_ambient_list.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;プログラムの書き込み&#34;&gt;プログラムの書き込み&lt;/h2&gt;
-
-&lt;p&gt;今回はNefryについている &lt;strong&gt;アナログ入力&lt;/strong&gt; を使ってみます。アナログ入力を扱えるセンサであればどのようなセンサでも大丈夫ですが、この記事ではGroveの明るさセンサを扱います。&lt;/p&gt;
-
-&lt;p&gt;全体のプログラムはこちら。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;script src=&amp;quot;https://gist-it.appspot.com/github/Nefry-Community/ProgramMaster/blob/gh-pages/Nefry/Ambient/Analog/Analog.ino&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Nefryにプログラムを書き込む方法は２つあります。&lt;/p&gt;
-
-&lt;h3 id=&#34;arduino-ideを使う&#34;&gt;Arduino IDEを使う&lt;/h3&gt;
-
-&lt;p&gt;プログラムを編集したい場合などは、Arduino IDEに上のプログラムを貼り、編集します。&lt;/p&gt;
-
-&lt;p&gt;Arduino IDEでコンパイルしたプログラムはNefryトップページの「Upload　Sketch」からアップロードすることができます。&lt;/p&gt;
-
-&lt;p&gt;Arduino IDEにNefryの設定を追加する方法は、以下の記事を確認してください。&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;&lt;img src=&#34;https://cdn.liginc.co.jp/wp-content/uploads/2016/07/20160728-nefry.png&#34; alt=&#34;&#34; /&gt;
-&lt;a href=&#34;https://liginc.co.jp/298161&#34;&gt;&lt;strong&gt;さくっと生活を便利にする！FRISKサイズのIoT向けデバイス「Nefry」を使ってみよう【環境構築編】&lt;/strong&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h3 id=&#34;プログラムをダウンロードして使う&#34;&gt;プログラムをダウンロードして使う&lt;/h3&gt;
-
-&lt;p&gt;もっと簡単に試したい場合、トップページから「Web Sketch Download」のページに移動し以下を入力してください。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;ドメイン :  program.nefry.studio&lt;/li&gt;
-&lt;li&gt;URL :  /Nefry/Ambient/Analog&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/092/07_nefry_websketch.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://program.nefry.studio/&#34;&gt;Nefry Platform&lt;/a&gt;というサイトでは他にも様々なプログラムを公開していますので、ぜひご覧ください。&lt;/p&gt;
-
-&lt;h2 id=&#34;nefryとambientの連携&#34;&gt;NefryとAmbientの連携&lt;/h2&gt;
-
-&lt;p&gt;プログラムが書き込めたら、Ambientの情報をNefryに登録します。&lt;/p&gt;
-
-&lt;p&gt;トップページから「Setup Module」をクリックしページを移動します。
-&lt;img src=&#34;https://dotstud.io/img/blog/092/08_nefry_module.png&#34; alt=&#34;&#34; /&gt;
-設定項目の中から「WriteKey」と「ChannelID」となっている欄を見つけ、そこにAmbientで取得したライトキーとチャネルIDをそれぞれ入力します。&lt;/p&gt;
-
-&lt;p&gt;Saveをクリックすると、Nefryが再起動してAmbientにデータを送るようになります。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;これで準備は完了です！&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;ambientでグラフを見てみよう&#34;&gt;Ambientでグラフを見てみよう&lt;/h2&gt;
-
-&lt;p&gt;Nefryに接続した明るさセンサーの値のグラフです！
-&lt;img src=&#34;https://dotstud.io/img/blog/092/09_product.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;右側がAmbientのグラフ、左側がNefryの取得したアナログ値をWebConsoleで表示しています。
-&lt;img src=&#34;http://program.nefry.studio/Nefry/Ambient/pic/ambientnefry.gif&#34; alt=&#34;Ambient×Nefry.git&#34; /&gt;
-Nefryにライトを当てたり遠ざけたりすると、わりと &lt;strong&gt;リアルタイムにどんどんグラフが生成されていく&lt;/strong&gt; のが分かります。&lt;a href=&#34;https://ambidata.io/ch/channel.html?id=785&#34;&gt;こちらのページ&lt;/a&gt;でで今回撮影したグラフをみることができます。&lt;/p&gt;
-
-&lt;p&gt;Ambientでは &lt;strong&gt;グラフの自動スケールやグラフの公開機能、画像の添付&lt;/strong&gt; など、今回紹介しきれないほど様々な機能が作成されています。&lt;/p&gt;
-
-&lt;p&gt;詳しくはAmbientの公式サイトやドキュメントを確認してください。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://ambidata.io/&#34;&gt;Ambient公式サイト&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://ambidata.io/docs/&#34;&gt;ドキュメント&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;今回は、なんとハードウエアもWeb側も &lt;strong&gt;コードを一切書かずにグラフ化する&lt;/strong&gt; ことができました。&lt;/p&gt;
-
-&lt;p&gt;紹介したのは折れ線グラフですが、&lt;strong&gt;棒グラフや散布図などもお手軽にグラフを作れるAmbient&lt;/strong&gt; と &lt;strong&gt;Webへの接続が簡単なNefry&lt;/strong&gt; でぜひぜひ遊んでみてください。&lt;/p&gt;
-
-&lt;p&gt;Ambientを運営されている下島さん、記事にさせていただく許可を頂きありがとうございました。&lt;/p&gt;
 </description>
     </item>
     
