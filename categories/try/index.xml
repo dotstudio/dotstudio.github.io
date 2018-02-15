@@ -10,6 +10,324 @@
     <atom:link href="/categories/try/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>クラブでモテる！つまみ付きユニコーンポーチ　前編</title>
+      <link>https://dotstud.io/blog/gyaruden-kyoko-unicorn-pochette/</link>
+      <pubDate>Thu, 15 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dotstud.io/blog/gyaruden-kyoko-unicorn-pochette/</guid>
+      
+      <description>
+
+&lt;p&gt;みなさん、ちょりおつ！ギャル電きょうこです。ギャルによるギャルのためのテクノロジーを提案するユニット、ギャル電で活動しています。今回は、&lt;strong&gt;クラブ行くときにぎゃんかわに盛れる光るポーチの作り方&lt;/strong&gt;を2回にわけて紹介します。&lt;/p&gt;
+
+&lt;h2 id=&#34;ユニコーンきゃわたん&#34;&gt;ユニコーンきゃわたん&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/146/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ちょっと前から、イケてるヤングの間ではユニコーンがはやってるっぽい。角生えてる馬、かっこいいしかわいいからはやるのも超わかりみある。&lt;/p&gt;
+
+&lt;p&gt;つーことで、イケてるユニコーンっぽいバッグが街には今いっぱい売ってる。今回は、&lt;strong&gt;WEGOで500円のサイズ感もぴったりな超イケてるポーチ&lt;/strong&gt;をゲット。めっちゃリーズナブル！！！！&lt;/p&gt;
+
+&lt;p&gt;コレ光らせたらやばくねってことで、さっそく作ってこう。&lt;/p&gt;
+
+&lt;h2 id=&#34;材料&#34;&gt;材料&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/146/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;①Arduino Nano 互換機&lt;/li&gt;
+&lt;li&gt;②可変抵抗 10KΩ 3個&lt;/li&gt;
+&lt;li&gt;③つまみのキャップ&lt;/li&gt;
+&lt;li&gt;④LEDテープ（WS2812B 60LED/M）LED24個分&lt;/li&gt;
+&lt;li&gt;線材（コネクタは気分で）&lt;/li&gt;
+&lt;li&gt;USB miniB ケーブル&lt;/li&gt;
+&lt;li&gt;プラ板&lt;/li&gt;
+&lt;li&gt;ユニコーンぽいファーのいい感じのポーチ（白系）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;材料はこんな感じ。つまみのキャップはギター用のカッコいいやつを使ったよ。ポーチはだいたいモバイルバッテリーと小銭と携帯が入るくらいのサイズ感のものがおすすめっす。&lt;/p&gt;
+
+&lt;h2 id=&#34;可変抵抗器をアクセントにしてみよう&#34;&gt;可変抵抗器をアクセントにしてみよう&lt;/h2&gt;
+
+&lt;p&gt;可変抵抗器はイケてるキャップをつけるとめっちゃかわいい！&lt;/p&gt;
+
+&lt;p&gt;今回は三つの可変抵抗器の値を変更することで、LEDの&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;明るさ&lt;/li&gt;
+&lt;li&gt;色&lt;/li&gt;
+&lt;li&gt;点灯速度&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;を変更できる仕組みをつくります。&lt;/p&gt;
+
+&lt;h2 id=&#34;配線をはんだ付けしよう&#34;&gt;配線をはんだ付けしよう&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/146/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/146/4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;まずは写真と図のように三つの可変抵抗器のプラスとプラス、マイナスとマイナスを配線でつなぎます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/146/5.png&#34; alt=&#34;&#34; /&gt;
+三つのうちの可変抵抗器の一つに、プラスとマイナスの配線をさらに1セット追加してArduino Nanoの5VとGNDにつなぎます。可変抵抗器の真ん中の線とAruduino NanoのA0〜A1ポートを配線でそれぞれつなぎます。&lt;/p&gt;
+
+&lt;p&gt;LEDテープはDINとD6、5V、GNDをそれぞれAruduino Nanoと配線でつなぎます。
+&lt;img src=&#34;https://dotstud.io/img/blog/146/6.png&#34; alt=&#34;&#34; /&gt;
+Aruduino Nanoの5VとGNDのところは、可変抵抗器とLEDテープからそれぞれ配線がつながります。一つのPINにはんだ付けが難しい場合は、ボードの裏と表にそれぞれ1本ずつ配線をつなげるとはんだ付けがやりやすいです。&lt;/p&gt;
+
+&lt;h2 id=&#34;前編はここまで&#34;&gt;前編はここまで&lt;/h2&gt;
+
+&lt;p&gt;今回は可変抵抗器を三つつなげたので、ちょっと配線とはんだ付けが複雑で疲れちゃったのでここまで！&lt;/p&gt;
+
+&lt;p&gt;後編はArduino Nanoへのプログラム書き込みと、ポーチとLEDを組み立てまっす！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>JavaScriptで開発できる！Mongoose OSでNefry BTをLチカしよう</title>
+      <link>https://dotstud.io/blog/mongoose-os-nefry-blink/</link>
+      <pubDate>Thu, 08 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dotstud.io/blog/mongoose-os-nefry-blink/</guid>
+      
+      <description>
+
+&lt;p&gt;唐突ですが、森田(&lt;a href=&#34;https://twitter.com/morita_pac&#34;&gt;@morita_pac&lt;/a&gt;)と申します。&lt;/p&gt;
+
+&lt;p&gt;ヘビーNefryBTユーザです。持ち歩いていろんな場所でNefry BTを利用したり、ケースを作ったりもしています。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/145/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;通常Nefry BTはArduino言語でプログラムするのですが、今回はJavaScriptで書き込めるようにしたいと思います。&lt;/p&gt;
+
+&lt;p&gt;※この記事内のプログラムはNefy BT（無印）向けです。Nefry BT R2向けのプログラムは別途準備中です。&lt;/p&gt;
+
+&lt;h2 id=&#34;javascriptで開発できるmongoose-osとは&#34;&gt;JavaScriptで開発できるMongoose OSとは&lt;/h2&gt;
+
+&lt;p&gt;今回は&lt;a href=&#34;https://mongoose-os.com/&#34;&gt;Mongoose OS&lt;/a&gt;というIoTのプロト開発を簡単にできるサービスを利用します。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;a href=&#34;https://mongoose-os.com/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/145/2.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;
+▲ Mongoose OS公式サイト
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;Mongoose OSでは、ESP32やESP8266へJavaScript（&lt;a href=&#34;https://github.com/cesanta/mjs&#34;&gt;mJS&lt;/a&gt;）でコードを書き込めます。
+さらには、セキュアで、AWS IoTやGoogleのCloud IoT Coreなどとも連携設定がシンプルにできます。&lt;/p&gt;
+
+&lt;p&gt;Mongoose OSをインストールしている間は元のNefry BTのプログラムは利用できなくなります。（Arduino IDEで書き込むことですぐに戻せます。）&lt;/p&gt;
+
+&lt;h2 id=&#34;mongoose-osの開発環境をセットアップ&#34;&gt;Mongoose OSの開発環境をセットアップ&lt;/h2&gt;
+
+&lt;h3 id=&#34;windowsの場合&#34;&gt;Windowsの場合&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://mongoose-os.com/software.html&#34;&gt;Download Page&lt;/a&gt;から、exeをダウンロードするだけで使えます。（アンチウイルス系のソフトが反応するかもしれません。）なお、以降MacOSでの説明になります。
+&lt;img src=&#34;https://dotstud.io/img/blog/145/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;mac-osの場合&#34;&gt;Mac OSの場合&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://mongoose-os.com/software.html&#34;&gt;Download Page&lt;/a&gt;の、MacOS/Linuxのcurlコマンドをターミナルで実行します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ curl -fsSL https://mongoose-os.com/downloads/mos/install.sh | /bin/bash
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/145/4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ターミナルで以下のようになれば無事完了です。開く場合は、Runの&lt;code&gt;/xxx/.mos/bin/mos&lt;/code&gt;を実行するとWeb UIが開きます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ curl -fsSL https://mongoose-os.com/downloads/mos/install.sh | /bin/bash
+Downloading https://mongoose-os.com/downloads/mos-release/mac/mos ...
+########################################################################
+ 100.0%
+Installing into /xxx/.mos/bin/mos ...
+Adding /xxx/.mos/bin to your PATH in /xxx/.profile
+SUCCESS: /xxx/.mos/bin/mos is installed.
+Run &#39;/xxx/.mos/bin/mos --help&#39; to see all available commands.
+Run &#39;/xxx/.mos/bin/mos&#39; without arguments to start a simplified Web UI installer.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;いざ-mongoose-osをnefry-btに入れてみよう&#34;&gt;いざ、Mongoose  OSをNefry BTに入れてみよう&lt;/h2&gt;
+
+&lt;p&gt;Nefry BTをUSBポートに差し込み、Mongose OSとサンプルコードをFlashします。（次回起動時は、ポート選択のみで利用可能です。）&lt;/p&gt;
+
+&lt;p&gt;Mongoose OSのWeb UIは、ブラウザで開きます。①②③の設定が完了すれば無事、JavaScriptで書き込む準備完了です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/145/5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;①は、Nefry BTのポートを選択します。ポートが見つからない場合はUSBを認識させるための&lt;a href=&#34;https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers&#34;&gt;ドライバ&lt;/a&gt;をインストールする必要があります。
+②では、Platformで「esp32」とapp「demo-js」を選択し「Flash」ボタンをクリックし、処理が終わるまで待ちます。
+③では、Wi-fi設定を行います。（今回は必須ではないです。）
+全ての設定が完了したら、「Done」ボタンをおしてdevice setupを閉じます。&lt;/p&gt;
+
+&lt;h1 id=&#34;4-基本的なweb-uiとサンプルプログラム&#34;&gt;4. 基本的なWeb UIとサンプルプログラム&lt;/h1&gt;
+
+&lt;h3 id=&#34;web-uiについて&#34;&gt;Web UIについて&lt;/h3&gt;
+
+&lt;p&gt;まず、画面左側Device Filesを選択します。すると、init.jsが選択され、メインプログラムが表示されます。init.jsファイルをメインで編集します。&lt;/p&gt;
+
+&lt;p&gt;編集後、書き込みたい場合は、Save + Rebootボタンで行えます。このコードやファイルの情報は、端末から読んでいますので、コードを書き換えたら、書き込む前にバックアップを取っておくことをお勧めします。
+&lt;img src=&#34;https://dotstud.io/img/blog/145/6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;サンプルプログラムについて&#34;&gt;サンプルプログラムについて&lt;/h3&gt;
+
+&lt;p&gt;デフォルトプログラムを僕の感性でコメントしましたので、ご確認ください。なお、色々と制限付きのJSなので、仕様は&lt;a href=&#34;https://github.com/cesanta/mjs&#34;&gt;こちら&lt;/a&gt;で確認ください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js:init.js&#34;&gt;// 利用するAPIを読み出します。Flashした時点のサンプルAPIが呼ばれています。
+// 各APIの仕様やサンプルは画面左のファイル一覧で参照可能です。
+load(&#39;api_config.js&#39;);
+load(&#39;api_events.js&#39;);
+load(&#39;api_gpio.js&#39;);
+load(&#39;api_mqtt.js&#39;);
+load(&#39;api_net.js&#39;);
+load(&#39;api_sys.js&#39;);
+load(&#39;api_timer.js&#39;);
+
+// 変数宣言はletのみです。const, varは使えません。
+let led = Cfg.get(&#39;pins.led&#39;);
+let button = Cfg.get(&#39;pins.button&#39;);
+let topic = &#39;/devices/&#39; + Cfg.get(&#39;device.id&#39;) + &#39;/events&#39;;
+
+print(&#39;LED GPIO:&#39;, led, &#39;button GPIO:&#39;, button);
+
+let getInfo = function() {
+  return JSON.stringify({
+    total_ram: Sys.total_ram(),
+    free_ram: Sys.free_ram()
+  });
+};
+
+// 1秒おきにLEDをチカチカさせてます。ついでにチクタク時を刻んでいます。
+GPIO.set_mode(led, GPIO.MODE_OUTPUT);
+Timer.set(1000 /* 1 sec */, Timer.REPEAT, function() {
+  let value = GPIO.toggle(led);
+  print(value ? &#39;Tick&#39; : &#39;Tock&#39;, &#39;uptime:&#39;, Sys.uptime(), getInfo());
+}, null);
+
+// リセットボタンではない方のボタンを押すとMQTTでpublishします。
+GPIO.set_button_handler(button, GPIO.PULL_UP, GPIO.INT_EDGE_NEG, 200, function() {
+  let message = getInfo();
+  let ok = MQTT.pub(topic, message, 1);
+  print(&#39;Published:&#39;, ok, topic, &#39;-&amp;gt;&#39;, message);
+}, null);
+
+// ネットワークモニタです。
+Event.addGroupHandler(Net.EVENT_GRP, function(ev, evdata, arg) {
+  let evs = &#39;???&#39;;
+  if (ev === Net.STATUS_DISCONNECTED) {
+    evs = &#39;DISCONNECTED&#39;;
+  } else if (ev === Net.STATUS_CONNECTING) {
+    evs = &#39;CONNECTING&#39;;
+  } else if (ev === Net.STATUS_CONNECTED) {
+    evs = &#39;CONNECTED&#39;;
+  } else if (ev === Net.STATUS_GOT_IP) {
+    evs = &#39;GOT_IP&#39;;
+  }
+  print(&#39;== Net event:&#39;, ev, evs);
+}, null);
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;nefry-btのフルカラーledを点灯しよう&#34;&gt;Nefry BTのフルカラーLEDを点灯しよう&lt;/h2&gt;
+
+&lt;p&gt;やっと本題に入ります。&lt;/p&gt;
+
+&lt;p&gt;Mongoose OSでは、様々なオープンソースコードがあり、それをインポートすることができます。今回は、NefryBTのフルカラーLEDを点灯させるためにNeoPixelのサンプルコードを入手します。&lt;/p&gt;
+
+&lt;p&gt;画面左のProjectsを選択し、Importをクリックします。
+&lt;img src=&#34;https://dotstud.io/img/blog/145/7.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;App Managerのサーチ部分に「neopixel」と入力し、HARDWAREから「example-neopixel-js」をimportします。完了したらApp Managerの画面を閉じます。
+&lt;img src=&#34;https://dotstud.io/img/blog/145/8.png&#34; alt=&#34;&#34; /&gt;
+次に、サンプルプログラムをNefryBTに書き込みます。&lt;/p&gt;
+
+&lt;p&gt;今ImportしたAppが選択されていることを確認し、①Rebuildアイコンと②Flashアイコンを処理が完了次第、順番にクリックすることで書き込み完了です。（それぞれ少々時間がかかります。）
+&lt;img src=&#34;https://dotstud.io/img/blog/145/9.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Device Filesのinit.jsの内容を以下の内容に書き換えます。Nefry BTのボタンを押したらフルカラーLEDが点灯するという内容のプログラムです。&lt;/p&gt;
+
+&lt;p&gt;※なお、R2に関しては動作確認中ですので、確認次第内容を変更いたします。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js:init.js&#34;&gt;load(&#39;api_config.js&#39;);
+load(&#39;api_events.js&#39;);
+load(&#39;api_gpio.js&#39;);
+load(&#39;api_sys.js&#39;);
+load(&#39;api_timer.js&#39;);
+load(&#39;api_neopixel.js&#39;);
+
+// 今回は一部しか利用していませんが、NefryのピンNoです。
+let pin = {
+    &amp;quot;nefrybt&amp;quot;:{
+      &amp;quot;sw&amp;quot;: 4,
+      &amp;quot;d0&amp;quot;:22,
+      &amp;quot;d1&amp;quot;:21,
+      &amp;quot;d2&amp;quot;:23,
+      &amp;quot;d3&amp;quot;:19,
+      &amp;quot;d4&amp;quot;:18,
+      &amp;quot;a0&amp;quot;:25,
+      &amp;quot;a1&amp;quot;:26,
+      &amp;quot;a2&amp;quot;:32,
+      &amp;quot;a3&amp;quot;:33,
+      &amp;quot;a4&amp;quot;:27,
+      &amp;quot;a5&amp;quot;:14,
+      &amp;quot;a6&amp;quot;:13,
+      &amp;quot;a7&amp;quot;:35,
+      &amp;quot;LED&amp;quot;:16
+    },
+    &amp;quot;nefrybtR2&amp;quot;:{
+      &amp;quot;sw&amp;quot;: 4,
+      &amp;quot;d0&amp;quot;:22,
+      &amp;quot;d1&amp;quot;:21,
+      &amp;quot;d2&amp;quot;:23,
+      &amp;quot;d3&amp;quot;:19,
+      &amp;quot;d4&amp;quot;:18,
+      &amp;quot;d5&amp;quot;:25,
+      &amp;quot;d6&amp;quot;:26,
+      &amp;quot;d7&amp;quot;:13,
+      &amp;quot;d8&amp;quot;:14,
+      &amp;quot;a0&amp;quot;:33,
+      &amp;quot;a1&amp;quot;:32,
+      &amp;quot;a2&amp;quot;:39,
+      &amp;quot;a3&amp;quot;:36,
+      &amp;quot;LED&amp;quot;:16
+    }
+  };
+
+
+// フルカラーLEDのピンと個数、オーダーを指定しています。
+let Lpin = pin.nefrybt.LED, numPixels = 1, colorOrder = NeoPixel.GRB;
+
+// api_neopixel.jsに基づき初期化を行います。
+let strip = NeoPixel.create(Lpin, numPixels, colorOrder);
+strip.clear();
+strip.setPixel(0,0,0,0);
+strip.show();
+
+// ボタンを押したら赤色をつけます。setpixel(0,0,0,0)は、ピクセルナンバーとRGBになっています。Redの数字は20としていますが、数字をあげるとかなり明るくなります。
+// GPIO.set_button_handlerの仕様は、
+GPIO.set_button_handler(4, GPIO.PULL_UP, GPIO.INT_EDGE_NEG, 200, function() {
+    strip.clear();
+    strip.setPixel(0,20,0,0);
+    strip.show();
+}, null);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;困った時は&#34;&gt;困った時は&lt;/h2&gt;
+
+&lt;p&gt;Q. DeviceLogsにエラーがでている。&lt;/p&gt;
+
+&lt;p&gt;A. Mongoose OS画面右上のdevice setupより、ポートを選択し直してください。それでも治らない場合は、ターミナルにて、&lt;code&gt;control+c&lt;/code&gt;でMongoose OSを一度終わらせて、再起動をしてみてください。&lt;/p&gt;
+
+&lt;p&gt;それでもエラーが発生する場合は、一度Arduino IDEからNefry BTをボードに選択し、何も書いていないコードで書き込み直してください。なお、Nefry BTの状態に戻したい場合もArduino IDEから書き込むことで初期状態にもどせます。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;Nefry BTをJavaScriptでプログラムして、LEDを点灯させるところまでできました。&lt;/p&gt;
+
+&lt;p&gt;ディスプレイも表示させることができるので、次回は、Mongoose OSを使ったディスプレイの表示方法をご紹介しようと思います。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Nefry BT（ESP32）からBLEでNode.jsにデータを送ってみよう</title>
       <link>https://dotstud.io/blog/nefrybt-ble-bluetooth-peripheral/</link>
       <pubDate>Fri, 12 Jan 2018 23:58:16 +0900</pubDate>
@@ -217,14 +535,14 @@ const discovered = (peripheral) =&amp;gt; {
         noble.stopScanning();
         console.log(&#39;device found&#39;);
         console.log(`service discover...`);
-        
+
         peripheral.connect(error =&amp;gt; {
             if (error) {
                 console.log(&amp;quot;connection error:&amp;quot;, error)
             } else {
                 console.log(&amp;quot;device connected&amp;quot;);
             }
-            
+
             peripheral.discoverServices([],(err, services) =&amp;gt; {
                 if (error) {
                     console.log(&amp;quot;discover service error&amp;quot;, error)
@@ -631,7 +949,7 @@ void loop() {
       errorReport();
     }
   }
-  
+
   mqttClient.loop();
 }
 
@@ -647,7 +965,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
 void errorReport(){
   Serial.print(&amp;quot;Failed. Error state = &amp;quot;);
-  
+
   switch (mqttClient.state()) {
     case MQTT_CONNECT_UNAUTHORIZED:
       Serial.println(&amp;quot;MQTT_CONNECT_UNAUTHORIZED&amp;quot;);
@@ -680,7 +998,7 @@ void errorReport(){
       Serial.println(&amp;quot;MQTT_CONNECTION_TIMEOUT&amp;quot;);
       break;
   }
-      
+
   delay(5000); // Wait 5 seconds before retrying
 }
 &lt;/code&gt;&lt;/pre&gt;
@@ -1404,9 +1722,9 @@ app.post(&#39;/&#39;, (req, res) =&amp;gt; {
         console.log(`[done] Image Save`);
         io.sockets.emit(&#39;new image&#39;,base64image); //画像送信
     });
-    
+
 });
- 
+
 http.listen(PORT, () =&amp;gt; console.log(`listening on *:${PORT}`));
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -3544,825 +3862,6 @@ Nefry BTのスイッチを押すとLEDの色が変わり送信を始めます。
 &lt;p&gt;リアルタイム通信が得意な「Milkcocoa」やクラウドサービスMicrosoft AzureのIoT向け機能である「Azure IoT Hub」などを使うとより幅広い開発ができるでしょう。&lt;/p&gt;
 
 &lt;p&gt;今後の更新で簡単に接続できるライブラリやサンプルコードを追加していく予定です。生まれたばかりでまだまだヒヨッコですが、進化していくNefry BTを応援していただけたらと思います。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>「Wio Node」で半田付けなしの電子工作！温度計作りでIoTはじめの一歩</title>
-      <link>https://dotstud.io/blog/seeed-wionode-hands-on/</link>
-      <pubDate>Fri, 21 Apr 2017 22:18:36 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/seeed-wionode-hands-on/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、バックエンドエンジニアのちゃんとく（&lt;a href=&#34;https://twitter.com/tokutoku393&#34;&gt;@tokutoku393&lt;/a&gt;）です。&lt;/p&gt;
-
-&lt;p&gt;今回は、難しいプログラミングや半田付けなしで簡単に試せる「Wio Node」を使って温度表示計を作ってみます！この記事は「&lt;strong&gt;&lt;a href=&#34;https://dotstudio.connpass.com/event/53388/&#34;&gt;WioNodeで始めよう！挫折しないIoT入門ハンズオン
-&lt;/a&gt;&lt;/strong&gt;」の資料にもなっています。&lt;/p&gt;
-
-&lt;p&gt;かなり長いですが、詳細な手順を載せていますので根気よく頑張りましょう！&lt;/p&gt;
-
-&lt;h2 id=&#34;wio-nodeとは&#34;&gt;Wio Nodeとは&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/01_wio_node.png&#34; alt=&#34;&#34; /&gt;
-今回使うWio Nodeは、中国のSeeed Studio社が開発した&lt;strong&gt;Wi-Fiモジュール初期搭載のIoTデバイス&lt;/strong&gt;です。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Grove規格のモジュールをそのまま挿せるコネクタを搭載&lt;/strong&gt;していて、はんだづけなしで動かすことができます。モジュールのセットアップも&lt;strong&gt;公式のスマートフォンアプリから行うことができ&lt;/strong&gt;、電子工作初心者でも簡単に試せます。&lt;/p&gt;
-
-&lt;h2 id=&#34;動かしてみる&#34;&gt;動かしてみる&lt;/h2&gt;
-
-&lt;p&gt;早速Wio Nodeを動かしてみましょう。今回は、温度センサと7セグメントディスプレイを使って簡易温度計を作ってみます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/02_map.png&#34; alt=&#34;&#34; /&gt;
-Wio Nodeに接続したモジュール同士は一見つながっているように見えますが、&lt;strong&gt;内部で連携する仕組みはありません&lt;/strong&gt;。それぞれWi-Fiを使ってAPIからインプットやアウトプットを制御します。&lt;/p&gt;
-
-&lt;p&gt;以下の手順で作っていきます。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Wio Nodeのセットアップ&lt;/li&gt;
-&lt;li&gt;Wio Nodeにモジュールを接続する&lt;/li&gt;
-&lt;li&gt;アプリからAPIを試す&lt;/li&gt;
-&lt;li&gt;Node.jsでプログラムを書く&lt;/li&gt;
-&lt;li&gt;試してみる&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h4&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Wio Node -&amp;gt; &lt;a href=&#34;https://dotstud.io/shop/wionode-social-remote-control/&#34;&gt;購入ページ&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Micro USBケーブル&lt;/li&gt;
-&lt;li&gt;Grove 温度センサ（型番: SEEED-101020015）&lt;/li&gt;
-&lt;li&gt;Grove 7セグメントディスプレイ（型番: SEEED-104030003）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;類似のセンサがたくさんありますので、型番をよくご確認ください。&lt;/strong&gt;（Wio Nodeに対応していない場合があります。）&lt;/p&gt;
-
-&lt;h4 id=&#34;筆者の環境&#34;&gt;筆者の環境&lt;/h4&gt;
-
-&lt;ul&gt;
-&lt;li&gt;MacBook Pro（Retina 13-inch、Early 2015）&lt;/li&gt;
-&lt;li&gt;OS X El Capitan（v10.11.6）&lt;/li&gt;
-&lt;li&gt;iOS10.31&lt;/li&gt;
-&lt;li&gt;Node.js v7.9.0&lt;/li&gt;
-&lt;li&gt;npm 4.5.0&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;wio-nodeのセットアップ&#34;&gt;Wio Nodeのセットアップ&lt;/h3&gt;
-
-&lt;p&gt;まずはWio Nodeの初期設定から進めていきます。&lt;/p&gt;
-
-&lt;p&gt;Wio Nodeは&lt;strong&gt;モバイルバッテリ・PCなどからUSBケーブルで電源を供給しましょう&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;開発用アプリのインストール&#34;&gt;開発用アプリのインストール&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/02_wio_app.png&#34; alt=&#34;&#34; /&gt;
-Wio Nodeの開発には、公式からリリースされている「Wio Link」というアプリ（Androidの場合は「Wio」）を利用します。執筆時はiOS版は1.5.2、Android版は2.3.6がリリースされています。今回はiOS版を使っての紹介です。&lt;/p&gt;
-
-&lt;p&gt;iOS: &lt;a href=&#34;https://itunes.apple.com/jp/app/wio-link/id1054893491?mt=8&#34;&gt;https://itunes.apple.com/jp/app/wio-link/id1054893491?mt=8&lt;/a&gt;&lt;br /&gt;
-Android: &lt;a href=&#34;https://play.google.com/store/apps/details?id=cc.seeed.iot.ap&amp;amp;hl=ja&#34;&gt;https://play.google.com/store/apps/details?id=cc.seeed.iot.ap&amp;amp;hl=ja&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;アプリとwio-nodeの設定&#34;&gt;アプリとWio Nodeの設定&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/03_acount.png&#34; alt=&#34;&#34; /&gt;
-アプリを開いたらまずはアカウントを作成しましょう。「SIGN UP」からメールアドレスとパスワードを設定し「Register」で登録します。ServerLocationはデフォルトのGlobalにしておきます。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;GmailやFacebookのアカウントを使った登録もできますが、他サービスとの連携でうまくいかないことがあるので非推奨です&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/04_add_device.png&#34; alt=&#34;&#34; /&gt;
-アカウントが作成されたらAdd Your First Deviceをタップし、Wio Nodeを選択します。&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;wi-fi設定&#34;&gt;Wi-Fi設定&lt;/h4&gt;
-
-&lt;p&gt;続いてWi-Fi設定をします。&lt;strong&gt;手順が少しややこしいので注意してください&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;まずは簡単にWio Nodeがインターネットに繋がる仕組みを整理してみます。
-&lt;img src=&#34;https://dotstud.io/img/blog/095/05_internet.png&#34; alt=&#34;&#34; /&gt;
-デバイスがインターネットに繋がるためには、&lt;strong&gt;インターネットに繋がる媒介（=アクセスポイント）&lt;/strong&gt;が必要です。私たちは普段ルータやポケットWi-Fi（モバイルルータ）を媒介にしていますね。&lt;/p&gt;
-
-&lt;p&gt;Wio Nodeも同様に、インターネットに繋がるために&lt;strong&gt;アクセスポイントが必要&lt;/strong&gt;です。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/06_wifi_setup.png&#34; alt=&#34;&#34; /&gt;
-Wio Nodeに&lt;strong&gt;アクセスポイントの情報を教える必要がある&lt;/strong&gt;ので、アドホックモードでWio Nodeとスマートフォンを同じ回線に繋いだ状態にします。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;スマートフォンからWio Nodeにアクセスポイント情報を教えてあげる&lt;/strong&gt;と、その後は&lt;strong&gt;Wio Node自身がアクセスポイントに繋がります&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;接続手順が複雑になりますが、この仕組みを押さえておきましょう！&lt;/p&gt;
-
-&lt;p&gt;アクセスポイントやWAN/LANについてよくわからない方は&lt;a href=&#34;https://dotstud.io/docs/network&#34;&gt;ドキュメント&lt;/a&gt;を参照してください。&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;wi-fi設定手順&#34;&gt;Wi-Fi設定手順&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/06_func.png&#34; alt=&#34;&#34; /&gt;
-まずは画面の指示にしたがってFuncボタン（写真親指側）を4秒以上長押しすると、青いランプがゆらゆらと光ります。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/07_wio_network.png&#34; alt=&#34;&#34; /&gt;
-iOSのWi-Fi選択画面から、「Wio_XXXX」というSSIDを選択します。（Androidはアプリ内での選択です。）アドホックモードで&lt;strong&gt;Wio Nodeとスマートフォンが繋がっている状態&lt;/strong&gt;です。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/08_wifi_list.png&#34; alt=&#34;&#34; /&gt;
-アプリに戻ると、続いてWi-Fiの接続を促されます。ネットワークリストから、部屋や会場のWi-Fi（利用するWi-Fi）を選択してパスワードを入力しましょう。&lt;strong&gt;アクセスポイント情報を教えてあげた状態&lt;/strong&gt;です。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/09_device_connect.png&#34; alt=&#34;&#34; /&gt;
-Wio Nodeがインターネットに繋がり、登録が完了しました。デバイスに名前をつけておきます。（Android端末で認識がうまくいかない場合、&lt;strong&gt;機内モードにして試す&lt;/strong&gt;と解消することがあるようです。）&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;アプリからでは失敗する場合は、&lt;a href=&#34;https://dotstud.io/docs/wionode-wiosetup&#34;&gt;こちら&lt;/a&gt;を参考にWio-Setupというツールを試してみてください&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;以上でWio Nodeのセットアップは完了です。同じデバイスとアクセスポイントを使う場合は、以後起動するだけで接続されるようになります！&lt;/p&gt;
-
-&lt;h3 id=&#34;wio-nodeにモジュールを接続する&#34;&gt;Wio Nodeにモジュールを接続する&lt;/h3&gt;
-
-&lt;p&gt;アプリから、接続するモジュールを登録します。
-&lt;img src=&#34;https://dotstud.io/img/blog/095/10_display_connect.png&#34; alt=&#34;&#34; /&gt;
-「PORT0」（左側）をタップして、下の「OUTPUT」から「4-Digit Display」を選択しましょう。&lt;strong&gt;似たようなモジュールがたくさんありますので、よく確認してください&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/11_temperature_connect.png&#34; alt=&#34;&#34; /&gt;
-続いて温度センサを登録します。「PORT1」（右側）をタップして、「INPUT」から「Temperature Sensor」を選択します。&lt;/p&gt;
-
-&lt;p&gt;アプリ画面を参考に、Wio Nodeにモジュールを接続します。
-&lt;img src=&#34;https://dotstud.io/img/blog/095/12_module_connect.png&#34; alt=&#34;&#34; /&gt;
-「PORT0」に7セグメントディスプレイ、「PORT1」に温度センサを接続しましょう。&lt;/p&gt;
-
-&lt;p&gt;接続できたら、アプリ画面下部の「Update Firmware」をタップしましょう。読み込みのあと、「View API」というAPIサンプルページが表示されるようになります。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Updateが失敗する場合はモジュールの接続が左右間違っていないか今一度確認してください&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;アプリからapiを試す&#34;&gt;アプリからAPIを試す&lt;/h3&gt;
-
-&lt;p&gt;「View API」のページでは、手軽にモジュールを操作するAPIを試すことができます。正しく接続できているか、試してみましょう。
-&lt;img src=&#34;https://dotstud.io/img/blog/095/13_display_api.png&#34; alt=&#34;&#34; /&gt;
-まずは7セグメントディスプレイの「display_point」というAPIを試してみます。説明部分には、「&lt;strong&gt;POSTメソッドで1を送ると&amp;rdquo;:&amp;ldquo;が表示される&lt;/strong&gt;」とありますね。「Test Request」から1を送ってみます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/14_display_demo.png&#34; alt=&#34;&#34; /&gt;
-7セグメントディスプレイに&amp;rdquo;:&amp;ldquo;が表示されました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/15_temp_api.png&#34; alt=&#34;&#34; /&gt;
-続いて温度センサのAPIを試します。温度の取得には値は必要ないので、そのままGETメソッドでRequestします。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/16_temp_demo.png&#34; alt=&#34;&#34; /&gt;
-現在の温度が返ってきました。（かなり暑いですね（笑））&lt;/p&gt;
-
-&lt;p&gt;挙動が確認できたら、2つのモジュールを連携させるプログラムを書いていきましょう！&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;memo-getメソッドとpostメソッド&#34;&gt;memo: GETメソッドとPOSTメソッド&lt;/h4&gt;
-
-&lt;p&gt;HTTPリクエストにはいくつかのメソッド（送信方法）があります。GET、POSTの他にもPUTメソッド、DELETEメソッドなどがあり、最近主流の「RESTful API」という考え方では&lt;strong&gt;操作する内容によってメソッドを使い分ける&lt;/strong&gt;ことになっています。&lt;/p&gt;
-
-&lt;p&gt;今回はメソッド名だけわかればプログラミング可能ですが、詳しく知りたい方は調べてみてください！&lt;/p&gt;
-
-&lt;h3 id=&#34;node-jsでプログラムを書く&#34;&gt;Node.jsでプログラムを書く&lt;/h3&gt;
-
-&lt;p&gt;センサの値を取得して、室温をディスプレイに表示するプログラムを書いていきましょう。プログラムはAPIを叩ければよいので、今回は&lt;strong&gt;Node.js&lt;/strong&gt;で作成します。&lt;/p&gt;
-
-&lt;p&gt;プログラムの仕組みを理解するために、以下の手順で説明します。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Node.jsのインストール&lt;/li&gt;
-&lt;li&gt;プロジェクトの作成&lt;/li&gt;
-&lt;li&gt;温度情報を取得する&lt;/li&gt;
-&lt;li&gt;温度情報を表示したい文字列に変換する&lt;/li&gt;
-&lt;li&gt;ディスプレイに温度を表示する&lt;/li&gt;
-&lt;li&gt;3秒ごとに更新する&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;memo-コマンドラインの使い方&#34;&gt;memo: コマンドラインの使い方&lt;/h4&gt;
-
-&lt;p&gt;Node.jsの実行やファイル操作はコマンドラインで行います。Macには「ターミナル」、Windowsには「コマンドプロンプト」というアプリケーションが最初から入っているので、立ち上げて使いましょう。&lt;/p&gt;
-
-&lt;p&gt;初めてコマンドを使う方は、「ターミナル コマンド」などで検索すると基本的な使い方がわかりますよ！&lt;/p&gt;
-
-&lt;p&gt;筆者はiTerm2というクライアントアプリにzshというシェルを入れています。（画面がちょっと違うくらいだと思ってください。）&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;1-node-jsのインストール&#34;&gt;1. Node.jsのインストール&lt;/h4&gt;
-
-&lt;p&gt;まずはNode.jsのインストールから始めます。また&lt;code&gt;async/await&lt;/code&gt;という機能を使っているので、&lt;strong&gt;v7.6.0以上が必要&lt;/strong&gt;です。最新版をインストール済みの方は次項の「プロジェクトの作成」から始めてください。&lt;/p&gt;
-
-&lt;p&gt;Node.jsのインストールには、簡単にバージョン管理ができる「&lt;strong&gt;nvm&lt;/strong&gt;」や「&lt;strong&gt;nodebrew&lt;/strong&gt;」を使うのが便利です。nodebrewを使ったインストール方法は下記を参照してください。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://dotstud.io/blog/setup-new-mac-app/#node-js%E7%92%B0%E5%A2%83%E6%95%B4%E5%82%99&#34;&gt;僕がMacを買い換えてすぐにいれるツール&amp;amp;すぐにする初期設定&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;インストールが完了したら、Node.jsが正しく動くか確認してみましょう。
-&lt;img src=&#34;https://dotstud.io/img/blog/095/17_node_v.png&#34; alt=&#34;&#34; /&gt;
-コマンドラインで&lt;code&gt;node -v&lt;/code&gt;を叩くとバージョンが出るようになったでしょうか？（v7.6.0以上ですよ！）&lt;/p&gt;
-
-&lt;p&gt;Node.jsの環境構築はとても簡単なので、ウェブ開発が初めての方にもオススメです！&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;memo-コーディング無しで動かしてみる&#34;&gt;memo: コーディング無しで動かしてみる&lt;/h4&gt;
-
-&lt;p&gt;サクッと試したい方は、githubの&lt;a href=&#34;https://github.com/dotstudio/wionode_handson&#34;&gt;完成プログラム&lt;/a&gt;をご覧ください。READMEの手順を進めるとコーディングなしで動かせます。&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;2-プロジェクトの作成&#34;&gt;2. プロジェクトの作成&lt;/h4&gt;
-
-&lt;p&gt;今回のWio Nodeのプログラムを置くプロジェクトを作成しましょう。&lt;/p&gt;
-
-&lt;p&gt;適当なディレクトリに移動します。（私は&lt;code&gt;/Users/ユーザ名/workspace&lt;/code&gt;という作業ディレクトリを用意しています。参考まで。）
-&lt;img src=&#34;https://dotstud.io/img/blog/095/18_mkdir.png&#34; alt=&#34;&#34; /&gt;
-&lt;code&gt;mkdir ディレクトリ名&lt;/code&gt;で新しいディレクトリを作成できます。&lt;code&gt;wio_temperature&lt;/code&gt;というディレクトリを作ってみました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/19_cd.png&#34; alt=&#34;&#34; /&gt;
-&lt;code&gt;cd ディレクトリ名&lt;/code&gt;で作成したディレクトリの下に移動します。&lt;/p&gt;
-
-&lt;p&gt;Node.jsでは「npm」でモジュールを管理できます。&lt;code&gt;npm init -y&lt;/code&gt;を実行しましょう。&lt;code&gt;-y&lt;/code&gt;オプションで名前等をデフォルト値で作成してくれます。
-&lt;img src=&#34;https://dotstud.io/img/blog/095/20_npm_init.png&#34; alt=&#34;&#34; /&gt;
-プロジェクト名やライブラリなどを管理する「&lt;strong&gt;package.json&lt;/strong&gt;」が作成されました。&lt;/p&gt;
-
-&lt;p&gt;今回使用する「&lt;strong&gt;axios&lt;/strong&gt;」ライブラリをインストールします。&lt;code&gt;npm install axios --save&lt;/code&gt;を実行しましょう。&lt;code&gt;--save&lt;/code&gt;オプションをつけることでpackage.jsonに記載されます。
-&lt;img src=&#34;https://dotstud.io/img/blog/095/21_npm_install.png&#34; alt=&#34;&#34; /&gt;
-axiosがインストールされ、package.jsonに追加されました。&lt;/p&gt;
-
-&lt;p&gt;続いてプログラムを記述するファイルを作成します。&lt;code&gt;touch ファイル名&lt;/code&gt;でファイルが作成されます。（Windowsの場合はコマンドがないのでフォルダから作成してください。）
-&lt;img src=&#34;https://dotstud.io/img/blog/095/22_touch.png&#34; alt=&#34;&#34; /&gt;
-app.jsというファイルを作成しました。（&lt;code&gt;ls&lt;/code&gt;コマンドでカレントディレクトリのファイルが見れます。Windowsは&lt;code&gt;dir&lt;/code&gt;。）&lt;/p&gt;
-
-&lt;p&gt;以上でプロジェクトの作成は完了です。ファイルにプログラムを書いていきましょう！&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;memo-ファイルの編集とエディタについて&#34;&gt;memo: ファイルの編集とエディタについて&lt;/h4&gt;
-
-&lt;p&gt;コマンドラインからでもファイルの編集はできますが、&lt;strong&gt;インデントやコードの補完が効かず作業しづらい&lt;/strong&gt;ので、テキストエディタを使うのがオススメです。&lt;/p&gt;
-
-&lt;p&gt;下記記事ではVisual Studio Codeのインストール方法を紹介しています。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://dotstud.io/blog/setup-new-mac-app/#visual-studio-code&#34;&gt;僕がMacを買い換えてすぐにいれるツール&amp;amp;すぐにする初期設定&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;3-温度情報を取得する&#34;&gt;3. 温度情報を取得する&lt;/h4&gt;
-
-&lt;p&gt;まずは温度を取得するプログラムを書いていきます。&lt;code&gt;BASE_URL&lt;/code&gt;はドメインが違う場合があるので、アプリから確認して自身のものに置き換えてください。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
-
-const axios = require(&#39;axios&#39;);
-const TOKEN = process.argv[2] || &#39;&#39;;
-const BASE_PATH = `https://us.wio.seeed.io/v1/node`; // 自身のものをアプリで確認
-
-/**
- * 温度取得
- */
- const getTemp = () =&amp;gt; {
-     const ENDPOINT = `/GroveTempA0/temp`;
-     const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${TOKEN}`;
-     axios.request({method: &#39;get&#39;, baseURL: BASE_URL})
-     .then((resp) =&amp;gt; console.log(resp));
- }
-
-getTemp();
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;axiosに温度取得APIのURLとオプションを渡し、返ってきた値を出力しています。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;const ACCESS_TOKEN = process.argv[2] || &#39;&#39;;&lt;/code&gt;の部分は、コマンドライン引数（実行時に渡す値）を取得しています。tokenなどの人に知られたくない値は、ファイルに直接書かないのがベターです。&lt;/p&gt;
-
-&lt;p&gt;それでは正しく動くか試してみましょう。&lt;code&gt;node app.js &amp;lt;自分のtoken&amp;gt;&lt;/code&gt;というコマンドで実行します。&lt;/p&gt;
-
-&lt;p&gt;ご自身のtokenは&lt;strong&gt;アプリのView API画面から確認してください&lt;/strong&gt;。&lt;code&gt;?access_token=&lt;/code&gt;の後の文字列がtokenです。
-&lt;img src=&#34;https://dotstud.io/img/blog/095/23_temp_test.png&#34; alt=&#34;&#34; /&gt;
-温度センサの情報が返ってきたでしょうか？&lt;/p&gt;
-
-&lt;p&gt;1番下に温度情報がありますね。この情報を使ってディスプレイに表示する文字列を作っていきます。&lt;/p&gt;
-
-&lt;p&gt;エラーが出てしまった人は、「Node.js &amp;lt;エラーメッセージ&amp;gt;」で検索すると答えが見つかりやすいです。&lt;/p&gt;
-
-&lt;p&gt;&lt;br&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;4-温度情報を表示したい文字列に変換する&#34;&gt;4. 温度情報を表示したい文字列に変換する&lt;/h4&gt;
-
-&lt;p&gt;取得した温度情報を、ディスプレイに表示する文字列に作り変えるfunctionを作りましょう。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;/**
- * 取得した温度情報を表示する文字列に変換
- *
- * @param {number} temp
- * @return {string}
- */
-const temp2digit = (temp) =&amp;gt; {
-  let temp_str = `${temp}`;
-  temp_str = temp_str.replace(&#39;.&#39;, &#39;&#39;);
-  if (temp_str.length &amp;gt;= 4) {
-    temp_str = temp_str.substr(0, tempstr.length-1);
-  }
-  return `${temp_str}C`;
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;temp2digit()の引数には、先ほど受け取った情報の温度部分だけを渡します。&lt;/p&gt;
-
-&lt;p&gt;数値を文字列に変換し、不要な&amp;rsquo;.&amp;lsquo;を取り除き、3桁にして、温度計らしく&amp;rsquo;C&amp;rsquo;を付けて返します。&lt;/p&gt;
-
-&lt;p&gt;これを先ほど作ったgetTemp()と一緒に実行するようにしてみましょう。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
-
-const axios = require(&#39;axios&#39;);
-const TOKEN = process.argv[2] || &#39;&#39;;
-const BASE_PATH = `https://us.wio.seeed.io/v1/node`; // 自身のものをアプリで確認
-
-/**
- * 温度取得
- */
- const getTemp = () =&amp;gt; {
-     const ENDPOINT = `/GroveTempA0/temp`;
-     const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${TOKEN}`;
-     return axios.request({method: &#39;get&#39;, baseURL: BASE_URL}); // ここでは実行しない
- }
-
-/**
- * 温度情報を文字列変換+Cを追加
- * @param {number} temp
- * @return {string}
- */
-const temp2digit = (temp) =&amp;gt;{
-    let temp_str = `${temp}`;
-    temp_str = temp_str.replace(&#39;.&#39;,&#39;&#39;);
-    if(temp_str.length &amp;gt;= 4){
-        temp_str = temp_str.substr(0,temp_str.length-1);
-    }
-    return `${temp_str}C`;
-}
-
-async function main(){ // async/awaitを使う
-   const res = await getTemp();
-   const temp = res.data.temperature;
-   const text = temp2digit(temp);
-   console.log(text);
-}
-
-main();
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;ここではasync/awaitを使っています。awaitで指定したタスクの実行を待ってレスポンスを受け取り、asyncを付けたメソッドを一つのタスクとして処理するような機能です。Node.jsではv7.6.0から導入されました。&lt;/p&gt;
-
-&lt;p&gt;実行を待たせるため、getTemp()では、APIの結果ではなくメソッドを返すだけに変更します。&lt;/p&gt;
-
-&lt;p&gt;getTemp()で受け取ったobjectの子要素には&lt;code&gt;.&lt;/code&gt;でアクセスします。先ほどのレスポンスのdataの中のtemperatureが欲しいので&lt;code&gt;res.data.temperature&lt;/code&gt;となります。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;node app.js &amp;lt;自分のtoken&amp;gt;&lt;/code&gt;で実行してみます。
-&lt;img src=&#34;https://dotstud.io/img/blog/095/24_temp2digit.png&#34; alt=&#34;&#34; /&gt;
-温度計の文字列ができました！&lt;/p&gt;
-
-&lt;p&gt;次はいよいよこの文字列をディスプレイに表示させます。&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;5-ディスプレイに温度を表示する&#34;&gt;5. ディスプレイに温度を表示する&lt;/h4&gt;
-
-&lt;p&gt;取得した温度の値を使って、ディスプレイに表示するAPIを叩きます。温度の区切りを表すため、最初に試した&amp;rsquo;:&amp;lsquo;を表示するAPIも使ってみましょう。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;/**
- * ディスプレイに値を表示
- *
- * @param {number} start_pos
- * @param {strng} chars
- */
-const fourDigit = (start_pos, chars) =&amp;gt; {
-  const ENDPOINT = `/Grove4DigitUART0/display_digits/${start_pos}/${chars}`;
-  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
-  return axios.request({method: &#39;POST&#39;, baseURL: BASE_URL})
-}
-
-/**
- * : を表示/非表示
- * @param {number} display 0|1
- */
-const fourDigitPoint = (display) =&amp;gt; {
-  const ENDPOINT = `/Grove4DigitUART0/display_point/${display}`;
-  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
-  return axios.request({method: &#39;POST&#39;, baseURL: BASE_URL});
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;fourDigit()のstart_posにはディスプレイ表示の開始位置、charsには表示する文字を渡します。（詳しくはAPIの説明を読んでみてください）&lt;/p&gt;
-
-&lt;p&gt;fourDigitPoint()には表示するかどうかの0/1を渡すようになっています。&lt;/p&gt;
-
-&lt;p&gt;これまで作ったfunctionと繋げてみます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
-
-const axios = require(&#39;axios&#39;);
-const BASE_PATH = &#39;https://us.wio.seeed.io/v1/node&#39;; // 自身のものをアプリで確認
-const ACCESS_TOKEN = process.argv[2] || &#39;&#39;;
-
-/**
- * 温度を取得
- */
-const getTemp = () =&amp;gt; {
-  const ENDPOINT = `/GroveTempA0/temp`;
-  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
-  return axios.request({method: &#39;GET&#39;, baseURL: BASE_URL});
-}
-
-/**
- * 取得した温度情報を表示する文字列に変換
- *
- * @param {number} temp
- * @return {string}
- */
-const temp2digit = (temp) =&amp;gt; {
-  let temp_str = `${temp}`;
-  temp_str = temp_str.replace(&#39;.&#39;, &#39;&#39;);
-  if (temp_str.length &amp;gt;= 4) {
-    temp_str = temp_str.substr(0, tempstr.length-1);
-  }
-  return `${temp_str}C`;
-}
-
-/**
- * ディスプレイに値を表示
- *
- * @param {number} start_pos
- * @param {strng} chars
- */
-const fourDigit = (start_pos, chars) =&amp;gt; {
-  const ENDPOINT = `/Grove4DigitUART0/display_digits/${start_pos}/${chars}`;
-  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
-  return axios.request({method: &#39;POST&#39;, baseURL: BASE_URL});
-}
-
-/**
- * : を表示/非表示
- * @param {number} display 0|1
- */
-const fourDigitPoint = (display) =&amp;gt; {
-  const ENDPOINT = `/Grove4DigitUART0/display_point/${display}`;
-  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
-  return axios.request({method: &#39;POST&#39;, baseURL: BASE_URL});
-}
-
-async function main() =&amp;gt; {
-  let res = getTemp();
-  const temp = res.data.temperature;
-  const text = temp2digit(temp);
-  console.log(text);
-  res = await fourDigit(0, text);
-  res = await fourDigitPoint(1);
-}
-
-main();
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;こちらも試してみましょう。&lt;code&gt;node app.js &amp;lt;自分のtoken&amp;gt;&lt;/code&gt;で実行です。
-&lt;img src=&#34;https://dotstud.io/img/blog/095/25_comp_demo.png&#34; alt=&#34;&#34; /&gt;
-温度がディスプレイに表示されました！&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;6-3秒ごとに更新する&#34;&gt;6. 3秒ごとに更新する&lt;/h4&gt;
-
-&lt;p&gt;今のままではコマンドを実行した時しか処理が走りません。3秒ごとに実行するようプログラムを変えてみます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;const INTERVAL = 3000;
-
-/**
- * 繰り返し実行する
- */
-setInterval(() =&amp;gt; {
-  main()
-  .catch((e) =&amp;gt; {
-    if (e.response) console.log(e.response);
-  })
-}, INTERVAL);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;update()の実行部分をsetInterval()関数で繰り返すようにします。setInterval()の第二引数にミリ秒で数値を渡すと、その間隔ごとに実行されます。あとから変更しやすいよう、定数で宣言しておきましょう。&lt;/p&gt;
-
-&lt;p&gt;catch()はエラーが発生するとエラーレスポンスを受け取ります。&lt;/p&gt;
-
-&lt;p&gt;完成させたコードはこちら。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
-
-const axios = require(&#39;axios&#39;);
-const BASE_PATH = &#39;https://us.wio.seeed.io/v1/node&#39;; // 自身のものをアプリで確認
-const ACCESS_TOKEN = process.argv[2] || &#39;&#39;;
-const INTERVAL = 3000;
-
-/**
- * 温度を取得
- *
- * @return {object}
- */
-const getTemp = () =&amp;gt; {
-  const ENDPOINT = `/GroveTempA0/temp`;
-  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
-  return axios.request({method: &#39;GET&#39;, baseURL: BASE_URL});
-}
-
-/**
- * 取得した温度情報を表示する文字列に変換
- *
- * @param {number} temp
- * @return {string}
- */
-const tempToDigit = (temp) =&amp;gt; {
-  let temp_str = `${temp}`;
-  temp_str = temp_str.replace(&#39;.&#39;, &#39;&#39;);
-  if (temp_str.length &amp;gt;= 4) {
-    temp_str = temp_str.substr(0, temp_str.length-1);
-  }
-  return `${temp_str}C`;
-}
-
-/**
- * ディスプレイに値を表示
- *
- * @param {number} start_pos
- * @param {strng} chars
- * @return {object}
- */
-const fourDigit = (start_pos, chars) =&amp;gt; {
-  const ENDPOINT = `/Grove4DigitUART0/display_digits/${start_pos}/${chars}`;
-  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
-  return axios.request({method: &#39;POST&#39;, baseURL: BASE_URL})
-}
-
-/**
- * : を表示/非表示
- * @param {number} display 0|1
- * @return {object}
- */
-const fourDigitPoint = (display) =&amp;gt; {
-  const ENDPOINT = `/Grove4DigitUART0/display_point/${display}`;
-  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
-  return axios.request({method: &#39;POST&#39;, baseURL: BASE_URL});
-}
-
-/**
- * メインの処理（同期）
- */
-async function main() {
-  let res = await getTemp();
-  const temp = res.data.temperature;
-  const text = tempToDigit(temp);
-  console.log(text);
-  res = await fourDigit(0, text);
-  res = await fourDigitPoint(1);
-}
-
-/**
- * 繰り返し実行する
- */
-setInterval(() =&amp;gt; {
-  main()
-  .catch((e) =&amp;gt; {
-    if (e.response) console.log(e.response);
-  })
-}, INTERVAL);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;試してみる&#34;&gt;試してみる&lt;/h3&gt;
-
-&lt;p&gt;完成コードを試してみます。ドキドキ。&lt;code&gt;node app.js &amp;lt;自分のtoken&amp;gt;&lt;/code&gt;で実行です。
-&lt;img src=&#34;https://dotstud.io/img/blog/095/25_comp_demo.png&#34; alt=&#34;&#34; /&gt;
-現在の室温が表示されます。&lt;/p&gt;
-
-&lt;p&gt;3秒ごとに更新されるので、変化を試すため温度センサを手で温めてみます。
-&lt;img src=&#34;https://dotstud.io/img/blog/095/26_warmer.png&#34; alt=&#34;&#34; /&gt;
-少し温度が上がりました。処理を止めたい場合は&lt;code&gt;controll+c&lt;/code&gt;で終了します。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;これでプログラムは完成です！やったー！！&lt;/strong&gt; お疲れ様でした！&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;補足-完成の一歩先へ&#34;&gt;補足: 完成の一歩先へ！&lt;/h4&gt;
-
-&lt;p&gt;「簡単であっという間だった」というあなた！&lt;strong&gt;このガジェットを使ってできることはまだまだあります！&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;例1: Azure Web AppsなどのPaaSを使って常時稼働できるようにする&lt;/li&gt;
-&lt;li&gt;例2: 温度情報をAmbientなどのウェブサービスを使ってグラフ化してみる&lt;/li&gt;
-&lt;li&gt;例3: 一定の温度をトリガーにTwitterやSlackへ通知を送ってみる&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;上記はほんの一例です。Wio Node対応モジュールもたくさんありますので、ここまでの知見を使って試してみましょう！&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;いかがだったでしょうか？簡単と言いつつ、コマンドでの作業やウェブ開発の経験がない人には詰まる部分が多かったかもしれません。でも、これで&lt;strong&gt;InternetとThingsの連携ができるようになりました！&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;IoTの世界には、まだまだたくさんの楽しいデバイスやアイディアが待っています。&lt;strong&gt;作っても使っても楽しい電子工作をやっていきましょう！&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;最後まで読んでくださりありがとうございました！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Nefryで取得したセンサーデータをAmbientで簡単にグラフ化しよう！</title>
-      <link>https://dotstud.io/blog/nefry-data-show-graphically/</link>
-      <pubDate>Tue, 21 Mar 2017 13:48:05 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/nefry-data-show-graphically/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、外部ライターのわみ（&lt;a href=&#34;http://twitter.com/wamisnet&#34;&gt;@wamisnet&lt;/a&gt;）です。愛知県でネットワークの勉強をしている学生です。2014年ごろから電子工作を始め、今回紹介するFRISKサイズのIoT向けデバイス「Nefry（ねふりー）」を自作しました。&lt;/p&gt;
-
-&lt;p&gt;IoTといえば、データを取ることはもちろんですが、データの蓄積や分析が大切です。&lt;/p&gt;
-
-&lt;p&gt;今回は、&lt;strong&gt;簡単にデータを蓄積・グラフ化してくれる「Ambient」&lt;/strong&gt; というサービスを使って、Nefryで取得したセンサーのデータをグラフ化する方法を紹介します。&lt;/p&gt;
-
-&lt;h2 id=&#34;nefryとは&#34;&gt;Nefryとは&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/059/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;「Nefry（ねふりー）」は手軽にIoTに挑戦できるFRISKサイズのデバイスです。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://nefry.studio/&#34;&gt;公式サイト&lt;/a&gt;から、詳細なドキュメントや制作例を確認できます。&lt;/p&gt;
-
-&lt;h3 id=&#34;wi-fiを初期搭載&#34;&gt;Wi-Fiを初期搭載&lt;/h3&gt;
-
-&lt;p&gt;Nefryは、Wi-Fiモジュールの &lt;strong&gt;ESP-WROOM-02を初期搭載&lt;/strong&gt; しています。簡単にインターネットに接続できるので、接続に時間をとられることなくあなたのアイデア実現に集中できます。&lt;/p&gt;
-
-&lt;h3 id=&#34;スタンドアロンで動かせる&#34;&gt;スタンドアロンで動かせる&lt;/h3&gt;
-
-&lt;p&gt;スマートフォンで使うようなモバイルバッテリー（5V）から給電できます。&lt;strong&gt;モバイルバッテリー＋Nefryの2つで動作する&lt;/strong&gt; ので、場所を選ばずに使うことができる優れものです！&lt;/p&gt;
-
-&lt;h3 id=&#34;外部サービス連携が簡単&#34;&gt;外部サービス連携が簡単&lt;/h3&gt;
-
-&lt;p&gt;NefryはGroveセンサの規格に対応しています。専用のソケットを使い、はんだづけ不要で楽しめます。また、リアルタイム通信を簡単に実現できる「Milkcocoa」や、様々なWebサービス同士を連携できる「IFTTT」などとも組み合わせることもできます。&lt;/p&gt;
-
-&lt;p&gt;実際に使ってみた例は以下をご覧ください。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://liginc.co.jp/263899&#34;&gt;Webサービス同士を連携できる「IFTTT」と自作IoTデバイスを繋いで生活を便利にしてみた&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/iotlt-vol24-chantoku-report/&#34;&gt;【大島薫×IoT】浮気男に社会的制裁を加えるマシーンを作ってみた&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://dotstud.io/projects/nefry-connect-internet/&#34;&gt;Nefryの購入はこちら！&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;ambientとは&#34;&gt;Ambientとは&lt;/h2&gt;
-
-&lt;p&gt;Ambient（アンビエント）は、&lt;strong&gt;センサーデータを蓄積・グラフ化してくれるIoTに特化したクラウドサービス&lt;/strong&gt; です。&lt;/p&gt;
-
-&lt;p&gt;Ambientから発行される「チャネルID」「ライトキー」の &lt;strong&gt;たった2つの情報をプログラムに書き込むだけ&lt;/strong&gt; で、いとも簡単にセンサーデータをグラフ化することができます！&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/092/01_ambient.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;このようなグラフを公開したり、簡単にカスタマイズしたりすることができるので、オススメのサービスです。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://ambidata.io/&#34;&gt;Ambient公式サイト&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;つくってみよう&#34;&gt;つくってみよう！&lt;/h2&gt;
-
-&lt;p&gt;Nefryで取得したデータをグラフ化するために、今回は以下の4ステップを試します。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;事前準備&lt;/li&gt;
-&lt;li&gt;Ambientにチャネルを作成&lt;/li&gt;
-&lt;li&gt;プログラムの書き込み&lt;/li&gt;
-&lt;li&gt;NefryとAmbientの連携&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;筆者の開発環境は以下です。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;windows 10&lt;/li&gt;
-&lt;li&gt;Nefry version 2.3.0&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;事前準備&#34;&gt;事前準備&lt;/h2&gt;
-
-&lt;p&gt;開発を始める前に、NefryとAmbientのセットアップをします。&lt;/p&gt;
-
-&lt;p&gt;NefryのWi-Fi接続とAmbientのユーザ登録が完了している方は、&lt;a href=&#34;https://dotstud.io/blog/nefry-data-show-graphically/#ambientにチャネルを作成&#34;&gt;Ambientにチャネルを作成&lt;/a&gt;から開始してください。&lt;/p&gt;
-
-&lt;h3 id=&#34;nefryのセットアップ&#34;&gt;Nefryのセットアップ&lt;/h3&gt;
-
-&lt;p&gt;PCやスマートフォンから、Wi-FiのSSIDが &lt;strong&gt;Nefry-XXXX&lt;/strong&gt;（変更した場合はその名前）になっているものを探し、接続します。&lt;/p&gt;
-
-&lt;p&gt;接続できるとこのようなページが表示されます。表示されない場合は &lt;a href=&#34;http://192.168.4.1&#34;&gt;http://192.168.4.1&lt;/a&gt; に接続してみてください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/092/02_nefry_menu.png&#34; alt=&#34;&#34; /&gt;
-このトップページでNefryに関するいろいろな設定ができます。まずは「Setup WiFi」をクリックして、Wi-Fiの設定をします。&lt;/p&gt;
-
-&lt;p&gt;Setup WiFiのページはこのようになっています。
-&lt;img src=&#34;https://dotstud.io/img/blog/092/03_nefry_wifi.png&#34; alt=&#34;&#34; /&gt;
-接続したいWi-Fiを選び、パスワードがある場合は入力をします。入力が完了したら「Save」をクリックしてください。設定が保存され、Nefryが再起動します。&lt;/p&gt;
-
-&lt;p&gt;おまけですが、&lt;strong&gt;Nefry library 2.3.0&lt;/strong&gt; 以降であると5つまでのWi-Fiを記憶することができ、自動的に最も強いWi-Fiに自動接続する機能を搭載しています。Nefryを持っていて &lt;strong&gt;ライブラリが古い場合は、更新することをオススメします&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;その他のセットアップや使い方の詳細は以下の記事をご覧ください。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://liginc.co.jp/236620&#34;&gt;自作したオリジナルIoTデバイス「Nefry」とインターネットを繋いでみた&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;ambientの登録&#34;&gt;Ambientの登録&lt;/h3&gt;
-
-&lt;p&gt;グラフ化に必要な情報を取得するために、まずAmbientに登録します。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://ambidata.io/&#34;&gt;Ambient公式サイト&lt;/a&gt;&lt;/strong&gt; の「ユーザー登録」から登録を進めます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/092/04_ambient_acount.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;メールアドレス認証が必要なので、各自アカウントを用意してください。&lt;/p&gt;
-
-&lt;h2 id=&#34;ambientにチャネルを作成&#34;&gt;Ambientにチャネルを作成&lt;/h2&gt;
-
-&lt;p&gt;Ambientでは &lt;strong&gt;チャネルという単位で送信するデーターを管理・グラフ化する&lt;/strong&gt; ため、まずはチャネルを作成します。「チャネルを作る」ボタンから作成します。
-&lt;img src=&#34;https://dotstud.io/img/blog/092/05_ambient_channel.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;チャネルが無事に作成されると、先ほどのページに情報が追加されています。「チャネルID」と「ライトキー」をあとで使うので控えておきましょう。
-&lt;img src=&#34;https://dotstud.io/img/blog/092/06_ambient_list.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;プログラムの書き込み&#34;&gt;プログラムの書き込み&lt;/h2&gt;
-
-&lt;p&gt;今回はNefryについている &lt;strong&gt;アナログ入力&lt;/strong&gt; を使ってみます。アナログ入力を扱えるセンサであればどのようなセンサでも大丈夫ですが、この記事ではGroveの明るさセンサを扱います。&lt;/p&gt;
-
-&lt;p&gt;全体のプログラムはこちら。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;script src=&amp;quot;https://gist-it.appspot.com/github/Nefry-Community/ProgramMaster/blob/gh-pages/Nefry/Ambient/Analog/Analog.ino&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Nefryにプログラムを書き込む方法は２つあります。&lt;/p&gt;
-
-&lt;h3 id=&#34;arduino-ideを使う&#34;&gt;Arduino IDEを使う&lt;/h3&gt;
-
-&lt;p&gt;プログラムを編集したい場合などは、Arduino IDEに上のプログラムを貼り、編集します。&lt;/p&gt;
-
-&lt;p&gt;Arduino IDEでコンパイルしたプログラムはNefryトップページの「Upload　Sketch」からアップロードすることができます。&lt;/p&gt;
-
-&lt;p&gt;Arduino IDEにNefryの設定を追加する方法は、以下の記事を確認してください。&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;&lt;img src=&#34;https://cdn.liginc.co.jp/wp-content/uploads/2016/07/20160728-nefry.png&#34; alt=&#34;&#34; /&gt;
-&lt;a href=&#34;https://liginc.co.jp/298161&#34;&gt;&lt;strong&gt;さくっと生活を便利にする！FRISKサイズのIoT向けデバイス「Nefry」を使ってみよう【環境構築編】&lt;/strong&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h3 id=&#34;プログラムをダウンロードして使う&#34;&gt;プログラムをダウンロードして使う&lt;/h3&gt;
-
-&lt;p&gt;もっと簡単に試したい場合、トップページから「Web Sketch Download」のページに移動し以下を入力してください。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;ドメイン :  program.nefry.studio&lt;/li&gt;
-&lt;li&gt;URL :  /Nefry/Ambient/Analog&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/092/07_nefry_websketch.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://program.nefry.studio/&#34;&gt;Nefry Platform&lt;/a&gt;というサイトでは他にも様々なプログラムを公開していますので、ぜひご覧ください。&lt;/p&gt;
-
-&lt;h2 id=&#34;nefryとambientの連携&#34;&gt;NefryとAmbientの連携&lt;/h2&gt;
-
-&lt;p&gt;プログラムが書き込めたら、Ambientの情報をNefryに登録します。&lt;/p&gt;
-
-&lt;p&gt;トップページから「Setup Module」をクリックしページを移動します。
-&lt;img src=&#34;https://dotstud.io/img/blog/092/08_nefry_module.png&#34; alt=&#34;&#34; /&gt;
-設定項目の中から「WriteKey」と「ChannelID」となっている欄を見つけ、そこにAmbientで取得したライトキーとチャネルIDをそれぞれ入力します。&lt;/p&gt;
-
-&lt;p&gt;Saveをクリックすると、Nefryが再起動してAmbientにデータを送るようになります。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;これで準備は完了です！&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;ambientでグラフを見てみよう&#34;&gt;Ambientでグラフを見てみよう&lt;/h2&gt;
-
-&lt;p&gt;Nefryに接続した明るさセンサーの値のグラフです！
-&lt;img src=&#34;https://dotstud.io/img/blog/092/09_product.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;右側がAmbientのグラフ、左側がNefryの取得したアナログ値をWebConsoleで表示しています。
-&lt;img src=&#34;http://program.nefry.studio/Nefry/Ambient/pic/ambientnefry.gif&#34; alt=&#34;Ambient×Nefry.git&#34; /&gt;
-Nefryにライトを当てたり遠ざけたりすると、わりと &lt;strong&gt;リアルタイムにどんどんグラフが生成されていく&lt;/strong&gt; のが分かります。&lt;a href=&#34;https://ambidata.io/ch/channel.html?id=785&#34;&gt;こちらのページ&lt;/a&gt;でで今回撮影したグラフをみることができます。&lt;/p&gt;
-
-&lt;p&gt;Ambientでは &lt;strong&gt;グラフの自動スケールやグラフの公開機能、画像の添付&lt;/strong&gt; など、今回紹介しきれないほど様々な機能が作成されています。&lt;/p&gt;
-
-&lt;p&gt;詳しくはAmbientの公式サイトやドキュメントを確認してください。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://ambidata.io/&#34;&gt;Ambient公式サイト&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://ambidata.io/docs/&#34;&gt;ドキュメント&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;今回は、なんとハードウエアもWeb側も &lt;strong&gt;コードを一切書かずにグラフ化する&lt;/strong&gt; ことができました。&lt;/p&gt;
-
-&lt;p&gt;紹介したのは折れ線グラフですが、&lt;strong&gt;棒グラフや散布図などもお手軽にグラフを作れるAmbient&lt;/strong&gt; と &lt;strong&gt;Webへの接続が簡単なNefry&lt;/strong&gt; でぜひぜひ遊んでみてください。&lt;/p&gt;
-
-&lt;p&gt;Ambientを運営されている下島さん、記事にさせていただく許可を頂きありがとうございました。&lt;/p&gt;
 </description>
     </item>
     

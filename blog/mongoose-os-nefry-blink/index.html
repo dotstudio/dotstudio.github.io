@@ -1,0 +1,1807 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
+  <meta charset="utf-8">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+    
+
+    
+    
+      
+      
+      
+      
+
+      
+      
+      
+      
+        
+      
+      
+
+      
+      
+    
+
+    
+    
+
+    
+    
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="JavaScriptでプログラミングできるMongoose OSを使ってNefry BTのLチカを試してみます！">
+    <meta name="author" content="dotstudio Inc.">
+    <meta content="https://dotstud.io/img/blog/145/00_eyecatch.png">
+
+    <meta itemprop="name" content="JavaScriptで開発できる！Mongoose OSでNefry BTをLチカしよう | dotstudio"/>
+    <meta itemprop="image" content="https://dotstud.io/img/blog/145/00_eyecatch.png"/>
+    
+    <meta property="og:title" content="JavaScriptで開発できる！Mongoose OSでNefry BTをLチカしよう | dotstudio" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://dotstud.io/blog/mongoose-os-nefry-blink/" />
+    <meta property="og:site_name" content="dotstudio（ドットスタジオ）" />
+    <meta property="og:image" content="https://dotstud.io/img/blog/145/00_eyecatch.png" />
+    <meta property="og:image:secure_url" content="https://dotstud.io/img/blog/145/00_eyecatch.png" />
+    <meta property="og:description" content="JavaScriptでプログラミングできるMongoose OSを使ってNefry BTのLチカを試してみます！" />
+    <meta property="article:author" content="https://www.facebook.com/dotstud10/" />
+    <meta property="fb:app_id" content="296336307370435" />
+    <meta property="fb:pages" content="1013196712108753" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image:src" content="https://dotstud.io/img/blog/145/00_eyecatch.png">
+    <meta name="twitter:site" content="@dotstud_io" />
+    <meta name="twitter:url" content="https://dotstud.io/blog/mongoose-os-nefry-blink/">
+    <meta name="twitter:description" content="JavaScriptでプログラミングできるMongoose OSを使ってNefry BTのLチカを試してみます！">
+    <meta name="twitter:title" content="JavaScriptで開発できる！Mongoose OSでNefry BTをLチカしよう | dotstudio">
+    <meta name="twitter:creator" content="@dotstud_io" />
+
+    
+    <meta name="google-site-verification" content="oW2fcSG1fFnkDoRCGFJ0IGGebtBr8FjV2twoFMd7Skc" />
+    <title>JavaScriptで開発できる！Mongoose OSでNefry BTをLチカしよう | dotstudio</title>
+    
+
+    <link rel="stylesheet" href="/css/loader.css">
+    
+    <link rel="stylesheet" href='/css/master.css'>
+    <link rel="stylesheet" href="/css/icon-font.css">
+    
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+
+    <link rel="shortcut icon" type="image/png" href="/img/resources/favicon.png"/>
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="preload" as="style" onload="this.rel='stylesheet'">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel="preload" as="style" onload="this.rel='stylesheet'">
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel="preload" as="style" onload="this.rel='stylesheet'">
+    
+    <link href="/css/lib/hljs.css" rel="preload" as="style" onload="this.rel='stylesheet'">
+    
+
+    
+    
+    
+
+    
+    
+
+    
+    
+    
+    
+
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-K5TRM9Q');</script>
+    
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-5922216421588455",
+        enable_page_level_ads: true
+      });
+    </script>
+</head>
+
+<body>
+  
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K5TRM9Q"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  
+
+  
+  <div id="fb-root"></div>
+  <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v2.8";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));</script>
+
+  
+
+  <header>
+    <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<symbol id="icon-arrow-right" viewBox="0 0 32 32">
+<title>arrow-right</title>
+<path class="path1" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M5.143 5.143l10.349 10.349"></path>
+<path class="path2" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M5.143 26.857l10.349-10.349"></path>
+<path class="path3" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M16.571 26.857l10.349-10.349"></path>
+<path class="path4" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M16.571 5.143l10.349 10.349"></path>
+</symbol>
+<symbol id="icon-hamburger" viewBox="0 0 60 32">
+<title>hamburger</title>
+<path class="path1" fill="none" stroke="#808080" stroke-width="7.1111" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M3.556 3.556h53.333"></path>
+<path class="path2" fill="none" stroke="#808080" stroke-width="7.1111" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M3.556 28.444h53.333"></path>
+</symbol>
+<symbol id="icon-logo-mark" viewBox="0 0 32 32">
+<title>logo-mark</title>
+<path class="path1" d="M19.731 28.8h-19.731v-19.699h19.731zM1.53 27.302h16.672v-16.672h-16.672z"></path>
+<path class="path2" d="M32 22.899h-19.731v-19.699h19.731zM13.798 21.37h16.672v-16.672h-16.672z"></path>
+</symbol>
+<symbol id="icon-social-facebook" viewBox="0 0 32 32">
+<title>social-facebook</title>
+<path class="path1" d="M30.1 0.12h-28.46c-0.974 0.011-1.76 0.804-1.76 1.78 0 0 0 0 0 0v28.46c0 0.983 0.797 1.78 1.78 1.78h15.32v-12.4h-4.16v-4.82h4.16v-3.58c-0.020-0.179-0.031-0.386-0.031-0.596 0-3.203 2.597-5.8 5.8-5.8 0.152 0 0.302 0.006 0.45 0.017-0.016-0.001-0.013-0.001-0.009-0.001 1.3 0 2.582 0.073 3.844 0.214l-0.155 4.286h-2.54c-2 0-2.36 0.96-2.36 2.36v3.1h4.76l-0.62 4.8h-4.12v12.4h8.12c0.983 0 1.78-0.797 1.78-1.78v-28.44c0-0.983-0.797-1.78-1.78-1.78z"></path>
+</symbol>
+<symbol id="icon-social-github" viewBox="0 0 32 32">
+<title>social-github</title>
+<path class="path1" d="M16 0.4c-0.001 0-0.002 0-0.004 0-8.837 0-16 7.163-16 16 0 7.028 4.531 12.997 10.831 15.147 0.913 0.173 1.213-0.307 1.213-0.747s-0.040-1.38-0.040-2.8c-4.44 1.060-5.38-2-5.38-2-0.308-0.987-0.937-1.798-1.763-2.33-1.477-1.010 0.103-0.99 0.103-0.99 1.055 0.144 1.941 0.76 2.451 1.624 0.607 1.039 1.701 1.715 2.953 1.715 0.6 0 1.164-0.155 1.653-0.428 0.062-0.836 0.437-1.58 1.002-2.13-3.559-0.401-7.279-1.781-7.279-8.001-0.001-0.032-0.001-0.069-0.001-0.106 0-1.621 0.624-3.096 1.645-4.198-0.181-0.526-0.283-1.135-0.283-1.769 0-0.85 0.184-1.657 0.514-2.383s1.325-0.404 4.385 1.676c1.199-0.341 2.577-0.537 4-0.537s2.801 0.196 4.107 0.562c2.953-2.026 4.293-1.666 4.293-1.666 0.31 0.683 0.49 1.481 0.49 2.321 0 0.688-0.121 1.348-0.343 1.959 1.030 1.058 1.654 2.533 1.654 4.154 0 0.037-0 0.075-0.001 0.112 0 6.134-3.74 7.494-7.3 7.894 0.685 0.69 1.108 1.641 1.108 2.69 0 0.088-0.003 0.175-0.009 0.261 0.001 2.128 0.001 3.848 0.001 4.368s0.28 0.92 1.1 0.78c6.413-2.183 10.944-8.152 10.944-15.18 0-8.837-7.163-16-16-16-0.015 0-0.031 0-0.046 0z"></path>
+</symbol>
+<symbol id="icon-social-twitter" viewBox="0 0 32 32">
+<title>social-twitter</title>
+<path class="path1" d="M10 29c0.036 0 0.078 0 0.12 0 10.25 0 18.56-8.31 18.56-18.56 0-0.042-0-0.085-0-0.127 0-0.274 0-0.554 0-0.834 1.312-0.959 2.414-2.113 3.289-3.431-1.070 0.454-2.347 0.82-3.686 0.984 1.293-0.819 2.312-2.084 2.804-3.587-1.184 0.679-2.577 1.234-4.062 1.539-1.286-1.244-2.976-2.027-4.849-2.027-3.634 0-6.58 2.946-6.58 6.58 0 0.518 0.060 1.022 0.173 1.506-5.473-0.309-10.286-2.887-13.523-6.813-0.587 0.917-0.919 2.059-0.919 3.278 0 2.258 1.137 4.25 2.871 5.435-1.063-0.025-2.070-0.325-2.95-0.822l0.032 0.017c-0 0.027-0.001 0.058-0.001 0.090 0 3.163 2.239 5.803 5.218 6.423-0.479 0.156-1.078 0.242-1.696 0.242-0.432 0-0.854-0.042-1.263-0.121 0.908 2.637 3.319 4.512 6.175 4.567-2.208 1.746-5.039 2.8-8.116 2.8-0.013 0-0.027-0-0.040-0-0.566-0.018-1.104-0.068-1.633-0.149 2.897 1.868 6.353 2.984 10.068 3.009z"></path>
+</symbol>
+</defs>
+</svg>
+
+    <div class="header">
+  <span class="logo"><a href="/"><svg id="icon-logo" width="100%"><use xlink:href="#icon-logo-mark"></svg></a></span>
+
+  <div class="menu">
+    <input type="checkbox" id="menu-toggle">
+      <label for="menu-toggle" class='label-toggle'>
+        <svg class="icon-hamburger"><use xlink:href="#icon-hamburger"></svg>
+      </label>
+    </input>
+    <ul>
+      <li class="menu-item"><a href="/blog">Blog</a></li>
+      <li class="menu-item"><a href="/shop">Shop</a></li>
+      <li class="menu-item"><a href="/docs">Docs</a></li>
+      <li class="menu-item"><a href="/about">About</a></li>
+      <li class="menu-item"><a href="/service">Service</a></li>
+      
+    </ul>
+  </div>
+
+</div>
+  </header>
+
+
+
+
+ 
+ 
+
+
+	
+		
+	
+
+
+
+
+<ul class="categories">
+	
+	<li><a href="/categories/try/" class="selected">
+		やってみるIoT
+	</a></li>
+	
+	<li><a href="/categories/learn/" class="">
+		IoTを知ろう
+	</a></li>
+	
+	<li><a href="/categories/event/" class="">
+		イベントレポート
+	</a></li>
+	
+	<li><a href="/categories/tips/" class="">
+		Tips
+	</a></li>
+	
+</ul>
+
+
+
+
+  
+    
+  
+
+
+
+  
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+<article class="blog-single">
+  <div class="date">2018.02.08</div>
+
+  <img class="blog-single--eyecatch" src="/img/blog/145/00_eyecatch.png" alt="" width="710px">
+  
+  <h1 class="blog-single--title">JavaScriptで開発できる！Mongoose OSでNefry BTをLチカしよう</h1>
+
+  <div class="blog-single--information">
+    <a class="author" href="/members/morita">
+      <img src="/img/members/morita/author.png" alt="" class="author--avatar">
+      <p class="author--name">森田</p>
+    </a>
+
+    
+    <a class="series" href="/series/nefrybt">
+        Nefry BT
+    </a>
+    
+
+  </div>
+  
+  <div class="blog-single--content markdown">
+
+<p>唐突ですが、森田(<a href="https://twitter.com/morita_pac">@morita_pac</a>)と申します。</p>
+
+<p>ヘビーNefryBTユーザです。持ち歩いていろんな場所でNefry BTを利用したり、ケースを作ったりもしています。</p>
+
+<p><img src="/img/blog/145/1.png" alt="" /></p>
+
+<p>通常Nefry BTはArduino言語でプログラムするのですが、今回はJavaScriptで書き込めるようにしたいと思います。</p>
+
+<p>※この記事内のプログラムはNefy BT（無印）向けです。Nefry BT R2向けのプログラムは別途準備中です。</p>
+
+<h2 id="javascriptで開発できるmongoose-osとは">JavaScriptで開発できるMongoose OSとは</h2>
+
+<p>今回は<a href="https://mongoose-os.com/">Mongoose OS</a>というIoTのプロト開発を簡単にできるサービスを利用します。</p>
+
+<p><center>
+<a href="https://mongoose-os.com/"><img src="/img/blog/145/2.png" alt="" /></a>
+▲ Mongoose OS公式サイト
+</center></p>
+
+<p>Mongoose OSでは、ESP32やESP8266へJavaScript（<a href="https://github.com/cesanta/mjs">mJS</a>）でコードを書き込めます。
+さらには、セキュアで、AWS IoTやGoogleのCloud IoT Coreなどとも連携設定がシンプルにできます。</p>
+
+<p>Mongoose OSをインストールしている間は元のNefry BTのプログラムは利用できなくなります。（Arduino IDEで書き込むことですぐに戻せます。）</p>
+
+<h2 id="mongoose-osの開発環境をセットアップ">Mongoose OSの開発環境をセットアップ</h2>
+
+<h3 id="windowsの場合">Windowsの場合</h3>
+
+<p><a href="https://mongoose-os.com/software.html">Download Page</a>から、exeをダウンロードするだけで使えます。（アンチウイルス系のソフトが反応するかもしれません。）なお、以降MacOSでの説明になります。
+<img src="/img/blog/145/3.png" alt="" /></p>
+
+<h3 id="mac-osの場合">Mac OSの場合</h3>
+
+<p><a href="https://mongoose-os.com/software.html">Download Page</a>の、MacOS/Linuxのcurlコマンドをターミナルで実行します。</p>
+
+<pre><code>$ curl -fsSL https://mongoose-os.com/downloads/mos/install.sh | /bin/bash
+</code></pre>
+
+<p><img src="/img/blog/145/4.png" alt="" /></p>
+
+<p>ターミナルで以下のようになれば無事完了です。開く場合は、Runの<code>/xxx/.mos/bin/mos</code>を実行するとWeb UIが開きます。</p>
+
+<pre><code>$ curl -fsSL https://mongoose-os.com/downloads/mos/install.sh | /bin/bash
+Downloading https://mongoose-os.com/downloads/mos-release/mac/mos ...
+########################################################################
+ 100.0%
+Installing into /xxx/.mos/bin/mos ...
+Adding /xxx/.mos/bin to your PATH in /xxx/.profile
+SUCCESS: /xxx/.mos/bin/mos is installed.
+Run '/xxx/.mos/bin/mos --help' to see all available commands.
+Run '/xxx/.mos/bin/mos' without arguments to start a simplified Web UI installer.
+</code></pre>
+
+<h2 id="いざ-mongoose-osをnefry-btに入れてみよう">いざ、Mongoose  OSをNefry BTに入れてみよう</h2>
+
+<p>Nefry BTをUSBポートに差し込み、Mongose OSとサンプルコードをFlashします。（次回起動時は、ポート選択のみで利用可能です。）</p>
+
+<p>Mongoose OSのWeb UIは、ブラウザで開きます。①②③の設定が完了すれば無事、JavaScriptで書き込む準備完了です。</p>
+
+<p><img src="/img/blog/145/5.png" alt="" /></p>
+
+<p>①は、Nefry BTのポートを選択します。ポートが見つからない場合はUSBを認識させるための<a href="https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers">ドライバ</a>をインストールする必要があります。
+②では、Platformで「esp32」とapp「demo-js」を選択し「Flash」ボタンをクリックし、処理が終わるまで待ちます。
+③では、Wi-fi設定を行います。（今回は必須ではないです。）
+全ての設定が完了したら、「Done」ボタンをおしてdevice setupを閉じます。</p>
+
+<h1 id="4-基本的なweb-uiとサンプルプログラム">4. 基本的なWeb UIとサンプルプログラム</h1>
+
+<h3 id="web-uiについて">Web UIについて</h3>
+
+<p>まず、画面左側Device Filesを選択します。すると、init.jsが選択され、メインプログラムが表示されます。init.jsファイルをメインで編集します。</p>
+
+<p>編集後、書き込みたい場合は、Save + Rebootボタンで行えます。このコードやファイルの情報は、端末から読んでいますので、コードを書き換えたら、書き込む前にバックアップを取っておくことをお勧めします。
+<img src="/img/blog/145/6.png" alt="" /></p>
+
+<h3 id="サンプルプログラムについて">サンプルプログラムについて</h3>
+
+<p>デフォルトプログラムを僕の感性でコメントしましたので、ご確認ください。なお、色々と制限付きのJSなので、仕様は<a href="https://github.com/cesanta/mjs">こちら</a>で確認ください。</p>
+
+<pre><code class="language-js:init.js">// 利用するAPIを読み出します。Flashした時点のサンプルAPIが呼ばれています。
+// 各APIの仕様やサンプルは画面左のファイル一覧で参照可能です。
+load('api_config.js');
+load('api_events.js');
+load('api_gpio.js');
+load('api_mqtt.js');
+load('api_net.js');
+load('api_sys.js');
+load('api_timer.js');
+
+// 変数宣言はletのみです。const, varは使えません。
+let led = Cfg.get('pins.led');
+let button = Cfg.get('pins.button');
+let topic = '/devices/' + Cfg.get('device.id') + '/events';
+
+print('LED GPIO:', led, 'button GPIO:', button);
+
+let getInfo = function() {
+  return JSON.stringify({
+    total_ram: Sys.total_ram(),
+    free_ram: Sys.free_ram()
+  });
+};
+
+// 1秒おきにLEDをチカチカさせてます。ついでにチクタク時を刻んでいます。
+GPIO.set_mode(led, GPIO.MODE_OUTPUT);
+Timer.set(1000 /* 1 sec */, Timer.REPEAT, function() {
+  let value = GPIO.toggle(led);
+  print(value ? 'Tick' : 'Tock', 'uptime:', Sys.uptime(), getInfo());
+}, null);
+
+// リセットボタンではない方のボタンを押すとMQTTでpublishします。
+GPIO.set_button_handler(button, GPIO.PULL_UP, GPIO.INT_EDGE_NEG, 200, function() {
+  let message = getInfo();
+  let ok = MQTT.pub(topic, message, 1);
+  print('Published:', ok, topic, '-&gt;', message);
+}, null);
+
+// ネットワークモニタです。
+Event.addGroupHandler(Net.EVENT_GRP, function(ev, evdata, arg) {
+  let evs = '???';
+  if (ev === Net.STATUS_DISCONNECTED) {
+    evs = 'DISCONNECTED';
+  } else if (ev === Net.STATUS_CONNECTING) {
+    evs = 'CONNECTING';
+  } else if (ev === Net.STATUS_CONNECTED) {
+    evs = 'CONNECTED';
+  } else if (ev === Net.STATUS_GOT_IP) {
+    evs = 'GOT_IP';
+  }
+  print('== Net event:', ev, evs);
+}, null);
+
+</code></pre>
+
+<h2 id="nefry-btのフルカラーledを点灯しよう">Nefry BTのフルカラーLEDを点灯しよう</h2>
+
+<p>やっと本題に入ります。</p>
+
+<p>Mongoose OSでは、様々なオープンソースコードがあり、それをインポートすることができます。今回は、NefryBTのフルカラーLEDを点灯させるためにNeoPixelのサンプルコードを入手します。</p>
+
+<p>画面左のProjectsを選択し、Importをクリックします。
+<img src="/img/blog/145/7.png" alt="" /></p>
+
+<p>App Managerのサーチ部分に「neopixel」と入力し、HARDWAREから「example-neopixel-js」をimportします。完了したらApp Managerの画面を閉じます。
+<img src="/img/blog/145/8.png" alt="" />
+次に、サンプルプログラムをNefryBTに書き込みます。</p>
+
+<p>今ImportしたAppが選択されていることを確認し、①Rebuildアイコンと②Flashアイコンを処理が完了次第、順番にクリックすることで書き込み完了です。（それぞれ少々時間がかかります。）
+<img src="/img/blog/145/9.png" alt="" /></p>
+
+<p>Device Filesのinit.jsの内容を以下の内容に書き換えます。Nefry BTのボタンを押したらフルカラーLEDが点灯するという内容のプログラムです。</p>
+
+<p>※なお、R2に関しては動作確認中ですので、確認次第内容を変更いたします。</p>
+
+<pre><code class="language-js:init.js">load('api_config.js');
+load('api_events.js');
+load('api_gpio.js');
+load('api_sys.js');
+load('api_timer.js');
+load('api_neopixel.js');
+
+// 今回は一部しか利用していませんが、NefryのピンNoです。
+let pin = {
+    &quot;nefrybt&quot;:{
+      &quot;sw&quot;: 4,
+      &quot;d0&quot;:22,
+      &quot;d1&quot;:21,
+      &quot;d2&quot;:23,
+      &quot;d3&quot;:19,
+      &quot;d4&quot;:18,
+      &quot;a0&quot;:25,
+      &quot;a1&quot;:26,
+      &quot;a2&quot;:32,
+      &quot;a3&quot;:33,
+      &quot;a4&quot;:27,
+      &quot;a5&quot;:14,
+      &quot;a6&quot;:13,
+      &quot;a7&quot;:35,
+      &quot;LED&quot;:16
+    },
+    &quot;nefrybtR2&quot;:{
+      &quot;sw&quot;: 4,
+      &quot;d0&quot;:22,
+      &quot;d1&quot;:21,
+      &quot;d2&quot;:23,
+      &quot;d3&quot;:19,
+      &quot;d4&quot;:18,
+      &quot;d5&quot;:25,
+      &quot;d6&quot;:26,
+      &quot;d7&quot;:13,
+      &quot;d8&quot;:14,
+      &quot;a0&quot;:33,
+      &quot;a1&quot;:32,
+      &quot;a2&quot;:39,
+      &quot;a3&quot;:36,
+      &quot;LED&quot;:16
+    }
+  };
+
+
+// フルカラーLEDのピンと個数、オーダーを指定しています。
+let Lpin = pin.nefrybt.LED, numPixels = 1, colorOrder = NeoPixel.GRB;
+
+// api_neopixel.jsに基づき初期化を行います。
+let strip = NeoPixel.create(Lpin, numPixels, colorOrder);
+strip.clear();
+strip.setPixel(0,0,0,0);
+strip.show();
+
+// ボタンを押したら赤色をつけます。setpixel(0,0,0,0)は、ピクセルナンバーとRGBになっています。Redの数字は20としていますが、数字をあげるとかなり明るくなります。
+// GPIO.set_button_handlerの仕様は、
+GPIO.set_button_handler(4, GPIO.PULL_UP, GPIO.INT_EDGE_NEG, 200, function() {
+    strip.clear();
+    strip.setPixel(0,20,0,0);
+    strip.show();
+}, null);
+</code></pre>
+
+<h2 id="困った時は">困った時は</h2>
+
+<p>Q. DeviceLogsにエラーがでている。</p>
+
+<p>A. Mongoose OS画面右上のdevice setupより、ポートを選択し直してください。それでも治らない場合は、ターミナルにて、<code>control+c</code>でMongoose OSを一度終わらせて、再起動をしてみてください。</p>
+
+<p>それでもエラーが発生する場合は、一度Arduino IDEからNefry BTをボードに選択し、何も書いていないコードで書き込み直してください。なお、Nefry BTの状態に戻したい場合もArduino IDEから書き込むことで初期状態にもどせます。</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>Nefry BTをJavaScriptでプログラムして、LEDを点灯させるところまでできました。</p>
+
+<p>ディスプレイも表示させることができるので、次回は、Mongoose OSを使ったディスプレイの表示方法をご紹介しようと思います。</p>
+</div>
+
+  
+
+
+
+    
+    
+    
+    <nav class="related">
+      <h2 class="">関連記事</h2>
+      <ul class="cards-related">
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/nefrybt-ble-bluetooth-peripheral/">
+                <img class="card-related--thumbnail" src="/img/blog/143/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">Nefry BT（ESP32）からBLEでNode.jsにデータを送ってみよう</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/nefry-bt-connect-mqtt/">
+                <img class="card-related--thumbnail" src="/img/blog/141/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">Nefry BT（ESP32）でMQTTを使ってみよう Subscribe編</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/nefrybt-pepper-monitoring-system/">
+                <img class="card-related--thumbnail" src="/img/blog/127/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">Node.jsとNefry BTで監視システムを作ろう！ for Pepper #iotlt</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/nefry-ifttt-push-line/">
+                <img class="card-related--thumbnail" src="/img/blog/100/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">Nefry BTとIFTTTでスイッチを押したらLINEを送る仕組みを作ってみよう</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+        </ul>
+      </nav>
+
+
+
+  <div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v2.7&appId=296336307370435";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+  <div class="share">
+    <a href="https://twitter.com/share" class="twitter-share-button" data-size="large" data-hashtags="dotstudio">Tweet</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    &nbsp;
+    <div class="fb-like" data-href="https://dotstud.io/blog/mongoose-os-nefry-blink/" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
+
+    &nbsp;
+
+    <div class="hatena-b">
+      <a href="http://b.hatena.ne.jp/entry/s/dotstud.io/blog/mongoose-os-nefry-blink" class="hatena-bookmark-button" data-hatena-bookmark-title="JavaScriptで開発できる！Mongoose OSでNefry BTをLチカしよう" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
+        <img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" />
+      </a>
+      <script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+    </div>    
+  </div>
+
+</article>
+
+
+
+<footer class="footer">
+  <p class="footer-info">
+    <a class="footer-info--item" href="/about">会社概要</a>
+    <a class="footer-info--item" href="/members">メンバー</a>
+    <a class="footer-info--item" href="/legal#tos">利用規約</a>
+    <a class="footer-info--item" href="/legal#sct">特定商取引</a>
+    <a class="footer-info--item" href="/legal#pp">プライバシーポリシー</a>
+  </p>
+  <p class="footer-cr">© 2016 dotstudio inc.</p>
+</footer>
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+
+
+
+
+
+<script src="/js/app.js"></script>
+
+
+<script src="/js/lib/hljs.js"></script>
+<script src="/js/lib/hljs-numbers.js"></script>
+<script>
+  hljs.initHighlightingOnLoad();
+  hljs.initLineNumbersOnLoad();
+</script>
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-78080011-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+

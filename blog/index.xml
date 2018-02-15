@@ -7,8 +7,326 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Fri, 19 Jan 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 15 Feb 2018 00:00:00 +0000</lastBuildDate>
     <atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>クラブでモテる！つまみ付きユニコーンポーチ　前編</title>
+      <link>https://dotstud.io/blog/gyaruden-kyoko-unicorn-pochette/</link>
+      <pubDate>Thu, 15 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dotstud.io/blog/gyaruden-kyoko-unicorn-pochette/</guid>
+      
+      <description>
+
+&lt;p&gt;みなさん、ちょりおつ！ギャル電きょうこです。ギャルによるギャルのためのテクノロジーを提案するユニット、ギャル電で活動しています。今回は、&lt;strong&gt;クラブ行くときにぎゃんかわに盛れる光るポーチの作り方&lt;/strong&gt;を2回にわけて紹介します。&lt;/p&gt;
+
+&lt;h2 id=&#34;ユニコーンきゃわたん&#34;&gt;ユニコーンきゃわたん&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/146/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ちょっと前から、イケてるヤングの間ではユニコーンがはやってるっぽい。角生えてる馬、かっこいいしかわいいからはやるのも超わかりみある。&lt;/p&gt;
+
+&lt;p&gt;つーことで、イケてるユニコーンっぽいバッグが街には今いっぱい売ってる。今回は、&lt;strong&gt;WEGOで500円のサイズ感もぴったりな超イケてるポーチ&lt;/strong&gt;をゲット。めっちゃリーズナブル！！！！&lt;/p&gt;
+
+&lt;p&gt;コレ光らせたらやばくねってことで、さっそく作ってこう。&lt;/p&gt;
+
+&lt;h2 id=&#34;材料&#34;&gt;材料&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/146/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;①Arduino Nano 互換機&lt;/li&gt;
+&lt;li&gt;②可変抵抗 10KΩ 3個&lt;/li&gt;
+&lt;li&gt;③つまみのキャップ&lt;/li&gt;
+&lt;li&gt;④LEDテープ（WS2812B 60LED/M）LED24個分&lt;/li&gt;
+&lt;li&gt;線材（コネクタは気分で）&lt;/li&gt;
+&lt;li&gt;USB miniB ケーブル&lt;/li&gt;
+&lt;li&gt;プラ板&lt;/li&gt;
+&lt;li&gt;ユニコーンぽいファーのいい感じのポーチ（白系）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;材料はこんな感じ。つまみのキャップはギター用のカッコいいやつを使ったよ。ポーチはだいたいモバイルバッテリーと小銭と携帯が入るくらいのサイズ感のものがおすすめっす。&lt;/p&gt;
+
+&lt;h2 id=&#34;可変抵抗器をアクセントにしてみよう&#34;&gt;可変抵抗器をアクセントにしてみよう&lt;/h2&gt;
+
+&lt;p&gt;可変抵抗器はイケてるキャップをつけるとめっちゃかわいい！&lt;/p&gt;
+
+&lt;p&gt;今回は三つの可変抵抗器の値を変更することで、LEDの&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;明るさ&lt;/li&gt;
+&lt;li&gt;色&lt;/li&gt;
+&lt;li&gt;点灯速度&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;を変更できる仕組みをつくります。&lt;/p&gt;
+
+&lt;h2 id=&#34;配線をはんだ付けしよう&#34;&gt;配線をはんだ付けしよう&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/146/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/146/4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;まずは写真と図のように三つの可変抵抗器のプラスとプラス、マイナスとマイナスを配線でつなぎます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/146/5.png&#34; alt=&#34;&#34; /&gt;
+三つのうちの可変抵抗器の一つに、プラスとマイナスの配線をさらに1セット追加してArduino Nanoの5VとGNDにつなぎます。可変抵抗器の真ん中の線とAruduino NanoのA0〜A1ポートを配線でそれぞれつなぎます。&lt;/p&gt;
+
+&lt;p&gt;LEDテープはDINとD6、5V、GNDをそれぞれAruduino Nanoと配線でつなぎます。
+&lt;img src=&#34;https://dotstud.io/img/blog/146/6.png&#34; alt=&#34;&#34; /&gt;
+Aruduino Nanoの5VとGNDのところは、可変抵抗器とLEDテープからそれぞれ配線がつながります。一つのPINにはんだ付けが難しい場合は、ボードの裏と表にそれぞれ1本ずつ配線をつなげるとはんだ付けがやりやすいです。&lt;/p&gt;
+
+&lt;h2 id=&#34;前編はここまで&#34;&gt;前編はここまで&lt;/h2&gt;
+
+&lt;p&gt;今回は可変抵抗器を三つつなげたので、ちょっと配線とはんだ付けが複雑で疲れちゃったのでここまで！&lt;/p&gt;
+
+&lt;p&gt;後編はArduino Nanoへのプログラム書き込みと、ポーチとLEDを組み立てまっす！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>JavaScriptで開発できる！Mongoose OSでNefry BTをLチカしよう</title>
+      <link>https://dotstud.io/blog/mongoose-os-nefry-blink/</link>
+      <pubDate>Thu, 08 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dotstud.io/blog/mongoose-os-nefry-blink/</guid>
+      
+      <description>
+
+&lt;p&gt;唐突ですが、森田(&lt;a href=&#34;https://twitter.com/morita_pac&#34;&gt;@morita_pac&lt;/a&gt;)と申します。&lt;/p&gt;
+
+&lt;p&gt;ヘビーNefryBTユーザです。持ち歩いていろんな場所でNefry BTを利用したり、ケースを作ったりもしています。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/145/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;通常Nefry BTはArduino言語でプログラムするのですが、今回はJavaScriptで書き込めるようにしたいと思います。&lt;/p&gt;
+
+&lt;p&gt;※この記事内のプログラムはNefy BT（無印）向けです。Nefry BT R2向けのプログラムは別途準備中です。&lt;/p&gt;
+
+&lt;h2 id=&#34;javascriptで開発できるmongoose-osとは&#34;&gt;JavaScriptで開発できるMongoose OSとは&lt;/h2&gt;
+
+&lt;p&gt;今回は&lt;a href=&#34;https://mongoose-os.com/&#34;&gt;Mongoose OS&lt;/a&gt;というIoTのプロト開発を簡単にできるサービスを利用します。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;a href=&#34;https://mongoose-os.com/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/145/2.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;
+▲ Mongoose OS公式サイト
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;Mongoose OSでは、ESP32やESP8266へJavaScript（&lt;a href=&#34;https://github.com/cesanta/mjs&#34;&gt;mJS&lt;/a&gt;）でコードを書き込めます。
+さらには、セキュアで、AWS IoTやGoogleのCloud IoT Coreなどとも連携設定がシンプルにできます。&lt;/p&gt;
+
+&lt;p&gt;Mongoose OSをインストールしている間は元のNefry BTのプログラムは利用できなくなります。（Arduino IDEで書き込むことですぐに戻せます。）&lt;/p&gt;
+
+&lt;h2 id=&#34;mongoose-osの開発環境をセットアップ&#34;&gt;Mongoose OSの開発環境をセットアップ&lt;/h2&gt;
+
+&lt;h3 id=&#34;windowsの場合&#34;&gt;Windowsの場合&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://mongoose-os.com/software.html&#34;&gt;Download Page&lt;/a&gt;から、exeをダウンロードするだけで使えます。（アンチウイルス系のソフトが反応するかもしれません。）なお、以降MacOSでの説明になります。
+&lt;img src=&#34;https://dotstud.io/img/blog/145/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;mac-osの場合&#34;&gt;Mac OSの場合&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://mongoose-os.com/software.html&#34;&gt;Download Page&lt;/a&gt;の、MacOS/Linuxのcurlコマンドをターミナルで実行します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ curl -fsSL https://mongoose-os.com/downloads/mos/install.sh | /bin/bash
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/145/4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ターミナルで以下のようになれば無事完了です。開く場合は、Runの&lt;code&gt;/xxx/.mos/bin/mos&lt;/code&gt;を実行するとWeb UIが開きます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ curl -fsSL https://mongoose-os.com/downloads/mos/install.sh | /bin/bash
+Downloading https://mongoose-os.com/downloads/mos-release/mac/mos ...
+########################################################################
+ 100.0%
+Installing into /xxx/.mos/bin/mos ...
+Adding /xxx/.mos/bin to your PATH in /xxx/.profile
+SUCCESS: /xxx/.mos/bin/mos is installed.
+Run &#39;/xxx/.mos/bin/mos --help&#39; to see all available commands.
+Run &#39;/xxx/.mos/bin/mos&#39; without arguments to start a simplified Web UI installer.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;いざ-mongoose-osをnefry-btに入れてみよう&#34;&gt;いざ、Mongoose  OSをNefry BTに入れてみよう&lt;/h2&gt;
+
+&lt;p&gt;Nefry BTをUSBポートに差し込み、Mongose OSとサンプルコードをFlashします。（次回起動時は、ポート選択のみで利用可能です。）&lt;/p&gt;
+
+&lt;p&gt;Mongoose OSのWeb UIは、ブラウザで開きます。①②③の設定が完了すれば無事、JavaScriptで書き込む準備完了です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/145/5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;①は、Nefry BTのポートを選択します。ポートが見つからない場合はUSBを認識させるための&lt;a href=&#34;https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers&#34;&gt;ドライバ&lt;/a&gt;をインストールする必要があります。
+②では、Platformで「esp32」とapp「demo-js」を選択し「Flash」ボタンをクリックし、処理が終わるまで待ちます。
+③では、Wi-fi設定を行います。（今回は必須ではないです。）
+全ての設定が完了したら、「Done」ボタンをおしてdevice setupを閉じます。&lt;/p&gt;
+
+&lt;h1 id=&#34;4-基本的なweb-uiとサンプルプログラム&#34;&gt;4. 基本的なWeb UIとサンプルプログラム&lt;/h1&gt;
+
+&lt;h3 id=&#34;web-uiについて&#34;&gt;Web UIについて&lt;/h3&gt;
+
+&lt;p&gt;まず、画面左側Device Filesを選択します。すると、init.jsが選択され、メインプログラムが表示されます。init.jsファイルをメインで編集します。&lt;/p&gt;
+
+&lt;p&gt;編集後、書き込みたい場合は、Save + Rebootボタンで行えます。このコードやファイルの情報は、端末から読んでいますので、コードを書き換えたら、書き込む前にバックアップを取っておくことをお勧めします。
+&lt;img src=&#34;https://dotstud.io/img/blog/145/6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;サンプルプログラムについて&#34;&gt;サンプルプログラムについて&lt;/h3&gt;
+
+&lt;p&gt;デフォルトプログラムを僕の感性でコメントしましたので、ご確認ください。なお、色々と制限付きのJSなので、仕様は&lt;a href=&#34;https://github.com/cesanta/mjs&#34;&gt;こちら&lt;/a&gt;で確認ください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js:init.js&#34;&gt;// 利用するAPIを読み出します。Flashした時点のサンプルAPIが呼ばれています。
+// 各APIの仕様やサンプルは画面左のファイル一覧で参照可能です。
+load(&#39;api_config.js&#39;);
+load(&#39;api_events.js&#39;);
+load(&#39;api_gpio.js&#39;);
+load(&#39;api_mqtt.js&#39;);
+load(&#39;api_net.js&#39;);
+load(&#39;api_sys.js&#39;);
+load(&#39;api_timer.js&#39;);
+
+// 変数宣言はletのみです。const, varは使えません。
+let led = Cfg.get(&#39;pins.led&#39;);
+let button = Cfg.get(&#39;pins.button&#39;);
+let topic = &#39;/devices/&#39; + Cfg.get(&#39;device.id&#39;) + &#39;/events&#39;;
+
+print(&#39;LED GPIO:&#39;, led, &#39;button GPIO:&#39;, button);
+
+let getInfo = function() {
+  return JSON.stringify({
+    total_ram: Sys.total_ram(),
+    free_ram: Sys.free_ram()
+  });
+};
+
+// 1秒おきにLEDをチカチカさせてます。ついでにチクタク時を刻んでいます。
+GPIO.set_mode(led, GPIO.MODE_OUTPUT);
+Timer.set(1000 /* 1 sec */, Timer.REPEAT, function() {
+  let value = GPIO.toggle(led);
+  print(value ? &#39;Tick&#39; : &#39;Tock&#39;, &#39;uptime:&#39;, Sys.uptime(), getInfo());
+}, null);
+
+// リセットボタンではない方のボタンを押すとMQTTでpublishします。
+GPIO.set_button_handler(button, GPIO.PULL_UP, GPIO.INT_EDGE_NEG, 200, function() {
+  let message = getInfo();
+  let ok = MQTT.pub(topic, message, 1);
+  print(&#39;Published:&#39;, ok, topic, &#39;-&amp;gt;&#39;, message);
+}, null);
+
+// ネットワークモニタです。
+Event.addGroupHandler(Net.EVENT_GRP, function(ev, evdata, arg) {
+  let evs = &#39;???&#39;;
+  if (ev === Net.STATUS_DISCONNECTED) {
+    evs = &#39;DISCONNECTED&#39;;
+  } else if (ev === Net.STATUS_CONNECTING) {
+    evs = &#39;CONNECTING&#39;;
+  } else if (ev === Net.STATUS_CONNECTED) {
+    evs = &#39;CONNECTED&#39;;
+  } else if (ev === Net.STATUS_GOT_IP) {
+    evs = &#39;GOT_IP&#39;;
+  }
+  print(&#39;== Net event:&#39;, ev, evs);
+}, null);
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;nefry-btのフルカラーledを点灯しよう&#34;&gt;Nefry BTのフルカラーLEDを点灯しよう&lt;/h2&gt;
+
+&lt;p&gt;やっと本題に入ります。&lt;/p&gt;
+
+&lt;p&gt;Mongoose OSでは、様々なオープンソースコードがあり、それをインポートすることができます。今回は、NefryBTのフルカラーLEDを点灯させるためにNeoPixelのサンプルコードを入手します。&lt;/p&gt;
+
+&lt;p&gt;画面左のProjectsを選択し、Importをクリックします。
+&lt;img src=&#34;https://dotstud.io/img/blog/145/7.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;App Managerのサーチ部分に「neopixel」と入力し、HARDWAREから「example-neopixel-js」をimportします。完了したらApp Managerの画面を閉じます。
+&lt;img src=&#34;https://dotstud.io/img/blog/145/8.png&#34; alt=&#34;&#34; /&gt;
+次に、サンプルプログラムをNefryBTに書き込みます。&lt;/p&gt;
+
+&lt;p&gt;今ImportしたAppが選択されていることを確認し、①Rebuildアイコンと②Flashアイコンを処理が完了次第、順番にクリックすることで書き込み完了です。（それぞれ少々時間がかかります。）
+&lt;img src=&#34;https://dotstud.io/img/blog/145/9.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Device Filesのinit.jsの内容を以下の内容に書き換えます。Nefry BTのボタンを押したらフルカラーLEDが点灯するという内容のプログラムです。&lt;/p&gt;
+
+&lt;p&gt;※なお、R2に関しては動作確認中ですので、確認次第内容を変更いたします。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js:init.js&#34;&gt;load(&#39;api_config.js&#39;);
+load(&#39;api_events.js&#39;);
+load(&#39;api_gpio.js&#39;);
+load(&#39;api_sys.js&#39;);
+load(&#39;api_timer.js&#39;);
+load(&#39;api_neopixel.js&#39;);
+
+// 今回は一部しか利用していませんが、NefryのピンNoです。
+let pin = {
+    &amp;quot;nefrybt&amp;quot;:{
+      &amp;quot;sw&amp;quot;: 4,
+      &amp;quot;d0&amp;quot;:22,
+      &amp;quot;d1&amp;quot;:21,
+      &amp;quot;d2&amp;quot;:23,
+      &amp;quot;d3&amp;quot;:19,
+      &amp;quot;d4&amp;quot;:18,
+      &amp;quot;a0&amp;quot;:25,
+      &amp;quot;a1&amp;quot;:26,
+      &amp;quot;a2&amp;quot;:32,
+      &amp;quot;a3&amp;quot;:33,
+      &amp;quot;a4&amp;quot;:27,
+      &amp;quot;a5&amp;quot;:14,
+      &amp;quot;a6&amp;quot;:13,
+      &amp;quot;a7&amp;quot;:35,
+      &amp;quot;LED&amp;quot;:16
+    },
+    &amp;quot;nefrybtR2&amp;quot;:{
+      &amp;quot;sw&amp;quot;: 4,
+      &amp;quot;d0&amp;quot;:22,
+      &amp;quot;d1&amp;quot;:21,
+      &amp;quot;d2&amp;quot;:23,
+      &amp;quot;d3&amp;quot;:19,
+      &amp;quot;d4&amp;quot;:18,
+      &amp;quot;d5&amp;quot;:25,
+      &amp;quot;d6&amp;quot;:26,
+      &amp;quot;d7&amp;quot;:13,
+      &amp;quot;d8&amp;quot;:14,
+      &amp;quot;a0&amp;quot;:33,
+      &amp;quot;a1&amp;quot;:32,
+      &amp;quot;a2&amp;quot;:39,
+      &amp;quot;a3&amp;quot;:36,
+      &amp;quot;LED&amp;quot;:16
+    }
+  };
+
+
+// フルカラーLEDのピンと個数、オーダーを指定しています。
+let Lpin = pin.nefrybt.LED, numPixels = 1, colorOrder = NeoPixel.GRB;
+
+// api_neopixel.jsに基づき初期化を行います。
+let strip = NeoPixel.create(Lpin, numPixels, colorOrder);
+strip.clear();
+strip.setPixel(0,0,0,0);
+strip.show();
+
+// ボタンを押したら赤色をつけます。setpixel(0,0,0,0)は、ピクセルナンバーとRGBになっています。Redの数字は20としていますが、数字をあげるとかなり明るくなります。
+// GPIO.set_button_handlerの仕様は、
+GPIO.set_button_handler(4, GPIO.PULL_UP, GPIO.INT_EDGE_NEG, 200, function() {
+    strip.clear();
+    strip.setPixel(0,20,0,0);
+    strip.show();
+}, null);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;困った時は&#34;&gt;困った時は&lt;/h2&gt;
+
+&lt;p&gt;Q. DeviceLogsにエラーがでている。&lt;/p&gt;
+
+&lt;p&gt;A. Mongoose OS画面右上のdevice setupより、ポートを選択し直してください。それでも治らない場合は、ターミナルにて、&lt;code&gt;control+c&lt;/code&gt;でMongoose OSを一度終わらせて、再起動をしてみてください。&lt;/p&gt;
+
+&lt;p&gt;それでもエラーが発生する場合は、一度Arduino IDEからNefry BTをボードに選択し、何も書いていないコードで書き込み直してください。なお、Nefry BTの状態に戻したい場合もArduino IDEから書き込むことで初期状態にもどせます。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;Nefry BTをJavaScriptでプログラムして、LEDを点灯させるところまでできました。&lt;/p&gt;
+
+&lt;p&gt;ディスプレイも表示させることができるので、次回は、Mongoose OSを使ったディスプレイの表示方法をご紹介しようと思います。&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>IoTも私らしく！楽しく学べる「IoT女子会」のクリスマスイベント潜入レポ</title>
@@ -348,14 +666,14 @@ const discovered = (peripheral) =&amp;gt; {
         noble.stopScanning();
         console.log(&#39;device found&#39;);
         console.log(`service discover...`);
-        
+
         peripheral.connect(error =&amp;gt; {
             if (error) {
                 console.log(&amp;quot;connection error:&amp;quot;, error)
             } else {
                 console.log(&amp;quot;device connected&amp;quot;);
             }
-            
+
             peripheral.discoverServices([],(err, services) =&amp;gt; {
                 if (error) {
                     console.log(&amp;quot;discover service error&amp;quot;, error)
@@ -762,7 +1080,7 @@ void loop() {
       errorReport();
     }
   }
-  
+
   mqttClient.loop();
 }
 
@@ -778,7 +1096,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
 void errorReport(){
   Serial.print(&amp;quot;Failed. Error state = &amp;quot;);
-  
+
   switch (mqttClient.state()) {
     case MQTT_CONNECT_UNAUTHORIZED:
       Serial.println(&amp;quot;MQTT_CONNECT_UNAUTHORIZED&amp;quot;);
@@ -811,7 +1129,7 @@ void errorReport(){
       Serial.println(&amp;quot;MQTT_CONNECTION_TIMEOUT&amp;quot;);
       break;
   }
-      
+
   delay(5000); // Wait 5 seconds before retrying
 }
 &lt;/code&gt;&lt;/pre&gt;
@@ -2407,298 +2725,6 @@ void loop()
 この光るカセットテープ、ギャル電は&lt;strong&gt;無人島フェスやULTRAJAPANで実際に使ってみたけどやっぱめっちゃモテた&lt;/strong&gt;。&lt;/p&gt;
 
 &lt;p&gt;光るとめっちゃ楽しいから、みんなも作っていろんなところに遊びに行ってみてね☆&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>#linedevday 2017レポート！ Clova連携で期待のGateboxの技術話を聞いてみたよ</title>
-      <link>https://dotstud.io/blog/linedevday-report-2017-gatebox/</link>
-      <pubDate>Thu, 28 Sep 2017 14:45:35 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/linedevday-report-2017-gatebox/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、のびすけです。&lt;/p&gt;
-
-&lt;p&gt;今日は&lt;a href=&#34;http://linedevday.linecorp.com/jp/2017/&#34;&gt;LINE DEVELOPER DAY 2017&lt;/a&gt;にお邪魔しています。&lt;/p&gt;
-
-&lt;p&gt;Gateboxの話を聞いていましたが、&lt;strong&gt;Gateboxの技術にNode.jsが採用されていたことが驚きです。&lt;/strong&gt;って感じの話を書きます。&lt;/p&gt;
-
-&lt;p&gt;(速報のりなので、誤字脱字あったらごめんなさい）&lt;/p&gt;
-
-&lt;h2 id=&#34;line-developer-day-2017&#34;&gt;LINE DEVELOPER DAY 2017&lt;/h2&gt;
-
-&lt;p&gt;LINEが開催している開発者向けのカンファレンスイベントです。&lt;/p&gt;
-
-&lt;p&gt;LINEや周辺サービスの裏側の技術や今後の展開についての発表があるイベントです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/128/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;3つの会場でパラレルでトークが展開されていきます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/128/1-1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;個人的には、今回は&lt;a href=&#34;https://clova.ai&#34;&gt;Clova&lt;/a&gt;やBotの話などを期待しています。（会場で、執筆してるので現在進行形）&lt;/p&gt;
-
-&lt;h2 id=&#34;セッション-gateboxのこれまでとこれから&#34;&gt;セッション「Gateboxのこれまでとこれから」&lt;/h2&gt;
-
-&lt;p&gt;ランチ後の最初のセッションです。&lt;/p&gt;
-
-&lt;p&gt;Gateboxの紹介と今後についてを紹介するセッションでした。ちなみに、当日の発表資料は&lt;a href=&#34;https://www.slideshare.net/linecorp/gatebox-how-we-got-here-and-where-were-going&#34;&gt;こちら&lt;/a&gt;です。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://gatebox.ai/&#34;&gt;Gatebox&lt;/a&gt;は好きなキャラクターと一緒に暮らせる世界初のバーチャルホームロボットです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/128/2-1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;写真の通り、2次元のキャラクターがパーソナルアシスタントをしてくれるロボットです。
-ロックマンエグゼのPETのイメージですね（分かる人いるかな&amp;hellip;）&lt;/p&gt;
-
-&lt;p&gt;iOSのSiriにビジュアルが付いたものをイメージすると良いかもしれません。&lt;/p&gt;
-
-&lt;p&gt;CF映画を彷彿させますね。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/128/2-2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Gateboxは2017年3月に&lt;a href=&#34;http://japanese.engadget.com/2017/03/02/line-gatebox-ai/&#34;&gt;LINEと資本提携&lt;/a&gt;をしてClovaとの連携が期待されています。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/128/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;発表はGatebox代表の武地さん。&lt;/p&gt;
-
-&lt;p&gt;「AIやスマートスピーカーが話題になってきているけど人間が話しかけたくなるインターフェイスになっていない」、「実際に話しかけたくなるものを作りたい」という想いで
-&lt;strong&gt;人間と同じようにキャラクターと生活できる世界&lt;/strong&gt;を目指してGateboxを開発しているそうです。&lt;/p&gt;
-
-&lt;h2 id=&#34;gateboxとclova&#34;&gt;GateboxとClova&lt;/h2&gt;
-
-&lt;p&gt;世の中のスマートスピーカーはクラウド上のAIなどが処理を行って言葉を返すけれど、Gateboxは性質上、ハードウェア側がリッチである必要があります。&lt;/p&gt;
-
-&lt;p&gt;Gatebox側では見た目のリッチさ、キャラクターの動きなどユーザーと触れる部分の見た目、振る舞いに注力しているのが他のスピーカーデバイスなどとの大きな違いです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/128/4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;逆にLINEのClovaはクラウド側やAIの仕組みに注力しているので、お互いの得意分野を生かしてより人間味のある仕組みを検討していくとのことです。&lt;/p&gt;
-
-&lt;p&gt;確かに現状のそういったデバイスはどうにも機械的なものが多いので、インターフェイスが自分好みのキャラクターになれば、&lt;strong&gt;話しかけたくなるAI&lt;/strong&gt;ができますね。&lt;/p&gt;
-
-&lt;h2 id=&#34;gateboxの技術話が初公開&#34;&gt;Gateboxの技術話が初公開&lt;/h2&gt;
-
-&lt;p&gt;今回、話を聞けてよかったなぁと特に思ったのがここです。&lt;/p&gt;
-
-&lt;p&gt;ここからは久森さんに交代です。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/128/5-1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Gateboxの技術的な話を対外的にするのは今回が初めて&lt;/strong&gt;だそうです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/128/5-2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;大きく分けるとこれが構成要素になるようです。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;プロジェクション&lt;/li&gt;
-&lt;li&gt;音声発話&lt;/li&gt;
-&lt;li&gt;センシング（人感センサやカメラ、マイクなど）&lt;/li&gt;
-&lt;li&gt;ネットワーク（Wi-Fi、Bluetooth）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;ハードウェア的な部分では中身の基盤部分も紹介してくれました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/128/5-3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;また、内部ではLinuxが動いていて、そこに色々なソフトウェアが動いています。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/128/5-4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Unity: キャラクターのアクションなど&lt;/li&gt;
-&lt;li&gt;Node.js: 音声認識、センサーとのやりとり、司令塔的なポジション&lt;/li&gt;
-&lt;li&gt;C++: 顔認識のライブラリなどとの通信&lt;/li&gt;
-&lt;li&gt;SQLite: 顔を覚えたり、発話を記憶させたり&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;また、クラウド側で連動しているサービスの紹介です。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/128/5-5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;クラウド側でもNode.jsを中心にAPIを呼び出しています。
-フルスクラッチで作るよりも、PaaSやBaaS系のサービスに乗せることでサービスの本質的な機能に集中して開発を進めているらしく、スタートアップのお手本のような開発だなぁと思いました。&lt;/p&gt;
-
-&lt;p&gt;例えば、メールを送る部分はSendGridで、それをAzureなどのPaaSから呼び出したりしているそうです。&lt;/p&gt;
-
-&lt;h3 id=&#34;node-jsをメインで採用している理由&#34;&gt;Node.jsをメインで採用している理由&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;個人的にはC++などではなく中心にNode.jsが利用されていることが驚きでした。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;僕はNode.js大好きなんですけど、実際のハードウェアプロダクトの中でNode.jsが動いているという例をあまり聞いたことがなかったので、パフォーマンス面や安定稼働とかの側面に不安は無いのかなど気になりすぎました。。。笑&lt;/p&gt;
-
-&lt;p&gt;気になったのでセッション後のAsk the Speakerのコーナーで聞きましたが、開発スタート時にNode.jsを使えるエンジニアが多く、開発スピードを優先して選んだそうです。&lt;/p&gt;
-
-&lt;p&gt;確かに内部のソフトウェアではNode.jsからシリアルの値を呼び出して、サーバー側でもNode.jsを動かしてと開発効率はバツグンにいいですし、チームの規模感や文化を優先する選択はさすがだと思いました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/128/5-6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;現状は339台作っているそうですが、今後量産体制に入っていくときのアーキテクチャ検討が課題だそうです。&lt;/p&gt;
-
-&lt;p&gt;サーバー側のアクセス数も増えていき、ユーザーの予期せぬ使い方なども増えていくため、安定稼働やスケールの仕組みを考える必要がありそうですね。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/128/6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;けっこう込み入った話も気軽に答えてくれてGateboxの皆さんの暖かさを感じました。&lt;/p&gt;
-
-&lt;p&gt;ありがとうございました！&lt;/p&gt;
-
-&lt;h2 id=&#34;最後に&#34;&gt;最後に&lt;/h2&gt;
-
-&lt;p&gt;ClovaもGateboxはすごく未来を感じさせてくれるプロダクトなので、それらの組み合わせは本当に期待ですね。&lt;/p&gt;
-
-&lt;p&gt;APIやSDKが提供され始めたらぜひ使ってみたいです。&lt;/p&gt;
-
-&lt;p&gt;まだLINE DEVELOPER DAYは続いてますが面白いセッションが多いので、ツイートを　#linedevdayのハッシュタグで振り返ると面白いですよ。&lt;/p&gt;
-
-&lt;p&gt;それでは、現場からは以上です :)&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>【報告】青山学院大学で4日間集中IoT講習を行いました</title>
-      <link>https://dotstud.io/blog/aogaku-iot-summer-report/</link>
-      <pubDate>Tue, 26 Sep 2017 19:31:51 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/aogaku-iot-summer-report/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、ちゃちゃまるです。
-&lt;a href=&#34;https://dotstud.io/blog/aogaku-iot-course-report/&#34;&gt;前回の体験講習会&lt;/a&gt;に引き続き、青山学院大学でIoT講習会を行ったので、その様子をお伝えしたいと思います！&lt;/p&gt;
-
-&lt;h2 id=&#34;テーマは-宅配便の不在通知を自分のlineに送る&#34;&gt;テーマは「宅配便の不在通知を自分のLINEに送る」&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://www.aim.aoyama.ac.jp/info/lect/7141/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/124/title.png&#34; alt=&#34;title.png&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;IoT講習会は3時間 x 4日間で実施しました。「IoT」「電子工作」「プログラミング」の基礎知識を固めながら「宅配便の不在通知を自分のLINEに送る」仕組みを作るのが目標です。&lt;/p&gt;
-
-&lt;p&gt;まずは座学で「IoT」の定義や概要を学んでアイデアを実現する方法を探り、その後は実際にセンサを使ったりLINE通知を送るプログラムを作ったりしながら実装を学んでいきます。&lt;/p&gt;
-
-&lt;h2 id=&#34;1日目-基礎知識を身につける&#34;&gt;1日目：基礎知識を身につける&lt;/h2&gt;
-
-&lt;p&gt;講座の序章として、まずは座学で基礎を学習していきます。
-&lt;center&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/124/iot.png&#34; alt=&#34;iot.png&#34; /&gt;
-世界各国の事例 - 画像は「ゴミの量を計測して収集を最適化する街」の例。
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;IoTの定義や概要、世界各国のIoT事例を紹介し、IoTへの理解を深めます。電子工作、プログラミング、開発環境の構築についても学び、1日目はNode.jsの環境を作成して実行するところまでトライしました。&lt;/p&gt;
-
-&lt;h2 id=&#34;2日目-電子工作にトライ&#34;&gt;2日目：電子工作にトライ&lt;/h2&gt;
-
-&lt;p&gt;続いて2日目からは、「不在通知を受け取ったことの取得」と「LINE通知」の実装に必要な仕組みを実際に作りながら学んでいきます。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/124/overview.png&#34; alt=&#34;overview.png&#34; /&gt;
-実装の構成を説明
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;音のデータを取得する&lt;/li&gt;
-&lt;li&gt;取得したデータをWi-Fi通信でサーバに送る&lt;/li&gt;
-&lt;li&gt;サーバにデータが送られたらLINEで通知する&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;といったように、機能ごとに分けてトライしていきます。&lt;/p&gt;
-
-&lt;h3 id=&#34;使用したのはwionodeとarduino-uno&#34;&gt;使用したのはWioNodeとArduino UNO&lt;/h3&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/124/device2.png&#34; alt=&#34;device2.png&#34; /&gt;
-今回使用したデバイスの一部
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;今回は「Arduino UNO」という入門向きのデバイスに、「Grove」というコネクタの拡張シールドを取り付け実装してみます。Wi-Fi接続には、こちらもGroveで配線できるWioNodeを利用。難しい配線やプログラミングを行わずとも自作IoTデバイスを作ることができます。&lt;/p&gt;
-
-&lt;p&gt;Arduino UNOを使った簡単なプログラムから始め、ステップバイステップで学んでいきます。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/124/device.png&#34; alt=&#34;device.png&#34; /&gt;
-Arduino UNOでLチカ（初歩的なプログラム）を試している様子
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;今回は上記の入門向きなデバイスやセンサ、パーツ類をセットにしたキットを用意しました。
-&lt;img src=&#34;https://dotstud.io/img/blog/124/kit.png&#34; alt=&#34;kit.png&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Arduino UNO&lt;/strong&gt;・・・専用ソフトウェアを使い、簡単にプログラムを書き込むことができるマイコンボード&lt;br /&gt;
-&lt;strong&gt;Grove&lt;/strong&gt;・・・Seeed社が作ったセンサ等を繋げるコネクタ規格。様々なセンサとの配線部分を規格化することで難しい配線が不要に&lt;br /&gt;
-&lt;strong&gt;Groveベースシールド&lt;/strong&gt;・・・Arduino UNOに取り付けることで、Groveコネクタを使えるようにする基盤&lt;br /&gt;
-&lt;strong&gt;WioNode&lt;/strong&gt;・・・専用スマホアプリのみで設定ができるGrove対応マイコンボード&lt;/p&gt;
-
-&lt;h2 id=&#34;3日目-デバイスを使ってiotを体感する&#34;&gt;3日目：デバイスを使ってIoTを体感する&lt;/h2&gt;
-
-&lt;p&gt;3日目は実際にデバイスを使って人の動きや音を感知するセンサのデータを取得し、LINEやブラウザで確認してIoTを肌で体験してもらいました。&lt;/p&gt;
-
-&lt;p&gt;Arduinoへのプログラムの書き込みやNode.jsを使ったサーバ構築に少し苦戦する学生もいましたが、徐々に慣れ参加者全員がデバイスの使い方とプログラミングの基本をマスターすることができました。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/124/jinkan.png&#34; alt=&#34;jinkan.png&#34; /&gt;
-手元の照度センサが光を検知するとブラウザ上のLEDが光るプログラムを試している様子
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/124/teach2.png&#34; alt=&#34;teach2.png&#34; /&gt;
-講師をつとめたちゃちゃまると参加してくれた学生さん。一様に真剣に取り組んでくれました。
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;柔軟なアイデアが飛び出した-不在通知を取得する方法&#34;&gt;柔軟なアイデアが飛び出した「不在通知を取得する方法」&lt;/h3&gt;
-
-&lt;p&gt;基本を学んだあとはグループに分かれ、どうやったら「不在通知を受け取ったこと」がわかるかアイデアを出し合いました。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/124/idea.png&#34; alt=&#34;idea.png&#34; /&gt;
-考えたアイデアを発表して共有
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;ポストが開けられた時の光の変化を取得する&lt;/li&gt;
-&lt;li&gt;不在の場合は2回インターホンを押してもらう&lt;/li&gt;
-&lt;li&gt;配達のトラックの音を機械学習で判定する&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;など、独創的なアイデアがたくさん飛び出しました。&lt;/p&gt;
-
-&lt;p&gt;一緒に参加していただいていた根本先生、槌屋先生から「夜で照度の違いがない場合はどうするか」「車じゃなかった場合はどうか」などのフィードバックをいただきましたが、&lt;strong&gt;自分で出したアイデアだからこそIoTの課題が身近に見えてくる&lt;/strong&gt;ように感じました！&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/124/award.png&#34; alt=&#34;award.png&#34; /&gt;
-優秀チームに先生方から授賞式！
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;4日目-iotの課題や精度を考える&#34;&gt;4日目：IoTの課題や精度を考える&lt;/h2&gt;
-
-&lt;p&gt;全ての機能の実装とデプロイが完了したあとは、発展として「不在通知を受け取ったこと」を取得する際の精度について考えてみました。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/124/data.png&#34; alt=&#34;data.png&#34; /&gt;
-音センサを使った場合の閾値について
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;IoTデバイスは、昼・夜、静かな場所・うるさい場所など様々な環境で使われることが想定されます。今回は環境に順応できる相対的なデータを利用した実装方法を学びました。&lt;/p&gt;
-
-&lt;p&gt;追加課題として出したArduinoの発展的なプログラムを解いてきてくれた学生さんもいて、今後につながる学習ができたのではないかと思います。&lt;/p&gt;
-
-&lt;h2 id=&#34;文系でもiot&#34;&gt;文系でもIoT！？&lt;/h2&gt;
-
-&lt;p&gt;参加してくれた学生さんのほとんどが文系で、今回の講習会で初めてプログラミングをしたという方もちらほら。
-&lt;img src=&#34;https://dotstud.io/img/blog/124/teach.png&#34; alt=&#34;teach.png&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ArduinoやGroveなどの登場で、もはや専門知識ゼロでもIoTの仕組みを作ることができてしまう時代です。&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめと感想&#34;&gt;まとめと感想&lt;/h2&gt;
-
-&lt;p&gt;四日間を通して、ほぼ全ての工程でスムーズに講習会を行うことができ、最後には無事参加してくれた全員がカリキュラムを完了することができました。&lt;/p&gt;
-
-&lt;p&gt;想定していたペースよりかなり早く進めることができ、学生さんたちの知識の吸収力・応用力に僕たちも驚きました！
-&lt;img src=&#34;https://dotstud.io/img/blog/124/all.png&#34; alt=&#34;all.png&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;弊社dotstudioでは、このような形で大学や企業でのIoT研修を行っております。ご興味のある方は是非弊社までお問い合わせください。&lt;/p&gt;
 </description>
     </item>
     
