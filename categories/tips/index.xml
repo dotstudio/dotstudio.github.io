@@ -10,6 +10,496 @@
     <atom:link href="/categories/tips/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Google公式ライブラリを利用してNode.jsからGmailの送受信をしてみよう</title>
+      <link>https://dotstud.io/blog/gmail-api-from-nodejs/</link>
+      <pubDate>Wed, 21 Feb 2018 17:43:26 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/gmail-api-from-nodejs/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、のびすけです。&lt;/p&gt;
+
+&lt;p&gt;Node.jsでGmailを制御する方法は、過去に色々な記事が出ているのですが、全体的に記事が古く、&lt;a href=&#34;https://developers.google.com/gmail/api/quickstart/nodejs?hl=ja&#34;&gt;Gmail API Node.js Quickstart&lt;/a&gt;のチュートリアルも割とわかりにくいなぁという印象です。英語しかないし。&lt;/p&gt;
+
+&lt;p&gt;また、勝手ライブラリも多いのですがメンテナンスされてなく利用していく際の不安も多いです。&lt;/p&gt;
+
+&lt;p&gt;ということで、今日はNode.jsでGmailを使う方法の紹介です。&lt;/p&gt;
+
+&lt;p&gt;以前書いたSpreadSheets記事も同様のGoogle APIライブラリを利用しているので基本的な手順は同じです。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/google-spreadsheets-from-nodejs/&#34;&gt;Node.jsでGoogle SpreadSheetsを操作してみよう。【GAS不使用】&lt;/a&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/135/00_eyecatch.png&#34; width=&#34;400px&#34;&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;gmail-apiの有効化とクライアントシークレットの取得&#34;&gt;Gmail APIの有効化とクライアントシークレットの取得&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://console.developers.google.com/start/api?id=gmail&amp;amp;hl=ja&#34;&gt;こちらのリンク&lt;/a&gt;からウィザード開始します。ログインしているGoogleアカウントが利用するGmailのアカウントになるので複数のGoogleやG Suiteのアカウントを持っている人は注意しましょう。&lt;/p&gt;
+
+&lt;p&gt;チェックをして進みます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/7aa9886c3113712265ee866ed58f6658.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;少し待つとAPIが有効になるので進みます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/2babe62f7ce826080545439c3c2675d9.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;認証情報に進みますが&amp;hellip;&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;例によってこの画面は何もせずに&lt;code&gt;キャンセル&lt;/code&gt;ボタンを押しましょう。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/1934915770a80c6fab94ee9818f9cf65.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;このダッシュボード画面になりますが、&lt;code&gt;OAuth同意画面&lt;/code&gt;のタブを選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/7f28a9c626ea9f2ecd0b4691ef337859.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;ユーザーに表示するサービス名&lt;/code&gt;の箇所に任意の名前を入力して、保存を押して進みます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/b93e391525943007cddd5de87a22acbf.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;認証情報タブに戻り、&lt;code&gt;認証情報を作成&lt;/code&gt; -&amp;gt; &lt;code&gt;OAuthクライアントID&lt;/code&gt;を選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/57b7c424a42dd9fedaed483ebbf5d84b.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;クライアントID作成画面では&lt;code&gt;その他&lt;/code&gt;を選択し、任意の名前を入力します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/124eeda9adf92739b1eff9b1e3afcb42.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;作成すると最初のダッシュボード画面に戻りますが、作成したクライアントIDが表示されています。ここの右下のダウンロードボタンを押すとクライアントシークレットが保存されたJSONファイルがダウンロードされます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/64db51910795b26e05aef6cb9918c33f.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;任意の場所に&lt;code&gt;client_secret.json&lt;/code&gt;という名前にリネームして保存しましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/8a4b65dfb3319eee11ddea1d0e7d407d.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;これで、 &lt;strong&gt;クライアントシークレットの保存が出来ました。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;node-jsプロジェクトの準備&#34;&gt;Node.jsプロジェクトの準備&lt;/h2&gt;
+
+&lt;p&gt;Node.jsはv9.5.0です。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mkdir gmail
+cd gmail
+npm init -y
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;先ほどの&lt;code&gt;client_secret.json&lt;/code&gt;をこのディレクトリに移動します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ls
+
+package.json client_secret.json
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ライブラリのインストールをすれば準備完了です。google-auth-libraryのバージョンは1.3.1になります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ npm i googleapis google-auth-library --save
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これで準備完了です。&lt;/p&gt;
+
+&lt;h2 id=&#34;アクセストークンの保存&#34;&gt;アクセストークンの保存&lt;/h2&gt;
+
+&lt;p&gt;本家とは少し違うやり方です。&lt;/p&gt;
+
+&lt;p&gt;本家のコードだとアクセストークンの作成&amp;amp;保存作業と実際のAPI呼び出しが一緒になったコードですがトークンの作成&amp;amp;保存は最初のみ行えば良いので手順を分けて紹介します。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;getAndStoreToken.js&lt;/code&gt;を作成します。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/google-spreadsheets-from-nodejs/&#34;&gt;前回の記事のコード&lt;/a&gt;とほぼ同様ですが、APIライブラリのバージョンの違いにより、呼び出し方が少し異なります。注意しましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//getAndStoreToken.js
+&#39;use strict&#39;;
+
+const fs = require(&#39;fs&#39;);
+const readline = require(&#39;readline&#39;);
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+const {promisify} = require(&#39;util&#39;);
+
+const {google} = require(&#39;googleapis&#39;);
+const {OAuth2Client} = require(&#39;google-auth-library&#39;);
+
+//promisifyでプロミス化
+const readFileAsync = promisify(fs.readFile);
+const writeFileAsync = promisify(fs.writeFile);
+const rlQuestionAsync = promisify(rl.question);
+
+const SCOPES = [&#39;https://www.googleapis.com/auth/gmail.send&#39;,&#39;https://www.googleapis.com/auth/gmail.readonly&#39;];
+const TOKEN_DIR = __dirname;
+const TOKEN_PATH = TOKEN_DIR+&#39;/gmail-nodejs-quickstart.json&#39;;
+
+const main = async () =&amp;gt; {
+    const content = await readFileAsync(__dirname+&#39;/client_secret.json&#39;);
+    const credentials = JSON.parse(content); //クレデンシャル
+    //認証
+    const clientSecret = credentials.installed.client_secret;
+    const clientId = credentials.installed.client_id;
+    const redirectUrl = credentials.installed.redirect_uris[0];
+    const oauth2Client = new OAuth2Client(clientId, clientSecret, redirectUrl);
+
+    //get new token
+    const authUrl = oauth2Client.generateAuthUrl({
+        access_type: &#39;offline&#39;,
+        scope: SCOPES
+    });
+
+    console.log(&#39;Authorize this app by visiting this url: &#39;, authUrl);
+
+    rl.question(&#39;Enter the code from that page here: &#39;, (code) =&amp;gt; {
+        rl.close();
+
+        oauth2Client.getToken(code, async (err, token) =&amp;gt; {
+            if (err) {
+                console.log(&#39;Error while trying to retrieve access token&#39;, err);
+                return;
+            }
+
+            oauth2Client.credentials = token;
+
+            try {
+                fs.mkdirSync(TOKEN_DIR);
+            } catch (err) {
+                if (err.code != &#39;EEXIST&#39;) throw err;
+            }
+
+            await writeFileAsync(TOKEN_PATH, JSON.stringify(token));
+            console.log(&#39;Token stored to &#39; + TOKEN_PATH);
+        });
+    });
+};
+
+main();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ここで&lt;code&gt;&#39;https://www.googleapis.com/auth/gmail.readonly&#39;,&#39;https://www.googleapis.com/auth/gmail.send&#39;&lt;/code&gt;の二つのスコープを指定していますが、表示用のgmail.readonlyとメール送信用のgmail.sendとなっています。表示だけしたい場合や送信だけしたい場合などで使い分けましょう。スコープについては&lt;a href=&#34;https://developers.google.com/gmail/api/auth/scopes&#34;&gt;
+Choose Auth Scopes&lt;/a&gt;で細かく確認できます。&lt;/p&gt;
+
+&lt;p&gt;では、このプログラムを実行しましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;node getAndStoreToken.js
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/379de8711e19b5510225e167de555ab6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;https://accounts.google.com/~&lt;/code&gt;で始まるURLが表示されるのでこれをコピーしてブラウザで開きます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/35387/06afa961-4789-535b-3fee-8eaf67a997af.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;アカウント選択画面になります。 複数Googleアカウントを持っている人は、今回アクセスしようとしているアカウントを選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/c5f18901079fc0f4c0362cb0213e89c6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;許可で進みます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/35387/6058bd3e-258f-1d8d-a7c6-68962617f1b2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;認証用のコードが発行されるので、ターミナルの&lt;code&gt;Enter the code from that page here:&lt;/code&gt;と書いてある箇所にコピぺしてEnterで進みます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Token stored to /Users/path/to/myapp/gmail-nodejs-quickstart.json
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;などの表示が出て、&lt;code&gt;gmail-nodejs-quickstart.json&lt;/code&gt;が保存されます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/4fc90f71b3520a01ce2c568eb28e005f.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;これでアクセストークンの保存が完了しました。&lt;/p&gt;
+
+&lt;h2 id=&#34;4-いよいよgmailにアクセス&#34;&gt;4. いよいよGmailにアクセス&lt;/h2&gt;
+
+&lt;p&gt;いよいよGmailにアクセスします。&lt;/p&gt;
+
+&lt;h3 id=&#34;ラベル一覧の取得&#34;&gt;ラベル一覧の取得&lt;/h3&gt;
+
+&lt;p&gt;本家チュートリアルを参考に、ラベルの一覧を取得します。
+&lt;code&gt;getLabels.js&lt;/code&gt;を作成します。&lt;/p&gt;
+
+&lt;p&gt;ここから先に出てくる&lt;code&gt;userId: &#39;me&#39;&lt;/code&gt;の&lt;code&gt;me&lt;/code&gt;は指定されている文字列らしく、自分のメアドやアカウント名をあえて指定する必要はなくそのまま&lt;code&gt;me&lt;/code&gt;と書いておけば問題なさそうです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//getLabels.js
+&#39;use strict&#39;;
+
+const fs = require(&#39;fs&#39;);
+const {promisify} = require(&#39;util&#39;);
+const {google} = require(&#39;googleapis&#39;);
+const {OAuth2Client} = require(&#39;google-auth-library&#39;);
+const gmail = google.gmail(&#39;v1&#39;);
+
+//promisifyでプロミス化
+const readFileAsync = promisify(fs.readFile);
+const gmailListLabesAsync = promisify(gmail.users.labels.list); //Gmailのラベル一覧
+
+const TOKEN_DIR = __dirname;
+const TOKEN_PATH = TOKEN_DIR + &#39;/gmail-nodejs-quickstart.json&#39;; //アクセストークンのファイルを指定
+
+const main = async () =&amp;gt; {
+    //クレデンシャル情報の取得
+    const content = await readFileAsync(__dirname+&#39;/client_secret.json&#39;); //クライアントシークレットのファイルを指定
+    const credentials = JSON.parse(content); //クレデンシャル
+
+    //認証
+    const clientSecret = credentials.installed.client_secret;
+    const clientId = credentials.installed.client_id;
+    const redirectUrl = credentials.installed.redirect_uris[0];
+    const oauth2Client = new OAuth2Client(clientId, clientSecret, redirectUrl);
+    const token = await readFileAsync(TOKEN_PATH);
+    oauth2Client.credentials = JSON.parse(token);
+
+    //API経由でシートにアクセス
+    const response = await gmailListLabesAsync({
+        auth: oauth2Client,
+        userId: &#39;me&#39;,
+    });
+    //結果を表示
+    console.log(response.data);
+};
+
+main();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Async/Awaitで利用できるように&lt;code&gt;const gmailListLabesAsync = promisify(gmail.users.labels.list);&lt;/code&gt;の箇所でPromisifyを利用してプロミス化しています。&lt;/p&gt;
+
+&lt;p&gt;実行するとラベル一覧が取得できます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;node getLabels.js
+
+{ labels:
+   [ { id: &#39;Label_125&#39;,
+       name: &#39;研修/青山学院大学&#39;,
+       messageListVisibility: &#39;show&#39;,
+       labelListVisibility: &#39;labelShow&#39;,
+       type: &#39;user&#39;,
+       color: [Object] },
+     { id: &#39;Label_40&#39;,
+       name: &#39;取引/養老乃瀧&#39;,
+       messageListVisibility: &#39;show&#39;,
+       labelListVisibility: &#39;labelShow&#39;,
+       type: &#39;user&#39;,
+       color: [Object] },
+       
+       ・
+       ・
+       ・
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;会社のメールの内容なので出せるところだけ笑&lt;/p&gt;
+
+&lt;h3 id=&#34;メールの内容を取得&#34;&gt;メールの内容を取得&lt;/h3&gt;
+
+&lt;p&gt;メールの内容は&lt;code&gt;Users.messages: list&lt;/code&gt;と&lt;code&gt;Users.messages: get&lt;/code&gt;を利用します。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://developers.google.com/gmail/api/v1/reference/users/messages/get&#34;&gt;https://developers.google.com/gmail/api/v1/reference/users/messages/get&lt;/a&gt;
+&lt;a href=&#34;https://developers.google.com/gmail/api/v1/reference/users/messages/list&#34;&gt;https://developers.google.com/gmail/api/v1/reference/users/messages/list&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;必要な箇所だけ抜粋しますが、&lt;code&gt;gmail.users.messages.list()&lt;/code&gt;と&lt;code&gt;gmail.users.messages.get()&lt;/code&gt;というメソッドがあるので利用します。
+Async/Awaitで利用できるように、先ほど同様Promisifyします。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;const gmailGetMessagesAsync = promisify(gmail.users.messages.get); 
+const gmailListMessagesAsync = promisify(gmail.users.messages.list);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;メッセージリストを取得し、メッセージごとのIDを取得します。メッセージIDをもとにメッセージ本文を取得。
+最後に本文はBase64変換されてるのでデコードして表示します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;省略
+
+    //メッセージリストの取得
+    let res = await gmailListMessagesAsync({
+        auth: oauth2Client,
+        userId: &#39;me&#39;
+    });
+    const newestMessageId = res.messages[0].id; //最新のメッセージID
+
+    //メッセージの取得
+    res = await gmailGetMessagesAsync({
+        auth: oauth2Client,
+        userId: &#39;me&#39;,
+        id: newestMessageId
+    });
+    //結果を表示
+    const base64mailBody = res.payload.parts[0].body.data; //parts[0]がテキスト、parts[1]がHTMLメールっぽい(?)
+    const mailBody = new Buffer(base64mailBody, &#39;base64&#39;).toString(); //メール本文はBase64になってるので変換
+    console.log(mailBody);//やっとメール本文が表示される
+
+省略
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;メールの送信&#34;&gt;メールの送信&lt;/h3&gt;
+
+&lt;p&gt;送信が割と大変でした。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;Users.messages: send&lt;/code&gt;を利用します。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://developers.google.com/gmail/api/v1/reference/users/messages/send&#34;&gt;https://developers.google.com/gmail/api/v1/reference/users/messages/send&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;code&gt;gmail.users.messages.send()&lt;/code&gt;のメソッドを利用します。
+先ほどと同様にPromisifyします。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;const gmailSendMessagesAsync = promisify(gmail.users.messages.send);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;次にメール送信時の処理です。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;省略
+
+    const makeBody = (params) =&amp;gt; {
+        params.subject = new Buffer(params.subject).toString(&amp;quot;base64&amp;quot;); //日本語対応
+
+        const str = [
+            `Content-Type: text/plain; charset=\&amp;quot;UTF-8\&amp;quot;\n`,
+            `MIME-Version: 1.0\n`,
+            `Content-Transfer-Encoding: 7bit\n`,
+            `to: ${params.to} \n`,
+            `from: ${params.from} \n`,
+            `subject: =?UTF-8?B?${params.subject}?= \n\n`,
+            params.message
+        ].join(&#39;&#39;);
+        return new Buffer(str).toString(&amp;quot;base64&amp;quot;).replace(/\+/g, &#39;-&#39;).replace(/\//g, &#39;_&#39;);
+    }
+    
+    const messageBody = `
+        XXXX 様
+
+        商品のご購入、誠にありがとうございます。
+        ・Nefry BT x 1
+        の商品を本日発送しましたのでご連絡差し上げます。
+        
+        こちらから配送状況をご確認頂けます。
+        (このメール送信の時点では反映されていない可能性もあります)
+
+        https://trackings.post.japanpost.jp/xxxxxxxxxx`;
+
+    const raw = makeBody({
+        to: &#39;相手のメールアドレス&#39;,
+        from: &#39;送信者のメールアドレス&#39;,
+        subject: &#39;件名(日本語可)&#39;,
+        message: messageBody
+    });
+
+    const res = await gmailSendMessagesAsync({
+        auth: oauth2Client,
+        userId: &#39;me&#39;,
+        resource: {
+          raw: raw
+        }
+    });
+    console.log(res.data);
+
+省略
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;sendMail.js&lt;/code&gt;などを作成し、この内容で実行するとメールが送信できます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;node sendMail.js
+
+{ id: &#39;xxxxxxxxxxxxxxxxx&#39;,
+  threadId: &#39;xxxxxxxxxxxxxxxx&#39;,
+  labelIds: [ &#39;SENT&#39; ] }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Gmail側で受信確認をすると、しっかりと送られてきています。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/3ad5f4729e90c9523e2e6e5cb972349b.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;また、暗号化もされているようで、&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://support.google.com/mail/answer/6330403?authuser=2&amp;amp;visit_id=1-636548034928176578-836942562&amp;amp;p=tls&amp;amp;hl=ja&amp;amp;rd=1&#34;&gt;送受信時のメールの暗号化 - Gmailヘルプ&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/247eb44de5f0b635d52fd2b0c06a4de3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Node.jsのメール送信ライブラリはいくつかあって、いくつか試したときに暗号化されてない場合も多かった印象です。暗号化無しだと、この赤いアラートっぽいメール表示になります。&lt;/p&gt;
+
+&lt;p&gt;今回のやり方はGoogle公式のライブラリで、特に意識せずに暗号化も行われているので暗号化に対するアラートなども受け取り手には表示されないので迷惑メールなどに振り分けられてしまう心配もたぶん少ないのでは。
+（Gmailの迷惑メールアルゴリズムは色々な要素がありそうなので断言は出来ないですが）&lt;/p&gt;
+
+&lt;h2 id=&#34;所感&#34;&gt;所感&lt;/h2&gt;
+
+&lt;p&gt;実装途中の感想ですが、メール送信が割と苦労した印象です。&lt;/p&gt;
+
+&lt;p&gt;メール送信のNode.jsサンプルが無かったので、&lt;a href=&#34;https://developers.google.com/gmail/api/v1/reference/users/messages/send#examples&#34;&gt;JavaScript Sample&lt;/a&gt;を見ると、送信パラメータに&lt;code&gt;email RFC 5322 formatted String.&lt;/code&gt;という記述があってRFCのフォーマットを確認する必要がありました。&lt;/p&gt;
+
+&lt;p&gt;この手のライブラリだと&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;const params = {
+    to: &#39;&#39;,
+    from: &#39;&#39;,
+    subject: &#39;&#39;,
+    body: &#39;&#39;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;みたいな形式のObjectを突っ込めばいい感じにやってくれる印象があったので&amp;hellip;&amp;hellip;苦笑&lt;/p&gt;
+
+&lt;p&gt;Stack Over Flowの&lt;a href=&#34;https://stackoverflow.com/questions/34546142/gmail-api-for-sending-mails-in-node-js&#34;&gt;Gmail API for sending mails in Node.js&lt;/a&gt;がかなり参考になりました。&lt;/p&gt;
+
+&lt;p&gt;また、日本語でのSubject送信に&lt;code&gt;=?文字コード?メソッド?Base64変換した文字列?=&lt;/code&gt;という形式で渡すなどは&lt;a href=&#34;http://hogem.hatenablog.com/entry/20100122/1264169093&#34;&gt;メールのSubjectヘッダのエンコード&lt;/a&gt;の記事が参考になりました。&lt;/p&gt;
+
+&lt;p&gt;とはいえ、問題なくメール送信出来たので、この記事を参考に使ってみてください。&lt;/p&gt;
+
+&lt;p&gt;それでは！&lt;/p&gt;
+
+&lt;h2 id=&#34;補足-本家のチュートリアルのエラー&#34;&gt;補足: 本家のチュートリアルのエラー&lt;/h2&gt;
+
+&lt;p&gt;今回紹介した手順では問題ないですが、もともとのチュートリアルのコードだと以下の二つのエラーが出ました。(2018年2月時点)&lt;/p&gt;
+
+&lt;h3 id=&#34;google-gmail-is-not-a-function&#34;&gt;google.gmail is not a function&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;google.gmail() is giving an error TypeError: google.gmail is not a function?
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ってエラーが出ました。&lt;/p&gt;
+
+&lt;p&gt;Stack Over Flowの&lt;a href=&#34;https://stackoverflow.com/questions/48762090/google-gmail-is-giving-an-error-typeerror-google-gmail-is-not-a-function&#34;&gt;google.gmail() is giving an error TypeError: google.gmail is not a function?&lt;/a&gt;を参考に&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var google = require(&#39;googleapis&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これを↓に変更するとエラー解消されます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;var {google} = require(&#39;googleapis&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;googleauth-is-not-a-constructor&#34;&gt;GoogleAuth is not a constructor&lt;/h3&gt;
+
+&lt;p&gt;こちらはIssueがあがっていて&lt;a href=&#34;https://github.com/google/google-auth-library-nodejs/issues/251&#34;&gt;GoogleAuth is not a constructor #251&lt;/a&gt;を見ると、&lt;/p&gt;
+
+&lt;p&gt;呼び出し方が変更されてて、以下の修正が必要です。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;const { GoogleAuth } = require(&#39;google-auth-library&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;↓&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;const { OAuth2Client } = require(&#39;google-auth-library&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;また、今の変更に伴いOAuthの処理も変更が必要です。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;const auth = new googleAuth();
+const oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;↓&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//const auth = new googleAuth();
+const oauth2Client = new OAuth2Client(clientId, clientSecret, redirectUrl);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これで問題なく利用できるようになりました。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Node.jsを始めよう！nodebrewを使って5分で環境構築</title>
       <link>https://dotstud.io/blog/nodejs-install-use-nodebrew/</link>
       <pubDate>Fri, 15 Dec 2017 00:00:00 +0000</pubDate>
@@ -1940,106 +2430,6 @@ LINEなど、エンジニア以外にも使われているツールだとプロ�
 &lt;p&gt;せっかく作り上げたサービスを、できることなら成長させたいですよね。そのためにはサービスに関わる人全てが「経営者目線を意識」するのも効果的のようです。&lt;/p&gt;
 
 &lt;p&gt;これからのconnpassがどのような展開を迎えるのか、今後の活躍にも注目ですね！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>【connpass × のびすけ対談】勉強会あるある！イベントのドタキャンにどう対処する？</title>
-      <link>https://dotstud.io/blog/connpass-n0bisuke-interview-vol1/</link>
-      <pubDate>Tue, 01 Nov 2016 10:00:00 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/connpass-n0bisuke-interview-vol1/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、dotstudioエディターのうらら（@uraranbon）です。&lt;/p&gt;
-
-&lt;p&gt;いろんな人と交流をしたい。新しい情報を得たい。IT/Web業界では最新トレンドやナレッジを共有する「勉強会」や「LT（ライトニングトーク）」というイベントが毎日のように開催されています。&lt;/p&gt;
-
-&lt;p&gt;しかし、イベント当日に参加者が来ない「&lt;strong&gt;ドタキャン&lt;/strong&gt;」に悩まされたことがある方は多いのではないでしょうか。エンジニア向けイベントサービス「&lt;a href=&#34;http://connpass.com&#34;&gt;connpass&lt;/a&gt;」と、1年で100件ほどイベントを開催するエンジニアののびすけ（@n0bisuke）がドタキャン問題の解決策を話します。&lt;/p&gt;
-
-&lt;div class=&#34;person-intro&#34;&gt;
-    &lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34;/&gt;
-    &lt;div class=&#34;person-info&#34;&gt;
-        &lt;strong&gt;人物紹介：佐藤治夫 氏&lt;/strong&gt;
-        &lt;p&gt;株式会社ビープラウド代表。&lt;br /&gt;2011年からイベントサイト「connpass」を運営する傍ら、自身も積極的に勉強会やイベント活動をおこなっている。&lt;/p&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
-
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;話を伺ってきたのは、エンジニア向けのイベントを積極的に主催しているdotstudio代表/エンジニアのびすけです。よく「connpass」を使って集客をしています。&lt;/p&gt;
-
-&lt;div class=&#34;person-intro&#34;&gt;
-    &lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; /&gt;
-    &lt;div class=&#34;person-info&#34;&gt;
-        &lt;strong&gt;人物紹介：菅原のびすけ&lt;/strong&gt;
-        &lt;p&gt;dotstudio代表。&lt;br /&gt;1989年生まれのバックエンドエンジニア。 &lt;a href=&#34;http://iotlt.connpass.com&#34; target=&#34;_blank&#34;&gt;IoTLT&lt;/a&gt;、Swift愛好会、NodeBotsハンズオンなど、幅広いイベントを開催している。&lt;/p&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&#34;参加登録した人のドタキャンをなくすには&#34;&gt;参加登録した人のドタキャンをなくすには&lt;/h2&gt;
-
-&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; /&gt;&lt;span&gt;とあるイベントに参加者の8~9割がconnpassの通知メール経由ってすごいですよね。僕自身も6,000人の集客がconnpassでできました。ただ、人が集まりやすい仕組みになってるからこそ、勢いでくるというか。&lt;strong&gt;ドタキャン率も高い印象です&lt;/strong&gt;。それってどのイベントサイトにも言えると思うんですけど。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;
-
-&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;公開されると「とりあえず参加します」みたいな、記念参加みたいにする人もいますよね。そこをなんとかしたいっていう問題はあります。IT業界全体の問題ですよね。&lt;/span&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;ドタキャンをなくすにはどうしたらいいですかね。ドタキャン問題を減らせる機能はうちも入れたい。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;
-
-&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; /&gt;&lt;span&gt;&lt;strong&gt;事前課金式&lt;/strong&gt;みたいなのはいいかなと思います。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;
-
-&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;1,000円とか徴収するっていう感じですよね。そうすると参加者が伸び悩んじゃう懸念もありますね。「行けないかもしれないからちょっと……」みたいな。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;
-
-&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; /&gt;&lt;span&gt;あと、僕は&lt;a href=&#34;http://nodejs.connpass.com/&#34; &gt;Node学園&lt;/a&gt;さんのやり方を参考にしていますね。Node学園では&lt;strong&gt;最初にイベントページだけを公開して、募集は1週間前とかにしています。&lt;/strong&gt;最近のNode学園は2~3日前に募集開始になってるときもあります。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;
-
-&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; /&gt;&lt;span&gt;募集開始時期があまりにも早いと、申し込みしたこと自体を忘れてしまうんですよね。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;
-
-&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; /&gt;&lt;span&gt;世の中みんなクリーンな心だったらこんなこと考えなくていいんでしょうけど（笑）&lt;/span&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;あはは（笑）　いちおう、connpassには「参加した」とか「キャンセルした」とかは全部表示されるようになっているんです。他のサービスは参加を隠せたりするんですけど。ユーザページである程度その人を把握できます。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;
-
-&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; /&gt;&lt;span&gt;申し込みして、キャンセル処理してなくてもキャンセルする人もいますよね。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;
-
-&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; /&gt;&lt;span&gt;ドタキャンは問題だと思いつつ、仕方ないかとも思っているんですよね。ドタキャンは絶対発生するものと思っていて。 &lt;strong&gt;200人が定員の会場だとしたら250人くらいまで募集をかけるときもあります。&lt;/strong&gt;&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;
-
-&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;たしかに。僕も入らないけれど60人で募集して、当日来ないだろうという当たりをつけてやっていますね。&lt;/span&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;「ドタキャンはIT業界全体の問題」&lt;/strong&gt;と佐藤氏が仰っていたように、イベントでは避けられないものなのかもしれません。とほほ。&lt;/p&gt;
-
-&lt;p&gt;ドタキャンに悩んでいる方は、次のようなことを試すと良いかもしれませんね。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;最初にイベントページだけを公開して、募集は1週間前や2~3日前などにする&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;参加費をとり、事前回収制にする&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;ドタキャンを見越して多めに募集する（定員が200人なら250人募集など）&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;ドタキャン問題と向き合って、皆さんが主催するイベントも楽しいイベントになるといいですね！&lt;/p&gt;
 </description>
     </item>
     
