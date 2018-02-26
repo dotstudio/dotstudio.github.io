@@ -7,8 +7,214 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Thu, 22 Feb 2018 03:00:43 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 26 Feb 2018 00:00:00 +0000</lastBuildDate>
     <atom:link href="/categories/try/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>パソコンやモバイルバッテリーに繋いで動かせるデバイスを作ろう！USB電子工作のすすめ#1 - 基礎知識編</title>
+      <link>https://dotstud.io/blog/usb-power-supply-making/</link>
+      <pubDate>Mon, 26 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dotstud.io/blog/usb-power-supply-making/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、ものづくり担当のうこ(&lt;a href=&#34;https://twitter.com/harmoniko&#34;&gt;@harmoniko&lt;/a&gt;)です。&lt;/p&gt;
+
+&lt;p&gt;みなさんは、&lt;strong&gt;電子工作をするときの電源はどこから取っていますか？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Arduinoをよく使われる方だと5V端子や3.3V端子から取っている場合が非常に多いですが、ではArduinoを使わない、ピュアな電子工作の場合だとどうしたらいいでしょうか？&lt;/p&gt;
+
+&lt;p&gt;今回は、電子工作用電源としても非常に有用な&lt;strong&gt;USBの基本と扱い方&lt;/strong&gt;についてお伝えします。&lt;/p&gt;
+
+&lt;h2 id=&#34;usbのしくみ&#34;&gt;USBのしくみ&lt;/h2&gt;
+
+&lt;p&gt;「&lt;strong&gt;USB&lt;/strong&gt;」は「&lt;strong&gt;Universal Serial Bus&lt;/strong&gt;」の略で、PCとその周辺機器の間の汎用的な通信規格として1996年に登場しました。USBは1対2本の信号線（※）で順番にデータを送る「&lt;strong&gt;シリアル接続&lt;/strong&gt;」という方式で、複数のデバイスを吊り下げられる「&lt;strong&gt;バス規格&lt;/strong&gt;」の1つです。&lt;/p&gt;
+
+&lt;p&gt;※…USB 2.0まで&lt;/p&gt;
+
+&lt;p&gt;端子は従来のものと比べてシンプルになり、ホストとデバイスをすぐに区別できるようなものになりました。&lt;/p&gt;
+
+&lt;p&gt;USBを使って通信をするには、USBを制御する専用のコントローラハードウェアが必要となるため、電子工作では少し難易度があがります。ただし、&lt;strong&gt;電源を使うだけならケーブルを切って電源のVcc線（+）とGnd線（-）を引き出すだけでよい&lt;/strong&gt;ので、スマホが普及しはじめるよりも早くから電源用ケーブルとしても使われるようになりました。&lt;/p&gt;
+
+&lt;p&gt;USBの簡単な特徴をまとめると、以下のようになります。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;通信は、 1つの「ホスト」（PC側）と1〜複数の「デバイス」（周辺機器側）との間で行われる。&lt;/li&gt;
+&lt;li&gt;ホスト側とデバイス側で端子形状が区別されている（タイプC端子を除く）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;電源供給用のケーブルおよび端子として使うなら扱いは簡単！&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;ここ数年普及してきている「USB PD」は、大電力の供給が可能でMacBookの給電などにも利用されている。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;さて当記事は、 &lt;strong&gt;「電子工作において電源として気軽に使えるUSB」&lt;/strong&gt; を知っていただくためのものですので、扱いの簡単な「USB2.0規格（タイプC端子を除く）」までを使う前提の説明にとどめます。&lt;/p&gt;
+
+&lt;p&gt;USB3.0規格以降は端子が増えたり電源規格が多様になったりしているため、電子工作での利用であれば、USB2.0規格までの理解で問題ありません。&lt;/p&gt;
+
+&lt;p&gt;さらに詳しくUSBについて知りたい方は、以下のリンクを参考にしてください。&lt;/p&gt;
+
+&lt;p&gt;⇒ 参考: &lt;a href=&#34;https://thinkit.co.jp/article/11142&#34;&gt;現代PCの基礎知識(7):仕様書を紐解くとわかる―本当はややこしいUSB（Think IT）&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;電源に使うことのメリット&#34;&gt;電源に使うことのメリット&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;モバイルバッテリー、PC、コンセントアダプタなど、多彩なソースが選べる。&lt;/li&gt;
+&lt;li&gt;給電方法に汎用性があるため、必要なパーツが安くて手に入りやすい。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;電源に使うことのデメリット&#34;&gt;電源に使うことのデメリット&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;「外部電源」となるため、電池として本体に含めることができない。&lt;/li&gt;
+&lt;li&gt;規格上、5V電圧以外を扱うときや大電流が必要なものには適さない（USB PDを除く）。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;仕様の一覧&#34;&gt;仕様の一覧&lt;/h3&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;left&#34;&gt;&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;USB 1.0&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;USB 1.1&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;USB 2.0&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;端子タイプ（ホスト側）&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;標準A&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;標準A&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;標準A, タイプC&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;端子タイプ（デバイス側）&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;B&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;B&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;ミニA, マイクロA, ミニB, マイクロB, タイプC&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;通信速度&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;12Mビット/秒&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;12Mビット/秒&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;480Mビット/秒&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;定格電圧&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;同右&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;同右&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;約5V（ホスト側4.4~5.25V）&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;最大電流&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;500mA&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;500mA&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;500mA（USB BC拡張:1.5A）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;以上は通信に関する基本的なバージョン仕様ですが、さらにUSB2.0を拡張したUSB電源専用規格である「USB BC（Battery Charging）」というものがあり、1.5Aまでの電流を流すことが可能となっています。&lt;/p&gt;
+
+&lt;p&gt;また、電子工作で利用するためのUSBパーツは100円ショップなどで購入できます。&lt;strong&gt;100円ショップなどで安価に入手可能なUSBパーツはほぼ100%がUSB2.0規格またはUSB BC規格のもの&lt;/strong&gt;となります。&lt;/p&gt;
+
+&lt;p&gt;よって、電子工作の&lt;strong&gt;電源として&lt;/strong&gt;USBを使ってみたいときは&lt;strong&gt;USB2.0規格またはUSB BC規格&lt;/strong&gt;に準じたUSB部品の仕様を知っておけばOKです。&lt;/p&gt;
+
+&lt;h2 id=&#34;usbケーブルの配線図&#34;&gt;USBケーブルの配線図&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/150/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;USB2.0には、電源線の5V（VccやVBUSとも）とGND、信号線のD-とD+の合計4種類の線があります。ケーブルのほとんどは2層構造になっていて、内側に収められている4本の線の色分けも上図のように決まっています。&lt;/p&gt;
+
+&lt;p&gt;電子工作でUSBを使うときは、「標準Aメス端子を基板に実装する」か、上図のような「標準Aオス端子がついたケーブルの電源線を接続する」ことになるので、端子の順番や色分けは覚えておくと楽です。&lt;/p&gt;
+
+&lt;h2 id=&#34;電圧と電流&#34;&gt;電圧と電流&lt;/h2&gt;
+
+&lt;p&gt;USB電源の基本は「&lt;strong&gt;電圧5V/電流500mAまで&lt;/strong&gt;」です。&lt;/p&gt;
+
+&lt;p&gt;といっても、これはパソコンのような「電源供給」を主目的としないホストから給電する場合の「USB2.0規格」による制限値です。&lt;/p&gt;
+
+&lt;p&gt;電子工作でUSB電源を扱う場合は、モバイルバッテリーやUSBコンセントなどからの給電がほとんどになると思われます。その場合は、USB BC規格の上限値である1.5Aとなりますが、普通はバッテリーやコンセントに最大出力が書いてあります（例：5V/800mA）ので、電流値の最大はそれに従いましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;usbケーブルの注意点&#34;&gt;USBケーブルの注意点&lt;/h4&gt;
+
+&lt;p style=&#34;font-size: 80%&#34;&gt;細かい話をすると、市場で出回る多くの充電器は「最大2.4A出力」などを謳っていて、この場合だとUSB BC規格にもあてはまりません。このような製品は、USBを通信を行わない完全な電源ケーブルとみなし、独自の規格を採用している場合が多いです。よって、電子工作でUSB電源を使うときは、「USB2.0規格の配線」と「使いたい電源供給源（バッテリーやコンセント等）の出力電流」を考慮して回路設計をするのがベストだといえます。難しく考えたくない人は、 **とにかく省エネになるように意識して作る**ようにするのがよいでしょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 80%&#34;&gt;⇒ 参考: &lt;a href=&#34;https://hanpenblog.com/1472/&#34;&gt;乱立するスマホ向け急速充電の規格について調べた（HANPEN-BLOG）&lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;電子工作での利用を考えると電流消費を見ることが大事で、個人で製作する小規模な回路であればほとんどが500mA以内に収まることが多いです。&lt;/p&gt;
+
+&lt;p&gt;ヒーターやモーターを使った回路は例外的で、接続された個数や負荷で変動しますが、最大電流が容易に1Aを超えてしまうことがあります。しかし、どのような場合であっても、個人製作された電子回路は漏電流やショートへの配慮、適切な電流制限などが行われていないことが大半です。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;基本的には、USB電源を利用する自作の電子回路は、安全上の理由からパソコンに接続して給電してはいけません。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;⇒ 参考：&lt;a href=&#34;http://www.wheel.gr.jp/~dai/hardware/usb-port.html&#34;&gt;USBポートは電源ではありません&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;現実には今のパソコンは全て保護回路が入っているため、ブレッドボードを繋げたArduinoにパソコンから給電するといったようなことを行なっていてもまず問題はありません。しかし&lt;strong&gt;危険性は少なからずあるもの&lt;/strong&gt;だとして意識してもらえれば幸いです。&lt;/p&gt;
+
+&lt;p&gt;（15年ほど前のパソコンでは、USB端子に500mA以上の過電流を流すといきなりパソコンの電源ごと落ちるものもありました。）&lt;/p&gt;
+
+&lt;h2 id=&#34;入手方法&#34;&gt;入手方法&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;おすすめは100円ショップ&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/150/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;100円ショップの電気系コーナーに行くと、どこに行っても大抵はUSBケーブルが置いてあります。USBケーブルの中でも取り扱いが多いのは、おそらく次の3つでしょう。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Aオス端子-microBオス端子（スマホ充電用）&lt;/li&gt;
+&lt;li&gt;Aオス端子-Bオス端子（プリンタなどの接続用）&lt;/li&gt;
+&lt;li&gt;Aオス端子-Aメス端子（ケーブル延長用）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;このうち、最後の &lt;strong&gt;Aオス端子-Aメス端子（ケーブル延長用）&lt;/strong&gt; は、置いていない店舗もありますが、&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ケーブル部分が比較的長い。&lt;/li&gt;
+&lt;li&gt;基本的にはAオス端子側を使うが、工作の内容によってはAメス端子があると便利なことがある。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;といった点から、電子工作で利用するには最もおすすめなケーブルとなっています。売られているのを発見したら、ぜひ買っておきましょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;実際に電子工作で使うには&#34;&gt;実際に電子工作で使うには&lt;/h2&gt;
+
+&lt;p&gt;USBについて、どんなものなのかなんとなくおわかりいただけましたでしょうか？&lt;/p&gt;
+
+&lt;p&gt;とりあえず要約すると、 &lt;strong&gt;「100円で手に入って電子工作で簡単に利用できる汎用電源インターフェース」&lt;/strong&gt; といったところでしょうか。では、実際に使うにはどうすればいいかを見ていきましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/150/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;USBケーブルを電源として利用する上で最も重要なパーツが「Aオス端子」部分となります。&lt;/p&gt;
+
+&lt;p&gt;100円ショップで購入できるUSBケーブルは少なくとも一方がこの端子ですので、この端子から伸びるケーブルを十分長く残したうえでニッパで切断します。長さは、製作するモノによって適切に決めてください。あとから調整できるという意味では長めに切り取るのがよいでしょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/150/4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/150/5.png&#34; alt=&#34;&#34; /&gt;
+切り取った部分の一番外側の皮膜をニッパまたは皮膜剥き用のニッパで1cm程度除去します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/150/6.png&#34; alt=&#34;&#34; /&gt;
+すると細い4本のケーブルが中から出てきますが、このうち赤色と黒色がそれぞれ電源となります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/150/7.png&#34; alt=&#34;&#34; /&gt;
+残りの2本は信号線で、USB BC規格として大きめの電流を流したい場合は、この信号線を200Ωの抵抗でショートします。が、実際には何もしなくても給電はなされます。ここでは簡単にするため切り落としました。&lt;/p&gt;
+
+&lt;p&gt;これで、Aオス端子が電源側、切断したほうが電子回路側となります。&lt;/p&gt;
+
+&lt;p&gt;さて、次回はこの1対の電源線を使って、電池で動作するおもちゃをUSB電源駆動に改造してみます。&lt;/p&gt;
+
+&lt;p&gt;お楽しみに。&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>放置されていた3Dプリンタ「Trinus」で初めての3Dプリントに挑戦</title>
@@ -3547,281 +3753,6 @@ void loop()
 &lt;p&gt;飲み終わったら、ダクトテープをはがして新しい大五郎にLEDユニットを貼るスタイルでいつでも光る大五郎が楽しめるので、改良してまた新たなパーティに出かけようと思います。&lt;/p&gt;
 
 &lt;p&gt;みんなもさっそく作ってパーティにでかけちゃおう！パリピに超モテるよ☆&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Wio NodeとIFTTTで簡単IoT！紫外線情報を取得してみよう</title>
-      <link>https://dotstud.io/blog/wionode-ifttt-uv-ornament/</link>
-      <pubDate>Tue, 06 Jun 2017 20:26:13 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/wionode-ifttt-uv-ornament/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、dotstudioライターのゆっきん（&lt;a href=&#34;https://twitter.com/yukkin4649&#34;&gt;@yukkin4649&lt;/a&gt;）です。普段はシステムエンジニアをしています！&lt;/p&gt;
-
-&lt;p&gt;IoTLTでのびすけさんから「電子工作でかわいいもの作ってくれ」という無茶ぶりを受けたので（笑）、女子の天敵&lt;strong&gt;紫外線指数を光って知らせてくれるオーナメント&lt;/strong&gt;を作ってみます！&lt;/p&gt;
-
-&lt;p&gt;今回は「Wio Node」というスマホから設定できるデバイスと、ノンプログラミングでサービス連携ができる「IFTTT」というWebサービスを使います。初心者の私でも簡単にできたので是非挑戦してみてください。&lt;/p&gt;
-
-&lt;h2 id=&#34;wio-nodeとは&#34;&gt;Wio Nodeとは&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/wio.png&#34; alt=&#34;&#34; /&gt;
-「Wio Node」とはSeeed Studio社が開発したIoTデバイスで、Wi-Fiモジュールが初期搭載されています。対応のモジュールをさすだけで使え、スマートフォンで設定できるシンプルな設計が特徴です。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://www.seeedstudio.com/Wio-Node-p-2637.html&#34;&gt;公式サイト&lt;/a&gt;によると&lt;strong&gt;IoTアプリケーション構築までたったの５分&lt;/strong&gt;だそうです。如何に簡単にできるのかが伺えます。&lt;/p&gt;
-
-&lt;h2 id=&#34;iftttとは&#34;&gt;IFTTTとは&lt;/h2&gt;
-
-&lt;p&gt;「IFTTT」では多数あるWebサービス同士を連携させ、自分好みの連携機能を作成することが出来ます。例えば【&lt;strong&gt;Twitterでお気に入りしたツイートをEvernoteに保存する&lt;/strong&gt;】等があります。&lt;/p&gt;
-
-&lt;p&gt;他の人が作成した連携（ここではレシピと呼ぶ）も利用することができ、カスタマイズも可能。今回はこの「IFTTT」を使って紫外線取得サービスとWio Nodeを連携します。&lt;/p&gt;
-
-&lt;h2 id=&#34;準備&#34;&gt;準備&lt;/h2&gt;
-
-&lt;h3 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;① Wio Node本体（&lt;a href=&#34;https://dotstud.io/shop/wionode-social-remote-control/&#34;&gt;購入ページ&lt;/a&gt;）&lt;br /&gt;
-② Grove LED Bar v2.0（型番：SEEED-104020006）&lt;br /&gt;
-③給電用のMicro USBケーブル&lt;br /&gt;
-④ スマートフォン（iOSまたはAndroid端末）&lt;br /&gt;
-⑤ グリーンオーナメント SS（100円均一で購入）&lt;br /&gt;
-⑥ 紙&lt;br /&gt;
-⑦ テープ&lt;br /&gt;
-⑧ ペン&lt;br /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;筆者の環境&#34;&gt;筆者の環境&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;MacBook Air 11-inch Early 2014&lt;/li&gt;
-&lt;li&gt;OS X El Capitan　v10.11.6&lt;/li&gt;
-&lt;li&gt;iPhone6（iOS 10.3.1）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;作り方&#34;&gt;作り方&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/2.png&#34; alt=&#34;&#34; /&gt;
-ざっくりとした構成です。IFTTTを使って「Today&amp;rsquo;s weather report」からUV値を取得し、Wio NodeのLED Barで表示させます。&lt;/p&gt;
-
-&lt;p&gt;それでは早速作っていきましょう。&lt;/p&gt;
-
-&lt;h3 id=&#34;1-wio-nodeの設定&#34;&gt;1. Wio Nodeの設定&lt;/h3&gt;
-
-&lt;h4 id=&#34;インストールとセットアップ&#34;&gt;インストールとセットアップ&lt;/h4&gt;
-
-&lt;p&gt;ここではWio Node開発用アプリのインストールと設定をしていきます。Wio NodeはPC・モバイルバッテリー等からUSBケーブルで接続し給電しましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/3.png&#34; alt=&#34;&#34; /&gt;
-App Store等でWio Nodeアプリを検索し、インストールします。iOSでは「Wio Link」、Androidでは「Wio」と言う名称です。&lt;/p&gt;
-
-&lt;p&gt;本記事ではiOSの「Wio Link」の画面で説明していきます。&lt;/p&gt;
-
-&lt;p&gt;iOS: &lt;a href=&#34;https://itunes.apple.com/jp/app/wio-link/id1054893491?mt=8&#34;&gt;https://itunes.apple.com/jp/app/wio-link/id1054893491?mt=8&lt;/a&gt;&lt;br /&gt;
-Android: &lt;a href=&#34;https://play.google.com/store/apps/details?id=cc.seeed.iot.ap&amp;amp;hl=ja&#34;&gt;https://play.google.com/store/apps/details?id=cc.seeed.iot.ap&amp;amp;hl=ja&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/4.png&#34; alt=&#34;&#34; /&gt;
-インストール後、アプリを立ち上げるとログイン画面が表示されるので〔SIGN UP〕のタブに切り替えてメールアドレスとパスワードを入力し〔SIGN UP〕のボタンを押下します。２回目以降は〔LOG IN〕タブから登録した情報を入力してログインして下さい。&lt;/p&gt;
-
-&lt;p&gt;※他のサービスと連携が上手くいかないこともあるのでGoogleアカウントやFacebookアカウントの連携によるユーザー登録は非推奨とします。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/5.png&#34; alt=&#34;&#34; /&gt;
-Device Listの画面が表示されたら、右上の〔+〕又は中央の〔Add Your First Device〕を押下します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/6.png&#34; alt=&#34;&#34; /&gt;
-デバイスの選択画面が表示されるので〔Wio Node〕を選択します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/7.png&#34; alt=&#34;&#34; /&gt;
-セットアップ画面の図と同様にWio Node本体のボタンを４秒程押下します。青いライトの光り方が変わることを確認後、次の手順に移ります。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/8.png&#34; alt=&#34;&#34; /&gt;
-iPhoneの〔設定〕アプリを起動します。〔Wi-Fi〕設定画面でWi-FiをONにし、〔Wio_XXXXXX〕を選択します。XXXXXXには割り当てられた文字列が入ります。（Android版はアプリの画面内で選択します。）&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/9.png&#34; alt=&#34;&#34; /&gt;
-Wio Nodeアプリに戻り、〔Goto wifi list〕を押下します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/10.png&#34; alt=&#34;&#34; /&gt;
-現在利用できる任意のWi-Fiを選択します。表示されない場合は右上の〔Refresh〕を押下して下さい。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/11.png&#34; alt=&#34;&#34; /&gt;
-選択したWi-Fiのパスワードを入力し、〔Join〕を押下します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/12.png&#34; alt=&#34;&#34; /&gt;
-この画面では、デバイスの名前をつけます。任意の名前を入力し、〔Start Wio-ing〕を押下します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/13.png&#34; alt=&#34;&#34; /&gt;
-Wio Nodeが認識され、モジュールの設定画面に移りました。最初のセットアップは以上です。&lt;/p&gt;
-
-&lt;p&gt;もしセットアップが上手くいかない場合は&lt;a href=&#34;https://dotstud.io/docs/wionode-wiosetup/&#34;&gt;こちら&lt;/a&gt;からセットアップしてみてください。&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;モジュールの設定&#34;&gt;モジュールの設定&lt;/h4&gt;
-
-&lt;p&gt;続いて今回使うモジュールを設定していきます。
-&lt;img src=&#34;https://dotstud.io/img/blog/106/14.png&#34; alt=&#34;&#34; /&gt;
-次にLED Barを取り付けます。Wio Node本体を画面と同じ向きに見た時、左側（PORT0）にLED Barを接続します。アプリ画面では、〔UART〕タブの〔LED Bar〕を選択し、〔Update Firmware〕を押下します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/15.png&#34; alt=&#34;&#34; /&gt;
-〔OK〕を押下します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/16.png&#34; alt=&#34;&#34; /&gt;
-設定が完了すると〔View API〕というリンクが表示されます。&lt;/p&gt;
-
-&lt;p&gt;APIを試してみましょう。〔View API〕を押下します。&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;apiを試してみる&#34;&gt;APIを試してみる&lt;/h4&gt;
-
-&lt;p&gt;View APIのページではあらかじめ用意されているAPIを使ってWio Nodeとモジュールの挙動を試すことができます。
-&lt;img src=&#34;https://dotstud.io/img/blog/106/17.png&#34; alt=&#34;&#34; /&gt;
-今回利用する〔level〕APIの〔Test Request〕に「10」と入力します。〔GET〕を押下します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/led.png&#34; alt=&#34;&#34; /&gt;
-LED Barが10個すべて光りました！数値を変えると光るBarの個数が変わります。&lt;/p&gt;
-
-&lt;p&gt;モジュールの設定は以上です。&lt;/p&gt;
-
-&lt;h3 id=&#34;2-iftttの設定&#34;&gt;2. IFTTTの設定&lt;/h3&gt;
-
-&lt;h4 id=&#34;インストールとセットアップ-1&#34;&gt;インストールとセットアップ&lt;/h4&gt;
-
-&lt;p&gt;次にIFTTT側の設定をしていきます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/18.png&#34; alt=&#34;&#34; /&gt;
-最初にIFTTTのアプリをダウンロードします。&lt;strong&gt;ブラウザから設定する場合はアプリのインストールは不要&lt;/strong&gt;です。ブラウザで「IFTTT」を検索してIFTTTの画面に遷移してください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/19.png&#34; alt=&#34;&#34; /&gt;
-ダウンロード後、アプリを起動します。アカウントを持っていない場合は、〔Sign up〕を押下します。アカウントを既に取得している場合は、〔Sign in〕を押下してログインしてください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/20.png&#34; alt=&#34;&#34; /&gt;
-アカウントを新規登録する場合はメールアドレスと任意のパスワードを入力し、〔Sign up〕を押下します。&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;レシピを作成する&#34;&gt;レシピを作成する&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/21.png&#34; alt=&#34;&#34; /&gt;
-それでは早速レシピを作ってみましょう。〔My Applets〕に移動し、右上の〔＋〕を押下します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/22.png&#34; alt=&#34;&#34; /&gt;
-IFTTTでは「if this then that」という構文を使って、サービスを連携させていきます。熊本弁で言うと「こぎゃん（こう）したら、あぎゃん（ああ）なる」みたいな感じです。&lt;/p&gt;
-
-&lt;p&gt;まずは「こうしたら」のトリガー部分を作っていきましょう。最初に〔this〕を押下します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/23.png&#34; alt=&#34;&#34; /&gt;
-IFTTTでは連携に利用できるWebサービスのことをチャンネルと言います。&lt;/p&gt;
-
-&lt;p&gt;トリガーとして利用できるチャンネルが表示されるので、「Wether Underground」チャンネルを検索し、選択します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/24.png&#34; alt=&#34;&#34; /&gt;
-「Wether Underground」で利用できるトリガーの一覧が表示されます。今回は〔Today&amp;rsquo;s weather report〕を使うので、選択してください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/25.png&#34; alt=&#34;&#34; /&gt;
-「Today&amp;rsquo;s weather report」は今日の現在の天気情報を取得できます。この画面では取得する時間を設定します。好きな時間に設定してください。&lt;/p&gt;
-
-&lt;p&gt;私の場合は昼休みで外に出る時の時間を設定しました。&lt;/p&gt;
-
-&lt;p&gt;続いて「こうなる」の部分を作ります。
-&lt;img src=&#34;https://dotstud.io/img/blog/106/26.png&#34; alt=&#34;&#34; /&gt;
-「if this then that」の〔that〕を押下します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/27.png&#34; alt=&#34;&#34; /&gt;
-アクション（発動条件を満たした後の動作）として利用できるチャンネルが表示されます。〔Search services〕に「seeed」と入力して検索しましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/28.png&#34; alt=&#34;&#34; /&gt;
-「Seeed」チャンネルを選択します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/29.png&#34; alt=&#34;&#34; /&gt;
-〔connect〕を押下します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/30.png&#34; alt=&#34;&#34; /&gt;
-アカウント設定画面が表示されます。ここにWio Nodeで設定したアカウント情報を入力し、〔Sign in〕を押下します。&lt;/p&gt;
-
-&lt;p&gt;Wio Node側でGoogleやFacebook連携でログインしていて上手く連携できない場合は、Wio Nodeのアプリからメールアドレスで登録しなおしましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/31.png&#34; alt=&#34;&#34; /&gt;
-「Seeed」チャンネルで利用できるアクションの一覧が表示されます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/32.png&#34; alt=&#34;&#34; /&gt;
-一覧の下の方にある〔Drive any Grove〕を選択してください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/33.png&#34; alt=&#34;&#34; /&gt;
-詳細設定をしていきます。functionを選択するプルダウンでは〔level（float level）〕を選択します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/34.png&#34; alt=&#34;&#34; /&gt;
-次にFirst Parameterを設定します。〔Add Ingredient〕を押下すると、設定できる候補が表示されます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/35.png&#34; alt=&#34;&#34; /&gt;
-今回取得するのはUV値なので〔UVindex〕を選択します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/36.png&#34; alt=&#34;&#34; /&gt;
-〔Next〕を押下します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/37.png&#34; alt=&#34;&#34; /&gt;
-タイトルが自動生成されるので、変更する場合は〔Edit title〕から編集します。最後に〔Finish〕を押下します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/38.png&#34; alt=&#34;&#34; /&gt;
-これでレシピは完成です！&lt;/p&gt;
-
-&lt;h3 id=&#34;3-オーナメント作り&#34;&gt;3. オーナメント作り&lt;/h3&gt;
-
-&lt;p&gt;最後に見せ方の部分である、オーナメント作りをしていきます。&lt;/p&gt;
-
-&lt;p&gt;では、グリーンオーナメントにWio Nodeを巻いていきます。この時、一度Wio NodeからUSBケーブルを抜いておくと良いでしょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/39.png&#34; alt=&#34;&#34; /&gt;
-購入したグリーンオーナメントにもよりますが、グリーンオーナメントの中の構成を把握してWio Nodeを取り付けるとコードが目立たないようになります。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/40.png&#34; alt=&#34;&#34; /&gt;
-今回の場合は、グリーンオーナメントの中心軸を避けたところにWio Nodeを設置し、コードを軸に這わせながら巻きつけていきます。巻きつけた後は、葉っぱでコードを隠します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/41.png&#34; alt=&#34;&#34; /&gt;
-LEDもコードがなるべく見えないように周りの葉っぱで隠します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/42.png&#34; alt=&#34;&#34; /&gt;
-次に目を用意します。自分の好きな目を書いてください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/43.png&#34; alt=&#34;&#34; /&gt;
-目を作成したら、グリーンオーナメントに装着します。両面テープや養生テープを使うと、目の位置等を簡単に変えられます。目の位置によって表情が変わるので好きな位置に取り付けましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/44.png&#34; alt=&#34;&#34; /&gt;
-最後にUSBケーブルと接続します。オーナメントによりますが、USBケーブルに色が移ることもあるので気をつけてください。&lt;/p&gt;
-
-&lt;p&gt;オーナメント作りはこれで完成です！&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;カスタマイズ&#34;&gt;カスタマイズ&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/45.png&#34; alt=&#34;&#34; /&gt;
-目だけでなく、ちょっとした花を付け加えるとより個性が出ます。色々試してみてください。&lt;/p&gt;
-
-&lt;h2 id=&#34;試してみる&#34;&gt;試してみる&lt;/h2&gt;
-
-&lt;p&gt;さて、一通り完成したので動作検証してみます。&lt;/p&gt;
-
-&lt;p&gt;IFTTTの〔My Applets〕で自分の作成したアプレットが確認できます。今回はテストなので時間を12時45分にしました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/46.png&#34; alt=&#34;&#34; /&gt;
-実行されるとIFTTTから通知が来ます。確認してみると正常に動いているようです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/47.png&#34; alt=&#34;&#34; /&gt;
-UVindexの値を確認すると「9」となっています。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/48.png&#34; alt=&#34;&#34; /&gt;
-LED Barは&amp;hellip;レベル9まで光っています！&lt;strong&gt;外に出る時は紫外線対策をしっかりしましょう！！&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;最後に&#34;&gt;最後に&lt;/h2&gt;
-
-&lt;p&gt;今回は「Wio Node」と「IFTTT」を使ってノンプログラミングでUV（紫外線）のレベルをLED Barで表示させました。初心者の方でも簡単にできたのではないでしょうか。「IFTTT」で取得する値を変えたりアクションを変えたりするともっと色んなことができそうですね。&lt;/p&gt;
-
-&lt;p&gt;また、「IFTTT」で取得する値は0〜16ですが、現状は10以上の場合もLED Barは10までの表示です。これ以上細かい表示をする場合はプログラムを組んでみましょう。そちらの方も是非挑戦してみてください。&lt;/p&gt;
-
-&lt;p&gt;最後まで読んで頂きありがとうございました。&lt;/p&gt;
 </description>
     </item>
     
