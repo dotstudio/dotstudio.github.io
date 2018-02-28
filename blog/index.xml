@@ -7,8 +7,217 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Mon, 26 Feb 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 28 Feb 2018 10:00:00 +0900</lastBuildDate>
     <atom:link href="/blog/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>クラブでモテる！つまみ付きユニコーンポーチ　後編</title>
+      <link>https://dotstud.io/blog/gyaruden-kyoko-unicorn-pochette2/</link>
+      <pubDate>Wed, 28 Feb 2018 10:00:00 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/gyaruden-kyoko-unicorn-pochette2/</guid>
+      
+      <description>
+
+&lt;p&gt;みなさん、ちょりおつ！ギャル電きょうこです。ギャルによるギャルのためのテクノロジーを提案するユニット、ギャル電で活動しています。今回は&lt;strong&gt;クラブ行くときにぎゃんかわに盛れる光るポーチ&lt;/strong&gt;の作り方後編でっす！&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;a href=&#34;https://dotstud.io/blog/gyaruden-kyoko-unicorn-pochette&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/147/link.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;
+▲ 前編をチェック！
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;arduino-nano互換機の導入方法&#34;&gt;Arduino Nano互換機の導入方法&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/147/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;今回使用したボードはArduino Nano互換機。AmazonやAliExpressとかで一枚300円くらいから買える感じの小さいボードっす。&lt;strong&gt;いいところは、安くて小さいところ&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;導入にクセがあるのと、ケーブルがUSB MiniBタイプなところがちょっとめんどいけど、Digisparkだとちょっと容量足りなくてプログラムが書き込めないときとかにこのボードよく使ってます。&lt;/p&gt;
+
+&lt;h2 id=&#34;ドライバのインストール&#34;&gt;ドライバのインストール&lt;/h2&gt;
+
+&lt;p&gt;Arduino Nano互換機を使用するためには、&lt;strong&gt;ドライバのインストールが必要&lt;/strong&gt;っす。「Arduino Nano 互換 OSの名前 ドライバ」、または「CH340 ドライバ OSの名前」とかで検索すると親切なインターネット上の先輩方の情報がみつかるとおもいまっす！&lt;/p&gt;
+
+&lt;p&gt;Macの新しめの機種使っててうまく認識しない場合には、接続するUSBの口を変えてみるか、USB2.0対応のUSBハブを接続してハブにつなげると認識しやすくなるかも。&lt;/p&gt;
+
+&lt;p&gt;あとどうにも認識しないときは、&lt;strong&gt;一回忘れて寝る。そんで再トライ。うちらはだいたいコレでいつも乗りきってる&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;h2 id=&#34;ボードのセッティング&#34;&gt;ボードのセッティング&lt;/h2&gt;
+
+&lt;p&gt;ドライバのインストールが完了して、デバイスを認識するようになったら、&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;「Arduino IDE」→「ツール」→「ボード」→「Arduino Nano」&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;をえらんで書き込み準備オッケー。Aruduino IDEの設定等はインターネットで調べるか、&lt;a href=&#34;https://dotstud.io/docs/arduinoide-setup/&#34;&gt;ドキュメント&lt;/a&gt;や&lt;a href=&#34;https://dotstud.io/blog/gyaruden-kyoko-led-cassette/#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%A0%E3%81%AE%E6%9B%B8%E3%81%8D%E8%BE%BC%E3%81%BF%E6%BA%96%E5%82%99&#34;&gt;過去記事&lt;/a&gt;等も参考にしてね☆&lt;/p&gt;
+
+&lt;h2 id=&#34;fastledライブラリの導入方法&#34;&gt;FASTLEDライブラリの導入方法&lt;/h2&gt;
+
+&lt;p&gt;今回はいつも超お世話になっているNeoPixcelライブラリではなくて、&lt;strong&gt;FastLEDライブラリ&lt;/strong&gt;を使用してLEDを光らせたいと思いまっす。&lt;/p&gt;
+
+&lt;p&gt;まずは、ここからライブラリファイル(SourceCode.zip)をダウンロードします。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;a href=&#34;https://github.com/FastLED/FastLED/releases&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/147/link2.png&#34; alt=&#34;&#34; /&gt;
+https://github.com/FastLED/FastLED/releases&lt;/a&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;ダウンロードしたファイルを、Arduino IDEを起動して&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;「スケッチ」→「ライブラリのインクルード」→「.Zip形式のライブラリをインストール」&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;で指定してインストールします。&lt;/p&gt;
+
+&lt;h2 id=&#34;プログラム&#34;&gt;プログラム&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://gist.github.com/hsiboy/11545fd0241ab60b567d&#34;&gt;こちら&lt;/a&gt;のページのプログラムを参考にしました。というかLEDの数とLEDのPIN、可変抵抗のPINを書き換えただけでコピペさせていただきました。&lt;/p&gt;
+
+&lt;p&gt;「led potentiometer」でググるといい感じの参考作例やプログラムがいっぱいみつかるよ。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//FastLED_AnalogueInput.ino
+
+/*
+   Using a potentiometer to control colour, brightness and speed.
+ Wire up as per http://arduino.cc/en/Tutorial/AnalogInput
+ You can connect the wiper, to any analogue input pin, and
+ adjust the settings below.
+ You will need three 10k potentiometers.
+ */
+
+#include &amp;lt;FastLED.h&amp;gt;
+
+#define LED_PIN 6              // which pin are LEDS connected to?
+#define NUM_LEDS 24
+#define COLOR_ORDER RGB
+#define LED_TYPE WS2811        // i&#39;m using WS2811s, FastLED supports lots of different types.
+
+/*
+ set your desired minimum and maxium brigtness settings here.
+ Valid values are 0 - 255
+ With 0 being fully dim, or not lit, and 255 being fully on.
+ Therefore half power, or 50%, would be 128
+ */
+
+#define MAX_BRIGHTNESS 164      // Thats full on, watch the power!
+#define MIN_BRIGHTNESS 32       // set to a minimum of 25%
+
+const int brightnessInPin = A0;  // The Analog input pin that the brightness control potentiometer is attached to.
+const int speedInPin = A1;       // Analog input pin that the speed control potentiometer is attached to.
+const int colourInPin = A2;      // The Analog input pin that the colour control potentiometer is attached to.
+
+struct CRGB leds[NUM_LEDS];
+
+void setup() {
+  delay(3000); // in case we do something stupid. We dont want to get locked out.
+
+  LEDS.addLeds&amp;lt;LED_TYPE, LED_PIN, COLOR_ORDER&amp;gt;(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
+  FastLED.setBrightness(MAX_BRIGHTNESS);
+}
+
+void loop() {
+  // read the analog brightness value:
+  //int brightValue = analogRead(brightnessInPin);            
+  // map it to the range of the FastLED brightness:
+  int mappedValue = map(analogRead(brightnessInPin), 0, 1023, 0, 255);
+
+  /*
+   At this point, brightness could be full off (mappedValue == 0)
+   or it could be fully on (mappedValue == 255).
+   if you are ruuning from a battery pack, or in a dark room, you
+   may not want full brightness.
+   Or if you are in daylight, you may not want the pixels to go out.
+   the following code, checks if mappedValue is above or below our defined
+   brightness settings above.
+   It works like this.
+
+   we get mappedValue: if mappedValue is between MIN_BRIGHTNESS and MAX_BRIGHTNESS.
+   we get MIN_BRIGHTNESS: if mappedValue is less than our defined MIN_BRIGHTNESS.
+   we get MAX_BRIGHTNESS: if mappedValue is greater than our defined MAX_BRIGHTNESS
+
+   so, it limits range of brightness values.
+
+   */
+
+  //int outputValue = constrain(mappedValue, MIN_BRIGHTNESS, MAX_BRIGHTNESS);
+
+  // now we set the brightness of the strip
+  FastLED.setBrightness(constrain(mappedValue, MIN_BRIGHTNESS, MAX_BRIGHTNESS));
+
+  // read the analog speed value:          
+  // map it to a value used in delay();
+  int delayValue = map(analogRead(speedInPin), 0, 1023, 0, 50);  
+
+  int mappedHue;
+  // read the analog brightness value:
+  //int hueValue = analogRead(colourInPin);            
+  // map it to the range of the FastLED brightness:
+
+  // First slide the led in one direction
+  for(int i = 0; i &amp;lt; NUM_LEDS; i++) {
+    mappedHue = map(analogRead(colourInPin), 0, 1023, 0, 255);
+    // Set the i&#39;th led to the chosen colour
+    leds[i] = CHSV(mappedHue, 255, 255);
+    // Show the leds
+    FastLED.show();
+    // now that we&#39;ve shown the leds, reset the i&#39;th led to black
+    leds[i] = CRGB::Black;
+    // Wait a little bit before we loop around and do it again
+    delay(delayValue);  
+  }
+
+  // Now go in the other direction.  
+  for(int i = NUM_LEDS-1; i &amp;gt;= 0; i--) {
+    mappedHue = map(analogRead(colourInPin), 0, 1023, 0, 255);
+    // Set the i&#39;th led to the chosen colour
+    leds[i] = CHSV(mappedHue, 255, 255);
+    // Show the leds
+    FastLED.show();
+    // now that we&#39;ve shown the leds, reset the i&#39;th led to black
+    leds[i] = CRGB::Black;
+    // Wait a little bit before we loop around and do it again
+    delay(delayValue);  
+  }
+
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;プログラムを書き込んでテストしてみよう&#34;&gt;プログラムを書き込んでテストしてみよう&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/147/2.png&#34; alt=&#34;&#34; /&gt;
+プログラムが書き込めたら、ちゃんと可変抵抗器で光り方が変わるかを確認します。&lt;/p&gt;
+
+&lt;p&gt;このプログラムでは、&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;A0に接続したつまみが、明るさ&lt;/li&gt;
+&lt;li&gt;A1に接続したつまみが、点滅速度&lt;/li&gt;
+&lt;li&gt;A2に接続したつまみが、色&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;を調整できるようになっています。&lt;/p&gt;
+
+&lt;h2 id=&#34;いい感じにポーチと部品を合体しよう&#34;&gt;いい感じにポーチと部品を合体しよう&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/147/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;光る部分が完成したので、ユニコーンファーポーチと合体します。&lt;/p&gt;
+
+&lt;p&gt;ファーの表面に可変抵抗器用の小さな穴をあけます。可変抵抗器をポーチの表面に出し、キャップをかぶせます。この時、ファーの毛を巻き込んで動きにくい場合は毛を少し刈ります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/147/4.png&#34; alt=&#34;&#34; /&gt;
+ポーチの裏側にLEDを貼ったプラ板を固定し、配線をいい感じに収納します。今回はポーチに裏布がついていたので、上部を切り開いてポケット状にして超いい感じに格納したっす。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/147/5.png&#34; alt=&#34;&#34; /&gt;
+とりあえず、ポーチにLEDとボードとモバイルバッテリーがおさまれば完成でっす！&lt;/p&gt;
+
+&lt;h2 id=&#34;光らすと超ユニコーン&#34;&gt;光らすと超ユニコーン！&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/147/6.png&#34; alt=&#34;&#34; /&gt;
+うひょー！超かわいくない？！シーンに合わせてかわいめからハードめまで光りかたが調整できちゃうから、現場（クラブ）でモテる未来しか見えない！！！！&lt;/p&gt;
+
+&lt;p&gt;みんなも作ってひからせてみよ！&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>パソコンやモバイルバッテリーに繋いで動かせるデバイスを作ろう！USB電子工作のすすめ#1 - 基礎知識編</title>
@@ -945,6 +1154,11 @@ Aruduino Nanoの5VとGNDのところは、可変抵抗器とLEDテープから�
 &lt;p&gt;今回は可変抵抗器を三つつなげたので、ちょっと配線とはんだ付けが複雑で疲れちゃったのでここまで！&lt;/p&gt;
 
 &lt;p&gt;後編はArduino Nanoへのプログラム書き込みと、ポーチとLEDを組み立てまっす！&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;a href=&#34;https://dotstud.io/blog/gyaruden-kyoko-unicorn-pochette2/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/146/link.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;
+▲ 後編をチェック！
+&lt;/center&gt;&lt;/p&gt;
 </description>
     </item>
     
@@ -2917,89 +3131,6 @@ motionEyeのインストールは以下を参考にしました。&lt;/p&gt;
 &lt;p&gt;今回は数時間ほどでこのシステムを作ることができました。カメラと呼び鈴が独立してしまっていますが、可能ならば「呼び鈴を押した瞬間の画像を保存してhipchatにアップロード」するような仕組みを作ってみたいです。
 &lt;img src=&#34;https://dotstud.io/img/blog/133/3.png&#34; alt=&#34;&#34; /&gt;
 次は何をつくってやろうか……。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>【祝！移転】電気街すぐそこ！dotstudioのオフィスが移転しました！【D.I.Y】</title>
-      <link>https://dotstud.io/blog/office-relocation-for-akihabara/</link>
-      <pubDate>Thu, 16 Nov 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://dotstud.io/blog/office-relocation-for-akihabara/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、ちゃんとくです。もうすっかり冬ですね。なかなか出歩くのが億劫な季節になりました。&lt;/p&gt;
-
-&lt;p&gt;でもオフィスから電気街遠い……駅も遠い……ってことで&lt;strong&gt;オフィス移転しましたー！！！&lt;/strong&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/132/1.png&#34; alt=&#34;&#34; /&gt;
-今回は新オフィスの様子をたっぷりお伝えしたいと思います！！&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/132/2.png&#34; alt=&#34;&#34; /&gt;
-ちなみにこちらが入居時の様子です。内装屋さんに頼んで、天井と床を剥いでもらいました。ペンキ塗りと床貼りのさまざまな知見（not IT）を得たのでいずれ記事にしたいと思います。&lt;/p&gt;
-
-&lt;h2 id=&#34;移転場所は電気街すぐ&#34;&gt;移転場所は電気街すぐ！&lt;/h2&gt;
-
-&lt;p&gt;新しいオフィスを選ぶにあたっての一番の条件は「&lt;strong&gt;電気街に近いこと&lt;/strong&gt;」だったので、電気街すぐの場所に移動しました！
-&lt;img src=&#34;https://dotstud.io/img/blog/132/5.png&#34; alt=&#34;&#34; /&gt;
-秋月、千石、ツクモなどのパーツ屋さんはもちろん、カレーにラーメンにケバブなど、美味しいお店もたくさんあって嬉しいです（泣）&lt;/p&gt;
-
-&lt;h2 id=&#34;オフィス内をチラ見せ&#34;&gt;オフィス内をチラ見せ！&lt;/h2&gt;
-
-&lt;p&gt;オフィスの中を紹介します！改装中なのでなにかとお見苦しいですが、&lt;strong&gt;らしさ&lt;/strong&gt;ということでお願いいたします。
-&lt;img src=&#34;https://dotstud.io/img/blog/132/map.png&#34; alt=&#34;&#34; /&gt;
-ざっくりとした配置（予定）はこんな感じ。&lt;/p&gt;
-
-&lt;h3 id=&#34;エントランス&#34;&gt;エントランス&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/132/3.png&#34; alt=&#34;&#34; /&gt;
-扉を開けると、ぺっぱーくんがお出迎えしてくれます。生気がないのは気のせいです。&lt;/p&gt;
-
-&lt;p&gt;中が丸見えで残念な感じですが、パーテーションを立てて草で装飾してステキな感じになる予定です。&lt;/p&gt;
-
-&lt;h3 id=&#34;打ち合わせスペース&#34;&gt;打ち合わせスペース&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/132/4.png&#34; alt=&#34;&#34; /&gt;
-入って左は、来客用の打ち合わせスペースです。現状だと&lt;strong&gt;机が足りない&lt;/strong&gt;のでかなりタイトな感じになっています。&lt;/p&gt;
-
-&lt;p&gt;コーヒーメーカーが導入されたのでお客様にコーヒーが出せるようになりました！！（ブラックのみ）&lt;/p&gt;
-
-&lt;h3 id=&#34;ハンズオンスペース&#34;&gt;ハンズオンスペース&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/132/6.png&#34; alt=&#34;&#34; /&gt;
-ここが待望だったハンズオンスペースです。&lt;strong&gt;心の目で見てください&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;壁一面のデバイス棚、巨大モニター、芝生カーペットの上に半田ごて作業スペース……素敵ですよね。ここでイベントを開催する日が待ち遠しいです。&lt;/p&gt;
-
-&lt;p&gt;※dotstudioはいま圧倒的に&lt;a href=&#34;http://amzn.asia/8KHCkEv&#34;&gt;床と照明&lt;/a&gt;が不足しています。&lt;/p&gt;
-
-&lt;h3 id=&#34;キッチンスペース&#34;&gt;キッチンスペース&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/132/8.png&#34; alt=&#34;&#34; /&gt;
-NYはブルックリンスタイルをイメージした自慢のオシャレキッチン（予定地）です。&lt;/p&gt;
-
-&lt;p&gt;テーブルとハイチェアを増設してバーカウンターみたいなやつを作ったり作らなかったりするかもしれない。&lt;/p&gt;
-
-&lt;h3 id=&#34;執務スペース&#34;&gt;執務スペース&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/132/9.png&#34; alt=&#34;&#34; /&gt;
-会社のメイン機能である執務スペース！個人の引き出しやモニタが追加されました。日当たりがよくて眠かったり画面見えなかったりしますが、わたし的に一番好きな場所です。&lt;/p&gt;
-
-&lt;p&gt;床（自分たちで貼った）が完全に乾いたら、みんな大好きな良いイスが導入されるよ！&lt;/p&gt;
-
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-
-&lt;p&gt;床が足りなかったり、棚がなかったり、電球少なくて暗かったり……。新オフィスはまだまだ作っている途中です。
-旧オフィスにも荷物があるので、こんな感じでちまちまと物を運んでいます。
-&lt;img src=&#34;https://dotstud.io/img/blog/132/10.png&#34; alt=&#34;&#34; /&gt;
-いつ来ても楽しくくつろいで過ごせるオフィスを目指して頑張っていきます！&lt;/p&gt;
-
-&lt;p&gt;ということで&lt;strong&gt;&lt;a href=&#34;http://amzn.asia/8KHCkEv&#34;&gt;ウィッシュリスト&lt;/a&gt;&lt;/strong&gt;も作りましたのでよかったら応援おねがいします（笑）&lt;/p&gt;
-
-&lt;h3 id=&#34;おまけ&#34;&gt;おまけ&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/132/sushi.png&#34; alt=&#34;&#34; /&gt;
-慰労寿司パ（定期）&lt;/p&gt;
 </description>
     </item>
     
