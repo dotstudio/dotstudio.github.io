@@ -27,7 +27,7 @@
 
 &lt;p&gt;が。&lt;strong&gt;ぶっちゃけ「音楽かけて」しか活用できてない……。&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;ということで、スマートスピーカーのスキルを開発し、&lt;u&gt;本当に役立つようにカスタマイズ&lt;/u&gt;してみましょう！今回は&lt;strong&gt;Amazon EchoのAlexaスキルをNode.jsで開発&lt;/strong&gt;してみます！&lt;/p&gt;
+&lt;p&gt;ということで、スマートスピーカーのスキルを開発し、&lt;u&gt;活用できるよう自分向けにカスタマイズ&lt;/u&gt;してみましょう！今回は&lt;strong&gt;Amazon EchoのAlexaスキルをNode.jsで開発&lt;/strong&gt;してみます！&lt;/p&gt;
 
 &lt;p&gt;※記事は長いですが、開発は簡単なのでぜひチャレンジしてみてください！&lt;/p&gt;
 
@@ -59,7 +59,7 @@ Amazonのスマートスピーカーは「Echo」という&lt;strong&gt;スピ�
 
 &lt;ul&gt;
 &lt;li&gt;Echoデバイスは受け取った音声をAlexaサービスに渡します。&lt;/li&gt;
-&lt;li&gt;Alexaサービスが音声を解析し、処理ロジックに渡します。&lt;/li&gt;
+&lt;li&gt;Alexaサービスは音声を解析してテキストに変換し、処理ロジックに渡します。&lt;/li&gt;
 &lt;li&gt;処理ロジックの結果がAlexaに渡され、音声データを生成してデバイスに渡します。&lt;/li&gt;
 &lt;li&gt;Echoデバイスが音声を発します。&lt;/li&gt;
 &lt;/ul&gt;
@@ -68,20 +68,20 @@ Amazonのスマートスピーカーは「Echo」という&lt;strong&gt;スピ�
 
 &lt;p&gt;音声インタフェースは&lt;u&gt;どんな言葉を受け取るか、どう理解するか&lt;/u&gt;などです。この部分は&lt;strong&gt;Amazon Developer上で設計&lt;/strong&gt;することができます。&lt;/p&gt;
 
-&lt;p&gt;処理ロジックは&lt;u&gt;返答をする部分&lt;/u&gt;です。自前でエンドポイントを作成することもできますが、&lt;strong&gt;AWS Lambdaで作成すると簡単に紐付けることができます&lt;/strong&gt;。今回はLambdaを使ってみます。&lt;/p&gt;
+&lt;p&gt;処理ロジックは&lt;u&gt;返答をする部分&lt;/u&gt;です。自前でエンドポイントを作成することもできますが、&lt;strong&gt;AWS Lambdaで作成すると簡単に紐付けることができます&lt;/strong&gt;。今回はAWS Lambdaを使ってみます。&lt;/p&gt;
 
 &lt;h3 id=&#34;開発手順の整理&#34;&gt;開発手順の整理&lt;/h3&gt;
 
-&lt;p&gt;今回やってみる開発の手順を整理してみます。&lt;/p&gt;
+&lt;p&gt;今回は下記の手順で開発していきます。&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;Amazon Developer上で音声インタフェースを設計&lt;/li&gt;
 &lt;li&gt;AWS Lambdaで処理ロジックを開発&lt;/li&gt;
 &lt;li&gt;音声インタフェースと処理ロジックの紐付け&lt;/li&gt;
-&lt;li&gt;デバイスにスキルを登録&lt;/li&gt;
+&lt;li&gt;デバイスでスキルを有効にする&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;一つ一つの手順は難しくないので、手順をしっかり理解しておきましょう！&lt;/p&gt;
+&lt;p&gt;一つ一つの手順は難しくないので、しっかり理解しておきましょう！&lt;/p&gt;
 
 &lt;h2 id=&#34;開発の事前準備&#34;&gt;開発の事前準備&lt;/h2&gt;
 
@@ -143,7 +143,7 @@ Echoデバイスと接続します。デバイスがオレンジになってい�
 
 &lt;p&gt;アカウント登録の際には&lt;strong&gt;クレジットカードの登録&lt;/strong&gt;、&lt;strong&gt;電話確認&lt;/strong&gt;（自動応答）が必要です。&lt;/p&gt;
 
-&lt;p&gt;AWSアカウントには2018年3月現在では1年間の無料枠がついてきますが、ご自身のアカウントの管理には注意してください。&lt;/p&gt;
+&lt;p&gt;AWSアカウントには2018年3月現在では1年間の無料枠がついてきますが、&lt;u&gt;ご自身のアカウントの管理には注意してください。&lt;/u&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;音声インタフェースの設計&#34;&gt;音声インタフェースの設計&lt;/h2&gt;
 
@@ -157,10 +157,10 @@ Echoデバイスと接続します。デバイスがオレンジになってい�
 Alexaのページへ移動します。&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/ad_start.png&#34; alt=&#34;&#34; /&gt;
-「Alexa Skills Kit」を始めます（新メニューのβ版が出てますが、まだ日本語対応していないようです）。&lt;/p&gt;
+「Alexa Skills Kit」を始めます。&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/create1.png&#34; alt=&#34;&#34; /&gt;
-「新しいスキルを追加」します。&lt;/p&gt;
+「新しいスキルを追加」します（新メニューのβ版が出てますが、まだ日本語対応していないようです）。&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/create2.png&#34; alt=&#34;&#34; /&gt;
 作成するスキルの情報を入力します。今回は下記のようにしました。&lt;/p&gt;
@@ -215,9 +215,11 @@ Alexaのページへ移動します。&lt;/p&gt;
 
 &lt;p&gt;続いて、&lt;a href=&#34;https://aws.amazon.com/jp/&#34;&gt;AWS&lt;/a&gt;のLambda上で処理ロジックを作っていきます。
 &lt;img src=&#34;https://dotstud.io/img/blog/144/4.png&#34; alt=&#34;&#34; /&gt;
-自分自身でエンドポイントを立てることもできますが、Lambdaを使うとロジック自体の開発や他のAWSサービスとの連携が簡単です。&lt;/p&gt;
+AWS Lambdaは、&lt;u&gt;AWSに関するイベントにをトリガーにする処理を作成できる実行環境&lt;/u&gt;です。&lt;/p&gt;
 
-&lt;h3 id=&#34;lambda関数を作成&#34;&gt;Lambda関数を作成&lt;/h3&gt;
+&lt;p&gt;自分自身でエンドポイントを立てることもできますが、AWS Lambdaを使うとロジック自体の開発や他のAWSサービスとの連携も簡単です。&lt;/p&gt;
+
+&lt;h3 id=&#34;aws-lambda関数を作成&#34;&gt;AWS Lambda関数を作成&lt;/h3&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/func1.png&#34; alt=&#34;&#34; /&gt;
 AWSコンソールを開いたら、「lambda」を検索して開きます。&lt;/p&gt;
@@ -304,16 +306,16 @@ exports.handler = function(event, context, callback) {
 &lt;p&gt;&lt;u&gt;&lt;strong&gt;この辺がきちんと設定されていないとAlexaスキルストアでは公開できない&lt;/strong&gt;みたいです。&lt;/u&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/func7.png&#34; alt=&#34;&#34; /&gt;
-コードが編集できたら右上で保存し、ARNをコピーして、Lambdaの設定は完了です。&lt;/p&gt;
+コードが編集できたら右上で保存し、ARNをコピーして、AWSの設定は完了です。&lt;/p&gt;
 
 &lt;h2 id=&#34;音声インターフェースと処理ロジックの紐付け&#34;&gt;音声インターフェースと処理ロジックの紐付け&lt;/h2&gt;
 
-&lt;p&gt;作成したLambda関数とAmazon Developer上のスキルを紐づけます。&lt;/p&gt;
+&lt;p&gt;作成したAWS Lambda関数とAmazon Developer上のスキルを紐づけます。&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/ad_func.png&#34; alt=&#34;&#34; /&gt;
 Amazon Developer側の設定ページで、「エンドポイント」に「AWS LambdaのARN」を選択し、「デフォルト」に先ほどのARNを貼り付けます。&lt;/p&gt;
 
-&lt;p&gt;保存して紐づけは完了です！&lt;strong&gt;これでスキルの作成が一通り完成しました！&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;保存して紐づけは完了です！&lt;strong&gt;これでスキルの作成が一通り完了しました！&lt;/strong&gt;&lt;/p&gt;
 
 &lt;h2 id=&#34;試してみよう&#34;&gt;試してみよう！&lt;/h2&gt;
 
