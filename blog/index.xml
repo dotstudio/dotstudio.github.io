@@ -7,8 +7,139 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Tue, 06 Mar 2018 01:00:43 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 08 Mar 2018 00:00:00 +0000</lastBuildDate>
     <atom:link href="/blog/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Nefry BTで簡単IoT！★IoTバイブステンアゲポロシャツ★ 前編</title>
+      <link>https://dotstud.io/blog/gyaruden-mao-vibes-polo/</link>
+      <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dotstud.io/blog/gyaruden-mao-vibes-polo/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは！ギャル電のまおです★
+&lt;img src=&#34;https://dotstud.io/img/blog/152/1.png&#34; alt=&#34;&#34; /&gt;
+今回は去年のIoTLT第30回目にてプレゼンした&lt;u&gt;インターネット経由できるバイブスアゲ↑アゲ↑なポロシャツの作り方&lt;/u&gt;について、紹介していきたいと思います！&lt;/p&gt;
+
+&lt;h2 id=&#34;iotバイブステンアゲポロシャツ&#34;&gt;IoTバイブステンアゲポロシャツ&lt;/h2&gt;
+
+&lt;p&gt;うちみたいな大学生ギャルがたまに六本木のクラブにいくと世代間のギャップで疑問に思うことがよくある。&lt;/p&gt;
+
+&lt;p&gt;毎回最もモヤモヤすることは、お兄さん達のファッション。みんなも何回かは見たことあるであろう、あのちょっと色黒のがたい良さげなお兄さん達がよく着ている&amp;hellip;&amp;hellip;&lt;strong&gt;最高に襟が立ったピッチピチなポロシャツ↓&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;うちみたいなヤンギャル（若いギャル）は、あの最高に襟が立ったポロシャツのよさみがわからない。&lt;/p&gt;
+
+&lt;p&gt;よってうちらギャル電、&lt;u&gt;テクノロジーを使って襟が立ったポロシャツにナウみを足してかっこよさを引き立てられるスタイル&lt;/u&gt;を提案した。&lt;/p&gt;
+
+&lt;p&gt;それが「 &lt;strong&gt;襟立てポロシャツのインターネット化&lt;/strong&gt;」、俺が最もイケてる瞬間をインターネットで全世界にお知らせ😄&lt;/p&gt;
+
+&lt;p&gt;しくみは、ポロシャツの襟を立てた瞬間ツイッターに通知される感じ。これならヤンギャルでも、&lt;strong&gt;バイブステンアゲピーナッツすぎてまじやばたん&lt;/strong&gt;ってなる。&lt;/p&gt;
+
+&lt;p&gt;IoTバイブステンアゲポロシャツについてプレゼンした資料はこちら↓&lt;/p&gt;
+
+&lt;script async class=&#34;speakerdeck-embed&#34; data-id=&#34;23b7788d53344c4ab9e6d7c5415a7802&#34; data-ratio=&#34;1.77777777777778&#34; src=&#34;//speakerdeck.com/assets/embed.js&#34;&gt;&lt;/script&gt;
+
+&lt;h2 id=&#34;さっそく作っていく&#34;&gt;さっそく作っていく！&lt;/h2&gt;
+
+&lt;h3 id=&#34;用意するもの&#34;&gt;用意するもの♡&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://dotstud.io/docs/nefrybt&#34;&gt;Nefry BT&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;デジタルチルトセンサー（例: &lt;a href=&#34;http://akizukidenshi.com/catalog/g/gM-07036/&#34;&gt;DFR0028（秋月電子）&lt;/a&gt;）&lt;/li&gt;
+&lt;li&gt;LED  1個&lt;/li&gt;
+&lt;li&gt;モバイルバッテリー&lt;/li&gt;
+&lt;li&gt;襟がめっちゃ立っているボロシャツ&lt;/li&gt;
+&lt;li&gt;紐長めの巾着袋&lt;/li&gt;
+&lt;li&gt;両面テープ、穴あけ道具&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;作り方の流れ&#34;&gt;作り方の流れ☆&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;IFTTTでレシピを作成&lt;/strong&gt; ←今回はここまで❤︎&lt;/li&gt;
+&lt;li&gt;Arduino IDEでプログラムを書き込む&lt;/li&gt;
+&lt;li&gt;Nefry BTとIFTTTの連携とwifi設定&lt;/li&gt;
+&lt;li&gt;センサーとLEDをNefry BTに配線&lt;/li&gt;
+&lt;li&gt;ボロシャツに取り付け&lt;/li&gt;
+&lt;li&gt;☆テスト☆&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;今回IoTバイブステンアゲポロシャツを作成するのにあたり、Nefry BT開発者わみさんの「&lt;a href=&#34;https://dotstud.io/blog/nefry-ifttt-push-line/&#34;&gt;&lt;strong&gt;Nefry BTとIFTTTでスイッチを押したらLINEを送る仕組みを作ってみよう&lt;/strong&gt;&lt;/a&gt;」の記事を元に作りました。こちらを参考にしながら作成するのもいいと思います！&lt;/p&gt;
+
+&lt;h2 id=&#34;iftttでレシピを作成&#34;&gt;IFTTTでレシピを作成&lt;/h2&gt;
+
+&lt;p&gt;IFFT（いふと）とは&lt;u&gt;いろんなWebサービス同士を簡単に連携できるサービス&lt;/u&gt;です。&lt;/p&gt;
+
+&lt;p&gt;IFTTTは、「&lt;strong&gt;If This Then That&lt;/strong&gt;」の略で「&lt;strong&gt;もし☆☆したら♡♡をする&lt;/strong&gt;」ことを&lt;strong&gt;レシピ&lt;/strong&gt;と呼びます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/152/2.png&#34; alt=&#34;&#34; /&gt;
+まず、&lt;a href=&#34;https://ifttt.com/&#34;&gt;IFTTTの公式サイト&lt;/a&gt;でアカウントを作ってください。&lt;/p&gt;
+
+&lt;p&gt;次に、さっそくレシピを作成していきます。&lt;/p&gt;
+
+&lt;h3 id=&#34;secret-keyの取得&#34;&gt;Secret Keyの取得&lt;/h3&gt;
+
+&lt;p&gt;まずはNefry BTとIFTTTの連携に必要な「Secret Key」を取得します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/152/3.png&#34; alt=&#34;&#34; /&gt;
+メニューバーの「Search」を選択して検索欄で”Webhook”と記入すると、Webhookアプリが出てくるのでそれをクリックしてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/152/4.png&#34; alt=&#34;&#34; /&gt;
+右上にある「Settings」をクリックします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/152/5.png&#34; alt=&#34;&#34; /&gt;
+そうすると、Account Infoが出てきます。こちらに表示されている&lt;strong&gt;URLの最後の部分がSecret Key&lt;/strong&gt;となるのでこちらを各自ゲトりましょう。（画像の中に表示されているSecret Keyは無効なので各自取得してください。）&lt;/p&gt;
+
+&lt;h3 id=&#34;トリガーの作成&#34;&gt;トリガーの作成&lt;/h3&gt;
+
+&lt;p&gt;次に、「もし☆☆したら」の部分（トリガー）を作成します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/152/6.png&#34; alt=&#34;&#34; /&gt;
+メニューバーの「My Applets」をクリックして「New Applet」をクリックしてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/152/7.png&#34; alt=&#34;&#34; /&gt;
+このような画面が出てきたら、「this」のとこをクリックします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/152/8.png&#34; alt=&#34;&#34; /&gt;
+検索欄で再び&amp;rdquo;Webhook&amp;rdquo;を検索します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/152/9.png&#34; alt=&#34;&#34; /&gt;
+「Receive a web request」をクリック！&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/152/10.png&#34; alt=&#34;&#34; /&gt;
+続いて、イベント名を記入します（Nefry　BTにプログラムを書き込む際使用する）。&lt;/p&gt;
+
+&lt;p&gt;記入したら「Create trigger」をクリックしてトリガーの作成が完了です。&lt;/p&gt;
+
+&lt;h3 id=&#34;アクションの作成&#34;&gt;アクションの作成&lt;/h3&gt;
+
+&lt;p&gt;最後に「♡♡をする」の部分（アクション）を設定します！
+&lt;img src=&#34;https://dotstud.io/img/blog/152/11.png&#34; alt=&#34;&#34; /&gt;
+画面の「that」をクリックします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/152/12.png&#34; alt=&#34;&#34; /&gt;
+次に、使うサービスを検索欄で検索します。今回はツイッターにツイートさせたいので”twitter”と検索します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/152/13.png&#34; alt=&#34;&#34; /&gt;
+そして、今回は画像をツイートさせたいので「Post a tweet with image」をクリックします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/152/14.png&#34; alt=&#34;&#34; /&gt;
+この画面ではツイートさせたい文章と画像のURLを記入して、「Create action」をクリックします。&lt;/p&gt;
+
+&lt;p&gt;すると、最後の画面に移るので「Finish」をクリックしてレシピ作成終了です。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;こんな感じで今回はここまで！次回後半はで残りのステップを紹介します★ では！&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;デコトラサンバイザーを更にアプリで盛る🤙✨💓 &lt;a href=&#34;https://t.co/G01xOz2L3k&#34;&gt;pic.twitter.com/G01xOz2L3k&lt;/a&gt;&lt;/p&gt; ギャル電 (@GALDEN999) &lt;a href=&#34;https://twitter.com/GALDEN999/status/956156306007601152?ref_src=twsrc%5Etfw&#34;&gt;2018年1月24日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Amazon Echoを使いこなそう！Node.jsでAlexaスキル開発 - スマートスピーカーの基本とスキル開発入門</title>
@@ -3167,160 +3298,6 @@ main();
 &lt;/blockquote&gt;
 
 &lt;p&gt;それでは！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>【Maker Faire ShenZhen2017】アキバ電気街の30倍！？世界最大の電脳都市”深セン＠中国”に行ってきた！</title>
-      <link>https://dotstud.io/blog/maker-faire-shenzhen-report2/</link>
-      <pubDate>Fri, 24 Nov 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://dotstud.io/blog/maker-faire-shenzhen-report2/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、dotstudioモノづくり担当・うこです。&lt;/p&gt;
-
-&lt;p&gt;日本は秋も終わりだんだんと寒くなってきつつありますが、中国南部・広東省深セン市はまだまだ暑いです。そんな深セン市で11月10日〜12日の3日間、モノづくりの祭典「&lt;strong&gt;Maker Faire Shenzhen&lt;/strong&gt;」が開催され、dotstudioのメンバーで偵察に行ってきましたのでその模様をお伝えします。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/134/33.png&#34; alt=&#34;&#34; /&gt;
-至るところにこのパンダが居た
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;maker-faire-shenzhen-mfsz-について&#34;&gt;Maker Faire Shenzhen(MFSZ) について&lt;/h2&gt;
-
-&lt;p&gt;世界一の電気街を擁するとされる街・中国広東省深セン市で行われる、非常に規模の大きいモノづくりの祭典です。
-dotstudioでは過去にも出展したことがあり過去にも記事をいくつか書いておりますので、詳しくはそちらも参照してください。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/maker-faire-shenzhen-2016/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/link1.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;
-&lt;a href=&#34;https://dotstud.io/blog/maker-faire-shenzhen-report/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/link2.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;深センまでの道のり&#34;&gt;深センまでの道のり&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/1.png&#34; alt=&#34;&#34; /&gt;
-今回はジェットスター航空で成田空港〜香港国際空港を移動し、さらに機場快線（エアポートエクスプレス）と香港MRTで羅湖駅を経由して深セン市までアクセスしました。香港に入国するとすぐにエアポートエクスプレスのカウンターがあり、クレジットカードで往復に使えるパスを購入できます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/2.png&#34; alt=&#34;&#34; /&gt;
-香港区域内で観光をしない場合は、空港からバスで直接上水駅まで行き1駅だけMTRに乗り国境を目指すか、香港に入境せずフェリーで深セン側の港に移動する方法もあります。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/4.png&#34; alt=&#34;&#34; /&gt;
-せっかくなので香港の中心部を経由してきました。ここはまだ、日本と同じで車道が左側通行なので違和感がありませんね。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/5.png&#34; alt=&#34;&#34; /&gt;
-羅湖駅まで移動します。ここは禁区と呼ばれる緩衝地帯の中のため駅の外には出ることができません。「↑深セン」と書かれた看板があり、人の流れに乗って進んでゆくと香港を出境することになります。さらにそのまま100mほどある河の上にかかる通路を通り、中国本土に入国します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/6.png&#34; alt=&#34;&#34; /&gt;
-中国側のイミグレーションは、中国国内で最大のものとあって建物はとても立派でした。旅行客のほとんどは中国人のようです。ホテルやタクシーの客引きのしつこさが尋常ではないです。今回は、ここから徒歩5分ほどの好立地のホテルに宿泊しました。&lt;/p&gt;
-
-&lt;h2 id=&#34;会場は大学のキャンパス&#34;&gt;会場は大学のキャンパス&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/7.png&#34; alt=&#34;&#34; /&gt;
-今年のMFSZ会場となったのは「深セン職業技術学院」。香港国境の羅湖駅からは地下鉄で1時間ほどかかります。とても大きくて綺麗なキャンパスでした。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/8.png&#34; alt=&#34;&#34; /&gt;
-日本のMaker Faireと違い、屋外に1つ1つが巨大なオブジェをかなりダイナミックに配置しているのがとても印象的でした。&lt;/p&gt;
-
-&lt;h2 id=&#34;展示物紹介&#34;&gt;展示物紹介&lt;/h2&gt;
-
-&lt;h3 id=&#34;さすが中国-編&#34;&gt;さすが中国！編&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/9.png&#34; alt=&#34;&#34; /&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/134/10.png&#34; alt=&#34;&#34; /&gt;
-くまモン（のパチモン）です。やたら腕が細長かったです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/11.png&#34; alt=&#34;&#34; /&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/134/12.png&#34; alt=&#34;&#34; /&gt;
-筋電でドローンなどを制御できる腕輪です。かなり面白かったので購入しようとしたのですが、現金が足りず……。しかしここは中国、&lt;strong&gt;田舎の屋台ですらも電子マネーが使える国&lt;/strong&gt;です。WechatPayでなんとか購入することができました。&lt;/p&gt;
-
-&lt;p&gt;ちなみに日本人がWechatPayを使うためには、「知人から送金してもらいPayアカウントを開設」し、「チャージ」する必要があります。「チャージ」は、本来は中国国内の銀行口座が必要ですが、国内の空港ででも日本円で可能なようです。&lt;/p&gt;
-
-&lt;p&gt;参考 : &lt;a href=&#34;http://japanese.engadget.com/2017/07/27/wechat-pay/&#34;&gt;中国旅行の新定番！ ポケットチェンジでWeChat Payにチャージする：旅人目線のデジタルレポ 中山智 - Engadget 日本版&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;ゲーム編&#34;&gt;ゲーム編&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/13.png&#34; alt=&#34;&#34; /&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/134/14.png&#34; alt=&#34;&#34; /&gt;
-RaspberryPiを使った超小型のスーファミのようなもの。レスポンスもよく、普通に遊べました。名作はひととおり揃っているようです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/15.png&#34; alt=&#34;&#34; /&gt;
-縁日で子供達が遊んでそうなおもちゃを作ったのは韓国のメイカーさん。スイッチ類が付いていてゴールしたら光ったりするそうですが、ちょうど修理中とのことでした。メイカーあるあるです。&lt;/p&gt;
-
-&lt;h3 id=&#34;教育ツール編&#34;&gt;教育ツール編&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/16.png&#34; alt=&#34;&#34; /&gt;
-PCメーカー・acer製の教育用ツールです。PCやタブレットから、Arduinoとそれに接続されたセンサ群をスクラッチでプログラミングできるようです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/17.png&#34; alt=&#34;&#34; /&gt;
-IoT Brickという、ブロックパーツをつなげて回路を作り、コントローラで制御ができるプロダクトです。すこし昔の日本にもあった、電子ブロックのようなものでしょうか。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/18.png&#34; alt=&#34;&#34; /&gt;
-天津市の企業であるYwRobot社のArduino互換シールドです。ケーブルが一般的によく使用されているもので代替ができて便利で、機能性の高いユニークな基板がたくさん用意されていました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/19.png&#34; alt=&#34;&#34; /&gt;
-弊社でも取り扱いをしている、上海SeeedStudio社のプロダクトです。Grove Zeroなどの新製品が展示・販売されていました。&lt;/p&gt;
-
-&lt;h3 id=&#34;デザイン編&#34;&gt;デザイン編&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/20.png&#34; alt=&#34;&#34; /&gt;
-眼球盦子という、こちらを見てくる目玉です。スマホと接続するとカメラが顔を認識し、顔のある方向に目玉がクリクリと動きます。買い換えたあとで余ってしまっているスマホを、インタラクティブな置物に変身させてくれそうです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/21.png&#34; alt=&#34;&#34; /&gt;
-ボルトやらチェーンやらの無骨なパーツで構成されたオブジェが展示されていました。どちらかというと、美大生の作品のような印象です。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/22.png&#34; alt=&#34;&#34; /&gt;
-レーザーでカットされた木材でできた箱ですが、模様をずらして絵柄を合わせないと開くことができないようになっています。日本にも寄木細工の秘密箱がありますが、それの現代メイカー版といったところでしょうか。&lt;/p&gt;
-
-&lt;h3 id=&#34;パワーを感じる編&#34;&gt;パワーを感じる編&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/23.png&#34; alt=&#34;&#34; /&gt;
-水上歩行を可能にする靴、いわゆる「忍者の水蜘蛛」です。後ろにはディスプレイがあって実際に水上を歩いている動画が流れていましたが、音と水しぶきだけやたらすごかったです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/24.png&#34; alt=&#34;&#34; /&gt;
-Groveのタッチセンサがついていて、うっかり触れると赤い星がキラリと光ります。&lt;/p&gt;
-
-&lt;h3 id=&#34;その他編&#34;&gt;その他編&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/25.png&#34; alt=&#34;&#34; /&gt;
-女の子が10人ほど、ライブコーディングならぬライブソーイング？で、目の前でミシンを使って作品を作り出していました。意外にも、出展者も来場者も女の子の割合が比較的高めな印象でした。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/26.png&#34; alt=&#34;&#34; /&gt;
-一般の出展者とは別に、各地の大学からきた学生サークルのブースばかりのエリアがありました。日本の理系大学の学園祭のような雰囲気ですが、ほとんど出払っていて人気があまりありません。どこかのブースではさりげなくただのガンプラとかも置いてあった気がします。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/27.png&#34; alt=&#34;&#34; /&gt;
-なんと食べ物の屋台もたくさん出ていました！無難に美味しかったです。日本人からすると物価が安いのでほぼ食べ放題ですね。&lt;/p&gt;
-
-&lt;h2 id=&#34;電気街にも行ってきました&#34;&gt;電気街にも行ってきました&lt;/h2&gt;
-
-&lt;p&gt;電子機器産業は深セン市全体で盛んではありますが、小売も卸売もどちらも行う業者が多数入り混じって一大繁華街を形成しているのが、深セン市中心部の華強路です。せっかくなので店舗を巡ってみました！&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/28.png&#34; alt=&#34;&#34; /&gt;
-去年まで行われていた大規模な工事が完了していて、とても綺麗な街並みでした。路上に落ちているゴミはほとんどなく、治安もとても良いです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/29.png&#34; alt=&#34;&#34; /&gt;
-すぐ近くのお店に入ってみると、ケーブルやらコンセントやらがずらり。こんな調子のお店が百店舗近く詰まったビルがいくつも並んでいます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/30.png&#34; alt=&#34;&#34; /&gt;
-路上の仮設テントで、VRを利用したアトラクションゲームが楽しめます。このテントの前では人の胴体ぐらいの大きさの飛行機のラジコンが通りの上空を猛スピードで飛び回っていました。日本では絶対にできませんね……。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/31.png&#34; alt=&#34;&#34; /&gt;
-DHLの集荷所のようです。秋葉原の路上で売られている製品も、ここから旅立っていくものはおそらく少なくないはずです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/32.png&#34; alt=&#34;&#34; /&gt;
-最近話題の犬型ロボットだって、安く、早く、手に入ります。そう、深センならね。&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;深センのMakerFaireは去年に引き続き2回目の来場でしたが、今年は少し規模が小さめになっており、ビジネス向け製品よりもデザイン寄りの作品がかなり多く出展されている印象でした。深センでは土地柄、新たなプロダクトを求めて来場するバイヤーも多く来場するそうですが、今回は会場が学校だったことが関係しているのかもしれません。&lt;/p&gt;
-
-&lt;p&gt;また、日本人をはじめとする海外メイカー勢も多く見受けられました。中国って少し行きづらそうなイメージがありますが、実際に行ってみると&lt;strong&gt;想像以上に治安がよく、渡航費・滞在費もあまりかからず、どの国からでも意外と参加しやすい&lt;/strong&gt;のかもしれません。特に深センは世界的な国際港である香港に隣接していることもあり、電子工業が加速的に発展していった街でもあります。
-ものづくりが好きだけど、まだ中国深センに行ったことがないという方も、この記事でご興味を持たれたらぜひ渡航してみてはいかがでしょうか。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/134/34.png&#34; alt=&#34;&#34; /&gt;
-現地に残ってお見送りする僕と知らないおじさん&lt;/center&gt;&lt;/p&gt;
 </description>
     </item>
     
