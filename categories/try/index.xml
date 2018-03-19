@@ -7,8 +7,180 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Thu, 08 Mar 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 19 Mar 2018 00:00:00 +0000</lastBuildDate>
     <atom:link href="/categories/try/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Nefry BTで簡単IoT！★IoTバイブステンアゲポロシャツ★ 後編</title>
+      <link>https://dotstud.io/blog/gyaruden-mao-vibes-polo2/</link>
+      <pubDate>Mon, 19 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dotstud.io/blog/gyaruden-mao-vibes-polo2/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは！ギャル電のまおです❤︎&lt;/p&gt;
+
+&lt;p&gt;今回は「★IoTバイブステンアゲポロシャツ★」の作り方後編です。前回の記事はこちら↓
+&lt;a href=&#34;https://dotstud.io/blog/gyaruden-mao-vibes-polo/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/link.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;作り方の流れ&#34;&gt;作り方の流れ☆&lt;/h2&gt;
+
+&lt;p&gt;作り方の流れはざっとこんな感じです。今回はArduino IDEでプログラムを書き込むところから始めていきたいと思います。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;IFTTTでレシピを作成&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Arduino IDEでプログラムを書き込む&lt;/strong&gt; &lt;strong&gt;←今回はここから❤︎&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Nefry BTのWi-Fi設定とIFTTTの連携&lt;/li&gt;
+&lt;li&gt;センサーとLEDをNefry BTに配線&lt;/li&gt;
+&lt;li&gt;ボロシャツに取り付け&lt;/li&gt;
+&lt;li&gt;☆テスト☆&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;arduino-ideでプログラムを書き込む&#34;&gt;Arduino IDEでプログラムを書き込む&lt;/h2&gt;
+
+&lt;h3 id=&#34;arduino-ideをインストール&#34;&gt;Arduino IDEをインストール&lt;/h3&gt;
+
+&lt;p&gt;Nefry BTはArduino IDEという無料ソフトウェアで書き込めるボードです。まだパソコンにインストールされてない方は、&lt;a href=&#34;https://www.arduino.cc/en/Main/Software&#34;&gt;公式サイト&lt;/a&gt;でダウンロードしてください。&lt;/p&gt;
+
+&lt;p&gt;⇒ 参考: &lt;a href=&#34;https://dotstud.io/docs/arduinoide-setup/&#34;&gt;Arduino IDEをPCにインストール&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;nefry-btライブラリの追加&#34;&gt;Nefry BTライブラリの追加&lt;/h3&gt;
+
+&lt;p&gt;Arduino IDEを立ち上げてまだすぐプログラミングはできません。 まず、&lt;u&gt;Aduino IDEにNefry BTというマイコンボードを知ってもらうためにボードのインストール&lt;/u&gt;をします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/1.png&#34; alt=&#34;&#34; /&gt;
+Arduino &amp;gt; Preferences をクリックしてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/2.png&#34; alt=&#34;&#34; /&gt;
+下記のURLを「追加のボードマネージャのURL」という欄に追加してください。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://nefry.studio/package_nefrybt_index.json&#34;&gt;http://nefry.studio/package_nefrybt_index.json&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;追加できたら「OK」をクリックします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/3.png&#34; alt=&#34;&#34; /&gt;
+次にツール＞ボード＞ボードマネージャをクリックします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/4.png&#34; alt=&#34;&#34; /&gt;
+ボードマネージャというウィンドウが出てくるので上にある検索欄で”Nefry”と検索すると、Nefryのライブラリが出てくるので「インストール」をクリックします。&lt;/p&gt;
+
+&lt;p&gt;インストールが完了したらプログラムを書き込む準備は終わりです。&lt;/p&gt;
+
+&lt;h3 id=&#34;プログラムを書き込む&#34;&gt;プログラムを書き込む&lt;/h3&gt;
+
+&lt;p&gt;まずNefry BTをパソコンのUSBポートに差し込みましょう。&lt;/p&gt;
+
+&lt;p&gt;下記のプログラムは&lt;u&gt;デジタルチルトセンサーが傾きを検出した時に画像がツイートされる&lt;/u&gt;というプログラムです。Nefry BTのスケッチ例の「NefryIFTTT」というプログラムを少し変えたものです。&lt;/p&gt;
+
+&lt;p&gt;以下をArduino IDEにコピペしてください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+#include &amp;lt;NefryIFTTT.h&amp;gt;
+String Event, SecretKey;
+int counter =0;                       //送信データのカウンタ
+int ledPin = 1;                // Connect LED to pin A1
+int switcher = 0;                 // Connect Tilt sensor to D0
+
+
+void setup() {
+  Nefry.setStoreTitle(&amp;quot;SecretKey&amp;quot;,0); //Nefry DataStoreのタイトルを指定
+  Nefry.setStoreTitle(&amp;quot;Event&amp;quot;,1);     //Nefry DataStoreのタイトルを指定
+  SecretKey = Nefry.getStoreStr(0);   //Nefry DataStoreからデータを取得
+  Event = Nefry.getStoreStr(1);       //Nefry DataStoreからデータを取得
+  pinMode(ledPin, OUTPUT);      // Set digital pin A1 to output mode
+  pinMode(switcher, INPUT);       // Set digital pin D0 to input mode
+
+}
+
+void loop() {
+  if (digitalRead(switcher)==HIGH) {               
+    digitalWrite(ledPin, HIGH);   // Turn on LED when the sensor is tilted
+    counter++;                        //送信回数加算
+    bool sendData = IFTTT.send(Event, SecretKey,&amp;quot;Nefry&amp;quot;,(String)(micros()/1000000)+&amp;quot;秒&amp;quot;,(String)counter);//IFTTTにデータを送信
+                                      //Value1:Nefry,Value2:Nefryが起動してからの秒数,Value3:送信カウンタ
+    if (!sendData) {//IFTTTにデータを送信が成功したか失敗したかの判定
+      Nefry.setLed(255, 0, 0);        //Errの時、赤色点灯
+    }
+
+    Nefry.ndelay(1000);               //送信後1秒間待つ
+  }
+else
+     {
+        digitalWrite(ledPin, LOW);    // Turn off LED when the sensor is not triggered
+     }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/5.png&#34; alt=&#34;&#34; /&gt;
+ツールをクリックして、ボード・UploadSpeed・シリアルポートを以下のように設定しましょう。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ボード：Nefry BT&lt;/li&gt;
+&lt;li&gt;UploadSpeed:115200&lt;/li&gt;
+&lt;li&gt;シリアルポート:/dev/cu.usbserial-XXXXX（MacOSの場合）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/6.png&#34; alt=&#34;&#34; /&gt;
+設定が完了したら左上にある「➡︎」ボタンをクリックしてボードに書き込みます。&lt;/p&gt;
+
+&lt;h2 id=&#34;nefry-btのwi-fi設定とiftttの連携&#34;&gt;Nefry BTのWi-Fi設定とIFTTTの連携&lt;/h2&gt;
+
+&lt;p&gt;次にNefry BTのWi-Fi設定とIFTTTの連携をします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/7.png&#34; alt=&#34;&#34; /&gt;
+Nefry BTをパソコンのUSBポートなど電源が取れる状態にしてから、パソコンのWi-Fi設定のところをクリックすると、&amp;rdquo;NefryBT-xxx&amp;rdquo;のような表示があります。それをクリックします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/8.png&#34; alt=&#34;&#34; /&gt;
+すると、上のようなコンソール画面が出てきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/9.png&#34; alt=&#34;&#34; /&gt;
+Setup WiFiをクリックして、Nefry BTが使うWi-Fi（2.4GHz帯）を設定します。使いたいWi-FiのSSIDとパスワードを入力して「Save」します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/10.png&#34; alt=&#34;&#34; /&gt;
+次に、前の画面に戻ってData Storeをクリックします。上のような画面が出てくるので、ここではIFTTTのwebhookの設定で取得した「SecretKey」とレシピを作成した時に設定した「イベント名」を記入して「Save」すれば設定完了です。&lt;/p&gt;
+
+&lt;h2 id=&#34;センサーとledをnefry-btに配線&#34;&gt;センサーとLEDをNefry BTに配線&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/11.png&#34; alt=&#34;&#34; /&gt;
+&lt;strong&gt;こんな感じで配線しました〜！&lt;/strong&gt;（※Nefry BT（無印）での配線です。Nefry BT R2の場合は配線表を参考に配線してください。）&lt;/p&gt;
+
+&lt;p&gt;デジタルチルトセンサーのピン配置は以下になります。
+&lt;center&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/153/12.png&#34; alt=&#34;&#34; /&gt;
+1: Input / 2: Power / 3: GND
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;Nefry BT、LEDとデジタルチルトセンサーの配線表は以下になります。
+&lt;img src=&#34;https://dotstud.io/img/blog/153/13.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;ポロシャツに取り付け&#34;&gt;ポロシャツに取り付け&lt;/h2&gt;
+
+&lt;p&gt;ポロシャツの襟の裏側にチルトセンサーを取り付けます。
+&lt;img src=&#34;https://dotstud.io/img/blog/153/14.png&#34; alt=&#34;&#34; /&gt;
+配線がポロシャツの中に隠れるように、ポロシャツに穴を開けて配線を通します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/15.png&#34; alt=&#34;&#34; /&gt;
+モバイルバッテリーにネフリーを接続して、巾着袋に入れます。&lt;/p&gt;
+
+&lt;p&gt;最後に首から背中に巾着袋をかけて、チルトセンサーのピンをNefry BTに接続したら出来上がり❤︎&lt;/p&gt;
+
+&lt;h2 id=&#34;テスト&#34;&gt;☆テスト☆&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;襟を立てると、ツイートされる！😆&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/demo.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;みんなも襟立てをインターネット化して、パリピになろうね卍&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;シャンパンは死にます✨ &lt;a href=&#34;https://t.co/2AbCV5ffOq&#34;&gt;pic.twitter.com/2AbCV5ffOq&lt;/a&gt;&lt;/p&gt; mao (@galmao777) &lt;a href=&#34;https://twitter.com/galmao777/status/964164179643912192?ref_src=twsrc%5Etfw&#34;&gt;2018年2月15日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Nefry BTで簡単IoT！★IoTバイブステンアゲポロシャツ★ 前編</title>
@@ -138,6 +310,9 @@
 &lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;デコトラサンバイザーを更にアプリで盛る🤙✨💓 &lt;a href=&#34;https://t.co/G01xOz2L3k&#34;&gt;pic.twitter.com/G01xOz2L3k&lt;/a&gt;&lt;/p&gt; ギャル電 (@GALDEN999) &lt;a href=&#34;https://twitter.com/GALDEN999/status/956156306007601152?ref_src=twsrc%5Etfw&#34;&gt;2018年1月24日&lt;/a&gt;&lt;/blockquote&gt;
 &lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
 &lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;後編の記事はこちら↓
+&lt;a href=&#34;https://dotstud.io/blog/gyaruden-mao-vibes-polo2/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/152/link.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     
@@ -3099,265 +3274,6 @@ issues発行します。&lt;/p&gt;
 &lt;p&gt;littleBitsの持つブロックを組み合わせて電子工作ができる手軽さに加えて、IFTTTが組み合わさることでインターネットもあたかもブロックのように扱えてるlittleBits cloudBitモジュール、ぜひ試してみてください！&lt;/p&gt;
 
 &lt;p&gt;※今回の図表の一部では&lt;a href=&#34;http://icooon-mono.com/&#34;&gt;アイコン素材ダウンロードサイト「icooon-mono」&lt;/a&gt;さんの画像を利用いたしました。ありがとうございます。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>フォトダイオードでリモコンの信号を検出してみよう</title>
-      <link>https://dotstud.io/blog/photodiode-remote-controll-signal/</link>
-      <pubDate>Wed, 02 Aug 2017 16:42:19 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/photodiode-remote-controll-signal/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、ものづくり担当のうこ（&lt;a href=&#34;https://twitter.com/harmoniko/&#34;&gt;@harmoniko&lt;/a&gt;）です。&lt;/p&gt;
-
-&lt;p&gt;今回は、フォトダイオードというパーツを使ってリモコンの信号を読み取る方法を紹介します！&lt;/p&gt;
-
-&lt;h2 id=&#34;フォトダイオードとは&#34;&gt;フォトダイオードとは？&lt;/h2&gt;
-
-&lt;p&gt;半導体素子のひとつで、照射される光の強さによって流れる電流の強さが変化します。太陽光パネルと仕組みはほとんど同じで、光によって電流を発生しますが、非常に小さいため電源としては使用されません。&lt;/p&gt;
-
-&lt;p&gt;一口にフォトダイオードと言っても様々な種類があります。（参考：&lt;a href=&#34;http://jp.rs-online.com/web/c/displays-optoelectronics/optocouplers-photodetectors-photointerrupters/photodiodes/&#34;&gt;RSコンポーネンツ&lt;/a&gt;。多種の取り扱いがあります。） 光を検出するセンサとしてはほかにCdSなどがありますが、応答の速さ・感度・信号強度特性・対応する波長などに優位性があり、リモコンの受光器などとして産業用途に幅広く利用されています。&lt;/p&gt;
-
-&lt;p&gt;今回はそんなリモコンの受光器を作り、信号の中身をみてみましょう。&lt;/p&gt;
-
-&lt;h2 id=&#34;リモコンの仕組み&#34;&gt;リモコンの仕組み&lt;/h2&gt;
-
-&lt;p&gt;リモコンは、赤外線LEDを高速で点滅させて家電などに信号を送っています。信号の中身は、国内ではNECが開発した方式が主流で、次いで家電製品協会の方式、ソニーなどの独自方式があります。今回は、最も普及しているNEC方式を用いたリモコン信号検出システムを作ってみます。&lt;/p&gt;
-
-&lt;p&gt;このフォーマットを採用している主なメーカーとして、NEC・東芝・日立などがあります。これらのメーカーのリモコンなどをお持ちでしたら、ぜひ作ってみてください。&lt;/p&gt;
-
-&lt;p&gt;【参考】&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://www.asahi-net.or.jp/~gt3n-tnk/IR_TX1.html&#34;&gt;赤外線リモコンのフォーマット&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;作ってみよう&#34;&gt;作ってみよう&lt;/h2&gt;
-
-&lt;h3 id=&#34;準備するもの&#34;&gt;準備するもの&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/117/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Arduino Due × 1&lt;/li&gt;
-&lt;li&gt;ブレッドボード × 1&lt;/li&gt;
-&lt;li&gt;抵抗1kΩ × 1&lt;/li&gt;
-&lt;li&gt;フォトダイオード S5971 × 1&lt;/li&gt;
-&lt;li&gt;ジャンパワイヤ × 4&lt;/li&gt;
-&lt;li&gt;黒画用紙(3cm×6cmぐらい)&lt;/li&gt;
-&lt;li&gt;USBマイクロBケーブル&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;作り方&#34;&gt;作り方&lt;/h3&gt;
-
-&lt;h4 id=&#34;フォトダイオードに黒画用紙を巻く&#34;&gt;フォトダイオードに黒画用紙を巻く&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/117/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/117/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;フォトダイオードには、細長く切った黒画用紙を巻き寿司のように巻きつけてテープで固定します。こうすることでフォトダイオードを常に暗い状態にし、光の誤検出を防ぎます。&lt;/p&gt;
-
-&lt;h4 id=&#34;配線&#34;&gt;配線&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/117/4.png&#34; alt=&#34;&#34; /&gt;
-まずはじめに、ブレッドボード上に抵抗器とフォトダイオードを、上の写真のように配置します。フォトダイオードは向きに注意してください。
-&lt;img src=&#34;https://dotstud.io/img/blog/117/5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;次に、4つのジャンパワイヤを使って、ブレッドボードとArduino Dueを接続します。
-&lt;img src=&#34;https://dotstud.io/img/blog/117/6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;接続が終わったら、このような感じになっています。
-&lt;img src=&#34;https://dotstud.io/img/blog/117/7.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;最後に、USBのマイクロBケーブルでArduino Dueとパソコンを接続して完了です。USBは、Arduino Due側は、黒いコネクタに近い方のUSBポート「Programming Port」に接続してください。&lt;/p&gt;
-
-&lt;h3 id=&#34;arduino-dueボード対応化&#34;&gt;Arduino Dueボード対応化&lt;/h3&gt;
-
-&lt;p&gt;Arduino IDEでプログラムを作成し書き込んでいきます。Arduino IDEのインストールが済んでいない方は、&lt;a href=&#34;https://www.arduino.cc/en/Main/Software&#34;&gt;公式サイト&lt;/a&gt;からダウンロードして進めてください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/117/8.png&#34; alt=&#34;&#34; /&gt;
-Arduino IDEのメニューから、
-Tools -&amp;gt; Boards:&amp;ldquo;&amp;hellip;&amp;rdquo; -&amp;gt; Board Manager&amp;hellip;
-を選択すると、小さい画面が表示されます。検索窓に「due」と打ち込むと、ひとつだけヒットするパッケージがありますので、最新版をインストールしてください。&lt;/p&gt;
-
-&lt;p&gt;次に、
-Tools -&amp;gt; Boards&amp;rdquo;&amp;hellip;&amp;rdquo;
-で、&amp;rdquo;Arduino Due (Programming Port)&amp;ldquo;を選択しておきます。&lt;/p&gt;
-
-&lt;h3 id=&#34;ソースコードを書き込む&#34;&gt;ソースコードを書き込む&lt;/h3&gt;
-
-&lt;p&gt;以下のソースコードをコピーし、スケッチにコピーしてください。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;const int thresholdH = 30;     // フォトダイオードの閾値(Off-&amp;gt;On)
-const int thresholdL = 20;     // フォトダイオードの閾値(On-&amp;gt;Off)
-const int input = A0;          // フォトダイオードの入力ピン
-int signalCnt = -1;            // 信号カウンタ
-int level = 0;                 // フォトダイオードのanalogRead値
-unsigned long offSpan;         // 信号L値持続時間(計測用)
-unsigned long offTime;         // 信号Off時間(計測用)
-unsigned long startTime;       // 時間計算用
-unsigned long signals = 0;     // 信号保存(カスタム16bit+データ8bit+反転データ8bit)
-bool now = false;              // フォトダイオード状態遷移フラグ1
-bool prev = false;             // フォトダイオード状態遷移フラグ2
-bool detected = false;         // リーダコード検出フラグ
-
-
-
-
-// フォトダイオードからアナログ値を読んで論理値に変換
-bool photoRead() {
-  level = analogRead(input);
-  if (level &amp;gt; thresholdH) return true;
-  if (level &amp;lt; thresholdL) return false;
-}
-
-
-// リーダコード認識
-bool leaderDetect() {
-  // 積分
-  unsigned long integral0 = 0;
-  unsigned long integral1 = 0;
-  startTime = micros();
-  // 9msループ(0.1msおまけ)
-  while (micros() &amp;lt; (startTime+9100)) {
-    if (photoRead()) integral1++;
-    else integral0++;
-  }
-  /*
-    副搬送波38kHz変調のデューティ比は1:2である
-    また信号で0を表す場合はPPM方式によりHとLがそれぞれ0.56ms(1:1)であるため
-    リーダコード以外の部分でフォトダイオードで得られるOnとOffの時間比は
-    Onが1に対してOffが6である
-    リーダコード部分は常にHであるのでOnが1に対してOffが3である
-    よってOnとOffの差がおおむね4倍以下であればリーダコードを判定することができる
-  */
-  if (integral1 &amp;gt; ((integral0)/4)) return true;
-  else return false;
-}
-
-
-void setup() {
-  // シリアルポートを開く
-  Serial.begin(115200);
-  // アナログ入力の細かさを12bit(4096段階)に設定
-  analogReadResolution(12);
-}
-
-
-void loop() {
-  // ダイオードの状態確認ループ
-  while(now == prev) {
-    now = photoRead();
-    // 一度検出できたらループを極力回さずにディレイさせたい
-    // 副搬送波のL値を誤検出しないようにするため
-    if (now) {
-      if (!detected) {
-        // Off-&amp;gt;On遷移かつリーダコード未検出
-        if (leaderDetect()) {
-          Serial.println(&amp;quot;------- LEADER -------&amp;quot;);
-          detected = true;
-          signalCnt = -1;
-        }
-      }
-    }
-  }
-
-  // 以下は状態変化した瞬間だけ実行される
-  //
-  if (detected) {
-    if (now) {
-      // Off-&amp;gt;On遷移かつリーダコード検出済
-      offSpan = micros() - offTime;
-      // 最初のリーダコードの直後のL値
-      if (signalCnt &amp;lt; 0) {
-        // リピートの検出(3ms未満)
-        if (offSpan &amp;lt; 3000) {
-          Serial.println(&amp;quot;------- REPEAT -------&amp;quot;);
-          Serial.println(&amp;quot;&amp;quot;);
-          signals = 0;
-          signalCnt = -1;
-          detected = false;
-        } else {
-          signalCnt++;
-        }
-      } else {
-        // off時間が1000msより多いか少ないか
-        if (offSpan &amp;lt; 1000) {
-          // 1判定
-          signals += 1&amp;lt;&amp;lt;(31-signalCnt);
-        } else {
-          // 0判定
-        }
-        signalCnt++;
-      }
-      // 570msも待てば必ずLになり次のコード先頭までHにならないので誤検出しない
-      delayMicroseconds(570);
-    } else {
-      // On-&amp;gt;Off遷移かつリーダコード検出済
-      offTime = micros();
-    }
-  }
-  // 反転
-  prev = now;
-
-  // 最後まで読めたら表示する
-  if (signalCnt &amp;gt;= 31) {
-    // カスタムコード16bit
-    int custom = (int)(signals&amp;gt;&amp;gt;16);
-    Serial.print(&amp;quot;Custom code: &amp;quot;); Serial.println(custom,HEX);
-    Serial.print(&amp;quot;    &amp;quot;); Serial.println(custom,BIN);
-    // データコード8bit
-    byte data1 = (byte)((signals&amp;gt;&amp;gt;8)&amp;amp;B11111111);
-    Serial.println(&amp;quot;Data code:&amp;quot;);
-    Serial.print(&amp;quot;    &amp;quot;); Serial.print(data1,BIN); Serial.print(&amp;quot; = &amp;quot;); Serial.println(data1,HEX);
-    // データコード(反転)8bit
-    byte data2 = (byte)(signals&amp;amp;B11111111);
-    Serial.print(&amp;quot;    &amp;quot;); Serial.print(data2,BIN); Serial.print(&amp;quot; = &amp;quot;); Serial.println(data2,HEX);
-    // データ検証
-    byte vf = data1^data2;
-    Serial.println(&amp;quot;Data verify: &amp;quot;);
-    Serial.print(&amp;quot;    &amp;quot;); Serial.print(data1,HEX); Serial.print(&amp;quot; xor &amp;quot;); Serial.print(data2,HEX); Serial.print(&amp;quot; = &amp;quot;); Serial.println(vf,HEX);
-    if (vf == 0xFF) Serial.println(&amp;quot;     [ VERIFIED ]&amp;quot;);
-    else Serial.println(&amp;quot;     [ ERROR ]&amp;quot;);
-    // おわり
-    Serial.println(&amp;quot;------- ------ -------&amp;quot;);
-    Serial.println(&amp;quot;&amp;quot;);
-    signals = 0;
-    signalCnt = -1;
-    detected = false;
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;試してみよう&#34;&gt;試してみよう&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/117/9.png&#34; alt=&#34;&#34; /&gt;
-アップロードが完了したら、Tools -&amp;gt; Serial Monitor からシリアルモニタを表示させ、通信速度を「115200bps」に変更します。その状態のまま、リモコンをフォトダイオードに近づけてボタンを押すと……&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/117/10.png&#34; alt=&#34;&#34; /&gt;
-いくつか値が表示されましたね！
-点線で囲まれたブロックが信号の1セットで、中身には「Custom code」「Data code」「Data verify」が入っています。
-「Custom code」は製品固有のコードで、同じリモコンだと基本的に固定の値です。&lt;/p&gt;
-
-&lt;p&gt;色々ボタンを押していると、「Data code」が変化するようすがわかります。「Data verify」は、信号に含まれている2つのデータを照合して、信号が壊れていないかを確認するためのものです。
-&lt;img src=&#34;https://dotstud.io/img/blog/117/11.png&#34; alt=&#34;&#34; /&gt;
-自宅の扇風機のリモコンで試してみたところ、確かにボタンで値が変わっていることがわかりました。&lt;/p&gt;
-
-&lt;h2 id=&#34;応用編&#34;&gt;応用編&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/117/12.png&#34; alt=&#34;&#34; /&gt;
-Arduino IDEには「シリアルプロッタ」という、グラフを描画できる機能が備わっています。それを利用して、リモコンの信号波形を描画してみるとこんな感じになりました。規則的な波形をところどころに確認することができます。&lt;/p&gt;
-
-&lt;p&gt;また、今回使用したマイコンボード「Arduino Due」は、USB接続の外付けマウス・外付けキーボードとして簡単に動作させることができるライブラリが備わっています。例えば、今回のプログラムにこの機能を取り入れて少し書き換えるだけで、普段使っているTVリモコンでパソコンの動画プレイヤーを制御、なんてこともすぐにできちゃいます。&lt;/p&gt;
-
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-
-&lt;p&gt;いかがでしたでしょうか？
-フォトダイオードはいろんな種類がありますが、Arduinoのようなマイコンボードを使えば意外と簡単に光センサを作ることができます。この機会にぜひ作ってみては。&lt;/p&gt;
 </description>
     </item>
     

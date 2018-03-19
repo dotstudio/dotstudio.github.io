@@ -7,8 +7,180 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Thu, 08 Mar 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 19 Mar 2018 00:00:00 +0000</lastBuildDate>
     <atom:link href="/blog/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Nefry BTで簡単IoT！★IoTバイブステンアゲポロシャツ★ 後編</title>
+      <link>https://dotstud.io/blog/gyaruden-mao-vibes-polo2/</link>
+      <pubDate>Mon, 19 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dotstud.io/blog/gyaruden-mao-vibes-polo2/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは！ギャル電のまおです❤︎&lt;/p&gt;
+
+&lt;p&gt;今回は「★IoTバイブステンアゲポロシャツ★」の作り方後編です。前回の記事はこちら↓
+&lt;a href=&#34;https://dotstud.io/blog/gyaruden-mao-vibes-polo/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/link.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;作り方の流れ&#34;&gt;作り方の流れ☆&lt;/h2&gt;
+
+&lt;p&gt;作り方の流れはざっとこんな感じです。今回はArduino IDEでプログラムを書き込むところから始めていきたいと思います。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;IFTTTでレシピを作成&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Arduino IDEでプログラムを書き込む&lt;/strong&gt; &lt;strong&gt;←今回はここから❤︎&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Nefry BTのWi-Fi設定とIFTTTの連携&lt;/li&gt;
+&lt;li&gt;センサーとLEDをNefry BTに配線&lt;/li&gt;
+&lt;li&gt;ボロシャツに取り付け&lt;/li&gt;
+&lt;li&gt;☆テスト☆&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;arduino-ideでプログラムを書き込む&#34;&gt;Arduino IDEでプログラムを書き込む&lt;/h2&gt;
+
+&lt;h3 id=&#34;arduino-ideをインストール&#34;&gt;Arduino IDEをインストール&lt;/h3&gt;
+
+&lt;p&gt;Nefry BTはArduino IDEという無料ソフトウェアで書き込めるボードです。まだパソコンにインストールされてない方は、&lt;a href=&#34;https://www.arduino.cc/en/Main/Software&#34;&gt;公式サイト&lt;/a&gt;でダウンロードしてください。&lt;/p&gt;
+
+&lt;p&gt;⇒ 参考: &lt;a href=&#34;https://dotstud.io/docs/arduinoide-setup/&#34;&gt;Arduino IDEをPCにインストール&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;nefry-btライブラリの追加&#34;&gt;Nefry BTライブラリの追加&lt;/h3&gt;
+
+&lt;p&gt;Arduino IDEを立ち上げてまだすぐプログラミングはできません。 まず、&lt;u&gt;Aduino IDEにNefry BTというマイコンボードを知ってもらうためにボードのインストール&lt;/u&gt;をします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/1.png&#34; alt=&#34;&#34; /&gt;
+Arduino &amp;gt; Preferences をクリックしてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/2.png&#34; alt=&#34;&#34; /&gt;
+下記のURLを「追加のボードマネージャのURL」という欄に追加してください。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://nefry.studio/package_nefrybt_index.json&#34;&gt;http://nefry.studio/package_nefrybt_index.json&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;追加できたら「OK」をクリックします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/3.png&#34; alt=&#34;&#34; /&gt;
+次にツール＞ボード＞ボードマネージャをクリックします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/4.png&#34; alt=&#34;&#34; /&gt;
+ボードマネージャというウィンドウが出てくるので上にある検索欄で”Nefry”と検索すると、Nefryのライブラリが出てくるので「インストール」をクリックします。&lt;/p&gt;
+
+&lt;p&gt;インストールが完了したらプログラムを書き込む準備は終わりです。&lt;/p&gt;
+
+&lt;h3 id=&#34;プログラムを書き込む&#34;&gt;プログラムを書き込む&lt;/h3&gt;
+
+&lt;p&gt;まずNefry BTをパソコンのUSBポートに差し込みましょう。&lt;/p&gt;
+
+&lt;p&gt;下記のプログラムは&lt;u&gt;デジタルチルトセンサーが傾きを検出した時に画像がツイートされる&lt;/u&gt;というプログラムです。Nefry BTのスケッチ例の「NefryIFTTT」というプログラムを少し変えたものです。&lt;/p&gt;
+
+&lt;p&gt;以下をArduino IDEにコピペしてください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+#include &amp;lt;NefryIFTTT.h&amp;gt;
+String Event, SecretKey;
+int counter =0;                       //送信データのカウンタ
+int ledPin = 1;                // Connect LED to pin A1
+int switcher = 0;                 // Connect Tilt sensor to D0
+
+
+void setup() {
+  Nefry.setStoreTitle(&amp;quot;SecretKey&amp;quot;,0); //Nefry DataStoreのタイトルを指定
+  Nefry.setStoreTitle(&amp;quot;Event&amp;quot;,1);     //Nefry DataStoreのタイトルを指定
+  SecretKey = Nefry.getStoreStr(0);   //Nefry DataStoreからデータを取得
+  Event = Nefry.getStoreStr(1);       //Nefry DataStoreからデータを取得
+  pinMode(ledPin, OUTPUT);      // Set digital pin A1 to output mode
+  pinMode(switcher, INPUT);       // Set digital pin D0 to input mode
+
+}
+
+void loop() {
+  if (digitalRead(switcher)==HIGH) {               
+    digitalWrite(ledPin, HIGH);   // Turn on LED when the sensor is tilted
+    counter++;                        //送信回数加算
+    bool sendData = IFTTT.send(Event, SecretKey,&amp;quot;Nefry&amp;quot;,(String)(micros()/1000000)+&amp;quot;秒&amp;quot;,(String)counter);//IFTTTにデータを送信
+                                      //Value1:Nefry,Value2:Nefryが起動してからの秒数,Value3:送信カウンタ
+    if (!sendData) {//IFTTTにデータを送信が成功したか失敗したかの判定
+      Nefry.setLed(255, 0, 0);        //Errの時、赤色点灯
+    }
+
+    Nefry.ndelay(1000);               //送信後1秒間待つ
+  }
+else
+     {
+        digitalWrite(ledPin, LOW);    // Turn off LED when the sensor is not triggered
+     }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/5.png&#34; alt=&#34;&#34; /&gt;
+ツールをクリックして、ボード・UploadSpeed・シリアルポートを以下のように設定しましょう。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ボード：Nefry BT&lt;/li&gt;
+&lt;li&gt;UploadSpeed:115200&lt;/li&gt;
+&lt;li&gt;シリアルポート:/dev/cu.usbserial-XXXXX（MacOSの場合）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/6.png&#34; alt=&#34;&#34; /&gt;
+設定が完了したら左上にある「➡︎」ボタンをクリックしてボードに書き込みます。&lt;/p&gt;
+
+&lt;h2 id=&#34;nefry-btのwi-fi設定とiftttの連携&#34;&gt;Nefry BTのWi-Fi設定とIFTTTの連携&lt;/h2&gt;
+
+&lt;p&gt;次にNefry BTのWi-Fi設定とIFTTTの連携をします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/7.png&#34; alt=&#34;&#34; /&gt;
+Nefry BTをパソコンのUSBポートなど電源が取れる状態にしてから、パソコンのWi-Fi設定のところをクリックすると、&amp;rdquo;NefryBT-xxx&amp;rdquo;のような表示があります。それをクリックします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/8.png&#34; alt=&#34;&#34; /&gt;
+すると、上のようなコンソール画面が出てきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/9.png&#34; alt=&#34;&#34; /&gt;
+Setup WiFiをクリックして、Nefry BTが使うWi-Fi（2.4GHz帯）を設定します。使いたいWi-FiのSSIDとパスワードを入力して「Save」します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/10.png&#34; alt=&#34;&#34; /&gt;
+次に、前の画面に戻ってData Storeをクリックします。上のような画面が出てくるので、ここではIFTTTのwebhookの設定で取得した「SecretKey」とレシピを作成した時に設定した「イベント名」を記入して「Save」すれば設定完了です。&lt;/p&gt;
+
+&lt;h2 id=&#34;センサーとledをnefry-btに配線&#34;&gt;センサーとLEDをNefry BTに配線&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/11.png&#34; alt=&#34;&#34; /&gt;
+&lt;strong&gt;こんな感じで配線しました〜！&lt;/strong&gt;（※Nefry BT（無印）での配線です。Nefry BT R2の場合は配線表を参考に配線してください。）&lt;/p&gt;
+
+&lt;p&gt;デジタルチルトセンサーのピン配置は以下になります。
+&lt;center&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/153/12.png&#34; alt=&#34;&#34; /&gt;
+1: Input / 2: Power / 3: GND
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;Nefry BT、LEDとデジタルチルトセンサーの配線表は以下になります。
+&lt;img src=&#34;https://dotstud.io/img/blog/153/13.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;ポロシャツに取り付け&#34;&gt;ポロシャツに取り付け&lt;/h2&gt;
+
+&lt;p&gt;ポロシャツの襟の裏側にチルトセンサーを取り付けます。
+&lt;img src=&#34;https://dotstud.io/img/blog/153/14.png&#34; alt=&#34;&#34; /&gt;
+配線がポロシャツの中に隠れるように、ポロシャツに穴を開けて配線を通します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/15.png&#34; alt=&#34;&#34; /&gt;
+モバイルバッテリーにネフリーを接続して、巾着袋に入れます。&lt;/p&gt;
+
+&lt;p&gt;最後に首から背中に巾着袋をかけて、チルトセンサーのピンをNefry BTに接続したら出来上がり❤︎&lt;/p&gt;
+
+&lt;h2 id=&#34;テスト&#34;&gt;☆テスト☆&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;襟を立てると、ツイートされる！😆&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/demo.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;みんなも襟立てをインターネット化して、パリピになろうね卍&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;シャンパンは死にます✨ &lt;a href=&#34;https://t.co/2AbCV5ffOq&#34;&gt;pic.twitter.com/2AbCV5ffOq&lt;/a&gt;&lt;/p&gt; mao (@galmao777) &lt;a href=&#34;https://twitter.com/galmao777/status/964164179643912192?ref_src=twsrc%5Etfw&#34;&gt;2018年2月15日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Nefry BTで簡単IoT！★IoTバイブステンアゲポロシャツ★ 前編</title>
@@ -138,6 +310,9 @@
 &lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;デコトラサンバイザーを更にアプリで盛る🤙✨💓 &lt;a href=&#34;https://t.co/G01xOz2L3k&#34;&gt;pic.twitter.com/G01xOz2L3k&lt;/a&gt;&lt;/p&gt; ギャル電 (@GALDEN999) &lt;a href=&#34;https://twitter.com/GALDEN999/status/956156306007601152?ref_src=twsrc%5Etfw&#34;&gt;2018年1月24日&lt;/a&gt;&lt;/blockquote&gt;
 &lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
 &lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;後編の記事はこちら↓
+&lt;a href=&#34;https://dotstud.io/blog/gyaruden-mao-vibes-polo2/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/152/link.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     
@@ -2935,369 +3110,6 @@ current: v8.9.3
 &lt;p&gt;Adventやら原稿やらガリガリ書いているときに邪魔でしょうがないので紹介してみました。&lt;/p&gt;
 
 &lt;p&gt;El Capitanからアップデートしたらなおるのかなぁ。。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Node.jsでGoogle SpreadSheetsを操作してみよう。【GAS不使用】</title>
-      <link>https://dotstud.io/blog/google-spreadsheets-from-nodejs/</link>
-      <pubDate>Mon, 04 Dec 2017 13:14:41 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/google-spreadsheets-from-nodejs/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、代表ののびすけです。&lt;/p&gt;
-
-&lt;p&gt;この記事は&lt;a href=&#34;https://qiita.com/advent-calendar/2017/nodejs&#34;&gt;Node.jsアドベントカレンダー2017&lt;/a&gt;の記事になります。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://developers.google.com/apps-script/&#34;&gt;GAS&lt;/a&gt;じゃなくてNode.jsから直接スプレッドシートにアクセスしたい！&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;そう思って調べると&lt;a href=&#34;https://developers.google.com/sheets/api/quickstart/nodejs&#34;&gt;Node.js Quickstart | Sheets API | Google Developers&lt;/a&gt;が出て来ますが、JS記述も古いし英語なので少しとっつきにくいです。&lt;/p&gt;
-
-&lt;p&gt;ということでちょっと試して記録残そうと思います。&lt;/p&gt;
-
-&lt;h2 id=&#34;google-sheets-api&#34;&gt;Google Sheets API&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://developers.google.com/sheets/guides/concepts?hl=ja&#34;&gt;Google Sheets API&lt;/a&gt;はスプレッドシートにアクセスできるようになるAPIです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/81dd3461cd263ea7e4d63f06fef54747.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Google Sheets API を使用すると、スプレッドシートの要素を読み取って変更できます。 スプレッドシートは多くの設定を備えており、美しく機能的なシートを作成することができます。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;普段慣れている言語でスプレッドシートにアクセス出来まるので、簡単な操作であれば、GASを使う必要もないです。&lt;/p&gt;
-
-&lt;p&gt;今回のサンプルは&lt;a href=&#34;https://github.com/n0bisuke/google-spread-sheet-node.js-sample&#34;&gt;こちら&lt;/a&gt;に置いておきます。&lt;/p&gt;
-
-&lt;h3 id=&#34;環境&#34;&gt;環境&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Node.js v9.2.0&lt;/li&gt;
-&lt;li&gt;macOS High Sierra&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;参考までに今回の僕の環境です。&lt;/p&gt;
-
-&lt;p&gt;では実際に作っていきます。&lt;/p&gt;
-
-&lt;h2 id=&#34;1-google-sheets-apiを使えるようにする&#34;&gt;1. Google Sheets APIを使えるようにする&lt;/h2&gt;
-
-&lt;p&gt;ちなみに2017年12月時点でのウィザードです。こういうのはアップデートによって画面遷移変わるので適宜読み替えてください。&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Use this wizard to create or select a project in the Google Developers Console and automatically turn on the API. Click Continue, then Go to credentials.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://console.developers.google.com/start/api?id=sheets.googleapis.com&#34;&gt;こちらのリンク&lt;/a&gt;からディベロッパーコンソールにいき、&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/31e8011951d1552b8f7126eb459da474.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;新機能のお知らせ、パフォーマンスに関するアドバイス、フィードバック調査、特典に関する最新情報をメールで受け取ります。&lt;/code&gt;の質問はいいえでもたぶん大丈夫です。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/60c5bf6a1e772473dc9fc6d4d7526077.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;認証情報に進む&lt;/code&gt;を選択&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/848f8f79460aac991b46956111f0da07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;この画面が出ますが、&lt;code&gt;キャンセル&lt;/code&gt;を選択します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/35387/e827d6ab-d728-1016-d22a-76cef4e4972e.png&#34; alt=&#34;スクリーンショット 2017-12-03 21.00.17.png&#34; title=&#34;スクリーンショット 2017-12-03 21.00.17.png&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;OAuth同意画面&lt;/code&gt;のタブを選択し、メールアドレスを確認し、&lt;code&gt;ユーザーに表示するサービス名&lt;/code&gt;を入力します。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;保存&lt;/code&gt;を選択しましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/35387/1ca3a2d5-b639-bb6c-9508-225d162c96ff.png&#34; alt=&#34;スクリーンショット 2017-12-03 21.01.07.png&#34; title=&#34;スクリーンショット 2017-12-03 21.01.07.png&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;次に、&lt;code&gt;認証情報&lt;/code&gt;のタブを選択し、 &lt;code&gt;認証情報を作成&lt;/code&gt; -&amp;gt; &lt;code&gt;OAuthクライアントID&lt;/code&gt;を選択します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/3d5b6da9cf3086b11c728cdc31307268.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;その他&lt;/code&gt;を選択し、任意の名前をつけて&lt;code&gt;作成&lt;/code&gt;。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/35387/a8a25dd3-a194-d4a3-ac57-909f8d7712e0.png&#34; alt=&#34;スクリーンショット 2017-12-03 21.06.47.png&#34; title=&#34;スクリーンショット 2017-12-03 21.06.47.png&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;OK&lt;/code&gt;で進みます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/35387/93c1e777-682e-434e-444d-a3aa8659bd54.png&#34; alt=&#34;スクリーンショット 2017-12-03 21.07.25.png&#34; title=&#34;スクリーンショット 2017-12-03 21.07.25.png&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;client_secret_xxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com.json&lt;/code&gt;のようなファイルがダウンロードされます。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;これを&lt;code&gt;client_secret.json&lt;/code&gt;にリネームしましょう。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;2-node-jsプロジェクトの準備&#34;&gt;2. Node.jsプロジェクトの準備&lt;/h2&gt;
-
-&lt;p&gt;任意のディレクトリを作成して移動します。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;sheetstest&lt;/code&gt;としました。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;mkdir sheetstest
-cd sheetstest
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;npm init -y&lt;/code&gt;で&lt;code&gt;package.json&lt;/code&gt;を作成します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;npm init -y
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;このディレクトリに先ほどの&lt;code&gt;client_secret.json&lt;/code&gt;を移動させます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;ls
-
-package.json client_secret.json
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/3d796ef0005ef28b914a83517772c65e.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;こんな感じです。&lt;/p&gt;
-
-&lt;p&gt;利用するモジュールを追加します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;npm i googleapis google-auth-library --save
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;3-トークンの作成-保存-最初だけ&#34;&gt;3. トークンの作成&amp;amp;保存 (最初だけ)&lt;/h2&gt;
-
-&lt;p&gt;本家とは少し違うやり方です。&lt;/p&gt;
-
-&lt;p&gt;本家のコードだと&lt;code&gt;トークンの作成&amp;amp;保存&lt;/code&gt;作業と実際のAPI呼び出しが一緒になったコードですが&lt;code&gt;トークンの作成&amp;amp;保存&lt;/code&gt;は最初のみ行えば良いので手順を分けて紹介します。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;getAndStoreToken.js&lt;/code&gt;を作成します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;//getAndStoreToken.js
-&#39;use strict&#39;;
-
-const fs = require(&#39;fs&#39;);
-const readline = require(&#39;readline&#39;);
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
-const {promisify} = require(&#39;util&#39;);
-
-const google = require(&#39;googleapis&#39;);
-const googleAuth = require(&#39;google-auth-library&#39;);
-
-//promisifyでプロミス化
-const readFileAsync = promisify(fs.readFile);
-const writeFileAsync = promisify(fs.writeFile);
-const rlQuestionAsync = promisify(rl.question);
-
-const SCOPES = [&#39;https://www.googleapis.com/auth/spreadsheets.readonly&#39;];
-const TOKEN_DIR = __dirname;
-const TOKEN_PATH = TOKEN_DIR+&#39;/sheets.googleapis.com-nodejs-quickstart.json&#39;;
-
-const main = async () =&amp;gt; {
-    const content = await readFileAsync(__dirname+&#39;/client_secret.json&#39;);
-    const credentials = JSON.parse(content); //クレデンシャル
-    //認証
-    const clientSecret = credentials.installed.client_secret;
-    const clientId = credentials.installed.client_id;
-    const redirectUrl = credentials.installed.redirect_uris[0];
-    const auth = new googleAuth();
-    const oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
-
-    //get new token
-    const authUrl = oauth2Client.generateAuthUrl({
-        access_type: &#39;offline&#39;,
-        scope: SCOPES
-    });
-
-    console.log(&#39;Authorize this app by visiting this url: &#39;, authUrl);
-
-    rl.question(&#39;Enter the code from that page here: &#39;, (code) =&amp;gt; {
-        rl.close();
-
-        oauth2Client.getToken(code, async (err, token) =&amp;gt; {
-            if (err) {
-                console.log(&#39;Error while trying to retrieve access token&#39;, err);
-                return;
-            }
-
-            oauth2Client.credentials = token;
-
-            try {
-                fs.mkdirSync(TOKEN_DIR);
-            } catch (err) {
-                if (err.code != &#39;EEXIST&#39;) throw err;
-            }
-
-            await writeFileAsync(TOKEN_PATH, JSON.stringify(token));
-            console.log(&#39;Token stored to &#39; + TOKEN_PATH);
-        });
-    });
-};
-
-main();
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;このプログラムを実行します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;node getAndStoreToken.js
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/379de8711e19b5510225e167de555ab6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;https://accounts.google.com/~&lt;/code&gt;で始まるURLが表示されるのでこれをコピーしてブラウザで開きます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/35387/06afa961-4789-535b-3fee-8eaf67a997af.png&#34; alt=&#34;スクリーンショット 2017-12-04 11.52.54.png&#34; title=&#34;スクリーンショット 2017-12-04 11.52.54.png&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;アカウント選択画面になります。
-複数Googleアカウントを持っている人は、今回アクセスしようとしているアカウントを選択します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/35387/18729d60-e4a6-8996-9519-f9f4750ae1f4.png&#34; alt=&#34;スクリーンショット 2017-12-04 11.53.02.png&#34; title=&#34;スクリーンショット 2017-12-04 11.53.02.png&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;許可&lt;/code&gt;で進みます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/35387/6058bd3e-258f-1d8d-a7c6-68962617f1b2.png&#34; alt=&#34;スクリーンショット 2017-12-04 11.53.09.png&#34; title=&#34;スクリーンショット 2017-12-04 11.53.09.png&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;認証用のコードが発行されます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/35387/fd612d7c-0b45-3d09-64ab-c1e02315fe81.png&#34; alt=&#34;スクリーンショット 2017-12-04 11.53.27.png&#34; title=&#34;スクリーンショット 2017-12-04 11.53.27.png&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;これをコピーしてターミナルに貼り付けてエンターキーで進みます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;Token stored to /Users/n0bisuke/dotstudio/playground/sheetstest/sheets.googleapis.com-nodejs-quickstart.json
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;などと表示されてjsonファイルが保存されます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/35387/830452dc-ad36-83ef-8cf8-8c80bc9637dd.png&#34; alt=&#34;スクリーンショット 2017-12-04 11.57.50.png&#34; title=&#34;スクリーンショット 2017-12-04 11.57.50.png&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;sheets.googleapis.com-nodejs-quickstart.json&lt;/code&gt;がフォルダ内に確認できればOKです。&lt;/p&gt;
-
-&lt;h2 id=&#34;4-いよいよシートにアクセス&#34;&gt;4. いよいよシートにアクセス&lt;/h2&gt;
-
-&lt;p&gt;さて最後の手順です。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;getSheetsData.js&lt;/code&gt;を作成しましょう。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;//getSheetsData.js
-&#39;use strict&#39;;
-
-const fs = require(&#39;fs&#39;);
-const {promisify} = require(&#39;util&#39;);
-const google = require(&#39;googleapis&#39;);
-const googleAuth = require(&#39;google-auth-library&#39;);
-const sheets = google.sheets(&#39;v4&#39;);
-
-//promisifyでプロミス化
-const readFileAsync = promisify(fs.readFile);
-const ssValuesGetAsync = promisify(sheets.spreadsheets.values.get);
-
-const TOKEN_DIR = __dirname;
-const TOKEN_PATH = TOKEN_DIR + &#39;/sheets.googleapis.com-nodejs-quickstart.json&#39;;
-
-const main = async () =&amp;gt; {
-    //クレデンシャル情報の取得
-    const content = await readFileAsync(__dirname+&#39;/client_secret.json&#39;);
-    const credentials = JSON.parse(content); //クレデンシャル
-
-    //認証
-    const clientSecret = credentials.installed.client_secret;
-    const clientId = credentials.installed.client_id;
-    const redirectUrl = credentials.installed.redirect_uris[0];
-    const auth = new googleAuth();
-    const oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
-    const token = await readFileAsync(TOKEN_PATH);
-    oauth2Client.credentials = JSON.parse(token);
-
-    //API経由でシートにアクセス
-    const apiOptions = {
-        auth: oauth2Client,
-        spreadsheetId: &#39;1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms&#39;,
-        range: &#39;Class Data!A2:E&#39;,
-    };
-    const response = await ssValuesGetAsync(apiOptions);
-
-    //結果を表示
-    console.log(response);
-};
-
-main();
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;これを実行します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ node getSheetsData.js
-
-{ range: &#39;\&#39;Class Data\&#39;!A2:E101&#39;,
-  majorDimension: &#39;ROWS&#39;,
-  values:
-   [ [ &#39;Alexandra&#39;, &#39;Female&#39;, &#39;4. Senior&#39;, &#39;CA&#39;, &#39;English&#39; ],
-     [ &#39;Andrew&#39;, &#39;Male&#39;, &#39;1. Freshman&#39;, &#39;SD&#39;, &#39;Math&#39; ],
-     [ &#39;Anna&#39;, &#39;Female&#39;, &#39;1. Freshman&#39;, &#39;NC&#39;, &#39;English&#39; ],
-     [ &#39;Becky&#39;, &#39;Female&#39;, &#39;2. Sophomore&#39;, &#39;SD&#39;, &#39;Art&#39; ],
-     [ &#39;Benjamin&#39;, &#39;Male&#39;, &#39;4. Senior&#39;, &#39;WI&#39;, &#39;English&#39; ],
-     [ &#39;Carl&#39;, &#39;Male&#39;, &#39;3. Junior&#39;, &#39;MD&#39;, &#39;Art&#39; ],
-     [ &#39;Carrie&#39;, &#39;Female&#39;, &#39;3. Junior&#39;, &#39;NE&#39;, &#39;English&#39; ],
-     [ &#39;Dorothy&#39;, &#39;Female&#39;, &#39;4. Senior&#39;, &#39;MD&#39;, &#39;Math&#39; ],
-     [ &#39;Dylan&#39;, &#39;Male&#39;, &#39;1. Freshman&#39;, &#39;MA&#39;, &#39;Math&#39; ],
-     [ &#39;Edward&#39;, &#39;Male&#39;, &#39;3. Junior&#39;, &#39;FL&#39;, &#39;English&#39; ],
-     [ &#39;Ellen&#39;, &#39;Female&#39;, &#39;1. Freshman&#39;, &#39;WI&#39;, &#39;Physics&#39; ],
-     [ &#39;Fiona&#39;, &#39;Female&#39;, &#39;1. Freshman&#39;, &#39;MA&#39;, &#39;Art&#39; ],
-     [ &#39;John&#39;, &#39;Male&#39;, &#39;3. Junior&#39;, &#39;CA&#39;, &#39;Physics&#39; ],
-     [ &#39;Jonathan&#39;, &#39;Male&#39;, &#39;2. Sophomore&#39;, &#39;SC&#39;, &#39;Math&#39; ],
-     [ &#39;Joseph&#39;, &#39;Male&#39;, &#39;1. Freshman&#39;, &#39;AK&#39;, &#39;English&#39; ],
-     [ &#39;Josephine&#39;, &#39;Female&#39;, &#39;1. Freshman&#39;, &#39;NY&#39;, &#39;Math&#39; ],
-     [ &#39;Karen&#39;, &#39;Female&#39;, &#39;2. Sophomore&#39;, &#39;NH&#39;, &#39;English&#39; ],
-     [ &#39;Kevin&#39;, &#39;Male&#39;, &#39;2. Sophomore&#39;, &#39;NE&#39;, &#39;Physics&#39; ],
-     [ &#39;Lisa&#39;, &#39;Female&#39;, &#39;3. Junior&#39;, &#39;SC&#39;, &#39;Art&#39; ],
-     [ &#39;Mary&#39;, &#39;Female&#39;, &#39;2. Sophomore&#39;, &#39;AK&#39;, &#39;Physics&#39; ],
-     [ &#39;Maureen&#39;, &#39;Female&#39;, &#39;1. Freshman&#39;, &#39;CA&#39;, &#39;Physics&#39; ],
-     [ &#39;Nick&#39;, &#39;Male&#39;, &#39;4. Senior&#39;, &#39;NY&#39;, &#39;Art&#39; ],
-     [ &#39;Olivia&#39;, &#39;Female&#39;, &#39;4. Senior&#39;, &#39;NC&#39;, &#39;Physics&#39; ],
-     [ &#39;Pamela&#39;, &#39;Female&#39;, &#39;3. Junior&#39;, &#39;RI&#39;, &#39;Math&#39; ],
-     [ &#39;Patrick&#39;, &#39;Male&#39;, &#39;1. Freshman&#39;, &#39;NY&#39;, &#39;Art&#39; ],
-     [ &#39;Robert&#39;, &#39;Male&#39;, &#39;1. Freshman&#39;, &#39;CA&#39;, &#39;English&#39; ],
-     [ &#39;Sean&#39;, &#39;Male&#39;, &#39;1. Freshman&#39;, &#39;NH&#39;, &#39;Physics&#39; ],
-     [ &#39;Stacy&#39;, &#39;Female&#39;, &#39;1. Freshman&#39;, &#39;NY&#39;, &#39;Math&#39; ],
-     [ &#39;Thomas&#39;, &#39;Male&#39;, &#39;2. Sophomore&#39;, &#39;RI&#39;, &#39;Art&#39; ],
-     [ &#39;Will&#39;, &#39;Male&#39;, &#39;4. Senior&#39;, &#39;FL&#39;, &#39;Math&#39; ] ] }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;このサンプルでは&lt;a href=&#34;https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit#gid=0&#34;&gt;こちらのワークブック&lt;/a&gt;へアクセスして情報を取得しています。&lt;/p&gt;
-
-&lt;p&gt;ちなみに用語的には&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;ワークブック＝Googleスプレッドシートの１ファイル&lt;/li&gt;
-&lt;li&gt;シート＝ワークブック内のタブ、シート&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;というニュアンスです。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;//省略
-
-    const apiOptions = {
-        auth: oauth2Client,
-        spreadsheetId: &#39;1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms&#39;,
-        range: &#39;Class Data!A2:E&#39;,
-    };
-
-//省略
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;ほかのワークブックにアクセスする場合は&lt;code&gt;https://docs.google.com/spreadsheets/d/&lt;/code&gt;の後に続くIDを&lt;code&gt;spreadsheetId&lt;/code&gt;に指定して実行しましょう。&lt;code&gt;range&lt;/code&gt;は&lt;code&gt;シート名:取得する範囲&lt;/code&gt;という形式で指定して、指定したシートの指定した範囲からセルの情報を取得します。&lt;/p&gt;
-
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-
-&lt;p&gt;これで次回以降は4番目の手順だけでスプレッドシートにアクセスできます。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;client_secret.json&lt;/code&gt;や&lt;code&gt;sheets.googleapis.com-nodejs-quickstart.json&lt;/code&gt;をコピーしてサーバー設置しておけば自動更新する仕組みなども作れます。&lt;/p&gt;
-
-&lt;p&gt;スプレッドシートは色々な場面で利用されているツールなので是非システム連携などに活用してみて下さい。&lt;/p&gt;
-
-&lt;p&gt;応用としてはこちらの内容で使っています。&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;https://qiita.com/n0bisuke/items/3313a64c56317932919e&#34;&gt;勉強会( #IoTLT )の登壇者管理でHeadless Chromeを利用している話&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;それでは！&lt;/p&gt;
 </description>
     </item>
     
