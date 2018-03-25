@@ -7,8 +7,183 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Mon, 19 Mar 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 26 Mar 2018 01:00:43 +0900</lastBuildDate>
     <atom:link href="/blog/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>くるくる回して値を入力！ロータリエンコーダでインプットの幅を広げよう</title>
+      <link>https://dotstud.io/blog/mongoose-os-rotary-encoder/</link>
+      <pubDate>Mon, 26 Mar 2018 01:00:43 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/mongoose-os-rotary-encoder/</guid>
+      
+      <description>
+
+&lt;p&gt;どうも。森田(&lt;a href=&#34;https://twitter.com/morita_pac&#34;&gt;@morita_pac&lt;/a&gt;)です。&lt;/p&gt;
+
+&lt;p&gt;ボタンを押してトリガー発動！センサー値をグラフにダイレクトアタック！IoTって最高かよ！&lt;/p&gt;
+
+&lt;p&gt;ってみなさん感じていると思います。&lt;/p&gt;
+
+&lt;p&gt;そこへ、新たなスパイスを投ずるべく、森田は&lt;u&gt;&lt;strong&gt;ロータリエンコーダ&lt;/strong&gt;&lt;/u&gt;をおすすめします。&lt;/p&gt;
+
+&lt;h2 id=&#34;ロータリエンコーダってなにかね&#34;&gt;ロータリエンコーダってなにかね？&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;これです。&lt;/strong&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/154/1.png&#34; alt=&#34;&#34; /&gt;
+回転の機械的変位量を電気信号に変換してくれます。つまり、&lt;u&gt;くるくるくるくる回してデジタル入力できるアイテム。&lt;/u&gt;&lt;/p&gt;
+
+&lt;p&gt;今回は&lt;strong&gt;クリック有り&lt;/strong&gt;（カチカチなってくれる）の&lt;strong&gt;インクリメンタル式&lt;/strong&gt;のロータリエンコーダを使って解説します。&lt;/p&gt;
+
+&lt;p&gt;⇒ 参考: ロータリエンコーダ販売ページ（&lt;a href=&#34;https://jp.rs-online.com/web/c/passive-components/rotary-encoders/&#34;&gt;RSコンポーネンツ&lt;/a&gt;）&lt;/p&gt;
+
+&lt;p&gt;さまざまな種類のロータリエンコーダがあるので、上記サイトなどを参照してみてください。今回利用したもの（&lt;a href=&#34;https://jp.rs-online.com/web/p/mechanical-rotary-encoders/7295836/&#34;&gt;EC12E2420801&lt;/a&gt;）も購入できます。&lt;/p&gt;
+
+&lt;h2 id=&#34;インクリメンタル式って何&#34;&gt;インクリメンタル式って何！？&lt;/h2&gt;
+
+&lt;p&gt;まだ引かないでください。。。&lt;/p&gt;
+
+&lt;p&gt;まず、ロータリエンコーダには信号検出の異なる「インクリメンタル式」と「アブソリュート式」があります。&lt;/p&gt;
+
+&lt;h3 id=&#34;アブソリュート式&#34;&gt;アブソリュート式&lt;/h3&gt;
+
+&lt;p&gt;回転位置が&lt;strong&gt;絶対的な数値として出力される高精度な方式&lt;/strong&gt;で、&lt;u&gt;電源断時でも回転位置を保持しておけることが特徴&lt;/u&gt;です。その分お値段も少々お高めなものが多いです。&lt;/p&gt;
+
+&lt;p&gt;回転方向も、数値の増減から判断できます。
+&lt;img src=&#34;https://dotstud.io/img/blog/154/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;インクリメンタル式&#34;&gt;インクリメンタル式&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;回転した角度だけパルス（短時間の電流）出力される方式&lt;/strong&gt;で、今回使うロータリエンコーダの場合だと、&lt;u&gt;15度回転させるとカチッとする感触があり、その時1パルスが出力され、24パルス出力で1回転&lt;/u&gt;となります。
+&lt;img src=&#34;https://dotstud.io/img/blog/154/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;回転方向を検出するために、位相が異なるA層B層の2つの端子からパルスを出力する構造になっており、
+例えば、&lt;u&gt;A→Bの順にパルスの変化があった場合は時計回り、B→Aの順にパルスの変化があった場合は反時計周りのように区別&lt;/u&gt;することができます。
+&lt;img src=&#34;https://dotstud.io/img/blog/154/4.png&#34; alt=&#34;&#34; /&gt;
+※イメージです。&lt;/p&gt;
+
+&lt;h2 id=&#34;使えるようにしてみよう&#34;&gt;使えるようにしてみよう。&lt;/h2&gt;
+
+&lt;p&gt;それでは、さっそくロータリエンコーダを使ってみるよ！&lt;/p&gt;
+
+&lt;p&gt;今回は、ESP32、ESP8266などのボードにJavaScriptで書き込みができる「&lt;strong&gt;Mongoose OS&lt;/strong&gt;」を利用してみます。&lt;strong&gt;なぜなら僕はMongoose OSが好きだから&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;Arduino言語での開発に慣れていない方にとっては、シンプルでわかりやすく感じると思います。Arduino IDEを使った方法やサンプルコードも、先例がたくさんあるので調べてみてください！&lt;/p&gt;
+
+&lt;p&gt;Mongoose OSを導入するまでの手順は下記の記事を参照してください。
+&lt;a href=&#34;https://dotstud.io/blog/mongoose-os-nefry-blink/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/154/link.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;用意したもの&#34;&gt;用意したもの&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Mongoose OS（導入方法は&lt;a href=&#34;https://dotstud.io/blog/mongoose-os-nefry-blink/&#34;&gt;こちらの記事&lt;/a&gt;を参考）&lt;/li&gt;
+&lt;li&gt;ロータリエンコーダ（EC12E2420801）&lt;/li&gt;
+&lt;li&gt;ESP32-DevKitC&lt;/li&gt;
+&lt;li&gt;いい感じのブレッドボード&lt;/li&gt;
+&lt;li&gt;10KΩ抵抗 2本&lt;/li&gt;
+&lt;li&gt;ジャンパワイヤ 数本&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/154/5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;配線&#34;&gt;配線&lt;/h3&gt;
+
+&lt;p&gt;下記の図を参考に配線してください。
+&lt;img src=&#34;https://dotstud.io/img/blog/154/6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;プログラム&#34;&gt;プログラム&lt;/h3&gt;
+
+&lt;p&gt;&lt;u&gt;正回転（※）でプラス10、逆回転でマイナス10の数値をログに出力するプログラム&lt;/u&gt;です。コピーしてMongoose OSで書き込みます。それぞれのコードの詳細はコメントに記載します。&lt;/p&gt;
+
+&lt;p&gt;※…正回転はエンコーダの位置アドレスが増加する回転方向のことです。今回利用したロータリエンコーダの場合は時計回りが正回転、反時計回りが逆回転です。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js:init.js&#34;&gt;//GPIOのAPIを使えるようにします。
+load(&#39;api_gpio.js&#39;);
+
+//ロータリエンコーダのA,Bのピンアサイン
+let pinA = 19;
+let pinB = 18;
+
+//A,Bの状態を読みます。
+let stateA = GPIO.read(pinA);
+let stateB = GPIO.read(pinB);
+
+let count =50;
+let rotate =0;
+
+//おまじない
+GPIO.set_mode(pinA,GPIO.MODE_INPUT);
+GPIO.set_mode(pinB,GPIO.MODE_INPUT);
+
+//プラス1(正回転)を判断するための関数です。
+let getRotationActA = function(){
+        let Acount = 0;
+        let AA = GPIO.read(pinA);
+        let AB = GPIO.read(pinB);
+        if (AA === 0 &amp;amp;&amp;amp; AB === 1)
+        {
+            AA = GPIO.read(pinA);
+            AB = GPIO.read(pinB);
+            Acount = 1;
+        }
+   return Acount;
+};
+
+//マイナス1(逆回転)を判断するための関数です。
+let getRotationActB = function(){
+        let Bcount = 0;
+        let BA = GPIO.read(pinA);
+        let BB = GPIO.read(pinB);
+        if (BA === 1 &amp;amp;&amp;amp; BB === 0)
+        {
+            BA = GPIO.read(pinA);
+            BB = GPIO.read(pinB);
+            Bcount = -1;
+        }
+   return Bcount;
+};
+
+//Aにパルスが来た時に動くイベントです。
+GPIO.set_button_handler(pinA, GPIO.PULL_UP, GPIO.INT_EDGE_NEG, 100, function(x) {
+  rotate = getRotationActA();
+  if(rotate === 1){
+  count = count +rotate*10;
+  print(count);
+  }
+}, null);
+
+
+//Bにパルスが来た時に動くイベントです。
+GPIO.set_button_handler(pinB, GPIO.PULL_UP, GPIO.INT_EDGE_NEG, 100, function(x) {
+  rotate = getRotationActB();
+  if(rotate === -1){
+  count = count +rotate*10;
+  print(count);
+  }
+}, null);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;試してみよう&#34;&gt;試してみよう。&lt;/h2&gt;
+
+&lt;p&gt;書き込めたら、実際に試してみましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/154/7.png&#34; alt=&#34;&#34; /&gt;
+Mongoose OSのコンソールからロータリエンコーダの値を確認することができます。&lt;/p&gt;
+
+&lt;p&gt;下記はOLEDディスプレイに値を表示するようにしてみました。
+&lt;img src=&#34;https://gyazo.com/52dce8bbfa4e37382bc964e1aef3109f.gif&#34; alt=&#34;&#34; /&gt;
+正回転で値が増え、逆回転で値が減っていきます！&lt;/p&gt;
+
+&lt;p&gt;Mongoose OSの特徴とチャタリングの関係から、勢いよくロータリエンコーダを回すと正確に信号を捉えられません。解決できる方法があるぜ。という場合はご連絡くださいませ。&lt;/p&gt;
+
+&lt;h2 id=&#34;さいごに&#34;&gt;さいごに&lt;/h2&gt;
+
+&lt;p&gt;いかがでしたでしょうか。これで、&lt;strong&gt;入力に新たな選択肢が加わった&lt;/strong&gt;と思います。&lt;/p&gt;
+
+&lt;p&gt;ロータリエンコーダにはボタン付きのものもあったりしますので、選択してボタンプッシュで送信のような機能が欲しい場合に使えると思います。&lt;/p&gt;
+
+&lt;p&gt;初期搭載のスイッチやセンサからの入力に飽きてしまった方は、ぜひ試してみてください！&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Nefry BTで簡単IoT！★IoTバイブステンアゲポロシャツ★ 後編</title>
@@ -3072,44 +3247,6 @@ current: v8.9.3
 &lt;p&gt;次回はNode.jsをはじめたばかりの人向けチュートリアルをやってみたいと思います。&lt;/p&gt;
 
 &lt;p&gt;それではまた！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>【予測変換】Macで日本語の変換ウィンドウが消えなくなったときの対処法【邪魔】</title>
-      <link>https://dotstud.io/blog/mac-nihongo-window-error/</link>
-      <pubDate>Thu, 14 Dec 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://dotstud.io/blog/mac-nihongo-window-error/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、エンジニア兼ライターのちゃんとくです。日々たくさんのコードや文字を書き続けているわけですが、&lt;strong&gt;突然消えなくなるアレ&lt;/strong&gt;に悩まされています。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/137/1.png&#34; alt=&#34;&#34; /&gt;
-これ。&lt;/p&gt;
-
-&lt;p&gt;クリックしてもEscapeしてもQuitしても消えなくて本当に邪魔ですよね。&lt;/p&gt;
-
-&lt;p&gt;わりと起こる頻度が高いのでそのたびに再起動するのも面倒です。&lt;/p&gt;
-
-&lt;h2 id=&#34;日本語入力のプロセスをキルする&#34;&gt;日本語入力のプロセスをキルする&lt;/h2&gt;
-
-&lt;p&gt;タイトルが全てですが、日本語入力のプロセスを終了すると消すことができます。&lt;/p&gt;
-
-&lt;p&gt;［アクテビティモニタ］を開いて［日本語入力］を探します。
-&lt;img src=&#34;https://dotstud.io/img/blog/137/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ダブルクリックするとウィンドウが開くので［終了］をクリックします。
-&lt;img src=&#34;https://dotstud.io/img/blog/137/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;平和がおとずれましたね。&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;Adventやら原稿やらガリガリ書いているときに邪魔でしょうがないので紹介してみました。&lt;/p&gt;
-
-&lt;p&gt;El Capitanからアップデートしたらなおるのかなぁ。。&lt;/p&gt;
 </description>
     </item>
     

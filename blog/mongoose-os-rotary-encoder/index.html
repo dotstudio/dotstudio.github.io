@@ -81,21 +81,21 @@
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
+    <meta name="description" content="入力装置はボタンやセンサーだけではありません。ロードセルを使ってインプット方法の幅を広げてみましょう！">
     <meta name="author" content="dotstudio Inc.">
     <meta content="https://dotstud.io/img/blog/154/00_eyecatch.png">
 
-    <meta itemprop="name" content="くるくる回して値を入力！ロータリエンコーダでインプットの幅をひろげよう | dotstudio"/>
+    <meta itemprop="name" content="くるくる回して値を入力！ロータリエンコーダでインプットの幅を広げよう | dotstudio"/>
     <meta itemprop="image" content="https://dotstud.io/img/blog/154/00_eyecatch.png"/>
     
-    <meta property="og:title" content="くるくる回して値を入力！ロータリエンコーダでインプットの幅をひろげよう | dotstudio" />
+    <meta property="og:title" content="くるくる回して値を入力！ロータリエンコーダでインプットの幅を広げよう | dotstudio" />
     <meta property="og:locale" content="ja_JP" />
     <meta property="og:type" content="article" />
     <meta property="og:url" content="https://dotstud.io/blog/mongoose-os-rotary-encoder/" />
     <meta property="og:site_name" content="dotstudio（ドットスタジオ）" />
     <meta property="og:image" content="https://dotstud.io/img/blog/154/00_eyecatch.png" />
     <meta property="og:image:secure_url" content="https://dotstud.io/img/blog/154/00_eyecatch.png" />
-    <meta property="og:description" content="" />
+    <meta property="og:description" content="入力装置はボタンやセンサーだけではありません。ロードセルを使ってインプット方法の幅を広げてみましょう！" />
     <meta property="article:author" content="https://www.facebook.com/dotstud10/" />
     <meta property="fb:app_id" content="296336307370435" />
     <meta property="fb:pages" content="1013196712108753" />
@@ -103,13 +103,13 @@
     <meta name="twitter:image:src" content="https://dotstud.io/img/blog/154/00_eyecatch.png">
     <meta name="twitter:site" content="@dotstud_io" />
     <meta name="twitter:url" content="https://dotstud.io/blog/mongoose-os-rotary-encoder/">
-    <meta name="twitter:description" content="">
-    <meta name="twitter:title" content="くるくる回して値を入力！ロータリエンコーダでインプットの幅をひろげよう | dotstudio">
+    <meta name="twitter:description" content="入力装置はボタンやセンサーだけではありません。ロードセルを使ってインプット方法の幅を広げてみましょう！">
+    <meta name="twitter:title" content="くるくる回して値を入力！ロータリエンコーダでインプットの幅を広げよう | dotstudio">
     <meta name="twitter:creator" content="@dotstud_io" />
 
     
     <meta name="google-site-verification" content="oW2fcSG1fFnkDoRCGFJ0IGGebtBr8FjV2twoFMd7Skc" />
-    <title>くるくる回して値を入力！ロータリエンコーダでインプットの幅をひろげよう | dotstudio</title>
+    <title>くるくる回して値を入力！ロータリエンコーダでインプットの幅を広げよう | dotstudio</title>
     
 
     <link rel="stylesheet" href="/css/loader.css">
@@ -311,11 +311,11 @@
 
 
 <article class="blog-single">
-  <div class="date">2018.03.22</div>
+  <div class="date">2018.03.26</div>
 
   <img class="blog-single--eyecatch" src="/img/blog/154/00_eyecatch.png" alt="" width="710px">
   
-  <h1 class="blog-single--title">くるくる回して値を入力！ロータリエンコーダでインプットの幅をひろげよう</h1>
+  <h1 class="blog-single--title">くるくる回して値を入力！ロータリエンコーダでインプットの幅を広げよう</h1>
 
   <div class="blog-single--information">
     <a class="author" href="/members/morita">
@@ -333,10 +333,6 @@
   
   <div class="blog-single--content markdown">
 
-<p><font color="red">
-★タイトルを変更…仮でつけましたが良い案があれば教えてください！<br>
-★ロータリーエンコーダ -&gt; ロータリエンコーダに統一</font></p>
-
 <p>どうも。森田(<a href="https://twitter.com/morita_pac">@morita_pac</a>)です。</p>
 
 <p>ボタンを押してトリガー発動！センサー値をグラフにダイレクトアタック！IoTって最高かよ！</p>
@@ -347,13 +343,15 @@
 
 <h2 id="ロータリエンコーダってなにかね">ロータリエンコーダってなにかね？</h2>
 
-<p>これです。
-<img src="https://qiita-image-store.s3.amazonaws.com/0/214681/809103df-9671-f5d7-940b-f6c90c3f0e85.jpeg" alt="ロータリーエンコーダ.jpg" />
-回転の機械的変位量を電気信号に変換してくれます。</p>
-
-<p>つまり、<u>くるくるくるくる回してデジタル入力できるアイテム。</u></p>
+<p><strong>これです。</strong>
+<img src="/img/blog/154/1.png" alt="" />
+回転の機械的変位量を電気信号に変換してくれます。つまり、<u>くるくるくるくる回してデジタル入力できるアイテム。</u></p>
 
 <p>今回は<strong>クリック有り</strong>（カチカチなってくれる）の<strong>インクリメンタル式</strong>のロータリエンコーダを使って解説します。</p>
+
+<p>⇒ 参考: ロータリエンコーダ販売ページ（<a href="https://jp.rs-online.com/web/c/passive-components/rotary-encoders/">RSコンポーネンツ</a>）</p>
+
+<p>さまざまな種類のロータリエンコーダがあるので、上記サイトなどを参照してみてください。今回利用したもの（<a href="https://jp.rs-online.com/web/p/mechanical-rotary-encoders/7295836/">EC12E2420801</a>）も購入できます。</p>
 
 <h2 id="インクリメンタル式って何">インクリメンタル式って何！？</h2>
 
@@ -363,28 +361,24 @@
 
 <h3 id="アブソリュート式">アブソリュート式</h3>
 
-<p><font color="red">★一文を二文に分けました</font></p>
-
-<p>回転位置が<strong>絶対的な数値として出力される高精度な方式</strong>で、つまりは<u>今何回転目かを読み取れることが特徴</u>です。その分お値段も少々お高めなものが多いです。</p>
+<p>回転位置が<strong>絶対的な数値として出力される高精度な方式</strong>で、<u>電源断時でも回転位置を保持しておけることが特徴</u>です。その分お値段も少々お高めなものが多いです。</p>
 
 <p>回転方向も、数値の増減から判断できます。
-<img src="https://qiita-image-store.s3.amazonaws.com/0/214681/bb2bb063-c6d0-8622-3623-ebe72dfd94f4.jpeg" alt="方式a.jpg" /></p>
+<img src="/img/blog/154/2.png" alt="" /></p>
 
 <h3 id="インクリメンタル式">インクリメンタル式</h3>
 
-<p><strong>回転した角度だけパルス（短時間の電流）出力される方式</strong>で、今回使うものは、<u>15度回転させるとカチッとする感触があり、その時1パルスが出力され、24パルス出力で1回転</u>となります。
-<img src="https://qiita-image-store.s3.amazonaws.com/0/214681/44329ed3-6cfd-055e-5fea-3b77c71c326a.jpeg" alt="housiki.jpg" /></p>
+<p><strong>回転した角度だけパルス（短時間の電流）出力される方式</strong>で、今回使うロータリエンコーダの場合だと、<u>15度回転させるとカチッとする感触があり、その時1パルスが出力され、24パルス出力で1回転</u>となります。
+<img src="/img/blog/154/3.png" alt="" /></p>
 
 <p>回転方向を検出するために、位相が異なるA層B層の2つの端子からパルスを出力する構造になっており、
 例えば、<u>A→Bの順にパルスの変化があった場合は時計回り、B→Aの順にパルスの変化があった場合は反時計周りのように区別</u>することができます。
-<img src="https://qiita-image-store.s3.amazonaws.com/0/214681/40f6ce5e-26f7-5d44-d443-e6ee403973be.jpeg" alt="cwccw.jpg" />
+<img src="/img/blog/154/4.png" alt="" />
 ※イメージです。</p>
 
 <h2 id="使えるようにしてみよう">使えるようにしてみよう。</h2>
 
 <p>それでは、さっそくロータリエンコーダを使ってみるよ！</p>
-
-<p><font color="red">★下記にMongoose OSを利用するまでの繋ぎを入れてみました。ArduinoIDEを使わないことのネガディブ感が消えるかなと思います。（ギャグを挟んでみましたが、イメージと違ったら指摘してください……。）</font></p>
 
 <p>今回は、ESP32、ESP8266などのボードにJavaScriptで書き込みができる「<strong>Mongoose OS</strong>」を利用してみます。<strong>なぜなら僕はMongoose OSが好きだから</strong>です。</p>
 
@@ -393,37 +387,29 @@
 <p>Mongoose OSを導入するまでの手順は下記の記事を参照してください。
 <a href="/blog/mongoose-os-nefry-blink/"><img src="/img/blog/154/link.png" alt="" /></a></p>
 
-<p><del>ArduinoIDEとかではすでに利用法やコードは出回っていたので、MongooseOSでJavaScriptでプログラムしたいと思います。</del></p>
-
-<p><del>どういった用途でロータリエンコーダを利用するかにもよりますが、個人的にはJavascriptの方がシンプルでわかりやすいと感じています。</del></p>
-
 <h3 id="用意したもの">用意したもの</h3>
 
 <ul>
 <li>Mongoose OS（導入方法は<a href="https://dotstud.io/blog/mongoose-os-nefry-blink/">こちらの記事</a>を参考）</li>
-<li>ロータリエンコーダ（<a href="https://jp.rs-online.com/web/p/mechanical-rotary-encoders/7295836/">EC12E2420801</a>）</li>
+<li>ロータリエンコーダ（EC12E2420801）</li>
 <li>ESP32-DevKitC</li>
 <li>いい感じのブレッドボード</li>
 <li>10KΩ抵抗 2本</li>
 <li>ジャンパワイヤ 数本</li>
 </ul>
 
-<p><img src="https://qiita-image-store.s3.amazonaws.com/0/214681/658e510a-e071-e13a-de04-5d849a83b6e8.jpeg" alt="bred.jpg" /></p>
+<p><img src="/img/blog/154/5.png" alt="" /></p>
 
 <h3 id="配線">配線</h3>
 
 <p>下記の図を参考に配線してください。
-<img src="https://qiita-image-store.s3.amazonaws.com/0/214681/b73538c0-c064-bc06-03f2-81128cef49e3.jpeg" alt="ブレッドボード.jpg" /></p>
+<img src="/img/blog/154/6.png" alt="" /></p>
 
 <h3 id="プログラム">プログラム</h3>
 
 <p><u>正回転（※）でプラス10、逆回転でマイナス10の数値をログに出力するプログラム</u>です。コピーしてMongoose OSで書き込みます。それぞれのコードの詳細はコメントに記載します。</p>
 
-<p><font color="red">★詳細は -&gt; それぞれのコードの詳細は / 一文追加</font></p>
-
 <p>※…正回転はエンコーダの位置アドレスが増加する回転方向のことです。今回利用したロータリエンコーダの場合は時計回りが正回転、反時計回りが逆回転です。</p>
-
-<p><font color="red">★上記説明正しいでしょうか？</font></p>
 
 <pre><code class="language-js:init.js">//GPIOのAPIを使えるようにします。
 load('api_gpio.js');
@@ -493,12 +479,13 @@ GPIO.set_button_handler(pinB, GPIO.PULL_UP, GPIO.INT_EDGE_NEG, 100, function(x) 
 
 <h2 id="試してみよう">試してみよう。</h2>
 
-<p><font color="red">★章を追加しました。ロータリエンコーダを回しているデモを入れられると嬉しいです。</font>
-書き込めたら、実際に試してみましょう。</p>
+<p>書き込めたら、実際に試してみましょう。
+<img src="/img/blog/154/7.png" alt="" />
+Mongoose OSのコンソールからロータリエンコーダの値を確認することができます。</p>
 
-<p>（デモgifなど）</p>
-
-<p><img src="https://qiita-image-store.s3.amazonaws.com/0/214681/4fda7779-6218-0734-66ad-69bdc24d4c4a.png" alt="Mongoose_OS.png" /></p>
+<p>下記はOLEDディスプレイに値を表示するようにしてみました。
+<img src="https://gyazo.com/52dce8bbfa4e37382bc964e1aef3109f.gif" alt="" />
+正回転で値が増え、逆回転で値が減っていきます！</p>
 
 <p>Mongoose OSの特徴とチャタリングの関係から、勢いよくロータリエンコーダを回すと正確に信号を捉えられません。解決できる方法があるぜ。という場合はご連絡くださいませ。</p>
 
@@ -509,8 +496,6 @@ GPIO.set_button_handler(pinB, GPIO.PULL_UP, GPIO.INT_EDGE_NEG, 100, function(x) 
 <p>ロータリエンコーダにはボタン付きのものもあったりしますので、選択してボタンプッシュで送信のような機能が欲しい場合に使えると思います。</p>
 
 <p>初期搭載のスイッチやセンサからの入力に飽きてしまった方は、ぜひ試してみてください！</p>
-
-<p><font color="red">★最後に締めの一文を追加してみました。よい感じの締めがあったらご提言ください！</font></p>
 </div>
 
   
@@ -1780,7 +1765,7 @@ GPIO.set_button_handler(pinB, GPIO.PULL_UP, GPIO.INT_EDGE_NEG, 100, function(x) 
     &nbsp;
 
     <div class="hatena-b">
-      <a href="http://b.hatena.ne.jp/entry/s/dotstud.io/blog/mongoose-os-rotary-encoder" class="hatena-bookmark-button" data-hatena-bookmark-title="くるくる回して値を入力！ロータリエンコーダでインプットの幅をひろげよう" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
+      <a href="http://b.hatena.ne.jp/entry/s/dotstud.io/blog/mongoose-os-rotary-encoder" class="hatena-bookmark-button" data-hatena-bookmark-title="くるくる回して値を入力！ロータリエンコーダでインプットの幅を広げよう" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
         <img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" />
       </a>
       <script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>

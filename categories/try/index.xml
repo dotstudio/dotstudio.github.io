@@ -7,8 +7,183 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Mon, 19 Mar 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 26 Mar 2018 01:00:43 +0900</lastBuildDate>
     <atom:link href="/categories/try/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>くるくる回して値を入力！ロータリエンコーダでインプットの幅を広げよう</title>
+      <link>https://dotstud.io/blog/mongoose-os-rotary-encoder/</link>
+      <pubDate>Mon, 26 Mar 2018 01:00:43 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/mongoose-os-rotary-encoder/</guid>
+      
+      <description>
+
+&lt;p&gt;どうも。森田(&lt;a href=&#34;https://twitter.com/morita_pac&#34;&gt;@morita_pac&lt;/a&gt;)です。&lt;/p&gt;
+
+&lt;p&gt;ボタンを押してトリガー発動！センサー値をグラフにダイレクトアタック！IoTって最高かよ！&lt;/p&gt;
+
+&lt;p&gt;ってみなさん感じていると思います。&lt;/p&gt;
+
+&lt;p&gt;そこへ、新たなスパイスを投ずるべく、森田は&lt;u&gt;&lt;strong&gt;ロータリエンコーダ&lt;/strong&gt;&lt;/u&gt;をおすすめします。&lt;/p&gt;
+
+&lt;h2 id=&#34;ロータリエンコーダってなにかね&#34;&gt;ロータリエンコーダってなにかね？&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;これです。&lt;/strong&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/154/1.png&#34; alt=&#34;&#34; /&gt;
+回転の機械的変位量を電気信号に変換してくれます。つまり、&lt;u&gt;くるくるくるくる回してデジタル入力できるアイテム。&lt;/u&gt;&lt;/p&gt;
+
+&lt;p&gt;今回は&lt;strong&gt;クリック有り&lt;/strong&gt;（カチカチなってくれる）の&lt;strong&gt;インクリメンタル式&lt;/strong&gt;のロータリエンコーダを使って解説します。&lt;/p&gt;
+
+&lt;p&gt;⇒ 参考: ロータリエンコーダ販売ページ（&lt;a href=&#34;https://jp.rs-online.com/web/c/passive-components/rotary-encoders/&#34;&gt;RSコンポーネンツ&lt;/a&gt;）&lt;/p&gt;
+
+&lt;p&gt;さまざまな種類のロータリエンコーダがあるので、上記サイトなどを参照してみてください。今回利用したもの（&lt;a href=&#34;https://jp.rs-online.com/web/p/mechanical-rotary-encoders/7295836/&#34;&gt;EC12E2420801&lt;/a&gt;）も購入できます。&lt;/p&gt;
+
+&lt;h2 id=&#34;インクリメンタル式って何&#34;&gt;インクリメンタル式って何！？&lt;/h2&gt;
+
+&lt;p&gt;まだ引かないでください。。。&lt;/p&gt;
+
+&lt;p&gt;まず、ロータリエンコーダには信号検出の異なる「インクリメンタル式」と「アブソリュート式」があります。&lt;/p&gt;
+
+&lt;h3 id=&#34;アブソリュート式&#34;&gt;アブソリュート式&lt;/h3&gt;
+
+&lt;p&gt;回転位置が&lt;strong&gt;絶対的な数値として出力される高精度な方式&lt;/strong&gt;で、&lt;u&gt;電源断時でも回転位置を保持しておけることが特徴&lt;/u&gt;です。その分お値段も少々お高めなものが多いです。&lt;/p&gt;
+
+&lt;p&gt;回転方向も、数値の増減から判断できます。
+&lt;img src=&#34;https://dotstud.io/img/blog/154/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;インクリメンタル式&#34;&gt;インクリメンタル式&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;回転した角度だけパルス（短時間の電流）出力される方式&lt;/strong&gt;で、今回使うロータリエンコーダの場合だと、&lt;u&gt;15度回転させるとカチッとする感触があり、その時1パルスが出力され、24パルス出力で1回転&lt;/u&gt;となります。
+&lt;img src=&#34;https://dotstud.io/img/blog/154/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;回転方向を検出するために、位相が異なるA層B層の2つの端子からパルスを出力する構造になっており、
+例えば、&lt;u&gt;A→Bの順にパルスの変化があった場合は時計回り、B→Aの順にパルスの変化があった場合は反時計周りのように区別&lt;/u&gt;することができます。
+&lt;img src=&#34;https://dotstud.io/img/blog/154/4.png&#34; alt=&#34;&#34; /&gt;
+※イメージです。&lt;/p&gt;
+
+&lt;h2 id=&#34;使えるようにしてみよう&#34;&gt;使えるようにしてみよう。&lt;/h2&gt;
+
+&lt;p&gt;それでは、さっそくロータリエンコーダを使ってみるよ！&lt;/p&gt;
+
+&lt;p&gt;今回は、ESP32、ESP8266などのボードにJavaScriptで書き込みができる「&lt;strong&gt;Mongoose OS&lt;/strong&gt;」を利用してみます。&lt;strong&gt;なぜなら僕はMongoose OSが好きだから&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;Arduino言語での開発に慣れていない方にとっては、シンプルでわかりやすく感じると思います。Arduino IDEを使った方法やサンプルコードも、先例がたくさんあるので調べてみてください！&lt;/p&gt;
+
+&lt;p&gt;Mongoose OSを導入するまでの手順は下記の記事を参照してください。
+&lt;a href=&#34;https://dotstud.io/blog/mongoose-os-nefry-blink/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/154/link.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;用意したもの&#34;&gt;用意したもの&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Mongoose OS（導入方法は&lt;a href=&#34;https://dotstud.io/blog/mongoose-os-nefry-blink/&#34;&gt;こちらの記事&lt;/a&gt;を参考）&lt;/li&gt;
+&lt;li&gt;ロータリエンコーダ（EC12E2420801）&lt;/li&gt;
+&lt;li&gt;ESP32-DevKitC&lt;/li&gt;
+&lt;li&gt;いい感じのブレッドボード&lt;/li&gt;
+&lt;li&gt;10KΩ抵抗 2本&lt;/li&gt;
+&lt;li&gt;ジャンパワイヤ 数本&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/154/5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;配線&#34;&gt;配線&lt;/h3&gt;
+
+&lt;p&gt;下記の図を参考に配線してください。
+&lt;img src=&#34;https://dotstud.io/img/blog/154/6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;プログラム&#34;&gt;プログラム&lt;/h3&gt;
+
+&lt;p&gt;&lt;u&gt;正回転（※）でプラス10、逆回転でマイナス10の数値をログに出力するプログラム&lt;/u&gt;です。コピーしてMongoose OSで書き込みます。それぞれのコードの詳細はコメントに記載します。&lt;/p&gt;
+
+&lt;p&gt;※…正回転はエンコーダの位置アドレスが増加する回転方向のことです。今回利用したロータリエンコーダの場合は時計回りが正回転、反時計回りが逆回転です。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js:init.js&#34;&gt;//GPIOのAPIを使えるようにします。
+load(&#39;api_gpio.js&#39;);
+
+//ロータリエンコーダのA,Bのピンアサイン
+let pinA = 19;
+let pinB = 18;
+
+//A,Bの状態を読みます。
+let stateA = GPIO.read(pinA);
+let stateB = GPIO.read(pinB);
+
+let count =50;
+let rotate =0;
+
+//おまじない
+GPIO.set_mode(pinA,GPIO.MODE_INPUT);
+GPIO.set_mode(pinB,GPIO.MODE_INPUT);
+
+//プラス1(正回転)を判断するための関数です。
+let getRotationActA = function(){
+        let Acount = 0;
+        let AA = GPIO.read(pinA);
+        let AB = GPIO.read(pinB);
+        if (AA === 0 &amp;amp;&amp;amp; AB === 1)
+        {
+            AA = GPIO.read(pinA);
+            AB = GPIO.read(pinB);
+            Acount = 1;
+        }
+   return Acount;
+};
+
+//マイナス1(逆回転)を判断するための関数です。
+let getRotationActB = function(){
+        let Bcount = 0;
+        let BA = GPIO.read(pinA);
+        let BB = GPIO.read(pinB);
+        if (BA === 1 &amp;amp;&amp;amp; BB === 0)
+        {
+            BA = GPIO.read(pinA);
+            BB = GPIO.read(pinB);
+            Bcount = -1;
+        }
+   return Bcount;
+};
+
+//Aにパルスが来た時に動くイベントです。
+GPIO.set_button_handler(pinA, GPIO.PULL_UP, GPIO.INT_EDGE_NEG, 100, function(x) {
+  rotate = getRotationActA();
+  if(rotate === 1){
+  count = count +rotate*10;
+  print(count);
+  }
+}, null);
+
+
+//Bにパルスが来た時に動くイベントです。
+GPIO.set_button_handler(pinB, GPIO.PULL_UP, GPIO.INT_EDGE_NEG, 100, function(x) {
+  rotate = getRotationActB();
+  if(rotate === -1){
+  count = count +rotate*10;
+  print(count);
+  }
+}, null);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;試してみよう&#34;&gt;試してみよう。&lt;/h2&gt;
+
+&lt;p&gt;書き込めたら、実際に試してみましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/154/7.png&#34; alt=&#34;&#34; /&gt;
+Mongoose OSのコンソールからロータリエンコーダの値を確認することができます。&lt;/p&gt;
+
+&lt;p&gt;下記はOLEDディスプレイに値を表示するようにしてみました。
+&lt;img src=&#34;https://gyazo.com/52dce8bbfa4e37382bc964e1aef3109f.gif&#34; alt=&#34;&#34; /&gt;
+正回転で値が増え、逆回転で値が減っていきます！&lt;/p&gt;
+
+&lt;p&gt;Mongoose OSの特徴とチャタリングの関係から、勢いよくロータリエンコーダを回すと正確に信号を捉えられません。解決できる方法があるぜ。という場合はご連絡くださいませ。&lt;/p&gt;
+
+&lt;h2 id=&#34;さいごに&#34;&gt;さいごに&lt;/h2&gt;
+
+&lt;p&gt;いかがでしたでしょうか。これで、&lt;strong&gt;入力に新たな選択肢が加わった&lt;/strong&gt;と思います。&lt;/p&gt;
+
+&lt;p&gt;ロータリエンコーダにはボタン付きのものもあったりしますので、選択してボタンプッシュで送信のような機能が欲しい場合に使えると思います。&lt;/p&gt;
+
+&lt;p&gt;初期搭載のスイッチやセンサからの入力に飽きてしまった方は、ぜひ試してみてください！&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Nefry BTで簡単IoT！★IoTバイブステンアゲポロシャツ★ 後編</title>
@@ -3056,224 +3231,6 @@ draw(&#39;init&#39;); //初期実行
 &lt;p&gt;Nefry BTとNode.jsを使ってネットワークカメラを作ることができました。&lt;/p&gt;
 
 &lt;p&gt;GroveのカメラとNefry V2を使って過去に&lt;a href=&#34;https://am-our.com/love/110/13945/&#34;&gt;【大島薫×IoT】浮気男を社会的に制裁するマシーンを作ってみた&lt;/a&gt;こともありましたが、ネットワークカメラを作りたい需要はそこそこあると思うので、その際の参考になれば幸いです。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>日本上陸！littleBits cloudBitモジュールでIFTTT連携してみた！</title>
-      <link>https://dotstud.io/blog/littlebits-cloudbit-ifttt-blink/</link>
-      <pubDate>Tue, 22 Aug 2017 19:43:42 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/littlebits-cloudbit-ifttt-blink/</guid>
-      
-      <description>
-
-&lt;p&gt;littleBits cloudBitモジュールの技適が通りまして、ついに日本でも使えることになったということで、早速littleBits cloudBitモジュールを購入してIFTTTと連携してみました。
-&lt;img src=&#34;https://dotstud.io/img/blog/119/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;littlebits-cloudbitモジュールとは&#34;&gt;littleBits cloudBitモジュールとは&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/2.png&#34; alt=&#34;&#34; /&gt;
-littleBits cloudBitモジュールは、磁石でつなげて簡単に電子工作ができる知育ブロックlittleBitsのモジュールのひとつ、littleBits Cloudが橋渡しとなってインターネットとやり取りできるモジュールです。&lt;/p&gt;
-
-&lt;p&gt;詳しくはこちら → &lt;a href=&#34;https://littlebits.cc/cloudstart&#34;&gt;Getting Started with your CloudBit&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/3.png&#34; alt=&#34;&#34; /&gt;
-橋渡しとなるlittleBits Cloudは、スマートフォンやPCからWEBアクセスできる CLOUD CONTROL APP や、LITTLEBITS APIによってREST APIでさらに深いところまで操作できるプログラミングできるLITTLEBITS APIといった入り口があります。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/4.png&#34; alt=&#34;&#34; /&gt;
-今回ご紹介するのは、もうひとつ。ノンプログラミングでインターネットのいろいろなことに接続できる&lt;a href=&#34;https://ifttt.com/login&#34;&gt;IFTTT&lt;/a&gt;とlittleBitsの連携についてお伝えします。&lt;/p&gt;
-
-&lt;p&gt;たとえば、littleBitsモジュールでボタンを押すとメールが送られたり、SNSでいいねが押されるとlittleBitsのLEDが反応するようなIoTの仕組みをさっと作ることができます。&lt;/p&gt;
-
-&lt;h2 id=&#34;今回の仕組み&#34;&gt;今回の仕組み&lt;/h2&gt;
-
-&lt;p&gt;今回の仕組みはGitHubでissueが上がるとBARGRAPH LEDが点灯する仕組みです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/5.png&#34; alt=&#34;&#34; /&gt;
-ですが、ただBARGRAPH LEDが光るだけだと見落としてしまうので、100円ショップで買った光で動くソーラーゆらゆら（がいこつ）にLEDを照らして動かしてよりわかりやすくします。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/6.png&#34; alt=&#34;&#34; /&gt;
-このような仕組みです。&lt;/p&gt;
-
-&lt;h2 id=&#34;準備&#34;&gt;準備&lt;/h2&gt;
-
-&lt;h3 id=&#34;littlebitsの準備&#34;&gt;littleBitsの準備&lt;/h3&gt;
-
-&lt;p&gt;セットアップについてはすでに行われているものとします。&lt;a href=&#34;http://www.1ft-seabass.jp/memo/2017/08/09/cloudbit-setup-step-memo/&#34;&gt;cloudBitモジュールのセットアップについてのメモ&lt;/a&gt;についてもご参考下さい。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/7.png&#34; alt=&#34;&#34; /&gt;
-CLOUDBITパッケージに入っているものはcloudBitモジュール関連だけなので、別途写真のようにlittleBitから入力させるボタンモジュールや、出力を反応させるBARGRAPHモジュールは別途揃えておきましょう。また今回はソーラーゆらゆら（がいこつ）へうまくつなげるためにWIREモジュールも用意しておきます。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;CLOUDBITパッケージにあるもの
-
-&lt;ul&gt;
-&lt;li&gt;USB power adapter ケーブル&lt;/li&gt;
-&lt;li&gt;USB POWER モジュール&lt;/li&gt;
-&lt;li&gt;cloudBitモジュール&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;別途必要なもの
-
-&lt;ul&gt;
-&lt;li&gt;ボタンモジュール&lt;/li&gt;
-&lt;li&gt;BARGRAPHモジュール&lt;/li&gt;
-&lt;li&gt;WIREモジュール&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/8.png&#34; alt=&#34;&#34; /&gt;
-ソーラーゆらゆらを準備します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/9.png&#34; alt=&#34;&#34; /&gt;
-コンセントをつないだアダプターからUSBケーブルを差し込みます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/10.png&#34; alt=&#34;&#34; /&gt;
-USB POWERモジュールにUSBケーブルをつなぎます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/11.png&#34; alt=&#34;&#34; /&gt;
-USB POWERモジュール→ボタンモジュール→cloudBitモジュールまでつないで、接続されるまで待ちます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/12.png&#34; alt=&#34;&#34; /&gt;
-つづいて、cloudBitモジュールの先にWIREモジュールとBARGRAPH LEDモジュールをつなぎます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/13.png&#34; alt=&#34;&#34; /&gt;
-ソーラーゆらゆら（がいこつ）のソーラーパネル部分にガッとBARGRAPH LEDモジュールを当てます。マスキングテープで補強します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/14.png&#34; alt=&#34;&#34; /&gt;
-これで準備完了です。&lt;/p&gt;
-
-&lt;h3 id=&#34;cloud-control-appの準備&#34;&gt;CLOUD CONTROL APPの準備&lt;/h3&gt;
-
-&lt;p&gt;cloudBitを管理している CLOUD CONTROL APP ページにログインしておきます。
-&lt;img src=&#34;https://dotstud.io/img/blog/119/15.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/16.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/17.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;iftttの準備&#34;&gt;IFTTTの準備&lt;/h3&gt;
-
-&lt;p&gt;IFTTTもlittleBitsとの関連付けを行うのでログインしておきます。
-&lt;img src=&#34;https://dotstud.io/img/blog/119/18.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;こちらで準備完了です。&lt;/p&gt;
-
-&lt;h2 id=&#34;littlebits-cloudbitモジュールとiftttの関連付け&#34;&gt;littleBits CloudBitモジュールとIFTTTの関連付け&lt;/h2&gt;
-
-&lt;p&gt;さきほどログインしたCLOUD CONTROL APP ページでlittleBits CloudBitモジュールとIFTTTの関連付けを行います。
-&lt;img src=&#34;https://dotstud.io/img/blog/119/19.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;下部のメニューでAUTOMATEを押します。
-&lt;img src=&#34;https://dotstud.io/img/blog/119/20.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;AUTOMATEページに遷移するとIFTTTとのアクティベートを促されるので GO TO IFTTT.COM ボタンを押します。
-&lt;img src=&#34;https://dotstud.io/img/blog/119/21.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;IFTTTのlittleBitsチャンネルに遷移するので、CONNECTを押します。
-&lt;img src=&#34;https://dotstud.io/img/blog/119/22.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;すでにIFTTTとCLOUD CONTROL APPがログインしてあるので、アクティベート確認ページに遷移します。AUTHORIZEボタンを押して認証します。
-&lt;img src=&#34;https://dotstud.io/img/blog/119/23.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ログインが完了します。これで、IFTTTでlittleBitsと連携することができます。&lt;/p&gt;
-
-&lt;h2 id=&#34;githubサービスのiftttでの認証をする&#34;&gt;GitHubサービスのIFTTTでの認証をする&lt;/h2&gt;
-
-&lt;p&gt;GitHubでもIFTTTで使えるようにしておきましょう。上部のSearchからgithubを検索します。
-&lt;img src=&#34;https://dotstud.io/img/blog/119/24.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Servicesに出てきたGitHubをクリックします。
-&lt;img src=&#34;https://dotstud.io/img/blog/119/25.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;GitHubのページに移動するのでConnectボタンを押します。
-&lt;img src=&#34;https://dotstud.io/img/blog/119/26.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;GitHubのAuthrize IFTTTページに移動します。
-&lt;img src=&#34;https://dotstud.io/img/blog/119/27.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Authrize IFTTTCHannelsボタンを押して認証を済ませておきます。&lt;/p&gt;
-
-&lt;h2 id=&#34;littlebitsのifttt連携の設定&#34;&gt;littleBitsのIFTTT連携の設定&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/28.png&#34; alt=&#34;&#34; /&gt;
-右上にある自分のプロフィールメニューからNew Appletを選択します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/29.png&#34; alt=&#34;&#34; /&gt;
-New Appletをつくる画面に行きます。thisボタンをクリックします。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/30.png&#34; alt=&#34;&#34; /&gt;
-Choose a serviceではgitと検索しGitHubをクリックします。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/31.png&#34; alt=&#34;&#34; /&gt;
-今回は自分にissueが来たときに動作するようにしたいので、Any new issueをクリックします。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/32.png&#34; alt=&#34;&#34; /&gt;
-つづいて動作のきっかけ this が作れたので、なにが起こるかの that を設定するため that ボタンを押します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/33.png&#34; alt=&#34;&#34; /&gt;
-Choose action service画面になるので、littleBitsと検索し、littleBitsアクションをクリックします。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/34.png&#34; alt=&#34;&#34; /&gt;
-Choose action画面になるので、Set Output Levelをクリックします。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/35.png&#34; alt=&#34;&#34; /&gt;
-Complete action fields画面になるので以下のように設定します。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Which cloudBit?
-
-&lt;ul&gt;
-&lt;li&gt;動かしたいcloudBit&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;Level
-
-&lt;ul&gt;
-&lt;li&gt;100&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;Duration
-
-&lt;ul&gt;
-&lt;li&gt;20 seconds&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/36.png&#34; alt=&#34;&#34; /&gt;
-設定が終わったら、下の方のCreate Actionボタンを押します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/37.png&#34; alt=&#34;&#34; /&gt;
-Review and finish画面に来るので、設定を確認します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/38.png&#34; alt=&#34;&#34; /&gt;
-問題なければ、下の方のFinishボタンを押します。&lt;/p&gt;
-
-&lt;p&gt;これで設定は完了です。&lt;/p&gt;
-
-&lt;h2 id=&#34;動かしてみる&#34;&gt;動かしてみる&lt;/h2&gt;
-
-&lt;p&gt;早速試しにissueをGitHubで作ってみましょう。
-&lt;img src=&#34;https://dotstud.io/img/blog/119/39.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;今回は適当に作ってみます。
-&lt;img src=&#34;https://dotstud.io/img/blog/119/40.png&#34; alt=&#34;&#34; /&gt;
-issues発行します。&lt;/p&gt;
-
-&lt;p&gt;多少タイムラグがあるので5～10秒ほど待ってみます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/119/demo.gif&#34; alt=&#34;&#34; /&gt;
-無事動きました！&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;ということで、技適が通り日本上陸となった、littleBits cloudBitモジュールのIFTTT連携をお伝えしました。&lt;/p&gt;
-
-&lt;p&gt;今回はIoTでも実装に手間がかかるインターネット上の反応をlittleBitsに降ろす仕組みを軸にお伝えしましたがIFTTTとlittleBits Cloudの連携は手軽に作れますね。IoTにおけるいろいろな技術要素が裏側でしっかり作られています。&lt;/p&gt;
-
-&lt;p&gt;もちろん、IFTTTと連携するとAmazon Dash Buttonのような、ボタンを押すとツイートがされるようなlittleBitsからインターネットを動かす仕組みについても実現可能です。&lt;/p&gt;
-
-&lt;p&gt;littleBitsの持つブロックを組み合わせて電子工作ができる手軽さに加えて、IFTTTが組み合わさることでインターネットもあたかもブロックのように扱えてるlittleBits cloudBitモジュール、ぜひ試してみてください！&lt;/p&gt;
-
-&lt;p&gt;※今回の図表の一部では&lt;a href=&#34;http://icooon-mono.com/&#34;&gt;アイコン素材ダウンロードサイト「icooon-mono」&lt;/a&gt;さんの画像を利用いたしました。ありがとうございます。&lt;/p&gt;
 </description>
     </item>
     
