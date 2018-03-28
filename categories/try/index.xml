@@ -7,8 +7,400 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Mon, 26 Mar 2018 01:00:43 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 28 Mar 2018 14:00:26 +0900</lastBuildDate>
     <atom:link href="/categories/try/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>オフィス改善！物理スイッチの照明を遠隔操作でON／OFFしよう！</title>
+      <link>https://dotstud.io/blog/switch-servo-remote-controll/</link>
+      <pubDate>Wed, 28 Mar 2018 14:00:26 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/switch-servo-remote-controll/</guid>
+      
+      <description>
+
+&lt;h2 id=&#34;お仕事は突然やってくる&#34;&gt;お仕事は突然やってくる&lt;/h2&gt;
+
+&lt;p&gt;こんにちは、宇宙エンジニアのたくろーどんです。&lt;/p&gt;
+
+&lt;p&gt;ある日、dotstudioのオフィスにて……。&lt;/p&gt;
+
+&lt;p&gt;※上司：ちゃんとく ／ &lt;del&gt;下僕&lt;/del&gt;部下：たくろーどん&lt;/p&gt;
+
+&lt;div class=&#34;talk-box&#34;&gt;
+  &lt;p class=&#34;speaker&#34;&gt;
+    &lt;img src=&#34;https://dotstud.io/img/members/chantoku/author.png&#34; /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    ちゃんとく「デスクから動くのがめんどくさい……。」
+  &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;talk-box&#34;&gt;
+  &lt;p class=&#34;speaker&#34;&gt;
+    &lt;img src=&#34;https://dotstud.io/img/members/takudooon/author.png&#34; /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    たくろーどん「そうですねぇ。（おなかすいた）」
+  &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;talk-box&#34;&gt;
+  &lt;p class=&#34;speaker&#34;&gt;
+    &lt;img src=&#34;https://dotstud.io/img/members/chantoku/author.png&#34; /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    ちゃんとく「なんか&lt;b&gt;電気のONとOFFを遠隔で操作できるデバイス&lt;/b&gt;つくってよ！」
+  &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;talk-box&#34;&gt;
+  &lt;p class=&#34;speaker&#34;&gt;
+    &lt;img src=&#34;https://dotstud.io/img/members/takudooon/author.png&#34; /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    たくろーどん「あっ、はい。かしこまりましたでございます。（きょうのごはんはカレーにしよう）」
+  &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;p&gt;そんなこんなで突然、ズボラなちゃんとくさんのために&lt;strong&gt;電気を遠隔でON/OFFできる装置&lt;/strong&gt;をつくることになりました。&lt;/p&gt;
+
+&lt;p&gt;下記のようなイメージで、&lt;strong&gt;電気の物理スイッチを遠隔操作できるリモコン&lt;/strong&gt;を目指して作ってみます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/155/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;実装&#34;&gt;実装&lt;/h2&gt;
+
+&lt;p&gt;まず、物理スイッチを押す機構にはサーボモータを使います。&lt;/p&gt;
+
+&lt;p&gt;サーボモータは簡単に角度の制御ができるので、スイッチをON/OFFと切り替えて押すことに適しています。&lt;/p&gt;
+
+&lt;p&gt;サーボモータについては、dotstudioドキュメントの「&lt;a href=&#34;https://dotstud.io/docs/pulse-width-modulation/&#34;&gt;&lt;strong&gt;PWM制御&lt;/strong&gt;&lt;/a&gt;（サーボモータの仕組み）」や「&lt;a href=&#34;https://codeiq.jp/magazine/2018/02/57076/&#34;&gt;&lt;strong&gt;遠隔消臭装置をつくって「気の利くナイスガイ」になろう！〜基本実装編〜│codeIQ&lt;/strong&gt;&lt;/a&gt;」の記事などを参考にしてください。&lt;/p&gt;
+
+&lt;p&gt;実際に、スイッチが押せるようにサーボモータを取り付けてみます。サーボモータの取り付けも&lt;strong&gt;グルーガン職人&lt;/strong&gt;の手にかかれば一瞬です。&lt;/p&gt;
+
+&lt;p&gt;※グルーガン（のりを温めて接着できる装置）は100均で手に入る最強アイテムです。
+&lt;img src=&#34;https://dotstud.io/img/blog/155/2.png&#34; alt=&#34;&#34; /&gt;
+見た目の改善はあとで考えていきましょう。&lt;strong&gt;とりあえず動くことが大事&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;ちなみに回路図はこのようになっています。
+&lt;img src=&#34;https://dotstud.io/img/blog/155/3.png&#34; alt=&#34;&#34; /&gt;
+今回はサーボモータを4つ繋げているので、&lt;u&gt;Nefry BTからの電源供給が足りず、Nefry BTが再起動してしまうこと&lt;/u&gt;があります。そこで&lt;strong&gt;サーボモータとNefry BTの電源は分ける&lt;/strong&gt;ことによって安定性を高めています。&lt;/p&gt;
+
+&lt;p&gt;では、次にプログラムです。&lt;/p&gt;
+
+&lt;h2 id=&#34;プログラム&#34;&gt;プログラム&lt;/h2&gt;
+
+&lt;p&gt;今回は、&lt;strong&gt;Nefry BTのWebコンソール画面&lt;/strong&gt;から遠隔操作できるようにしたいと思います。&lt;/p&gt;
+
+&lt;p&gt;Nefry BTのWebコンソール画面へは、&lt;u&gt;Nefry BT自身のWi-Fiにつないでアドホックモードにするほか、Wi-Fi設定をして外部からアクセス&lt;/u&gt;することができます。詳細は「&lt;a href=&#34;https://dotstud.io/docs/nefrybt-wifi-setup/&#34;&gt;&lt;strong&gt;Nefry BTのWi-Fiセットアップ&lt;/strong&gt;&lt;/a&gt;」を参照してください。&lt;/p&gt;
+
+&lt;p&gt;Webコンソール画面には、&lt;strong&gt;Nefry.getWebServer()関数&lt;/strong&gt;を使って機能追加することができます。少し試してみましょう。&lt;/p&gt;
+
+&lt;p&gt;以下のようにプログラムを書くと……&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;#include &amp;lt;Nefry.h&amp;gt;
+void setup() {
+  // on()の第一引数でURLを決める
+  Nefry.getWebServer()-&amp;gt;on(&amp;quot;/welcome&amp;quot;, [&amp;amp;]() {
+    String content = F(
+      // 表示するページをHTMLで記述する
+      &amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;title&amp;gt;Nefry Welcome&amp;lt;/title&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;Nefry Welcome!&amp;lt;/h1&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+    Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
+  });
+  // setIndexLink(&#39;表示したいページ名&#39;, &#39;指定したURL&#39;)でTOPページに表示される名前を決める
+  Nefry.setIndexLink(&amp;quot;welcomePage&amp;quot;,&amp;quot;/welcome&amp;quot;);
+}
+
+void loop() {
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Nefry BTのコンソール画面に「welcomePage」と追加され、クリックすると、「Nefry Welcome」と作成したHTMLページが表示されます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/155/4.png&#34; alt=&#34;&#34; /&gt;
+これを応用して、&lt;strong&gt;「Light_on」というHTMLページにアクセスしたらサーボモータが回転する&lt;/strong&gt;ようにしてみます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;// /onというURLのページを作成
+Nefry.getWebServer()-&amp;gt;on(&amp;quot;/on&amp;quot;, [&amp;amp;]() {
+  String content = F(
+    // ページのHTMLを記述
+    &amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+    &amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+    &amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;On&amp;lt;/h1&amp;gt;&amp;quot;
+    &amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;
+  );
+
+  // サーボモータを回転させる
+  for(int i=90; i&amp;lt;=115; i++){
+    ledcWrite(0,deg2pw(i, PWM_BITWIDTH));
+  }
+  delay(800);
+  ledcWrite(0,deg2pw(90, PWM_BITWIDTH));
+
+  Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
+});
+
+// TOPページに「Ligth_on」と表示する
+Nefry.setIndexLink(&amp;quot;Light_on&amp;quot;,&amp;quot;/on&amp;quot;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上記のプログラムを4つのサーボモータそれぞれに割り当て、最終的なプログラムの全体はこのようになります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;#include &amp;lt;Nefry.h&amp;gt;
+#include&amp;quot;esp32-hal-ledc.h&amp;quot;
+#define PWM_BITWIDTH 16
+
+int deg2pw(int deg, int bit){
+    double ms = ((double) deg - 90.0) * 0.95 / 90.0 + 1.45;
+    return (int) (ms / 20.0 * pow(2, bit));
+}
+
+void setup() {
+  Serial.begin(115200);
+  ledcSetup(0,50,PWM_BITWIDTH);
+  ledcSetup(1,50,PWM_BITWIDTH);
+  ledcSetup(2,50,PWM_BITWIDTH);
+  ledcSetup(3,50,PWM_BITWIDTH);
+  ledcAttachPin(A0,0);
+  ledcAttachPin(A1,1);
+  ledcAttachPin(D0,2);
+  ledcAttachPin(D1,3);
+
+  Nefry.getWebServer()-&amp;gt;on(&amp;quot;/on&amp;quot;, [&amp;amp;]() {
+    String content = F(
+      &amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;On&amp;lt;/h1&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+
+    for(int i=90; i&amp;lt;=115; i++){
+      ledcWrite(0,deg2pw(i, PWM_BITWIDTH));
+    }
+    delay(800);
+    ledcWrite(0,deg2pw(90, PWM_BITWIDTH));
+
+    Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
+  });
+  Nefry.setIndexLink(&amp;quot;Light_on&amp;quot;,&amp;quot;/on&amp;quot;);
+
+  Nefry.getWebServer()-&amp;gt;on(&amp;quot;/off&amp;quot;, [&amp;amp;]() {
+    String content = F(
+      &amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;off&amp;lt;/h1&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+
+    for(int i=90; i&amp;gt;=65; --i){
+      ledcWrite(0,deg2pw(i, PWM_BITWIDTH));
+    }
+    delay(800);
+    ledcWrite(0,deg2pw(90, PWM_BITWIDTH));
+
+    Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
+  });
+  Nefry.setIndexLink(&amp;quot;Light_off&amp;quot;,&amp;quot;/off&amp;quot;);
+
+//////////////////////////////////////////////////////////////
+  Nefry.getWebServer()-&amp;gt;on(&amp;quot;/on2&amp;quot;, [&amp;amp;]() {
+    String content = F(
+      &amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;On&amp;lt;/h1&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+
+    for(int i=90; i&amp;lt;=115; i++){
+      ledcWrite(1,deg2pw(i, PWM_BITWIDTH));
+    }
+    delay(800);
+    ledcWrite(1,deg2pw(90, PWM_BITWIDTH));
+
+    Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
+  });
+  Nefry.setIndexLink(&amp;quot;Light_on_2&amp;quot;,&amp;quot;/on2&amp;quot;);
+
+  Nefry.getWebServer()-&amp;gt;on(&amp;quot;/off2&amp;quot;, [&amp;amp;]() {
+    String content = F(
+      &amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;off&amp;lt;/h1&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+
+    for(int i=90; i&amp;gt;=65; --i){
+      ledcWrite(1,deg2pw(i, PWM_BITWIDTH));
+    }
+    delay(800);
+    ledcWrite(1,deg2pw(90, PWM_BITWIDTH));
+
+    Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
+  });
+  Nefry.setIndexLink(&amp;quot;Light_off_2&amp;quot;,&amp;quot;/off2&amp;quot;);
+
+  //////////////////////////////////////////////////////////////
+  Nefry.getWebServer()-&amp;gt;on(&amp;quot;/on3&amp;quot;, [&amp;amp;]() {
+    String content = F(
+      &amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;On&amp;lt;/h1&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+
+    for(int i=90; i&amp;lt;=115; i++){
+      ledcWrite(2,deg2pw(i, PWM_BITWIDTH));
+    }
+    delay(800);
+    ledcWrite(2,deg2pw(90, PWM_BITWIDTH));
+
+    Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
+  });
+  Nefry.setIndexLink(&amp;quot;Light_on_3&amp;quot;,&amp;quot;/on3&amp;quot;);
+
+  Nefry.getWebServer()-&amp;gt;on(&amp;quot;/off3&amp;quot;, [&amp;amp;]() {
+    String content = F(
+      &amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;off&amp;lt;/h1&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+
+    for(int i=90; i&amp;gt;=65; --i){
+      ledcWrite(2,deg2pw(i, PWM_BITWIDTH));
+    }
+    delay(800);
+    ledcWrite(2,deg2pw(90, PWM_BITWIDTH));
+
+    Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
+  });
+  Nefry.setIndexLink(&amp;quot;Light_off_3&amp;quot;,&amp;quot;/off3&amp;quot;);
+
+  //////////////////////////////////////////////////////////////
+  Nefry.getWebServer()-&amp;gt;on(&amp;quot;/on4&amp;quot;, [&amp;amp;]() {
+    String content = F(
+      &amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;On&amp;lt;/h1&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+
+    for(int i=90; i&amp;lt;=125; i++){
+      ledcWrite(3,deg2pw(i, PWM_BITWIDTH));
+    }
+    delay(800);
+    ledcWrite(3,deg2pw(90, PWM_BITWIDTH));
+
+    Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
+  });
+  Nefry.setIndexLink(&amp;quot;Light_on_4&amp;quot;,&amp;quot;/on4&amp;quot;);
+
+  Nefry.getWebServer()-&amp;gt;on(&amp;quot;/off4&amp;quot;, [&amp;amp;]() {
+    String content = F(
+      &amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;off&amp;lt;/h1&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+
+    for(int i=90; i&amp;gt;=65; --i){
+      ledcWrite(3,deg2pw(i, PWM_BITWIDTH));
+    }
+    delay(800);
+    ledcWrite(3,deg2pw(90, PWM_BITWIDTH));
+
+    Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
+  });
+  Nefry.setIndexLink(&amp;quot;Light_off_4&amp;quot;,&amp;quot;/off4&amp;quot;);
+
+}
+
+void loop() {
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/155/5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;これで、Nefry BTのコンソール画面から遠隔でサーボモータを制御できるようになりました。
+また、&lt;strong&gt;Nefry.getWebServer()関数を使うことで、HTMLを書く要領でコンソール画面をカスタマイズ&lt;/strong&gt;することができます。&lt;/p&gt;
+
+&lt;h2 id=&#34;試してみる&#34;&gt;試してみる&lt;/h2&gt;
+
+&lt;div class=&#34;talk-box&#34;&gt;
+  &lt;p class=&#34;speaker&#34;&gt;
+    &lt;img src=&#34;https://dotstud.io/img/members/takudooon/author.png&#34; /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    たくろーどん「ちゃんとくさん、遠隔操作できる仕組みが完成しました！早速試してみてください。」
+  &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;talk-box&#34;&gt;
+  &lt;p class=&#34;speaker&#34;&gt;
+    &lt;img src=&#34;https://dotstud.io/img/members/chantoku/author.png&#34; /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    ちゃんとく「やった！さっそくデスクからポチっとな」
+  &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/155/7.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;div class=&#34;talk-box&#34;&gt;
+  &lt;p class=&#34;speaker&#34;&gt;
+    &lt;img src=&#34;https://dotstud.io/img/members/takudooon/author.png&#34; /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    たくろーどん「おぉ、これで遠隔で電気のON/OFF操作は完璧ですね！」
+  &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;talk-box&#34;&gt;
+  &lt;p class=&#34;speaker&#34;&gt;
+    &lt;img src=&#34;https://dotstud.io/img/members/chantoku/author.png&#34; /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    ちゃんとく「便利になったけど、&lt;b&gt;SSIDの命名センスがすごい&lt;/b&gt;」
+  &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/155/6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;※Nefry BTのSSIDは変更することができる。「&lt;a href=&#34;https://dotstud.io/docs/nefrybt-change-ssid/&#34;&gt;&lt;strong&gt;Nefry BTのSSIDを変更する&lt;/strong&gt;&lt;/a&gt;」を参照。&lt;/p&gt;
+
+&lt;div class=&#34;talk-box&#34;&gt;
+  &lt;p class=&#34;speaker&#34;&gt;
+    &lt;img src=&#34;https://dotstud.io/img/members/takudooon/author.png&#34; /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    たくろーどん「満足してもらえたようで嬉しいです。」
+  &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&#34;終わりに&#34;&gt;終わりに&lt;/h2&gt;
+
+&lt;p&gt;このようにdotstudioではお仕事が急にやってくるので柔軟な対応が求められます。&lt;u&gt;ヘマをすると何がおこるかわからないので、今回は首の皮一枚つながりました。&lt;/u&gt;&lt;/p&gt;
+
+&lt;p&gt;遠隔でデバイスを操作するには、今回のようにNefry BTのコンソール画面を応用する他にも、スマホアプリから操作できるようになる「&lt;a href=&#34;https://www.blynk.cc/&#34;&gt;&lt;strong&gt;Blynk&lt;/strong&gt;&lt;/a&gt;」を使ったり、リアルタイム通信を簡単に実現できる「&lt;a href=&#34;https://mlkcca.com/&#34;&gt;&lt;strong&gt;Milkcocoa&lt;/strong&gt;&lt;/a&gt;」を使ったりと、いろいろな方法があります。&lt;/p&gt;
+
+&lt;p&gt;ぜひみなさんも試してみてはいかがでしょうか？&lt;/p&gt;
+
+&lt;style&gt;
+div.talk-box p {
+  display: table-cell;
+  vertical-align: middle;
+  margin: 0;
+}
+
+.speaker {
+  width: 70px;
+  height: 70px;
+  margin-right: 10px;
+  padding-right: 10px;
+}
+
+.speaker img {
+  border-radius: 50%;
+}
+&lt;/style&gt;
+</description>
+    </item>
     
     <item>
       <title>くるくる回して値を入力！ロータリエンコーダでインプットの幅を広げよう</title>
@@ -3006,234 +3398,6 @@ void loop()
 この光るカセットテープ、ギャル電は&lt;strong&gt;無人島フェスやULTRAJAPANで実際に使ってみたけどやっぱめっちゃモテた&lt;/strong&gt;。&lt;/p&gt;
 
 &lt;p&gt;光るとめっちゃ楽しいから、みんなも作っていろんなところに遊びに行ってみてね☆&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Node.jsとNefry BTで監視システムを作ろう！ for Pepper #iotlt</title>
-      <link>https://dotstud.io/blog/nefrybt-pepper-monitoring-system/</link>
-      <pubDate>Thu, 21 Sep 2017 18:40:38 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/nefrybt-pepper-monitoring-system/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、のびすけです。&lt;/p&gt;
-
-&lt;p&gt;IoTLT vol31で話をしたNefry BT（ESP32系ボード）を使ってネットワークカメラを作ってみたいと思います。&lt;/p&gt;
-
-&lt;p&gt;発表資料もご参照ください。&lt;/p&gt;
-
-&lt;script async class=&#34;speakerdeck-embed&#34; data-id=&#34;a4d673e00b57428ebe22543efda38f6f&#34; data-ratio=&#34;1.33333333333333&#34; src=&#34;//speakerdeck.com/assets/embed.js&#34;&gt;&lt;/script&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;https://speakerdeck.com/n0bisuke/pepperlian-xi-falsejian-shi-sisutemu-number-iotlt&#34;&gt;Pepper連携の監視システム? #iotlt by n0bisuke&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://dotstudio.connpass.com/event/61189/&#34;&gt;Nefry BTのハンズオン&lt;/a&gt;も開催しますので合わせてご覧ください。&lt;/p&gt;
-
-&lt;h2 id=&#34;やりたいこと&#34;&gt;やりたいこと&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;Pepperを監視したい。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;謎ですが、Pepperを監視したいです。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://iotlt.connpass.com/event/65379/&#34;&gt;IoTLT vol31&lt;/a&gt;で話をした内容ですが、Pepperが動いてくれないので、Pepperがいつ動き出しても大丈夫なように&lt;strong&gt;Pepperを見守り&lt;/strong&gt;します。&lt;/p&gt;
-
-&lt;p&gt;巷では「Pepperが見守り」だったり、「Pepperが防犯」みたいな先進的な取り組みがありますが、僕は&lt;strong&gt;あえてPepperを見守ります。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;完成イメージ&#34;&gt;完成イメージ&lt;/h2&gt;
-
-&lt;p&gt;こんな感じで見守ります。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/c3fa7c7bb7dbdd5bba505e7a3de3b54b.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;そして、外からでもブラウザでPepperを見守るストリーミングサービスっぽいものを作ります。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/09e912583e26710a13f0d49f4a866b55.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;使うもの&#34;&gt;使うもの&lt;/h2&gt;
-
-&lt;p&gt;デバイスはNefry BTとGroveカメラの二つです。
-（ちょっとジャンパワイヤ使います。）&lt;/p&gt;
-
-&lt;h3 id=&#34;nefry-bt&#34;&gt;Nefry BT&lt;/h3&gt;
-
-&lt;p&gt;ESP32ベースのArduino互換開発ボードです。
-&lt;a href=&#34;http://sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-55W8&#34;&gt;千石電商さん&lt;/a&gt;でも購入できます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/d43d9926b0e5293b1045890bdd7fbc6c.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;grove-シリアルカメラキット&#34;&gt;Grove シリアルカメラキット&lt;/h3&gt;
-
-&lt;p&gt;Grove対応のカメラです。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://www.switch-science.com/catalog/1626/&#34;&gt;スイッチサイエンスさん&lt;/a&gt;などで購入できます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/99ad24d2ffcfd62c8407d7db7fb753c5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;構成イメージ&#34;&gt;構成イメージ&lt;/h2&gt;
-
-&lt;p&gt;カメラで撮影した画像をNefry BT経由でサーバーにアップロードします。
-アップロードされた画像はNode.jsで立てたサーバーで受け取り、WebSocket(Socket.io)でブラウザに配信します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/bfdd4f3e37898144268c2edd086320dc.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;作り方&#34;&gt;作り方&lt;/h2&gt;
-
-&lt;p&gt;3つに分けて紹介します。&lt;/p&gt;
-
-&lt;p&gt;デバイス（Nefry BT）で撮影した画像をサーバーに送りサーバーからブラウザに配信します。&lt;/p&gt;
-
-&lt;p&gt;データの流れ的に&lt;code&gt;デバイス -&amp;gt; サーバー -&amp;gt; ブラウザ&lt;/code&gt;という流れです。&lt;/p&gt;
-
-&lt;p&gt;全体のコードは&lt;a href=&#34;https://github.com/dotstudio/nefrybt_camera_server&#34;&gt;こちらのGitHubリポジトリ&lt;/a&gt;にあります。&lt;/p&gt;
-
-&lt;h3 id=&#34;デバイス側-arduino&#34;&gt;デバイス側 - Arduino&lt;/h3&gt;
-
-&lt;p&gt;デバイス側は&lt;a href=&#34;http://wiki.seeed.cc/Grove-Serial_Camera_Kit/&#34;&gt;Grove - Serial Camera Kitの公式Wiki&lt;/a&gt;にあるサンプルコードをもとに作っています。&lt;/p&gt;
-
-&lt;p&gt;dotstudioの&lt;a href=&#34;https://dotstud.io/members/ukkz/&#34;&gt;ものづくりアーティストうこ&lt;/a&gt;さんがメインで作ってくれました。&lt;/p&gt;
-
-&lt;p&gt;少し長いので&lt;a href=&#34;https://github.com/dotstudio/nefrybt_camera_server/blob/master/nefry/nefrybt_grove_camera/nefrybt_grove_camera.ino&#34;&gt;GitHubのリポジトリ&lt;/a&gt;を参照しましょう。&lt;/p&gt;
-
-&lt;p&gt;このプログラムをNefry BTに書き込みましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;host&lt;/code&gt;の箇所に画像アップロード先のサーバーを指定します。&lt;/p&gt;
-
-&lt;h4 id=&#34;配線&#34;&gt;配線&lt;/h4&gt;
-
-&lt;p&gt;配線はD3,D4に繋ぎます。&lt;/p&gt;
-
-&lt;p&gt;プログラム的には&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;#define SEREAL_RX 19 //Nefry BT D3
-#define SEREAL_TX 18 //Nefry BT D4
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;の部分が該当します。NefryBTの&lt;a href=&#34;https://drive.google.com/file/d/0B_mvDQF8yaQRLVprUHl4WTFLWVE/view&#34;&gt;仕様書&lt;/a&gt;を見ると分かりますが、ESP32のGPIO 19番がNefryBTのD3にあたり、18番がD4になります。&lt;/p&gt;
-
-&lt;h3 id=&#34;サーバー側-node-js&#34;&gt;サーバー側 - Node.js&lt;/h3&gt;
-
-&lt;p&gt;Node.jsで画像を受信するサーバーを作ります。&lt;/p&gt;
-
-&lt;p&gt;無難にSocket.ioとexpressを使います。 Node.jsのバージョンは8.4です。
-7系以前だと動かない可能性があります。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;npm i --save socket.io express
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;//server.js
-&#39;use strict&#39;;
-
-const fs = require(&#39;fs&#39;);
-const app = require(&#39;express&#39;)();
-const http = require(&#39;http&#39;).Server(app);
-const io = require(&#39;socket.io&#39;)(http);
-const express = require(&#39;express&#39;);
-const PORT = process.env.PORT || 3000;
-app.use(express.static(__dirname));
-
-const {promisify} = require(&#39;util&#39;);
-const writeFileAsync = promisify(fs.writeFile);
-
-io.on(&#39;connection&#39;, (socket) =&amp;gt; console.log(&#39;a user connected&#39;)); //socket.ioのコネクション
-
-app.get(&#39;/&#39;, (req, res) =&amp;gt; res.sendFile(&#39;./index.thml&#39;));
-app.post(&#39;/&#39;, (req, res) =&amp;gt; {
-    let buffers = [];
-    let cur = 0;
-    const len = parseInt(req.headers[&#39;content-length&#39;], 10);
-
-    req.on(&#39;data&#39;, (chunk) =&amp;gt; {
-        buffers.push(chunk);
-        cur += chunk.length;
-        console.log(`Downloading...${(100.0 * cur / len).toFixed(2)}%`);
-    });
-
-    req.on(&#39;end&#39;, async () =&amp;gt; {
-        console.log(`\n[done] Image upload`);
-        req.rawBody = Buffer.concat(buffers);
-        const base64image = req.rawBody.toString(&#39;base64&#39;); //base64変換
-        await writeFileAsync(&#39;./img.jpeg&#39;, req.rawBody, &#39;utf-8&#39;)
-        console.log(`[done] Image Save`);
-        io.sockets.emit(&#39;new image&#39;,base64image); //画像送信
-    });
-
-});
-
-http.listen(PORT, () =&amp;gt; console.log(`listening on *:${PORT}`));
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;通常Expressを使う際に&lt;a href=&#34;https://github.com/expressjs/body-parser&#34;&gt;body-parser&lt;/a&gt;をよく使いますが、今回はあえて使わずに、&lt;code&gt;dataイベント&lt;/code&gt;で&lt;code&gt;chunk&lt;/code&gt;を拾って画像アップロードのプログレス表示を実装しています。&lt;/p&gt;
-
-&lt;p&gt;Nefry BTも含めてこういったマイコンボードはスマートフォンやPCに比べるとCPUパワーが弱いため、画像アップロードに時間がかかることがあります。&lt;/p&gt;
-
-&lt;p&gt;サーバー側でどれくらいのデータ送信が完了しているのかの進捗が分かると安心して開発できます。
-画像を受信したら&lt;code&gt;toString(&#39;base64&#39;)&lt;/code&gt;でBase64の文字列に変換をしています。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;io.sockets.emit()&lt;/code&gt;の箇所では変換した文字列をSocket.io経由でブラウザに配信しています。&lt;/p&gt;
-
-&lt;h3 id=&#34;ブラウザ側-javascript&#34;&gt;ブラウザ側 - JavaScript&lt;/h3&gt;
-
-&lt;p&gt;ブラウザ側では、文字列で送られた画像データを受け取り、Canvasに流し込みます。
-HTML側では&lt;code&gt;id=&amp;quot;myCanvas&amp;quot;&lt;/code&gt;のcanvasを作り、&lt;code&gt;socket.io&lt;/code&gt;の読み込みと以下で作る&lt;code&gt;app.js&lt;/code&gt;の読み込みをします。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;html&amp;gt;
-&amp;lt;head&amp;gt;
-    &amp;lt;meta charset=&amp;quot;utf-8&amp;quot; /&amp;gt;
-    &amp;lt;title&amp;gt;Nefry BT Camera&amp;lt;/title&amp;gt;
-&amp;lt;/head&amp;gt;
-
-&amp;lt;body style=&amp;quot;background-color:#D0D0D0;&amp;quot;&amp;gt;
-    &amp;lt;canvas id=&amp;quot;myCanvas&amp;quot; width=&amp;quot;640&amp;quot; height=&amp;quot;480&amp;quot; style=&amp;quot;background-color:#FFFFFF;&amp;quot;&amp;gt;&amp;lt;/canvas&amp;gt;
-    &amp;lt;script src=&amp;quot;/socket.io/socket.io.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-    &amp;lt;script src=&amp;quot;/public/app.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-&amp;lt;/body&amp;gt;
-&amp;lt;/html&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;draw()&lt;/code&gt;では、canvasに&lt;code&gt;drawImage()&lt;/code&gt;で画像を描画します。
-Base64の場合はsrcが画像パスではなく&lt;code&gt;data:image/jpeg;base64,~~~~~&lt;/code&gt;という指定方法です。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;// /public/app.js
-&#39;use strict&#39;;
-
-const socket = io();
-
-const draw = (imageData = &#39;&#39;) =&amp;gt; {
-    const canvas = document.getElementById(&#39;myCanvas&#39;);
-    const ctx = canvas.getContext(&#39;2d&#39;);
-    const img = new Image();
-    img.src = `data:image/jpeg;base64,${imageData}`; //基本base64の文字列
-    if(imageData === &#39;init&#39;) img.src = `./img.jpeg`; //初期実行時のみサーバーのimg.jpegを取得
-    img.onload = () =&amp;gt; {
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx.drawImage(img, 0, 0, 640, 480);
-    }
-    console.log(`update ${new Date()}`);
-}
-
-socket.on(&#39;new image&#39;, draw); //画像更新時
-draw(&#39;init&#39;); //初期実行
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;socket.on(&#39;new image&#39;, draw)&lt;/code&gt;でサーバーからデータが送られてくるたびに&lt;code&gt;draw()&lt;/code&gt;を実行します。&lt;/p&gt;
-
-&lt;h2 id=&#34;使ってみた感想&#34;&gt;使ってみた感想&lt;/h2&gt;
-
-&lt;p&gt;1週間ほど動かしていますが、問題なくずっと稼働写真を送り続けてくれるので意外と&lt;strong&gt;ラズパイなどで作るシステムより安定しているかも&lt;/strong&gt;しれません。&lt;/p&gt;
-
-&lt;p&gt;あと、発表のオチだったのですが、Pepperの調子が悪く被写体が動かないので成功してるのか分かりにくいです苦笑&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/b2fb0a60f31c12e61e99b51d442dd563.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;Nefry BTとNode.jsを使ってネットワークカメラを作ることができました。&lt;/p&gt;
-
-&lt;p&gt;GroveのカメラとNefry V2を使って過去に&lt;a href=&#34;https://am-our.com/love/110/13945/&#34;&gt;【大島薫×IoT】浮気男を社会的に制裁するマシーンを作ってみた&lt;/a&gt;こともありましたが、ネットワークカメラを作りたい需要はそこそこあると思うので、その際の参考になれば幸いです。&lt;/p&gt;
 </description>
     </item>
     
