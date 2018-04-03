@@ -7,8 +7,145 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Thu, 08 Feb 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 03 Apr 2018 10:00:26 +0900</lastBuildDate>
     <atom:link href="/series/nefrybt/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>自動水やり装置を作ろう！Nefry BTとGroveモジュールでズボラのための電子工作</title>
+      <link>https://dotstud.io/blog/nefrybt-motor-watering-system/</link>
+      <pubDate>Tue, 03 Apr 2018 10:00:26 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nefrybt-motor-watering-system/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、ちゃんとくです！日中は温かくなって、すっかり春めいてきました。&lt;/p&gt;
+
+&lt;p&gt;春といえば花。&lt;/p&gt;
+
+&lt;p&gt;花といえばそう、&lt;strong&gt;自動水やり装置ですね&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;この季節にぴったりの装置を、お手軽開発ボード&lt;a href=&#34;https://dotstud.io/docs/nefrybt&#34;&gt;Nefry BT&lt;/a&gt;を使って自作してみましょう！&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/148/watering.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;まずは簡単に、&lt;u&gt;土が乾いたら水をやる機構&lt;/u&gt;を作っていきましょう。&lt;/p&gt;
+
+&lt;p&gt;なお今回のレシピはNefry BT開発者の&lt;a href=&#34;https://dotstud.io/members/wami&#34;&gt;わみ&lt;/a&gt;さんにご提供いただきました！&lt;/p&gt;
+
+&lt;h2 id=&#34;開発の前に&#34;&gt;開発の前に&lt;/h2&gt;
+
+&lt;h3 id=&#34;環境構築&#34;&gt;環境構築&lt;/h3&gt;
+
+&lt;p&gt;初めてNefry BTを使う方は、ドキュメントを参考に&lt;u&gt;Nefry BTのWi-Fi&lt;/u&gt;と&lt;u&gt;Arduino IDEのセットアップ&lt;/u&gt;を済ませておきましょう。&lt;/p&gt;
+
+&lt;p&gt;⇒ 参考: &lt;a href=&#34;https://dotstud.io/docs/nefrybt-wifi-setup/&#34;&gt;Nefry BTのWi-Fiセットアップ&lt;/a&gt;&lt;br /&gt;
+⇒ 参考: &lt;a href=&#34;https://dotstud.io/docs/nefrybt-arduino-ide-setup/&#34;&gt;Nefry BT向けのArduino IDEセットアップ方法&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;使うもの&#34;&gt;使うもの&lt;/h3&gt;
+
+&lt;p&gt;いろいろな実装方法がありますが、今回は簡単に電気をON/OFFできる「&lt;strong&gt;リレー&lt;/strong&gt;（継電器）」というモジュールを使います。
+&lt;img src=&#34;https://dotstud.io/img/blog/148/parts.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;水をやりたい植物&lt;/li&gt;
+&lt;li&gt;Nefry BT + 専用ディスプレイ（ディスプレイはなくてもOK）&lt;/li&gt;
+&lt;li&gt;Grove 水分センサ（&lt;a href=&#34;https://www.seeedstudio.com/grove-moisture-sensor-p-955.html&#34;&gt;SEEED-101020008&lt;/a&gt;）&lt;/li&gt;
+&lt;li&gt;Grove リレーモジュール（&lt;a href=&#34;http://www.seeedstudio.com/depot/grove-relay-p-769.html&#34;&gt;SEEED-103020005&lt;/a&gt;）&lt;/li&gt;
+&lt;li&gt;DCウォーターポンプ（&lt;a href=&#34;https://amzn.to/2IoPJI7&#34;&gt;こういうの&lt;/a&gt;。型番忘れてしまいましたが千石さんで購入。）&lt;/li&gt;
+&lt;li&gt;ポンプ用シリコンチューブ（&lt;a href=&#34;https://amzn.to/2q29vBE&#34;&gt;こういうの&lt;/a&gt;。熱帯魚屋さんなどに売ってます。）&lt;/li&gt;
+&lt;li&gt;ジャンパワイヤ（オス-オス） 1本&lt;/li&gt;
+&lt;li&gt;水を貯めておく容器（コップなど）&lt;/li&gt;
+&lt;li&gt;はんだごて + はんだ&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;配線&#34;&gt;配線&lt;/h2&gt;
+
+&lt;p&gt;さっそく配線をしていきます！全体はこんな感じ。
+&lt;img src=&#34;https://dotstud.io/img/blog/148/circuits.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/148/handa.png&#34; alt=&#34;&#34; /&gt;
+ポンプへの給電はNefry BTからされるように、ポンプの線をリレーモジュールのGND部分にはんだづけします。モーターの回転方向は関係ないので今回はどちらの線でも大丈夫です。（一般的には赤がプラス、白または黒がマイナスです。）&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/148/relay.png&#34; alt=&#34;&#34; /&gt;
+リレーにはこのように、ジャンパワイヤを挟んで止めることができます。小さいマイナスドライバなどで上部のネジを緩めて挟み、抜けないよう締めます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/148/kairo.png&#34; alt=&#34;&#34; /&gt;
+ジャンパワイヤとポンプの線をそれぞれ挟みます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/148/nipper.png&#34; alt=&#34;&#34; /&gt;
+挟む部分が足りない場合は、ニッパーやワイヤストリッパーでちょんちょんと切れ目を入れ被覆を剥きましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/148/grove.png&#34; alt=&#34;&#34; /&gt;
+Groveコネクタを使ってリレーモジュールはD2に、水分センサはA2（Nefry BT R2の場合はA1）に繋ぎます。（Nefry BT R2はA1の表記がA0になっているミスがあります。注意してください。）&lt;/p&gt;
+
+&lt;p&gt;ジャンパはGPIOの5Vに刺します。&lt;/p&gt;
+
+&lt;h2 id=&#34;プログラム&#34;&gt;プログラム&lt;/h2&gt;
+
+&lt;p&gt;Arduino IDEに下記のプログラムを貼り付け、書き込みます。Nefry BT R2の場合はINの指定をA1にしてください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+#include &amp;lt;NefryDisplay.h&amp;gt;
+
+#define IN A2 // 土壌センサ（R2の場合はA1）
+#define OUT D2 // リレー-&amp;gt;モータ
+#define AVE 5 // センサ値を平均化するための取得回数
+
+int readRaw;
+int aveRate;
+int waterTimer;
+
+void setup() {
+  pinMode(OUT, OUTPUT);
+  digitalWrite(OUT, LOW);
+  delay(10000);
+  NefryDisplay.print(&amp;quot;wait...&amp;quot;);
+}
+
+void loop() {
+  readRaw = 0;
+  for(int i=0;i&amp;lt;AVE;i++){
+    readRaw = analogRead(IN);
+    delay(500);
+  }
+  aveRate = readRaw/AVE;
+  NefryDisplay.print((String)&amp;quot;readAve : &amp;quot;+aveRate/10/4+&amp;quot; %&amp;quot;);
+  NefryDisplay.print((String)&amp;quot;aveRate : &amp;quot;+aveRate);
+  if(aveRate&amp;lt;250){
+    digitalWrite(OUT,HIGH);
+    NefryDisplay.print(&amp;quot;Motor ON&amp;quot;);
+    delay(3000);
+    digitalWrite(OUT,LOW);
+  }else{
+    digitalWrite(OUT,LOW);
+    NefryDisplay.print(&amp;quot;Motor OFF&amp;quot;);
+  }
+  delay(60000);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;動かしてみよう&#34;&gt;動かしてみよう&lt;/h2&gt;
+
+&lt;p&gt;さっそく試してみます！デモ用に下記の動きになっています。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;乾いていない時（水分センサが水に浸っている時）= ポンプから水は出ない&lt;/li&gt;
+&lt;li&gt;乾いている時（水分センサが水から出た時）= ポンプから水が出る&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://gyazo.com/34eb79467ebdd096591ecc893f1e5a5a.gif&#34; alt=&#34;&#34; /&gt;
+ポンプが動きました！少し見づらいですが、ディスプレイの表示もOFF-&amp;gt;ONと切り替わっています。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;ポンプを使った電子工作は一見難しいですが、Groveのリレーモジュールを使ってわりと簡単に作ることができました！&lt;/p&gt;
+
+&lt;p&gt;ただこのままでは&lt;u&gt;給水用の水がなくなっても気づかなかったり、コップの水をこぼしそうになったり&lt;/u&gt;、少し使いづらいですよね……。&lt;/p&gt;
+
+&lt;p&gt;次回は外装制作とWeb通知の連携をして&lt;strong&gt;より放置しやすい自動水やり装置にブラッシュアップ&lt;/strong&gt;してみます！&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>JavaScriptで開発できる！Mongoose OSでNefry BTをLチカしよう</title>

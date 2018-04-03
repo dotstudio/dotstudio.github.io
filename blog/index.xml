@@ -7,8 +7,145 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Wed, 28 Mar 2018 14:00:26 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 03 Apr 2018 10:00:26 +0900</lastBuildDate>
     <atom:link href="/blog/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>自動水やり装置を作ろう！Nefry BTとGroveモジュールでズボラのための電子工作</title>
+      <link>https://dotstud.io/blog/nefrybt-motor-watering-system/</link>
+      <pubDate>Tue, 03 Apr 2018 10:00:26 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nefrybt-motor-watering-system/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、ちゃんとくです！日中は温かくなって、すっかり春めいてきました。&lt;/p&gt;
+
+&lt;p&gt;春といえば花。&lt;/p&gt;
+
+&lt;p&gt;花といえばそう、&lt;strong&gt;自動水やり装置ですね&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;この季節にぴったりの装置を、お手軽開発ボード&lt;a href=&#34;https://dotstud.io/docs/nefrybt&#34;&gt;Nefry BT&lt;/a&gt;を使って自作してみましょう！&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/148/watering.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;まずは簡単に、&lt;u&gt;土が乾いたら水をやる機構&lt;/u&gt;を作っていきましょう。&lt;/p&gt;
+
+&lt;p&gt;なお今回のレシピはNefry BT開発者の&lt;a href=&#34;https://dotstud.io/members/wami&#34;&gt;わみ&lt;/a&gt;さんにご提供いただきました！&lt;/p&gt;
+
+&lt;h2 id=&#34;開発の前に&#34;&gt;開発の前に&lt;/h2&gt;
+
+&lt;h3 id=&#34;環境構築&#34;&gt;環境構築&lt;/h3&gt;
+
+&lt;p&gt;初めてNefry BTを使う方は、ドキュメントを参考に&lt;u&gt;Nefry BTのWi-Fi&lt;/u&gt;と&lt;u&gt;Arduino IDEのセットアップ&lt;/u&gt;を済ませておきましょう。&lt;/p&gt;
+
+&lt;p&gt;⇒ 参考: &lt;a href=&#34;https://dotstud.io/docs/nefrybt-wifi-setup/&#34;&gt;Nefry BTのWi-Fiセットアップ&lt;/a&gt;&lt;br /&gt;
+⇒ 参考: &lt;a href=&#34;https://dotstud.io/docs/nefrybt-arduino-ide-setup/&#34;&gt;Nefry BT向けのArduino IDEセットアップ方法&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;使うもの&#34;&gt;使うもの&lt;/h3&gt;
+
+&lt;p&gt;いろいろな実装方法がありますが、今回は簡単に電気をON/OFFできる「&lt;strong&gt;リレー&lt;/strong&gt;（継電器）」というモジュールを使います。
+&lt;img src=&#34;https://dotstud.io/img/blog/148/parts.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;水をやりたい植物&lt;/li&gt;
+&lt;li&gt;Nefry BT + 専用ディスプレイ（ディスプレイはなくてもOK）&lt;/li&gt;
+&lt;li&gt;Grove 水分センサ（&lt;a href=&#34;https://www.seeedstudio.com/grove-moisture-sensor-p-955.html&#34;&gt;SEEED-101020008&lt;/a&gt;）&lt;/li&gt;
+&lt;li&gt;Grove リレーモジュール（&lt;a href=&#34;http://www.seeedstudio.com/depot/grove-relay-p-769.html&#34;&gt;SEEED-103020005&lt;/a&gt;）&lt;/li&gt;
+&lt;li&gt;DCウォーターポンプ（&lt;a href=&#34;https://amzn.to/2IoPJI7&#34;&gt;こういうの&lt;/a&gt;。型番忘れてしまいましたが千石さんで購入。）&lt;/li&gt;
+&lt;li&gt;ポンプ用シリコンチューブ（&lt;a href=&#34;https://amzn.to/2q29vBE&#34;&gt;こういうの&lt;/a&gt;。熱帯魚屋さんなどに売ってます。）&lt;/li&gt;
+&lt;li&gt;ジャンパワイヤ（オス-オス） 1本&lt;/li&gt;
+&lt;li&gt;水を貯めておく容器（コップなど）&lt;/li&gt;
+&lt;li&gt;はんだごて + はんだ&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;配線&#34;&gt;配線&lt;/h2&gt;
+
+&lt;p&gt;さっそく配線をしていきます！全体はこんな感じ。
+&lt;img src=&#34;https://dotstud.io/img/blog/148/circuits.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/148/handa.png&#34; alt=&#34;&#34; /&gt;
+ポンプへの給電はNefry BTからされるように、ポンプの線をリレーモジュールのGND部分にはんだづけします。モーターの回転方向は関係ないので今回はどちらの線でも大丈夫です。（一般的には赤がプラス、白または黒がマイナスです。）&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/148/relay.png&#34; alt=&#34;&#34; /&gt;
+リレーにはこのように、ジャンパワイヤを挟んで止めることができます。小さいマイナスドライバなどで上部のネジを緩めて挟み、抜けないよう締めます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/148/kairo.png&#34; alt=&#34;&#34; /&gt;
+ジャンパワイヤとポンプの線をそれぞれ挟みます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/148/nipper.png&#34; alt=&#34;&#34; /&gt;
+挟む部分が足りない場合は、ニッパーやワイヤストリッパーでちょんちょんと切れ目を入れ被覆を剥きましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/148/grove.png&#34; alt=&#34;&#34; /&gt;
+Groveコネクタを使ってリレーモジュールはD2に、水分センサはA2（Nefry BT R2の場合はA1）に繋ぎます。（Nefry BT R2はA1の表記がA0になっているミスがあります。注意してください。）&lt;/p&gt;
+
+&lt;p&gt;ジャンパはGPIOの5Vに刺します。&lt;/p&gt;
+
+&lt;h2 id=&#34;プログラム&#34;&gt;プログラム&lt;/h2&gt;
+
+&lt;p&gt;Arduino IDEに下記のプログラムを貼り付け、書き込みます。Nefry BT R2の場合はINの指定をA1にしてください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+#include &amp;lt;NefryDisplay.h&amp;gt;
+
+#define IN A2 // 土壌センサ（R2の場合はA1）
+#define OUT D2 // リレー-&amp;gt;モータ
+#define AVE 5 // センサ値を平均化するための取得回数
+
+int readRaw;
+int aveRate;
+int waterTimer;
+
+void setup() {
+  pinMode(OUT, OUTPUT);
+  digitalWrite(OUT, LOW);
+  delay(10000);
+  NefryDisplay.print(&amp;quot;wait...&amp;quot;);
+}
+
+void loop() {
+  readRaw = 0;
+  for(int i=0;i&amp;lt;AVE;i++){
+    readRaw = analogRead(IN);
+    delay(500);
+  }
+  aveRate = readRaw/AVE;
+  NefryDisplay.print((String)&amp;quot;readAve : &amp;quot;+aveRate/10/4+&amp;quot; %&amp;quot;);
+  NefryDisplay.print((String)&amp;quot;aveRate : &amp;quot;+aveRate);
+  if(aveRate&amp;lt;250){
+    digitalWrite(OUT,HIGH);
+    NefryDisplay.print(&amp;quot;Motor ON&amp;quot;);
+    delay(3000);
+    digitalWrite(OUT,LOW);
+  }else{
+    digitalWrite(OUT,LOW);
+    NefryDisplay.print(&amp;quot;Motor OFF&amp;quot;);
+  }
+  delay(60000);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;動かしてみよう&#34;&gt;動かしてみよう&lt;/h2&gt;
+
+&lt;p&gt;さっそく試してみます！デモ用に下記の動きになっています。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;乾いていない時（水分センサが水に浸っている時）= ポンプから水は出ない&lt;/li&gt;
+&lt;li&gt;乾いている時（水分センサが水から出た時）= ポンプから水が出る&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://gyazo.com/34eb79467ebdd096591ecc893f1e5a5a.gif&#34; alt=&#34;&#34; /&gt;
+ポンプが動きました！少し見づらいですが、ディスプレイの表示もOFF-&amp;gt;ONと切り替わっています。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;ポンプを使った電子工作は一見難しいですが、Groveのリレーモジュールを使ってわりと簡単に作ることができました！&lt;/p&gt;
+
+&lt;p&gt;ただこのままでは&lt;u&gt;給水用の水がなくなっても気づかなかったり、コップの水をこぼしそうになったり&lt;/u&gt;、少し使いづらいですよね……。&lt;/p&gt;
+
+&lt;p&gt;次回は外装制作とWeb通知の連携をして&lt;strong&gt;より放置しやすい自動水やり装置にブラッシュアップ&lt;/strong&gt;してみます！&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>オフィス改善！物理スイッチの照明を遠隔操作でON／OFFしよう！</title>
@@ -3309,199 +3446,6 @@ UVプリンターでイラストや写真を転写
 アクリルとパーツを選ぶだけで、ケースの雰囲気はずいぶんと変わります！枠線さえ作ればばあとはすんなりと進めますので、ぜひぜひ試してみてください。&lt;/p&gt;
 
 &lt;p&gt;日替わりで変えられるくらいケースを作りすぎてしまいましたが、&lt;strong&gt;どこに連れて行ってもかわいいと言ってもらえる&lt;/strong&gt;ので作りがいがありました。何より愛着がわきますね〜！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Nefry BT（ESP32）でMQTTを使ってみよう Subscribe編</title>
-      <link>https://dotstud.io/blog/nefry-bt-connect-mqtt/</link>
-      <pubDate>Sat, 06 Jan 2018 14:28:04 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/nefry-bt-connect-mqtt/</guid>
-      
-      <description>
-
-&lt;p&gt;あけましておめでとうございます。 代表ののびすけ（&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;@n0bisuke&lt;/a&gt;）です。&lt;/p&gt;
-
-&lt;p&gt;Nefry BTを使ってMQTTを利用する方法を紹介します。&lt;/p&gt;
-
-&lt;p&gt;今回はMQTTでNefry BTに情報を送信してみます。&lt;/p&gt;
-
-&lt;p&gt;ほぼESP32のコードなので、ESP32系の他のボードを利用している人の参考にもなると思います。&lt;/p&gt;
-
-&lt;h2 id=&#34;mqttの登場人物&#34;&gt;MQTTの登場人物&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Broker - 通信のサーバー&lt;/li&gt;
-&lt;li&gt;Publisher - 情報の送信側&lt;/li&gt;
-&lt;li&gt;Subscriber - 情報の受信側&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;WebSocketではサーバーとクライアントだけで双方向通信をしますが、MQTTではサーバーはBrocker、クライアント側が送信者のPublisherと受信者のSubscriberに分かれます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/141/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;今回はNefry BTをSubscriber（受信者）にして、外部からNefry BTに情報を送ってみたいと思います。&lt;/p&gt;
-
-&lt;h2 id=&#34;環境&#34;&gt;環境&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Arduino IDE 1.8.5&lt;/li&gt;
-&lt;li&gt;Nefry ライブラリ 1.1.4&lt;/li&gt;
-&lt;li&gt;Nefry BT R2&lt;/li&gt;
-&lt;li&gt;macOS High Sierra&lt;/li&gt;
-&lt;li&gt;Node.js v9.2.0&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;subscriberの作成&#34;&gt;Subscriberの作成&lt;/h2&gt;
-
-&lt;h3 id=&#34;arduino向けのmqttライブラリをインストール&#34;&gt;Arduino向けのMQTTライブラリをインストール&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://github.com/knolleary/pubsubclient&#34;&gt;knolleary/pubsubclient&lt;/a&gt;を利用します。&lt;/p&gt;
-
-&lt;p&gt;zipファイルをダウンロードしたら、 &lt;code&gt;スケッチ &amp;gt; ライブラリのインポート &amp;gt; .ZIP形式のライブラリをインストール&lt;/code&gt;からArduino IDEにライブラリをインストールします。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/141/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;nefry-btのスケッチ&#34;&gt;Nefry BTのスケッチ&lt;/h3&gt;
-
-&lt;p&gt;ブローカーは&lt;a href=&#34;https://mosquitto.org/&#34;&gt;Mosquitto&lt;/a&gt;を利用します。&lt;/p&gt;
-
-&lt;p&gt;&amp;ldquo;mosquitto.org&amp;rdquo;の&amp;rdquo;n0bisuke&amp;rdquo;という名前のトピックに情報が送信されたら受信します。&lt;/p&gt;
-
-&lt;p&gt;MQTTはデフォルト1883ポートを利用するので、1883ポートを指定します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
-#include &amp;lt;PubSubClient.h&amp;gt;
-
-WiFiClient httpsClient;
-PubSubClient mqttClient(httpsClient);
-
-#define TOPIC &amp;quot;n0bisuke&amp;quot;
-#define QOS 0
-#define URL &amp;quot;mosquitto.org&amp;quot;
-#define PORT 1883
-
-void setup() {
-  mqttClient.setServer(URL, PORT);
-  mqttClient.setCallback(callback);
-}
-
-void loop() {
-  if(!mqttClient.connected()) {
-    if (mqttClient.connect(TOPIC)) {
-      Serial.println(&amp;quot;Connected.&amp;quot;);    
-      mqttClient.subscribe(TOPIC, QOS);
-      Serial.println(&amp;quot;Subscribed.&amp;quot;);
-    }
-    else {
-      errorReport();
-    }
-  }
-
-  mqttClient.loop();
-}
-
-void callback(char* topic, byte* payload, unsigned int length) {
-  Serial.print(&amp;quot;Message arrived [&amp;quot;);
-  Serial.print(topic);
-  Serial.print(&amp;quot;] &amp;quot;);
-  for (int i = 0; i &amp;lt; length; i++) {
-    Serial.print((char)payload[i]);
-  }
-  Serial.println();
-}
-
-void errorReport(){
-  Serial.print(&amp;quot;Failed. Error state = &amp;quot;);
-
-  switch (mqttClient.state()) {
-    case MQTT_CONNECT_UNAUTHORIZED:
-      Serial.println(&amp;quot;MQTT_CONNECT_UNAUTHORIZED&amp;quot;);
-      break;
-    case MQTT_CONNECT_BAD_CREDENTIALS:
-      Serial.println(&amp;quot;MQTT_CONNECT_BAD_CREDENTIALS&amp;quot;);
-      break;
-    case MQTT_CONNECT_UNAVAILABLE:
-      Serial.println(&amp;quot;MQTT_CONNECT_UNAVAILABLE&amp;quot;);
-      break;
-    case MQTT_CONNECT_BAD_CLIENT_ID:
-      Serial.println(&amp;quot;MQTT_CONNECT_BAD_CLIENT_ID&amp;quot;);
-      break;
-    case MQTT_CONNECT_BAD_PROTOCOL:
-      Serial.println(&amp;quot;MQTT_CONNECT_BAD_PROTOCOL&amp;quot;);
-      break;
-    case MQTT_CONNECTED:
-      Serial.println(&amp;quot;MQTT_CONNECTED&amp;quot;);
-      break;
-    case MQTT_DISCONNECTED:
-      Serial.println(&amp;quot;MQTT_DISCONNECTED&amp;quot;);
-      break;
-    case MQTT_CONNECT_FAILED:
-      Serial.println(&amp;quot;MQTT_CONNECT_FAILED&amp;quot;);
-      break;
-    case MQTT_CONNECTION_LOST:
-      Serial.println(&amp;quot;MQTT_CONNECTION_LOST&amp;quot;);
-      break;
-    case MQTT_CONNECTION_TIMEOUT:
-      Serial.println(&amp;quot;MQTT_CONNECTION_TIMEOUT&amp;quot;);
-      break;
-  }
-
-  delay(5000); // Wait 5 seconds before retrying
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;publisherの作成&#34;&gt;Publisherの作成&lt;/h2&gt;
-
-&lt;p&gt;情報の送信側であるPublisherは手元のMac Book上のNode.jsで作成しました。&lt;/p&gt;
-
-&lt;p&gt;Node.jsでMQTTを利用する場合は&lt;a href=&#34;https://www.npmjs.com/package/mqtt&#34;&gt;mqtt.js&lt;/a&gt;を利用するのが手頃です。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;mkdir mqtt-test
-cd mqtt-test
-npm init -y
-npm i --save mqtt
-touch publisher.js
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;//publisher.js
-&#39;use strict&#39;;
-
-const mqtt = require(&#39;mqtt&#39;);
-const client = mqtt.connect(&#39;mqtt://mosquitto.org&#39;);
-
-client.on(&#39;connect&#39;, () =&amp;gt; console.log(&#39;publisher.connected.&#39;));
-
-setInterval(() =&amp;gt; {
-    const message = Date.now().toString();
-    client.publish(&#39;n0bisuke&#39;, message);
-    console.log(&#39;publisher.publish:&#39;, message);
-}, 1000);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;これで実行すると、以下のように時間の情報をパブリッシュ（送信）し始めます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;node publisher.js
-
-publisher.publish: 1515219086876
-publisher.publish: 1515219087879
-publisher.publish: 1515219088880
-publisher.publish: 1515219089882
-・
-・
-・
-(省略)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/141/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;所感&#34;&gt;所感&lt;/h2&gt;
-
-&lt;p&gt;思ってたより簡単に実装出来ました。
-これを参考にNefry BTとWebサービスの連携などに活用していきましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://www.mosca.io/&#34;&gt;Mosca&lt;/a&gt;などを使うとBrokerも自分で作成することが出来るので試してみると良いかもしれません。&lt;/p&gt;
 </description>
     </item>
     
