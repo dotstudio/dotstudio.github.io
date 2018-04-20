@@ -7,8 +7,214 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Mon, 09 Apr 2018 14:00:26 +0900</lastBuildDate>
+    <lastBuildDate>Fri, 20 Apr 2018 14:00:26 +0900</lastBuildDate>
     <atom:link href="/blog/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>NodeSchoolでNode.jsの学習を始めよう！インストール手順から基本操作までステップ別解説</title>
+      <link>https://dotstud.io/blog/node-school-before-learn/</link>
+      <pubDate>Fri, 20 Apr 2018 14:00:26 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/node-school-before-learn/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、ちゃんとくです。&lt;strong&gt;みなさんNode.jsしてますかー！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;dotstudioでは何度も紹介していますが、Node.jsは&lt;u&gt;超超ざっくり言うとサーバサイドで動くJavaScript&lt;/u&gt;ですね。&lt;/p&gt;
+
+&lt;p&gt;これからNode.jsを学びたい！という人も多いと思うのですが、初めてNode.jsを学びたいときにピッタリな「&lt;strong&gt;NodeSchool&lt;/strong&gt;」をご存知でしょうか。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://nodeschool.io/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/nodeschool.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;
+NodeSchoolは&lt;strong&gt;JavaScriptに関するいろいろな授業を集めた学校のようなもの&lt;/strong&gt;で、コードを書いて問題を解いていくことで学習を進められます。&lt;/p&gt;
+
+&lt;p&gt;世界各国のさまざまな言語に対応していて、日本語に対応した「&lt;a href=&#34;https://nodeschool.io/tokyo/&#34;&gt;NodeSChol Tokyo&lt;/a&gt;」のページもあります。&lt;/p&gt;
+
+&lt;p&gt;みんなで集まって授業を進めるハンズオンイベントも盛んで、ちょうど&lt;u&gt;5月21日にNodeSchool Tokyoが開催&lt;/u&gt;されるようです！
+&lt;a href=&#34;https://nodejs.connpass.com/event/82742/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/link.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;今回は、そもそも「コードを書くのもコマンドラインも初めて」という人向けに、&lt;strong&gt;NodeSchoolを始めるまで&lt;/strong&gt;を紹介してみたいと思います。&lt;/p&gt;
+
+&lt;p&gt;CLIの操作方法、Node.jsの環境構築から解説していきますが、「コマンドライン使えるよ、もうNode.js入ってるよ」という人は「&lt;a href=&#34;https://dotstud.io/blog/node-school-before-learn/#nodeschool%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB&#34;&gt;NodeSchoolのインストール&lt;/a&gt;」の章から進めましょう！&lt;/p&gt;
+
+&lt;p&gt;それではやって行こう！&lt;/p&gt;
+
+&lt;h2 id=&#34;nodeschoolを始める前に&#34;&gt;NodeSchoolを始める前に&lt;/h2&gt;
+
+&lt;h3 id=&#34;コマンドラインインタフェース-cli-の操作&#34;&gt;コマンドラインインタフェース（CLI）の操作&lt;/h3&gt;
+
+&lt;p&gt;NodeSchoolは、自身のPCのコマンドライン上（コマンドラインインタフェース、CLI）で進めるツールです。学習を始めるにあたって、基本の操作を覚えておきましょう！&lt;/p&gt;
+
+&lt;p&gt;（↓長くなっちゃったので別記事にしました）
+&lt;a href=&#34;https://dotstud.io/blog/how-to-use-cli&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/link3.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;node-jsのインストール&#34;&gt;Node.jsのインストール&lt;/h3&gt;
+
+&lt;p&gt;NodeSchoolはNode.jsで動きます。NodeSchoolを動かすために、自身のPCにNode.js環境を準備をします。&lt;/p&gt;
+
+&lt;p&gt;まずNode.jsがインストールされているかは、下記コマンドで確認してみてください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ node -v
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;インストールされている場合はインストールされているバージョン、されていない場合は &lt;code&gt;command not found&lt;/code&gt; といったエラーが出ます。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;font size=2&gt;※2018年4月20日時点の最新版はv9.11.1、安定板はv8.11.1です。新しめのバージョンを使うのがオススメです（v6、v7辺りで大きめの変更がありました）。&lt;/font&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://nodejs.org/ja/&#34;&gt;Node.js公式サイト&lt;/a&gt;からインストーラを使ってインストールしてもよいのですが、Node.jsはバージョンアップが多いので、&lt;u&gt;Node.jsのバージョンを管理できるツールと一緒にインストールするのがオススメ&lt;/u&gt;です。&lt;/p&gt;
+
+&lt;p&gt;バージョン管理ツールには「nodebrew」や「nvm」、Windowsの方は「nodist」などがあります。&lt;/p&gt;
+
+&lt;p&gt;「nodebrew」を使ったインストール方法をまとめたので、こちらを参考にインストールしてみてください！&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/nodejs-install-use-nodebrew/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/link2.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;nodeschoolのインストール&#34;&gt;NodeSchoolのインストール&lt;/h2&gt;
+
+&lt;p&gt;さて、Node.js環境の準備ができたら、&lt;strong&gt;いよいよNodeSchoolをインストール&lt;/strong&gt;しましょう。&lt;/p&gt;
+
+&lt;p&gt;NodeSchoolは「npm」というパッケージ管理ツールで配布されているので、npmコマンドでインストールします（Node.jsと一緒にインストールされるのでとりあえず深く考えなくてOK）。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://nodeschool.io/ja/index.html&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/class.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;
+NodeSchoolには上記のようにいくつかの授業があるので、今回は「&lt;strong&gt;learnyounode&lt;/strong&gt;」という授業を入れてみます。下記コマンドを実行しましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ npm install -g learnyounode
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;問題なくインストールされたか確認してみます。下記コマンドを実行しましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ learnyounode
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/learnyounode.png&#34; alt=&#34;&#34; /&gt;
+こんな画面が開いたでしょうか？&lt;/p&gt;
+
+&lt;p&gt;これがNodeSchoolの実行画面で、ここから学習を進めていきます。&lt;strong&gt;インストールお疲れ様でした！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;nodeschoolの基本操作&#34;&gt;NodeSchoolの基本操作&lt;/h2&gt;
+
+&lt;p&gt;まず、「&lt;strong&gt;とりあえずこの画面閉じたい！&lt;/strong&gt;」というときは&lt;code&gt;control+c&lt;/code&gt;で終了できます。&lt;/p&gt;
+
+&lt;p&gt;基本は十字キーの↑↓で移動し、エンターで選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/language.png&#34; alt=&#34;&#34; /&gt;
+「英語表示になっちゃってるよ！」という人は、まずは言語設定を日本語にしましょう。矢印キーで「CHOOSE LANGUAGE」に移動し、エンターで選択します。&lt;/p&gt;
+
+&lt;h2 id=&#34;問題を解く方法&#34;&gt;問題を解く方法&lt;/h2&gt;
+
+&lt;h3 id=&#34;問題画面の見方&#34;&gt;問題画面の見方&lt;/h3&gt;
+
+&lt;p&gt;さてNodeSchoolを始める準備ができましたが、問題を解く方法も少し癖があります。試しに1問解いてみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/helloworld.png&#34; alt=&#34;&#34; /&gt;
+十字キーで移動し、「こんにちは世界」を選んでエンターします（いわゆる&amp;rdquo;Hello, world&amp;rdquo;ですが、日本語訳するとやや不自然ですね）。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/question.png&#34; alt=&#34;&#34; /&gt;
+するとこんな文章が表示されます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/detail.png&#34; alt=&#34;&#34; /&gt;
+大きくわけると、3つの要素で構成されています。&lt;/p&gt;
+
+&lt;p&gt;日本語なので、落ち着いて問題とヒントを読み進めましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;ヒントを読んで進める&#34;&gt;ヒントを読んで進める&lt;/h3&gt;
+
+&lt;p&gt;NodeSchoolでは、自分でNode.js実行ファイルを作り、実際に実行させて答え合わせをして進めていきます。&lt;/p&gt;
+
+&lt;p&gt;この問題は、&lt;u&gt;コンソール（ここではターミナル上）に「こんにちは世界」と表示するNode.jsスクリプトを実行してください&lt;/u&gt;という意味です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/hint1.png&#34; alt=&#34;&#34; /&gt;
+ヒントをみると、「&lt;code&gt;.js&lt;/code&gt;拡張子のファイルを作って、&lt;code&gt;$ node xxx.js&lt;/code&gt; を実行すればOKです」と書いてありますね。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/hint2.png&#34; alt=&#34;&#34; /&gt;
+そして 「&lt;code&gt;console.log(&amp;quot;text&amp;quot;)&lt;/code&gt; と記述するとコンソールに出力できます」とあります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/hint3.png&#34; alt=&#34;&#34; /&gt;
+答え合わせ方法は「&lt;code&gt;$ learnyounode verify xxx.js&lt;/code&gt;でテストする」とあります。&lt;/p&gt;
+
+&lt;p&gt;その通りにやってみましょう！&lt;/p&gt;
+
+&lt;h3 id=&#34;node-js実行ファイルを作る&#34;&gt;Node.js実行ファイルを作る&lt;/h3&gt;
+
+&lt;p&gt;問題を解くとき、この問題文＆ヒントを見ながら進めたいですよね。&lt;/p&gt;
+
+&lt;p&gt;そこで操作画面をもう一つ開きます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/terminal.png&#34; alt=&#34;&#34; /&gt;
+ツールバーの「シェル」から「新規ウィンドウ」または「新規タブ」で開くことができます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/iterm.png&#34; alt=&#34;&#34; /&gt;
+前述の記事でオススメしたiTermを使っている場合は、画面分割機能がオススメです。ツールバーの「Shell」から「Split&amp;hellip;」を選ぶか、「⌘+D」で横に分割、「⌘+Shift+D」で縦に分割できます（使用頻度が高いので覚えておくのがオススメです）。&lt;/p&gt;
+
+&lt;p&gt;問題を解くファイルは、あとで見つけやすいようにひとところにまとめておきましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/work_dir.png&#34; alt=&#34;&#34; /&gt;
+ちゃんとくはこんな感じで、ホームディレクトリ（開いた場所/cdを実行した移動先）の下に &lt;code&gt;/workspace/nodeschool/learnyounode/&lt;/code&gt;というディレクトリを作り、その下に実行ファイルを作っています。&lt;/p&gt;
+
+&lt;p&gt;好みはそれぞれなので、自分がわかりやすい場所であればなんでもOKです。&lt;/p&gt;
+
+&lt;p&gt;それではファイルを作成して、実行スクリプトを書きましょう！&lt;code&gt;touch&lt;/code&gt;コマンドで新規ファイルを作成できます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ touch 1.js
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ファイル名も、自分がわかればOKです。どの問題かわかるように番号や問題タイトルなどをつけておくのがオススメです。&lt;/p&gt;
+
+&lt;h3 id=&#34;エディタでスクリプトを書く&#34;&gt;エディタでスクリプトを書く&lt;/h3&gt;
+
+&lt;p&gt;それでは「こんにちは世界」用のファイルにスクリプトを書いていきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;vi&lt;/code&gt;コマンドなどでターミナル上で開いてもよいのですが、プログラミング向けエディタ（IDE）を使うのがオススメです。無料エディタでは&lt;a href=&#34;https://www.microsoft.com/ja-jp/dev/products/code-vs.aspx&#34;&gt;Visual Studio Code&lt;/a&gt;や、軽量な&lt;a href=&#34;https://atom.io/&#34;&gt;Atomエディタ&lt;/a&gt;などが流行りです（ちゃんとくはAtom）。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;$ open ./&lt;/code&gt;というコマンドでファイルの場所を開いてみましょう。（&lt;code&gt;./&lt;/code&gt;は今いるディレクトリを表しています。）&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/open.png&#34; alt=&#34;&#34; /&gt;
+ファイルの場所がファインダーで表示されました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/select_editor.png&#34; alt=&#34;&#34; /&gt;
+編集したいファイルを右クリックすると開くアプリを選択できるので、エディタで開きましょう。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;font size=&#34;&#34;&gt;※この「CLIからエディタでファイルを開く操作」は、エディタをカスタマイズしてコマンドで実行することもできます。Atomの場合は&lt;code&gt;$ atom ./&lt;/code&gt;など（後日記事にしてみたいと思います）。&lt;/font&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/example.png&#34; alt=&#34;&#34; /&gt;
+ヒントを参考に、&lt;code&gt;console.log(&amp;quot;text&amp;quot;)&lt;/code&gt;コマンドを書いてみます。エディタで「⌘+s」などで保存して、試しに実行してみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;$ node xxx.js&lt;/code&gt;でファイルを実行します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/script.png&#34; alt=&#34;&#34; /&gt;
+上記のような実行結果になったでしょうか？&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;console.log()&lt;/code&gt;というコマンドに&lt;code&gt;&amp;quot;text&amp;quot;&lt;/code&gt;を渡したら、「text」と表示されました。&lt;/p&gt;
+
+&lt;p&gt;「こんにちは世界」と表示するには……もう分かったでしょうか？（ちょっと意地悪ですが、頑張って解いてみてください！）&lt;/p&gt;
+
+&lt;h3 id=&#34;答え合わせ&#34;&gt;答え合わせ&lt;/h3&gt;
+
+&lt;p&gt;さて、これだ！というスクリプトが書けたら答え合わせをします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/verify.png&#34; alt=&#34;&#34; /&gt;
+ヒントのとおり、&lt;code&gt;$ learnyounode verify xxx.js&lt;/code&gt;を実行します（learnyounodeとかファイル名とか記述するの長いなあってときは、途中まで書いてTabを押すといいことがあります）。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;font size=2&gt;※CLIに慣れてくると雰囲気がわかりますが、&lt;code&gt;$ モジュール名 命令 引数&lt;/code&gt;という風にコマンドを実行しています。引数とはプログラムに渡すモノです。&lt;/font&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/verify_detail.png&#34; alt=&#34;&#34; /&gt;
+答え合わせの結果画面です。自分の書いたスクリプトの実行結果と、想定回答（求められている答え）が表示されます。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;無事に正解していると褒められます。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;回答例も表示されるので、確認してみましょう。&lt;/p&gt;
+
+&lt;p&gt;無事に解けたら、また「&lt;a href=&#34;https://dotstud.io/blog/node-school-before-learn/#%E5%95%8F%E9%A1%8C%E3%82%92%E8%A7%A3%E3%81%8F%E6%96%B9%E6%B3%95&#34;&gt;問題を解く方法&lt;/a&gt;」のように&lt;code&gt;$ learnyounode&lt;/code&gt; を実行して問題ファイルを開き、進めていきましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;NodeSchoolデビューお疲れ様でした！&lt;/strong&gt;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>【Mac向け】「黒い画面」の苦手意識を克服しよう！コマンドラインインタフェースの基本操作</title>
@@ -1886,9 +2092,10 @@ void loop() {
 
 &lt;p&gt;これで、Aオス端子が電源側、切断したほうが電子回路側となります。&lt;/p&gt;
 
-&lt;p&gt;さて、次回はこの1対の電源線を使って、電池で動作するおもちゃをUSB電源駆動に改造してみます。&lt;/p&gt;
+&lt;p&gt;さて、次回は電池駆動の機器をUSB駆動に改造するために、電源と機器の関係について考えてみたいと思います。&lt;/p&gt;
 
-&lt;p&gt;お楽しみに。&lt;/p&gt;
+&lt;p&gt;お楽しみに。
+&lt;a href=&#34;https://dotstud.io/blog/usb-power-supply-making2&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/151/link1.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 </description>
     </item>
     
@@ -2999,358 +3206,6 @@ GPIO.set_button_handler(4, GPIO.PULL_UP, GPIO.INT_EDGE_NEG, 200, function() {
 &lt;/center&gt;&lt;/p&gt;
 
 &lt;p&gt;性別、立場などマイノリティに関係なく、テクノロジーでみんながステキな暮らしを実現できる世界もそう遠くないのでは、と思わされるイベントでした。IoT女子会の最新情報は&lt;a href=&#34;https://www.facebook.com/groups/184023265513094/&#34;&gt;Facebookグループ&lt;/a&gt;をウォッチ！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Nefry BT（ESP32）からBLEでNode.jsにデータを送ってみよう</title>
-      <link>https://dotstud.io/blog/nefrybt-ble-bluetooth-peripheral/</link>
-      <pubDate>Fri, 12 Jan 2018 23:58:16 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/nefrybt-ble-bluetooth-peripheral/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、代表ののびすけ（&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;@n0bisuke&lt;/a&gt;）です。Nefry BTを使ってBluetooth / BLEを利用する方法を紹介します。&lt;/p&gt;
-
-&lt;p&gt;ほぼESP32のコードなので、検証してませんが他のESP32系のボードでも動作すると思います。&lt;/p&gt;
-
-&lt;h2 id=&#34;bleについて&#34;&gt;BLEについて&lt;/h2&gt;
-
-&lt;p&gt;BLEには大きく分け&lt;strong&gt;Peripheral （ペリフェラル）&lt;/strong&gt;と&lt;strong&gt;Central（セントラル）&lt;/strong&gt;という二つの役割があります。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Peripheral: 発信側端末、ビーコンやBLEタグなど受信端末に対して情報を送る側&lt;/li&gt;
-&lt;li&gt;Central: 受信側端末、iPhoneやMacなどBLEデバイスの情報を探して受け取る側&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/143/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Nefry BTは書き込むコードによって、PeripheralにもCentralにもなることができます。&lt;/p&gt;
-
-&lt;h2 id=&#34;環境&#34;&gt;環境&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Arduino IDE 1.8.5&lt;/li&gt;
-&lt;li&gt;Nefry ライブラリ 1.1.4&lt;/li&gt;
-&lt;li&gt;Nefry BT R2&lt;/li&gt;
-&lt;li&gt;macOS High Sierra&lt;/li&gt;
-&lt;li&gt;Node.js v9.2.0&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;peripheralの作成&#34;&gt;Peripheralの作成&lt;/h2&gt;
-
-&lt;p&gt;情報発信側のPeripheralをNefry BTで作成します。&lt;/p&gt;
-
-&lt;h3 id=&#34;uuidの作成&#34;&gt;UUIDの作成&lt;/h3&gt;
-
-&lt;p&gt;BLEを利用するためには&lt;strong&gt;SERVICE（サービス）&lt;/strong&gt;と&lt;strong&gt;CHARACTERISTIC（キャラクタリスティック）&lt;/strong&gt;という各機能を司るUUIDを設定する必要があります。プログラミングでいうクラスとメソッドの関係だと思うと良いかもしれません。&lt;/p&gt;
-
-&lt;p&gt;BLEデバイスは部屋の中やカフェ、駅などいたるところに存在するのでそれらのデバイスと自分が所持しているデバイスのIDが競合しないようにユニークな値にする必要があります。そこでUUIDを作成し、設定する必要があります。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://www.uuidgenerator.net/&#34;&gt;https://www.uuidgenerator.net/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/143/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;このサイトでUUIDが作成出きるので各自作成しましょう。&lt;/p&gt;
-
-&lt;h3 id=&#34;nefry-btのスケッチ&#34;&gt;Nefry BTのスケッチ&lt;/h3&gt;
-
-&lt;p&gt;大元のコードはnkolban氏の&lt;a href=&#34;https://github.com/nkolban/ESP32_BLE_Arduino/blob/f8fe9d7cdfb20caa54b70849826d1ac6e375ff78/examples/BLE_notify/BLE_notify.ino&#34;&gt;こちらのコード&lt;/a&gt;です。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;#define SERVICE_UUID&lt;/code&gt;の箇所と&lt;code&gt;#define CHARACTERISTIC_UUID&lt;/code&gt;の箇所に先ほど作成したUUIDを指定します。&lt;/p&gt;
-
-&lt;p&gt;また&lt;code&gt;BLEDevice::init(&amp;quot;&amp;quot;);&lt;/code&gt;の箇所にBLEデバイスの名前を設定できます。
-以下のコードではNefryBT-n0bisukeという名前を指定しています。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;#include &amp;lt;BLEDevice.h&amp;gt;
-#include &amp;lt;BLEServer.h&amp;gt;
-#include &amp;lt;BLEUtils.h&amp;gt;
-#include &amp;lt;BLE2902.h&amp;gt;
-
-BLECharacteristic *pCharacteristic;
-bool deviceConnected = false;
-uint8_t value = 0;
-
-// See the following for generating UUIDs:
-// https://www.uuidgenerator.net/
-
-#define SERVICE_UUID        &amp;quot;D5875408-FA51-4763-A75D-7D33CECEBC31&amp;quot;
-#define CHARACTERISTIC_UUID &amp;quot;A4F01D8C-A037-43B6-9050-1876A8C23584&amp;quot;
-
-class MyServerCallbacks: public BLEServerCallbacks {
-    void onConnect(BLEServer* pServer) {
-      deviceConnected = true;
-    };
-
-    void onDisconnect(BLEServer* pServer) {
-      deviceConnected = false;
-    }
-};
-
-void setup() {
-  Serial.begin(115200);
-
-  // Create the BLE Device
-  BLEDevice::init(&amp;quot;NefryBT-n0bisuke&amp;quot;);
-
-  // Create the BLE Server
-  BLEServer *pServer = BLEDevice::createServer();
-  pServer-&amp;gt;setCallbacks(new MyServerCallbacks());
-
-  // Create the BLE Service
-  BLEService *pService = pServer-&amp;gt;createService(SERVICE_UUID);
-
-  // Create a BLE Characteristic
-  pCharacteristic = pService-&amp;gt;createCharacteristic(
-                      CHARACTERISTIC_UUID,
-                      BLECharacteristic::PROPERTY_READ   |
-                      BLECharacteristic::PROPERTY_WRITE  |
-                      BLECharacteristic::PROPERTY_NOTIFY |
-                      BLECharacteristic::PROPERTY_INDICATE
-                    );
-
-  // https://www.bluetooth.com/specifications/gatt/viewer?attributeXmlFile=org.bluetooth.descriptor.gatt.client_characteristic_configuration.xml
-  // Create a BLE Descriptor
-  pCharacteristic-&amp;gt;addDescriptor(new BLE2902());
-
-  // Start the service
-  pService-&amp;gt;start();
-
-  // Start advertising
-  pServer-&amp;gt;getAdvertising()-&amp;gt;start();
-  Serial.println(&amp;quot;Waiting a client connection to notify...&amp;quot;);
-}
-
-void loop() {
-
-  if (deviceConnected) {
-    Serial.printf(&amp;quot;*** NOTIFY: %d ***\n&amp;quot;, value);
-    char buffer[10];
-    sprintf(buffer, &amp;quot;{\&amp;quot;val\&amp;quot;:%d}&amp;quot;, value);
-    Serial.printf(buffer);
-    pCharacteristic-&amp;gt;setValue(buffer);
-    pCharacteristic-&amp;gt;notify();
-    //pCharacteristic-&amp;gt;indicate();
-    value++;
-  }
-  delay(2000);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;コンパイルエラーが出ないで書き込みが出来ればOKです。&lt;/p&gt;
-
-&lt;h3 id=&#34;確認&#34;&gt;確認&lt;/h3&gt;
-
-&lt;p&gt;デバッグには&lt;a href=&#34;https://itunes.apple.com/jp/app/lightblue/id639944780?mt=12&#34;&gt;LightBlue&lt;/a&gt;などのBLEデバッグ用のアプリケーションを利用することをお勧めします。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/143/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Nefry BTが起動すると先ほど指定した&lt;strong&gt;NefryBT-n0bisuke&lt;/strong&gt;という名前でBLEデバイスが検出されます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/143/4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;SERVICEのUUIDやCHARACTERISTICのUUIDも先ほど指定したものが表示されていると思います。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;これで問題なく、Nefry BTから情報が発信されていることが確認出来ました。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;centralの作成&#34;&gt;Centralの作成&lt;/h2&gt;
-
-&lt;p&gt;次は受信側のCentralを作成していきます。
-データの確認だけであれば先ほどのLightBlueなどのアプリで確認でも良いのですが、自分のサービスに組み込む際には何かしらのプログラミング言語でアクセスできた方が都合が良いです。&lt;/p&gt;
-
-&lt;h3 id=&#34;nobleの利用&#34;&gt;nobleの利用&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://github.com/sandeepmistry/noble&#34;&gt;noble&lt;/a&gt;はNode.js向けのBLEライブラリです。MacやWindows、Raspberry PiなどのデバイスをBLEのCentralにすることができます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;mkdir ble_central
-cd ble_central
-touch app.js
-npm init -y
-npm i --save noble
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;これで準備とnobleのインストールが完了しました。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;app.js&lt;/code&gt;に以下を記述します。SERVICE_UUIDやCHARACTERISTIC_UUIDは自分で作成したNefry BT側に書き込んだUUIDと同様のものを指定しましょう。&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;[WIP] Async/Awaitに書き換えたい。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
-
-const noble = require(&#39;noble&#39;);
-const serviceuuid = `d5875408fa514763a75d7d33cecebc31`;
-const charauuid = `a4f01d8ca03743b690501876a8c23584`;
-
-//キャラクタリスティックにアクセスしてデータやりとり
-const accessChara = (chara) =&amp;gt; {
-    console.log(&#39;-----Start GATT Access-----&#39;)
-    chara.notify(true, (err) =&amp;gt; {
-        if (err) {
-          console.log(&#39;listen notif error&#39;, err)
-        } else {
-          console.log(&#39;listen notif&#39;)
-        }
-    });
-    chara.on(&#39;data&#39;, (data, isNotif) =&amp;gt; {
-        const jsonStr = data.toString(&#39;utf-8&#39;);
-        const jsonData = JSON.parse(jsonStr);
-        console.log(jsonData);
-    });
-}
-
-
-//discovered BLE device
-const discovered = (peripheral) =&amp;gt; {
-    console.log(`BLE Device Found: ${peripheral.advertisement.localName}(${peripheral.uuid}) RSSI${peripheral.rssi}`);
-
-    if(peripheral.advertisement.localName === &#39;NefryBT-n0bisuke&#39;){
-        noble.stopScanning();
-        console.log(&#39;device found&#39;);
-        console.log(`service discover...`);
-
-        peripheral.connect(error =&amp;gt; {
-            if (error) {
-                console.log(&amp;quot;connection error:&amp;quot;, error)
-            } else {
-                console.log(&amp;quot;device connected&amp;quot;);
-            }
-
-            peripheral.discoverServices([],(err, services) =&amp;gt; {
-                if (error) {
-                    console.log(&amp;quot;discover service error&amp;quot;, error)
-                }
-                console.log(&#39;discover service&#39;);               
-                services.forEach(service =&amp;gt; {
-                    if(service.uuid === serviceuuid){
-                        service.discoverCharacteristics([], (error, charas) =&amp;gt; {
-                            console.log(&#39;discover chara&#39;);
-                            charas.forEach(chara =&amp;gt; {
-                                if(chara.uuid === charauuid){
-                                    console.log(&amp;quot;found chara: &amp;quot;, chara.uuid)
-                                    accessChara(chara);
-                                }
-                            });
-                        });
-                    }
-                });
-            });
-        });
-    }
-}
-
-//BLE scan start
-const scanStart = () =&amp;gt; {
-    noble.startScanning();
-    noble.on(&#39;discover&#39;, discovered);
-}
-
-if(noble.state === &#39;poweredOn&#39;){
-    scanStart();
-}else{
-    noble.on(&#39;stateChange&#39;, scanStart);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;実行&#34;&gt;実行&lt;/h3&gt;
-
-&lt;pre&gt;&lt;code&gt;node app.js
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;で実行します。この時、先ほどのLightBlueなどのアプリでNefryBTにBLEアクセスしていると上手くいかないのでアプリ側の接続は解除しましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/143/5.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Mac側のNode.jsのログはこんな感じで表示されます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;BLE Device Found: LED(59aa15c3a3274ed7b11d334b5c0d0900) RSSI-68
-BLE Device Found: NefryBT-n0bisuke(d0b77d4611f54380b8b63e6d05765ad6) RSSI-49
-device found
-service discover...
-device connected
-discover service
-discover chara
-found chara:  a4f01d8ca03743b690501876a8c23584
------Start GATT Access-----
-listen notif
-{ val: 147 }
-{ val: 148 }
-・
-・
-・
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;解説&#34;&gt;解説&lt;/h3&gt;
-
-&lt;p&gt;NefryBT側ではデバイスにアクセスがありCentralとのコネクションが確立すると、&lt;code&gt;変数value&lt;/code&gt;の値をセット(pCharacteristic-&amp;gt;setValue)して送信（pCharacteristic-&amp;gt;notify）し、valueの値をインクリメントします。&lt;/p&gt;
-
-&lt;p&gt;これを2秒ごとに行うので2秒間隔でNefryBTからMacのNode.jsに情報が送信されます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;・
-(省略)
-・
-・
-void loop() {
-
-  if (deviceConnected) {
-    Serial.printf(&amp;quot;*** NOTIFY: %d ***\n&amp;quot;, value);
-    char buffer[10];
-    sprintf(buffer, &amp;quot;{\&amp;quot;val\&amp;quot;:%d}&amp;quot;, value);
-    Serial.printf(buffer);
-    pCharacteristic-&amp;gt;setValue(buffer);
-    pCharacteristic-&amp;gt;notify();
-    //pCharacteristic-&amp;gt;indicate();
-    value++;
-  }
-  delay(2000);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Node.js（noble）側では、PERIPHERAL -&amp;gt; SERVICE -&amp;gt; CHARACTERISTICと階層的にアクセスしていき、CHARACTERISTICまでアクセスが出きると、accessChara関数が呼ばれます。&lt;/p&gt;
-
-&lt;p&gt;この中の&lt;code&gt;chara.on(&#39;data&#39;)&lt;/code&gt;の箇所でデータが送られてくるたびにイベントが発火して、データの中身を確認できます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;・
-・
-(省略)
-・
-const accessChara = (chara) =&amp;gt; {
-    console.log(&#39;-----Start GATT Access-----&#39;)
-    chara.notify(true, (err) =&amp;gt; {
-        if (err) {
-          console.log(&#39;listen notif error&#39;, err)
-        } else {
-          console.log(&#39;listen notif&#39;)
-        }
-    });
-    chara.on(&#39;data&#39;, (data, isNotif) =&amp;gt; {
-        const jsonStr = data.toString(&#39;utf-8&#39;);
-        const jsonData = JSON.parse(jsonStr);
-        console.log(jsonData);
-    });
-}
-・
-・
-(省略)
-・
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;Nefry BTでBLEを利用する方法を紹介しました。
-Nefry BTでセンサーのデータを取得し、Centralに送信する方法なども応用して作れそうですね。&lt;/p&gt;
-
-&lt;p&gt;これを参考にNefry BTとBLEデバイスの連携などに活用していきましょう。&lt;/p&gt;
-
-&lt;p&gt;今回はNefry BTをPeripheralにする実装でしたが、別の機会でCentralにする方法も紹介できればと思っています。&lt;/p&gt;
-
-&lt;p&gt;それでは！&lt;/p&gt;
-
-&lt;h2 id=&#34;所感&#34;&gt;所感&lt;/h2&gt;
-
-&lt;p&gt;今回の実装ですが色々と途中でのハマりが多いかつ、調べてもまだまだESP32のBLE利用をArduinoでやってる事例は少なくけっこう大変でした。この辺の大変だった知見はQiitaなどでまとめらたらと思っています。お疲れ様です笑&lt;/p&gt;
 </description>
     </item>
     
