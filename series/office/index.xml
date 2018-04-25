@@ -2,12 +2,572 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Office on dotstudio（ドットスタジオ）</title>
-    <link>https://dotstud.io/series/office/index.xml</link>
+    <link>https://dotstud.io/series/office/</link>
     <description>Recent content in Office on dotstudio（ドットスタジオ）</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <atom:link href="/series/office/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 28 Mar 2018 14:00:26 +0900</lastBuildDate>
+    <atom:link href="/series/office/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>オフィス改善！物理スイッチの照明を遠隔操作でON／OFFしよう！</title>
+      <link>https://dotstud.io/blog/switch-servo-remote-controll/</link>
+      <pubDate>Wed, 28 Mar 2018 14:00:26 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/switch-servo-remote-controll/</guid>
+      
+      <description>
+
+&lt;h2 id=&#34;お仕事は突然やってくる&#34;&gt;お仕事は突然やってくる&lt;/h2&gt;
+
+&lt;p&gt;こんにちは、宇宙エンジニアのたくろーどんです。&lt;/p&gt;
+
+&lt;p&gt;ある日、dotstudioのオフィスにて……。&lt;/p&gt;
+
+&lt;p&gt;※上司：ちゃんとく ／ &lt;del&gt;下僕&lt;/del&gt;部下：たくろーどん&lt;/p&gt;
+
+&lt;div class=&#34;talk-box&#34;&gt;
+  &lt;p class=&#34;speaker&#34;&gt;
+    &lt;img src=&#34;https://dotstud.io/img/members/chantoku/author.png&#34; /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    ちゃんとく「デスクから動くのがめんどくさい……。」
+  &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;talk-box&#34;&gt;
+  &lt;p class=&#34;speaker&#34;&gt;
+    &lt;img src=&#34;https://dotstud.io/img/members/takudooon/author.png&#34; /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    たくろーどん「そうですねぇ。（おなかすいた）」
+  &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;talk-box&#34;&gt;
+  &lt;p class=&#34;speaker&#34;&gt;
+    &lt;img src=&#34;https://dotstud.io/img/members/chantoku/author.png&#34; /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    ちゃんとく「なんか&lt;b&gt;電気のONとOFFを遠隔で操作できるデバイス&lt;/b&gt;つくってよ！」
+  &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;talk-box&#34;&gt;
+  &lt;p class=&#34;speaker&#34;&gt;
+    &lt;img src=&#34;https://dotstud.io/img/members/takudooon/author.png&#34; /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    たくろーどん「あっ、はい。かしこまりましたでございます。（きょうのごはんはカレーにしよう）」
+  &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;p&gt;そんなこんなで突然、ズボラなちゃんとくさんのために&lt;strong&gt;電気を遠隔でON/OFFできる装置&lt;/strong&gt;をつくることになりました。&lt;/p&gt;
+
+&lt;p&gt;下記のようなイメージで、&lt;strong&gt;電気の物理スイッチを遠隔操作できるリモコン&lt;/strong&gt;を目指して作ってみます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/155/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;実装&#34;&gt;実装&lt;/h2&gt;
+
+&lt;p&gt;まず、物理スイッチを押す機構にはサーボモータを使います。&lt;/p&gt;
+
+&lt;p&gt;サーボモータは簡単に角度の制御ができるので、スイッチをON/OFFと切り替えて押すことに適しています。&lt;/p&gt;
+
+&lt;p&gt;サーボモータについては、dotstudioドキュメントの「&lt;a href=&#34;https://dotstud.io/docs/pulse-width-modulation/&#34;&gt;&lt;strong&gt;PWM制御&lt;/strong&gt;&lt;/a&gt;（サーボモータの仕組み）」や「&lt;a href=&#34;https://codeiq.jp/magazine/2018/02/57076/&#34;&gt;&lt;strong&gt;遠隔消臭装置をつくって「気の利くナイスガイ」になろう！〜基本実装編〜│codeIQ&lt;/strong&gt;&lt;/a&gt;」の記事などを参考にしてください。&lt;/p&gt;
+
+&lt;p&gt;実際に、スイッチが押せるようにサーボモータを取り付けてみます。サーボモータの取り付けも&lt;strong&gt;グルーガン職人&lt;/strong&gt;の手にかかれば一瞬です。&lt;/p&gt;
+
+&lt;p&gt;※グルーガン（のりを温めて接着できる装置）は100均で手に入る最強アイテムです。
+&lt;img src=&#34;https://dotstud.io/img/blog/155/2.png&#34; alt=&#34;&#34; /&gt;
+見た目の改善はあとで考えていきましょう。&lt;strong&gt;とりあえず動くことが大事&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;ちなみに回路図はこのようになっています。
+&lt;img src=&#34;https://dotstud.io/img/blog/155/3.png&#34; alt=&#34;&#34; /&gt;
+今回はサーボモータを4つ繋げているので、&lt;u&gt;Nefry BTからの電源供給が足りず、Nefry BTが再起動してしまうこと&lt;/u&gt;があります。そこで&lt;strong&gt;サーボモータとNefry BTの電源は分ける&lt;/strong&gt;ことによって安定性を高めています。&lt;/p&gt;
+
+&lt;p&gt;では、次にプログラムです。&lt;/p&gt;
+
+&lt;h2 id=&#34;プログラム&#34;&gt;プログラム&lt;/h2&gt;
+
+&lt;p&gt;今回は、&lt;strong&gt;Nefry BTのWebコンソール画面&lt;/strong&gt;から遠隔操作できるようにしたいと思います。&lt;/p&gt;
+
+&lt;p&gt;Nefry BTのWebコンソール画面へは、&lt;u&gt;Nefry BT自身のWi-Fiにつないでアドホックモードにするほか、Wi-Fi設定をして外部からアクセス&lt;/u&gt;することができます。詳細は「&lt;a href=&#34;https://dotstud.io/docs/nefrybt-wifi-setup/&#34;&gt;&lt;strong&gt;Nefry BTのWi-Fiセットアップ&lt;/strong&gt;&lt;/a&gt;」を参照してください。&lt;/p&gt;
+
+&lt;p&gt;Webコンソール画面には、&lt;strong&gt;Nefry.getWebServer()関数&lt;/strong&gt;を使って機能追加することができます。少し試してみましょう。&lt;/p&gt;
+
+&lt;p&gt;以下のようにプログラムを書くと……&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;#include &amp;lt;Nefry.h&amp;gt;
+void setup() {
+  // on()の第一引数でURLを決める
+  Nefry.getWebServer()-&amp;gt;on(&amp;quot;/welcome&amp;quot;, [&amp;amp;]() {
+    String content = F(
+      // 表示するページをHTMLで記述する
+      &amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;title&amp;gt;Nefry Welcome&amp;lt;/title&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;Nefry Welcome!&amp;lt;/h1&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+    Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
+  });
+  // setIndexLink(&#39;表示したいページ名&#39;, &#39;指定したURL&#39;)でTOPページに表示される名前を決める
+  Nefry.setIndexLink(&amp;quot;welcomePage&amp;quot;,&amp;quot;/welcome&amp;quot;);
+}
+
+void loop() {
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Nefry BTのコンソール画面に「welcomePage」と追加され、クリックすると、「Nefry Welcome」と作成したHTMLページが表示されます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/155/4.png&#34; alt=&#34;&#34; /&gt;
+これを応用して、&lt;strong&gt;「Light_on」というHTMLページにアクセスしたらサーボモータが回転する&lt;/strong&gt;ようにしてみます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;// /onというURLのページを作成
+Nefry.getWebServer()-&amp;gt;on(&amp;quot;/on&amp;quot;, [&amp;amp;]() {
+  String content = F(
+    // ページのHTMLを記述
+    &amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+    &amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+    &amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;On&amp;lt;/h1&amp;gt;&amp;quot;
+    &amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;
+  );
+
+  // サーボモータを回転させる
+  for(int i=90; i&amp;lt;=115; i++){
+    ledcWrite(0,deg2pw(i, PWM_BITWIDTH));
+  }
+  delay(800);
+  ledcWrite(0,deg2pw(90, PWM_BITWIDTH));
+
+  Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
+});
+
+// TOPページに「Ligth_on」と表示する
+Nefry.setIndexLink(&amp;quot;Light_on&amp;quot;,&amp;quot;/on&amp;quot;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上記のプログラムを4つのサーボモータそれぞれに割り当て、最終的なプログラムの全体はこのようになります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;#include &amp;lt;Nefry.h&amp;gt;
+#include&amp;quot;esp32-hal-ledc.h&amp;quot;
+#define PWM_BITWIDTH 16
+
+int deg2pw(int deg, int bit){
+    double ms = ((double) deg - 90.0) * 0.95 / 90.0 + 1.45;
+    return (int) (ms / 20.0 * pow(2, bit));
+}
+
+void setup() {
+  Serial.begin(115200);
+  ledcSetup(0,50,PWM_BITWIDTH);
+  ledcSetup(1,50,PWM_BITWIDTH);
+  ledcSetup(2,50,PWM_BITWIDTH);
+  ledcSetup(3,50,PWM_BITWIDTH);
+  ledcAttachPin(A0,0);
+  ledcAttachPin(A1,1);
+  ledcAttachPin(D0,2);
+  ledcAttachPin(D1,3);
+
+  Nefry.getWebServer()-&amp;gt;on(&amp;quot;/on&amp;quot;, [&amp;amp;]() {
+    String content = F(
+      &amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;On&amp;lt;/h1&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+
+    for(int i=90; i&amp;lt;=115; i++){
+      ledcWrite(0,deg2pw(i, PWM_BITWIDTH));
+    }
+    delay(800);
+    ledcWrite(0,deg2pw(90, PWM_BITWIDTH));
+
+    Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
+  });
+  Nefry.setIndexLink(&amp;quot;Light_on&amp;quot;,&amp;quot;/on&amp;quot;);
+
+  Nefry.getWebServer()-&amp;gt;on(&amp;quot;/off&amp;quot;, [&amp;amp;]() {
+    String content = F(
+      &amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;off&amp;lt;/h1&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+
+    for(int i=90; i&amp;gt;=65; --i){
+      ledcWrite(0,deg2pw(i, PWM_BITWIDTH));
+    }
+    delay(800);
+    ledcWrite(0,deg2pw(90, PWM_BITWIDTH));
+
+    Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
+  });
+  Nefry.setIndexLink(&amp;quot;Light_off&amp;quot;,&amp;quot;/off&amp;quot;);
+
+//////////////////////////////////////////////////////////////
+  Nefry.getWebServer()-&amp;gt;on(&amp;quot;/on2&amp;quot;, [&amp;amp;]() {
+    String content = F(
+      &amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;On&amp;lt;/h1&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+
+    for(int i=90; i&amp;lt;=115; i++){
+      ledcWrite(1,deg2pw(i, PWM_BITWIDTH));
+    }
+    delay(800);
+    ledcWrite(1,deg2pw(90, PWM_BITWIDTH));
+
+    Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
+  });
+  Nefry.setIndexLink(&amp;quot;Light_on_2&amp;quot;,&amp;quot;/on2&amp;quot;);
+
+  Nefry.getWebServer()-&amp;gt;on(&amp;quot;/off2&amp;quot;, [&amp;amp;]() {
+    String content = F(
+      &amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;off&amp;lt;/h1&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+
+    for(int i=90; i&amp;gt;=65; --i){
+      ledcWrite(1,deg2pw(i, PWM_BITWIDTH));
+    }
+    delay(800);
+    ledcWrite(1,deg2pw(90, PWM_BITWIDTH));
+
+    Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
+  });
+  Nefry.setIndexLink(&amp;quot;Light_off_2&amp;quot;,&amp;quot;/off2&amp;quot;);
+
+  //////////////////////////////////////////////////////////////
+  Nefry.getWebServer()-&amp;gt;on(&amp;quot;/on3&amp;quot;, [&amp;amp;]() {
+    String content = F(
+      &amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;On&amp;lt;/h1&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+
+    for(int i=90; i&amp;lt;=115; i++){
+      ledcWrite(2,deg2pw(i, PWM_BITWIDTH));
+    }
+    delay(800);
+    ledcWrite(2,deg2pw(90, PWM_BITWIDTH));
+
+    Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
+  });
+  Nefry.setIndexLink(&amp;quot;Light_on_3&amp;quot;,&amp;quot;/on3&amp;quot;);
+
+  Nefry.getWebServer()-&amp;gt;on(&amp;quot;/off3&amp;quot;, [&amp;amp;]() {
+    String content = F(
+      &amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;off&amp;lt;/h1&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+
+    for(int i=90; i&amp;gt;=65; --i){
+      ledcWrite(2,deg2pw(i, PWM_BITWIDTH));
+    }
+    delay(800);
+    ledcWrite(2,deg2pw(90, PWM_BITWIDTH));
+
+    Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
+  });
+  Nefry.setIndexLink(&amp;quot;Light_off_3&amp;quot;,&amp;quot;/off3&amp;quot;);
+
+  //////////////////////////////////////////////////////////////
+  Nefry.getWebServer()-&amp;gt;on(&amp;quot;/on4&amp;quot;, [&amp;amp;]() {
+    String content = F(
+      &amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;On&amp;lt;/h1&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+
+    for(int i=90; i&amp;lt;=125; i++){
+      ledcWrite(3,deg2pw(i, PWM_BITWIDTH));
+    }
+    delay(800);
+    ledcWrite(3,deg2pw(90, PWM_BITWIDTH));
+
+    Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
+  });
+  Nefry.setIndexLink(&amp;quot;Light_on_4&amp;quot;,&amp;quot;/on4&amp;quot;);
+
+  Nefry.getWebServer()-&amp;gt;on(&amp;quot;/off4&amp;quot;, [&amp;amp;]() {
+    String content = F(
+      &amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;off&amp;lt;/h1&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+
+    for(int i=90; i&amp;gt;=65; --i){
+      ledcWrite(3,deg2pw(i, PWM_BITWIDTH));
+    }
+    delay(800);
+    ledcWrite(3,deg2pw(90, PWM_BITWIDTH));
+
+    Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
+  });
+  Nefry.setIndexLink(&amp;quot;Light_off_4&amp;quot;,&amp;quot;/off4&amp;quot;);
+
+}
+
+void loop() {
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/155/5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;これで、Nefry BTのコンソール画面から遠隔でサーボモータを制御できるようになりました。
+また、&lt;strong&gt;Nefry.getWebServer()関数を使うことで、HTMLを書く要領でコンソール画面をカスタマイズ&lt;/strong&gt;することができます。&lt;/p&gt;
+
+&lt;h2 id=&#34;試してみる&#34;&gt;試してみる&lt;/h2&gt;
+
+&lt;div class=&#34;talk-box&#34;&gt;
+  &lt;p class=&#34;speaker&#34;&gt;
+    &lt;img src=&#34;https://dotstud.io/img/members/takudooon/author.png&#34; /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    たくろーどん「ちゃんとくさん、遠隔操作できる仕組みが完成しました！早速試してみてください。」
+  &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;talk-box&#34;&gt;
+  &lt;p class=&#34;speaker&#34;&gt;
+    &lt;img src=&#34;https://dotstud.io/img/members/chantoku/author.png&#34; /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    ちゃんとく「やった！さっそくデスクからポチっとな」
+  &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/155/7.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;div class=&#34;talk-box&#34;&gt;
+  &lt;p class=&#34;speaker&#34;&gt;
+    &lt;img src=&#34;https://dotstud.io/img/members/takudooon/author.png&#34; /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    たくろーどん「おぉ、これで遠隔で電気のON/OFF操作は完璧ですね！」
+  &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;talk-box&#34;&gt;
+  &lt;p class=&#34;speaker&#34;&gt;
+    &lt;img src=&#34;https://dotstud.io/img/members/chantoku/author.png&#34; /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    ちゃんとく「便利になったけど、&lt;b&gt;SSIDの命名センスがすごい&lt;/b&gt;」
+  &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/155/6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;※Nefry BTのSSIDは変更することができる。「&lt;a href=&#34;https://dotstud.io/docs/nefrybt-change-ssid/&#34;&gt;&lt;strong&gt;Nefry BTのSSIDを変更する&lt;/strong&gt;&lt;/a&gt;」を参照。&lt;/p&gt;
+
+&lt;div class=&#34;talk-box&#34;&gt;
+  &lt;p class=&#34;speaker&#34;&gt;
+    &lt;img src=&#34;https://dotstud.io/img/members/takudooon/author.png&#34; /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    たくろーどん「満足してもらえたようで嬉しいです。」
+  &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&#34;終わりに&#34;&gt;終わりに&lt;/h2&gt;
+
+&lt;p&gt;このようにdotstudioではお仕事が急にやってくるので柔軟な対応が求められます。&lt;u&gt;ヘマをすると何がおこるかわからないので、今回は首の皮一枚つながりました。&lt;/u&gt;&lt;/p&gt;
+
+&lt;p&gt;遠隔でデバイスを操作するには、今回のようにNefry BTのコンソール画面を応用する他にも、スマホアプリから操作できるようになる「&lt;a href=&#34;https://www.blynk.cc/&#34;&gt;&lt;strong&gt;Blynk&lt;/strong&gt;&lt;/a&gt;」を使ったり、リアルタイム通信を簡単に実現できる「&lt;a href=&#34;https://mlkcca.com/&#34;&gt;&lt;strong&gt;Milkcocoa&lt;/strong&gt;&lt;/a&gt;」を使ったりと、いろいろな方法があります。&lt;/p&gt;
+
+&lt;p&gt;ぜひみなさんも試してみてはいかがでしょうか？&lt;/p&gt;
+
+&lt;style&gt;
+div.talk-box p {
+  display: table-cell;
+  vertical-align: middle;
+  margin: 0;
+}
+
+.speaker {
+  width: 70px;
+  height: 70px;
+  margin-right: 10px;
+  padding-right: 10px;
+}
+
+.speaker img {
+  border-radius: 50%;
+}
+&lt;/style&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>放置されていた3Dプリンタ「Trinus」で初めての3Dプリントに挑戦</title>
+      <link>https://dotstud.io/blog/3d-printer-trinus-usage/</link>
+      <pubDate>Thu, 22 Feb 2018 03:00:43 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/3d-printer-trinus-usage/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、たくろーどんです。大学で&lt;a href=&#34;https://dotstud.io/docs/nefrybt&#34;&gt;NefryBT&lt;/a&gt;を使った工作をしていたら、いつのまにかdotstudioでアルバイトすることになっていました。宇宙工学を勉強しています。以後よろしくお願いします。&lt;/p&gt;
+
+&lt;p&gt;=&amp;gt; 参考: &lt;a href=&#34;https://qiita.com/minwinmin/items/d1f296b8a9cd1a2c22f6&#34;&gt;研究室のみんなとNefry BTを使ってはじめてIoTデバイスをつくってみた&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;今回は、dotstudioに放置されていた3Dプリンタ「Trinus（トライナス）」を使って初めての3Dプリントに挑戦してみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/149/lead.png&#34; alt=&#34;&#34; /&gt;
+これで哲学的なものを錬成していきましょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;3dプリントを始める前に&#34;&gt;3Dプリントを始める前に&lt;/h2&gt;
+
+&lt;h3 id=&#34;3dプリンタとは&#34;&gt;3Dプリンタとは？&lt;/h3&gt;
+
+&lt;p&gt;3Dプリンタとは、その名の通り&lt;strong&gt;3Dのデータを出力できる&lt;/strong&gt;プリンタです。
+&lt;img src=&#34;https://dotstud.io/img/blog/149/3dprint.png&#34; alt=&#34;&#34; /&gt;
+プリンタによりますが、金属、アルミ、ゴムなどさまざまな素材で出力できるため広い分野で活躍しています。&lt;/p&gt;
+
+&lt;p&gt;現在は業務用から一般向けまでさまざまな種類の3Dプリンタが販売されていますが、今回はdotstudioに放置されていた「Trinus（トライナス）」を使ってみます。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;a href=&#34;http://www.trinus3d.com/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/trinus.png&#34; alt=&#34;&#34; /&gt;
+Trinus - Kodama, Inc.&lt;/a&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;3万円代とお手頃価格で、樹脂に加えて木材やアルミも利用でき、別売りのヘッドをつけることでレーザ彫刻機にもなる優れものです。&lt;/p&gt;
+
+&lt;h3 id=&#34;3dプリントには3dデータが必要&#34;&gt;3Dプリントには3Dデータが必要&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;3Dプリントをするためには3Dデータが必要です&lt;/strong&gt;。3Dデータをモデリング（作成すること）方法はいくつかありますが、今回は3D CADソフトを使っています。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/inventor.png&#34; alt=&#34;&#34; /&gt;
+僕はAutodeskの「&lt;a href=&#34;https://www.autodesk.co.jp/products/inventor/overview&#34;&gt;&lt;strong&gt;Inventor&lt;/strong&gt;&lt;/a&gt;」を使ってデータを作成しました。有料ソフトですが、なんと&lt;strong&gt;学生だと3年間無料で&lt;/strong&gt;つかえます！&lt;/p&gt;
+
+&lt;p&gt;Inventorは本格的な機械設計向きなので、簡単に試したい人は同じくAutodeskの「&lt;a href=&#34;https://www.autodesk.co.jp/products/fusion-360/overview&#34;&gt;&lt;strong&gt;fusion360&lt;/strong&gt;&lt;/a&gt;」の方がとっつきやすいかと思います。こちらも個人利用の場合は無料です。&lt;/p&gt;
+
+&lt;p&gt;3D CADソフトは他にも&lt;a href=&#34;https://www.rs-online.com/designspark/mechanical-software-jp&#34;&gt;DesignSpark Mechanical&lt;/a&gt;や&lt;a href=&#34;https://www.freecadweb.org/?lang=ja&#34;&gt;FreeCAD&lt;/a&gt;などいくつかあるので、自分が使いやすいと思ったものを使うと良いでしょう。&lt;/p&gt;
+
+&lt;p&gt;さらにもう一つ。
+プログラマーのためにGithubがあるなら、&lt;strong&gt;メカ系エンジニアのために&lt;a href=&#34;https://grabcad.com/&#34;&gt;GrabcCAD&lt;/a&gt;というものがあります&lt;/strong&gt;。
+&lt;img src=&#34;https://dotstud.io/img/blog/149/grabccad.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ここで、世界中のエンジニアが製作した様々なモデリングを閲覧したり使用したりできます。もし複雑なパーツをモデリングすることが難しければ、GrabCADを参考にしてみるのも手だと思います。&lt;/p&gt;
+
+&lt;h3 id=&#34;trinusの組み立て&#34;&gt;Trinusの組み立て&lt;/h3&gt;
+
+&lt;p&gt;Trinusの組み立てに関しては説明書をご覧ください。
+また、日本語の公式サイトもあります。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;a href=&#34;http://www.trinusjapan.com/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/community.png&#34; alt=&#34;&#34; /&gt;
+http://trinusjapan.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;trinus用ソフト-pango-をインストール&#34;&gt;Trinus用ソフト「Pango」をインストール&lt;/h3&gt;
+
+&lt;p&gt;Trinusで3Dプリントするには、モデリングしたものを扱う専用ソフト「Pango」が必要です。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://trinusjapan.com/softwaredownload/&#34;&gt;こちらのリンク&lt;/a&gt;からインストールしてください。&lt;/p&gt;
+
+&lt;h2 id=&#34;3dプリントに挑戦&#34;&gt;3Dプリントに挑戦！&lt;/h2&gt;
+
+&lt;h3 id=&#34;プリンタ側の準備&#34;&gt;プリンタ側の準備&lt;/h3&gt;
+
+&lt;p&gt;詳しくは&lt;a href=&#34;http://trinusjapan.com/firstprint/&#34;&gt;公式サイト&lt;/a&gt;にのっているので、要点だけ説明します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/printer.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;まず、Trinusの電源をいれるため、コンセントにつなげましょう。電源がつくと「ビッ」という音がします。&lt;/p&gt;
+
+&lt;h3 id=&#34;pangoにデータを取り込む&#34;&gt;Pangoにデータを取り込む&lt;/h3&gt;
+
+&lt;p&gt;パソコンからデータ（stlファイル）をPangoで開きましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/1.png&#34; alt=&#34;&#34; /&gt;
+①のように「書き出し」から「CAD形式」を選択し、stl形式で保存します。&lt;strong&gt;サイズがモデリングと一致&lt;/strong&gt;しているかしっかりと確認してください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/2.png&#34; alt=&#34;&#34; /&gt;
+Pangoでstlファイルを開くと&lt;strong&gt;何故かサイズが10分の1&lt;/strong&gt;になってしまうので（dotstudioだけで起こる現象なのか不明）、元のサイズに戻します。③と④のように比率（Ratio）を10に変えます。Amountは寸法を意味していて、単位はmmです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/3.png&#34; alt=&#34;&#34; /&gt;
+必要があれば3Dプリントしやすいようにモデルの向きを変えましょう。&lt;strong&gt;どのような向きで出力するか&lt;/strong&gt;、これがとても大事です！印刷中に思いがけない失敗を引き起こすことになります。&lt;/p&gt;
+
+&lt;p&gt;⑤のように赤丸部をクリックすると回転軸の表示が出ます。そして、回転したい軸にマウスポインタを持っていきます。⑥のように回転する軸が強調されます。マウスで操作する場合はホイールを動かすことで回転させることができます。パソコンにあるタッチパッドの場合は2本の指で、上下になぞるように動かすと回転します（Windowsの場合）。&lt;/p&gt;
+
+&lt;h3 id=&#34;印刷のシミュレーション&#34;&gt;印刷のシミュレーション&lt;/h3&gt;
+
+&lt;p&gt;実際にどのように印刷が進められるかPango上で確認することもできます。Pangoの上部にある「View」から「Layer」をクリックしてください。
+&lt;img src=&#34;https://dotstud.io/img/blog/149/4.png&#34; alt=&#34;&#34; /&gt;
+すると自分がモデリングしたもの以外に格子状のモデリング（濃いピンクの部分）が追加されています。これは「&lt;strong&gt;ラフト&lt;/strong&gt;」と呼ばれ、3Dプリンタの印刷面と出力するものの間に積層される荒い土台のことです。&lt;/p&gt;
+
+&lt;p&gt;これがあると出力した後に製作物を外しやすく、最終的には除去してゴミとして捨てることができます。&lt;/p&gt;
+
+&lt;h3 id=&#34;データをtrinusに移す&#34;&gt;データをTrinusに移す&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/5.png&#34; alt=&#34;&#34; /&gt;
+データをSDカードに「pcode」形式で保存します。図の赤丸部をクリックし、SDカードにデータをpcode形式で保存します。この形式は、Torinusで出力するために必要な形式です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/6.png&#34; alt=&#34;&#34; /&gt;
+SDカードをTorinusに接続し、TorinusとパソコンをUSB接続します。&lt;/p&gt;
+
+&lt;h3 id=&#34;出力設定を調整&#34;&gt;出力設定を調整&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/7.png&#34; alt=&#34;&#34; /&gt;
+Pango上部の「Preference」から「Setting」を選択します。ここでは、出力するスピードや厚みなどを設定することができます。&lt;strong&gt;設定はあまりいじる必要はない&lt;/strong&gt;ので、眺めおきましょう！（ただし今回は試行錯誤の結果、Thickness: 0.2mm、Print Speed: 40mm/sとしています）&lt;/p&gt;
+
+&lt;h3 id=&#34;重要-出力位置の初期位置を調整&#34;&gt;【重要】出力位置の初期位置を調整&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/8.png&#34; alt=&#34;&#34; /&gt;
+TorinusとパソコンをUSB接続した状態でPango上部の「View」から「Console」をクリックします。上のような画像が出たら、さらに「Console」をクリックします。　&lt;/p&gt;
+
+&lt;p&gt;そうすると下記のような設定画面があらわれます。&lt;strong&gt;この画面で行う設定が非常に重要です&lt;/strong&gt;。
+&lt;img src=&#34;https://dotstud.io/img/blog/149/9.png&#34; alt=&#34;&#34; /&gt;
+&lt;strong&gt;まず「Home」をクリック&lt;/strong&gt;します。これで、3Dプリンタのノズル（フィラメントが出る部分）が初期位置に戻ります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/10.png&#34; alt=&#34;&#34; /&gt;
+ここで&lt;strong&gt;z軸の距離（ノズルから出力される面の高さ、画像でいう赤い矢印部分）を確認&lt;/strong&gt;してください。その距離が初期位置で広すぎると上手く出力されません。なので、目視でその距離を縮めましょう。「Offset」をクリックすると&lt;strong&gt;z軸方向の距離を上下&lt;/strong&gt;することができます。&lt;/p&gt;
+
+&lt;h3 id=&#34;出力を開始&#34;&gt;出力を開始！&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/9.png&#34; alt=&#34;&#34; /&gt;
+位置設定が終わったら、「&lt;strong&gt;Heat E」をクリック&lt;/strong&gt;し3Dプリンタのノズルを温めます。どれくらい温まっているかは、Console画面の左下に示す数字（分数部分）で表されます。最後に右のSDカードのイラスト部分をクリックし、保存したpcodeファイルを指定します。3Dプリンタのノズルが十分に温まれば自動で出力が始まります！&lt;/p&gt;
+
+&lt;h3 id=&#34;出力直後にやるべきこと&#34;&gt;出力直後にやるべきこと&lt;/h3&gt;
+
+&lt;p&gt;出力が始まるとその直後に、&lt;strong&gt;ノズルから溶け出たフィラメント&lt;/strong&gt;が垂れてきます。&lt;strong&gt;垂れて固まったフィラメントは出力の邪魔になることもあるので、ピンセットで取り除きましょう&lt;/strong&gt;。下記の図の赤丸で囲った部分がその例です。
+&lt;img src=&#34;https://dotstud.io/img/blog/149/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;あとは見守りながら完成するまで放置しましょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;はじめての出力&#34;&gt;はじめての出力&lt;/h2&gt;
+
+&lt;p&gt;プリンタとデータをセットして出力されるのを待ちます……。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/212276/c7659ea8-e54a-f50a-400a-183218006215.gif&#34; alt=&#34;出力.gif&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;完成しました。
+&lt;img src=&#34;https://dotstud.io/img/blog/149/完成1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;哲学的なゴミです。特に用途はありません。
+&lt;img src=&#34;https://dotstud.io/img/blog/149/完成2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;3dプリンタを使うときに注意すること&#34;&gt;3Dプリンタを使うときに注意すること&lt;/h2&gt;
+
+&lt;p&gt;セットアップの説明でも述べましたが、3Dプリンターを使ってみて注意した方が良い点をもう一度まとめます。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Pango上でモデリングのサイズを要チェック&lt;/li&gt;
+&lt;li&gt;モデリングしたものをどの向きで出力するか&lt;/li&gt;
+&lt;li&gt;初期位置の設定を正確に！（特にz軸方向）&lt;/li&gt;
+&lt;li&gt;出力直後に溶け出したフィラメントを必ず除去&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;3Dプリンタは複雑なものを簡単に出力できるイメージですが、実際に使ってみると経験やコツがいります。やはり、どんな道具も使いこなせるようになるには時間が必要なようです。&lt;/p&gt;
+
+&lt;p&gt;まだまだ3Dプリンターを使う上で学ぶことが多いと感じたので、継続して使っていきたいと思います。&lt;/p&gt;
+
+&lt;p&gt;それではまた。&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>オフィス移転したらインターホンがなかったのでRaspbeerry Piでカメラ付きインターホン作ってみた</title>

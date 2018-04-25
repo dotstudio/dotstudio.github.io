@@ -1,0 +1,1934 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
+  <meta charset="utf-8">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+    
+
+    
+    
+      
+      
+      
+      
+
+      
+      
+      
+      
+        
+      
+      
+
+      
+      
+    
+
+    
+    
+
+    
+    
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Amazon Echoで動くAlexaのスキル開発をNode.jsでやってみましょう！">
+    <meta name="author" content="dotstudio Inc.">
+    <meta content="https://dotstud.io/img/blog/144/00_eyecatch.png">
+
+    <meta itemprop="name" content="Amazon Echoを使いこなそう！Node.jsでAlexaスキル開発 - スマートスピーカーの基本とスキル開発入門 | dotstudio"/>
+    <meta itemprop="image" content="https://dotstud.io/img/blog/144/00_eyecatch.png"/>
+    
+    <meta property="og:title" content="Amazon Echoを使いこなそう！Node.jsでAlexaスキル開発 - スマートスピーカーの基本とスキル開発入門 | dotstudio" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://dotstud.io/blog/nodejs-amazon-alexa-skill/" />
+    <meta property="og:site_name" content="dotstudio（ドットスタジオ）" />
+    <meta property="og:image" content="https://dotstud.io/img/blog/144/00_eyecatch.png" />
+    <meta property="og:image:secure_url" content="https://dotstud.io/img/blog/144/00_eyecatch.png" />
+    <meta property="og:description" content="Amazon Echoで動くAlexaのスキル開発をNode.jsでやってみましょう！" />
+    <meta property="article:author" content="https://www.facebook.com/dotstud10/" />
+    <meta property="fb:app_id" content="296336307370435" />
+    <meta property="fb:pages" content="1013196712108753" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image:src" content="https://dotstud.io/img/blog/144/00_eyecatch.png">
+    <meta name="twitter:site" content="@dotstud_io" />
+    <meta name="twitter:url" content="https://dotstud.io/blog/nodejs-amazon-alexa-skill/">
+    <meta name="twitter:description" content="Amazon Echoで動くAlexaのスキル開発をNode.jsでやってみましょう！">
+    <meta name="twitter:title" content="Amazon Echoを使いこなそう！Node.jsでAlexaスキル開発 - スマートスピーカーの基本とスキル開発入門 | dotstudio">
+    <meta name="twitter:creator" content="@dotstud_io" />
+
+    
+    <meta name="google-site-verification" content="oW2fcSG1fFnkDoRCGFJ0IGGebtBr8FjV2twoFMd7Skc" />
+    <title>Amazon Echoを使いこなそう！Node.jsでAlexaスキル開発 - スマートスピーカーの基本とスキル開発入門 | dotstudio</title>
+    
+
+    <link rel="stylesheet" href="/css/loader.css">
+    
+    <link rel="stylesheet" href='/css/master.css'>
+    <link rel="stylesheet" href="/css/icon-font.css">
+    
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+
+    <link rel="shortcut icon" type="image/png" href="/img/resources/favicon.png"/>
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="preload" as="style" onload="this.rel='stylesheet'">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel="preload" as="style" onload="this.rel='stylesheet'">
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel="preload" as="style" onload="this.rel='stylesheet'">
+    
+    <link href="/css/lib/hljs.css" rel="preload" as="style" onload="this.rel='stylesheet'">
+    
+
+    
+    
+    
+
+    
+    
+
+    
+    
+    
+    
+
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-K5TRM9Q');</script>
+    
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-5922216421588455",
+        enable_page_level_ads: true
+      });
+    </script>
+</head>
+
+<body>
+  
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K5TRM9Q"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  
+
+  
+  <div id="fb-root"></div>
+  <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v2.8";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));</script>
+
+  
+
+  <header>
+    <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<symbol id="icon-arrow-right" viewBox="0 0 32 32">
+<title>arrow-right</title>
+<path class="path1" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M5.143 5.143l10.349 10.349"></path>
+<path class="path2" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M5.143 26.857l10.349-10.349"></path>
+<path class="path3" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M16.571 26.857l10.349-10.349"></path>
+<path class="path4" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M16.571 5.143l10.349 10.349"></path>
+</symbol>
+<symbol id="icon-hamburger" viewBox="0 0 60 32">
+<title>hamburger</title>
+<path class="path1" fill="none" stroke="#808080" stroke-width="7.1111" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M3.556 3.556h53.333"></path>
+<path class="path2" fill="none" stroke="#808080" stroke-width="7.1111" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M3.556 28.444h53.333"></path>
+</symbol>
+<symbol id="icon-logo-mark" viewBox="0 0 32 32">
+<title>logo-mark</title>
+<path class="path1" d="M19.731 28.8h-19.731v-19.699h19.731zM1.53 27.302h16.672v-16.672h-16.672z"></path>
+<path class="path2" d="M32 22.899h-19.731v-19.699h19.731zM13.798 21.37h16.672v-16.672h-16.672z"></path>
+</symbol>
+<symbol id="icon-social-facebook" viewBox="0 0 32 32">
+<title>social-facebook</title>
+<path class="path1" d="M30.1 0.12h-28.46c-0.974 0.011-1.76 0.804-1.76 1.78 0 0 0 0 0 0v28.46c0 0.983 0.797 1.78 1.78 1.78h15.32v-12.4h-4.16v-4.82h4.16v-3.58c-0.020-0.179-0.031-0.386-0.031-0.596 0-3.203 2.597-5.8 5.8-5.8 0.152 0 0.302 0.006 0.45 0.017-0.016-0.001-0.013-0.001-0.009-0.001 1.3 0 2.582 0.073 3.844 0.214l-0.155 4.286h-2.54c-2 0-2.36 0.96-2.36 2.36v3.1h4.76l-0.62 4.8h-4.12v12.4h8.12c0.983 0 1.78-0.797 1.78-1.78v-28.44c0-0.983-0.797-1.78-1.78-1.78z"></path>
+</symbol>
+<symbol id="icon-social-github" viewBox="0 0 32 32">
+<title>social-github</title>
+<path class="path1" d="M16 0.4c-0.001 0-0.002 0-0.004 0-8.837 0-16 7.163-16 16 0 7.028 4.531 12.997 10.831 15.147 0.913 0.173 1.213-0.307 1.213-0.747s-0.040-1.38-0.040-2.8c-4.44 1.060-5.38-2-5.38-2-0.308-0.987-0.937-1.798-1.763-2.33-1.477-1.010 0.103-0.99 0.103-0.99 1.055 0.144 1.941 0.76 2.451 1.624 0.607 1.039 1.701 1.715 2.953 1.715 0.6 0 1.164-0.155 1.653-0.428 0.062-0.836 0.437-1.58 1.002-2.13-3.559-0.401-7.279-1.781-7.279-8.001-0.001-0.032-0.001-0.069-0.001-0.106 0-1.621 0.624-3.096 1.645-4.198-0.181-0.526-0.283-1.135-0.283-1.769 0-0.85 0.184-1.657 0.514-2.383s1.325-0.404 4.385 1.676c1.199-0.341 2.577-0.537 4-0.537s2.801 0.196 4.107 0.562c2.953-2.026 4.293-1.666 4.293-1.666 0.31 0.683 0.49 1.481 0.49 2.321 0 0.688-0.121 1.348-0.343 1.959 1.030 1.058 1.654 2.533 1.654 4.154 0 0.037-0 0.075-0.001 0.112 0 6.134-3.74 7.494-7.3 7.894 0.685 0.69 1.108 1.641 1.108 2.69 0 0.088-0.003 0.175-0.009 0.261 0.001 2.128 0.001 3.848 0.001 4.368s0.28 0.92 1.1 0.78c6.413-2.183 10.944-8.152 10.944-15.18 0-8.837-7.163-16-16-16-0.015 0-0.031 0-0.046 0z"></path>
+</symbol>
+<symbol id="icon-social-twitter" viewBox="0 0 32 32">
+<title>social-twitter</title>
+<path class="path1" d="M10 29c0.036 0 0.078 0 0.12 0 10.25 0 18.56-8.31 18.56-18.56 0-0.042-0-0.085-0-0.127 0-0.274 0-0.554 0-0.834 1.312-0.959 2.414-2.113 3.289-3.431-1.070 0.454-2.347 0.82-3.686 0.984 1.293-0.819 2.312-2.084 2.804-3.587-1.184 0.679-2.577 1.234-4.062 1.539-1.286-1.244-2.976-2.027-4.849-2.027-3.634 0-6.58 2.946-6.58 6.58 0 0.518 0.060 1.022 0.173 1.506-5.473-0.309-10.286-2.887-13.523-6.813-0.587 0.917-0.919 2.059-0.919 3.278 0 2.258 1.137 4.25 2.871 5.435-1.063-0.025-2.070-0.325-2.95-0.822l0.032 0.017c-0 0.027-0.001 0.058-0.001 0.090 0 3.163 2.239 5.803 5.218 6.423-0.479 0.156-1.078 0.242-1.696 0.242-0.432 0-0.854-0.042-1.263-0.121 0.908 2.637 3.319 4.512 6.175 4.567-2.208 1.746-5.039 2.8-8.116 2.8-0.013 0-0.027-0-0.040-0-0.566-0.018-1.104-0.068-1.633-0.149 2.897 1.868 6.353 2.984 10.068 3.009z"></path>
+</symbol>
+</defs>
+</svg>
+
+    <div class="header">
+  <span class="logo"><a href="/"><svg id="icon-logo" width="100%"><use xlink:href="#icon-logo-mark"></svg></a></span>
+
+  <div class="menu">
+    <input type="checkbox" id="menu-toggle">
+      <label for="menu-toggle" class='label-toggle'>
+        <svg class="icon-hamburger"><use xlink:href="#icon-hamburger"></svg>
+      </label>
+    </input>
+    <ul>
+      <li class="menu-item"><a href="/blog">Blog</a></li>
+      <li class="menu-item"><a href="/shop">Shop</a></li>
+      <li class="menu-item"><a href="/docs">Docs</a></li>
+      <li class="menu-item"><a href="/about">About</a></li>
+      <li class="menu-item"><a href="/service">Service</a></li>
+      
+    </ul>
+  </div>
+
+</div>
+  </header>
+
+
+
+
+ 
+ 
+
+
+	
+		
+	
+
+
+
+
+<ul class="categories">
+	
+	<li><a href="/categories/try/" class="selected">
+		やってみるIoT
+	</a></li>
+	
+	<li><a href="/categories/learn/" class="">
+		IoTを知ろう
+	</a></li>
+	
+	<li><a href="/categories/event/" class="">
+		イベントレポート
+	</a></li>
+	
+	<li><a href="/categories/tips/" class="">
+		Tips
+	</a></li>
+	
+</ul>
+
+
+
+
+  
+    
+  
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+<article class="blog-single">
+  <div class="date">2018.03.06</div>
+
+  <img class="blog-single--eyecatch" src="/img/blog/144/00_eyecatch.png" alt="" width="710px">
+  
+  <h1 class="blog-single--title">Amazon Echoを使いこなそう！Node.jsでAlexaスキル開発 - スマートスピーカーの基本とスキル開発入門</h1>
+
+  <div class="blog-single--information">
+    <a class="author" href="/members/chantoku">
+      <img src="/img/members/chantoku/author.png" alt="" class="author--avatar">
+      <p class="author--name">ちゃんとく</p>
+    </a>
+
+    
+    <a class="series" href="/series/smartspeaker">
+        スマートスピーカー開発入門
+    </a>
+    
+
+  </div>
+  
+  <div class="blog-single--content markdown">
+
+<p>こんにちは、ちゃんとくです。突然ですが、「<strong>スマートスピーカー</strong>」流行っていますね！</p>
+
+<p>dotstudioでも「LINE Wave」「Google Home mini」「Amazon Echo Dot」と取り揃えております。</p>
+
+<p><img src="/img/blog/144/1.png" alt="" /></p>
+
+<p>が。<strong>ぶっちゃけ「音楽かけて」しか活用できてない……。</strong></p>
+
+<p>ということで、スマートスピーカーのスキルを開発し、<u>活用できるよう自分向けにカスタマイズ</u>してみましょう！今回は<strong>Amazon EchoのAlexaスキルをNode.jsで開発</strong>してみます！</p>
+
+<p>※記事は長いですが、開発は簡単なのでぜひチャレンジしてみてください！</p>
+
+<h2 id="開発を始める前に">開発を始める前に</h2>
+
+<h3 id="alexaって何-amazon-echoじゃないの">Alexaって何？Amazon Echoじゃないの？</h3>
+
+<p><img src="/img/blog/144/device.png" alt="" />
+Amazonのスマートスピーカーは「Echo」という<strong>スピーカーのシリーズ</strong>に、「Alexa」という<strong>音声AI</strong>が搭載されたものです。Alexaは音声AIの名前なので、Alexa搭載のPCやクルマもありますよね。</p>
+
+<p>各スピーカの違いは音質だったり、スマートホームハブ内臓だったりと色々あるので、調べてみてください。</p>
+
+<p>⇒ 参考: <a href="http://www.itmedia.co.jp/news/articles/1711/08/news107.html">日本上陸「Amazon Echo」3機種の違いは？　他社とどう差別化する？</a></p>
+
+<p>ちなみに「LINE WAVE」の音声AIは「Clova」、「Google Home」の音声AIは「Googleアシスタント」と言います。</p>
+
+<h3 id="alexaのスキルってなに">Alexaのスキルってなに？</h3>
+
+<p>「スキル」とは、<u>開発者によって追加された拡張機能</u>を指します。スマートフォンでいうアプリのようなものですね。</p>
+
+<p>スキルにも「カスタムスキル（汎用）」「スマートホームスキル（家電制御など）」「フラッシュブリーフィングスキル（読み上げ）」などの種類があります。</p>
+
+<p>開発したカスタムスキルは<strong>自分のデバイスですぐに利用</strong>できますが、<strong>Alexaスキルストアで公開して頒布する</strong>こともできます！今回は自分のデバイスで利用できるところまでやってみますよ〜！</p>
+
+<h3 id="スキルを開発する方法">スキルを開発する方法</h3>
+
+<p>まずはスキルの全体の処理の流れを見てみましょう。
+<img src="/img/blog/144/2.png" alt="" /></p>
+
+<ul>
+<li>Echoデバイスは受け取った音声をAlexaサービスに渡します。</li>
+<li>Alexaサービスは音声を解析してテキストに変換し、処理ロジックに渡します。</li>
+<li>処理ロジックの結果がAlexaに渡され、音声データを生成してデバイスに渡します。</li>
+<li>Echoデバイスが音声を発します。</li>
+</ul>
+
+<p>スキルを開発するときに必要なのは、上の図で「<strong>音声インタフェース</strong>」と「<strong>処理ロジック</strong>」の部分です。</p>
+
+<p>音声インタフェースは<u>どんな言葉を受け取るか、どう理解するか</u>などです。この部分は<strong>Amazon Developer上で設計</strong>することができます。</p>
+
+<p>処理ロジックは<u>返答をする部分</u>です。自前でエンドポイントを作成することもできますが、<strong>AWS Lambdaで作成すると簡単に紐付けることができます</strong>。今回はAWS Lambdaを使ってみます。</p>
+
+<h3 id="開発手順の整理">開発手順の整理</h3>
+
+<p>今回は下記の手順で開発していきます。</p>
+
+<ul>
+<li>Amazon Developer上で音声インタフェースを設計</li>
+<li>AWS Lambdaで処理ロジックを開発</li>
+<li>音声インタフェースと処理ロジックの紐付け</li>
+<li>デバイスでスキルを有効にする</li>
+</ul>
+
+<p>一つ一つの手順は難しくないので、しっかり理解しておきましょう！</p>
+
+<h2 id="開発の事前準備">開発の事前準備</h2>
+
+<p>各種アカウントやセットアップは開発の前にあらかじめ用意しておくとスムーズです。</p>
+
+<ul>
+<li>Amazon Developerアカウント</li>
+<li>Echoデバイスのセットアップ</li>
+<li>AWSアカウント</li>
+</ul>
+
+<p>下記でそれぞれの手順を紹介します。</p>
+
+<h3 id="amazon-developerアカウントの作成">Amazon Developerアカウントの作成</h3>
+
+<p>Alexaスキルの登録や音声インタフェースの設計に必要です。Amazon.co.jpのお買い物アカウントをそのまま紐付けることができます。</p>
+
+<p><strong>※Amazon.com（米国）アカウントを紐付けると最後のデバイスとスキルの紐付けでうまくいかない場合があります。</strong></p>
+
+<p><center>
+<a href="https://developer.amazon.com/ja/"><img src="/img/blog/144/ad_console.png" alt="" />
+Amazon Developer（日本語版）</a>
+</center></p>
+
+<p>右上のDeveloper Consoleから登録します。</p>
+
+<p><img src="/img/blog/144/ad_monetize.png" alt="" />
+収益化の項目はひとまず「いいえ」にしておきます（後から変更できます）。</p>
+
+<h3 id="echoデバイスのセットアップ">Echoデバイスのセットアップ</h3>
+
+<p>スマートフォンアプリで、Amazon Developerアカウントの紐づけとWi-Fi設定を行います。</p>
+
+<p><img src="/img/blog/144/app_login.png" alt="" />
+お手持ちのiPhone、Android端末にAlexaアプリをインストールしましょう（以下iPhoneでの説明です）。Amazon Developerアカウントでログインします。</p>
+
+<p><img src="/img/blog/144/app_setup.png" alt="" />
+「設定」から「新しいデバイスをセットアップ」を選びます。</p>
+
+<p><img src="/img/blog/144/app_wifi.png" alt="" />
+言語を選択し、スマートフォンを利用するWi-Fiに接続します。<strong>Wi-Fiは2.4GHz帯でないと利用できない</strong>ので注意しましょう（最近だと5GHz帯も多いので確認してください）。</p>
+
+<p><img src="/img/blog/144/app_action.png" alt="" />
+Echoデバイスと接続します。デバイスがオレンジになっていない場合はアクションボタンを長押しします。</p>
+
+<p><img src="/img/blog/144/app_mode.png" alt="" />
+「・」のボタンがアクションボタンです。</p>
+
+<p><img src="/img/blog/144/app_device.png" alt="" />
+「Amazon-XXXX」に接続します（複数のデバイスがセットアップモードになっている場合、混同しないよう注意してください）。</p>
+
+<p>以上でセットアップ完了です！</p>
+
+<h3 id="awsアカウントの作成">AWSアカウントの作成</h3>
+
+<p>AWSアカウントは下記の公式サイトを参考に進めてみてください（以前に登録済みだったので画面キャプチャが用意できませんでした……）。</p>
+
+<p><a href="https://aws.amazon.com/jp/register-flow/">https://aws.amazon.com/jp/register-flow/</a></p>
+
+<p>アカウント登録の際には<strong>クレジットカードの登録</strong>、<strong>電話確認</strong>（自動応答）が必要です。</p>
+
+<p>AWSアカウントには2018年3月現在では1年間の無料枠がついてきますが、<u>ご自身のアカウントの管理には注意してください。</u></p>
+
+<h2 id="音声インタフェースの設計">音声インタフェースの設計</h2>
+
+<p>まずは<a href="https://developer.amazon.com/ja/">Amazon Developer</a>上で音声インタフェースを作成していきます。
+<img src="/img/blog/144/3.png" alt="" /></p>
+
+<h3 id="alexaスキルを新規登録">Alexaスキルを新規登録</h3>
+
+<p>Amazon Developerにログインして<a href="https://developer.amazon.com/home.html">Developer Console</a>を開きます。
+<img src="/img/blog/144/ad_alexa.png" alt="" />
+Alexaのページへ移動します。</p>
+
+<p><img src="/img/blog/144/ad_start.png" alt="" />
+「Alexa Skills Kit」を始めます。</p>
+
+<p><img src="/img/blog/144/create1.png" alt="" />
+「新しいスキルを追加」します（新メニューのβ版が出てますが、まだ日本語対応していないようです）。</p>
+
+<p><img src="/img/blog/144/create2.png" alt="" />
+作成するスキルの情報を入力します。今回は下記のようにしました。</p>
+
+<ul>
+<li>スキルの種類 ⇒ 「カスタム対話モデル」</li>
+<li>言語 ⇒ 日本語</li>
+<li>スキル名 ⇒ ちゃんとくカフェ</li>
+<li>呼び出し名 ⇒ ちゃんとくカフェ</li>
+</ul>
+
+<p>「保存」して「次へ」で作成します。</p>
+
+<h3 id="対話モデルを作成">対話モデルを作成</h3>
+
+<p><img src="/img/blog/144/create3.png" alt="" />
+作成したら、<strong>対話モデル</strong>を作っていきます。「スキルビルダーを起動する」を選択します。</p>
+
+<p>対話モデルとは、<u>ユーザがどのように発話するか、どのように解釈して処理ロジックに伝えるか</u>の部分です。用語がいくつか出てくるので、下の図を見てみましょう。
+<img src="/img/blog/144/model1.png" alt="" /></p>
+
+<ul>
+<li>スキル名を<strong>Invocation name</strong>と言い、「<strong>Alexa、{Invocation name}を開いて</strong>」と呼びかけます。</li>
+<li>起動後に返すAlexaの言葉を<strong>LaunchRequest</strong>と言います。</li>
+<li><u>Alexaが受け付けるアクションの呼びかけ</u>を、<strong>Intent</strong>と言います。</li>
+<li>Intentに対するAlexaの返答を<strong>IntentRequest</strong>と言います。</li>
+</ul>
+
+<p>これが基本的なユーザとAlexaのやりとりの構図です。対話モデルでは<strong>Intent</strong>を設定して、Alexaに受け付けてもらえるようにしていきます。</p>
+
+<p><img src="/img/blog/144/model2.png" alt="" />
+ちなみに「スキルを開く〜アクション」までは一文での呼びかけでもできます。</p>
+
+<p><img src="/img/blog/144/builder1.png" alt="" />
+スキルビルダーの画面が開いたら、左のIntentsから「ADD」を選択します。</p>
+
+<p><img src="/img/blog/144/builder2.png" alt="" />
+設定するIntentの名前を付けます。今回はオススメを教えてもらうアクションを作成したいので「RecomendIntent」にしてみました。<u>アクションに沿った名前をつけておく</u>とIntentが増えてもわかりやすいと思います。</p>
+
+<p><img src="/img/blog/144/builder3.png" alt="" />
+アクションを呼ぶときの「呼びかけ」のサンプル発話を登録していきます。公式によると、パターン数は1つのIntentに対し、<u>最低6つ、理想は30</u>だそうです。サンプル発話が多いほど認識精度が向上します。</p>
+
+<p>登録したら「<strong>Save Model</strong>」、「<strong>Build Model</strong>」を順に選択します。（Buildには少し時間がかかります。ここで機械学習がされているそうです。）</p>
+
+<p><img src="/img/blog/144/builder4.png" alt="" />
+ビルドが完了したら「Configuration」を選択し、設定画面に戻ります。</p>
+
+<p><img src="/img/blog/144/builder5.png" alt="" />
+スキルの「ID」をコピーして、Amazon Developerは一旦置いておきます（まだ設定があるので開いたまま）。</p>
+
+<h2 id="処理ロジックの開発">処理ロジックの開発</h2>
+
+<p>続いて、<a href="https://aws.amazon.com/jp/">AWS</a>のLambda上で処理ロジックを作っていきます。
+<img src="/img/blog/144/4.png" alt="" />
+AWS Lambdaは、<u>AWSに関するイベントにをトリガーにする処理を作成できる実行環境</u>です。</p>
+
+<p>自分自身でエンドポイントを立てることもできますが、AWS Lambdaを使うとロジック自体の開発や他のAWSサービスとの連携も簡単です。</p>
+
+<h3 id="aws-lambda関数を作成">AWS Lambda関数を作成</h3>
+
+<p><img src="/img/blog/144/func1.png" alt="" />
+AWSコンソールを開いたら、「lambda」を検索して開きます。</p>
+
+<p><img src="/img/blog/144/func2.png" alt="" />
+<strong>リージョンが「東京」になっていることを確認</strong>し、「関数を作成」します。</p>
+
+<p><img src="/img/blog/144/func3.png" alt="" />
+「設計図」から作成し、「alexa-skill-sdk-factskill」を検索して選びます。この設計図を利用すると、<strong>Alexa Skills Kit for Node.jsというNode.jsのSDK</strong>がデフォルトで入ってきます。<u>現在のところ公式に開発されているSDKはNode.jsだけ</u>です。</p>
+
+<p><img src="/img/blog/144/func4.png" alt="" />
+上記のように関数の情報を設定します。</p>
+
+<p>「ロール」は関数のアクセス権限です。今回は「シンプルなマイクロハーネスのアクセス権限」を選択しましたが、S3など他のサービスに繋ぎたい場合は別途選択が必要です。AWSの<a href="https://developer.amazon.com/ja/docs/custom-skills/host-a-custom-skill-as-an-aws-lambda-function.html">ドキュメント</a>を参考にしましょう。</p>
+
+<p><img src="/img/blog/144/func5.png" alt="" />
+下にスクロールして保存します。</p>
+
+<h3 id="トリガーをセット">トリガーをセット</h3>
+
+<p><img src="/img/blog/144/func6.png" alt="" />
+関数が作成できたら、トリガー部分に「Alexa Skills Kit」をドラッグ＆ドロップで設定します。</p>
+
+<p>ここで「Alexa Skills Kitがない！」という人は、<strong>リージョンが東京になっているか</strong>をもう一度確認してください。（東京じゃない場合は、リージョンを選び直して関数を再度作成ですよ！）</p>
+
+<p><img src="/img/blog/144/func8.png" alt="" />
+下にスクロールして「トリガーの設定」に、Amazon Developerで取得した「スキルのID」を貼り付けます。</p>
+
+<h3 id="処理ロジックを編集">処理ロジックを編集</h3>
+
+<p><img src="/img/blog/144/func9.png" alt="" />
+関数がデフォルトの設計図のままなので編集します。上記の部分を選択すると下にエディタが開きます。</p>
+
+<p><img src="/img/blog/144/func11.png" alt="" />
+コードのエントリタイプ（エディタを使う・アップロードするなど）や、ランタイムを選択できます。Node.jsは6.10までの対応になっています。もう少しバージョンが上がってほしいですね……！</p>
+
+<p>エディタには、デフォルトのコードを参考に下記のようなコードを貼り付けます。</p>
+
+<pre><code>'use strict';
+
+const Alexa = require('alexa-sdk');
+
+const handlers = {
+    // アプリ起動時の返答
+    'LaunchRequest': function () {
+        const speechOutput = 'こんにちは。オススメをお知らせします。'
+        const reprompt = 'オススメをお知らせします。'
+        this.emit(':ask', speechOutput, reprompt);
+    },
+    // RecomendIntentへの返答
+    'RecomendIntent': function () {
+        const intent = this.event.request.intent;
+        const speechOutput = 'オススメはハンバーグ定食です。'
+        this.emit(':tell', speechOutput);
+    },
+    // ヘルプ（デフォルト）への返答
+    'AMAZON.HelpIntent': function () {
+        const speechOutput = 'ちゃんとくカフェのオススメメニューをお知らせします。';
+        const reprompt = 'オススメを聞いてみてください。'
+        this.emit(':ask', speechOutput, reprompt);
+    },
+    // キャンセル（デフォルト）への返答
+    'AMAZON.CancelIntent': function () {
+        this.emit(':tell', this.t('STOP_MESSAGE'));
+    },
+    // 対応できないアクションへの返答
+    'AMAZON.StopIntent': function () {
+        const speechOutput = 'すみません。わかりません。';
+        const reprompt = 'もう一度お願いします。'
+        this.emit(':tell', this.t('STOP_MESSAGE'));
+    },
+};
+
+// 下記のように修正
+exports.handler = function(event, context, callback) {
+    const alexa = Alexa.handler(event, context, callback);
+    alexa.registerHandlers(handlers);
+    alexa.execute();
+}
+</code></pre>
+
+<p>先ほど設定した「RecomendIntent」（ご自身が設定したIntent名。小文字大文字など注意！）に対する返答や、その他の返答を作成しました。RaunchRequest、HelpIntentなど、<strong>スキル開発で推奨されている設定があるので記述する</strong>ようにします。</p>
+
+<p><u><strong>この辺がきちんと設定されていないとAlexaスキルストアでは公開できない</strong>みたいです。</u></p>
+
+<p><img src="/img/blog/144/func7.png" alt="" />
+コードが編集できたら右上で保存し、ARNをコピーして、AWSの設定は完了です。</p>
+
+<h2 id="音声インターフェースと処理ロジックの紐付け">音声インターフェースと処理ロジックの紐付け</h2>
+
+<p>作成したAWS Lambda関数とAmazon Developer上のスキルを紐づけます。</p>
+
+<p><img src="/img/blog/144/ad_func.png" alt="" />
+Amazon Developer側の設定ページで、「エンドポイント」に「AWS LambdaのARN」を選択し、「デフォルト」に先ほどのARNを貼り付けます。</p>
+
+<p>保存して紐づけは完了です！<strong>これでスキルの作成が一通り完了しました！</strong></p>
+
+<h2 id="試してみよう">試してみよう！</h2>
+
+<h3 id="シミュレータでテスト">シミュレータでテスト</h3>
+
+<p>まずはAmazon Developer上に用意されているシミュレータでテストしてみます（実はスキル開発だけならEchoデバイスが無くてもできるんですね）。</p>
+
+<p><img src="/img/blog/144/simu1.png" alt="" />
+「テスト」のサービスシミュレータに登録したサンプル発話を入力し、スキルを呼び出します。</p>
+
+<p><img src="/img/blog/144/simu2.png" alt="" />
+レスポンスが返ってきました！処理ロジックを作ったらここでデバッグをしていくのが良さそうです。</p>
+
+<h3 id="echoデバイスでスキルを有効にする">Echoデバイスでスキルを有効にする</h3>
+
+<p>開発したスキルは、自分のAmazon Developerアカウントに紐付いているデバイスで検証することができます。</p>
+
+<p><img src="/img/blog/144/demo1.png" alt="" />
+スマートフォンアプリから「スキル」を選びます。</p>
+
+<p><img src="/img/blog/144/demo2.png" alt="" />
+「有効なスキル」を選択します。</p>
+
+<p><img src="/img/blog/144/demo3.png" alt="" />
+「DEVスキル」の項目から、作成したスキルを選択します。</p>
+
+<p>ここで作ったスキルが表示されていない場合は、Amazon Developerアカウントが<strong>Amazon.comアカウント（米国）に紐付いてないか確認</strong>してください。Amazon.co.jpアカウントに紐づけないとダメみたい……（現象が起こせなくて解決策がイマイチわかっていません、すみません）。</p>
+
+<p><img src="/img/blog/144/demo4.png" alt="" />
+選択すると連携しているEchoデバイスでスキルが使えるようになります（無効にすると使えなくなります）。</p>
+
+<h3 id="いざ-スキルを呼び出し">いざ、スキルを呼び出し！</h3>
+
+<p>デバイスで作成したスキルを試してみましょう！</p>
+
+<p>基本のやりとりから……
+<iframe width="560" height="315" src="https://www.youtube.com/embed/RyHESCiE03s" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+バッチリです！</p>
+
+<p>「ヘルプ」「ストップ」などの呼びかけは、Intentを登録しなくてもデフォルトで設定されています。
+<iframe width="560" height="315" src="https://www.youtube.com/embed/dr-akz9qTDk" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>手順の紹介は長くなってしまいましたが、あまり引っかかるところなくスキルの開発ができたと思います。</p>
+
+<p>今回の基本のスキルに加えて、<u>デフォルトのIntentの拡張や、任意の数字や都市を受け取ることができる「Slot」の追加</u>などまだまだカスタマイズができます。</p>
+
+<p>次回はカスタマイズを加えたスキルを開発し、公開するところまでやってみたいと思います。それではまた！</p>
+</div>
+
+  
+
+
+
+    
+    
+    
+    <nav class="related">
+      <h2 class="">関連記事</h2>
+      <ul class="cards-related">
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+        </ul>
+      </nav>
+
+
+
+  <div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v2.7&appId=296336307370435";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+  <div class="share">
+    <a href="https://twitter.com/share" class="twitter-share-button" data-size="large" data-hashtags="dotstudio">Tweet</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    &nbsp;
+    <div class="fb-like" data-href="https://dotstud.io/blog/nodejs-amazon-alexa-skill/" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
+
+    &nbsp;
+
+    <div class="hatena-b">
+      <a href="http://b.hatena.ne.jp/entry/s/dotstud.io/blog/nodejs-amazon-alexa-skill" class="hatena-bookmark-button" data-hatena-bookmark-title="Amazon Echoを使いこなそう！Node.jsでAlexaスキル開発 - スマートスピーカーの基本とスキル開発入門" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
+        <img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" />
+      </a>
+      <script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+    </div>    
+  </div>
+
+</article>
+
+
+
+<footer class="footer">
+  <p class="footer-info">
+    <a class="footer-info--item" href="/about">会社概要</a>
+    <a class="footer-info--item" href="/members">メンバー</a>
+    <a class="footer-info--item" href="/legal#tos">利用規約</a>
+    <a class="footer-info--item" href="/legal#sct">特定商取引</a>
+    <a class="footer-info--item" href="/legal#pp">プライバシーポリシー</a>
+  </p>
+  <p class="footer-cr">© 2016 dotstudio inc.</p>
+</footer>
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+
+
+
+
+
+<script src="/js/app.js"></script>
+
+
+<script src="/js/lib/hljs.js"></script>
+<script src="/js/lib/hljs-numbers.js"></script>
+<script>
+  hljs.initHighlightingOnLoad();
+  hljs.initLineNumbersOnLoad();
+</script>
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-78080011-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+

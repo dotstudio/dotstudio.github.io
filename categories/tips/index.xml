@@ -2,12 +2,313 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tips on dotstudio（ドットスタジオ）</title>
-    <link>https://dotstud.io/categories/tips/index.xml</link>
+    <link>https://dotstud.io/categories/tips/</link>
     <description>Recent content in Tips on dotstudio（ドットスタジオ）</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <atom:link href="/categories/tips/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 20 Apr 2018 14:00:26 +0900</lastBuildDate>
+    <atom:link href="/categories/tips/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>NodeSchoolでNode.jsの学習を始めよう！インストール手順から基本操作までステップ別解説</title>
+      <link>https://dotstud.io/blog/node-school-before-learn/</link>
+      <pubDate>Fri, 20 Apr 2018 14:00:26 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/node-school-before-learn/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、ちゃんとくです。&lt;strong&gt;みなさんNode.jsしてますかー！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;dotstudioでは何度も紹介していますが、Node.jsは&lt;u&gt;超超ざっくり言うとサーバサイドで動くJavaScript&lt;/u&gt;ですね。&lt;/p&gt;
+
+&lt;p&gt;これからNode.jsを学びたい！という人も多いと思うのですが、初めてNode.jsを学びたいときにピッタリな「&lt;strong&gt;NodeSchool&lt;/strong&gt;」をご存知でしょうか。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://nodeschool.io/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/nodeschool.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;
+NodeSchoolは&lt;strong&gt;JavaScriptに関するいろいろな授業を集めた学校のようなもの&lt;/strong&gt;で、コードを書いて問題を解いていくことで学習を進められます。&lt;/p&gt;
+
+&lt;p&gt;世界各国のさまざまな言語に対応していて、日本語に対応した「&lt;a href=&#34;https://nodeschool.io/tokyo/&#34;&gt;NodeSchool Tokyo&lt;/a&gt;」のページもあります。&lt;/p&gt;
+
+&lt;p&gt;みんなで集まって授業を進めるハンズオンイベントも盛んで、ちょうど&lt;u&gt;5月21日にNodeSchool Tokyoが開催&lt;/u&gt;されるようです！
+&lt;a href=&#34;https://nodejs.connpass.com/event/82742/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/link.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;今回は、そもそも「コードを書くのもコマンドラインも初めて」という人向けに、&lt;strong&gt;NodeSchoolを始めるまで&lt;/strong&gt;を紹介してみたいと思います。&lt;/p&gt;
+
+&lt;p&gt;CLIの操作方法、Node.jsの環境構築から解説していきますが、「コマンドライン使えるよ、もうNode.js入ってるよ」という人は「&lt;a href=&#34;https://dotstud.io/blog/node-school-before-learn/#nodeschool%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB&#34;&gt;NodeSchoolのインストール&lt;/a&gt;」の章から進めましょう！&lt;/p&gt;
+
+&lt;p&gt;それではやって行こう！&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;font size=2&gt;※筆者はMacユーザのため、基本的にMacに沿った説明になっています。Windows向けの説明も書いていますが、わからないときは適宜調べてみてください。&lt;/font&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;nodeschoolを始める前に&#34;&gt;NodeSchoolを始める前に&lt;/h2&gt;
+
+&lt;h3 id=&#34;コマンドラインインタフェース-cli-の操作&#34;&gt;コマンドラインインタフェース（CLI）の操作&lt;/h3&gt;
+
+&lt;p&gt;NodeSchoolは、自身のPCのコマンドライン上（コマンドラインインタフェース、CLI）で進めるツールです。学習を始めるにあたって、基本の操作を覚えておきましょう！&lt;/p&gt;
+
+&lt;p&gt;（↓長くなっちゃったので別記事にしました）
+&lt;a href=&#34;https://dotstud.io/blog/how-to-use-cli&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/link3.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;node-jsのインストール&#34;&gt;Node.jsのインストール&lt;/h3&gt;
+
+&lt;p&gt;NodeSchoolはNode.jsで動きます。NodeSchoolを動かすために、自身のPCにNode.js環境を準備をします。&lt;/p&gt;
+
+&lt;p&gt;まずNode.jsがインストールされているかは、下記コマンドで確認してみてください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ node -v
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;インストールされている場合はインストールされているバージョン、されていない場合は &lt;code&gt;command not found&lt;/code&gt; といったエラーが出ます。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;font size=2&gt;※2018年4月20日時点の最新版はv9.11.1、安定板はv8.11.1です。新しめのバージョンを使うのがオススメです（v6、v7辺りで大きめの変更がありました）。&lt;/font&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://nodejs.org/ja/&#34;&gt;Node.js公式サイト&lt;/a&gt;からインストーラを使ってインストールしてもよいのですが、Node.jsはバージョンアップが多いので、&lt;u&gt;Node.jsのバージョンを管理できるツールと一緒にインストールするのがオススメ&lt;/u&gt;です。&lt;/p&gt;
+
+&lt;p&gt;バージョン管理ツールには「nodebrew」や「nvm」、Windowsの方は「nodist」などがあります。&lt;/p&gt;
+
+&lt;p&gt;「nodebrew」を使ったインストール方法をまとめたので、こちらを参考にインストールしてみてください！&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/nodejs-install-use-nodebrew/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/link2.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;nodeschoolのインストール&#34;&gt;NodeSchoolのインストール&lt;/h2&gt;
+
+&lt;p&gt;さて、Node.js環境の準備ができたら、&lt;strong&gt;いよいよNodeSchoolをインストール&lt;/strong&gt;しましょう。&lt;/p&gt;
+
+&lt;p&gt;NodeSchoolは「npm」というパッケージ管理ツールで配布されているので、npmコマンドでインストールします（Node.jsと一緒にインストールされるのでとりあえず深く考えなくてOK）。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://nodeschool.io/ja/index.html&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/class.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;
+NodeSchoolには上記のようにいくつかの授業があるので、今回は「&lt;strong&gt;learnyounode&lt;/strong&gt;」という授業を入れてみます。下記コマンドを実行しましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ npm install -g learnyounode
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;問題なくインストールされたか確認してみます。下記コマンドを実行しましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ learnyounode
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/learnyounode.png&#34; alt=&#34;&#34; /&gt;
+こんな画面が開いたでしょうか？&lt;/p&gt;
+
+&lt;p&gt;これがNodeSchoolの実行画面で、ここから学習を進めていきます。&lt;strong&gt;インストールお疲れ様でした！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;nodeschoolの基本操作&#34;&gt;NodeSchoolの基本操作&lt;/h2&gt;
+
+&lt;p&gt;まず、「&lt;strong&gt;とりあえずこの画面閉じたい！&lt;/strong&gt;」というときは&lt;code&gt;control+c&lt;/code&gt;で終了できます。&lt;/p&gt;
+
+&lt;p&gt;基本は十字キーの↑↓で移動し、エンターで選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/language.png&#34; alt=&#34;&#34; /&gt;
+「英語表示になっちゃってるよ！」という人は、まずは言語設定を日本語にしましょう。矢印キーで「CHOOSE LANGUAGE」に移動し、エンターで選択します。&lt;/p&gt;
+
+&lt;h2 id=&#34;問題を解く方法&#34;&gt;問題を解く方法&lt;/h2&gt;
+
+&lt;h3 id=&#34;問題画面の見方&#34;&gt;問題画面の見方&lt;/h3&gt;
+
+&lt;p&gt;さてNodeSchoolを始める準備ができましたが、問題を解く方法も少し癖があります。試しに1問解いてみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/helloworld.png&#34; alt=&#34;&#34; /&gt;
+十字キーで移動し、「こんにちは世界」を選んでエンターします（いわゆる&amp;rdquo;Hello, world&amp;rdquo;ですが、日本語訳するとやや不自然ですね）。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/question.png&#34; alt=&#34;&#34; /&gt;
+するとこんな文章が表示されます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/detail.png&#34; alt=&#34;&#34; /&gt;
+大きくわけると、3つの要素で構成されています。&lt;/p&gt;
+
+&lt;p&gt;日本語なので、落ち着いて問題とヒントを読み進めましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;ヒントを読んで進める&#34;&gt;ヒントを読んで進める&lt;/h3&gt;
+
+&lt;p&gt;NodeSchoolでは、自分でNode.js実行ファイルを作り、実際に実行させて答え合わせをして進めていきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/question_detail.png&#34; alt=&#34;&#34; /&gt;
+この問題は、&lt;u&gt;コンソール（ここではターミナル上）に「こんにちは世界」と表示するNode.jsスクリプトを書いてください&lt;/u&gt;という意味です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/hint1.png&#34; alt=&#34;&#34; /&gt;
+ヒントをみると、「&lt;code&gt;.js&lt;/code&gt;拡張子のファイルを作って、&lt;code&gt;$ node xxx.js&lt;/code&gt; を実行すればOKです」と書いてありますね。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/hint2.png&#34; alt=&#34;&#34; /&gt;
+そして 「&lt;code&gt;console.log(&amp;quot;text&amp;quot;)&lt;/code&gt; と記述するとコンソールに出力できます」とあります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/hint3.png&#34; alt=&#34;&#34; /&gt;
+答え合わせ方法は「&lt;code&gt;$ learnyounode verify xxx.js&lt;/code&gt;でテストする」とあります。&lt;/p&gt;
+
+&lt;p&gt;その通りにやってみましょう！&lt;/p&gt;
+
+&lt;h3 id=&#34;node-js実行ファイルを作る&#34;&gt;Node.js実行ファイルを作る&lt;/h3&gt;
+
+&lt;p&gt;問題を解くとき、この問題文＆ヒントを見ながら進めたいですよね。&lt;/p&gt;
+
+&lt;p&gt;そこで操作画面をもう一つ開きます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/terminal.png&#34; alt=&#34;&#34; /&gt;
+Macの場合はツールバーの「シェル」から「新規ウィンドウ」または「新規タブ」で開くことができます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/iterm.png&#34; alt=&#34;&#34; /&gt;
+前述の記事でオススメしたiTermを使っている場合は、画面分割機能がオススメです。ツールバーの「Shell」から「Split&amp;hellip;」を選ぶか、「⌘+D」で横に分割、「⌘+Shift+D」で縦に分割できます（使用頻度が高いので覚えておくのがオススメです）。&lt;/p&gt;
+
+&lt;p&gt;問題を解くファイルは、あとで見つけやすいようにひとところにまとめておきましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/work_dir.png&#34; alt=&#34;&#34; /&gt;
+ちゃんとくはこんな感じで、ホームディレクトリ（開いた場所/cdを実行した移動先）の下に &lt;code&gt;/workspace/nodeschool/learnyounode/&lt;/code&gt;というディレクトリを作り、その下に実行ファイルを作っています。&lt;/p&gt;
+
+&lt;p&gt;好みはそれぞれなので、自分がわかりやすい場所であればなんでもOKです。&lt;/p&gt;
+
+&lt;p&gt;それではファイルを作成して、実行スクリプトを書きましょう！Macの場合は&lt;code&gt;touch&lt;/code&gt;コマンドで新規ファイルを作成できます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ touch 1.js
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ファイル名も、自分がわかればOKです。どの問題かわかるように番号や問題タイトルなどをつけておくのがオススメです。&lt;/p&gt;
+
+&lt;h3 id=&#34;エディタでスクリプトを書く&#34;&gt;エディタでスクリプトを書く&lt;/h3&gt;
+
+&lt;p&gt;それでは「こんにちは世界」用のファイルにスクリプトを書いていきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;vi&lt;/code&gt;コマンドなどでターミナル上で開いてもよいのですが、プログラミング向けエディタ（IDE）を使うのがオススメです。無料エディタでは&lt;a href=&#34;https://www.microsoft.com/ja-jp/dev/products/code-vs.aspx&#34;&gt;Visual Studio Code&lt;/a&gt;や、軽量な&lt;a href=&#34;https://atom.io/&#34;&gt;Atomエディタ&lt;/a&gt;などが流行りです（ちゃんとくはAtom）。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;$ open ./&lt;/code&gt;というコマンド（Windowsの人は&lt;code&gt;explore&lt;/code&gt;）でファイルの場所を開いてみましょう。（&lt;code&gt;./&lt;/code&gt;は今いるディレクトリを表しています。）&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/open.png&#34; alt=&#34;&#34; /&gt;
+ファイルの場所がファインダーで表示されました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/select_editor.png&#34; alt=&#34;&#34; /&gt;
+編集したいファイルを右クリックすると開くアプリを選択できるので、エディタで開きましょう。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;font size=&#34;&#34;&gt;※この「CLIからエディタでファイルを開く操作」は、エディタをカスタマイズしてコマンドで実行することもできます。Atomの場合は&lt;code&gt;$ atom ./&lt;/code&gt;など（後日記事にしてみたいと思います）。&lt;/font&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/example.png&#34; alt=&#34;&#34; /&gt;
+ヒントを参考に、&lt;code&gt;console.log(&amp;quot;text&amp;quot;)&lt;/code&gt;コマンドを書いてみます。エディタで「⌘+s」などで保存して、試しに実行してみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;$ node xxx.js&lt;/code&gt;でファイルを実行します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/script.png&#34; alt=&#34;&#34; /&gt;
+上記のような実行結果になったでしょうか？&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;console.log()&lt;/code&gt;というコマンドに&lt;code&gt;&amp;quot;text&amp;quot;&lt;/code&gt;を渡したら、「text」と表示されました。&lt;/p&gt;
+
+&lt;p&gt;「こんにちは世界」と表示するには……もう分かったでしょうか？（ちょっと意地悪ですが、頑張って解いてみてください！）&lt;/p&gt;
+
+&lt;h3 id=&#34;答え合わせ&#34;&gt;答え合わせ&lt;/h3&gt;
+
+&lt;p&gt;さて、これだ！というスクリプトが書けたら答え合わせをします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/verify.png&#34; alt=&#34;&#34; /&gt;
+ヒントのとおり、&lt;code&gt;$ learnyounode verify xxx.js&lt;/code&gt;を実行します（learnyounodeとかファイル名とか記述するの長いなあってときは、途中まで書いてTabを押すといいことがあります）。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;font size=2&gt;※CLIに慣れてくると雰囲気がわかりますが、&lt;code&gt;$ モジュール名 命令 引数&lt;/code&gt;という風にコマンドを実行しています。引数とはプログラムに渡すモノです。&lt;/font&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/verify_detail.png&#34; alt=&#34;&#34; /&gt;
+答え合わせの結果画面です。自分の書いたスクリプトの実行結果と、想定回答（求められている答え）が表示されます。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;無事に正解していると褒められます。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;回答例も表示されるので、確認してみましょう。&lt;/p&gt;
+
+&lt;p&gt;無事に解けたら、また「&lt;a href=&#34;https://dotstud.io/blog/node-school-before-learn/#%E5%95%8F%E9%A1%8C%E3%82%92%E8%A7%A3%E3%81%8F%E6%96%B9%E6%B3%95&#34;&gt;問題を解く方法&lt;/a&gt;」のように&lt;code&gt;$ learnyounode&lt;/code&gt; を実行して問題ファイルを開き、進めていきましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;NodeSchoolデビューお疲れ様でした！&lt;/strong&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>【Mac向け】「黒い画面」の苦手意識を克服しよう！コマンドラインインタフェースの基本操作</title>
+      <link>https://dotstud.io/blog/how-to-use-cli/</link>
+      <pubDate>Mon, 09 Apr 2018 14:00:26 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/how-to-use-cli/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、ちゃんとくです。&lt;/p&gt;
+
+&lt;p&gt;これからプログラミングの学習を始めたいと思っているみなさん、「&lt;strong&gt;コマンドラインインタフェース&lt;/strong&gt;」はご存知ですか？&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/illust.png&#34; alt=&#34;&#34; /&gt;
+いわゆるプログラマーなイメージの、「&lt;strong&gt;黒い画面&lt;/strong&gt;」ってやつですね。&lt;/p&gt;
+
+&lt;p&gt;苦手意識を持つ方も多いと思いますが、プログラミングの学習を進めるにあたっては必須となっていきます。&lt;/p&gt;
+
+&lt;p&gt;基本を覚えれば簡単なので、今回はコマンドラインインタフェースの基本操作を覚えていきましょう！&lt;/p&gt;
+
+&lt;h2 id=&#34;コマンドラインインタフェース-cli-とは&#34;&gt;コマンドラインインタフェース（CLI）とは&lt;/h2&gt;
+
+&lt;p&gt;コマンドラインインタフェースとは、簡単に言うとPC上で行う操作を&lt;u&gt;キーボード入力（コマンド）だけで操作する画面&lt;/u&gt;のことです。&lt;strong&gt;CLI&lt;/strong&gt;（Comand Line Interface）と呼ばれ、逆に通常マウスなどでPCを扱う画面を&lt;strong&gt;GUI&lt;/strong&gt;（Grafical User Interface）と呼びます。&lt;/p&gt;
+
+&lt;p&gt;Macの人は「ターミナル」を開いてみましょう。（Windowsの人は「コマンドプロンプト」が入っていますが、いろいろとコマンドが違うので別記事を書きたいと思います……！）
+&lt;img src=&#34;https://dotstud.io/img/blog/156/cli.png&#34; alt=&#34;&#34; /&gt;
+こういう画面です。いわゆる「黒い画面」（画像は白いけど）ってやつです。この画面は「&lt;strong&gt;自分のPC&lt;/strong&gt;」を表示しています。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/cli_pwd.png&#34; alt=&#34;&#34; /&gt;
+上記のように、「&lt;strong&gt;pwd&lt;/strong&gt;」と打ってエンターしてみてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;/Users/xxx&lt;/code&gt; のように表示されたと思います。これは&lt;code&gt;pwd&lt;/code&gt;という「&lt;strong&gt;現在のディレクトリを教えて&lt;/strong&gt;」というコマンドを打ったので、現在いる場所が表示された状態です。（※ディレクトリ…PC上の住所。フォルダ的なもの。）&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/gui.png&#34; alt=&#34;&#34; /&gt;
+&lt;code&gt;/Users/xxx&lt;/code&gt; はちょっと聞きなれないディレクトリですが、ファインダーなどで「ユーザ/xxx」を開いていることと同じことを表しています。このファインダーで表示している画面が「GUI」です。&lt;/p&gt;
+
+&lt;p&gt;ちなみに「pwd」は「&lt;u&gt;present working directory&lt;/u&gt;」の略で、それぞれのコマンドは英語に基づいているので合わせて覚えると簡単ですね。&lt;/p&gt;
+
+&lt;h2 id=&#34;基本のコマンドいくつか&#34;&gt;基本のコマンドいくつか&lt;/h2&gt;
+
+&lt;p&gt;ターミナルを開いたときにいる&lt;u&gt;デフォルトの場所を「ホームディレクトリ」&lt;/u&gt;と言います。「cd」というコマンドを打つことでここに戻れます。&lt;/p&gt;
+
+&lt;p&gt;続いて「ls」と打ってみてください。
+&lt;img src=&#34;https://dotstud.io/img/blog/156/cli_ls.png&#34; alt=&#34;&#34; /&gt;
+「ls」は「list」という意味で、現在のディレクトリ直下にあるディレクトリとファイルが表示されました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/gui_ls.png&#34; alt=&#34;&#34; /&gt;
+この場所を見ている状態と同じです。英語と日本語ですが、同じものが表示されていますね！&lt;/p&gt;
+
+&lt;p&gt;ではコマンドライン上で新しいディレクトリを作り、その中へ移動してみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/156/cli_mkdir.png&#34; alt=&#34;&#34; /&gt;
+「mkdir 任意のディレクトリ名」と打ち、そのあと「cd ディレクトリ名/」と打ちます。（nodeschool説明記事と一緒に書いているので、nodeschool用フォルダを作っています笑）&lt;/p&gt;
+
+&lt;p&gt;※mkdir…make directory / cd…change directory&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/gui_mkdir.png&#34; alt=&#34;&#34; /&gt;
+これは「ファインダー上で右クリックでファイルを新規作成、ダブルクリックして開く」と同じことです。&lt;/p&gt;
+
+&lt;p&gt;コマンドのあとにディレクトリ名などを指定した部分は、「&lt;strong&gt;引数&lt;/strong&gt;」と言います。コマンドに「こういう名前で作ってね」「ここに移動してね」と渡す部分です。&lt;/p&gt;
+
+&lt;h2 id=&#34;コマンドライン操作の表し方&#34;&gt;コマンドライン操作の表し方&lt;/h2&gt;
+
+&lt;p&gt;「このようにコマンドを打ってみてください」というのを、大抵下記のように表します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ mkdir nodeschool
+$ cd nodeschool/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;「$」マークはコマンドラインの操作だよーということを表しているので、打つときは不要です。&lt;/p&gt;
+
+&lt;h2 id=&#34;便利なターミナルアプリ&#34;&gt;便利なターミナルアプリ&lt;/h2&gt;
+
+&lt;p&gt;Macにデフォルトで入っている「ターミナル」で進めてもよいのですが、いろいろと便利なターミナルアプリを入れておくのがオススメです。&lt;/p&gt;
+
+&lt;p&gt;よく使われているのは「&lt;a href=&#34;https://www.iterm2.com/&#34;&gt;iTerm&lt;/a&gt;」です。（ちゃんとくの画面もこれ。）&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/158/separate.png&#34; alt=&#34;&#34; /&gt;
+いくつかの操作を並行したいときにこんな感じで画面を分割できたり、進めていく上でなにかと便利なカスタマイズができたりします。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;このような感じで、コマンドでPCを操作する雰囲気が掴めたでしょうか。&lt;/p&gt;
+
+&lt;p&gt;「&lt;strong&gt;なんでわざわざ難しいコマンドで操作するの？&lt;/strong&gt;」という感じもしますが、&lt;u&gt;ゆくゆくプログラムを管理したり書いたりしていく上で便利になっていく&lt;/u&gt;ので覚えておきましょう！&lt;/p&gt;
+
+&lt;p&gt;もっとコマンドを知りたい！という人は「&lt;strong&gt;UNIXコマンド&lt;/strong&gt;」を調べてみてください！&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Google公式ライブラリを利用してNode.jsからGmailの送受信をしてみよう</title>
@@ -2101,335 +2402,6 @@ Command.ioというサービスでおそらくVPSサービスです。なのでN
 ちょっと気分を変えたいときや、何かの理由でHerokuが厳しいと感じた際の参考になれば幸いです。&lt;/p&gt;
 
 &lt;p&gt;それでは。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>LINE NotifyとGitHubを連携してSlackから移行してみました。</title>
-      <link>https://dotstud.io/blog/line-notify-chat-bot/</link>
-      <pubDate>Fri, 11 Nov 2016 11:30:54 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/line-notify-chat-bot/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、dotstudio代表の&lt;a href=&#34;http://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
-
-&lt;p&gt;この記事を見ている人は大半がLINEは使ってると思います。
-今日は&lt;a href=&#34;http://linedevday.linecorp.com/jp/2016/&#34;&gt;LINE DEVELOPER DAY 2016&lt;/a&gt;で発表があったLINEの新機能であるLINE Notifyを使ってみようと思います。&lt;/p&gt;
-
-&lt;h2 id=&#34;line-notify&#34;&gt;LINE Notify&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://notify-bot.line.me/ja/&#34;&gt;https://notify-bot.line.me/ja/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;様々なWebサービスなどと連携することで、LINEが提供する公式アカウント&amp;rdquo;LINE Notify&amp;rdquo;から通知させることができる機能です。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/054/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;プログラミング不要-実際に使ってみましょう&#34;&gt;プログラミング不要！実際に使ってみましょう&lt;/h2&gt;
-
-&lt;h3 id=&#34;line-notfyと友達になる&#34;&gt;LINE Notfyと友達になる&lt;/h3&gt;
-
-&lt;p&gt;まずは&lt;a href=&#34;https://notify-bot.line.me/ja/&#34;&gt;LINE Notifyのサイト&lt;/a&gt;からLINE Notifyと友達になります。&lt;/p&gt;
-
-&lt;p&gt;サイトに掲載してあるQRコードをスマートフォンアプリのLINEから読み込みましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/054/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;githubリポジトリ作成&#34;&gt;GitHubリポジトリ作成&lt;/h3&gt;
-
-&lt;p&gt;今回は僕がメンターとして入っている&lt;a href=&#34;http://gsacademy.tokyo/&#34;&gt;G&amp;rsquo;s ACADEMY TOKYO&lt;/a&gt;の学生さんたちとのやりとりに使ってみます。
-今回は5期目なのでgs5thというリポジトリを作りました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/054/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;lineのトークルームにline-notifyアカウントを追加&#34;&gt;LINEのトークルームにLINE Notifyアカウントを追加&lt;/h3&gt;
-
-&lt;p&gt;トークルームを作成し、通知を受けるトークルームにLINE Notifyアカウントを追加しましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/054/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;連携作業&#34;&gt;連携作業&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://notify-bot.line.me/github/repos/select&#34;&gt;https://notify-bot.line.me/github/repos/select&lt;/a&gt; からGitHub連携ができます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/054/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;GitHubのアカウント（Organization）とリポジトリ、LINEのトークルームを先ほど作成したものを指定します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/054/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;最後に&lt;code&gt;「同意して連携する」&lt;/code&gt;を選択しましょう。&lt;/p&gt;
-
-&lt;h3 id=&#34;完了&#34;&gt;完了&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/054/07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;LINE Notifyから通知が来ます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/054/08.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;連携を試してみる&#34;&gt;連携を試してみる&lt;/h2&gt;
-
-&lt;p&gt;GitHubにPushすると&amp;hellip;&amp;hellip;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/054/09.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;issueが追加されると&amp;hellip;&amp;hellip;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/054/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;このようにLINEのトークルームにGitHubの通知が流れます。&lt;/p&gt;
-
-&lt;h2 id=&#34;実際に少し使ってみて&#34;&gt;実際に少し使ってみて&lt;/h2&gt;
-
-&lt;p&gt;今までSlack+GitHubを使ってました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/054/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;学生さんたちはエンジアリングは初心者の方が大半で、Slackを使ったことがないという人も多いです。
-エンジニア界だとSlackとGitHubはよくある組み合わせなので今まで採用してましたが、実際の連携は通知くらいにしか使ってなかったため今回のLINE連携で代用できそうです。&lt;/p&gt;
-
-&lt;h3 id=&#34;アカウント作ってくださいやりとり-が発生しない&#34;&gt;「アカウント作ってくださいやりとり」が発生しない&lt;/h3&gt;
-
-&lt;p&gt;やはりアカウントはデフォルトでみんな持っているんだなぁと感じました。
-逆に友達追加やりとりが少し手間でした。&lt;/p&gt;
-
-&lt;h3 id=&#34;通知を見逃さない&#34;&gt;通知を見逃さない&lt;/h3&gt;
-
-&lt;p&gt;Slackだとスマートフォンアプリもいれないと細かな通知には気づけないですが、LINEはみんな利用しているため問題なく通知に気付けます。&lt;/p&gt;
-
-&lt;h3 id=&#34;既読が分かる&#34;&gt;既読が分かる&lt;/h3&gt;
-
-&lt;p&gt;よくも悪くも既読が分かります。連絡をしたときに全員が確認できてるか分かるのは大きいです。&lt;/p&gt;
-
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-
-&lt;p&gt;最近は、「Slackを使えば正義」みたいな文化は少し崩れて来た気もしています。
-LINEなど、エンジニア以外にも使われているツールだとプログラミング初心者がいるときにはいいのかもしれません。&lt;/p&gt;
-
-&lt;p&gt;GitHubとの連携はサイト上の操作のみでできましたが、LINE Notifyは独自にトークンを発行してプログラム経由で通知させることもできます。&lt;/p&gt;
-
-&lt;p&gt;結構自由度が効いて使い勝手は良さそうです。&lt;/p&gt;
-
-&lt;p&gt;今後も利用してみて感想など、応用などを発信できたらと思います。&lt;/p&gt;
-
-&lt;p&gt;それでは。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>【connpass × のびすけ対談】サービスの立ち上げから運営まで。「connpass」の歴史を聞いてみました</title>
-      <link>https://dotstud.io/blog/connpass-n0bisuke-interview-vol2/</link>
-      <pubDate>Wed, 02 Nov 2016 10:30:00 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/connpass-n0bisuke-interview-vol2/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、dotstudioエディターのうらら（@uraranbon）です。&lt;/p&gt;
-
-&lt;p&gt;今や10人に1人は社長と言われるほど起業が身近になった現代。しかし、夢や希望を詰めて作られたサービスの大方は、思うように成長せずに消えていってしまいます。&lt;/p&gt;
-
-&lt;p&gt;そんな中、イベントの募集を助けるWebサービス「connpass」は、2011年にリリースされてから5年で85,000人のユーザーを集め、connpassを利用し2015年〜2016年の1年間で6,000人の集客したという人もいます。&lt;/p&gt;
-
-&lt;p&gt;サービスを向上させる秘訣はあるのでしょうか。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/connpass-n0bisuke-interview-vol1/&#34;&gt;【connpass × のびすけ対談】勉強会あるある！イベントのドタキャンにどう対処する？&lt;/a&gt;に続き、connpassを運営する株式会社ビープラウドの代表・佐藤氏に話を伺ってきました。&lt;/p&gt;
-
-&lt;div class=&#34;person-intro&#34;&gt;
-    &lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34;/&gt;
-    &lt;div class=&#34;person-info&#34;&gt;
-        &lt;strong&gt;人物紹介：佐藤治夫 氏&lt;/strong&gt;
-        &lt;p&gt;株式会社ビープラウド代表。&lt;br /&gt;2011年からイベントサイト「connpass」を運営する傍ら、自身も積極的に勉強会やイベント活動をおこなっている。&lt;/p&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
-
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;話を伺ってきたのは、エンジニア向けのイベントを積極的に主催しているdotstudio代表/エンジニアのびすけです。よく「connpass」を使って集客をしています。&lt;/p&gt;
-
-&lt;div class=&#34;person-intro&#34;&gt;
-    &lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; /&gt;
-    &lt;div class=&#34;person-info&#34;&gt;
-        &lt;strong&gt;人物紹介：菅原のびすけ&lt;/strong&gt;
-        &lt;p&gt;dotstudio代表。&lt;br /&gt;1989年生まれのバックエンドエンジニア。 &lt;a href=&#34;http://iotlt.connpass.com&#34; target=&#34;_blank&#34;&gt;IoTLT&lt;/a&gt;、Swift愛好会、NodeBotsハンズオンなど、幅広いイベントを開催している。&lt;/p&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&#34;もともとはイベントから生まれたサービスだった&#34;&gt;もともとはイベントから生まれたサービスだった&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/037/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293920&#34; /&gt;&lt;span&gt;
-今日はありがとうございます。そもそも、なぜこういったイベントサービスを始めようと思ったんですか？&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;今はイベントサイトって結構ありますけど、もともとはリクルートさんが運営する&lt;a href=&#34;https://atnd.org/&#34;&gt;ATND&lt;/a&gt;しかありませんでした。そのときの技術が好きだった人たちが集まっていたんですけど、少しシンプルだったんです。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;そんなときに、&amp;rdquo;Django Dash&amp;rdquo;という「2~3日でサービスを1つ立ち上げよう」みたいなイベントがありました。そこで、イベントサイトならこういう機能がほしい、あれほしいっていうのを簡単に話していたんです。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;そのときはそれで終わってたんですけど、弊社でサービスを作りましょうかという話が持ち上がったときに、「途中までこういうのを作ったことがありますよ」と再浮上したのがきっかけです。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;
-&lt;img src=&#34;https://dotstud.io/img/blog/037/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;あとは、もともと僕が「BPStudy」という勉強会をずっと続けていたので、そこでエンジニアの人たちのコミュニティを広げたいとか、経験を高めたくなり、2011年に「ちゃんとサービスを始めよう」となりました。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293920&#34; /&gt;&lt;span&gt;へえ、もともとはイベントがきっかけだったんですね。オープンしてからすぐにイベントって集まったんですか？&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;いや、最初はそんなに多くなかったですね。弊社がPython系のコミュニティと繋がっていて、そのイベントの人たちが使ってくれて広まりました。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;イベント参加者だった人が「自分でやってみよう」というときに&lt;strong&gt;自分が参加したことのあるサイトを選ぶ&lt;/strong&gt;といった感じで広まったと思います。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293920&#34; /&gt;&lt;span&gt;余談ですが、その頃からPyCon主催の鈴木たかのりさんもいらっしゃったんですか？&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;そうですね。たかのりさんは、2011年にconnpassがオープンしてからすぐくらい、2012年あたりですね。有料決済みたいなのや、参加枠みたいな機能、アーリーバード枠とか。PyConの要望で追加した機能もあるんです。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;h2 id=&#34;ブレイクポイントはサービス開始2年後に&#34;&gt;ブレイクポイントはサービス開始2年後に&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/037/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293920&#34; /&gt;&lt;span&gt;connpassを始めた2011年から、何かブレイクポイントありますか？&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;2013年にありました。「IT勉強会に特化した」っていう部分ですね。もともとは「どういうイベントが対象」かっていうのを絞っていなくて。そこを、「IT勉強会といえばconnpass」と思ってもらえるようにしました。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293920&#34; /&gt;&lt;span&gt;具体的にはどのへんで伝えたんですか？&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;タイトルですね。ログインしているとわからないんですけど、トップページにこういう画面があって……&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;
-&lt;img src=&#34;https://dotstud.io/img/blog/037/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293920&#34; /&gt;&lt;span&gt;あ、上部の「エンジニアをつなぐ〜」というやつですね。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;ここから、より絞られたユーザーが集まってきたと思います。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;h2 id=&#34;サービスを-技術的チャレンジができる広告塔-に&#34;&gt;サービスを「技術的チャレンジができる広告塔」に&lt;/h2&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293920&#34; /&gt;&lt;span&gt;開発は何人くらいでおこなうんですか？&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;2人とか3人とかですね。今は専任ですが、状況に応じて受託開発をしたり、connpassをやってもらったりしています。いろんな案件を経験すれば、バランス良くスキルやノウハウが身につきますし、「こっちでノウハウを使おう」という流用もできるので。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/037/07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293920&#34; /&gt;&lt;span&gt;意外と少ない印象です。ちなみに、connpassって中の人にとってはどういう位置付けなのでしょう？&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;位置づけですか。ひとつは&lt;strong&gt;広告塔として&lt;/strong&gt;ですね。connpassがあることによって、「あ〜、connpassやってる会社ですか」って思ってもらえています。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;ふたつめは、&lt;strong&gt;技術的チャレンジがしやすい&lt;/strong&gt;っていうところですかね。結構Dockerとかを使って、サイトに導入していこうかなとは思っています。そういうデプロイのところは効率化しようかなと。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;connpassの特徴として、落ちない、不具合が少ないっていうのがありますが、それもやっぱり、不具合がおこりにくい、落ちないサイトってどういうサイトなの？っていうのをconnpassで実践してるからですね。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;みっつめは&lt;strong&gt;知見を得られる場所&lt;/strong&gt;ですね。運営・企画サポートまでを自分たちで回しているっていうことで、知見を得られているかなと思っています。ざっくりとした位置付けはこの3点ですね。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;h2 id=&#34;connpass開発で試行錯誤して活用した-匠メソッド&#34;&gt;connpass開発で試行錯誤して活用した「匠メソッド」&lt;/h2&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293920&#34; /&gt;&lt;span&gt;エンジニアの理想じゃないですか。ちなみに、サイトの企画〜運営までのナレッジは、具体的にどんなことを学んだんですか？&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;&lt;strong&gt;アイデア出しから形に落とし込むまでの要求開発方法&lt;/strong&gt;ですね。サービス企画ってやったことがないと、最終的にどう落とし込んでいくのかってスキルが必要だと思うんですよ。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;自分は「絶対いい！」とか思っている機能を、他の人が「いやぁ……」とかいうと、揉めますよね。みんな熱意があるからそうなるんですけど、喧嘩っぽくなっちゃったり、諦めて妥協したりする人が出て、&lt;strong&gt;結局3ヶ月とか4ヶ月とかかかることも&lt;/strong&gt;あります。みんなが納得する状態まで持っていくのは、意外に難しい。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;そこを「匠メソッド」という要求開発方法を使っていて。それを使ってアイデア出しから形にするまでを2~3日でまとめるんです。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;以前登壇した資料に詳しく書いていますが、現状に対する「こうした機能がほしい」というのが出ても、全部作るわけにはいかないじゃないですか。それを、「どうやって、何を基準に決めるの？」という部分を決めていますね。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&amp;nbsp;
-&lt;center&gt;&lt;iframe src=&#34;//www.slideshare.net/slideshow/embed_code/key/4vBwrvIJjIx1eL&#34; width=&#34;595&#34; height=&#34;485&#34; frameborder=&#34;0&#34; marginwidth=&#34;0&#34; marginheight=&#34;0&#34; scrolling=&#34;no&#34; style=&#34;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&#34; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&#34;margin-bottom:5px&#34;&gt; &lt;strong&gt; &lt;a href=&#34;//www.slideshare.net/ssuserafaef6/bpstudy88-connpass-42735511&#34; title=&#34;BPStudy#88 connpassにおける戦略決定&#34;&gt;BPStudy#88 connpassにおける戦略決定&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a href=&#34;//www.slideshare.net/ssuserafaef6&#34;&gt;Haruo Sato&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;まず、&lt;strong&gt;「誰に対してどういう価値があるか」&lt;/strong&gt;を出して、要求分析ツリーというツリーの形にします。そして、経営者目線でどこからやっていくかを話していくんです。そうすると、機能じゃなくて戦略的な話ができる。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;誰も幸せにならない、「絶対これがいい」と言い張る人がたまにいますよね。でも、それをあきらめられる。ロジカルに考えられます。あっさりと「これやろう、これは没、没にぶら下がっているのは全部やらないよね」みたいになります。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293920&#34; /&gt;&lt;span&gt;みんなが経営者目線を意識するんですね。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/037/08.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;そうですね。みんなが納得感のある落とし所をconnpassを通じてやっていて、それを受託開発もやっています。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;そういうふうに、サイトの企画から開発、運営までをエンジニアでやっているので、お客さんが「こういうサイト作りたいです」って言ったときにもそれを実践していますね。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;connpassのノウハウを生かして、効果の高いものを最小限のちからで。ただ「開発しますよ」という感じではなくて、そういう話ができるようにはなってきたかなって思いますね。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293920&#34; /&gt;&lt;span&gt;僕も匠メソッド試してみようかな。&lt;/span&gt;
-&lt;/div&gt;
-&amp;nbsp;&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;connpassの歴史をさっくりと伺いました。もともとはイベントから生まれ、その後は会社と一緒に成長してきたサービスでした。&lt;/p&gt;
-
-&lt;p&gt;せっかく作り上げたサービスを、できることなら成長させたいですよね。そのためにはサービスに関わる人全てが「経営者目線を意識」するのも効果的のようです。&lt;/p&gt;
-
-&lt;p&gt;これからのconnpassがどのような展開を迎えるのか、今後の活躍にも注目ですね！&lt;/p&gt;
 </description>
     </item>
     

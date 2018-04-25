@@ -2,13 +2,2274 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Blogs on dotstudio（ドットスタジオ）</title>
-    <link>https://dotstud.io/blog/index.xml</link>
+    <link>https://dotstud.io/blog/</link>
     <description>Recent content in Blogs on dotstudio（ドットスタジオ）</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2016 dotstudio inc.</copyright>
-    <lastBuildDate>Wed, 21 Feb 2018 17:43:26 +0900</lastBuildDate>
-    <atom:link href="/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 20 Apr 2018 14:00:26 +0900</lastBuildDate>
+    <atom:link href="/blog/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>NodeSchoolでNode.jsの学習を始めよう！インストール手順から基本操作までステップ別解説</title>
+      <link>https://dotstud.io/blog/node-school-before-learn/</link>
+      <pubDate>Fri, 20 Apr 2018 14:00:26 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/node-school-before-learn/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、ちゃんとくです。&lt;strong&gt;みなさんNode.jsしてますかー！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;dotstudioでは何度も紹介していますが、Node.jsは&lt;u&gt;超超ざっくり言うとサーバサイドで動くJavaScript&lt;/u&gt;ですね。&lt;/p&gt;
+
+&lt;p&gt;これからNode.jsを学びたい！という人も多いと思うのですが、初めてNode.jsを学びたいときにピッタリな「&lt;strong&gt;NodeSchool&lt;/strong&gt;」をご存知でしょうか。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://nodeschool.io/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/nodeschool.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;
+NodeSchoolは&lt;strong&gt;JavaScriptに関するいろいろな授業を集めた学校のようなもの&lt;/strong&gt;で、コードを書いて問題を解いていくことで学習を進められます。&lt;/p&gt;
+
+&lt;p&gt;世界各国のさまざまな言語に対応していて、日本語に対応した「&lt;a href=&#34;https://nodeschool.io/tokyo/&#34;&gt;NodeSchool Tokyo&lt;/a&gt;」のページもあります。&lt;/p&gt;
+
+&lt;p&gt;みんなで集まって授業を進めるハンズオンイベントも盛んで、ちょうど&lt;u&gt;5月21日にNodeSchool Tokyoが開催&lt;/u&gt;されるようです！
+&lt;a href=&#34;https://nodejs.connpass.com/event/82742/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/link.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;今回は、そもそも「コードを書くのもコマンドラインも初めて」という人向けに、&lt;strong&gt;NodeSchoolを始めるまで&lt;/strong&gt;を紹介してみたいと思います。&lt;/p&gt;
+
+&lt;p&gt;CLIの操作方法、Node.jsの環境構築から解説していきますが、「コマンドライン使えるよ、もうNode.js入ってるよ」という人は「&lt;a href=&#34;https://dotstud.io/blog/node-school-before-learn/#nodeschool%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB&#34;&gt;NodeSchoolのインストール&lt;/a&gt;」の章から進めましょう！&lt;/p&gt;
+
+&lt;p&gt;それではやって行こう！&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;font size=2&gt;※筆者はMacユーザのため、基本的にMacに沿った説明になっています。Windows向けの説明も書いていますが、わからないときは適宜調べてみてください。&lt;/font&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;nodeschoolを始める前に&#34;&gt;NodeSchoolを始める前に&lt;/h2&gt;
+
+&lt;h3 id=&#34;コマンドラインインタフェース-cli-の操作&#34;&gt;コマンドラインインタフェース（CLI）の操作&lt;/h3&gt;
+
+&lt;p&gt;NodeSchoolは、自身のPCのコマンドライン上（コマンドラインインタフェース、CLI）で進めるツールです。学習を始めるにあたって、基本の操作を覚えておきましょう！&lt;/p&gt;
+
+&lt;p&gt;（↓長くなっちゃったので別記事にしました）
+&lt;a href=&#34;https://dotstud.io/blog/how-to-use-cli&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/link3.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;node-jsのインストール&#34;&gt;Node.jsのインストール&lt;/h3&gt;
+
+&lt;p&gt;NodeSchoolはNode.jsで動きます。NodeSchoolを動かすために、自身のPCにNode.js環境を準備をします。&lt;/p&gt;
+
+&lt;p&gt;まずNode.jsがインストールされているかは、下記コマンドで確認してみてください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ node -v
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;インストールされている場合はインストールされているバージョン、されていない場合は &lt;code&gt;command not found&lt;/code&gt; といったエラーが出ます。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;font size=2&gt;※2018年4月20日時点の最新版はv9.11.1、安定板はv8.11.1です。新しめのバージョンを使うのがオススメです（v6、v7辺りで大きめの変更がありました）。&lt;/font&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://nodejs.org/ja/&#34;&gt;Node.js公式サイト&lt;/a&gt;からインストーラを使ってインストールしてもよいのですが、Node.jsはバージョンアップが多いので、&lt;u&gt;Node.jsのバージョンを管理できるツールと一緒にインストールするのがオススメ&lt;/u&gt;です。&lt;/p&gt;
+
+&lt;p&gt;バージョン管理ツールには「nodebrew」や「nvm」、Windowsの方は「nodist」などがあります。&lt;/p&gt;
+
+&lt;p&gt;「nodebrew」を使ったインストール方法をまとめたので、こちらを参考にインストールしてみてください！&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/nodejs-install-use-nodebrew/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/link2.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;nodeschoolのインストール&#34;&gt;NodeSchoolのインストール&lt;/h2&gt;
+
+&lt;p&gt;さて、Node.js環境の準備ができたら、&lt;strong&gt;いよいよNodeSchoolをインストール&lt;/strong&gt;しましょう。&lt;/p&gt;
+
+&lt;p&gt;NodeSchoolは「npm」というパッケージ管理ツールで配布されているので、npmコマンドでインストールします（Node.jsと一緒にインストールされるのでとりあえず深く考えなくてOK）。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://nodeschool.io/ja/index.html&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/class.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;
+NodeSchoolには上記のようにいくつかの授業があるので、今回は「&lt;strong&gt;learnyounode&lt;/strong&gt;」という授業を入れてみます。下記コマンドを実行しましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ npm install -g learnyounode
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;問題なくインストールされたか確認してみます。下記コマンドを実行しましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ learnyounode
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/learnyounode.png&#34; alt=&#34;&#34; /&gt;
+こんな画面が開いたでしょうか？&lt;/p&gt;
+
+&lt;p&gt;これがNodeSchoolの実行画面で、ここから学習を進めていきます。&lt;strong&gt;インストールお疲れ様でした！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;nodeschoolの基本操作&#34;&gt;NodeSchoolの基本操作&lt;/h2&gt;
+
+&lt;p&gt;まず、「&lt;strong&gt;とりあえずこの画面閉じたい！&lt;/strong&gt;」というときは&lt;code&gt;control+c&lt;/code&gt;で終了できます。&lt;/p&gt;
+
+&lt;p&gt;基本は十字キーの↑↓で移動し、エンターで選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/language.png&#34; alt=&#34;&#34; /&gt;
+「英語表示になっちゃってるよ！」という人は、まずは言語設定を日本語にしましょう。矢印キーで「CHOOSE LANGUAGE」に移動し、エンターで選択します。&lt;/p&gt;
+
+&lt;h2 id=&#34;問題を解く方法&#34;&gt;問題を解く方法&lt;/h2&gt;
+
+&lt;h3 id=&#34;問題画面の見方&#34;&gt;問題画面の見方&lt;/h3&gt;
+
+&lt;p&gt;さてNodeSchoolを始める準備ができましたが、問題を解く方法も少し癖があります。試しに1問解いてみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/helloworld.png&#34; alt=&#34;&#34; /&gt;
+十字キーで移動し、「こんにちは世界」を選んでエンターします（いわゆる&amp;rdquo;Hello, world&amp;rdquo;ですが、日本語訳するとやや不自然ですね）。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/question.png&#34; alt=&#34;&#34; /&gt;
+するとこんな文章が表示されます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/detail.png&#34; alt=&#34;&#34; /&gt;
+大きくわけると、3つの要素で構成されています。&lt;/p&gt;
+
+&lt;p&gt;日本語なので、落ち着いて問題とヒントを読み進めましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;ヒントを読んで進める&#34;&gt;ヒントを読んで進める&lt;/h3&gt;
+
+&lt;p&gt;NodeSchoolでは、自分でNode.js実行ファイルを作り、実際に実行させて答え合わせをして進めていきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/question_detail.png&#34; alt=&#34;&#34; /&gt;
+この問題は、&lt;u&gt;コンソール（ここではターミナル上）に「こんにちは世界」と表示するNode.jsスクリプトを書いてください&lt;/u&gt;という意味です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/hint1.png&#34; alt=&#34;&#34; /&gt;
+ヒントをみると、「&lt;code&gt;.js&lt;/code&gt;拡張子のファイルを作って、&lt;code&gt;$ node xxx.js&lt;/code&gt; を実行すればOKです」と書いてありますね。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/hint2.png&#34; alt=&#34;&#34; /&gt;
+そして 「&lt;code&gt;console.log(&amp;quot;text&amp;quot;)&lt;/code&gt; と記述するとコンソールに出力できます」とあります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/hint3.png&#34; alt=&#34;&#34; /&gt;
+答え合わせ方法は「&lt;code&gt;$ learnyounode verify xxx.js&lt;/code&gt;でテストする」とあります。&lt;/p&gt;
+
+&lt;p&gt;その通りにやってみましょう！&lt;/p&gt;
+
+&lt;h3 id=&#34;node-js実行ファイルを作る&#34;&gt;Node.js実行ファイルを作る&lt;/h3&gt;
+
+&lt;p&gt;問題を解くとき、この問題文＆ヒントを見ながら進めたいですよね。&lt;/p&gt;
+
+&lt;p&gt;そこで操作画面をもう一つ開きます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/terminal.png&#34; alt=&#34;&#34; /&gt;
+Macの場合はツールバーの「シェル」から「新規ウィンドウ」または「新規タブ」で開くことができます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/iterm.png&#34; alt=&#34;&#34; /&gt;
+前述の記事でオススメしたiTermを使っている場合は、画面分割機能がオススメです。ツールバーの「Shell」から「Split&amp;hellip;」を選ぶか、「⌘+D」で横に分割、「⌘+Shift+D」で縦に分割できます（使用頻度が高いので覚えておくのがオススメです）。&lt;/p&gt;
+
+&lt;p&gt;問題を解くファイルは、あとで見つけやすいようにひとところにまとめておきましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/work_dir.png&#34; alt=&#34;&#34; /&gt;
+ちゃんとくはこんな感じで、ホームディレクトリ（開いた場所/cdを実行した移動先）の下に &lt;code&gt;/workspace/nodeschool/learnyounode/&lt;/code&gt;というディレクトリを作り、その下に実行ファイルを作っています。&lt;/p&gt;
+
+&lt;p&gt;好みはそれぞれなので、自分がわかりやすい場所であればなんでもOKです。&lt;/p&gt;
+
+&lt;p&gt;それではファイルを作成して、実行スクリプトを書きましょう！Macの場合は&lt;code&gt;touch&lt;/code&gt;コマンドで新規ファイルを作成できます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ touch 1.js
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ファイル名も、自分がわかればOKです。どの問題かわかるように番号や問題タイトルなどをつけておくのがオススメです。&lt;/p&gt;
+
+&lt;h3 id=&#34;エディタでスクリプトを書く&#34;&gt;エディタでスクリプトを書く&lt;/h3&gt;
+
+&lt;p&gt;それでは「こんにちは世界」用のファイルにスクリプトを書いていきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;vi&lt;/code&gt;コマンドなどでターミナル上で開いてもよいのですが、プログラミング向けエディタ（IDE）を使うのがオススメです。無料エディタでは&lt;a href=&#34;https://www.microsoft.com/ja-jp/dev/products/code-vs.aspx&#34;&gt;Visual Studio Code&lt;/a&gt;や、軽量な&lt;a href=&#34;https://atom.io/&#34;&gt;Atomエディタ&lt;/a&gt;などが流行りです（ちゃんとくはAtom）。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;$ open ./&lt;/code&gt;というコマンド（Windowsの人は&lt;code&gt;explore&lt;/code&gt;）でファイルの場所を開いてみましょう。（&lt;code&gt;./&lt;/code&gt;は今いるディレクトリを表しています。）&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/open.png&#34; alt=&#34;&#34; /&gt;
+ファイルの場所がファインダーで表示されました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/select_editor.png&#34; alt=&#34;&#34; /&gt;
+編集したいファイルを右クリックすると開くアプリを選択できるので、エディタで開きましょう。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;font size=&#34;&#34;&gt;※この「CLIからエディタでファイルを開く操作」は、エディタをカスタマイズしてコマンドで実行することもできます。Atomの場合は&lt;code&gt;$ atom ./&lt;/code&gt;など（後日記事にしてみたいと思います）。&lt;/font&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/example.png&#34; alt=&#34;&#34; /&gt;
+ヒントを参考に、&lt;code&gt;console.log(&amp;quot;text&amp;quot;)&lt;/code&gt;コマンドを書いてみます。エディタで「⌘+s」などで保存して、試しに実行してみましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;$ node xxx.js&lt;/code&gt;でファイルを実行します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/script.png&#34; alt=&#34;&#34; /&gt;
+上記のような実行結果になったでしょうか？&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;console.log()&lt;/code&gt;というコマンドに&lt;code&gt;&amp;quot;text&amp;quot;&lt;/code&gt;を渡したら、「text」と表示されました。&lt;/p&gt;
+
+&lt;p&gt;「こんにちは世界」と表示するには……もう分かったでしょうか？（ちょっと意地悪ですが、頑張って解いてみてください！）&lt;/p&gt;
+
+&lt;h3 id=&#34;答え合わせ&#34;&gt;答え合わせ&lt;/h3&gt;
+
+&lt;p&gt;さて、これだ！というスクリプトが書けたら答え合わせをします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/verify.png&#34; alt=&#34;&#34; /&gt;
+ヒントのとおり、&lt;code&gt;$ learnyounode verify xxx.js&lt;/code&gt;を実行します（learnyounodeとかファイル名とか記述するの長いなあってときは、途中まで書いてTabを押すといいことがあります）。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;font size=2&gt;※CLIに慣れてくると雰囲気がわかりますが、&lt;code&gt;$ モジュール名 命令 引数&lt;/code&gt;という風にコマンドを実行しています。引数とはプログラムに渡すモノです。&lt;/font&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/verify_detail.png&#34; alt=&#34;&#34; /&gt;
+答え合わせの結果画面です。自分の書いたスクリプトの実行結果と、想定回答（求められている答え）が表示されます。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;無事に正解していると褒められます。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;回答例も表示されるので、確認してみましょう。&lt;/p&gt;
+
+&lt;p&gt;無事に解けたら、また「&lt;a href=&#34;https://dotstud.io/blog/node-school-before-learn/#%E5%95%8F%E9%A1%8C%E3%82%92%E8%A7%A3%E3%81%8F%E6%96%B9%E6%B3%95&#34;&gt;問題を解く方法&lt;/a&gt;」のように&lt;code&gt;$ learnyounode&lt;/code&gt; を実行して問題ファイルを開き、進めていきましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;NodeSchoolデビューお疲れ様でした！&lt;/strong&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>【Mac向け】「黒い画面」の苦手意識を克服しよう！コマンドラインインタフェースの基本操作</title>
+      <link>https://dotstud.io/blog/how-to-use-cli/</link>
+      <pubDate>Mon, 09 Apr 2018 14:00:26 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/how-to-use-cli/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、ちゃんとくです。&lt;/p&gt;
+
+&lt;p&gt;これからプログラミングの学習を始めたいと思っているみなさん、「&lt;strong&gt;コマンドラインインタフェース&lt;/strong&gt;」はご存知ですか？&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/illust.png&#34; alt=&#34;&#34; /&gt;
+いわゆるプログラマーなイメージの、「&lt;strong&gt;黒い画面&lt;/strong&gt;」ってやつですね。&lt;/p&gt;
+
+&lt;p&gt;苦手意識を持つ方も多いと思いますが、プログラミングの学習を進めるにあたっては必須となっていきます。&lt;/p&gt;
+
+&lt;p&gt;基本を覚えれば簡単なので、今回はコマンドラインインタフェースの基本操作を覚えていきましょう！&lt;/p&gt;
+
+&lt;h2 id=&#34;コマンドラインインタフェース-cli-とは&#34;&gt;コマンドラインインタフェース（CLI）とは&lt;/h2&gt;
+
+&lt;p&gt;コマンドラインインタフェースとは、簡単に言うとPC上で行う操作を&lt;u&gt;キーボード入力（コマンド）だけで操作する画面&lt;/u&gt;のことです。&lt;strong&gt;CLI&lt;/strong&gt;（Comand Line Interface）と呼ばれ、逆に通常マウスなどでPCを扱う画面を&lt;strong&gt;GUI&lt;/strong&gt;（Grafical User Interface）と呼びます。&lt;/p&gt;
+
+&lt;p&gt;Macの人は「ターミナル」を開いてみましょう。（Windowsの人は「コマンドプロンプト」が入っていますが、いろいろとコマンドが違うので別記事を書きたいと思います……！）
+&lt;img src=&#34;https://dotstud.io/img/blog/156/cli.png&#34; alt=&#34;&#34; /&gt;
+こういう画面です。いわゆる「黒い画面」（画像は白いけど）ってやつです。この画面は「&lt;strong&gt;自分のPC&lt;/strong&gt;」を表示しています。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/cli_pwd.png&#34; alt=&#34;&#34; /&gt;
+上記のように、「&lt;strong&gt;pwd&lt;/strong&gt;」と打ってエンターしてみてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;/Users/xxx&lt;/code&gt; のように表示されたと思います。これは&lt;code&gt;pwd&lt;/code&gt;という「&lt;strong&gt;現在のディレクトリを教えて&lt;/strong&gt;」というコマンドを打ったので、現在いる場所が表示された状態です。（※ディレクトリ…PC上の住所。フォルダ的なもの。）&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/gui.png&#34; alt=&#34;&#34; /&gt;
+&lt;code&gt;/Users/xxx&lt;/code&gt; はちょっと聞きなれないディレクトリですが、ファインダーなどで「ユーザ/xxx」を開いていることと同じことを表しています。このファインダーで表示している画面が「GUI」です。&lt;/p&gt;
+
+&lt;p&gt;ちなみに「pwd」は「&lt;u&gt;present working directory&lt;/u&gt;」の略で、それぞれのコマンドは英語に基づいているので合わせて覚えると簡単ですね。&lt;/p&gt;
+
+&lt;h2 id=&#34;基本のコマンドいくつか&#34;&gt;基本のコマンドいくつか&lt;/h2&gt;
+
+&lt;p&gt;ターミナルを開いたときにいる&lt;u&gt;デフォルトの場所を「ホームディレクトリ」&lt;/u&gt;と言います。「cd」というコマンドを打つことでここに戻れます。&lt;/p&gt;
+
+&lt;p&gt;続いて「ls」と打ってみてください。
+&lt;img src=&#34;https://dotstud.io/img/blog/156/cli_ls.png&#34; alt=&#34;&#34; /&gt;
+「ls」は「list」という意味で、現在のディレクトリ直下にあるディレクトリとファイルが表示されました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/gui_ls.png&#34; alt=&#34;&#34; /&gt;
+この場所を見ている状態と同じです。英語と日本語ですが、同じものが表示されていますね！&lt;/p&gt;
+
+&lt;p&gt;ではコマンドライン上で新しいディレクトリを作り、その中へ移動してみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/156/cli_mkdir.png&#34; alt=&#34;&#34; /&gt;
+「mkdir 任意のディレクトリ名」と打ち、そのあと「cd ディレクトリ名/」と打ちます。（nodeschool説明記事と一緒に書いているので、nodeschool用フォルダを作っています笑）&lt;/p&gt;
+
+&lt;p&gt;※mkdir…make directory / cd…change directory&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/156/gui_mkdir.png&#34; alt=&#34;&#34; /&gt;
+これは「ファインダー上で右クリックでファイルを新規作成、ダブルクリックして開く」と同じことです。&lt;/p&gt;
+
+&lt;p&gt;コマンドのあとにディレクトリ名などを指定した部分は、「&lt;strong&gt;引数&lt;/strong&gt;」と言います。コマンドに「こういう名前で作ってね」「ここに移動してね」と渡す部分です。&lt;/p&gt;
+
+&lt;h2 id=&#34;コマンドライン操作の表し方&#34;&gt;コマンドライン操作の表し方&lt;/h2&gt;
+
+&lt;p&gt;「このようにコマンドを打ってみてください」というのを、大抵下記のように表します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ mkdir nodeschool
+$ cd nodeschool/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;「$」マークはコマンドラインの操作だよーということを表しているので、打つときは不要です。&lt;/p&gt;
+
+&lt;h2 id=&#34;便利なターミナルアプリ&#34;&gt;便利なターミナルアプリ&lt;/h2&gt;
+
+&lt;p&gt;Macにデフォルトで入っている「ターミナル」で進めてもよいのですが、いろいろと便利なターミナルアプリを入れておくのがオススメです。&lt;/p&gt;
+
+&lt;p&gt;よく使われているのは「&lt;a href=&#34;https://www.iterm2.com/&#34;&gt;iTerm&lt;/a&gt;」です。（ちゃんとくの画面もこれ。）&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/158/separate.png&#34; alt=&#34;&#34; /&gt;
+いくつかの操作を並行したいときにこんな感じで画面を分割できたり、進めていく上でなにかと便利なカスタマイズができたりします。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;このような感じで、コマンドでPCを操作する雰囲気が掴めたでしょうか。&lt;/p&gt;
+
+&lt;p&gt;「&lt;strong&gt;なんでわざわざ難しいコマンドで操作するの？&lt;/strong&gt;」という感じもしますが、&lt;u&gt;ゆくゆくプログラムを管理したり書いたりしていく上で便利になっていく&lt;/u&gt;ので覚えておきましょう！&lt;/p&gt;
+
+&lt;p&gt;もっとコマンドを知りたい！という人は「&lt;strong&gt;UNIXコマンド&lt;/strong&gt;」を調べてみてください！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>自動水やり装置を作ろう！Nefry BTとGroveモジュールでズボラのための電子工作</title>
+      <link>https://dotstud.io/blog/nefrybt-motor-watering-system/</link>
+      <pubDate>Tue, 03 Apr 2018 10:00:26 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nefrybt-motor-watering-system/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、ちゃんとくです！日中は温かくなって、すっかり春めいてきました。&lt;/p&gt;
+
+&lt;p&gt;春といえば花。&lt;/p&gt;
+
+&lt;p&gt;花といえばそう、&lt;strong&gt;自動水やり装置ですね&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;この季節にぴったりの装置を、お手軽開発ボード&lt;a href=&#34;https://dotstud.io/docs/nefrybt&#34;&gt;Nefry BT&lt;/a&gt;を使って自作してみましょう！&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/148/watering.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;まずは簡単に、&lt;u&gt;土が乾いたら水をやる機構&lt;/u&gt;を作っていきましょう。&lt;/p&gt;
+
+&lt;p&gt;なお今回のレシピはNefry BT開発者の&lt;a href=&#34;https://dotstud.io/members/wami&#34;&gt;わみ&lt;/a&gt;さんにご提供いただきました！&lt;/p&gt;
+
+&lt;h2 id=&#34;開発の前に&#34;&gt;開発の前に&lt;/h2&gt;
+
+&lt;h3 id=&#34;環境構築&#34;&gt;環境構築&lt;/h3&gt;
+
+&lt;p&gt;初めてNefry BTを使う方は、ドキュメントを参考に&lt;u&gt;Nefry BTのWi-Fi&lt;/u&gt;と&lt;u&gt;Arduino IDEのセットアップ&lt;/u&gt;を済ませておきましょう。&lt;/p&gt;
+
+&lt;p&gt;⇒ 参考: &lt;a href=&#34;https://dotstud.io/docs/nefrybt-wifi-setup/&#34;&gt;Nefry BTのWi-Fiセットアップ&lt;/a&gt;&lt;br /&gt;
+⇒ 参考: &lt;a href=&#34;https://dotstud.io/docs/nefrybt-arduino-ide-setup/&#34;&gt;Nefry BT向けのArduino IDEセットアップ方法&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;使うもの&#34;&gt;使うもの&lt;/h3&gt;
+
+&lt;p&gt;いろいろな実装方法がありますが、今回は簡単に電気をON/OFFできる「&lt;strong&gt;リレー&lt;/strong&gt;（継電器）」というモジュールを使います。
+&lt;img src=&#34;https://dotstud.io/img/blog/148/parts.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;水をやりたい植物&lt;/li&gt;
+&lt;li&gt;Nefry BT + 専用ディスプレイ（ディスプレイはなくてもOK）&lt;/li&gt;
+&lt;li&gt;Grove 水分センサ（&lt;a href=&#34;https://www.seeedstudio.com/grove-moisture-sensor-p-955.html&#34;&gt;SEEED-101020008&lt;/a&gt;）&lt;/li&gt;
+&lt;li&gt;Grove リレーモジュール（&lt;a href=&#34;http://www.seeedstudio.com/depot/grove-relay-p-769.html&#34;&gt;SEEED-103020005&lt;/a&gt;）&lt;/li&gt;
+&lt;li&gt;DCウォーターポンプ（&lt;a href=&#34;https://amzn.to/2IoPJI7&#34;&gt;こういうの&lt;/a&gt;。型番忘れてしまいましたが千石さんで購入。）&lt;/li&gt;
+&lt;li&gt;ポンプ用シリコンチューブ（&lt;a href=&#34;https://amzn.to/2q29vBE&#34;&gt;こういうの&lt;/a&gt;。熱帯魚屋さんなどに売ってます。）&lt;/li&gt;
+&lt;li&gt;ジャンパワイヤ（オス-オス） 1本&lt;/li&gt;
+&lt;li&gt;水を貯めておく容器（コップなど）&lt;/li&gt;
+&lt;li&gt;はんだごて + はんだ&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;配線&#34;&gt;配線&lt;/h2&gt;
+
+&lt;p&gt;さっそく配線をしていきます！全体はこんな感じ。
+&lt;img src=&#34;https://dotstud.io/img/blog/148/circuits.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/148/handa.png&#34; alt=&#34;&#34; /&gt;
+ポンプへの給電はNefry BTからされるように、ポンプの線をリレーモジュールのGND部分にはんだづけします。モーターの回転方向は関係ないので今回はどちらの線でも大丈夫です。（一般的には赤がプラス、白または黒がマイナスです。）&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/148/relay.png&#34; alt=&#34;&#34; /&gt;
+リレーにはこのように、ジャンパワイヤを挟んで止めることができます。小さいマイナスドライバなどで上部のネジを緩めて挟み、抜けないよう締めます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/148/kairo.png&#34; alt=&#34;&#34; /&gt;
+ジャンパワイヤとポンプの線をそれぞれ挟みます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/148/nipper.png&#34; alt=&#34;&#34; /&gt;
+挟む部分が足りない場合は、ニッパーやワイヤストリッパーでちょんちょんと切れ目を入れ被覆を剥きましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/148/grove.png&#34; alt=&#34;&#34; /&gt;
+Groveコネクタを使ってリレーモジュールはD2に、水分センサはA2（Nefry BT R2の場合はA1）に繋ぎます。（Nefry BT R2はA1の表記がA0になっているミスがあります。注意してください。）&lt;/p&gt;
+
+&lt;p&gt;ジャンパはGPIOの5Vに刺します。&lt;/p&gt;
+
+&lt;h2 id=&#34;プログラム&#34;&gt;プログラム&lt;/h2&gt;
+
+&lt;p&gt;Arduino IDEに下記のプログラムを貼り付け、書き込みます。Nefry BT R2の場合はINの指定をA1にしてください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+#include &amp;lt;NefryDisplay.h&amp;gt;
+
+#define IN A2 // 土壌センサ（R2の場合はA1）
+#define OUT D2 // リレー-&amp;gt;モータ
+#define AVE 5 // センサ値を平均化するための取得回数
+
+int readRaw;
+int aveRate;
+int waterTimer;
+
+void setup() {
+  pinMode(OUT, OUTPUT);
+  digitalWrite(OUT, LOW);
+  delay(10000);
+  NefryDisplay.print(&amp;quot;wait...&amp;quot;);
+}
+
+void loop() {
+  readRaw = 0;
+  for(int i=0;i&amp;lt;AVE;i++){
+    readRaw = analogRead(IN);
+    delay(500);
+  }
+  aveRate = readRaw/AVE;
+  NefryDisplay.print((String)&amp;quot;readAve : &amp;quot;+aveRate/10/4+&amp;quot; %&amp;quot;);
+  NefryDisplay.print((String)&amp;quot;aveRate : &amp;quot;+aveRate);
+  if(aveRate&amp;lt;250){
+    digitalWrite(OUT,HIGH);
+    NefryDisplay.print(&amp;quot;Motor ON&amp;quot;);
+    delay(3000);
+    digitalWrite(OUT,LOW);
+  }else{
+    digitalWrite(OUT,LOW);
+    NefryDisplay.print(&amp;quot;Motor OFF&amp;quot;);
+  }
+  delay(60000);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;動かしてみよう&#34;&gt;動かしてみよう&lt;/h2&gt;
+
+&lt;p&gt;さっそく試してみます！デモ用に下記の動きになっています。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;乾いていない時（水分センサが水に浸っている時）= ポンプから水は出ない&lt;/li&gt;
+&lt;li&gt;乾いている時（水分センサが水から出た時）= ポンプから水が出る&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://gyazo.com/34eb79467ebdd096591ecc893f1e5a5a.gif&#34; alt=&#34;&#34; /&gt;
+ポンプが動きました！少し見づらいですが、ディスプレイの表示もOFF-&amp;gt;ONと切り替わっています。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;ポンプを使った電子工作は一見難しいですが、Groveのリレーモジュールを使ってわりと簡単に作ることができました！&lt;/p&gt;
+
+&lt;p&gt;ただこのままでは&lt;u&gt;給水用の水がなくなっても気づかなかったり、コップの水をこぼしそうになったり&lt;/u&gt;、少し使いづらいですよね……。&lt;/p&gt;
+
+&lt;p&gt;次回は外装制作とWeb通知の連携をして&lt;strong&gt;より放置しやすい自動水やり装置にブラッシュアップ&lt;/strong&gt;してみます！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>オフィス改善！物理スイッチの照明を遠隔操作でON／OFFしよう！</title>
+      <link>https://dotstud.io/blog/switch-servo-remote-controll/</link>
+      <pubDate>Wed, 28 Mar 2018 14:00:26 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/switch-servo-remote-controll/</guid>
+      
+      <description>
+
+&lt;h2 id=&#34;お仕事は突然やってくる&#34;&gt;お仕事は突然やってくる&lt;/h2&gt;
+
+&lt;p&gt;こんにちは、宇宙エンジニアのたくろーどんです。&lt;/p&gt;
+
+&lt;p&gt;ある日、dotstudioのオフィスにて……。&lt;/p&gt;
+
+&lt;p&gt;※上司：ちゃんとく ／ &lt;del&gt;下僕&lt;/del&gt;部下：たくろーどん&lt;/p&gt;
+
+&lt;div class=&#34;talk-box&#34;&gt;
+  &lt;p class=&#34;speaker&#34;&gt;
+    &lt;img src=&#34;https://dotstud.io/img/members/chantoku/author.png&#34; /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    ちゃんとく「デスクから動くのがめんどくさい……。」
+  &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;talk-box&#34;&gt;
+  &lt;p class=&#34;speaker&#34;&gt;
+    &lt;img src=&#34;https://dotstud.io/img/members/takudooon/author.png&#34; /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    たくろーどん「そうですねぇ。（おなかすいた）」
+  &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;talk-box&#34;&gt;
+  &lt;p class=&#34;speaker&#34;&gt;
+    &lt;img src=&#34;https://dotstud.io/img/members/chantoku/author.png&#34; /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    ちゃんとく「なんか&lt;b&gt;電気のONとOFFを遠隔で操作できるデバイス&lt;/b&gt;つくってよ！」
+  &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;talk-box&#34;&gt;
+  &lt;p class=&#34;speaker&#34;&gt;
+    &lt;img src=&#34;https://dotstud.io/img/members/takudooon/author.png&#34; /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    たくろーどん「あっ、はい。かしこまりましたでございます。（きょうのごはんはカレーにしよう）」
+  &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;p&gt;そんなこんなで突然、ズボラなちゃんとくさんのために&lt;strong&gt;電気を遠隔でON/OFFできる装置&lt;/strong&gt;をつくることになりました。&lt;/p&gt;
+
+&lt;p&gt;下記のようなイメージで、&lt;strong&gt;電気の物理スイッチを遠隔操作できるリモコン&lt;/strong&gt;を目指して作ってみます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/155/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;実装&#34;&gt;実装&lt;/h2&gt;
+
+&lt;p&gt;まず、物理スイッチを押す機構にはサーボモータを使います。&lt;/p&gt;
+
+&lt;p&gt;サーボモータは簡単に角度の制御ができるので、スイッチをON/OFFと切り替えて押すことに適しています。&lt;/p&gt;
+
+&lt;p&gt;サーボモータについては、dotstudioドキュメントの「&lt;a href=&#34;https://dotstud.io/docs/pulse-width-modulation/&#34;&gt;&lt;strong&gt;PWM制御&lt;/strong&gt;&lt;/a&gt;（サーボモータの仕組み）」や「&lt;a href=&#34;https://codeiq.jp/magazine/2018/02/57076/&#34;&gt;&lt;strong&gt;遠隔消臭装置をつくって「気の利くナイスガイ」になろう！〜基本実装編〜│codeIQ&lt;/strong&gt;&lt;/a&gt;」の記事などを参考にしてください。&lt;/p&gt;
+
+&lt;p&gt;実際に、スイッチが押せるようにサーボモータを取り付けてみます。サーボモータの取り付けも&lt;strong&gt;グルーガン職人&lt;/strong&gt;の手にかかれば一瞬です。&lt;/p&gt;
+
+&lt;p&gt;※グルーガン（のりを温めて接着できる装置）は100均で手に入る最強アイテムです。
+&lt;img src=&#34;https://dotstud.io/img/blog/155/2.png&#34; alt=&#34;&#34; /&gt;
+見た目の改善はあとで考えていきましょう。&lt;strong&gt;とりあえず動くことが大事&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;ちなみに回路図はこのようになっています。
+&lt;img src=&#34;https://dotstud.io/img/blog/155/3.png&#34; alt=&#34;&#34; /&gt;
+今回はサーボモータを4つ繋げているので、&lt;u&gt;Nefry BTからの電源供給が足りず、Nefry BTが再起動してしまうこと&lt;/u&gt;があります。そこで&lt;strong&gt;サーボモータとNefry BTの電源は分ける&lt;/strong&gt;ことによって安定性を高めています。&lt;/p&gt;
+
+&lt;p&gt;では、次にプログラムです。&lt;/p&gt;
+
+&lt;h2 id=&#34;プログラム&#34;&gt;プログラム&lt;/h2&gt;
+
+&lt;p&gt;今回は、&lt;strong&gt;Nefry BTのWebコンソール画面&lt;/strong&gt;から遠隔操作できるようにしたいと思います。&lt;/p&gt;
+
+&lt;p&gt;Nefry BTのWebコンソール画面へは、&lt;u&gt;Nefry BT自身のWi-Fiにつないでアドホックモードにするほか、Wi-Fi設定をして外部からアクセス&lt;/u&gt;することができます。詳細は「&lt;a href=&#34;https://dotstud.io/docs/nefrybt-wifi-setup/&#34;&gt;&lt;strong&gt;Nefry BTのWi-Fiセットアップ&lt;/strong&gt;&lt;/a&gt;」を参照してください。&lt;/p&gt;
+
+&lt;p&gt;Webコンソール画面には、&lt;strong&gt;Nefry.getWebServer()関数&lt;/strong&gt;を使って機能追加することができます。少し試してみましょう。&lt;/p&gt;
+
+&lt;p&gt;以下のようにプログラムを書くと……&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;#include &amp;lt;Nefry.h&amp;gt;
+void setup() {
+  // on()の第一引数でURLを決める
+  Nefry.getWebServer()-&amp;gt;on(&amp;quot;/welcome&amp;quot;, [&amp;amp;]() {
+    String content = F(
+      // 表示するページをHTMLで記述する
+      &amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;title&amp;gt;Nefry Welcome&amp;lt;/title&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;Nefry Welcome!&amp;lt;/h1&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+    Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
+  });
+  // setIndexLink(&#39;表示したいページ名&#39;, &#39;指定したURL&#39;)でTOPページに表示される名前を決める
+  Nefry.setIndexLink(&amp;quot;welcomePage&amp;quot;,&amp;quot;/welcome&amp;quot;);
+}
+
+void loop() {
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Nefry BTのコンソール画面に「welcomePage」と追加され、クリックすると、「Nefry Welcome」と作成したHTMLページが表示されます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/155/4.png&#34; alt=&#34;&#34; /&gt;
+これを応用して、&lt;strong&gt;「Light_on」というHTMLページにアクセスしたらサーボモータが回転する&lt;/strong&gt;ようにしてみます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;// /onというURLのページを作成
+Nefry.getWebServer()-&amp;gt;on(&amp;quot;/on&amp;quot;, [&amp;amp;]() {
+  String content = F(
+    // ページのHTMLを記述
+    &amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+    &amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+    &amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;On&amp;lt;/h1&amp;gt;&amp;quot;
+    &amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;
+  );
+
+  // サーボモータを回転させる
+  for(int i=90; i&amp;lt;=115; i++){
+    ledcWrite(0,deg2pw(i, PWM_BITWIDTH));
+  }
+  delay(800);
+  ledcWrite(0,deg2pw(90, PWM_BITWIDTH));
+
+  Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
+});
+
+// TOPページに「Ligth_on」と表示する
+Nefry.setIndexLink(&amp;quot;Light_on&amp;quot;,&amp;quot;/on&amp;quot;);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;上記のプログラムを4つのサーボモータそれぞれに割り当て、最終的なプログラムの全体はこのようになります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;#include &amp;lt;Nefry.h&amp;gt;
+#include&amp;quot;esp32-hal-ledc.h&amp;quot;
+#define PWM_BITWIDTH 16
+
+int deg2pw(int deg, int bit){
+    double ms = ((double) deg - 90.0) * 0.95 / 90.0 + 1.45;
+    return (int) (ms / 20.0 * pow(2, bit));
+}
+
+void setup() {
+  Serial.begin(115200);
+  ledcSetup(0,50,PWM_BITWIDTH);
+  ledcSetup(1,50,PWM_BITWIDTH);
+  ledcSetup(2,50,PWM_BITWIDTH);
+  ledcSetup(3,50,PWM_BITWIDTH);
+  ledcAttachPin(A0,0);
+  ledcAttachPin(A1,1);
+  ledcAttachPin(D0,2);
+  ledcAttachPin(D1,3);
+
+  Nefry.getWebServer()-&amp;gt;on(&amp;quot;/on&amp;quot;, [&amp;amp;]() {
+    String content = F(
+      &amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;On&amp;lt;/h1&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+
+    for(int i=90; i&amp;lt;=115; i++){
+      ledcWrite(0,deg2pw(i, PWM_BITWIDTH));
+    }
+    delay(800);
+    ledcWrite(0,deg2pw(90, PWM_BITWIDTH));
+
+    Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
+  });
+  Nefry.setIndexLink(&amp;quot;Light_on&amp;quot;,&amp;quot;/on&amp;quot;);
+
+  Nefry.getWebServer()-&amp;gt;on(&amp;quot;/off&amp;quot;, [&amp;amp;]() {
+    String content = F(
+      &amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;off&amp;lt;/h1&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+
+    for(int i=90; i&amp;gt;=65; --i){
+      ledcWrite(0,deg2pw(i, PWM_BITWIDTH));
+    }
+    delay(800);
+    ledcWrite(0,deg2pw(90, PWM_BITWIDTH));
+
+    Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
+  });
+  Nefry.setIndexLink(&amp;quot;Light_off&amp;quot;,&amp;quot;/off&amp;quot;);
+
+//////////////////////////////////////////////////////////////
+  Nefry.getWebServer()-&amp;gt;on(&amp;quot;/on2&amp;quot;, [&amp;amp;]() {
+    String content = F(
+      &amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;On&amp;lt;/h1&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+
+    for(int i=90; i&amp;lt;=115; i++){
+      ledcWrite(1,deg2pw(i, PWM_BITWIDTH));
+    }
+    delay(800);
+    ledcWrite(1,deg2pw(90, PWM_BITWIDTH));
+
+    Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
+  });
+  Nefry.setIndexLink(&amp;quot;Light_on_2&amp;quot;,&amp;quot;/on2&amp;quot;);
+
+  Nefry.getWebServer()-&amp;gt;on(&amp;quot;/off2&amp;quot;, [&amp;amp;]() {
+    String content = F(
+      &amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;off&amp;lt;/h1&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+
+    for(int i=90; i&amp;gt;=65; --i){
+      ledcWrite(1,deg2pw(i, PWM_BITWIDTH));
+    }
+    delay(800);
+    ledcWrite(1,deg2pw(90, PWM_BITWIDTH));
+
+    Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
+  });
+  Nefry.setIndexLink(&amp;quot;Light_off_2&amp;quot;,&amp;quot;/off2&amp;quot;);
+
+  //////////////////////////////////////////////////////////////
+  Nefry.getWebServer()-&amp;gt;on(&amp;quot;/on3&amp;quot;, [&amp;amp;]() {
+    String content = F(
+      &amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;On&amp;lt;/h1&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+
+    for(int i=90; i&amp;lt;=115; i++){
+      ledcWrite(2,deg2pw(i, PWM_BITWIDTH));
+    }
+    delay(800);
+    ledcWrite(2,deg2pw(90, PWM_BITWIDTH));
+
+    Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
+  });
+  Nefry.setIndexLink(&amp;quot;Light_on_3&amp;quot;,&amp;quot;/on3&amp;quot;);
+
+  Nefry.getWebServer()-&amp;gt;on(&amp;quot;/off3&amp;quot;, [&amp;amp;]() {
+    String content = F(
+      &amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;off&amp;lt;/h1&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+
+    for(int i=90; i&amp;gt;=65; --i){
+      ledcWrite(2,deg2pw(i, PWM_BITWIDTH));
+    }
+    delay(800);
+    ledcWrite(2,deg2pw(90, PWM_BITWIDTH));
+
+    Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
+  });
+  Nefry.setIndexLink(&amp;quot;Light_off_3&amp;quot;,&amp;quot;/off3&amp;quot;);
+
+  //////////////////////////////////////////////////////////////
+  Nefry.getWebServer()-&amp;gt;on(&amp;quot;/on4&amp;quot;, [&amp;amp;]() {
+    String content = F(
+      &amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;On&amp;lt;/h1&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+
+    for(int i=90; i&amp;lt;=125; i++){
+      ledcWrite(3,deg2pw(i, PWM_BITWIDTH));
+    }
+    delay(800);
+    ledcWrite(3,deg2pw(90, PWM_BITWIDTH));
+
+    Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
+  });
+  Nefry.setIndexLink(&amp;quot;Light_on_4&amp;quot;,&amp;quot;/on4&amp;quot;);
+
+  Nefry.getWebServer()-&amp;gt;on(&amp;quot;/off4&amp;quot;, [&amp;amp;]() {
+    String content = F(
+      &amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;off&amp;lt;/h1&amp;gt;&amp;quot;
+      &amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+
+    for(int i=90; i&amp;gt;=65; --i){
+      ledcWrite(3,deg2pw(i, PWM_BITWIDTH));
+    }
+    delay(800);
+    ledcWrite(3,deg2pw(90, PWM_BITWIDTH));
+
+    Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
+  });
+  Nefry.setIndexLink(&amp;quot;Light_off_4&amp;quot;,&amp;quot;/off4&amp;quot;);
+
+}
+
+void loop() {
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/155/5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;これで、Nefry BTのコンソール画面から遠隔でサーボモータを制御できるようになりました。
+また、&lt;strong&gt;Nefry.getWebServer()関数を使うことで、HTMLを書く要領でコンソール画面をカスタマイズ&lt;/strong&gt;することができます。&lt;/p&gt;
+
+&lt;h2 id=&#34;試してみる&#34;&gt;試してみる&lt;/h2&gt;
+
+&lt;div class=&#34;talk-box&#34;&gt;
+  &lt;p class=&#34;speaker&#34;&gt;
+    &lt;img src=&#34;https://dotstud.io/img/members/takudooon/author.png&#34; /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    たくろーどん「ちゃんとくさん、遠隔操作できる仕組みが完成しました！早速試してみてください。」
+  &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;talk-box&#34;&gt;
+  &lt;p class=&#34;speaker&#34;&gt;
+    &lt;img src=&#34;https://dotstud.io/img/members/chantoku/author.png&#34; /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    ちゃんとく「やった！さっそくデスクからポチっとな」
+  &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/155/7.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;div class=&#34;talk-box&#34;&gt;
+  &lt;p class=&#34;speaker&#34;&gt;
+    &lt;img src=&#34;https://dotstud.io/img/members/takudooon/author.png&#34; /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    たくろーどん「おぉ、これで遠隔で電気のON/OFF操作は完璧ですね！」
+  &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;talk-box&#34;&gt;
+  &lt;p class=&#34;speaker&#34;&gt;
+    &lt;img src=&#34;https://dotstud.io/img/members/chantoku/author.png&#34; /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    ちゃんとく「便利になったけど、&lt;b&gt;SSIDの命名センスがすごい&lt;/b&gt;」
+  &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/155/6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;※Nefry BTのSSIDは変更することができる。「&lt;a href=&#34;https://dotstud.io/docs/nefrybt-change-ssid/&#34;&gt;&lt;strong&gt;Nefry BTのSSIDを変更する&lt;/strong&gt;&lt;/a&gt;」を参照。&lt;/p&gt;
+
+&lt;div class=&#34;talk-box&#34;&gt;
+  &lt;p class=&#34;speaker&#34;&gt;
+    &lt;img src=&#34;https://dotstud.io/img/members/takudooon/author.png&#34; /&gt;
+  &lt;/p&gt;
+  &lt;p&gt;
+    たくろーどん「満足してもらえたようで嬉しいです。」
+  &lt;/p&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&#34;終わりに&#34;&gt;終わりに&lt;/h2&gt;
+
+&lt;p&gt;このようにdotstudioではお仕事が急にやってくるので柔軟な対応が求められます。&lt;u&gt;ヘマをすると何がおこるかわからないので、今回は首の皮一枚つながりました。&lt;/u&gt;&lt;/p&gt;
+
+&lt;p&gt;遠隔でデバイスを操作するには、今回のようにNefry BTのコンソール画面を応用する他にも、スマホアプリから操作できるようになる「&lt;a href=&#34;https://www.blynk.cc/&#34;&gt;&lt;strong&gt;Blynk&lt;/strong&gt;&lt;/a&gt;」を使ったり、リアルタイム通信を簡単に実現できる「&lt;a href=&#34;https://mlkcca.com/&#34;&gt;&lt;strong&gt;Milkcocoa&lt;/strong&gt;&lt;/a&gt;」を使ったりと、いろいろな方法があります。&lt;/p&gt;
+
+&lt;p&gt;ぜひみなさんも試してみてはいかがでしょうか？&lt;/p&gt;
+
+&lt;style&gt;
+div.talk-box p {
+  display: table-cell;
+  vertical-align: middle;
+  margin: 0;
+}
+
+.speaker {
+  width: 70px;
+  height: 70px;
+  margin-right: 10px;
+  padding-right: 10px;
+}
+
+.speaker img {
+  border-radius: 50%;
+}
+&lt;/style&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>くるくる回して値を入力！ロータリエンコーダでインプットの幅を広げよう</title>
+      <link>https://dotstud.io/blog/mongoose-os-rotary-encoder/</link>
+      <pubDate>Mon, 26 Mar 2018 01:00:43 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/mongoose-os-rotary-encoder/</guid>
+      
+      <description>
+
+&lt;p&gt;どうも。森田(&lt;a href=&#34;https://twitter.com/morita_pac&#34;&gt;@morita_pac&lt;/a&gt;)です。&lt;/p&gt;
+
+&lt;p&gt;ボタンを押してトリガー発動！センサー値をグラフにダイレクトアタック！IoTって最高かよ！&lt;/p&gt;
+
+&lt;p&gt;ってみなさん感じていると思います。&lt;/p&gt;
+
+&lt;p&gt;そこへ、新たなスパイスを投ずるべく、森田は&lt;u&gt;&lt;strong&gt;ロータリエンコーダ&lt;/strong&gt;&lt;/u&gt;をおすすめします。&lt;/p&gt;
+
+&lt;h2 id=&#34;ロータリエンコーダってなにかね&#34;&gt;ロータリエンコーダってなにかね？&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;これです。&lt;/strong&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/154/1.png&#34; alt=&#34;&#34; /&gt;
+回転の機械的変位量を電気信号に変換してくれます。つまり、&lt;u&gt;くるくるくるくる回してデジタル入力できるアイテム。&lt;/u&gt;&lt;/p&gt;
+
+&lt;p&gt;今回は&lt;strong&gt;クリック有り&lt;/strong&gt;（カチカチなってくれる）の&lt;strong&gt;インクリメンタル式&lt;/strong&gt;のロータリエンコーダを使って解説します。&lt;/p&gt;
+
+&lt;p&gt;⇒ 参考: ロータリエンコーダ販売ページ（&lt;a href=&#34;https://jp.rs-online.com/web/c/passive-components/rotary-encoders/&#34;&gt;RSコンポーネンツ&lt;/a&gt;）&lt;/p&gt;
+
+&lt;p&gt;さまざまな種類のロータリエンコーダがあるので、上記サイトなどを参照してみてください。今回利用したもの（EC12E2420801）も購入できます。&lt;/p&gt;
+
+&lt;h2 id=&#34;インクリメンタル式って何&#34;&gt;インクリメンタル式って何！？&lt;/h2&gt;
+
+&lt;p&gt;まだ引かないでください。。。&lt;/p&gt;
+
+&lt;p&gt;まず、ロータリエンコーダには信号検出の異なる「インクリメンタル式」と「アブソリュート式」があります。&lt;/p&gt;
+
+&lt;h3 id=&#34;アブソリュート式&#34;&gt;アブソリュート式&lt;/h3&gt;
+
+&lt;p&gt;回転位置が&lt;strong&gt;絶対的な数値として出力される高精度な方式&lt;/strong&gt;で、&lt;u&gt;電源断時でも回転位置を保持しておけることが特徴&lt;/u&gt;です。その分お値段も少々お高めなものが多いです。&lt;/p&gt;
+
+&lt;p&gt;回転方向も、数値の増減から判断できます。
+&lt;img src=&#34;https://dotstud.io/img/blog/154/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;インクリメンタル式&#34;&gt;インクリメンタル式&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;回転した角度だけパルス（短時間の電流）出力される方式&lt;/strong&gt;で、今回使うロータリエンコーダの場合だと、&lt;u&gt;15度回転させるとカチッとする感触があり、その時1パルスが出力され、24パルス出力で1回転&lt;/u&gt;となります。
+&lt;img src=&#34;https://dotstud.io/img/blog/154/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;回転方向を検出するために、位相が異なるA層B層の2つの端子からパルスを出力する構造になっており、
+例えば、&lt;u&gt;A→Bの順にパルスの変化があった場合は時計回り、B→Aの順にパルスの変化があった場合は反時計周りのように区別&lt;/u&gt;することができます。
+&lt;img src=&#34;https://dotstud.io/img/blog/154/4.png&#34; alt=&#34;&#34; /&gt;
+※イメージです。&lt;/p&gt;
+
+&lt;h2 id=&#34;使えるようにしてみよう&#34;&gt;使えるようにしてみよう。&lt;/h2&gt;
+
+&lt;p&gt;それでは、さっそくロータリエンコーダを使ってみるよ！&lt;/p&gt;
+
+&lt;p&gt;今回は、ESP32、ESP8266などのボードにJavaScriptで書き込みができる「&lt;strong&gt;Mongoose OS&lt;/strong&gt;」を利用してみます。&lt;strong&gt;なぜなら僕はMongoose OSが好きだから&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;Arduino言語での開発に慣れていない方にとっては、シンプルでわかりやすく感じると思います。Arduino IDEを使った方法やサンプルコードも、先例がたくさんあるので調べてみてください！&lt;/p&gt;
+
+&lt;p&gt;⇒ 参考: &lt;a href=&#34;https://sakura87.net/archives/2969&#34;&gt;Arduino Unoでロータリーエンコーダを使う│SAKURA87.net&lt;/a&gt;&lt;br /&gt;
+⇒ 参考: &lt;a href=&#34;http://nn-hokuson.hatenablog.com/entry/2017/03/26/102145&#34;&gt;【Arduino】マウスホイール（ロータリーエンコーダ）の回転量を取得する│おもちゃラボ&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Mongoose OSを導入するまでの手順は下記の記事を参照してください。
+&lt;a href=&#34;https://dotstud.io/blog/mongoose-os-nefry-blink/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/154/link.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;用意したもの&#34;&gt;用意したもの&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Mongoose OS（導入方法は&lt;a href=&#34;https://dotstud.io/blog/mongoose-os-nefry-blink/&#34;&gt;こちらの記事&lt;/a&gt;を参考）&lt;/li&gt;
+&lt;li&gt;ロータリエンコーダ（EC12E2420801）&lt;/li&gt;
+&lt;li&gt;ESP32-DevKitC&lt;/li&gt;
+&lt;li&gt;いい感じのブレッドボード&lt;/li&gt;
+&lt;li&gt;10KΩ抵抗 2本&lt;/li&gt;
+&lt;li&gt;ジャンパワイヤ 数本&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/154/5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;配線&#34;&gt;配線&lt;/h3&gt;
+
+&lt;p&gt;下記の図を参考に配線してください。
+&lt;img src=&#34;https://dotstud.io/img/blog/154/6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;プログラム&#34;&gt;プログラム&lt;/h3&gt;
+
+&lt;p&gt;&lt;u&gt;正回転（※）でプラス10、逆回転でマイナス10の数値をログに出力するプログラム&lt;/u&gt;です。コピーしてMongoose OSで書き込みます。それぞれのコードの詳細はコメントに記載します。&lt;/p&gt;
+
+&lt;p&gt;※…正回転はエンコーダの位置アドレスが増加する回転方向のことです。今回利用したロータリエンコーダの場合は時計回りが正回転、反時計回りが逆回転です。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js:init.js&#34;&gt;//GPIOのAPIを使えるようにします。
+load(&#39;api_gpio.js&#39;);
+
+//ロータリエンコーダのA,Bのピンアサイン
+let pinA = 19;
+let pinB = 18;
+
+//A,Bの状態を読みます。
+let stateA = GPIO.read(pinA);
+let stateB = GPIO.read(pinB);
+
+let count =50;
+let rotate =0;
+
+//おまじない
+GPIO.set_mode(pinA,GPIO.MODE_INPUT);
+GPIO.set_mode(pinB,GPIO.MODE_INPUT);
+
+//プラス1(正回転)を判断するための関数です。
+let getRotationActA = function(){
+        let Acount = 0;
+        let AA = GPIO.read(pinA);
+        let AB = GPIO.read(pinB);
+        if (AA === 0 &amp;amp;&amp;amp; AB === 1)
+        {
+            AA = GPIO.read(pinA);
+            AB = GPIO.read(pinB);
+            Acount = 1;
+        }
+   return Acount;
+};
+
+//マイナス1(逆回転)を判断するための関数です。
+let getRotationActB = function(){
+        let Bcount = 0;
+        let BA = GPIO.read(pinA);
+        let BB = GPIO.read(pinB);
+        if (BA === 1 &amp;amp;&amp;amp; BB === 0)
+        {
+            BA = GPIO.read(pinA);
+            BB = GPIO.read(pinB);
+            Bcount = -1;
+        }
+   return Bcount;
+};
+
+//Aにパルスが来た時に動くイベントです。
+GPIO.set_button_handler(pinA, GPIO.PULL_UP, GPIO.INT_EDGE_NEG, 100, function(x) {
+  rotate = getRotationActA();
+  if(rotate === 1){
+  count = count +rotate*10;
+  print(count);
+  }
+}, null);
+
+
+//Bにパルスが来た時に動くイベントです。
+GPIO.set_button_handler(pinB, GPIO.PULL_UP, GPIO.INT_EDGE_NEG, 100, function(x) {
+  rotate = getRotationActB();
+  if(rotate === -1){
+  count = count +rotate*10;
+  print(count);
+  }
+}, null);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;試してみよう&#34;&gt;試してみよう。&lt;/h2&gt;
+
+&lt;p&gt;書き込めたら、実際に試してみましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/154/7.png&#34; alt=&#34;&#34; /&gt;
+Mongoose OSのコンソールからロータリエンコーダの値を確認することができます。&lt;/p&gt;
+
+&lt;p&gt;下記はOLEDディスプレイに値を表示するようにしてみました。
+&lt;img src=&#34;https://gyazo.com/52dce8bbfa4e37382bc964e1aef3109f.gif&#34; alt=&#34;&#34; /&gt;
+正回転で値が増え、逆回転で値が減っていきます！&lt;/p&gt;
+
+&lt;p&gt;Mongoose OSの特徴とチャタリングの関係から、勢いよくロータリエンコーダを回すと正確に信号を捉えられません。解決できる方法があるぜ。という場合はご連絡くださいませ。&lt;/p&gt;
+
+&lt;h2 id=&#34;さいごに&#34;&gt;さいごに&lt;/h2&gt;
+
+&lt;p&gt;いかがでしたでしょうか。これで、&lt;strong&gt;入力に新たな選択肢が加わった&lt;/strong&gt;と思います。&lt;/p&gt;
+
+&lt;p&gt;ロータリエンコーダにはボタン付きのものもあったりしますので、選択してボタンプッシュで送信のような機能が欲しい場合に使えると思います。&lt;/p&gt;
+
+&lt;p&gt;初期搭載のスイッチやセンサからの入力に飽きてしまった方は、ぜひ試してみてください！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Nefry BTで簡単IoT！★IoTバイブステンアゲポロシャツ★ 後編</title>
+      <link>https://dotstud.io/blog/gyaruden-mao-vibes-polo2/</link>
+      <pubDate>Mon, 19 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dotstud.io/blog/gyaruden-mao-vibes-polo2/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは！ギャル電のまおです❤︎&lt;/p&gt;
+
+&lt;p&gt;今回は「★IoTバイブステンアゲポロシャツ★」の作り方後編です。前回の記事はこちら↓
+&lt;a href=&#34;https://dotstud.io/blog/gyaruden-mao-vibes-polo/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/link.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;作り方の流れ&#34;&gt;作り方の流れ☆&lt;/h2&gt;
+
+&lt;p&gt;作り方の流れはざっとこんな感じです。今回はArduino IDEでプログラムを書き込むところから始めていきたいと思います。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;IFTTTでレシピを作成&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Arduino IDEでプログラムを書き込む&lt;/strong&gt; &lt;strong&gt;←今回はここから❤︎&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;Nefry BTのWi-Fi設定とIFTTTの連携&lt;/li&gt;
+&lt;li&gt;センサーとLEDをNefry BTに配線&lt;/li&gt;
+&lt;li&gt;ボロシャツに取り付け&lt;/li&gt;
+&lt;li&gt;☆テスト☆&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&#34;arduino-ideでプログラムを書き込む&#34;&gt;Arduino IDEでプログラムを書き込む&lt;/h2&gt;
+
+&lt;h3 id=&#34;arduino-ideをインストール&#34;&gt;Arduino IDEをインストール&lt;/h3&gt;
+
+&lt;p&gt;Nefry BTはArduino IDEという無料ソフトウェアで書き込めるボードです。まだパソコンにインストールされてない方は、&lt;a href=&#34;https://www.arduino.cc/en/Main/Software&#34;&gt;公式サイト&lt;/a&gt;でダウンロードしてください。&lt;/p&gt;
+
+&lt;p&gt;⇒ 参考: &lt;a href=&#34;https://dotstud.io/docs/arduinoide-setup/&#34;&gt;Arduino IDEをPCにインストール&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;nefry-btライブラリの追加&#34;&gt;Nefry BTライブラリの追加&lt;/h3&gt;
+
+&lt;p&gt;Arduino IDEを立ち上げてまだすぐプログラミングはできません。 まず、&lt;u&gt;Aduino IDEにNefry BTというマイコンボードを知ってもらうためにボードのインストール&lt;/u&gt;をします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/1.png&#34; alt=&#34;&#34; /&gt;
+Arduino &amp;gt; Preferences をクリックしてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/2.png&#34; alt=&#34;&#34; /&gt;
+下記のURLを「追加のボードマネージャのURL」という欄に追加してください。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://nefry.studio/package_nefrybt_index.json&#34;&gt;http://nefry.studio/package_nefrybt_index.json&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;追加できたら「OK」をクリックします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/3.png&#34; alt=&#34;&#34; /&gt;
+次にツール＞ボード＞ボードマネージャをクリックします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/4.png&#34; alt=&#34;&#34; /&gt;
+ボードマネージャというウィンドウが出てくるので上にある検索欄で”Nefry”と検索すると、Nefryのライブラリが出てくるので「インストール」をクリックします。&lt;/p&gt;
+
+&lt;p&gt;インストールが完了したらプログラムを書き込む準備は終わりです。&lt;/p&gt;
+
+&lt;h3 id=&#34;プログラムを書き込む&#34;&gt;プログラムを書き込む&lt;/h3&gt;
+
+&lt;p&gt;まずNefry BTをパソコンのUSBポートに差し込みましょう。&lt;/p&gt;
+
+&lt;p&gt;下記のプログラムは&lt;u&gt;デジタルチルトセンサーが傾きを検出した時に画像がツイートされる&lt;/u&gt;というプログラムです。Nefry BTのスケッチ例の「NefryIFTTT」というプログラムを少し変えたものです。&lt;/p&gt;
+
+&lt;p&gt;以下をArduino IDEにコピペしてください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+#include &amp;lt;NefryIFTTT.h&amp;gt;
+String Event, SecretKey;
+int counter =0;                       //送信データのカウンタ
+int ledPin = 1;                // Connect LED to pin A1
+int switcher = 0;                 // Connect Tilt sensor to D0
+
+
+void setup() {
+  Nefry.setStoreTitle(&amp;quot;SecretKey&amp;quot;,0); //Nefry DataStoreのタイトルを指定
+  Nefry.setStoreTitle(&amp;quot;Event&amp;quot;,1);     //Nefry DataStoreのタイトルを指定
+  SecretKey = Nefry.getStoreStr(0);   //Nefry DataStoreからデータを取得
+  Event = Nefry.getStoreStr(1);       //Nefry DataStoreからデータを取得
+  pinMode(ledPin, OUTPUT);      // Set digital pin A1 to output mode
+  pinMode(switcher, INPUT);       // Set digital pin D0 to input mode
+
+}
+
+void loop() {
+  if (digitalRead(switcher)==HIGH) {               
+    digitalWrite(ledPin, HIGH);   // Turn on LED when the sensor is tilted
+    counter++;                        //送信回数加算
+    bool sendData = IFTTT.send(Event, SecretKey,&amp;quot;Nefry&amp;quot;,(String)(micros()/1000000)+&amp;quot;秒&amp;quot;,(String)counter);//IFTTTにデータを送信
+                                      //Value1:Nefry,Value2:Nefryが起動してからの秒数,Value3:送信カウンタ
+    if (!sendData) {//IFTTTにデータを送信が成功したか失敗したかの判定
+      Nefry.setLed(255, 0, 0);        //Errの時、赤色点灯
+    }
+
+    Nefry.ndelay(1000);               //送信後1秒間待つ
+  }
+else
+     {
+        digitalWrite(ledPin, LOW);    // Turn off LED when the sensor is not triggered
+     }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/5.png&#34; alt=&#34;&#34; /&gt;
+ツールをクリックして、ボード・UploadSpeed・シリアルポートを以下のように設定しましょう。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ボード：Nefry BT&lt;/li&gt;
+&lt;li&gt;UploadSpeed:115200&lt;/li&gt;
+&lt;li&gt;シリアルポート:/dev/cu.usbserial-XXXXX（MacOSの場合）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/6.png&#34; alt=&#34;&#34; /&gt;
+設定が完了したら左上にある「➡︎」ボタンをクリックしてボードに書き込みます。&lt;/p&gt;
+
+&lt;h2 id=&#34;nefry-btのwi-fi設定とiftttの連携&#34;&gt;Nefry BTのWi-Fi設定とIFTTTの連携&lt;/h2&gt;
+
+&lt;p&gt;次にNefry BTのWi-Fi設定とIFTTTの連携をします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/7.png&#34; alt=&#34;&#34; /&gt;
+Nefry BTをパソコンのUSBポートなど電源が取れる状態にしてから、パソコンのWi-Fi設定のところをクリックすると、&amp;rdquo;NefryBT-xxx&amp;rdquo;のような表示があります。それをクリックします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/8.png&#34; alt=&#34;&#34; /&gt;
+すると、上のようなコンソール画面が出てきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/9.png&#34; alt=&#34;&#34; /&gt;
+Setup WiFiをクリックして、Nefry BTが使うWi-Fi（2.4GHz帯）を設定します。使いたいWi-FiのSSIDとパスワードを入力して「Save」します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/10.png&#34; alt=&#34;&#34; /&gt;
+次に、前の画面に戻ってData Storeをクリックします。上のような画面が出てくるので、ここではIFTTTのwebhookの設定で取得した「SecretKey」とレシピを作成した時に設定した「イベント名」を記入して「Save」すれば設定完了です。&lt;/p&gt;
+
+&lt;h2 id=&#34;センサーとledをnefry-btに配線&#34;&gt;センサーとLEDをNefry BTに配線&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/11.png&#34; alt=&#34;&#34; /&gt;
+&lt;strong&gt;こんな感じで配線しました〜！&lt;/strong&gt;（※Nefry BT（無印）での配線です。Nefry BT R2の場合は配線表を参考に配線してください。）&lt;/p&gt;
+
+&lt;p&gt;デジタルチルトセンサーのピン配置は以下になります。
+&lt;center&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/153/12.png&#34; alt=&#34;&#34; /&gt;
+1: Input / 2: Power / 3: GND
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;Nefry BT、LEDとデジタルチルトセンサーの配線表は以下になります。
+&lt;img src=&#34;https://dotstud.io/img/blog/153/13.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;ポロシャツに取り付け&#34;&gt;ポロシャツに取り付け&lt;/h2&gt;
+
+&lt;p&gt;ポロシャツの襟の裏側にチルトセンサーを取り付けます。
+&lt;img src=&#34;https://dotstud.io/img/blog/153/14.png&#34; alt=&#34;&#34; /&gt;
+配線がポロシャツの中に隠れるように、ポロシャツに穴を開けて配線を通します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/15.png&#34; alt=&#34;&#34; /&gt;
+モバイルバッテリーにネフリーを接続して、巾着袋に入れます。&lt;/p&gt;
+
+&lt;p&gt;最後に首から背中に巾着袋をかけて、チルトセンサーのピンをNefry BTに接続したら出来上がり❤︎&lt;/p&gt;
+
+&lt;h2 id=&#34;テスト&#34;&gt;☆テスト☆&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;襟を立てると、ツイートされる！😆&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/153/demo.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;みんなも襟立てをインターネット化して、パリピになろうね卍&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;シャンパンは死にます✨ &lt;a href=&#34;https://t.co/2AbCV5ffOq&#34;&gt;pic.twitter.com/2AbCV5ffOq&lt;/a&gt;&lt;/p&gt; mao (@galmao777) &lt;a href=&#34;https://twitter.com/galmao777/status/964164179643912192?ref_src=twsrc%5Etfw&#34;&gt;2018年2月15日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Nefry BTで簡単IoT！★IoTバイブステンアゲポロシャツ★ 前編</title>
+      <link>https://dotstud.io/blog/gyaruden-mao-vibes-polo/</link>
+      <pubDate>Thu, 08 Mar 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dotstud.io/blog/gyaruden-mao-vibes-polo/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは！ギャル電のまおです★
+&lt;img src=&#34;https://dotstud.io/img/blog/152/1.png&#34; alt=&#34;&#34; /&gt;
+今回は去年のIoTLT第30回目にてプレゼンした&lt;u&gt;インターネット経由できるバイブスアゲ↑アゲ↑なポロシャツの作り方&lt;/u&gt;について、紹介していきたいと思います！&lt;/p&gt;
+
+&lt;h2 id=&#34;iotバイブステンアゲポロシャツ&#34;&gt;IoTバイブステンアゲポロシャツ&lt;/h2&gt;
+
+&lt;p&gt;うちみたいな大学生ギャルがたまに六本木のクラブにいくと世代間のギャップで疑問に思うことがよくある。&lt;/p&gt;
+
+&lt;p&gt;毎回最もモヤモヤすることは、お兄さん達のファッション。みんなも何回かは見たことあるであろう、あのちょっと色黒のがたい良さげなお兄さん達がよく着ている&amp;hellip;&amp;hellip;&lt;strong&gt;最高に襟が立ったピッチピチなポロシャツ。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;うちみたいなヤンギャル（若いギャル）は、あの最高に襟が立ったポロシャツのよさみがわからない。&lt;/p&gt;
+
+&lt;p&gt;よってうちらギャル電、&lt;u&gt;テクノロジーを使って襟が立ったポロシャツにナウみを足してかっこよさを引き立てられるスタイル&lt;/u&gt;を提案した。&lt;/p&gt;
+
+&lt;p&gt;それが「 &lt;strong&gt;襟立てポロシャツのインターネット化&lt;/strong&gt;」、俺が最もイケてる瞬間をインターネットで全世界にお知らせ😄&lt;/p&gt;
+
+&lt;p&gt;しくみは、ポロシャツの襟を立てた瞬間ツイッターに通知される感じ。これならヤンギャルでも、&lt;strong&gt;バイブステンアゲピーナッツすぎてまじやばたん&lt;/strong&gt;ってなる。&lt;/p&gt;
+
+&lt;p&gt;IoTバイブステンアゲポロシャツについてプレゼンした資料はこちら↓&lt;/p&gt;
+
+&lt;script async class=&#34;speakerdeck-embed&#34; data-id=&#34;23b7788d53344c4ab9e6d7c5415a7802&#34; data-ratio=&#34;1.77777777777778&#34; src=&#34;//speakerdeck.com/assets/embed.js&#34;&gt;&lt;/script&gt;
+
+&lt;h2 id=&#34;さっそく作っていく&#34;&gt;さっそく作っていく！&lt;/h2&gt;
+
+&lt;h3 id=&#34;用意するもの&#34;&gt;用意するもの♡&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://dotstud.io/docs/nefrybt&#34;&gt;Nefry BT&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;デジタルチルトセンサー（例: &lt;a href=&#34;http://akizukidenshi.com/catalog/g/gM-07036/&#34;&gt;DFR0028（秋月電子）&lt;/a&gt;）&lt;/li&gt;
+&lt;li&gt;LED  1個&lt;/li&gt;
+&lt;li&gt;モバイルバッテリー&lt;/li&gt;
+&lt;li&gt;襟がめっちゃ立っているボロシャツ&lt;/li&gt;
+&lt;li&gt;紐長めの巾着袋&lt;/li&gt;
+&lt;li&gt;両面テープ、穴あけ道具&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;作り方の流れ&#34;&gt;作り方の流れ☆&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;IFTTTでレシピを作成&lt;/strong&gt; ←今回はここまで❤︎&lt;/li&gt;
+&lt;li&gt;Arduino IDEでプログラムを書き込む&lt;/li&gt;
+&lt;li&gt;Nefry BTとIFTTTの連携とwifi設定&lt;/li&gt;
+&lt;li&gt;センサーとLEDをNefry BTに配線&lt;/li&gt;
+&lt;li&gt;ボロシャツに取り付け&lt;/li&gt;
+&lt;li&gt;☆テスト☆&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;今回IoTバイブステンアゲポロシャツを作成するのにあたり、Nefry BT開発者わみさんの「&lt;a href=&#34;https://dotstud.io/blog/nefry-ifttt-push-line/&#34;&gt;&lt;strong&gt;Nefry BTとIFTTTでスイッチを押したらLINEを送る仕組みを作ってみよう&lt;/strong&gt;&lt;/a&gt;」の記事を元に作りました。こちらを参考にしながら作成するのもいいと思います！&lt;/p&gt;
+
+&lt;h2 id=&#34;iftttでレシピを作成&#34;&gt;IFTTTでレシピを作成&lt;/h2&gt;
+
+&lt;p&gt;IFFT（いふと）とは&lt;u&gt;いろんなWebサービス同士を簡単に連携できるサービス&lt;/u&gt;です。&lt;/p&gt;
+
+&lt;p&gt;IFTTTは、「&lt;strong&gt;If This Then That&lt;/strong&gt;」の略で「&lt;strong&gt;もし☆☆したら♡♡をする&lt;/strong&gt;」ことを&lt;strong&gt;レシピ&lt;/strong&gt;と呼びます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/152/2.png&#34; alt=&#34;&#34; /&gt;
+まず、&lt;a href=&#34;https://ifttt.com/&#34;&gt;IFTTTの公式サイト&lt;/a&gt;でアカウントを作ってください。&lt;/p&gt;
+
+&lt;p&gt;次に、さっそくレシピを作成していきます。&lt;/p&gt;
+
+&lt;h3 id=&#34;secret-keyの取得&#34;&gt;Secret Keyの取得&lt;/h3&gt;
+
+&lt;p&gt;まずはNefry BTとIFTTTの連携に必要な「Secret Key」を取得します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/152/3.png&#34; alt=&#34;&#34; /&gt;
+メニューバーの「Search」を選択して検索欄で”Webhook”と記入すると、Webhookアプリが出てくるのでそれをクリックしてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/152/4.png&#34; alt=&#34;&#34; /&gt;
+右上にある「Settings」をクリックします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/152/5.png&#34; alt=&#34;&#34; /&gt;
+そうすると、Account Infoが出てきます。こちらに表示されている&lt;strong&gt;URLの最後の部分がSecret Key&lt;/strong&gt;となるのでこちらを各自ゲトりましょう。（画像の中に表示されているSecret Keyは無効なので各自取得してください。）&lt;/p&gt;
+
+&lt;h3 id=&#34;トリガーの作成&#34;&gt;トリガーの作成&lt;/h3&gt;
+
+&lt;p&gt;次に、「もし☆☆したら」の部分（トリガー）を作成します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/152/6.png&#34; alt=&#34;&#34; /&gt;
+メニューバーの「My Applets」をクリックして「New Applet」をクリックしてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/152/7.png&#34; alt=&#34;&#34; /&gt;
+このような画面が出てきたら、「this」のとこをクリックします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/152/8.png&#34; alt=&#34;&#34; /&gt;
+検索欄で再び&amp;rdquo;Webhook&amp;rdquo;を検索します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/152/9.png&#34; alt=&#34;&#34; /&gt;
+「Receive a web request」をクリック！&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/152/10.png&#34; alt=&#34;&#34; /&gt;
+続いて、イベント名を記入します（Nefry　BTにプログラムを書き込む際使用する）。&lt;/p&gt;
+
+&lt;p&gt;記入したら「Create trigger」をクリックしてトリガーの作成が完了です。&lt;/p&gt;
+
+&lt;h3 id=&#34;アクションの作成&#34;&gt;アクションの作成&lt;/h3&gt;
+
+&lt;p&gt;最後に「♡♡をする」の部分（アクション）を設定します！
+&lt;img src=&#34;https://dotstud.io/img/blog/152/11.png&#34; alt=&#34;&#34; /&gt;
+画面の「that」をクリックします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/152/12.png&#34; alt=&#34;&#34; /&gt;
+次に、使うサービスを検索欄で検索します。今回はツイッターにツイートさせたいので”twitter”と検索します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/152/13.png&#34; alt=&#34;&#34; /&gt;
+そして、今回は画像をツイートさせたいので「Post a tweet with image」をクリックします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/152/14.png&#34; alt=&#34;&#34; /&gt;
+この画面ではツイートさせたい文章と画像のURLを記入して、「Create action」をクリックします。&lt;/p&gt;
+
+&lt;p&gt;すると、最後の画面に移るので「Finish」をクリックしてレシピ作成終了です。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;こんな感じで今回はここまで！次回後半はで残りのステップを紹介します★ では！&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;デコトラサンバイザーを更にアプリで盛る🤙✨💓 &lt;a href=&#34;https://t.co/G01xOz2L3k&#34;&gt;pic.twitter.com/G01xOz2L3k&lt;/a&gt;&lt;/p&gt; ギャル電 (@GALDEN999) &lt;a href=&#34;https://twitter.com/GALDEN999/status/956156306007601152?ref_src=twsrc%5Etfw&#34;&gt;2018年1月24日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;後編の記事はこちら↓
+&lt;a href=&#34;https://dotstud.io/blog/gyaruden-mao-vibes-polo2/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/152/link.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Amazon Echoを使いこなそう！Node.jsでAlexaスキル開発 - スマートスピーカーの基本とスキル開発入門</title>
+      <link>https://dotstud.io/blog/nodejs-amazon-alexa-skill/</link>
+      <pubDate>Tue, 06 Mar 2018 01:00:43 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nodejs-amazon-alexa-skill/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、ちゃんとくです。突然ですが、「&lt;strong&gt;スマートスピーカー&lt;/strong&gt;」流行っていますね！&lt;/p&gt;
+
+&lt;p&gt;dotstudioでも「LINE Wave」「Google Home mini」「Amazon Echo Dot」と取り揃えております。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;が。&lt;strong&gt;ぶっちゃけ「音楽かけて」しか活用できてない……。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;ということで、スマートスピーカーのスキルを開発し、&lt;u&gt;活用できるよう自分向けにカスタマイズ&lt;/u&gt;してみましょう！今回は&lt;strong&gt;Amazon EchoのAlexaスキルをNode.jsで開発&lt;/strong&gt;してみます！&lt;/p&gt;
+
+&lt;p&gt;※記事は長いですが、開発は簡単なのでぜひチャレンジしてみてください！&lt;/p&gt;
+
+&lt;h2 id=&#34;開発を始める前に&#34;&gt;開発を始める前に&lt;/h2&gt;
+
+&lt;h3 id=&#34;alexaって何-amazon-echoじゃないの&#34;&gt;Alexaって何？Amazon Echoじゃないの？&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/device.png&#34; alt=&#34;&#34; /&gt;
+Amazonのスマートスピーカーは「Echo」という&lt;strong&gt;スピーカーのシリーズ&lt;/strong&gt;に、「Alexa」という&lt;strong&gt;音声AI&lt;/strong&gt;が搭載されたものです。Alexaは音声AIの名前なので、Alexa搭載のPCやクルマもありますよね。&lt;/p&gt;
+
+&lt;p&gt;各スピーカの違いは音質だったり、スマートホームハブ内臓だったりと色々あるので、調べてみてください。&lt;/p&gt;
+
+&lt;p&gt;⇒ 参考: &lt;a href=&#34;http://www.itmedia.co.jp/news/articles/1711/08/news107.html&#34;&gt;日本上陸「Amazon Echo」3機種の違いは？　他社とどう差別化する？&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;ちなみに「LINE WAVE」の音声AIは「Clova」、「Google Home」の音声AIは「Googleアシスタント」と言います。&lt;/p&gt;
+
+&lt;h3 id=&#34;alexaのスキルってなに&#34;&gt;Alexaのスキルってなに？&lt;/h3&gt;
+
+&lt;p&gt;「スキル」とは、&lt;u&gt;開発者によって追加された拡張機能&lt;/u&gt;を指します。スマートフォンでいうアプリのようなものですね。&lt;/p&gt;
+
+&lt;p&gt;スキルにも「カスタムスキル（汎用）」「スマートホームスキル（家電制御など）」「フラッシュブリーフィングスキル（読み上げ）」などの種類があります。&lt;/p&gt;
+
+&lt;p&gt;開発したカスタムスキルは&lt;strong&gt;自分のデバイスですぐに利用&lt;/strong&gt;できますが、&lt;strong&gt;Alexaスキルストアで公開して頒布する&lt;/strong&gt;こともできます！今回は自分のデバイスで利用できるところまでやってみますよ〜！&lt;/p&gt;
+
+&lt;h3 id=&#34;スキルを開発する方法&#34;&gt;スキルを開発する方法&lt;/h3&gt;
+
+&lt;p&gt;まずはスキルの全体の処理の流れを見てみましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/144/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Echoデバイスは受け取った音声をAlexaサービスに渡します。&lt;/li&gt;
+&lt;li&gt;Alexaサービスは音声を解析してテキストに変換し、処理ロジックに渡します。&lt;/li&gt;
+&lt;li&gt;処理ロジックの結果がAlexaに渡され、音声データを生成してデバイスに渡します。&lt;/li&gt;
+&lt;li&gt;Echoデバイスが音声を発します。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;スキルを開発するときに必要なのは、上の図で「&lt;strong&gt;音声インタフェース&lt;/strong&gt;」と「&lt;strong&gt;処理ロジック&lt;/strong&gt;」の部分です。&lt;/p&gt;
+
+&lt;p&gt;音声インタフェースは&lt;u&gt;どんな言葉を受け取るか、どう理解するか&lt;/u&gt;などです。この部分は&lt;strong&gt;Amazon Developer上で設計&lt;/strong&gt;することができます。&lt;/p&gt;
+
+&lt;p&gt;処理ロジックは&lt;u&gt;返答をする部分&lt;/u&gt;です。自前でエンドポイントを作成することもできますが、&lt;strong&gt;AWS Lambdaで作成すると簡単に紐付けることができます&lt;/strong&gt;。今回はAWS Lambdaを使ってみます。&lt;/p&gt;
+
+&lt;h3 id=&#34;開発手順の整理&#34;&gt;開発手順の整理&lt;/h3&gt;
+
+&lt;p&gt;今回は下記の手順で開発していきます。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Amazon Developer上で音声インタフェースを設計&lt;/li&gt;
+&lt;li&gt;AWS Lambdaで処理ロジックを開発&lt;/li&gt;
+&lt;li&gt;音声インタフェースと処理ロジックの紐付け&lt;/li&gt;
+&lt;li&gt;デバイスでスキルを有効にする&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;一つ一つの手順は難しくないので、しっかり理解しておきましょう！&lt;/p&gt;
+
+&lt;h2 id=&#34;開発の事前準備&#34;&gt;開発の事前準備&lt;/h2&gt;
+
+&lt;p&gt;各種アカウントやセットアップは開発の前にあらかじめ用意しておくとスムーズです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Amazon Developerアカウント&lt;/li&gt;
+&lt;li&gt;Echoデバイスのセットアップ&lt;/li&gt;
+&lt;li&gt;AWSアカウント&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;下記でそれぞれの手順を紹介します。&lt;/p&gt;
+
+&lt;h3 id=&#34;amazon-developerアカウントの作成&#34;&gt;Amazon Developerアカウントの作成&lt;/h3&gt;
+
+&lt;p&gt;Alexaスキルの登録や音声インタフェースの設計に必要です。Amazon.co.jpのお買い物アカウントをそのまま紐付けることができます。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;※Amazon.com（米国）アカウントを紐付けると最後のデバイスとスキルの紐付けでうまくいかない場合があります。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;a href=&#34;https://developer.amazon.com/ja/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/ad_console.png&#34; alt=&#34;&#34; /&gt;
+Amazon Developer（日本語版）&lt;/a&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;右上のDeveloper Consoleから登録します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/ad_monetize.png&#34; alt=&#34;&#34; /&gt;
+収益化の項目はひとまず「いいえ」にしておきます（後から変更できます）。&lt;/p&gt;
+
+&lt;h3 id=&#34;echoデバイスのセットアップ&#34;&gt;Echoデバイスのセットアップ&lt;/h3&gt;
+
+&lt;p&gt;スマートフォンアプリで、Amazon Developerアカウントの紐づけとWi-Fi設定を行います。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/app_login.png&#34; alt=&#34;&#34; /&gt;
+お手持ちのiPhone、Android端末にAlexaアプリをインストールしましょう（以下iPhoneでの説明です）。Amazon Developerアカウントでログインします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/app_setup.png&#34; alt=&#34;&#34; /&gt;
+「設定」から「新しいデバイスをセットアップ」を選びます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/app_wifi.png&#34; alt=&#34;&#34; /&gt;
+言語を選択し、スマートフォンを利用するWi-Fiに接続します。&lt;strong&gt;Wi-Fiは2.4GHz帯でないと利用できない&lt;/strong&gt;ので注意しましょう（最近だと5GHz帯も多いので確認してください）。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/app_action.png&#34; alt=&#34;&#34; /&gt;
+Echoデバイスと接続します。デバイスがオレンジになっていない場合はアクションボタンを長押しします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/app_mode.png&#34; alt=&#34;&#34; /&gt;
+「・」のボタンがアクションボタンです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/app_device.png&#34; alt=&#34;&#34; /&gt;
+「Amazon-XXXX」に接続します（複数のデバイスがセットアップモードになっている場合、混同しないよう注意してください）。&lt;/p&gt;
+
+&lt;p&gt;以上でセットアップ完了です！&lt;/p&gt;
+
+&lt;h3 id=&#34;awsアカウントの作成&#34;&gt;AWSアカウントの作成&lt;/h3&gt;
+
+&lt;p&gt;AWSアカウントは下記の公式サイトを参考に進めてみてください（以前に登録済みだったので画面キャプチャが用意できませんでした……）。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://aws.amazon.com/jp/register-flow/&#34;&gt;https://aws.amazon.com/jp/register-flow/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;アカウント登録の際には&lt;strong&gt;クレジットカードの登録&lt;/strong&gt;、&lt;strong&gt;電話確認&lt;/strong&gt;（自動応答）が必要です。&lt;/p&gt;
+
+&lt;p&gt;AWSアカウントには2018年3月現在では1年間の無料枠がついてきますが、&lt;u&gt;ご自身のアカウントの管理には注意してください。&lt;/u&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;音声インタフェースの設計&#34;&gt;音声インタフェースの設計&lt;/h2&gt;
+
+&lt;p&gt;まずは&lt;a href=&#34;https://developer.amazon.com/ja/&#34;&gt;Amazon Developer&lt;/a&gt;上で音声インタフェースを作成していきます。
+&lt;img src=&#34;https://dotstud.io/img/blog/144/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;alexaスキルを新規登録&#34;&gt;Alexaスキルを新規登録&lt;/h3&gt;
+
+&lt;p&gt;Amazon Developerにログインして&lt;a href=&#34;https://developer.amazon.com/home.html&#34;&gt;Developer Console&lt;/a&gt;を開きます。
+&lt;img src=&#34;https://dotstud.io/img/blog/144/ad_alexa.png&#34; alt=&#34;&#34; /&gt;
+Alexaのページへ移動します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/ad_start.png&#34; alt=&#34;&#34; /&gt;
+「Alexa Skills Kit」を始めます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/create1.png&#34; alt=&#34;&#34; /&gt;
+「新しいスキルを追加」します（新メニューのβ版が出てますが、まだ日本語対応していないようです）。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/create2.png&#34; alt=&#34;&#34; /&gt;
+作成するスキルの情報を入力します。今回は下記のようにしました。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;スキルの種類 ⇒ 「カスタム対話モデル」&lt;/li&gt;
+&lt;li&gt;言語 ⇒ 日本語&lt;/li&gt;
+&lt;li&gt;スキル名 ⇒ ちゃんとくカフェ&lt;/li&gt;
+&lt;li&gt;呼び出し名 ⇒ ちゃんとくカフェ&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;「保存」して「次へ」で作成します。&lt;/p&gt;
+
+&lt;h3 id=&#34;対話モデルを作成&#34;&gt;対話モデルを作成&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/create3.png&#34; alt=&#34;&#34; /&gt;
+作成したら、&lt;strong&gt;対話モデル&lt;/strong&gt;を作っていきます。「スキルビルダーを起動する」を選択します。&lt;/p&gt;
+
+&lt;p&gt;対話モデルとは、&lt;u&gt;ユーザがどのように発話するか、どのように解釈して処理ロジックに伝えるか&lt;/u&gt;の部分です。用語がいくつか出てくるので、下の図を見てみましょう。
+&lt;img src=&#34;https://dotstud.io/img/blog/144/model1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;スキル名を&lt;strong&gt;Invocation name&lt;/strong&gt;と言い、「&lt;strong&gt;Alexa、{Invocation name}を開いて&lt;/strong&gt;」と呼びかけます。&lt;/li&gt;
+&lt;li&gt;起動後に返すAlexaの言葉を&lt;strong&gt;LaunchRequest&lt;/strong&gt;と言います。&lt;/li&gt;
+&lt;li&gt;&lt;u&gt;Alexaが受け付けるアクションの呼びかけ&lt;/u&gt;を、&lt;strong&gt;Intent&lt;/strong&gt;と言います。&lt;/li&gt;
+&lt;li&gt;Intentに対するAlexaの返答を&lt;strong&gt;IntentRequest&lt;/strong&gt;と言います。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;これが基本的なユーザとAlexaのやりとりの構図です。対話モデルでは&lt;strong&gt;Intent&lt;/strong&gt;を設定して、Alexaに受け付けてもらえるようにしていきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/model2.png&#34; alt=&#34;&#34; /&gt;
+ちなみに「スキルを開く〜アクション」までは一文での呼びかけでもできます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/builder1.png&#34; alt=&#34;&#34; /&gt;
+スキルビルダーの画面が開いたら、左のIntentsから「ADD」を選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/builder2.png&#34; alt=&#34;&#34; /&gt;
+設定するIntentの名前を付けます。今回はオススメを教えてもらうアクションを作成したいので「RecomendIntent」にしてみました。&lt;u&gt;アクションに沿った名前をつけておく&lt;/u&gt;とIntentが増えてもわかりやすいと思います。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/builder3.png&#34; alt=&#34;&#34; /&gt;
+アクションを呼ぶときの「呼びかけ」のサンプル発話を登録していきます。公式によると、パターン数は1つのIntentに対し、&lt;u&gt;最低6つ、理想は30&lt;/u&gt;だそうです。サンプル発話が多いほど認識精度が向上します。&lt;/p&gt;
+
+&lt;p&gt;登録したら「&lt;strong&gt;Save Model&lt;/strong&gt;」、「&lt;strong&gt;Build Model&lt;/strong&gt;」を順に選択します。（Buildには少し時間がかかります。ここで機械学習がされているそうです。）&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/builder4.png&#34; alt=&#34;&#34; /&gt;
+ビルドが完了したら「Configuration」を選択し、設定画面に戻ります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/builder5.png&#34; alt=&#34;&#34; /&gt;
+スキルの「ID」をコピーして、Amazon Developerは一旦置いておきます（まだ設定があるので開いたまま）。&lt;/p&gt;
+
+&lt;h2 id=&#34;処理ロジックの開発&#34;&gt;処理ロジックの開発&lt;/h2&gt;
+
+&lt;p&gt;続いて、&lt;a href=&#34;https://aws.amazon.com/jp/&#34;&gt;AWS&lt;/a&gt;のLambda上で処理ロジックを作っていきます。
+&lt;img src=&#34;https://dotstud.io/img/blog/144/4.png&#34; alt=&#34;&#34; /&gt;
+AWS Lambdaは、&lt;u&gt;AWSに関するイベントにをトリガーにする処理を作成できる実行環境&lt;/u&gt;です。&lt;/p&gt;
+
+&lt;p&gt;自分自身でエンドポイントを立てることもできますが、AWS Lambdaを使うとロジック自体の開発や他のAWSサービスとの連携も簡単です。&lt;/p&gt;
+
+&lt;h3 id=&#34;aws-lambda関数を作成&#34;&gt;AWS Lambda関数を作成&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/func1.png&#34; alt=&#34;&#34; /&gt;
+AWSコンソールを開いたら、「lambda」を検索して開きます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/func2.png&#34; alt=&#34;&#34; /&gt;
+&lt;strong&gt;リージョンが「東京」になっていることを確認&lt;/strong&gt;し、「関数を作成」します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/func3.png&#34; alt=&#34;&#34; /&gt;
+「設計図」から作成し、「alexa-skill-sdk-factskill」を検索して選びます。この設計図を利用すると、&lt;strong&gt;Alexa Skills Kit for Node.jsというNode.jsのSDK&lt;/strong&gt;がデフォルトで入ってきます。&lt;u&gt;現在のところ公式に開発されているSDKはNode.jsだけ&lt;/u&gt;です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/func4.png&#34; alt=&#34;&#34; /&gt;
+上記のように関数の情報を設定します。&lt;/p&gt;
+
+&lt;p&gt;「ロール」は関数のアクセス権限です。今回は「シンプルなマイクロハーネスのアクセス権限」を選択しましたが、S3など他のサービスに繋ぎたい場合は別途選択が必要です。AWSの&lt;a href=&#34;https://developer.amazon.com/ja/docs/custom-skills/host-a-custom-skill-as-an-aws-lambda-function.html&#34;&gt;ドキュメント&lt;/a&gt;を参考にしましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/func5.png&#34; alt=&#34;&#34; /&gt;
+下にスクロールして保存します。&lt;/p&gt;
+
+&lt;h3 id=&#34;トリガーをセット&#34;&gt;トリガーをセット&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/func6.png&#34; alt=&#34;&#34; /&gt;
+関数が作成できたら、トリガー部分に「Alexa Skills Kit」をドラッグ＆ドロップで設定します。&lt;/p&gt;
+
+&lt;p&gt;ここで「Alexa Skills Kitがない！」という人は、&lt;strong&gt;リージョンが東京になっているか&lt;/strong&gt;をもう一度確認してください。（東京じゃない場合は、リージョンを選び直して関数を再度作成ですよ！）&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/func8.png&#34; alt=&#34;&#34; /&gt;
+下にスクロールして「トリガーの設定」に、Amazon Developerで取得した「スキルのID」を貼り付けます。&lt;/p&gt;
+
+&lt;h3 id=&#34;処理ロジックを編集&#34;&gt;処理ロジックを編集&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/func9.png&#34; alt=&#34;&#34; /&gt;
+関数がデフォルトの設計図のままなので編集します。上記の部分を選択すると下にエディタが開きます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/func11.png&#34; alt=&#34;&#34; /&gt;
+コードのエントリタイプ（エディタを使う・アップロードするなど）や、ランタイムを選択できます。Node.jsは6.10までの対応になっています。もう少しバージョンが上がってほしいですね……！&lt;/p&gt;
+
+&lt;p&gt;エディタには、デフォルトのコードを参考に下記のようなコードを貼り付けます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
+
+const Alexa = require(&#39;alexa-sdk&#39;);
+
+const handlers = {
+    // アプリ起動時の返答
+    &#39;LaunchRequest&#39;: function () {
+        const speechOutput = &#39;こんにちは。オススメをお知らせします。&#39;
+        const reprompt = &#39;オススメをお知らせします。&#39;
+        this.emit(&#39;:ask&#39;, speechOutput, reprompt);
+    },
+    // RecomendIntentへの返答
+    &#39;RecomendIntent&#39;: function () {
+        const intent = this.event.request.intent;
+        const speechOutput = &#39;オススメはハンバーグ定食です。&#39;
+        this.emit(&#39;:tell&#39;, speechOutput);
+    },
+    // ヘルプ（デフォルト）への返答
+    &#39;AMAZON.HelpIntent&#39;: function () {
+        const speechOutput = &#39;ちゃんとくカフェのオススメメニューをお知らせします。&#39;;
+        const reprompt = &#39;オススメを聞いてみてください。&#39;
+        this.emit(&#39;:ask&#39;, speechOutput, reprompt);
+    },
+    // キャンセル（デフォルト）への返答
+    &#39;AMAZON.CancelIntent&#39;: function () {
+        this.emit(&#39;:tell&#39;, this.t(&#39;STOP_MESSAGE&#39;));
+    },
+    // 対応できないアクションへの返答
+    &#39;AMAZON.StopIntent&#39;: function () {
+        const speechOutput = &#39;すみません。わかりません。&#39;;
+        const reprompt = &#39;もう一度お願いします。&#39;
+        this.emit(&#39;:tell&#39;, this.t(&#39;STOP_MESSAGE&#39;));
+    },
+};
+
+// 下記のように修正
+exports.handler = function(event, context, callback) {
+    const alexa = Alexa.handler(event, context, callback);
+    alexa.registerHandlers(handlers);
+    alexa.execute();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;先ほど設定した「RecomendIntent」（ご自身が設定したIntent名。小文字大文字など注意！）に対する返答や、その他の返答を作成しました。RaunchRequest、HelpIntentなど、&lt;strong&gt;スキル開発で推奨されている設定があるので記述する&lt;/strong&gt;ようにします。&lt;/p&gt;
+
+&lt;p&gt;&lt;u&gt;&lt;strong&gt;この辺がきちんと設定されていないとAlexaスキルストアでは公開できない&lt;/strong&gt;みたいです。&lt;/u&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/func7.png&#34; alt=&#34;&#34; /&gt;
+コードが編集できたら右上で保存し、ARNをコピーして、AWSの設定は完了です。&lt;/p&gt;
+
+&lt;h2 id=&#34;音声インターフェースと処理ロジックの紐付け&#34;&gt;音声インターフェースと処理ロジックの紐付け&lt;/h2&gt;
+
+&lt;p&gt;作成したAWS Lambda関数とAmazon Developer上のスキルを紐づけます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/ad_func.png&#34; alt=&#34;&#34; /&gt;
+Amazon Developer側の設定ページで、「エンドポイント」に「AWS LambdaのARN」を選択し、「デフォルト」に先ほどのARNを貼り付けます。&lt;/p&gt;
+
+&lt;p&gt;保存して紐づけは完了です！&lt;strong&gt;これでスキルの作成が一通り完了しました！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;試してみよう&#34;&gt;試してみよう！&lt;/h2&gt;
+
+&lt;h3 id=&#34;シミュレータでテスト&#34;&gt;シミュレータでテスト&lt;/h3&gt;
+
+&lt;p&gt;まずはAmazon Developer上に用意されているシミュレータでテストしてみます（実はスキル開発だけならEchoデバイスが無くてもできるんですね）。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/simu1.png&#34; alt=&#34;&#34; /&gt;
+「テスト」のサービスシミュレータに登録したサンプル発話を入力し、スキルを呼び出します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/simu2.png&#34; alt=&#34;&#34; /&gt;
+レスポンスが返ってきました！処理ロジックを作ったらここでデバッグをしていくのが良さそうです。&lt;/p&gt;
+
+&lt;h3 id=&#34;echoデバイスでスキルを有効にする&#34;&gt;Echoデバイスでスキルを有効にする&lt;/h3&gt;
+
+&lt;p&gt;開発したスキルは、自分のAmazon Developerアカウントに紐付いているデバイスで検証することができます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/demo1.png&#34; alt=&#34;&#34; /&gt;
+スマートフォンアプリから「スキル」を選びます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/demo2.png&#34; alt=&#34;&#34; /&gt;
+「有効なスキル」を選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/demo3.png&#34; alt=&#34;&#34; /&gt;
+「DEVスキル」の項目から、作成したスキルを選択します。&lt;/p&gt;
+
+&lt;p&gt;ここで作ったスキルが表示されていない場合は、Amazon Developerアカウントが&lt;strong&gt;Amazon.comアカウント（米国）に紐付いてないか確認&lt;/strong&gt;してください。Amazon.co.jpアカウントに紐づけないとダメみたい……（現象が起こせなくて解決策がイマイチわかっていません、すみません）。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/144/demo4.png&#34; alt=&#34;&#34; /&gt;
+選択すると連携しているEchoデバイスでスキルが使えるようになります（無効にすると使えなくなります）。&lt;/p&gt;
+
+&lt;h3 id=&#34;いざ-スキルを呼び出し&#34;&gt;いざ、スキルを呼び出し！&lt;/h3&gt;
+
+&lt;p&gt;デバイスで作成したスキルを試してみましょう！&lt;/p&gt;
+
+&lt;p&gt;基本のやりとりから……
+&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/RyHESCiE03s&#34; frameborder=&#34;0&#34; allow=&#34;autoplay; encrypted-media&#34; allowfullscreen&gt;&lt;/iframe&gt;
+バッチリです！&lt;/p&gt;
+
+&lt;p&gt;「ヘルプ」「ストップ」などの呼びかけは、Intentを登録しなくてもデフォルトで設定されています。
+&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/dr-akz9qTDk&#34; frameborder=&#34;0&#34; allow=&#34;autoplay; encrypted-media&#34; allowfullscreen&gt;&lt;/iframe&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;手順の紹介は長くなってしまいましたが、あまり引っかかるところなくスキルの開発ができたと思います。&lt;/p&gt;
+
+&lt;p&gt;今回の基本のスキルに加えて、&lt;u&gt;デフォルトのIntentの拡張や、任意の数字や都市を受け取ることができる「Slot」の追加&lt;/u&gt;などまだまだカスタマイズができます。&lt;/p&gt;
+
+&lt;p&gt;次回はカスタマイズを加えたスキルを開発し、公開するところまでやってみたいと思います。それではまた！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>クラブでモテる！つまみ付きユニコーンポーチ　後編</title>
+      <link>https://dotstud.io/blog/gyaruden-kyoko-unicorn-pochette2/</link>
+      <pubDate>Wed, 28 Feb 2018 10:00:00 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/gyaruden-kyoko-unicorn-pochette2/</guid>
+      
+      <description>
+
+&lt;p&gt;みなさん、ちょりおつ！ギャル電きょうこです。ギャルによるギャルのためのテクノロジーを提案するユニット、ギャル電で活動しています。今回は&lt;strong&gt;クラブ行くときにぎゃんかわに盛れる光るポーチ&lt;/strong&gt;の作り方後編でっす！&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;a href=&#34;https://dotstud.io/blog/gyaruden-kyoko-unicorn-pochette&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/147/link.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;
+▲ 前編をチェック！
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;arduino-nano互換機の導入方法&#34;&gt;Arduino Nano互換機の導入方法&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/147/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;今回使用したボードはArduino Nano互換機。AmazonやAliExpressとかで一枚300円くらいから買える感じの小さいボードっす。&lt;strong&gt;いいところは、安くて小さいところ&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;導入にクセがあるのと、ケーブルがUSB MiniBタイプなところがちょっとめんどいけど、Digisparkだとちょっと容量足りなくてプログラムが書き込めないときとかにこのボードよく使ってます。&lt;/p&gt;
+
+&lt;h2 id=&#34;ドライバのインストール&#34;&gt;ドライバのインストール&lt;/h2&gt;
+
+&lt;p&gt;Arduino Nano互換機を使用するためには、&lt;strong&gt;ドライバのインストールが必要&lt;/strong&gt;っす。「Arduino Nano 互換 OSの名前 ドライバ」、または「CH340 ドライバ OSの名前」とかで検索すると親切なインターネット上の先輩方の情報がみつかるとおもいまっす！&lt;/p&gt;
+
+&lt;p&gt;Macの新しめの機種使っててうまく認識しない場合には、接続するUSBの口を変えてみるか、USB2.0対応のUSBハブを接続してハブにつなげると認識しやすくなるかも。&lt;/p&gt;
+
+&lt;p&gt;あとどうにも認識しないときは、&lt;strong&gt;一回忘れて寝る。そんで再トライ。うちらはだいたいコレでいつも乗りきってる&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;h2 id=&#34;ボードのセッティング&#34;&gt;ボードのセッティング&lt;/h2&gt;
+
+&lt;p&gt;ドライバのインストールが完了して、デバイスを認識するようになったら、&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;「Arduino IDE」→「ツール」→「ボード」→「Arduino Nano」&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;をえらんで書き込み準備オッケー。Aruduino IDEの設定等はインターネットで調べるか、&lt;a href=&#34;https://dotstud.io/docs/arduinoide-setup/&#34;&gt;ドキュメント&lt;/a&gt;や&lt;a href=&#34;https://dotstud.io/blog/gyaruden-kyoko-led-cassette/#%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%A0%E3%81%AE%E6%9B%B8%E3%81%8D%E8%BE%BC%E3%81%BF%E6%BA%96%E5%82%99&#34;&gt;過去記事&lt;/a&gt;等も参考にしてね☆&lt;/p&gt;
+
+&lt;h2 id=&#34;fastledライブラリの導入方法&#34;&gt;FASTLEDライブラリの導入方法&lt;/h2&gt;
+
+&lt;p&gt;今回はいつも超お世話になっているNeoPixcelライブラリではなくて、&lt;strong&gt;FastLEDライブラリ&lt;/strong&gt;を使用してLEDを光らせたいと思いまっす。&lt;/p&gt;
+
+&lt;p&gt;まずは、ここからライブラリファイル(SourceCode.zip)をダウンロードします。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;a href=&#34;https://github.com/FastLED/FastLED/releases&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/147/link2.png&#34; alt=&#34;&#34; /&gt;
+https://github.com/FastLED/FastLED/releases&lt;/a&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;ダウンロードしたファイルを、Arduino IDEを起動して&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;「スケッチ」→「ライブラリのインクルード」→「.Zip形式のライブラリをインストール」&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;で指定してインストールします。&lt;/p&gt;
+
+&lt;h2 id=&#34;プログラム&#34;&gt;プログラム&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://gist.github.com/hsiboy/11545fd0241ab60b567d&#34;&gt;こちら&lt;/a&gt;のページのプログラムを参考にしました。というかLEDの数とLEDのPIN、可変抵抗のPINを書き換えただけでコピペさせていただきました。&lt;/p&gt;
+
+&lt;p&gt;「led potentiometer」でググるといい感じの参考作例やプログラムがいっぱいみつかるよ。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//FastLED_AnalogueInput.ino
+
+/*
+   Using a potentiometer to control colour, brightness and speed.
+ Wire up as per http://arduino.cc/en/Tutorial/AnalogInput
+ You can connect the wiper, to any analogue input pin, and
+ adjust the settings below.
+ You will need three 10k potentiometers.
+ */
+
+#include &amp;lt;FastLED.h&amp;gt;
+
+#define LED_PIN 6              // which pin are LEDS connected to?
+#define NUM_LEDS 24
+#define COLOR_ORDER RGB
+#define LED_TYPE WS2811        // i&#39;m using WS2811s, FastLED supports lots of different types.
+
+/*
+ set your desired minimum and maxium brigtness settings here.
+ Valid values are 0 - 255
+ With 0 being fully dim, or not lit, and 255 being fully on.
+ Therefore half power, or 50%, would be 128
+ */
+
+#define MAX_BRIGHTNESS 164      // Thats full on, watch the power!
+#define MIN_BRIGHTNESS 32       // set to a minimum of 25%
+
+const int brightnessInPin = A0;  // The Analog input pin that the brightness control potentiometer is attached to.
+const int speedInPin = A1;       // Analog input pin that the speed control potentiometer is attached to.
+const int colourInPin = A2;      // The Analog input pin that the colour control potentiometer is attached to.
+
+struct CRGB leds[NUM_LEDS];
+
+void setup() {
+  delay(3000); // in case we do something stupid. We dont want to get locked out.
+
+  LEDS.addLeds&amp;lt;LED_TYPE, LED_PIN, COLOR_ORDER&amp;gt;(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
+  FastLED.setBrightness(MAX_BRIGHTNESS);
+}
+
+void loop() {
+  // read the analog brightness value:
+  //int brightValue = analogRead(brightnessInPin);            
+  // map it to the range of the FastLED brightness:
+  int mappedValue = map(analogRead(brightnessInPin), 0, 1023, 0, 255);
+
+  /*
+   At this point, brightness could be full off (mappedValue == 0)
+   or it could be fully on (mappedValue == 255).
+   if you are ruuning from a battery pack, or in a dark room, you
+   may not want full brightness.
+   Or if you are in daylight, you may not want the pixels to go out.
+   the following code, checks if mappedValue is above or below our defined
+   brightness settings above.
+   It works like this.
+
+   we get mappedValue: if mappedValue is between MIN_BRIGHTNESS and MAX_BRIGHTNESS.
+   we get MIN_BRIGHTNESS: if mappedValue is less than our defined MIN_BRIGHTNESS.
+   we get MAX_BRIGHTNESS: if mappedValue is greater than our defined MAX_BRIGHTNESS
+
+   so, it limits range of brightness values.
+
+   */
+
+  //int outputValue = constrain(mappedValue, MIN_BRIGHTNESS, MAX_BRIGHTNESS);
+
+  // now we set the brightness of the strip
+  FastLED.setBrightness(constrain(mappedValue, MIN_BRIGHTNESS, MAX_BRIGHTNESS));
+
+  // read the analog speed value:          
+  // map it to a value used in delay();
+  int delayValue = map(analogRead(speedInPin), 0, 1023, 0, 50);  
+
+  int mappedHue;
+  // read the analog brightness value:
+  //int hueValue = analogRead(colourInPin);            
+  // map it to the range of the FastLED brightness:
+
+  // First slide the led in one direction
+  for(int i = 0; i &amp;lt; NUM_LEDS; i++) {
+    mappedHue = map(analogRead(colourInPin), 0, 1023, 0, 255);
+    // Set the i&#39;th led to the chosen colour
+    leds[i] = CHSV(mappedHue, 255, 255);
+    // Show the leds
+    FastLED.show();
+    // now that we&#39;ve shown the leds, reset the i&#39;th led to black
+    leds[i] = CRGB::Black;
+    // Wait a little bit before we loop around and do it again
+    delay(delayValue);  
+  }
+
+  // Now go in the other direction.  
+  for(int i = NUM_LEDS-1; i &amp;gt;= 0; i--) {
+    mappedHue = map(analogRead(colourInPin), 0, 1023, 0, 255);
+    // Set the i&#39;th led to the chosen colour
+    leds[i] = CHSV(mappedHue, 255, 255);
+    // Show the leds
+    FastLED.show();
+    // now that we&#39;ve shown the leds, reset the i&#39;th led to black
+    leds[i] = CRGB::Black;
+    // Wait a little bit before we loop around and do it again
+    delay(delayValue);  
+  }
+
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;プログラムを書き込んでテストしてみよう&#34;&gt;プログラムを書き込んでテストしてみよう&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/147/2.png&#34; alt=&#34;&#34; /&gt;
+プログラムが書き込めたら、ちゃんと可変抵抗器で光り方が変わるかを確認します。&lt;/p&gt;
+
+&lt;p&gt;このプログラムでは、&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;A0に接続したつまみが、明るさ&lt;/li&gt;
+&lt;li&gt;A1に接続したつまみが、点滅速度&lt;/li&gt;
+&lt;li&gt;A2に接続したつまみが、色&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;を調整できるようになっています。&lt;/p&gt;
+
+&lt;h2 id=&#34;いい感じにポーチと部品を合体しよう&#34;&gt;いい感じにポーチと部品を合体しよう&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/147/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;光る部分が完成したので、ユニコーンファーポーチと合体します。&lt;/p&gt;
+
+&lt;p&gt;ファーの表面に可変抵抗器用の小さな穴をあけます。可変抵抗器をポーチの表面に出し、キャップをかぶせます。この時、ファーの毛を巻き込んで動きにくい場合は毛を少し刈ります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/147/4.png&#34; alt=&#34;&#34; /&gt;
+ポーチの裏側にLEDを貼ったプラ板を固定し、配線をいい感じに収納します。今回はポーチに裏布がついていたので、上部を切り開いてポケット状にして超いい感じに格納したっす。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/147/5.png&#34; alt=&#34;&#34; /&gt;
+とりあえず、ポーチにLEDとボードとモバイルバッテリーがおさまれば完成でっす！&lt;/p&gt;
+
+&lt;h2 id=&#34;光らすと超ユニコーン&#34;&gt;光らすと超ユニコーン！&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/147/6.png&#34; alt=&#34;&#34; /&gt;
+うひょー！超かわいくない？！シーンに合わせてかわいめからハードめまで光りかたが調整できちゃうから、現場（クラブ）でモテる未来しか見えない！！！！&lt;/p&gt;
+
+&lt;p&gt;みんなも作ってひからせてみよ！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>パソコンやモバイルバッテリーに繋いで動かせるデバイスを作ろう！USB電子工作のすすめ#1 - 基礎知識編</title>
+      <link>https://dotstud.io/blog/usb-power-supply-making/</link>
+      <pubDate>Mon, 26 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dotstud.io/blog/usb-power-supply-making/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、ものづくり担当のうこ(&lt;a href=&#34;https://twitter.com/harmoniko&#34;&gt;@harmoniko&lt;/a&gt;)です。&lt;/p&gt;
+
+&lt;p&gt;みなさんは、&lt;strong&gt;電子工作をするときの電源はどこから取っていますか？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Arduinoをよく使われる方だと5V端子や3.3V端子から取っている場合が非常に多いですが、ではArduinoを使わない、ピュアな電子工作の場合だとどうしたらいいでしょうか？&lt;/p&gt;
+
+&lt;p&gt;今回は、電子工作用電源としても非常に有用な&lt;strong&gt;USBの基本と扱い方&lt;/strong&gt;についてお伝えします。&lt;/p&gt;
+
+&lt;h2 id=&#34;usbのしくみ&#34;&gt;USBのしくみ&lt;/h2&gt;
+
+&lt;p&gt;「&lt;strong&gt;USB&lt;/strong&gt;」は「&lt;strong&gt;Universal Serial Bus&lt;/strong&gt;」の略で、PCとその周辺機器の間の汎用的な通信規格として1996年に登場しました。USBは1対2本の信号線（※）で順番にデータを送る「&lt;strong&gt;シリアル接続&lt;/strong&gt;」という方式で、複数のデバイスを吊り下げられる「&lt;strong&gt;バス規格&lt;/strong&gt;」の1つです。&lt;/p&gt;
+
+&lt;p&gt;※…USB 2.0まで&lt;/p&gt;
+
+&lt;p&gt;端子は従来のものと比べてシンプルになり、ホストとデバイスをすぐに区別できるようなものになりました。&lt;/p&gt;
+
+&lt;p&gt;USBを使って通信をするには、USBを制御する専用のコントローラハードウェアが必要となるため、電子工作では少し難易度があがります。ただし、&lt;strong&gt;電源を使うだけならケーブルを切って電源のVcc線（+）とGnd線（-）を引き出すだけでよい&lt;/strong&gt;ので、スマホが普及しはじめるよりも早くから電源用ケーブルとしても使われるようになりました。&lt;/p&gt;
+
+&lt;p&gt;USBの簡単な特徴をまとめると、以下のようになります。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;通信は、 1つの「ホスト」（PC側）と1〜複数の「デバイス」（周辺機器側）との間で行われる。&lt;/li&gt;
+&lt;li&gt;ホスト側とデバイス側で端子形状が区別されている（タイプC端子を除く）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;電源供給用のケーブルおよび端子として使うなら扱いは簡単！&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;ここ数年普及してきている「USB PD」は、大電力の供給が可能でMacBookの給電などにも利用されている。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;さて当記事は、 &lt;strong&gt;「電子工作において電源として気軽に使えるUSB」&lt;/strong&gt; を知っていただくためのものですので、扱いの簡単な「USB2.0規格（タイプC端子を除く）」までを使う前提の説明にとどめます。&lt;/p&gt;
+
+&lt;p&gt;USB3.0規格以降は端子が増えたり電源規格が多様になったりしているため、電子工作での利用であれば、USB2.0規格までの理解で問題ありません。&lt;/p&gt;
+
+&lt;p&gt;さらに詳しくUSBについて知りたい方は、以下のリンクを参考にしてください。&lt;/p&gt;
+
+&lt;p&gt;⇒ 参考: &lt;a href=&#34;https://thinkit.co.jp/article/11142&#34;&gt;現代PCの基礎知識(7):仕様書を紐解くとわかる―本当はややこしいUSB（Think IT）&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;電源に使うことのメリット&#34;&gt;電源に使うことのメリット&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;モバイルバッテリー、PC、コンセントアダプタなど、多彩なソースが選べる。&lt;/li&gt;
+&lt;li&gt;給電方法に汎用性があるため、必要なパーツが安くて手に入りやすい。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;電源に使うことのデメリット&#34;&gt;電源に使うことのデメリット&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;「外部電源」となるため、電池として本体に含めることができない。&lt;/li&gt;
+&lt;li&gt;規格上、5V電圧以外を扱うときや大電流が必要なものには適さない（USB PDを除く）。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;仕様の一覧&#34;&gt;仕様の一覧&lt;/h3&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;left&#34;&gt;&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;USB 1.0&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;USB 1.1&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;USB 2.0&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;端子タイプ（ホスト側）&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;標準A&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;標準A&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;標準A, タイプC&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;端子タイプ（デバイス側）&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;B&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;B&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;ミニA, マイクロA, ミニB, マイクロB, タイプC&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;通信速度&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;12Mビット/秒&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;12Mビット/秒&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;480Mビット/秒&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;定格電圧&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;同右&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;同右&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;約5V（ホスト側4.4~5.25V）&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;最大電流&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;500mA&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;500mA&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;500mA（USB BC拡張:1.5A）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;以上は通信に関する基本的なバージョン仕様ですが、さらにUSB2.0を拡張したUSB電源専用規格である「USB BC（Battery Charging）」というものがあり、1.5Aまでの電流を流すことが可能となっています。&lt;/p&gt;
+
+&lt;p&gt;また、電子工作で利用するためのUSBパーツは100円ショップなどで購入できます。&lt;strong&gt;100円ショップなどで安価に入手可能なUSBパーツはほぼ100%がUSB2.0規格またはUSB BC規格のもの&lt;/strong&gt;となります。&lt;/p&gt;
+
+&lt;p&gt;よって、電子工作の&lt;strong&gt;電源として&lt;/strong&gt;USBを使ってみたいときは&lt;strong&gt;USB2.0規格またはUSB BC規格&lt;/strong&gt;に準じたUSB部品の仕様を知っておけばOKです。&lt;/p&gt;
+
+&lt;h2 id=&#34;usbケーブルの配線図&#34;&gt;USBケーブルの配線図&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/151/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;USB2.0には、電源線の5V（VccやVBUSとも）とGND、信号線のD-とD+の合計4種類の線があります。ケーブルのほとんどは2層構造になっていて、内側に収められている4本の線の色分けも上図のように決まっています。&lt;/p&gt;
+
+&lt;p&gt;電子工作でUSBを使うときは、「標準Aメス端子を基板に実装する」か、上図のような「標準Aオス端子がついたケーブルの電源線を接続する」ことになるので、端子の順番や色分けは覚えておくと楽です。&lt;/p&gt;
+
+&lt;h2 id=&#34;電圧と電流&#34;&gt;電圧と電流&lt;/h2&gt;
+
+&lt;p&gt;USB電源の基本は「&lt;strong&gt;電圧5V/電流500mAまで&lt;/strong&gt;」です。&lt;/p&gt;
+
+&lt;p&gt;といっても、これはパソコンのような「電源供給」を主目的としないホストから給電する場合の「USB2.0規格」による制限値です。&lt;/p&gt;
+
+&lt;p&gt;電子工作でUSB電源を扱う場合は、モバイルバッテリーやUSBコンセントなどからの給電がほとんどになると思われます。その場合は、USB BC規格の上限値である1.5Aとなりますが、普通はバッテリーやコンセントに最大出力が書いてあります（例：5V/800mA）ので、電流値の最大はそれに従いましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;usbケーブルの注意点&#34;&gt;USBケーブルの注意点&lt;/h4&gt;
+
+&lt;p style=&#34;font-size: 80%&#34;&gt;細かい話をすると、市場で出回る多くの充電器は「最大2.4A出力」などを謳っていて、この場合だとUSB BC規格にもあてはまりません。このような製品は、USBを通信を行わない完全な電源ケーブルとみなし、独自の規格を採用している場合が多いです。よって、電子工作でUSB電源を使うときは、「USB2.0規格の配線」と「使いたい電源供給源（バッテリーやコンセント等）の出力電流」を考慮して回路設計をするのがベストだといえます。難しく考えたくない人は、 **とにかく省エネになるように意識して作る**ようにするのがよいでしょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 80%&#34;&gt;⇒ 参考: &lt;a href=&#34;https://hanpenblog.com/1472/&#34;&gt;乱立するスマホ向け急速充電の規格について調べた（HANPEN-BLOG）&lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;電子工作での利用を考えると電流消費を見ることが大事で、個人で製作する小規模な回路であればほとんどが500mA以内に収まることが多いです。&lt;/p&gt;
+
+&lt;p&gt;ヒーターやモーターを使った回路は例外的で、接続された個数や負荷で変動しますが、最大電流が容易に1Aを超えてしまうことがあります。しかし、どのような場合であっても、個人製作された電子回路は漏電流やショートへの配慮、適切な電流制限などが行われていないことが大半です。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;基本的には、USB電源を利用する自作の電子回路は、安全上の理由からパソコンに接続して給電してはいけません。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;⇒ 参考：&lt;a href=&#34;http://www.wheel.gr.jp/~dai/hardware/usb-port.html&#34;&gt;USBポートは電源ではありません&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;現実には今のパソコンは全て保護回路が入っているため、ブレッドボードを繋げたArduinoにパソコンから給電するといったようなことを行なっていてもまず問題はありません。しかし&lt;strong&gt;危険性は少なからずあるもの&lt;/strong&gt;だとして意識してもらえれば幸いです。&lt;/p&gt;
+
+&lt;p&gt;（15年ほど前のパソコンでは、USB端子に500mA以上の過電流を流すといきなりパソコンの電源ごと落ちるものもありました。）&lt;/p&gt;
+
+&lt;h2 id=&#34;入手方法&#34;&gt;入手方法&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;おすすめは100円ショップ&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/151/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;100円ショップの電気系コーナーに行くと、どこに行っても大抵はUSBケーブルが置いてあります。USBケーブルの中でも取り扱いが多いのは、おそらく次の3つでしょう。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Aオス端子-microBオス端子（スマホ充電用）&lt;/li&gt;
+&lt;li&gt;Aオス端子-Bオス端子（プリンタなどの接続用）&lt;/li&gt;
+&lt;li&gt;Aオス端子-Aメス端子（ケーブル延長用）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;このうち、最後の &lt;strong&gt;Aオス端子-Aメス端子（ケーブル延長用）&lt;/strong&gt; は、置いていない店舗もありますが、&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ケーブル部分が比較的長い。&lt;/li&gt;
+&lt;li&gt;基本的にはAオス端子側を使うが、工作の内容によってはAメス端子があると便利なことがある。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;といった点から、電子工作で利用するには最もおすすめなケーブルとなっています。売られているのを発見したら、ぜひ買っておきましょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;実際に電子工作で使うには&#34;&gt;実際に電子工作で使うには&lt;/h2&gt;
+
+&lt;p&gt;USBについて、どんなものなのかなんとなくおわかりいただけましたでしょうか？&lt;/p&gt;
+
+&lt;p&gt;とりあえず要約すると、 &lt;strong&gt;「100円で手に入って電子工作で簡単に利用できる汎用電源インターフェース」&lt;/strong&gt; といったところでしょうか。では、実際に使うにはどうすればいいかを見ていきましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/151/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;USBケーブルを電源として利用する上で最も重要なパーツが「Aオス端子」部分となります。&lt;/p&gt;
+
+&lt;p&gt;100円ショップで購入できるUSBケーブルは少なくとも一方がこの端子ですので、この端子から伸びるケーブルを十分長く残したうえでニッパで切断します。長さは、製作するモノによって適切に決めてください。あとから調整できるという意味では長めに切り取るのがよいでしょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/151/4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/151/5.png&#34; alt=&#34;&#34; /&gt;
+切り取った部分の一番外側の皮膜をニッパまたは皮膜剥き用のニッパで1cm程度除去します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/151/6.png&#34; alt=&#34;&#34; /&gt;
+すると細い4本のケーブルが中から出てきますが、このうち赤色と黒色がそれぞれ電源となります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/151/7.png&#34; alt=&#34;&#34; /&gt;
+残りの2本は信号線で、&lt;del&gt;USB BC規格として大きめの電流を流したい場合は、この信号線を200Ωの抵抗でショートします。が、実際には何もしなくても給電はなされます。&lt;/del&gt;ここでは簡単にするため切り落としました。&lt;/p&gt;
+
+&lt;p style=&#34;font-size: 80%; color: red;&#34;&gt;
+（3/4 修正）200Ωの抵抗を接続するのは充電器側であるとのご指摘をいただき、上記訂正します。
+&lt;/p&gt;
+&lt;p style=&#34;font-size: 80%;&#34;&gt;
+⇒ 出展: USB.orgの&lt;a href =&#34;http://www.usb.org/developers/docs/devclass_docs/&#34;&gt;開発者向けドキュメント&lt;/a&gt;にある「Battery Charging v1.2 Spec and Adopters Agreement.zip」内のBC1.2_FINAL.pdf「Battery Charging Specification, Revision 1.2」3.2.4項「Primary Detection」のFigure 3-6 など）
+&lt;/p&gt;
+
+&lt;p&gt;これで、Aオス端子が電源側、切断したほうが電子回路側となります。&lt;/p&gt;
+
+&lt;p&gt;さて、次回は電池駆動の機器をUSB駆動に改造するために、電源と機器の関係について考えてみたいと思います。&lt;/p&gt;
+
+&lt;p&gt;お楽しみに。
+&lt;a href=&#34;https://dotstud.io/blog/usb-power-supply-making2&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/151/link1.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>放置されていた3Dプリンタ「Trinus」で初めての3Dプリントに挑戦</title>
+      <link>https://dotstud.io/blog/3d-printer-trinus-usage/</link>
+      <pubDate>Thu, 22 Feb 2018 03:00:43 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/3d-printer-trinus-usage/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、たくろーどんです。大学で&lt;a href=&#34;https://dotstud.io/docs/nefrybt&#34;&gt;NefryBT&lt;/a&gt;を使った工作をしていたら、いつのまにかdotstudioでアルバイトすることになっていました。宇宙工学を勉強しています。以後よろしくお願いします。&lt;/p&gt;
+
+&lt;p&gt;=&amp;gt; 参考: &lt;a href=&#34;https://qiita.com/minwinmin/items/d1f296b8a9cd1a2c22f6&#34;&gt;研究室のみんなとNefry BTを使ってはじめてIoTデバイスをつくってみた&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;今回は、dotstudioに放置されていた3Dプリンタ「Trinus（トライナス）」を使って初めての3Dプリントに挑戦してみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/149/lead.png&#34; alt=&#34;&#34; /&gt;
+これで哲学的なものを錬成していきましょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;3dプリントを始める前に&#34;&gt;3Dプリントを始める前に&lt;/h2&gt;
+
+&lt;h3 id=&#34;3dプリンタとは&#34;&gt;3Dプリンタとは？&lt;/h3&gt;
+
+&lt;p&gt;3Dプリンタとは、その名の通り&lt;strong&gt;3Dのデータを出力できる&lt;/strong&gt;プリンタです。
+&lt;img src=&#34;https://dotstud.io/img/blog/149/3dprint.png&#34; alt=&#34;&#34; /&gt;
+プリンタによりますが、金属、アルミ、ゴムなどさまざまな素材で出力できるため広い分野で活躍しています。&lt;/p&gt;
+
+&lt;p&gt;現在は業務用から一般向けまでさまざまな種類の3Dプリンタが販売されていますが、今回はdotstudioに放置されていた「Trinus（トライナス）」を使ってみます。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;a href=&#34;http://www.trinus3d.com/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/trinus.png&#34; alt=&#34;&#34; /&gt;
+Trinus - Kodama, Inc.&lt;/a&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;3万円代とお手頃価格で、樹脂に加えて木材やアルミも利用でき、別売りのヘッドをつけることでレーザ彫刻機にもなる優れものです。&lt;/p&gt;
+
+&lt;h3 id=&#34;3dプリントには3dデータが必要&#34;&gt;3Dプリントには3Dデータが必要&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;3Dプリントをするためには3Dデータが必要です&lt;/strong&gt;。3Dデータをモデリング（作成すること）方法はいくつかありますが、今回は3D CADソフトを使っています。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/inventor.png&#34; alt=&#34;&#34; /&gt;
+僕はAutodeskの「&lt;a href=&#34;https://www.autodesk.co.jp/products/inventor/overview&#34;&gt;&lt;strong&gt;Inventor&lt;/strong&gt;&lt;/a&gt;」を使ってデータを作成しました。有料ソフトですが、なんと&lt;strong&gt;学生だと3年間無料で&lt;/strong&gt;つかえます！&lt;/p&gt;
+
+&lt;p&gt;Inventorは本格的な機械設計向きなので、簡単に試したい人は同じくAutodeskの「&lt;a href=&#34;https://www.autodesk.co.jp/products/fusion-360/overview&#34;&gt;&lt;strong&gt;fusion360&lt;/strong&gt;&lt;/a&gt;」の方がとっつきやすいかと思います。こちらも個人利用の場合は無料です。&lt;/p&gt;
+
+&lt;p&gt;3D CADソフトは他にも&lt;a href=&#34;https://www.rs-online.com/designspark/mechanical-software-jp&#34;&gt;DesignSpark Mechanical&lt;/a&gt;や&lt;a href=&#34;https://www.freecadweb.org/?lang=ja&#34;&gt;FreeCAD&lt;/a&gt;などいくつかあるので、自分が使いやすいと思ったものを使うと良いでしょう。&lt;/p&gt;
+
+&lt;p&gt;さらにもう一つ。
+プログラマーのためにGithubがあるなら、&lt;strong&gt;メカ系エンジニアのために&lt;a href=&#34;https://grabcad.com/&#34;&gt;GrabcCAD&lt;/a&gt;というものがあります&lt;/strong&gt;。
+&lt;img src=&#34;https://dotstud.io/img/blog/149/grabccad.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ここで、世界中のエンジニアが製作した様々なモデリングを閲覧したり使用したりできます。もし複雑なパーツをモデリングすることが難しければ、GrabCADを参考にしてみるのも手だと思います。&lt;/p&gt;
+
+&lt;h3 id=&#34;trinusの組み立て&#34;&gt;Trinusの組み立て&lt;/h3&gt;
+
+&lt;p&gt;Trinusの組み立てに関しては説明書をご覧ください。
+また、日本語の公式サイトもあります。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;a href=&#34;http://www.trinusjapan.com/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/community.png&#34; alt=&#34;&#34; /&gt;
+http://trinusjapan.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;trinus用ソフト-pango-をインストール&#34;&gt;Trinus用ソフト「Pango」をインストール&lt;/h3&gt;
+
+&lt;p&gt;Trinusで3Dプリントするには、モデリングしたものを扱う専用ソフト「Pango」が必要です。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://trinusjapan.com/softwaredownload/&#34;&gt;こちらのリンク&lt;/a&gt;からインストールしてください。&lt;/p&gt;
+
+&lt;h2 id=&#34;3dプリントに挑戦&#34;&gt;3Dプリントに挑戦！&lt;/h2&gt;
+
+&lt;h3 id=&#34;プリンタ側の準備&#34;&gt;プリンタ側の準備&lt;/h3&gt;
+
+&lt;p&gt;詳しくは&lt;a href=&#34;http://trinusjapan.com/firstprint/&#34;&gt;公式サイト&lt;/a&gt;にのっているので、要点だけ説明します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/printer.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;まず、Trinusの電源をいれるため、コンセントにつなげましょう。電源がつくと「ビッ」という音がします。&lt;/p&gt;
+
+&lt;h3 id=&#34;pangoにデータを取り込む&#34;&gt;Pangoにデータを取り込む&lt;/h3&gt;
+
+&lt;p&gt;パソコンからデータ（stlファイル）をPangoで開きましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/1.png&#34; alt=&#34;&#34; /&gt;
+①のように「書き出し」から「CAD形式」を選択し、stl形式で保存します。&lt;strong&gt;サイズがモデリングと一致&lt;/strong&gt;しているかしっかりと確認してください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/2.png&#34; alt=&#34;&#34; /&gt;
+Pangoでstlファイルを開くと&lt;strong&gt;何故かサイズが10分の1&lt;/strong&gt;になってしまうので（dotstudioだけで起こる現象なのか不明）、元のサイズに戻します。③と④のように比率（Ratio）を10に変えます。Amountは寸法を意味していて、単位はmmです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/3.png&#34; alt=&#34;&#34; /&gt;
+必要があれば3Dプリントしやすいようにモデルの向きを変えましょう。&lt;strong&gt;どのような向きで出力するか&lt;/strong&gt;、これがとても大事です！印刷中に思いがけない失敗を引き起こすことになります。&lt;/p&gt;
+
+&lt;p&gt;⑤のように赤丸部をクリックすると回転軸の表示が出ます。そして、回転したい軸にマウスポインタを持っていきます。⑥のように回転する軸が強調されます。マウスで操作する場合はホイールを動かすことで回転させることができます。パソコンにあるタッチパッドの場合は2本の指で、上下になぞるように動かすと回転します（Windowsの場合）。&lt;/p&gt;
+
+&lt;h3 id=&#34;印刷のシミュレーション&#34;&gt;印刷のシミュレーション&lt;/h3&gt;
+
+&lt;p&gt;実際にどのように印刷が進められるかPango上で確認することもできます。Pangoの上部にある「View」から「Layer」をクリックしてください。
+&lt;img src=&#34;https://dotstud.io/img/blog/149/4.png&#34; alt=&#34;&#34; /&gt;
+すると自分がモデリングしたもの以外に格子状のモデリング（濃いピンクの部分）が追加されています。これは「&lt;strong&gt;ラフト&lt;/strong&gt;」と呼ばれ、3Dプリンタの印刷面と出力するものの間に積層される荒い土台のことです。&lt;/p&gt;
+
+&lt;p&gt;これがあると出力した後に製作物を外しやすく、最終的には除去してゴミとして捨てることができます。&lt;/p&gt;
+
+&lt;h3 id=&#34;データをtrinusに移す&#34;&gt;データをTrinusに移す&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/5.png&#34; alt=&#34;&#34; /&gt;
+データをSDカードに「pcode」形式で保存します。図の赤丸部をクリックし、SDカードにデータをpcode形式で保存します。この形式は、Torinusで出力するために必要な形式です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/6.png&#34; alt=&#34;&#34; /&gt;
+SDカードをTorinusに接続し、TorinusとパソコンをUSB接続します。&lt;/p&gt;
+
+&lt;h3 id=&#34;出力設定を調整&#34;&gt;出力設定を調整&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/7.png&#34; alt=&#34;&#34; /&gt;
+Pango上部の「Preference」から「Setting」を選択します。ここでは、出力するスピードや厚みなどを設定することができます。&lt;strong&gt;設定はあまりいじる必要はない&lt;/strong&gt;ので、眺めおきましょう！（ただし今回は試行錯誤の結果、Thickness: 0.2mm、Print Speed: 40mm/sとしています）&lt;/p&gt;
+
+&lt;h3 id=&#34;重要-出力位置の初期位置を調整&#34;&gt;【重要】出力位置の初期位置を調整&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/8.png&#34; alt=&#34;&#34; /&gt;
+TorinusとパソコンをUSB接続した状態でPango上部の「View」から「Console」をクリックします。上のような画像が出たら、さらに「Console」をクリックします。　&lt;/p&gt;
+
+&lt;p&gt;そうすると下記のような設定画面があらわれます。&lt;strong&gt;この画面で行う設定が非常に重要です&lt;/strong&gt;。
+&lt;img src=&#34;https://dotstud.io/img/blog/149/9.png&#34; alt=&#34;&#34; /&gt;
+&lt;strong&gt;まず「Home」をクリック&lt;/strong&gt;します。これで、3Dプリンタのノズル（フィラメントが出る部分）が初期位置に戻ります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/10.png&#34; alt=&#34;&#34; /&gt;
+ここで&lt;strong&gt;z軸の距離（ノズルから出力される面の高さ、画像でいう赤い矢印部分）を確認&lt;/strong&gt;してください。その距離が初期位置で広すぎると上手く出力されません。なので、目視でその距離を縮めましょう。「Offset」をクリックすると&lt;strong&gt;z軸方向の距離を上下&lt;/strong&gt;することができます。&lt;/p&gt;
+
+&lt;h3 id=&#34;出力を開始&#34;&gt;出力を開始！&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/9.png&#34; alt=&#34;&#34; /&gt;
+位置設定が終わったら、「&lt;strong&gt;Heat E」をクリック&lt;/strong&gt;し3Dプリンタのノズルを温めます。どれくらい温まっているかは、Console画面の左下に示す数字（分数部分）で表されます。最後に右のSDカードのイラスト部分をクリックし、保存したpcodeファイルを指定します。3Dプリンタのノズルが十分に温まれば自動で出力が始まります！&lt;/p&gt;
+
+&lt;h3 id=&#34;出力直後にやるべきこと&#34;&gt;出力直後にやるべきこと&lt;/h3&gt;
+
+&lt;p&gt;出力が始まるとその直後に、&lt;strong&gt;ノズルから溶け出たフィラメント&lt;/strong&gt;が垂れてきます。&lt;strong&gt;垂れて固まったフィラメントは出力の邪魔になることもあるので、ピンセットで取り除きましょう&lt;/strong&gt;。下記の図の赤丸で囲った部分がその例です。
+&lt;img src=&#34;https://dotstud.io/img/blog/149/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;あとは見守りながら完成するまで放置しましょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;はじめての出力&#34;&gt;はじめての出力&lt;/h2&gt;
+
+&lt;p&gt;プリンタとデータをセットして出力されるのを待ちます……。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/212276/c7659ea8-e54a-f50a-400a-183218006215.gif&#34; alt=&#34;出力.gif&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;完成しました。
+&lt;img src=&#34;https://dotstud.io/img/blog/149/完成1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;哲学的なゴミです。特に用途はありません。
+&lt;img src=&#34;https://dotstud.io/img/blog/149/完成2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;3dプリンタを使うときに注意すること&#34;&gt;3Dプリンタを使うときに注意すること&lt;/h2&gt;
+
+&lt;p&gt;セットアップの説明でも述べましたが、3Dプリンターを使ってみて注意した方が良い点をもう一度まとめます。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Pango上でモデリングのサイズを要チェック&lt;/li&gt;
+&lt;li&gt;モデリングしたものをどの向きで出力するか&lt;/li&gt;
+&lt;li&gt;初期位置の設定を正確に！（特にz軸方向）&lt;/li&gt;
+&lt;li&gt;出力直後に溶け出したフィラメントを必ず除去&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;3Dプリンタは複雑なものを簡単に出力できるイメージですが、実際に使ってみると経験やコツがいります。やはり、どんな道具も使いこなせるようになるには時間が必要なようです。&lt;/p&gt;
+
+&lt;p&gt;まだまだ3Dプリンターを使う上で学ぶことが多いと感じたので、継続して使っていきたいと思います。&lt;/p&gt;
+
+&lt;p&gt;それではまた。&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Google公式ライブラリを利用してNode.jsからGmailの送受信をしてみよう</title>
@@ -572,6 +2833,11 @@ Aruduino Nanoの5VとGNDのところは、可変抵抗器とLEDテープから�
 &lt;p&gt;今回は可変抵抗器を三つつなげたので、ちょっと配線とはんだ付けが複雑で疲れちゃったのでここまで！&lt;/p&gt;
 
 &lt;p&gt;後編はArduino Nanoへのプログラム書き込みと、ポーチとLEDを組み立てまっす！&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;a href=&#34;https://dotstud.io/blog/gyaruden-kyoko-unicorn-pochette2/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/146/link.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;
+▲ 後編をチェック！
+&lt;/center&gt;&lt;/p&gt;
 </description>
     </item>
     
@@ -945,1935 +3211,6 @@ GPIO.set_button_handler(4, GPIO.PULL_UP, GPIO.INT_EDGE_NEG, 200, function() {
 &lt;/center&gt;&lt;/p&gt;
 
 &lt;p&gt;性別、立場などマイノリティに関係なく、テクノロジーでみんながステキな暮らしを実現できる世界もそう遠くないのでは、と思わされるイベントでした。IoT女子会の最新情報は&lt;a href=&#34;https://www.facebook.com/groups/184023265513094/&#34;&gt;Facebookグループ&lt;/a&gt;をウォッチ！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Nefry BT（ESP32）からBLEでNode.jsにデータを送ってみよう</title>
-      <link>https://dotstud.io/blog/nefrybt-ble-bluetooth-peripheral/</link>
-      <pubDate>Fri, 12 Jan 2018 23:58:16 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/nefrybt-ble-bluetooth-peripheral/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、代表ののびすけ（&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;@n0bisuke&lt;/a&gt;）です。Nefry BTを使ってBluetooth / BLEを利用する方法を紹介します。&lt;/p&gt;
-
-&lt;p&gt;ほぼESP32のコードなので、検証してませんが他のESP32系のボードでも動作すると思います。&lt;/p&gt;
-
-&lt;h2 id=&#34;bleについて&#34;&gt;BLEについて&lt;/h2&gt;
-
-&lt;p&gt;BLEには大きく分け&lt;strong&gt;Peripheral （ペリフェラル）&lt;/strong&gt;と&lt;strong&gt;Central（セントラル）&lt;/strong&gt;という二つの役割があります。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Peripheral: 発信側端末、ビーコンやBLEタグなど受信端末に対して情報を送る側&lt;/li&gt;
-&lt;li&gt;Central: 受信側端末、iPhoneやMacなどBLEデバイスの情報を探して受け取る側&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/143/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Nefry BTは書き込むコードによって、PeripheralにもCentralにもなることができます。&lt;/p&gt;
-
-&lt;h2 id=&#34;環境&#34;&gt;環境&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Arduino IDE 1.8.5&lt;/li&gt;
-&lt;li&gt;Nefry ライブラリ 1.1.4&lt;/li&gt;
-&lt;li&gt;Nefry BT R2&lt;/li&gt;
-&lt;li&gt;macOS High Sierra&lt;/li&gt;
-&lt;li&gt;Node.js v9.2.0&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;peripheralの作成&#34;&gt;Peripheralの作成&lt;/h2&gt;
-
-&lt;p&gt;情報発信側のPeripheralをNefry BTで作成します。&lt;/p&gt;
-
-&lt;h3 id=&#34;uuidの作成&#34;&gt;UUIDの作成&lt;/h3&gt;
-
-&lt;p&gt;BLEを利用するためには&lt;strong&gt;SERVICE（サービス）&lt;/strong&gt;と&lt;strong&gt;CHARACTERISTIC（キャラクタリスティック）&lt;/strong&gt;という各機能を司るUUIDを設定する必要があります。プログラミングでいうクラスとメソッドの関係だと思うと良いかもしれません。&lt;/p&gt;
-
-&lt;p&gt;BLEデバイスは部屋の中やカフェ、駅などいたるところに存在するのでそれらのデバイスと自分が所持しているデバイスのIDが競合しないようにユニークな値にする必要があります。そこでUUIDを作成し、設定する必要があります。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://www.uuidgenerator.net/&#34;&gt;https://www.uuidgenerator.net/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/143/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;このサイトでUUIDが作成出きるので各自作成しましょう。&lt;/p&gt;
-
-&lt;h3 id=&#34;nefry-btのスケッチ&#34;&gt;Nefry BTのスケッチ&lt;/h3&gt;
-
-&lt;p&gt;大元のコードはnkolban氏の&lt;a href=&#34;https://github.com/nkolban/ESP32_BLE_Arduino/blob/f8fe9d7cdfb20caa54b70849826d1ac6e375ff78/examples/BLE_notify/BLE_notify.ino&#34;&gt;こちらのコード&lt;/a&gt;です。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;#define SERVICE_UUID&lt;/code&gt;の箇所と&lt;code&gt;#define CHARACTERISTIC_UUID&lt;/code&gt;の箇所に先ほど作成したUUIDを指定します。&lt;/p&gt;
-
-&lt;p&gt;また&lt;code&gt;BLEDevice::init(&amp;quot;&amp;quot;);&lt;/code&gt;の箇所にBLEデバイスの名前を設定できます。
-以下のコードではNefryBT-n0bisukeという名前を指定しています。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;#include &amp;lt;BLEDevice.h&amp;gt;
-#include &amp;lt;BLEServer.h&amp;gt;
-#include &amp;lt;BLEUtils.h&amp;gt;
-#include &amp;lt;BLE2902.h&amp;gt;
-
-BLECharacteristic *pCharacteristic;
-bool deviceConnected = false;
-uint8_t value = 0;
-
-// See the following for generating UUIDs:
-// https://www.uuidgenerator.net/
-
-#define SERVICE_UUID        &amp;quot;D5875408-FA51-4763-A75D-7D33CECEBC31&amp;quot;
-#define CHARACTERISTIC_UUID &amp;quot;A4F01D8C-A037-43B6-9050-1876A8C23584&amp;quot;
-
-class MyServerCallbacks: public BLEServerCallbacks {
-    void onConnect(BLEServer* pServer) {
-      deviceConnected = true;
-    };
-
-    void onDisconnect(BLEServer* pServer) {
-      deviceConnected = false;
-    }
-};
-
-void setup() {
-  Serial.begin(115200);
-
-  // Create the BLE Device
-  BLEDevice::init(&amp;quot;NefryBT-n0bisuke&amp;quot;);
-
-  // Create the BLE Server
-  BLEServer *pServer = BLEDevice::createServer();
-  pServer-&amp;gt;setCallbacks(new MyServerCallbacks());
-
-  // Create the BLE Service
-  BLEService *pService = pServer-&amp;gt;createService(SERVICE_UUID);
-
-  // Create a BLE Characteristic
-  pCharacteristic = pService-&amp;gt;createCharacteristic(
-                      CHARACTERISTIC_UUID,
-                      BLECharacteristic::PROPERTY_READ   |
-                      BLECharacteristic::PROPERTY_WRITE  |
-                      BLECharacteristic::PROPERTY_NOTIFY |
-                      BLECharacteristic::PROPERTY_INDICATE
-                    );
-
-  // https://www.bluetooth.com/specifications/gatt/viewer?attributeXmlFile=org.bluetooth.descriptor.gatt.client_characteristic_configuration.xml
-  // Create a BLE Descriptor
-  pCharacteristic-&amp;gt;addDescriptor(new BLE2902());
-
-  // Start the service
-  pService-&amp;gt;start();
-
-  // Start advertising
-  pServer-&amp;gt;getAdvertising()-&amp;gt;start();
-  Serial.println(&amp;quot;Waiting a client connection to notify...&amp;quot;);
-}
-
-void loop() {
-
-  if (deviceConnected) {
-    Serial.printf(&amp;quot;*** NOTIFY: %d ***\n&amp;quot;, value);
-    char buffer[10];
-    sprintf(buffer, &amp;quot;{\&amp;quot;val\&amp;quot;:%d}&amp;quot;, value);
-    Serial.printf(buffer);
-    pCharacteristic-&amp;gt;setValue(buffer);
-    pCharacteristic-&amp;gt;notify();
-    //pCharacteristic-&amp;gt;indicate();
-    value++;
-  }
-  delay(2000);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;コンパイルエラーが出ないで書き込みが出来ればOKです。&lt;/p&gt;
-
-&lt;h3 id=&#34;確認&#34;&gt;確認&lt;/h3&gt;
-
-&lt;p&gt;デバッグには&lt;a href=&#34;https://itunes.apple.com/jp/app/lightblue/id639944780?mt=12&#34;&gt;LightBlue&lt;/a&gt;などのBLEデバッグ用のアプリケーションを利用することをお勧めします。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/143/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Nefry BTが起動すると先ほど指定した&lt;strong&gt;NefryBT-n0bisuke&lt;/strong&gt;という名前でBLEデバイスが検出されます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/143/4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;SERVICEのUUIDやCHARACTERISTICのUUIDも先ほど指定したものが表示されていると思います。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;これで問題なく、Nefry BTから情報が発信されていることが確認出来ました。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;centralの作成&#34;&gt;Centralの作成&lt;/h2&gt;
-
-&lt;p&gt;次は受信側のCentralを作成していきます。
-データの確認だけであれば先ほどのLightBlueなどのアプリで確認でも良いのですが、自分のサービスに組み込む際には何かしらのプログラミング言語でアクセスできた方が都合が良いです。&lt;/p&gt;
-
-&lt;h3 id=&#34;nobleの利用&#34;&gt;nobleの利用&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://github.com/sandeepmistry/noble&#34;&gt;noble&lt;/a&gt;はNode.js向けのBLEライブラリです。MacやWindows、Raspberry PiなどのデバイスをBLEのCentralにすることができます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;mkdir ble_central
-cd ble_central
-touch app.js
-npm init -y
-npm i --save noble
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;これで準備とnobleのインストールが完了しました。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;app.js&lt;/code&gt;に以下を記述します。SERVICE_UUIDやCHARACTERISTIC_UUIDは自分で作成したNefry BT側に書き込んだUUIDと同様のものを指定しましょう。&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;[WIP] Async/Awaitに書き換えたい。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
-
-const noble = require(&#39;noble&#39;);
-const serviceuuid = `d5875408fa514763a75d7d33cecebc31`;
-const charauuid = `a4f01d8ca03743b690501876a8c23584`;
-
-//キャラクタリスティックにアクセスしてデータやりとり
-const accessChara = (chara) =&amp;gt; {
-    console.log(&#39;-----Start GATT Access-----&#39;)
-    chara.notify(true, (err) =&amp;gt; {
-        if (err) {
-          console.log(&#39;listen notif error&#39;, err)
-        } else {
-          console.log(&#39;listen notif&#39;)
-        }
-    });
-    chara.on(&#39;data&#39;, (data, isNotif) =&amp;gt; {
-        const jsonStr = data.toString(&#39;utf-8&#39;);
-        const jsonData = JSON.parse(jsonStr);
-        console.log(jsonData);
-    });
-}
-
-
-//discovered BLE device
-const discovered = (peripheral) =&amp;gt; {
-    console.log(`BLE Device Found: ${peripheral.advertisement.localName}(${peripheral.uuid}) RSSI${peripheral.rssi}`);
-
-    if(peripheral.advertisement.localName === &#39;NefryBT-n0bisuke&#39;){
-        noble.stopScanning();
-        console.log(&#39;device found&#39;);
-        console.log(`service discover...`);
-
-        peripheral.connect(error =&amp;gt; {
-            if (error) {
-                console.log(&amp;quot;connection error:&amp;quot;, error)
-            } else {
-                console.log(&amp;quot;device connected&amp;quot;);
-            }
-
-            peripheral.discoverServices([],(err, services) =&amp;gt; {
-                if (error) {
-                    console.log(&amp;quot;discover service error&amp;quot;, error)
-                }
-                console.log(&#39;discover service&#39;);               
-                services.forEach(service =&amp;gt; {
-                    if(service.uuid === serviceuuid){
-                        service.discoverCharacteristics([], (error, charas) =&amp;gt; {
-                            console.log(&#39;discover chara&#39;);
-                            charas.forEach(chara =&amp;gt; {
-                                if(chara.uuid === charauuid){
-                                    console.log(&amp;quot;found chara: &amp;quot;, chara.uuid)
-                                    accessChara(chara);
-                                }
-                            });
-                        });
-                    }
-                });
-            });
-        });
-    }
-}
-
-//BLE scan start
-const scanStart = () =&amp;gt; {
-    noble.startScanning();
-    noble.on(&#39;discover&#39;, discovered);
-}
-
-if(noble.state === &#39;poweredOn&#39;){
-    scanStart();
-}else{
-    noble.on(&#39;stateChange&#39;, scanStart);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;実行&#34;&gt;実行&lt;/h3&gt;
-
-&lt;pre&gt;&lt;code&gt;node app.js
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;で実行します。この時、先ほどのLightBlueなどのアプリでNefryBTにBLEアクセスしていると上手くいかないのでアプリ側の接続は解除しましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/143/5.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Mac側のNode.jsのログはこんな感じで表示されます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;BLE Device Found: LED(59aa15c3a3274ed7b11d334b5c0d0900) RSSI-68
-BLE Device Found: NefryBT-n0bisuke(d0b77d4611f54380b8b63e6d05765ad6) RSSI-49
-device found
-service discover...
-device connected
-discover service
-discover chara
-found chara:  a4f01d8ca03743b690501876a8c23584
------Start GATT Access-----
-listen notif
-{ val: 147 }
-{ val: 148 }
-・
-・
-・
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;解説&#34;&gt;解説&lt;/h3&gt;
-
-&lt;p&gt;NefryBT側ではデバイスにアクセスがありCentralとのコネクションが確立すると、&lt;code&gt;変数value&lt;/code&gt;の値をセット(pCharacteristic-&amp;gt;setValue)して送信（pCharacteristic-&amp;gt;notify）し、valueの値をインクリメントします。&lt;/p&gt;
-
-&lt;p&gt;これを2秒ごとに行うので2秒間隔でNefryBTからMacのNode.jsに情報が送信されます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;・
-(省略)
-・
-・
-void loop() {
-
-  if (deviceConnected) {
-    Serial.printf(&amp;quot;*** NOTIFY: %d ***\n&amp;quot;, value);
-    char buffer[10];
-    sprintf(buffer, &amp;quot;{\&amp;quot;val\&amp;quot;:%d}&amp;quot;, value);
-    Serial.printf(buffer);
-    pCharacteristic-&amp;gt;setValue(buffer);
-    pCharacteristic-&amp;gt;notify();
-    //pCharacteristic-&amp;gt;indicate();
-    value++;
-  }
-  delay(2000);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Node.js（noble）側では、PERIPHERAL -&amp;gt; SERVICE -&amp;gt; CHARACTERISTICと階層的にアクセスしていき、CHARACTERISTICまでアクセスが出きると、accessChara関数が呼ばれます。&lt;/p&gt;
-
-&lt;p&gt;この中の&lt;code&gt;chara.on(&#39;data&#39;)&lt;/code&gt;の箇所でデータが送られてくるたびにイベントが発火して、データの中身を確認できます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;・
-・
-(省略)
-・
-const accessChara = (chara) =&amp;gt; {
-    console.log(&#39;-----Start GATT Access-----&#39;)
-    chara.notify(true, (err) =&amp;gt; {
-        if (err) {
-          console.log(&#39;listen notif error&#39;, err)
-        } else {
-          console.log(&#39;listen notif&#39;)
-        }
-    });
-    chara.on(&#39;data&#39;, (data, isNotif) =&amp;gt; {
-        const jsonStr = data.toString(&#39;utf-8&#39;);
-        const jsonData = JSON.parse(jsonStr);
-        console.log(jsonData);
-    });
-}
-・
-・
-(省略)
-・
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;Nefry BTでBLEを利用する方法を紹介しました。
-Nefry BTでセンサーのデータを取得し、Centralに送信する方法なども応用して作れそうですね。&lt;/p&gt;
-
-&lt;p&gt;これを参考にNefry BTとBLEデバイスの連携などに活用していきましょう。&lt;/p&gt;
-
-&lt;p&gt;今回はNefry BTをPeripheralにする実装でしたが、別の機会でCentralにする方法も紹介できればと思っています。&lt;/p&gt;
-
-&lt;p&gt;それでは！&lt;/p&gt;
-
-&lt;h2 id=&#34;所感&#34;&gt;所感&lt;/h2&gt;
-
-&lt;p&gt;今回の実装ですが色々と途中でのハマりが多いかつ、調べてもまだまだESP32のBLE利用をArduinoでやってる事例は少なくけっこう大変でした。この辺の大変だった知見はQiitaなどでまとめらたらと思っています。お疲れ様です笑&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>レーザーカッターで自分だけのRaspberryPiケースを作ってみよう！</title>
-      <link>https://dotstud.io/blog/raspberry-pi-case-making/</link>
-      <pubDate>Thu, 11 Jan 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://dotstud.io/blog/raspberry-pi-case-making/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、Webデザイナーの3yakaです。自宅の猫が心配すぎてラズパイ（Raspberry Pi）で監視するアプリを作ったら、&lt;strong&gt;ラズパイにはまってしまったラズパイ女子です&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;ものづくりをする方は、Raspberry PiやらArduinoやら、いろいろ使っているとケースに困ることはないでしょうか？&lt;/p&gt;
-
-&lt;p&gt;しかしなかなか可愛いいケースがない……。&lt;strong&gt;ないなら、作ってしまえばいい！！！&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;ということで可愛いケースを作りましょう！今回はレーザーカッターを使ったRaspberry Pi3用ケースの作り方を紹介します。アクリルや型の扱いは他のケースにも応用できるのでぜひ見てみてください！&lt;/p&gt;
-
-&lt;h2 id=&#34;レーザーカッターを使える場所を探そう&#34;&gt;レーザーカッターを使える場所を探そう&lt;/h2&gt;
-
-&lt;p&gt;今回はアクリルをレーザーカッターで切り抜いてケースにします。レーザーカッターを持っている人は少ないと思うので、&lt;strong&gt;工作機械を気軽に利用できるFabスペース&lt;/strong&gt;を利用してみましょう！&lt;/p&gt;
-
-&lt;p&gt;レーザーカッターはとても難しそうですが、実はそんなに難しくないんですよ。細かいデータの作り方のルールは機械によって異なるので、パスでできたデータ（Adobe Illustratorのai形式）さえ持っていけば大丈夫です。（Illustratorも合わせて貸してくれるスペースもあります。）&lt;/p&gt;
-
-&lt;p&gt;何ポイントで何色で……などは、優しい店員さんが使い方をレクチャーしてくれるので心配しなくても大丈夫です。（※使用前に講習があるお店もあります。）&lt;/p&gt;
-
-&lt;h3 id=&#34;レーザーカッターが使える初心者向けオススメfabスペース&#34;&gt;レーザーカッターが使える初心者向けオススメFabスペース&lt;/h3&gt;
-
-&lt;p&gt;初心者の方でも気軽に入れるFabスペースをご紹介します！&lt;/p&gt;
-
-&lt;h4 id=&#34;fabcafe-https-fabcafe-com-tokyo&#34;&gt;&lt;a href=&#34;https://fabcafe.com/tokyo/&#34;&gt;◆FabCafe&lt;/a&gt;&lt;/h4&gt;
-
-&lt;p&gt;渋谷のおしゃれカフェといった感じなのでとっても入りやすいです。最初はお茶だけしに行きました。&lt;/p&gt;
-
-&lt;h4 id=&#34;iotlab-https-cami-jp-iotlab&#34;&gt;&lt;a href=&#34;https://cami.jp/iotlab/&#34;&gt;◆IoTLab&lt;/a&gt;&lt;/h4&gt;
-
-&lt;p&gt;できたばかりのFabスペース。五反田のオフィス街でふらっと立ち寄れる場所で便利。今回はこちらで作成しました！&lt;/p&gt;
-
-&lt;h4 id=&#34;techshop-http-www-techshop-jp&#34;&gt;&lt;a href=&#34;http://www.techshop.jp/&#34;&gt;◆TechShop&lt;/a&gt;&lt;/h4&gt;
-
-&lt;p&gt;プロ仕様です！広いです！UVプリンターもあるので好きなデザインのアクリルから作りたい人にオススメです。&lt;/p&gt;
-
-&lt;h2 id=&#34;ケースの形について調べてみよう&#34;&gt;ケースの形について調べてみよう&lt;/h2&gt;
-
-&lt;p&gt;一口に「ケース」といっても、素材や形などいろいろな種類があります。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/142/1.png&#34; alt=&#34;&#34; /&gt;
-「Raspberry Pi  ケース」を検索
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;ケースの形によってはかなり難易度が高そうです……。&lt;/p&gt;
-
-&lt;h3 id=&#34;初心者にも作りやすいケースの形&#34;&gt;初心者にも作りやすいケースの形&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;凹凸の多い形や局面のある形のケースは加工が難しそう。&lt;/li&gt;
-&lt;li&gt;ラズパイは発熱するので、放熱を考えると覆わない形がよさそう。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;ということで、上蓋・下蓋・支柱で作るシンプルな形が初心者には優しそうです！&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/142/2.png&#34; alt=&#34;&#34; /&gt;
-上蓋と下蓋を支柱で支えるタイプのケース　　
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;部材を集めよう&#34;&gt;部材を集めよう&lt;/h2&gt;
-
-&lt;h3 id=&#34;かわいいアクリルで作れば-かわいいケースになる-はず&#34;&gt;かわいいアクリルで作れば、かわいいケースになる（はず）！！&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;かわいいアクリルで作ればかわいいケースになる&lt;/strong&gt;と信じて、素敵なアクリルを用意しましょう。&lt;/p&gt;
-
-&lt;p&gt;アクリルには、透明/色つき透明、不透明/乳白、ミラー、表面プリント、とたくさんの種類があります。ネットではあまりサイズ展開がないことも多いので、&lt;strong&gt;実際に店舗に行ってみるのがオススメ&lt;/strong&gt;です。&lt;/p&gt;
-
-&lt;p&gt;ラメ入りやレース入り、パール入りなどのデザイン性の高いアクリルを取り扱う「&lt;a href=&#34;https://www.miyukiacryl.tokyo/tokyo-acryl&#34;&gt;デザインアクリル専門店 ミユキアクリル&lt;/a&gt;」さんのような&lt;strong&gt;デザインアクリル専門店&lt;/strong&gt;もあるので、興味のある方は覗いてみましょう！&lt;/p&gt;
-
-&lt;p&gt;※デザインアクリルの価格は普通のクリアアクリルの２〜４倍くらい&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/142/3.png&#34; alt=&#34;&#34; /&gt;
-自分好みのアクリルを選ぼう
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;アクリルの厚みは、今回のケースの場合3ミリが一番作りやすくバランスがいいです（アクリルの中に入るものによって厚みが異なります）。5ミリだと重厚感が出て、2ミリだとちょっと薄く感じます。&lt;/p&gt;
-
-&lt;p&gt;厚みを変えて楽しむこともできますが、ネジの長さが変わりますので注意してください！（今回は３ミリで作りますよ！）&lt;/p&gt;
-
-&lt;p&gt;好みのアクリルがない場合は、&lt;strong&gt;UVプリンターを使ってオリジナルのアクリルを作る&lt;/strong&gt;という手もあります。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/142/4.png&#34; alt=&#34;&#34; /&gt;
-UVプリンターでイラストや写真を転写
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;UVプリンターを使えば写真もイラストもだいたいプリントできます。&lt;/p&gt;
-
-&lt;h3 id=&#34;ネジやスペーサーなどのパーツ&#34;&gt;ネジやスペーサーなどのパーツ&lt;/h3&gt;
-
-&lt;p&gt;支柱となるスペーサーは、プラスチックの白や、金属のシルバー、ゴールドなどがあるので、上のアクリルの色や柄によって好みで選びましょう。ネジも色や素材、形などたくさんの種類があります。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/142/5.png&#34; alt=&#34;&#34; /&gt;
-上：真鍮黒ネジ、シルバーの六角スペーサー の組み合わせ&lt;br /&gt;
-下：プラネジ、白のプラスチックのスペーサー&lt;br /&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;必要なパーツ一覧&#34;&gt;必要なパーツ一覧&lt;/h3&gt;
-
-&lt;p&gt;好みのネジ、スペーサー、アクリルを選んでパーツを揃えましょう！&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;ラズパイ固定用・ネジ M2.6（8mm）8本&lt;/li&gt;
-&lt;li&gt;ラズパイ固定用・両メススペーサー M2.6（7mm）４個&lt;/li&gt;
-&lt;li&gt;アクリル板固定・ネジ M3（8mm）8本&lt;/li&gt;
-&lt;li&gt;アクリル板固定・両メススペーサー M3（30mm） 4本&lt;/li&gt;
-&lt;li&gt;アクリル（今回は厚さ3mmのもの）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;アクリルはケースのサイズ分あればOKですが、A4サイズが扱いやすくオススメです！&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/142/parts.png&#34; alt=&#34;&#34; /&gt;
-デザインによりけりですが、上をデザインアクリル、下をクリアアクリルで作成した場合1,600円ほどで作れることができました！&lt;/p&gt;
-
-&lt;h2 id=&#34;作り方&#34;&gt;作り方&lt;/h2&gt;
-
-&lt;h3 id=&#34;step1-型の準備&#34;&gt;step1. 型の準備&lt;/h3&gt;
-
-&lt;p&gt;Illustratorでアクリルの型データをパスで作ります。Illustratorをお持ちでない方はレーザーカッターと合わせて貸してくれるfabスペースもあるので探してみてください！&lt;/p&gt;
-
-&lt;p&gt;ラズパイの実寸を測りながら、上蓋と下蓋、ネジ穴をそれぞれ型どります。&lt;a href=&#34;https://drive.google.com/open?id=1_jcM5kPaZ1AGNdrkMTUWEc8vrxDtU1-Y&#34;&gt;&lt;strong&gt;こちらのaiデータ&lt;/strong&gt;&lt;/a&gt;をそのまま使うこともできます。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/142/6.png&#34; alt=&#34;&#34; /&gt;
-左：下蓋 / 右：上蓋
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;カメラとGPIOがそのまま使えるようしたいので、実寸に少し余裕をもたせて追加します。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;カメラ：幅0.9mm × 高さ28mm&lt;/li&gt;
-&lt;li&gt;GPIO：幅55mm × 高さ12mm&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/142/7.png&#34; alt=&#34;&#34; /&gt;
-上蓋にカメラとGPIOの部分を追加
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;レーザーカッターには切る順番があり、「&lt;strong&gt;彫刻 → 穴 → 切り落とし&lt;/strong&gt;」の順番になります。データもレーザーカッターが切る順番を認識できるように、最初に切る線を赤で、次に切る線を青という風に分けて作ります。&lt;/p&gt;
-
-&lt;p&gt;これはレーザーカッターの機械によってルールが異なるので、お店の人に確認してみてください！&lt;/p&gt;
-
-&lt;h3 id=&#34;step2-アクリルを裁断&#34;&gt;step2. アクリルを裁断&lt;/h3&gt;
-
-&lt;p&gt;今回は彫刻作業はないので最初にネジ穴とカメラの穴から切り、続いて外枠を切り落とします。切った穴は熱でくっついて外れなくなってしまうので、早めに外しましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/142/8.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;step3-組み立てる&#34;&gt;step3. 組み立てる&lt;/h3&gt;
-
-&lt;p&gt;まず下の蓋とラズパイを固定します。短い方のスペーサーを下蓋にM2.6のネジで固定します。ラズパイを乗せ、上からもM2.6のネジで固定します。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/142/9.png&#34; alt=&#34;&#34; /&gt;
-短いスペーサーでラズパイを下蓋に固定
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;次に長い方のスペーサーをM3のネジで下蓋に固定し、上蓋を乗せて上からも固定します。&lt;/p&gt;
-
-&lt;h3 id=&#34;完成&#34;&gt;完成&lt;/h3&gt;
-
-&lt;p&gt;自分だけのラズパイケースが完成しました！カメラもGPIOも問題なく使えますよ〜！
-&lt;img src=&#34;https://dotstud.io/img/blog/142/10.png&#34; alt=&#34;&#34; /&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/142/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/142/12.png&#34; alt=&#34;&#34; /&gt;
-アクリルとパーツを選ぶだけで、ケースの雰囲気はずいぶんと変わります！枠線さえ作ればばあとはすんなりと進めますので、ぜひぜひ試してみてください。&lt;/p&gt;
-
-&lt;p&gt;日替わりで変えられるくらいケースを作りすぎてしまいましたが、&lt;strong&gt;どこに連れて行ってもかわいいと言ってもらえる&lt;/strong&gt;ので作りがいがありました。何より愛着がわきますね〜！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Nefry BT（ESP32）でMQTTを使ってみよう Subscribe編</title>
-      <link>https://dotstud.io/blog/nefry-bt-connect-mqtt/</link>
-      <pubDate>Sat, 06 Jan 2018 14:28:04 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/nefry-bt-connect-mqtt/</guid>
-      
-      <description>
-
-&lt;p&gt;あけましておめでとうございます。 代表ののびすけ（&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;@n0bisuke&lt;/a&gt;）です。&lt;/p&gt;
-
-&lt;p&gt;Nefry BTを使ってMQTTを利用する方法を紹介します。&lt;/p&gt;
-
-&lt;p&gt;今回はMQTTでNefry BTに情報を送信してみます。&lt;/p&gt;
-
-&lt;p&gt;ほぼESP32のコードなので、ESP32系の他のボードを利用している人の参考にもなると思います。&lt;/p&gt;
-
-&lt;h2 id=&#34;mqttの登場人物&#34;&gt;MQTTの登場人物&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Broker - 通信のサーバー&lt;/li&gt;
-&lt;li&gt;Publisher - 情報の送信側&lt;/li&gt;
-&lt;li&gt;Subscriber - 情報の受信側&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;WebSocketではサーバーとクライアントだけで双方向通信をしますが、MQTTではサーバーはBrocker、クライアント側が送信者のPublisherと受信者のSubscriberに分かれます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/141/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;今回はNefry BTをSubscriber（受信者）にして、外部からNefry BTに情報を送ってみたいと思います。&lt;/p&gt;
-
-&lt;h2 id=&#34;環境&#34;&gt;環境&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Arduino IDE 1.8.5&lt;/li&gt;
-&lt;li&gt;Nefry ライブラリ 1.1.4&lt;/li&gt;
-&lt;li&gt;Nefry BT R2&lt;/li&gt;
-&lt;li&gt;macOS High Sierra&lt;/li&gt;
-&lt;li&gt;Node.js v9.2.0&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;subscriberの作成&#34;&gt;Subscriberの作成&lt;/h2&gt;
-
-&lt;h3 id=&#34;arduino向けのmqttライブラリをインストール&#34;&gt;Arduino向けのMQTTライブラリをインストール&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://github.com/knolleary/pubsubclient&#34;&gt;knolleary/pubsubclient&lt;/a&gt;を利用します。&lt;/p&gt;
-
-&lt;p&gt;zipファイルをダウンロードしたら、 &lt;code&gt;スケッチ &amp;gt; ライブラリのインポート &amp;gt; .ZIP形式のライブラリをインストール&lt;/code&gt;からArduino IDEにライブラリをインストールします。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/141/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;nefry-btのスケッチ&#34;&gt;Nefry BTのスケッチ&lt;/h3&gt;
-
-&lt;p&gt;ブローカーは&lt;a href=&#34;https://mosquitto.org/&#34;&gt;Mosquitto&lt;/a&gt;を利用します。&lt;/p&gt;
-
-&lt;p&gt;&amp;ldquo;mosquitto.org&amp;rdquo;の&amp;rdquo;n0bisuke&amp;rdquo;という名前のトピックに情報が送信されたら受信します。&lt;/p&gt;
-
-&lt;p&gt;MQTTはデフォルト1883ポートを利用するので、1883ポートを指定します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
-#include &amp;lt;PubSubClient.h&amp;gt;
-
-WiFiClient httpsClient;
-PubSubClient mqttClient(httpsClient);
-
-#define TOPIC &amp;quot;n0bisuke&amp;quot;
-#define QOS 0
-#define URL &amp;quot;mosquitto.org&amp;quot;
-#define PORT 1883
-
-void setup() {
-  mqttClient.setServer(URL, PORT);
-  mqttClient.setCallback(callback);
-}
-
-void loop() {
-  if(!mqttClient.connected()) {
-    if (mqttClient.connect(TOPIC)) {
-      Serial.println(&amp;quot;Connected.&amp;quot;);    
-      mqttClient.subscribe(TOPIC, QOS);
-      Serial.println(&amp;quot;Subscribed.&amp;quot;);
-    }
-    else {
-      errorReport();
-    }
-  }
-
-  mqttClient.loop();
-}
-
-void callback(char* topic, byte* payload, unsigned int length) {
-  Serial.print(&amp;quot;Message arrived [&amp;quot;);
-  Serial.print(topic);
-  Serial.print(&amp;quot;] &amp;quot;);
-  for (int i = 0; i &amp;lt; length; i++) {
-    Serial.print((char)payload[i]);
-  }
-  Serial.println();
-}
-
-void errorReport(){
-  Serial.print(&amp;quot;Failed. Error state = &amp;quot;);
-
-  switch (mqttClient.state()) {
-    case MQTT_CONNECT_UNAUTHORIZED:
-      Serial.println(&amp;quot;MQTT_CONNECT_UNAUTHORIZED&amp;quot;);
-      break;
-    case MQTT_CONNECT_BAD_CREDENTIALS:
-      Serial.println(&amp;quot;MQTT_CONNECT_BAD_CREDENTIALS&amp;quot;);
-      break;
-    case MQTT_CONNECT_UNAVAILABLE:
-      Serial.println(&amp;quot;MQTT_CONNECT_UNAVAILABLE&amp;quot;);
-      break;
-    case MQTT_CONNECT_BAD_CLIENT_ID:
-      Serial.println(&amp;quot;MQTT_CONNECT_BAD_CLIENT_ID&amp;quot;);
-      break;
-    case MQTT_CONNECT_BAD_PROTOCOL:
-      Serial.println(&amp;quot;MQTT_CONNECT_BAD_PROTOCOL&amp;quot;);
-      break;
-    case MQTT_CONNECTED:
-      Serial.println(&amp;quot;MQTT_CONNECTED&amp;quot;);
-      break;
-    case MQTT_DISCONNECTED:
-      Serial.println(&amp;quot;MQTT_DISCONNECTED&amp;quot;);
-      break;
-    case MQTT_CONNECT_FAILED:
-      Serial.println(&amp;quot;MQTT_CONNECT_FAILED&amp;quot;);
-      break;
-    case MQTT_CONNECTION_LOST:
-      Serial.println(&amp;quot;MQTT_CONNECTION_LOST&amp;quot;);
-      break;
-    case MQTT_CONNECTION_TIMEOUT:
-      Serial.println(&amp;quot;MQTT_CONNECTION_TIMEOUT&amp;quot;);
-      break;
-  }
-
-  delay(5000); // Wait 5 seconds before retrying
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;publisherの作成&#34;&gt;Publisherの作成&lt;/h2&gt;
-
-&lt;p&gt;情報の送信側であるPublisherは手元のMac Book上のNode.jsで作成しました。&lt;/p&gt;
-
-&lt;p&gt;Node.jsでMQTTを利用する場合は&lt;a href=&#34;https://www.npmjs.com/package/mqtt&#34;&gt;mqtt.js&lt;/a&gt;を利用するのが手頃です。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;mkdir mqtt-test
-cd mqtt-test
-npm init -y
-npm i --save mqtt
-touch publisher.js
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code&gt;//publisher.js
-&#39;use strict&#39;;
-
-const mqtt = require(&#39;mqtt&#39;);
-const client = mqtt.connect(&#39;mqtt://mosquitto.org&#39;);
-
-client.on(&#39;connect&#39;, () =&amp;gt; console.log(&#39;publisher.connected.&#39;));
-
-setInterval(() =&amp;gt; {
-    const message = Date.now().toString();
-    client.publish(&#39;n0bisuke&#39;, message);
-    console.log(&#39;publisher.publish:&#39;, message);
-}, 1000);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;これで実行すると、以下のように時間の情報をパブリッシュ（送信）し始めます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;node publisher.js
-
-publisher.publish: 1515219086876
-publisher.publish: 1515219087879
-publisher.publish: 1515219088880
-publisher.publish: 1515219089882
-・
-・
-・
-(省略)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/141/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;所感&#34;&gt;所感&lt;/h2&gt;
-
-&lt;p&gt;思ってたより簡単に実装出来ました。
-これを参考にNefry BTとWebサービスの連携などに活用していきましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://www.mosca.io/&#34;&gt;Mosca&lt;/a&gt;などを使うとBrokerも自分で作成することが出来るので試してみると良いかもしれません。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Node.jsを始めよう！nodebrewを使って5分で環境構築</title>
-      <link>https://dotstud.io/blog/nodejs-install-use-nodebrew/</link>
-      <pubDate>Fri, 15 Dec 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://dotstud.io/blog/nodejs-install-use-nodebrew/</guid>
-      
-      <description>
-
-&lt;p&gt;この記事は&lt;a href=&#34;https://qiita.com/advent-calendar/2017/nodejs2&#34;&gt;Node.js Advent Calendar 2017&lt;/a&gt;に参加しています！&lt;/p&gt;
-
-&lt;p&gt;こんにちは、エンジニアのちゃんとくです。「これからNode.jsを始めたい！」という人向けに導入記事をまとめていきたいと思います。まずは環境構築からはじめましょう！&lt;/p&gt;
-
-&lt;p&gt;今回はNode.jsのバージョンを管理できる「&lt;strong&gt;nodebrew&lt;/strong&gt;」を使ったインストール手順を紹介します。&lt;/p&gt;
-
-&lt;h2 id=&#34;普通のダウンロードじゃダメなの&#34;&gt;普通のダウンロードじゃダメなの？&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://nodejs.org/ja/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/136/1.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;
-&lt;a href=&#34;https://nodejs.org/ja/&#34;&gt;Node.js公式ページ&lt;/a&gt;にアクセスすると、どーんとダウンロードボタンがありますね。これをクリックすると、表記のバージョンのNode.jsパッケージが降ってきます。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;しかし！&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Node.jsはバージョンアップの頻度が高く、その都度ダウンロードし直すのは大変ですよね。&lt;/p&gt;
-
-&lt;p&gt;プロジェクトによっては古いバージョンを使いたかったり、プロジェクトごとにバージョンを変えたかったりしたいときもあります。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;そこで役に立つのがNode.jsのバージョン管理ツールです&lt;/strong&gt;！&lt;/p&gt;
-
-&lt;p&gt;今回紹介する&lt;strong&gt;nodebrew&lt;/strong&gt;以外にも、世界的に利用者の多い&lt;strong&gt;NVM&lt;/strong&gt;（Node Version Manager）やWindows向けの&lt;strong&gt;nodist&lt;/strong&gt;などがあります。&lt;/p&gt;
-
-&lt;p&gt;今回は日本人コミッタが多く困ったときにも質問しやすいnodebrewでやってみます！&lt;/p&gt;
-
-&lt;h2 id=&#34;nodebrewをインストール&#34;&gt;nodebrewをインストール&lt;/h2&gt;
-
-&lt;p&gt;さっそくnodebrewをインストールしましょう！以下のコマンドを実行します。（&lt;code&gt;$&lt;/code&gt;マークはCLIであることを表しているのでコピペの際は不要です！）&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ curl -L git.io/nodebrew | perl - setup
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;完了するとこんなことを言われます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/136/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;「&lt;code&gt;~/.nodebrew&lt;/code&gt;にインストールしたからPATH通してね！」というようなことを言っています。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;~/.bash_profile&lt;/code&gt;などの設定ファイルに&lt;code&gt;export PATH=$HOME/.nodebrew/current/bin:$PATH&lt;/code&gt;を追加しましょう。&lt;/p&gt;
-
-&lt;p&gt;追記したらターミナルを開き直すか&lt;code&gt;source&lt;/code&gt;コマンドで更新します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ source ~/.bash_profile
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;nodebrewコマンドが使えるか確認してみます。&lt;code&gt;command not found&lt;/code&gt;が出なければOKです。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ nodebrew help
-nodebrew 0.9.8
-
-Usage:
-…
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;nodebrewでnode-jsをインストール&#34;&gt;nodebrewでNode.jsをインストール&lt;/h2&gt;
-
-&lt;p&gt;まずは&lt;code&gt;nodebrew ls-remote&lt;/code&gt;コマンドでダウンロード可能なNode.jsのバージョンを確認してみます。&lt;/p&gt;
-
-&lt;p&gt;Node.jsは偶数のバージョンがLTS（安定板）、奇数のバージョンが最新版となっています。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ nodebrew ls-remote
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/136/3.png&#34; alt=&#34;&#34; /&gt;
-実行するとべろーっとバージョンが出てきますね。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/136/4.png&#34; alt=&#34;&#34; /&gt;
-下の方まで見ると2017年12月15日現在はLTSがv8.9.3、最新がv9.3.0であることがわかりました。（io.jsはNode.jsのForkですが、一旦気にしなくてOK）&lt;/p&gt;
-
-&lt;p&gt;今回は最新版のv9.3.0をインストールしてみます。&lt;code&gt;nodebrew install-binary&lt;/code&gt;コマンドを利用します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ nodebrew install-binary v9.3.0
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;1分くらいでインストールは完了します。（ダメ回線なので、もっと速いかもしれません）&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;nodebrew ls&lt;/code&gt;コマンドで状態を確認します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ nodebrew ls
-v9.3.0
-
-current: none
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;使用するバージョンの&lt;code&gt;current&lt;/code&gt;がnoneになっているので指定します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ nodebrew use v9.3.0
-$ node -v
-v9.3.0
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;これでNode.jsのインストールは完了です！&lt;/p&gt;
-
-&lt;h2 id=&#34;バージョン切り替え&#34;&gt;バージョン切り替え&lt;/h2&gt;
-
-&lt;p&gt;別のバージョンを使いたくなったら、nodebrewでバージョンを切り替えてみましょう。&lt;/p&gt;
-
-&lt;p&gt;試しにLTSのv8.9.3を使えるようにしてみます。まずはインストール。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ nodebrew install-binary v8.9.3
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;v8.9.3とv9.3.0が使えるようになりましたが、まだ&lt;code&gt;current&lt;/code&gt;はv9.3.0のままです。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ nodebrew list
-v8.9.3
-v9.3.0
-
-current: v9.3.0
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;nodebrew use&lt;/code&gt;でv8.9.3を指定します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ nodebrew use v8.9.3
-$ nodebrew list
-v8.9.3
-v9.3.0
-
-current: v8.9.3
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;これでバージョンが切り替えられました！listにあるバージョンは再インストールすることなく切り替えられます。&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;ここまで特にむずかしいところなく環境構築できたのではないかと思います！はじめるまでの手軽さもNode.jsの魅力のひとつですよね。&lt;/p&gt;
-
-&lt;p&gt;次回はNode.jsをはじめたばかりの人向けチュートリアルをやってみたいと思います。&lt;/p&gt;
-
-&lt;p&gt;それではまた！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>【予測変換】Macで日本語の変換ウィンドウが消えなくなったときの対処法【邪魔】</title>
-      <link>https://dotstud.io/blog/mac-nihongo-window-error/</link>
-      <pubDate>Thu, 14 Dec 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://dotstud.io/blog/mac-nihongo-window-error/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、エンジニア兼ライターのちゃんとくです。日々たくさんのコードや文字を書き続けているわけですが、&lt;strong&gt;突然消えなくなるアレ&lt;/strong&gt;に悩まされています。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/137/1.png&#34; alt=&#34;&#34; /&gt;
-これ。&lt;/p&gt;
-
-&lt;p&gt;クリックしてもEscapeしてもQuitしても消えなくて本当に邪魔ですよね。&lt;/p&gt;
-
-&lt;p&gt;わりと起こる頻度が高いのでそのたびに再起動するのも面倒です。&lt;/p&gt;
-
-&lt;h2 id=&#34;日本語入力のプロセスをキルする&#34;&gt;日本語入力のプロセスをキルする&lt;/h2&gt;
-
-&lt;p&gt;タイトルが全てですが、日本語入力のプロセスを終了すると消すことができます。&lt;/p&gt;
-
-&lt;p&gt;［アクテビティモニタ］を開いて［日本語入力］を探します。
-&lt;img src=&#34;https://dotstud.io/img/blog/137/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ダブルクリックするとウィンドウが開くので［終了］をクリックします。
-&lt;img src=&#34;https://dotstud.io/img/blog/137/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;平和がおとずれましたね。&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;Adventやら原稿やらガリガリ書いているときに邪魔でしょうがないので紹介してみました。&lt;/p&gt;
-
-&lt;p&gt;El Capitanからアップデートしたらなおるのかなぁ。。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Node.jsでGoogle SpreadSheetsを操作してみよう。【GAS不使用】</title>
-      <link>https://dotstud.io/blog/google-spreadsheets-from-nodejs/</link>
-      <pubDate>Mon, 04 Dec 2017 13:14:41 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/google-spreadsheets-from-nodejs/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、代表ののびすけです。&lt;/p&gt;
-
-&lt;p&gt;この記事は&lt;a href=&#34;https://qiita.com/advent-calendar/2017/nodejs&#34;&gt;Node.jsアドベントカレンダー2017&lt;/a&gt;の記事になります。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://developers.google.com/apps-script/&#34;&gt;GAS&lt;/a&gt;じゃなくてNode.jsから直接スプレッドシートにアクセスしたい！&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;そう思って調べると&lt;a href=&#34;https://developers.google.com/sheets/api/quickstart/nodejs&#34;&gt;Node.js Quickstart | Sheets API | Google Developers&lt;/a&gt;が出て来ますが、JS記述も古いし英語なので少しとっつきにくいです。&lt;/p&gt;
-
-&lt;p&gt;ということでちょっと試して記録残そうと思います。&lt;/p&gt;
-
-&lt;h2 id=&#34;google-sheets-api&#34;&gt;Google Sheets API&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://developers.google.com/sheets/guides/concepts?hl=ja&#34;&gt;Google Sheets API&lt;/a&gt;はスプレッドシートにアクセスできるようになるAPIです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/81dd3461cd263ea7e4d63f06fef54747.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Google Sheets API を使用すると、スプレッドシートの要素を読み取って変更できます。 スプレッドシートは多くの設定を備えており、美しく機能的なシートを作成することができます。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;普段慣れている言語でスプレッドシートにアクセス出来まるので、簡単な操作であれば、GASを使う必要もないです。&lt;/p&gt;
-
-&lt;p&gt;今回のサンプルは&lt;a href=&#34;https://github.com/n0bisuke/google-spread-sheet-node.js-sample&#34;&gt;こちら&lt;/a&gt;に置いておきます。&lt;/p&gt;
-
-&lt;h3 id=&#34;環境&#34;&gt;環境&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Node.js v9.2.0&lt;/li&gt;
-&lt;li&gt;macOS High Sierra&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;参考までに今回の僕の環境です。&lt;/p&gt;
-
-&lt;p&gt;では実際に作っていきます。&lt;/p&gt;
-
-&lt;h2 id=&#34;1-google-sheets-apiを使えるようにする&#34;&gt;1. Google Sheets APIを使えるようにする&lt;/h2&gt;
-
-&lt;p&gt;ちなみに2017年12月時点でのウィザードです。こういうのはアップデートによって画面遷移変わるので適宜読み替えてください。&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Use this wizard to create or select a project in the Google Developers Console and automatically turn on the API. Click Continue, then Go to credentials.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://console.developers.google.com/start/api?id=sheets.googleapis.com&#34;&gt;こちらのリンク&lt;/a&gt;からディベロッパーコンソールにいき、&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/31e8011951d1552b8f7126eb459da474.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;新機能のお知らせ、パフォーマンスに関するアドバイス、フィードバック調査、特典に関する最新情報をメールで受け取ります。&lt;/code&gt;の質問はいいえでもたぶん大丈夫です。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/60c5bf6a1e772473dc9fc6d4d7526077.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;認証情報に進む&lt;/code&gt;を選択&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/848f8f79460aac991b46956111f0da07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;この画面が出ますが、&lt;code&gt;キャンセル&lt;/code&gt;を選択します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/35387/e827d6ab-d728-1016-d22a-76cef4e4972e.png&#34; alt=&#34;スクリーンショット 2017-12-03 21.00.17.png&#34; title=&#34;スクリーンショット 2017-12-03 21.00.17.png&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;OAuth同意画面&lt;/code&gt;のタブを選択し、メールアドレスを確認し、&lt;code&gt;ユーザーに表示するサービス名&lt;/code&gt;を入力します。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;保存&lt;/code&gt;を選択しましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/35387/1ca3a2d5-b639-bb6c-9508-225d162c96ff.png&#34; alt=&#34;スクリーンショット 2017-12-03 21.01.07.png&#34; title=&#34;スクリーンショット 2017-12-03 21.01.07.png&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;次に、&lt;code&gt;認証情報&lt;/code&gt;のタブを選択し、 &lt;code&gt;認証情報を作成&lt;/code&gt; -&amp;gt; &lt;code&gt;OAuthクライアントID&lt;/code&gt;を選択します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/3d5b6da9cf3086b11c728cdc31307268.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;その他&lt;/code&gt;を選択し、任意の名前をつけて&lt;code&gt;作成&lt;/code&gt;。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/35387/a8a25dd3-a194-d4a3-ac57-909f8d7712e0.png&#34; alt=&#34;スクリーンショット 2017-12-03 21.06.47.png&#34; title=&#34;スクリーンショット 2017-12-03 21.06.47.png&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;OK&lt;/code&gt;で進みます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/35387/93c1e777-682e-434e-444d-a3aa8659bd54.png&#34; alt=&#34;スクリーンショット 2017-12-03 21.07.25.png&#34; title=&#34;スクリーンショット 2017-12-03 21.07.25.png&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;client_secret_xxxxxxxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com.json&lt;/code&gt;のようなファイルがダウンロードされます。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;これを&lt;code&gt;client_secret.json&lt;/code&gt;にリネームしましょう。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;2-node-jsプロジェクトの準備&#34;&gt;2. Node.jsプロジェクトの準備&lt;/h2&gt;
-
-&lt;p&gt;任意のディレクトリを作成して移動します。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;sheetstest&lt;/code&gt;としました。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;mkdir sheetstest
-cd sheetstest
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;npm init -y&lt;/code&gt;で&lt;code&gt;package.json&lt;/code&gt;を作成します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;npm init -y
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;このディレクトリに先ほどの&lt;code&gt;client_secret.json&lt;/code&gt;を移動させます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;ls
-
-package.json client_secret.json
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/3d796ef0005ef28b914a83517772c65e.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;こんな感じです。&lt;/p&gt;
-
-&lt;p&gt;利用するモジュールを追加します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;npm i googleapis google-auth-library --save
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;3-トークンの作成-保存-最初だけ&#34;&gt;3. トークンの作成&amp;amp;保存 (最初だけ)&lt;/h2&gt;
-
-&lt;p&gt;本家とは少し違うやり方です。&lt;/p&gt;
-
-&lt;p&gt;本家のコードだと&lt;code&gt;トークンの作成&amp;amp;保存&lt;/code&gt;作業と実際のAPI呼び出しが一緒になったコードですが&lt;code&gt;トークンの作成&amp;amp;保存&lt;/code&gt;は最初のみ行えば良いので手順を分けて紹介します。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;getAndStoreToken.js&lt;/code&gt;を作成します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;//getAndStoreToken.js
-&#39;use strict&#39;;
-
-const fs = require(&#39;fs&#39;);
-const readline = require(&#39;readline&#39;);
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
-const {promisify} = require(&#39;util&#39;);
-
-const google = require(&#39;googleapis&#39;);
-const googleAuth = require(&#39;google-auth-library&#39;);
-
-//promisifyでプロミス化
-const readFileAsync = promisify(fs.readFile);
-const writeFileAsync = promisify(fs.writeFile);
-const rlQuestionAsync = promisify(rl.question);
-
-const SCOPES = [&#39;https://www.googleapis.com/auth/spreadsheets.readonly&#39;];
-const TOKEN_DIR = __dirname;
-const TOKEN_PATH = TOKEN_DIR+&#39;/sheets.googleapis.com-nodejs-quickstart.json&#39;;
-
-const main = async () =&amp;gt; {
-    const content = await readFileAsync(__dirname+&#39;/client_secret.json&#39;);
-    const credentials = JSON.parse(content); //クレデンシャル
-    //認証
-    const clientSecret = credentials.installed.client_secret;
-    const clientId = credentials.installed.client_id;
-    const redirectUrl = credentials.installed.redirect_uris[0];
-    const auth = new googleAuth();
-    const oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
-
-    //get new token
-    const authUrl = oauth2Client.generateAuthUrl({
-        access_type: &#39;offline&#39;,
-        scope: SCOPES
-    });
-
-    console.log(&#39;Authorize this app by visiting this url: &#39;, authUrl);
-
-    rl.question(&#39;Enter the code from that page here: &#39;, (code) =&amp;gt; {
-        rl.close();
-
-        oauth2Client.getToken(code, async (err, token) =&amp;gt; {
-            if (err) {
-                console.log(&#39;Error while trying to retrieve access token&#39;, err);
-                return;
-            }
-
-            oauth2Client.credentials = token;
-
-            try {
-                fs.mkdirSync(TOKEN_DIR);
-            } catch (err) {
-                if (err.code != &#39;EEXIST&#39;) throw err;
-            }
-
-            await writeFileAsync(TOKEN_PATH, JSON.stringify(token));
-            console.log(&#39;Token stored to &#39; + TOKEN_PATH);
-        });
-    });
-};
-
-main();
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;このプログラムを実行します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;node getAndStoreToken.js
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/379de8711e19b5510225e167de555ab6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;https://accounts.google.com/~&lt;/code&gt;で始まるURLが表示されるのでこれをコピーしてブラウザで開きます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/35387/06afa961-4789-535b-3fee-8eaf67a997af.png&#34; alt=&#34;スクリーンショット 2017-12-04 11.52.54.png&#34; title=&#34;スクリーンショット 2017-12-04 11.52.54.png&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;アカウント選択画面になります。
-複数Googleアカウントを持っている人は、今回アクセスしようとしているアカウントを選択します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/35387/18729d60-e4a6-8996-9519-f9f4750ae1f4.png&#34; alt=&#34;スクリーンショット 2017-12-04 11.53.02.png&#34; title=&#34;スクリーンショット 2017-12-04 11.53.02.png&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;許可&lt;/code&gt;で進みます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/35387/6058bd3e-258f-1d8d-a7c6-68962617f1b2.png&#34; alt=&#34;スクリーンショット 2017-12-04 11.53.09.png&#34; title=&#34;スクリーンショット 2017-12-04 11.53.09.png&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;認証用のコードが発行されます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/35387/fd612d7c-0b45-3d09-64ab-c1e02315fe81.png&#34; alt=&#34;スクリーンショット 2017-12-04 11.53.27.png&#34; title=&#34;スクリーンショット 2017-12-04 11.53.27.png&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;これをコピーしてターミナルに貼り付けてエンターキーで進みます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;Token stored to /Users/n0bisuke/dotstudio/playground/sheetstest/sheets.googleapis.com-nodejs-quickstart.json
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;などと表示されてjsonファイルが保存されます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/35387/830452dc-ad36-83ef-8cf8-8c80bc9637dd.png&#34; alt=&#34;スクリーンショット 2017-12-04 11.57.50.png&#34; title=&#34;スクリーンショット 2017-12-04 11.57.50.png&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;sheets.googleapis.com-nodejs-quickstart.json&lt;/code&gt;がフォルダ内に確認できればOKです。&lt;/p&gt;
-
-&lt;h2 id=&#34;4-いよいよシートにアクセス&#34;&gt;4. いよいよシートにアクセス&lt;/h2&gt;
-
-&lt;p&gt;さて最後の手順です。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;getSheetsData.js&lt;/code&gt;を作成しましょう。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;//getSheetsData.js
-&#39;use strict&#39;;
-
-const fs = require(&#39;fs&#39;);
-const {promisify} = require(&#39;util&#39;);
-const google = require(&#39;googleapis&#39;);
-const googleAuth = require(&#39;google-auth-library&#39;);
-const sheets = google.sheets(&#39;v4&#39;);
-
-//promisifyでプロミス化
-const readFileAsync = promisify(fs.readFile);
-const ssValuesGetAsync = promisify(sheets.spreadsheets.values.get);
-
-const TOKEN_DIR = __dirname;
-const TOKEN_PATH = TOKEN_DIR + &#39;/sheets.googleapis.com-nodejs-quickstart.json&#39;;
-
-const main = async () =&amp;gt; {
-    //クレデンシャル情報の取得
-    const content = await readFileAsync(__dirname+&#39;/client_secret.json&#39;);
-    const credentials = JSON.parse(content); //クレデンシャル
-
-    //認証
-    const clientSecret = credentials.installed.client_secret;
-    const clientId = credentials.installed.client_id;
-    const redirectUrl = credentials.installed.redirect_uris[0];
-    const auth = new googleAuth();
-    const oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
-    const token = await readFileAsync(TOKEN_PATH);
-    oauth2Client.credentials = JSON.parse(token);
-
-    //API経由でシートにアクセス
-    const apiOptions = {
-        auth: oauth2Client,
-        spreadsheetId: &#39;1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms&#39;,
-        range: &#39;Class Data!A2:E&#39;,
-    };
-    const response = await ssValuesGetAsync(apiOptions);
-
-    //結果を表示
-    console.log(response);
-};
-
-main();
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;これを実行します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ node getSheetsData.js
-
-{ range: &#39;\&#39;Class Data\&#39;!A2:E101&#39;,
-  majorDimension: &#39;ROWS&#39;,
-  values:
-   [ [ &#39;Alexandra&#39;, &#39;Female&#39;, &#39;4. Senior&#39;, &#39;CA&#39;, &#39;English&#39; ],
-     [ &#39;Andrew&#39;, &#39;Male&#39;, &#39;1. Freshman&#39;, &#39;SD&#39;, &#39;Math&#39; ],
-     [ &#39;Anna&#39;, &#39;Female&#39;, &#39;1. Freshman&#39;, &#39;NC&#39;, &#39;English&#39; ],
-     [ &#39;Becky&#39;, &#39;Female&#39;, &#39;2. Sophomore&#39;, &#39;SD&#39;, &#39;Art&#39; ],
-     [ &#39;Benjamin&#39;, &#39;Male&#39;, &#39;4. Senior&#39;, &#39;WI&#39;, &#39;English&#39; ],
-     [ &#39;Carl&#39;, &#39;Male&#39;, &#39;3. Junior&#39;, &#39;MD&#39;, &#39;Art&#39; ],
-     [ &#39;Carrie&#39;, &#39;Female&#39;, &#39;3. Junior&#39;, &#39;NE&#39;, &#39;English&#39; ],
-     [ &#39;Dorothy&#39;, &#39;Female&#39;, &#39;4. Senior&#39;, &#39;MD&#39;, &#39;Math&#39; ],
-     [ &#39;Dylan&#39;, &#39;Male&#39;, &#39;1. Freshman&#39;, &#39;MA&#39;, &#39;Math&#39; ],
-     [ &#39;Edward&#39;, &#39;Male&#39;, &#39;3. Junior&#39;, &#39;FL&#39;, &#39;English&#39; ],
-     [ &#39;Ellen&#39;, &#39;Female&#39;, &#39;1. Freshman&#39;, &#39;WI&#39;, &#39;Physics&#39; ],
-     [ &#39;Fiona&#39;, &#39;Female&#39;, &#39;1. Freshman&#39;, &#39;MA&#39;, &#39;Art&#39; ],
-     [ &#39;John&#39;, &#39;Male&#39;, &#39;3. Junior&#39;, &#39;CA&#39;, &#39;Physics&#39; ],
-     [ &#39;Jonathan&#39;, &#39;Male&#39;, &#39;2. Sophomore&#39;, &#39;SC&#39;, &#39;Math&#39; ],
-     [ &#39;Joseph&#39;, &#39;Male&#39;, &#39;1. Freshman&#39;, &#39;AK&#39;, &#39;English&#39; ],
-     [ &#39;Josephine&#39;, &#39;Female&#39;, &#39;1. Freshman&#39;, &#39;NY&#39;, &#39;Math&#39; ],
-     [ &#39;Karen&#39;, &#39;Female&#39;, &#39;2. Sophomore&#39;, &#39;NH&#39;, &#39;English&#39; ],
-     [ &#39;Kevin&#39;, &#39;Male&#39;, &#39;2. Sophomore&#39;, &#39;NE&#39;, &#39;Physics&#39; ],
-     [ &#39;Lisa&#39;, &#39;Female&#39;, &#39;3. Junior&#39;, &#39;SC&#39;, &#39;Art&#39; ],
-     [ &#39;Mary&#39;, &#39;Female&#39;, &#39;2. Sophomore&#39;, &#39;AK&#39;, &#39;Physics&#39; ],
-     [ &#39;Maureen&#39;, &#39;Female&#39;, &#39;1. Freshman&#39;, &#39;CA&#39;, &#39;Physics&#39; ],
-     [ &#39;Nick&#39;, &#39;Male&#39;, &#39;4. Senior&#39;, &#39;NY&#39;, &#39;Art&#39; ],
-     [ &#39;Olivia&#39;, &#39;Female&#39;, &#39;4. Senior&#39;, &#39;NC&#39;, &#39;Physics&#39; ],
-     [ &#39;Pamela&#39;, &#39;Female&#39;, &#39;3. Junior&#39;, &#39;RI&#39;, &#39;Math&#39; ],
-     [ &#39;Patrick&#39;, &#39;Male&#39;, &#39;1. Freshman&#39;, &#39;NY&#39;, &#39;Art&#39; ],
-     [ &#39;Robert&#39;, &#39;Male&#39;, &#39;1. Freshman&#39;, &#39;CA&#39;, &#39;English&#39; ],
-     [ &#39;Sean&#39;, &#39;Male&#39;, &#39;1. Freshman&#39;, &#39;NH&#39;, &#39;Physics&#39; ],
-     [ &#39;Stacy&#39;, &#39;Female&#39;, &#39;1. Freshman&#39;, &#39;NY&#39;, &#39;Math&#39; ],
-     [ &#39;Thomas&#39;, &#39;Male&#39;, &#39;2. Sophomore&#39;, &#39;RI&#39;, &#39;Art&#39; ],
-     [ &#39;Will&#39;, &#39;Male&#39;, &#39;4. Senior&#39;, &#39;FL&#39;, &#39;Math&#39; ] ] }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;このサンプルでは&lt;a href=&#34;https://docs.google.com/spreadsheets/d/1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms/edit#gid=0&#34;&gt;こちらのワークブック&lt;/a&gt;へアクセスして情報を取得しています。&lt;/p&gt;
-
-&lt;p&gt;ちなみに用語的には&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;ワークブック＝Googleスプレッドシートの１ファイル&lt;/li&gt;
-&lt;li&gt;シート＝ワークブック内のタブ、シート&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;というニュアンスです。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;//省略
-
-    const apiOptions = {
-        auth: oauth2Client,
-        spreadsheetId: &#39;1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms&#39;,
-        range: &#39;Class Data!A2:E&#39;,
-    };
-
-//省略
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;ほかのワークブックにアクセスする場合は&lt;code&gt;https://docs.google.com/spreadsheets/d/&lt;/code&gt;の後に続くIDを&lt;code&gt;spreadsheetId&lt;/code&gt;に指定して実行しましょう。&lt;code&gt;range&lt;/code&gt;は&lt;code&gt;シート名:取得する範囲&lt;/code&gt;という形式で指定して、指定したシートの指定した範囲からセルの情報を取得します。&lt;/p&gt;
-
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-
-&lt;p&gt;これで次回以降は4番目の手順だけでスプレッドシートにアクセスできます。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;client_secret.json&lt;/code&gt;や&lt;code&gt;sheets.googleapis.com-nodejs-quickstart.json&lt;/code&gt;をコピーしてサーバー設置しておけば自動更新する仕組みなども作れます。&lt;/p&gt;
-
-&lt;p&gt;スプレッドシートは色々な場面で利用されているツールなので是非システム連携などに活用してみて下さい。&lt;/p&gt;
-
-&lt;p&gt;応用としてはこちらの内容で使っています。&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;https://qiita.com/n0bisuke/items/3313a64c56317932919e&#34;&gt;勉強会( #IoTLT )の登壇者管理でHeadless Chromeを利用している話&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;それでは！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>【Maker Faire ShenZhen2017】アキバ電気街の30倍！？世界最大の電脳都市”深セン＠中国”に行ってきた！</title>
-      <link>https://dotstud.io/blog/maker-faire-shenzhen-report2/</link>
-      <pubDate>Fri, 24 Nov 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://dotstud.io/blog/maker-faire-shenzhen-report2/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、dotstudioモノづくり担当・うこです。&lt;/p&gt;
-
-&lt;p&gt;日本は秋も終わりだんだんと寒くなってきつつありますが、中国南部・広東省深セン市はまだまだ暑いです。そんな深セン市で11月10日〜12日の3日間、モノづくりの祭典「&lt;strong&gt;Maker Faire Shenzhen&lt;/strong&gt;」が開催され、dotstudioのメンバーで偵察に行ってきましたのでその模様をお伝えします。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/134/33.png&#34; alt=&#34;&#34; /&gt;
-至るところにこのパンダが居た
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;maker-faire-shenzhen-mfsz-について&#34;&gt;Maker Faire Shenzhen(MFSZ) について&lt;/h2&gt;
-
-&lt;p&gt;世界一の電気街を擁するとされる街・中国広東省深セン市で行われる、非常に規模の大きいモノづくりの祭典です。
-dotstudioでは過去にも出展したことがあり過去にも記事をいくつか書いておりますので、詳しくはそちらも参照してください。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/maker-faire-shenzhen-2016/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/link1.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;
-&lt;a href=&#34;https://dotstud.io/blog/maker-faire-shenzhen-report/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/link2.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;深センまでの道のり&#34;&gt;深センまでの道のり&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/1.png&#34; alt=&#34;&#34; /&gt;
-今回はジェットスター航空で成田空港〜香港国際空港を移動し、さらに機場快線（エアポートエクスプレス）と香港MRTで羅湖駅を経由して深セン市までアクセスしました。香港に入国するとすぐにエアポートエクスプレスのカウンターがあり、クレジットカードで往復に使えるパスを購入できます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/2.png&#34; alt=&#34;&#34; /&gt;
-香港区域内で観光をしない場合は、空港からバスで直接上水駅まで行き1駅だけMTRに乗り国境を目指すか、香港に入境せずフェリーで深セン側の港に移動する方法もあります。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/4.png&#34; alt=&#34;&#34; /&gt;
-せっかくなので香港の中心部を経由してきました。ここはまだ、日本と同じで車道が左側通行なので違和感がありませんね。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/5.png&#34; alt=&#34;&#34; /&gt;
-羅湖駅まで移動します。ここは禁区と呼ばれる緩衝地帯の中のため駅の外には出ることができません。「↑深セン」と書かれた看板があり、人の流れに乗って進んでゆくと香港を出境することになります。さらにそのまま100mほどある河の上にかかる通路を通り、中国本土に入国します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/6.png&#34; alt=&#34;&#34; /&gt;
-中国側のイミグレーションは、中国国内で最大のものとあって建物はとても立派でした。旅行客のほとんどは中国人のようです。ホテルやタクシーの客引きのしつこさが尋常ではないです。今回は、ここから徒歩5分ほどの好立地のホテルに宿泊しました。&lt;/p&gt;
-
-&lt;h2 id=&#34;会場は大学のキャンパス&#34;&gt;会場は大学のキャンパス&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/7.png&#34; alt=&#34;&#34; /&gt;
-今年のMFSZ会場となったのは「深セン職業技術学院」。香港国境の羅湖駅からは地下鉄で1時間ほどかかります。とても大きくて綺麗なキャンパスでした。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/8.png&#34; alt=&#34;&#34; /&gt;
-日本のMaker Faireと違い、屋外に1つ1つが巨大なオブジェをかなりダイナミックに配置しているのがとても印象的でした。&lt;/p&gt;
-
-&lt;h2 id=&#34;展示物紹介&#34;&gt;展示物紹介&lt;/h2&gt;
-
-&lt;h3 id=&#34;さすが中国-編&#34;&gt;さすが中国！編&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/9.png&#34; alt=&#34;&#34; /&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/134/10.png&#34; alt=&#34;&#34; /&gt;
-くまモン（のパチモン）です。やたら腕が細長かったです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/11.png&#34; alt=&#34;&#34; /&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/134/12.png&#34; alt=&#34;&#34; /&gt;
-筋電でドローンなどを制御できる腕輪です。かなり面白かったので購入しようとしたのですが、現金が足りず……。しかしここは中国、&lt;strong&gt;田舎の屋台ですらも電子マネーが使える国&lt;/strong&gt;です。WechatPayでなんとか購入することができました。&lt;/p&gt;
-
-&lt;p&gt;ちなみに日本人がWechatPayを使うためには、「知人から送金してもらいPayアカウントを開設」し、「チャージ」する必要があります。「チャージ」は、本来は中国国内の銀行口座が必要ですが、国内の空港ででも日本円で可能なようです。&lt;/p&gt;
-
-&lt;p&gt;参考 : &lt;a href=&#34;http://japanese.engadget.com/2017/07/27/wechat-pay/&#34;&gt;中国旅行の新定番！ ポケットチェンジでWeChat Payにチャージする：旅人目線のデジタルレポ 中山智 - Engadget 日本版&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;ゲーム編&#34;&gt;ゲーム編&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/13.png&#34; alt=&#34;&#34; /&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/134/14.png&#34; alt=&#34;&#34; /&gt;
-RaspberryPiを使った超小型のスーファミのようなもの。レスポンスもよく、普通に遊べました。名作はひととおり揃っているようです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/15.png&#34; alt=&#34;&#34; /&gt;
-縁日で子供達が遊んでそうなおもちゃを作ったのは韓国のメイカーさん。スイッチ類が付いていてゴールしたら光ったりするそうですが、ちょうど修理中とのことでした。メイカーあるあるです。&lt;/p&gt;
-
-&lt;h3 id=&#34;教育ツール編&#34;&gt;教育ツール編&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/16.png&#34; alt=&#34;&#34; /&gt;
-PCメーカー・acer製の教育用ツールです。PCやタブレットから、Arduinoとそれに接続されたセンサ群をスクラッチでプログラミングできるようです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/17.png&#34; alt=&#34;&#34; /&gt;
-IoT Brickという、ブロックパーツをつなげて回路を作り、コントローラで制御ができるプロダクトです。すこし昔の日本にもあった、電子ブロックのようなものでしょうか。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/18.png&#34; alt=&#34;&#34; /&gt;
-天津市の企業であるYwRobot社のArduino互換シールドです。ケーブルが一般的によく使用されているもので代替ができて便利で、機能性の高いユニークな基板がたくさん用意されていました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/19.png&#34; alt=&#34;&#34; /&gt;
-弊社でも取り扱いをしている、上海SeeedStudio社のプロダクトです。Grove Zeroなどの新製品が展示・販売されていました。&lt;/p&gt;
-
-&lt;h3 id=&#34;デザイン編&#34;&gt;デザイン編&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/20.png&#34; alt=&#34;&#34; /&gt;
-眼球盦子という、こちらを見てくる目玉です。スマホと接続するとカメラが顔を認識し、顔のある方向に目玉がクリクリと動きます。買い換えたあとで余ってしまっているスマホを、インタラクティブな置物に変身させてくれそうです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/21.png&#34; alt=&#34;&#34; /&gt;
-ボルトやらチェーンやらの無骨なパーツで構成されたオブジェが展示されていました。どちらかというと、美大生の作品のような印象です。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/22.png&#34; alt=&#34;&#34; /&gt;
-レーザーでカットされた木材でできた箱ですが、模様をずらして絵柄を合わせないと開くことができないようになっています。日本にも寄木細工の秘密箱がありますが、それの現代メイカー版といったところでしょうか。&lt;/p&gt;
-
-&lt;h3 id=&#34;パワーを感じる編&#34;&gt;パワーを感じる編&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/23.png&#34; alt=&#34;&#34; /&gt;
-水上歩行を可能にする靴、いわゆる「忍者の水蜘蛛」です。後ろにはディスプレイがあって実際に水上を歩いている動画が流れていましたが、音と水しぶきだけやたらすごかったです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/24.png&#34; alt=&#34;&#34; /&gt;
-Groveのタッチセンサがついていて、うっかり触れると赤い星がキラリと光ります。&lt;/p&gt;
-
-&lt;h3 id=&#34;その他編&#34;&gt;その他編&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/25.png&#34; alt=&#34;&#34; /&gt;
-女の子が10人ほど、ライブコーディングならぬライブソーイング？で、目の前でミシンを使って作品を作り出していました。意外にも、出展者も来場者も女の子の割合が比較的高めな印象でした。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/26.png&#34; alt=&#34;&#34; /&gt;
-一般の出展者とは別に、各地の大学からきた学生サークルのブースばかりのエリアがありました。日本の理系大学の学園祭のような雰囲気ですが、ほとんど出払っていて人気があまりありません。どこかのブースではさりげなくただのガンプラとかも置いてあった気がします。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/27.png&#34; alt=&#34;&#34; /&gt;
-なんと食べ物の屋台もたくさん出ていました！無難に美味しかったです。日本人からすると物価が安いのでほぼ食べ放題ですね。&lt;/p&gt;
-
-&lt;h2 id=&#34;電気街にも行ってきました&#34;&gt;電気街にも行ってきました&lt;/h2&gt;
-
-&lt;p&gt;電子機器産業は深セン市全体で盛んではありますが、小売も卸売もどちらも行う業者が多数入り混じって一大繁華街を形成しているのが、深セン市中心部の華強路です。せっかくなので店舗を巡ってみました！&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/28.png&#34; alt=&#34;&#34; /&gt;
-去年まで行われていた大規模な工事が完了していて、とても綺麗な街並みでした。路上に落ちているゴミはほとんどなく、治安もとても良いです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/29.png&#34; alt=&#34;&#34; /&gt;
-すぐ近くのお店に入ってみると、ケーブルやらコンセントやらがずらり。こんな調子のお店が百店舗近く詰まったビルがいくつも並んでいます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/30.png&#34; alt=&#34;&#34; /&gt;
-路上の仮設テントで、VRを利用したアトラクションゲームが楽しめます。このテントの前では人の胴体ぐらいの大きさの飛行機のラジコンが通りの上空を猛スピードで飛び回っていました。日本では絶対にできませんね……。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/31.png&#34; alt=&#34;&#34; /&gt;
-DHLの集荷所のようです。秋葉原の路上で売られている製品も、ここから旅立っていくものはおそらく少なくないはずです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/134/32.png&#34; alt=&#34;&#34; /&gt;
-最近話題の犬型ロボットだって、安く、早く、手に入ります。そう、深センならね。&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;深センのMakerFaireは去年に引き続き2回目の来場でしたが、今年は少し規模が小さめになっており、ビジネス向け製品よりもデザイン寄りの作品がかなり多く出展されている印象でした。深センでは土地柄、新たなプロダクトを求めて来場するバイヤーも多く来場するそうですが、今回は会場が学校だったことが関係しているのかもしれません。&lt;/p&gt;
-
-&lt;p&gt;また、日本人をはじめとする海外メイカー勢も多く見受けられました。中国って少し行きづらそうなイメージがありますが、実際に行ってみると&lt;strong&gt;想像以上に治安がよく、渡航費・滞在費もあまりかからず、どの国からでも意外と参加しやすい&lt;/strong&gt;のかもしれません。特に深センは世界的な国際港である香港に隣接していることもあり、電子工業が加速的に発展していった街でもあります。
-ものづくりが好きだけど、まだ中国深センに行ったことがないという方も、この記事でご興味を持たれたらぜひ渡航してみてはいかがでしょうか。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/134/34.png&#34; alt=&#34;&#34; /&gt;
-現地に残ってお見送りする僕と知らないおじさん&lt;/center&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>オフィス移転したらインターホンがなかったのでRaspbeerry Piでカメラ付きインターホン作ってみた</title>
-      <link>https://dotstud.io/blog/office-new-door-notification/</link>
-      <pubDate>Mon, 20 Nov 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://dotstud.io/blog/office-new-door-notification/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、dotstudioモノづくり担当・うこです。&lt;/p&gt;
-
-&lt;p&gt;dotstudioは&lt;a href=&#34;https://dotstud.io/blog/office-relocation-for-akihabara/&#34;&gt;&lt;strong&gt;めでたく新オフィスに移転したのですが&lt;/strong&gt;&lt;/a&gt;、インターホンがついておらず不便なんですよね。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/133/10.png&#34; alt=&#34;&#34; /&gt;
-代表・のびすけ「&lt;strong&gt;うこ先生、これRaspberry Piでインターホン作れない？&lt;/strong&gt;」&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/133/1.png&#34; alt=&#34;&#34; /&gt;
-僕「&lt;strong&gt;秒でいけます&lt;/strong&gt;」&lt;/p&gt;
-
-&lt;p&gt;ということで作ってみました！&lt;/p&gt;
-
-&lt;h2 id=&#34;全体の構成&#34;&gt;全体の構成&lt;/h2&gt;
-
-&lt;p&gt;今回は&lt;strong&gt;ボタンを押したら室内のスピーカに音がなる機能&lt;/strong&gt;に加えて、&lt;strong&gt;押した人の姿が見えるカメラ機能&lt;/strong&gt;も搭載してみました。&lt;/p&gt;
-
-&lt;p&gt;全体の構成はこんな感じです。
-&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/116011/a7707b67-176f-8dc6-cf32-8323a56e860c.png&#34; alt=&#34;いんたーほん.png&#34; title=&#34;いんたーほん.png&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Raspberry Pi 3（以下ラズパイ）をベースにして、Grove接続されたタッチセンサに触れると室内のBluetoothスピーカー（今回はBASE EGG）から音が流れる仕組みを作ります。&lt;/p&gt;
-
-&lt;p&gt;さらに、ラズパイカメラをドアの外に出して、外の様子がオフィス内のモニタから見られるようにします。&lt;/p&gt;
-
-&lt;h3 id=&#34;使ったもの&#34;&gt;使ったもの&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Raspberry Pi 3&lt;/li&gt;
-&lt;li&gt;Raspberry Pi カメラモジュール&lt;/li&gt;
-&lt;li&gt;Grove タッチセンサ&lt;/li&gt;
-&lt;li&gt;Bluetoothオーディオトランスミッタ&lt;/li&gt;
-&lt;li&gt;Bluetoothスピーカー（今回はBASS EGG）&lt;/li&gt;
-&lt;li&gt;スピーカー（100円）&lt;/li&gt;
-&lt;li&gt;オーディオ分岐プラグ（100円）&lt;/li&gt;
-&lt;li&gt;マグネット付きプラスチックケース（100円）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;呼び鈴の製作&#34;&gt;呼び鈴の製作&lt;/h2&gt;
-
-&lt;h3 id=&#34;ハードウェア部分&#34;&gt;ハードウェア部分&lt;/h3&gt;
-
-&lt;p&gt;まずはじめに、&lt;strong&gt;来客者がボタンを押すと室内で音が鳴って訪問を知らせるようにする機能&lt;/strong&gt;を作ります。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/133/12.png&#34; alt=&#34;&#34; /&gt;
-ラズパイはマグネット付きのプラスチックケースに入れて、金属製のドアの内側に貼り付けます。ケースはケーブルが引き出せるように適宜加工します。&lt;/p&gt;
-
-&lt;p&gt;次にGroveタッチセンサですが、そのままだとラズパイに接続できないためジャンパワイヤを3本用意します。接続するピンは以下のとおりです。&lt;/p&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th align=&#34;left&#34;&gt;タッチセンサのピン&lt;/th&gt;
-&lt;th align=&#34;left&#34;&gt;ラズパイGPIO&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;VCC&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;3.3V&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;GND&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;Ground&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;NC&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;SIG&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;24&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;ラズパイGPIOのピン番号と位置については、以下の公式ページにある2番目の図を参照してください。&lt;/p&gt;
-
-&lt;p&gt;参考：&lt;a href=&#34;https://www.raspberrypi.org/documentation/usage/gpio-plus-and-raspi2/&#34;&gt;GPIO: MODELS A+, B+, RASPBERRY PI 2 B AND RASPBERRY PI 3 B&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;次に、100円程度で売られているオーディオ出力分岐器をラズパイのオーディオ出力に接続し、さらにBluetoothのオーディオトランスミッタと小型のスピーカーに接続します。
-&lt;center&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/133/11.png&#34; alt=&#34;&#34; /&gt;
-実証の結果、「押した人にも音が鳴ったことがわかる」ことが必要とわかった
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;オーディオトランスミッタは室内に来客を知らせるスピーカーを鳴らす用、小型スピーカーはドアの外に出して来客者に「呼び鈴が鳴った」ことを知らせる用です。USB接続のアンプ付きスピーカーなどで大きな音が出せるのならそれで代用することができます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/133/5.png&#34; alt=&#34;&#34; /&gt;
-最後に電源を近くのコンセントからUSBアダプタ経由で接続してハードウェア部分は完了です！&lt;/p&gt;
-
-&lt;h3 id=&#34;ソフトウェア部分&#34;&gt;ソフトウェア部分&lt;/h3&gt;
-
-&lt;p&gt;まず、適当なインターフォンの音となるmp3を用意しましょう。簡単なピンポン音でも、ネタのような効果音でもいいです。dotstudioでは、「ファミマ入店音」が好評だったため採用しました。&lt;/p&gt;
-
-&lt;p&gt;mp3が用意できたら、&lt;code&gt;/home/pi&lt;/code&gt;などのディレクトリに&lt;code&gt;sounds&lt;/code&gt;というフォルダを作ってその中にmp3を入れましょう。&lt;/p&gt;
-
-&lt;p&gt;次に、&lt;code&gt;sudo apt-get install mpg321&lt;/code&gt;を実行し、サウンド再生用のソフトウェア「mpg321」をインストールします。&lt;code&gt;mpg321 sounds/サウンド.mp3&lt;/code&gt;などと実行して、スピーカーから音が出ていればOKです。もしここで音が小さい場合は、&lt;code&gt;alsamixer&lt;/code&gt;コマンドを実行すると音量調整ができますので、矢印キーで大きくしておきます。&lt;/p&gt;
-
-&lt;p&gt;音の再生が確認できたら、以下のPythonプログラムを&lt;code&gt;sounds&lt;/code&gt;ディレクトリと同じ場所に保存して実行します。タッチセンサを触ると同時に、音が鳴ってターミナル上に&amp;rsquo;Ping-pon!&amp;lsquo;と表示されれば成功です。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-/home/pi/interphone.py&#34;&gt;#!/usr/bin/python
-
-import RPi.GPIO as GPIO
-import glob
-import subprocess
-from time import sleep
-from random import shuffle
-
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(24, GPIO.IN)
-
-# mp3が保存されているディレクトリは適宜変更してください
-soundlist = glob.glob(&amp;quot;./sounds/*.mp3&amp;quot;)
-
-while True:
-    if GPIO.input(24) == GPIO.HIGH:
-        shuffle(soundlist)
-        print(&#39;Ping-pon!&#39;)
-        subprocess.call(&amp;quot;mpg321 -q &amp;quot;+soundlist[0], shell=True)
-    else:
-        sleep(0.01)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;最後に、再起動しても動くように、&lt;code&gt;/etc/rc.local&lt;/code&gt;ファイルの末尾に&lt;code&gt;/usr/bin/python /home/pi/interphone.py &amp;amp;&lt;/code&gt;と追記しておきましょう。
-ちなみにですが、上記のコードでは&lt;code&gt;sounds&lt;/code&gt;ディレクトリ内に複数のmp3が入っているとランダムで再生されるような仕組みにしています。&lt;/p&gt;
-
-&lt;h2 id=&#34;監視カメラ部分の製作&#34;&gt;監視カメラ部分の製作&lt;/h2&gt;
-
-&lt;p&gt;監視カメラはラズパイ専用カメラを使用します。接続はとても簡単で、HDMI端子とオーディオ端子の間にある細長い端子にケーブルを差し込むだけです。&lt;code&gt;sudo raspi-config&lt;/code&gt;コマンドで、カメラを使うことができるように設定を変更しておきましょう。&lt;code&gt;raspistill -p&lt;/code&gt;コマンドを実行し、特にエラーが出なければ正常に接続されています。&lt;/p&gt;
-
-&lt;p&gt;今回はカメラと呼び鈴部分は連動させず、カメラは&lt;a href=&#34;https://github.com/ccrisan/motioneye/wiki&#34;&gt;motionEye&lt;/a&gt;というオープンソースウェアを使って単独で動作させます。
-motionEyeのインストールは以下を参考にしました。&lt;/p&gt;
-
-&lt;p&gt;参考：&lt;a href=&#34;https://qiita.com/mt08/items/96207abfba91954b50d4&#34;&gt;らずぱい motionEye (Web UIベースのカメラサーバ) - Qiita&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;こちらのページにも書かれていますが、ラズパイのカメラモジュールを使用するので、以下のコマンドを実行しておくのを忘れないようにしましょう。
-&lt;code&gt;grep bcm2835-v4l2 /etc/modules || echo bcm2835-v4l2 | sudo tee -a /etc/modules&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/133/4.png&#34; alt=&#34;&#34; /&gt;
-インストールが完了して、室内に常設してあるPCのブラウザからアクセスしてみました。
-ばっちりドアの外が撮影されていますね！
-1秒おきに更新されていますが、python上で動作しているためか、少々重たいようです。&lt;/p&gt;
-
-&lt;h2 id=&#34;試してみる&#34;&gt;試してみる&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/133/7.png&#34; alt=&#34;&#34; /&gt;
-インターホンを押すと……&lt;/p&gt;
-
-&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/4W4pJ0bZVGY&#34; frameborder=&#34;0&#34; gesture=&#34;media&#34; allowfullscreen&gt;&lt;/iframe&gt;
-
-&lt;p&gt;入店っぽい音が流れます！&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/133/13.png&#34; alt=&#34;&#34; /&gt;
-旧スタイルに比べるとだいぶ未来になりました。&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;今回は数時間ほどでこのシステムを作ることができました。カメラと呼び鈴が独立してしまっていますが、可能ならば「呼び鈴を押した瞬間の画像を保存してhipchatにアップロード」するような仕組みを作ってみたいです。
-&lt;img src=&#34;https://dotstud.io/img/blog/133/3.png&#34; alt=&#34;&#34; /&gt;
-次は何をつくってやろうか……。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>【祝！移転】電気街すぐそこ！dotstudioのオフィスが移転しました！【D.I.Y】</title>
-      <link>https://dotstud.io/blog/office-relocation-for-akihabara/</link>
-      <pubDate>Thu, 16 Nov 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://dotstud.io/blog/office-relocation-for-akihabara/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、ちゃんとくです。もうすっかり冬ですね。なかなか出歩くのが億劫な季節になりました。&lt;/p&gt;
-
-&lt;p&gt;でもオフィスから電気街遠い……駅も遠い……ってことで&lt;strong&gt;オフィス移転しましたー！！！&lt;/strong&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/132/1.png&#34; alt=&#34;&#34; /&gt;
-今回は新オフィスの様子をたっぷりお伝えしたいと思います！！&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/132/2.png&#34; alt=&#34;&#34; /&gt;
-ちなみにこちらが入居時の様子です。内装屋さんに頼んで、天井と床を剥いでもらいました。ペンキ塗りと床貼りのさまざまな知見（not IT）を得たのでいずれ記事にしたいと思います。&lt;/p&gt;
-
-&lt;h2 id=&#34;移転場所は電気街すぐ&#34;&gt;移転場所は電気街すぐ！&lt;/h2&gt;
-
-&lt;p&gt;新しいオフィスを選ぶにあたっての一番の条件は「&lt;strong&gt;電気街に近いこと&lt;/strong&gt;」だったので、電気街すぐの場所に移動しました！
-&lt;img src=&#34;https://dotstud.io/img/blog/132/5.png&#34; alt=&#34;&#34; /&gt;
-秋月、千石、ツクモなどのパーツ屋さんはもちろん、カレーにラーメンにケバブなど、美味しいお店もたくさんあって嬉しいです（泣）&lt;/p&gt;
-
-&lt;h2 id=&#34;オフィス内をチラ見せ&#34;&gt;オフィス内をチラ見せ！&lt;/h2&gt;
-
-&lt;p&gt;オフィスの中を紹介します！改装中なのでなにかとお見苦しいですが、&lt;strong&gt;らしさ&lt;/strong&gt;ということでお願いいたします。
-&lt;img src=&#34;https://dotstud.io/img/blog/132/map.png&#34; alt=&#34;&#34; /&gt;
-ざっくりとした配置（予定）はこんな感じ。&lt;/p&gt;
-
-&lt;h3 id=&#34;エントランス&#34;&gt;エントランス&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/132/3.png&#34; alt=&#34;&#34; /&gt;
-扉を開けると、ぺっぱーくんがお出迎えしてくれます。生気がないのは気のせいです。&lt;/p&gt;
-
-&lt;p&gt;中が丸見えで残念な感じですが、パーテーションを立てて草で装飾してステキな感じになる予定です。&lt;/p&gt;
-
-&lt;h3 id=&#34;打ち合わせスペース&#34;&gt;打ち合わせスペース&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/132/4.png&#34; alt=&#34;&#34; /&gt;
-入って左は、来客用の打ち合わせスペースです。現状だと&lt;strong&gt;机が足りない&lt;/strong&gt;のでかなりタイトな感じになっています。&lt;/p&gt;
-
-&lt;p&gt;コーヒーメーカーが導入されたのでお客様にコーヒーが出せるようになりました！！（ブラックのみ）&lt;/p&gt;
-
-&lt;h3 id=&#34;ハンズオンスペース&#34;&gt;ハンズオンスペース&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/132/6.png&#34; alt=&#34;&#34; /&gt;
-ここが待望だったハンズオンスペースです。&lt;strong&gt;心の目で見てください&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;壁一面のデバイス棚、巨大モニター、芝生カーペットの上に半田ごて作業スペース……素敵ですよね。ここでイベントを開催する日が待ち遠しいです。&lt;/p&gt;
-
-&lt;p&gt;※dotstudioはいま圧倒的に&lt;a href=&#34;http://amzn.asia/8KHCkEv&#34;&gt;床と照明&lt;/a&gt;が不足しています。&lt;/p&gt;
-
-&lt;h3 id=&#34;キッチンスペース&#34;&gt;キッチンスペース&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/132/8.png&#34; alt=&#34;&#34; /&gt;
-NYはブルックリンスタイルをイメージした自慢のオシャレキッチン（予定地）です。&lt;/p&gt;
-
-&lt;p&gt;テーブルとハイチェアを増設してバーカウンターみたいなやつを作ったり作らなかったりするかもしれない。&lt;/p&gt;
-
-&lt;h3 id=&#34;執務スペース&#34;&gt;執務スペース&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/132/9.png&#34; alt=&#34;&#34; /&gt;
-会社のメイン機能である執務スペース！個人の引き出しやモニタが追加されました。日当たりがよくて眠かったり画面見えなかったりしますが、わたし的に一番好きな場所です。&lt;/p&gt;
-
-&lt;p&gt;床（自分たちで貼った）が完全に乾いたら、みんな大好きな良いイスが導入されるよ！&lt;/p&gt;
-
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-
-&lt;p&gt;床が足りなかったり、棚がなかったり、電球少なくて暗かったり……。新オフィスはまだまだ作っている途中です。
-旧オフィスにも荷物があるので、こんな感じでちまちまと物を運んでいます。
-&lt;img src=&#34;https://dotstud.io/img/blog/132/10.png&#34; alt=&#34;&#34; /&gt;
-いつ来ても楽しくくつろいで過ごせるオフィスを目指して頑張っていきます！&lt;/p&gt;
-
-&lt;p&gt;ということで&lt;strong&gt;&lt;a href=&#34;http://amzn.asia/8KHCkEv&#34;&gt;ウィッシュリスト&lt;/a&gt;&lt;/strong&gt;も作りましたのでよかったら応援おねがいします（笑）&lt;/p&gt;
-
-&lt;h3 id=&#34;おまけ&#34;&gt;おまけ&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/132/sushi.png&#34; alt=&#34;&#34; /&gt;
-慰労寿司パ（定期）&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Node.js製の静的サイトジェネレータ「Hexo」で無料ブログ開発 vol.3</title>
-      <link>https://dotstud.io/blog/hexo-static-site-vol3/</link>
-      <pubDate>Tue, 31 Oct 2017 17:53:15 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/hexo-static-site-vol3/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、エンジニアのちゃんとくです。ひょんなことから&lt;a href=&#34;https://nodejs.connpass.com/&#34;&gt;&lt;strong&gt;Node女学園&lt;/strong&gt;&lt;/a&gt;というNode.jsを学ぶ女性のためのコミュニティを立ち上げました。&lt;/p&gt;
-
-&lt;p&gt;このシリーズではNode女学園のブログを作りながら、&lt;strong&gt;Node.js製の静的サイトジェネレータ「Hexo」&lt;/strong&gt;の使い方を紹介していきます！&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/hexo-static-site-vol2&#34;&gt;&lt;strong&gt;前回&lt;/strong&gt;&lt;/a&gt;はデザインを当ててブログのカスタマイズをしてみました。
-&lt;img src=&#34;https://dotstud.io/img/blog/108/pre_art.png&#34; alt=&#34;&#34; /&gt;
-&lt;center&gt;
-&lt;a href=&#34;https://dotstud.io/blog/hexo-static-site-vol2&#34;&gt;Node.js製の静的サイトジェネレータ「Hexo」で無料ブログ開発 vol.2&lt;/a&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;今回はルートを追加してブログ記事以外のページを作ってみます。&lt;/p&gt;
-
-&lt;h2 id=&#34;今回やること&#34;&gt;今回やること&lt;/h2&gt;
-
-&lt;p&gt;現在はコマンドで記事を追加すると&lt;code&gt;サイトURL/:YYYY/:MM/:DD&lt;/code&gt;という記事が作成されるようになっています。&lt;/p&gt;
-
-&lt;p&gt;これを変更して、&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;サイトURL/about/&lt;/code&gt;という情報ページを追加&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;サイトURL/blog/:title&lt;/code&gt;に記事を生成&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;というのをやってみます。&lt;/p&gt;
-
-&lt;h2 id=&#34;新しいルートを追加&#34;&gt;新しいルートを追加&lt;/h2&gt;
-
-&lt;p&gt;ルートの追加は、&lt;code&gt;hexo new page &amp;quot;[新しいルート]&amp;quot;&lt;/code&gt;というコマンドで簡単にできます。
-&lt;img src=&#34;https://dotstud.io/img/blog/108/new_route.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;コマンドを実行すると&lt;code&gt;/source&lt;/code&gt;の下に新しいディレクトリが作成されます。
-&lt;img src=&#34;https://dotstud.io/img/blog/108/about_dir.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;作成された&lt;code&gt;about/index.md&lt;/code&gt;にページ内容を記載します。&lt;/p&gt;
-
-&lt;p&gt;ローカルサーバを起動して&lt;a href=&#34;http://localhost:4000/about/&#34;&gt;http://localhost:4000/about/&lt;/a&gt; を見てみます。
-&lt;img src=&#34;https://dotstud.io/img/blog/108/about.png&#34; alt=&#34;&#34; /&gt;
-新しいページができました！&lt;/p&gt;
-
-&lt;h2 id=&#34;メニューに追加&#34;&gt;メニューに追加&lt;/h2&gt;
-
-&lt;p&gt;今のままではどこからもリンクがないのでメニューのHomeの横に追加してみます。
-&lt;img src=&#34;https://dotstud.io/img/blog/108/menu_before.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;/themes/pacman/_config.yml&lt;/code&gt;の&lt;code&gt;menu:&lt;/code&gt;に表示名とPATHを記載します。
-&lt;img src=&#34;https://dotstud.io/img/blog/108/menu.png&#34; alt=&#34;&#34; /&gt;
-Archivesはしばらく不要なので消しました。ついでにEventsとStaffページも追加してみます。&lt;/p&gt;
-
-&lt;p&gt;表示を確認します。
-&lt;img src=&#34;https://dotstud.io/img/blog/108/menu_after.png&#34; alt=&#34;&#34; /&gt;
-メニューができました！各リンクが正しいかも確認しておきましょう。&lt;/p&gt;
-
-&lt;h2 id=&#34;blog記事のurlを変更する&#34;&gt;blog記事のURLを変更する&lt;/h2&gt;
-
-&lt;p&gt;続いてブログ記事が&lt;code&gt;サイトURL/blog/:title&lt;/code&gt;となるように変更していきます。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;プロジェクト/_config.yml&lt;/code&gt;を変更しましょう。
-&lt;img src=&#34;https://dotstud.io/img/blog/108/title.png&#34; alt=&#34;&#34; /&gt;
-&lt;code&gt;permalink:&lt;/code&gt;を&lt;code&gt;/:title/&lt;/code&gt;に変更します。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;new_post_name:&lt;/code&gt;の項目を&lt;code&gt;blog/:title.md&lt;/code&gt;に変更します。
-&lt;img src=&#34;https://dotstud.io/img/blog/108/blog_title.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;新しい記事を作成してみます。
-&lt;img src=&#34;https://dotstud.io/img/blog/108/new_post.png&#34; alt=&#34;&#34; /&gt;
-&lt;code&gt;/source/blog&lt;/code&gt;の下に記事が追加されるようになりました。&lt;/p&gt;
-
-&lt;p&gt;トップページを確認してみましょう。
-&lt;img src=&#34;https://dotstud.io/img/blog/108/top.png&#34; alt=&#34;&#34; /&gt;
-&lt;a href=&#34;http://localhost:4000&#34;&gt;http://localhost:4000&lt;/a&gt; にはブログ一覧が表示されます。&lt;/p&gt;
-
-&lt;p&gt;記事をクリックして飛んでみます。
-&lt;img src=&#34;https://dotstud.io/img/blog/108/art.png&#34; alt=&#34;&#34; /&gt;
-&lt;code&gt;サイトURL/blog/:title&lt;/code&gt;の形で記事が発行されました！&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;hexo deploy -g&lt;/code&gt;でデプロイです。&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/108/done.png&#34; alt=&#34;&#34; /&gt;
-今回もコマンドと設定ファイルの編集で簡単にルーティングをすることができました。&lt;/p&gt;
-
-&lt;p&gt;かなりサイトらしくなってきましたね！&lt;/p&gt;
-
-&lt;p&gt;次回はサイドバーをカスタマイズしてみたいと思います。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>みんなでﾀﾞｧｼｴﾘｲｪｽ！遅延すると光るガジェットをつくるIoTハンズオンを開催しました！</title>
-      <link>https://dotstud.io/blog/train-nefry-ihandson-report/</link>
-      <pubDate>Thu, 12 Oct 2017 00:00:00 +0000</pubDate>
-      
-      <guid>https://dotstud.io/blog/train-nefry-ihandson-report/</guid>
-      
-      <description>
-
-&lt;p&gt;どうも、ポキオです。9月27日に、Nefry BTを使ったIoT初心者向けハンズオンを開催しました。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;a href=&#34;https://dotstudio.connpass.com/event/61189/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/130/1.png&#34; alt=&#34;IoTハンズオン！【ﾀﾞｧ】Nefry BTで電車遅延すると光るガジェットを作ろう【ｼｪｲﾘｲｪｽ】&#34; /&gt;&lt;/a&gt;
-&lt;a href=&#34;https://dotstudio.connpass.com/event/61189/&#34;&gt;IoTハンズオン！【ﾀﾞｧ】Nefry BTで電車遅延すると光るガジェットを作ろう【ｼｪｲﾘｲｪｽ】&lt;/a&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;今回、ハンズオンのお題は&lt;strong&gt;遅延すると光るガジェット&lt;/strong&gt;。IoTLTでおなじみ（？）のガジェットをみんなで作りました！&lt;/p&gt;
-
-&lt;h2 id=&#34;イベント概要&#34;&gt;イベント概要&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/wionode-ifttt-handson-report/&#34;&gt;ゆっきんさんのハンズオン&lt;/a&gt;と同じく、&lt;strong&gt;デジタルハリウッド大学のLabProto&lt;/strong&gt;をお借りしてハンズオンを開催しました。色々なツールが所狭しと並び、机や椅子もまさに&lt;strong&gt;ラボ&lt;/strong&gt;な雰囲気を醸し出してる、お洒落な会場でした。
-&lt;img src=&#34;https://dotstud.io/img/blog/130/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;IoTLTでは、私はもっぱら京急ネタで登壇させていただきましたが、今回は参加者の好きな路線を設定して、その路線が遅延したらNefry BTのLEDが光るようなガジェットを作成してみました。&lt;/p&gt;
-
-&lt;h2 id=&#34;nefry-btって&#34;&gt;Nefry BTって？&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/nefrybt/&#34;&gt;Nefry BT&lt;/a&gt;とは、ESP32というWi-FiとBLEと搭載したチップが載った、フリスクサイズの開発ボードのこと。&lt;a href=&#34;https://kibidango.com/513&#34;&gt;過去に行われたクラウドファンディング&lt;/a&gt;では437%を達成した、今話題のモジュールです。
-&lt;img src=&#34;https://dotstud.io/img/blog/130/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;大切なものはすべて実装済み&#34;&gt;大切なものはすべて実装済み&lt;/h3&gt;
-
-&lt;p&gt;IoTなガジェットを作る上で、ハードウェアの知識が無いと困ることも多いと思います。&lt;/p&gt;
-
-&lt;p&gt;Nefry BTは開発ボードでよくある&lt;strong&gt;GPIO&lt;/strong&gt;はもちろん搭載していて、さらに&lt;strong&gt;フルカラーのLED&lt;/strong&gt;や&lt;strong&gt;ディスプレイ&lt;/strong&gt;、そして半田ごて不要で様々なセンサーを接続できる&lt;strong&gt;Groveシステム&lt;/strong&gt;にも対応。買ってすぐLチカや開発が始められる上に、Groveのセンサーを接続すれば色々なガジェットを作ることができます。&lt;/p&gt;
-
-&lt;h3 id=&#34;便利な関数で楽々プログラミング&#34;&gt;便利な関数で楽々プログラミング&lt;/h3&gt;
-
-&lt;p&gt;Nefry BTは設定がWebブラウザ上からできるなど、&lt;strong&gt;初心者にも非常に優しい作り&lt;/strong&gt;になっています。&lt;/p&gt;
-
-&lt;p&gt;さらに&lt;a href=&#34;https://nefry.studio/&#34;&gt;ドキュメント&lt;/a&gt;では、便利な関数が多数公開されています。たとえば実装済みのフルカラーLEDは、コード上で複雑な初期化不要で、&lt;a href=&#34;https://nefry.studio/NefryLibrary/%E3%83%8F%E3%83%BC%E3%83%89%E3%82%A6%E3%82%A8%E3%82%A2%E9%96%A2%E9%80%A3%E9%96%A2%E6%95%B0/#setled&#34;&gt;簡単に色を指定&lt;/a&gt;できます。&lt;/p&gt;
-
-&lt;h2 id=&#34;準備&#34;&gt;準備&lt;/h2&gt;
-
-&lt;h3 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;電車のおもちゃ（ダイソーで売ってる&lt;strong&gt;プチ電車シリーズ&lt;/strong&gt;）&lt;/li&gt;
-&lt;li&gt;Nefry BT&lt;/li&gt;
-&lt;li&gt;USB延長ケーブル&lt;/li&gt;
-&lt;li&gt;トレーシングペーパー&lt;/li&gt;
-&lt;li&gt;両面テープ&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;筆者の環境&#34;&gt;筆者の環境&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;MacBook Air (13-inch, Mid 2013)&lt;/li&gt;
-&lt;li&gt;OS X Yosemite 10.10.5&lt;/li&gt;
-&lt;li&gt;Arduino IDE 1.8.4&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;電車の中にnefry-btをセット&#34;&gt;電車の中にNefry BTをセット&lt;/h2&gt;
-
-&lt;p&gt;そんなNefry BTですが、実はダイソーで売っている電車のおもちゃの内部にピッタリ入ります。
-&lt;img src=&#34;https://dotstud.io/img/blog/130/4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Nefry BTのUSBコネクター部分が電車の外に出るように、電車のおもちゃには少し加工をしています。USBコネクターにはUSB延長ケーブルを接続して、給電を行います。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/130/6.png&#34; alt=&#34;&#34; /&gt;
-また、LEDの光が拡散するように、電車の窓部分には内側からトレーシングペーパーを貼り付けています。Nefry BTに実装されているLEDだけでも、こんな感じで電車を光らせる事ができます！&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/130/5.png&#34; alt=&#34;&#34; /&gt;
-皆さん、もくもくと作成中！&lt;/p&gt;
-
-&lt;h2 id=&#34;肝心のコーディング&#34;&gt;肝心のコーディング&lt;/h2&gt;
-
-&lt;p&gt;ハンズオンでは特定の路線に遅延が発生したら光らせるプログラムを書き込みました。書き込みはArduino IDEより行いました。ちなみに、&lt;a href=&#34;https://dotstud.io/docs/nefrybt-wifi-setup/&#34;&gt;&lt;strong&gt;このページ&lt;/strong&gt;&lt;/a&gt;を参考にNefry BTのセットアップを済ませておくと、コード上でWi-Fi接続のシーケンスを実装しなくて済むので、非常に便利です。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
-#include &amp;lt;WiFiClientSecure.h&amp;gt; // HTTPS通信のために必要
-
-void setup() {
-  // 何もしない
-}
-
-void loop() {
-  // JSONを取得する
-  String trainDelayJson = getTrainDelayJson();
-
-  // JSONに特定の路線名が含まれているか確認する
-  if (trainDelayJson.indexOf(&amp;quot;（好きな路線名）&amp;quot;) &amp;gt; 0) {
-    blinkFor30Sec(255, 0, 0); // 赤く光らせる
-  } else {
-    blinkFor30Sec(0, 0, 255); // 青く光らせる
-  }
-}
-
-// 鉄道遅延情報のjsonさんから、遅延情報（JSON）を取得する
-String getTrainDelayJson() {
-  WiFiClientSecure client; // 変数を宣言
-
-  // サーバーにHTTPSのデフォルトポート（443）でアクセスしてみる
-  if ( !client.connect(&amp;quot;rti-giken.jp&amp;quot;, 443) ) {
-    Nefry.println(&amp;quot;接続失敗&amp;quot;);
-    return &amp;quot;&amp;quot;;
-  }
-
-  client.print(String(&amp;quot;GET /fhc/api/train_tetsudo/delay.json HTTP/1.1\r\n&amp;quot;) +
-               &amp;quot;Host: rti-giken.jp\r\n&amp;quot; +
-               &amp;quot;Connection: close\r\n\r\n&amp;quot;); // HTTP-GETのリクエストメッセージを書く
-
-  // レスポンスが来るまでちょっと待つ
-  Nefry.ndelay(1000);
-
-  // HTTP-GETのレスポンスを保存しておく変数
-  String response = &amp;quot;&amp;quot;;
-
-  // レスポンスを変数に格納する
-  while (client.available()) {
-    response += client.readStringUntil(&#39;\r&#39;);
-  }
-
-  Nefry.println(&amp;quot;接続成功&amp;quot;);
-  Nefry.println(response);
-
-  return response;
-}
-
-// 30秒間、500msecおきに点灯と消灯を繰り返します
-void blinkFor30Sec(int r, int g, int b) {
-  for (int i = 0; i &amp;lt; 30; i++) {
-    Nefry.setLed(r, g, b);
-    Nefry.ndelay(500);
-    Nefry.setLed(0, 0, 0);
-    Nefry.ndelay(500);
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Nefry BTから定期的にWi-Fi経由で鉄道の遅延情報を取得し、特定の路線が遅れているかどうかを監視するようにしています。遅延情報は&lt;a href=&#34;https://rti-giken.jp/fhc/api/train_tetsudo/&#34;&gt;&lt;strong&gt;鉄道遅延情報のjson&lt;/strong&gt;&lt;/a&gt;さんより、JSON形式のデータを受信することで実現しています。&lt;/p&gt;
-
-&lt;h2 id=&#34;拡張性で広がるiot工作&#34;&gt;拡張性で広がるIoT工作&lt;/h2&gt;
-
-&lt;p&gt;今回は、Nefry BTに乗っているハードウェアを使って工作をしました。前途の通り、Nefry BTにはGPIOとGroveシステムにも対応しているので、LEDを増設したり、センサーを追加するなどして、簡単に拡張できます。&lt;/p&gt;
-
-&lt;p&gt;みなさんもNefry BTでIoT工作に踏み出してみませんか？&lt;/p&gt;
 </description>
     </item>
     

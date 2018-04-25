@@ -1,0 +1,487 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Dojyo on dotstudio（ドットスタジオ）</title>
+    <link>https://dotstud.io/series/dojyo/</link>
+    <description>Recent content in Dojyo on dotstudio（ドットスタジオ）</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>© 2016 dotstudio inc.</copyright>
+    <lastBuildDate>Mon, 26 Feb 2018 00:00:00 +0000</lastBuildDate>
+    <atom:link href="/series/dojyo/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>パソコンやモバイルバッテリーに繋いで動かせるデバイスを作ろう！USB電子工作のすすめ#1 - 基礎知識編</title>
+      <link>https://dotstud.io/blog/usb-power-supply-making/</link>
+      <pubDate>Mon, 26 Feb 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://dotstud.io/blog/usb-power-supply-making/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、ものづくり担当のうこ(&lt;a href=&#34;https://twitter.com/harmoniko&#34;&gt;@harmoniko&lt;/a&gt;)です。&lt;/p&gt;
+
+&lt;p&gt;みなさんは、&lt;strong&gt;電子工作をするときの電源はどこから取っていますか？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Arduinoをよく使われる方だと5V端子や3.3V端子から取っている場合が非常に多いですが、ではArduinoを使わない、ピュアな電子工作の場合だとどうしたらいいでしょうか？&lt;/p&gt;
+
+&lt;p&gt;今回は、電子工作用電源としても非常に有用な&lt;strong&gt;USBの基本と扱い方&lt;/strong&gt;についてお伝えします。&lt;/p&gt;
+
+&lt;h2 id=&#34;usbのしくみ&#34;&gt;USBのしくみ&lt;/h2&gt;
+
+&lt;p&gt;「&lt;strong&gt;USB&lt;/strong&gt;」は「&lt;strong&gt;Universal Serial Bus&lt;/strong&gt;」の略で、PCとその周辺機器の間の汎用的な通信規格として1996年に登場しました。USBは1対2本の信号線（※）で順番にデータを送る「&lt;strong&gt;シリアル接続&lt;/strong&gt;」という方式で、複数のデバイスを吊り下げられる「&lt;strong&gt;バス規格&lt;/strong&gt;」の1つです。&lt;/p&gt;
+
+&lt;p&gt;※…USB 2.0まで&lt;/p&gt;
+
+&lt;p&gt;端子は従来のものと比べてシンプルになり、ホストとデバイスをすぐに区別できるようなものになりました。&lt;/p&gt;
+
+&lt;p&gt;USBを使って通信をするには、USBを制御する専用のコントローラハードウェアが必要となるため、電子工作では少し難易度があがります。ただし、&lt;strong&gt;電源を使うだけならケーブルを切って電源のVcc線（+）とGnd線（-）を引き出すだけでよい&lt;/strong&gt;ので、スマホが普及しはじめるよりも早くから電源用ケーブルとしても使われるようになりました。&lt;/p&gt;
+
+&lt;p&gt;USBの簡単な特徴をまとめると、以下のようになります。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;通信は、 1つの「ホスト」（PC側）と1〜複数の「デバイス」（周辺機器側）との間で行われる。&lt;/li&gt;
+&lt;li&gt;ホスト側とデバイス側で端子形状が区別されている（タイプC端子を除く）。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;電源供給用のケーブルおよび端子として使うなら扱いは簡単！&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;ここ数年普及してきている「USB PD」は、大電力の供給が可能でMacBookの給電などにも利用されている。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;さて当記事は、 &lt;strong&gt;「電子工作において電源として気軽に使えるUSB」&lt;/strong&gt; を知っていただくためのものですので、扱いの簡単な「USB2.0規格（タイプC端子を除く）」までを使う前提の説明にとどめます。&lt;/p&gt;
+
+&lt;p&gt;USB3.0規格以降は端子が増えたり電源規格が多様になったりしているため、電子工作での利用であれば、USB2.0規格までの理解で問題ありません。&lt;/p&gt;
+
+&lt;p&gt;さらに詳しくUSBについて知りたい方は、以下のリンクを参考にしてください。&lt;/p&gt;
+
+&lt;p&gt;⇒ 参考: &lt;a href=&#34;https://thinkit.co.jp/article/11142&#34;&gt;現代PCの基礎知識(7):仕様書を紐解くとわかる―本当はややこしいUSB（Think IT）&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;電源に使うことのメリット&#34;&gt;電源に使うことのメリット&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;モバイルバッテリー、PC、コンセントアダプタなど、多彩なソースが選べる。&lt;/li&gt;
+&lt;li&gt;給電方法に汎用性があるため、必要なパーツが安くて手に入りやすい。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;電源に使うことのデメリット&#34;&gt;電源に使うことのデメリット&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;「外部電源」となるため、電池として本体に含めることができない。&lt;/li&gt;
+&lt;li&gt;規格上、5V電圧以外を扱うときや大電流が必要なものには適さない（USB PDを除く）。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;仕様の一覧&#34;&gt;仕様の一覧&lt;/h3&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;left&#34;&gt;&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;USB 1.0&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;USB 1.1&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;USB 2.0&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;端子タイプ（ホスト側）&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;標準A&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;標準A&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;標準A, タイプC&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;端子タイプ（デバイス側）&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;B&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;B&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;ミニA, マイクロA, ミニB, マイクロB, タイプC&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;通信速度&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;12Mビット/秒&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;12Mビット/秒&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;480Mビット/秒&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;定格電圧&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;同右&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;同右&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;約5V（ホスト側4.4~5.25V）&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;最大電流&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;500mA&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;500mA&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;500mA（USB BC拡張:1.5A）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;以上は通信に関する基本的なバージョン仕様ですが、さらにUSB2.0を拡張したUSB電源専用規格である「USB BC（Battery Charging）」というものがあり、1.5Aまでの電流を流すことが可能となっています。&lt;/p&gt;
+
+&lt;p&gt;また、電子工作で利用するためのUSBパーツは100円ショップなどで購入できます。&lt;strong&gt;100円ショップなどで安価に入手可能なUSBパーツはほぼ100%がUSB2.0規格またはUSB BC規格のもの&lt;/strong&gt;となります。&lt;/p&gt;
+
+&lt;p&gt;よって、電子工作の&lt;strong&gt;電源として&lt;/strong&gt;USBを使ってみたいときは&lt;strong&gt;USB2.0規格またはUSB BC規格&lt;/strong&gt;に準じたUSB部品の仕様を知っておけばOKです。&lt;/p&gt;
+
+&lt;h2 id=&#34;usbケーブルの配線図&#34;&gt;USBケーブルの配線図&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/151/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;USB2.0には、電源線の5V（VccやVBUSとも）とGND、信号線のD-とD+の合計4種類の線があります。ケーブルのほとんどは2層構造になっていて、内側に収められている4本の線の色分けも上図のように決まっています。&lt;/p&gt;
+
+&lt;p&gt;電子工作でUSBを使うときは、「標準Aメス端子を基板に実装する」か、上図のような「標準Aオス端子がついたケーブルの電源線を接続する」ことになるので、端子の順番や色分けは覚えておくと楽です。&lt;/p&gt;
+
+&lt;h2 id=&#34;電圧と電流&#34;&gt;電圧と電流&lt;/h2&gt;
+
+&lt;p&gt;USB電源の基本は「&lt;strong&gt;電圧5V/電流500mAまで&lt;/strong&gt;」です。&lt;/p&gt;
+
+&lt;p&gt;といっても、これはパソコンのような「電源供給」を主目的としないホストから給電する場合の「USB2.0規格」による制限値です。&lt;/p&gt;
+
+&lt;p&gt;電子工作でUSB電源を扱う場合は、モバイルバッテリーやUSBコンセントなどからの給電がほとんどになると思われます。その場合は、USB BC規格の上限値である1.5Aとなりますが、普通はバッテリーやコンセントに最大出力が書いてあります（例：5V/800mA）ので、電流値の最大はそれに従いましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;usbケーブルの注意点&#34;&gt;USBケーブルの注意点&lt;/h4&gt;
+
+&lt;p style=&#34;font-size: 80%&#34;&gt;細かい話をすると、市場で出回る多くの充電器は「最大2.4A出力」などを謳っていて、この場合だとUSB BC規格にもあてはまりません。このような製品は、USBを通信を行わない完全な電源ケーブルとみなし、独自の規格を採用している場合が多いです。よって、電子工作でUSB電源を使うときは、「USB2.0規格の配線」と「使いたい電源供給源（バッテリーやコンセント等）の出力電流」を考慮して回路設計をするのがベストだといえます。難しく考えたくない人は、 **とにかく省エネになるように意識して作る**ようにするのがよいでしょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 80%&#34;&gt;⇒ 参考: &lt;a href=&#34;https://hanpenblog.com/1472/&#34;&gt;乱立するスマホ向け急速充電の規格について調べた（HANPEN-BLOG）&lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;電子工作での利用を考えると電流消費を見ることが大事で、個人で製作する小規模な回路であればほとんどが500mA以内に収まることが多いです。&lt;/p&gt;
+
+&lt;p&gt;ヒーターやモーターを使った回路は例外的で、接続された個数や負荷で変動しますが、最大電流が容易に1Aを超えてしまうことがあります。しかし、どのような場合であっても、個人製作された電子回路は漏電流やショートへの配慮、適切な電流制限などが行われていないことが大半です。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;基本的には、USB電源を利用する自作の電子回路は、安全上の理由からパソコンに接続して給電してはいけません。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;⇒ 参考：&lt;a href=&#34;http://www.wheel.gr.jp/~dai/hardware/usb-port.html&#34;&gt;USBポートは電源ではありません&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;現実には今のパソコンは全て保護回路が入っているため、ブレッドボードを繋げたArduinoにパソコンから給電するといったようなことを行なっていてもまず問題はありません。しかし&lt;strong&gt;危険性は少なからずあるもの&lt;/strong&gt;だとして意識してもらえれば幸いです。&lt;/p&gt;
+
+&lt;p&gt;（15年ほど前のパソコンでは、USB端子に500mA以上の過電流を流すといきなりパソコンの電源ごと落ちるものもありました。）&lt;/p&gt;
+
+&lt;h2 id=&#34;入手方法&#34;&gt;入手方法&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;おすすめは100円ショップ&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/151/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;100円ショップの電気系コーナーに行くと、どこに行っても大抵はUSBケーブルが置いてあります。USBケーブルの中でも取り扱いが多いのは、おそらく次の3つでしょう。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Aオス端子-microBオス端子（スマホ充電用）&lt;/li&gt;
+&lt;li&gt;Aオス端子-Bオス端子（プリンタなどの接続用）&lt;/li&gt;
+&lt;li&gt;Aオス端子-Aメス端子（ケーブル延長用）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;このうち、最後の &lt;strong&gt;Aオス端子-Aメス端子（ケーブル延長用）&lt;/strong&gt; は、置いていない店舗もありますが、&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ケーブル部分が比較的長い。&lt;/li&gt;
+&lt;li&gt;基本的にはAオス端子側を使うが、工作の内容によってはAメス端子があると便利なことがある。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;といった点から、電子工作で利用するには最もおすすめなケーブルとなっています。売られているのを発見したら、ぜひ買っておきましょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;実際に電子工作で使うには&#34;&gt;実際に電子工作で使うには&lt;/h2&gt;
+
+&lt;p&gt;USBについて、どんなものなのかなんとなくおわかりいただけましたでしょうか？&lt;/p&gt;
+
+&lt;p&gt;とりあえず要約すると、 &lt;strong&gt;「100円で手に入って電子工作で簡単に利用できる汎用電源インターフェース」&lt;/strong&gt; といったところでしょうか。では、実際に使うにはどうすればいいかを見ていきましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/151/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;USBケーブルを電源として利用する上で最も重要なパーツが「Aオス端子」部分となります。&lt;/p&gt;
+
+&lt;p&gt;100円ショップで購入できるUSBケーブルは少なくとも一方がこの端子ですので、この端子から伸びるケーブルを十分長く残したうえでニッパで切断します。長さは、製作するモノによって適切に決めてください。あとから調整できるという意味では長めに切り取るのがよいでしょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/151/4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/151/5.png&#34; alt=&#34;&#34; /&gt;
+切り取った部分の一番外側の皮膜をニッパまたは皮膜剥き用のニッパで1cm程度除去します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/151/6.png&#34; alt=&#34;&#34; /&gt;
+すると細い4本のケーブルが中から出てきますが、このうち赤色と黒色がそれぞれ電源となります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/151/7.png&#34; alt=&#34;&#34; /&gt;
+残りの2本は信号線で、&lt;del&gt;USB BC規格として大きめの電流を流したい場合は、この信号線を200Ωの抵抗でショートします。が、実際には何もしなくても給電はなされます。&lt;/del&gt;ここでは簡単にするため切り落としました。&lt;/p&gt;
+
+&lt;p style=&#34;font-size: 80%; color: red;&#34;&gt;
+（3/4 修正）200Ωの抵抗を接続するのは充電器側であるとのご指摘をいただき、上記訂正します。
+&lt;/p&gt;
+&lt;p style=&#34;font-size: 80%;&#34;&gt;
+⇒ 出展: USB.orgの&lt;a href =&#34;http://www.usb.org/developers/docs/devclass_docs/&#34;&gt;開発者向けドキュメント&lt;/a&gt;にある「Battery Charging v1.2 Spec and Adopters Agreement.zip」内のBC1.2_FINAL.pdf「Battery Charging Specification, Revision 1.2」3.2.4項「Primary Detection」のFigure 3-6 など）
+&lt;/p&gt;
+
+&lt;p&gt;これで、Aオス端子が電源側、切断したほうが電子回路側となります。&lt;/p&gt;
+
+&lt;p&gt;さて、次回は電池駆動の機器をUSB駆動に改造するために、電源と機器の関係について考えてみたいと思います。&lt;/p&gt;
+
+&lt;p&gt;お楽しみに。
+&lt;a href=&#34;https://dotstud.io/blog/usb-power-supply-making2&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/151/link1.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>フォトダイオードでリモコンの信号を検出してみよう</title>
+      <link>https://dotstud.io/blog/photodiode-remote-controll-signal/</link>
+      <pubDate>Wed, 02 Aug 2017 16:42:19 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/photodiode-remote-controll-signal/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、ものづくり担当のうこ（&lt;a href=&#34;https://twitter.com/harmoniko/&#34;&gt;@harmoniko&lt;/a&gt;）です。&lt;/p&gt;
+
+&lt;p&gt;今回は、フォトダイオードというパーツを使ってリモコンの信号を読み取る方法を紹介します！&lt;/p&gt;
+
+&lt;h2 id=&#34;フォトダイオードとは&#34;&gt;フォトダイオードとは？&lt;/h2&gt;
+
+&lt;p&gt;半導体素子のひとつで、照射される光の強さによって流れる電流の強さが変化します。太陽光パネルと仕組みはほとんど同じで、光によって電流を発生しますが、非常に小さいため電源としては使用されません。&lt;/p&gt;
+
+&lt;p&gt;一口にフォトダイオードと言っても様々な種類があります。光を検出するセンサとしてはほかにCdSなどがありますが、応答の速さ・感度・信号強度特性・対応する波長などに優位性があり、リモコンの受光器などとして産業用途に幅広く利用されています。&lt;/p&gt;
+
+&lt;p&gt;今回はそんなリモコンの受光器を作り、信号の中身をみてみましょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;リモコンの仕組み&#34;&gt;リモコンの仕組み&lt;/h2&gt;
+
+&lt;p&gt;リモコンは、赤外線LEDを高速で点滅させて家電などに信号を送っています。信号の中身は、国内ではNECが開発した方式が主流で、次いで家電製品協会の方式、ソニーなどの独自方式があります。今回は、最も普及しているNEC方式を用いたリモコン信号検出システムを作ってみます。&lt;/p&gt;
+
+&lt;p&gt;このフォーマットを採用している主なメーカーとして、NEC・東芝・日立などがあります。これらのメーカーのリモコンなどをお持ちでしたら、ぜひ作ってみてください。&lt;/p&gt;
+
+&lt;p&gt;【参考】&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.asahi-net.or.jp/~gt3n-tnk/IR_TX1.html&#34;&gt;赤外線リモコンのフォーマット&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;作ってみよう&#34;&gt;作ってみよう&lt;/h2&gt;
+
+&lt;h3 id=&#34;準備するもの&#34;&gt;準備するもの&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/117/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Arduino Due × 1&lt;/li&gt;
+&lt;li&gt;ブレッドボード × 1&lt;/li&gt;
+&lt;li&gt;抵抗1kΩ × 1&lt;/li&gt;
+&lt;li&gt;フォトダイオード S5971 × 1&lt;/li&gt;
+&lt;li&gt;ジャンパワイヤ × 4&lt;/li&gt;
+&lt;li&gt;黒画用紙(3cm×6cmぐらい)&lt;/li&gt;
+&lt;li&gt;USBマイクロBケーブル&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;作り方&#34;&gt;作り方&lt;/h3&gt;
+
+&lt;h4 id=&#34;フォトダイオードに黒画用紙を巻く&#34;&gt;フォトダイオードに黒画用紙を巻く&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/117/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/117/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;フォトダイオードには、細長く切った黒画用紙を巻き寿司のように巻きつけてテープで固定します。こうすることでフォトダイオードを常に暗い状態にし、光の誤検出を防ぎます。&lt;/p&gt;
+
+&lt;h4 id=&#34;配線&#34;&gt;配線&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/117/4.png&#34; alt=&#34;&#34; /&gt;
+まずはじめに、ブレッドボード上に抵抗器とフォトダイオードを、上の写真のように配置します。フォトダイオードは向きに注意してください。
+&lt;img src=&#34;https://dotstud.io/img/blog/117/5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;次に、4つのジャンパワイヤを使って、ブレッドボードとArduino Dueを接続します。
+&lt;img src=&#34;https://dotstud.io/img/blog/117/6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;接続が終わったら、このような感じになっています。
+&lt;img src=&#34;https://dotstud.io/img/blog/117/7.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;最後に、USBのマイクロBケーブルでArduino Dueとパソコンを接続して完了です。USBは、Arduino Due側は、黒いコネクタに近い方のUSBポート「Programming Port」に接続してください。&lt;/p&gt;
+
+&lt;h3 id=&#34;arduino-dueボード対応化&#34;&gt;Arduino Dueボード対応化&lt;/h3&gt;
+
+&lt;p&gt;Arduino IDEでプログラムを作成し書き込んでいきます。Arduino IDEのインストールが済んでいない方は、&lt;a href=&#34;https://www.arduino.cc/en/Main/Software&#34;&gt;公式サイト&lt;/a&gt;からダウンロードして進めてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/117/8.png&#34; alt=&#34;&#34; /&gt;
+Arduino IDEのメニューから、
+Tools -&amp;gt; Boards:&amp;ldquo;&amp;hellip;&amp;rdquo; -&amp;gt; Board Manager&amp;hellip;
+を選択すると、小さい画面が表示されます。検索窓に「due」と打ち込むと、ひとつだけヒットするパッケージがありますので、最新版をインストールしてください。&lt;/p&gt;
+
+&lt;p&gt;次に、
+Tools -&amp;gt; Boards&amp;rdquo;&amp;hellip;&amp;rdquo;
+で、&amp;rdquo;Arduino Due (Programming Port)&amp;ldquo;を選択しておきます。&lt;/p&gt;
+
+&lt;h3 id=&#34;ソースコードを書き込む&#34;&gt;ソースコードを書き込む&lt;/h3&gt;
+
+&lt;p&gt;以下のソースコードをコピーし、スケッチにコピーしてください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;const int thresholdH = 30;     // フォトダイオードの閾値(Off-&amp;gt;On)
+const int thresholdL = 20;     // フォトダイオードの閾値(On-&amp;gt;Off)
+const int input = A0;          // フォトダイオードの入力ピン
+int signalCnt = -1;            // 信号カウンタ
+int level = 0;                 // フォトダイオードのanalogRead値
+unsigned long offSpan;         // 信号L値持続時間(計測用)
+unsigned long offTime;         // 信号Off時間(計測用)
+unsigned long startTime;       // 時間計算用
+unsigned long signals = 0;     // 信号保存(カスタム16bit+データ8bit+反転データ8bit)
+bool now = false;              // フォトダイオード状態遷移フラグ1
+bool prev = false;             // フォトダイオード状態遷移フラグ2
+bool detected = false;         // リーダコード検出フラグ
+
+
+
+
+// フォトダイオードからアナログ値を読んで論理値に変換
+bool photoRead() {
+  level = analogRead(input);
+  if (level &amp;gt; thresholdH) return true;
+  if (level &amp;lt; thresholdL) return false;
+}
+
+
+// リーダコード認識
+bool leaderDetect() {
+  // 積分
+  unsigned long integral0 = 0;
+  unsigned long integral1 = 0;
+  startTime = micros();
+  // 9msループ(0.1msおまけ)
+  while (micros() &amp;lt; (startTime+9100)) {
+    if (photoRead()) integral1++;
+    else integral0++;
+  }
+  /*
+    副搬送波38kHz変調のデューティ比は1:2である
+    また信号で0を表す場合はPPM方式によりHとLがそれぞれ0.56ms(1:1)であるため
+    リーダコード以外の部分でフォトダイオードで得られるOnとOffの時間比は
+    Onが1に対してOffが6である
+    リーダコード部分は常にHであるのでOnが1に対してOffが3である
+    よってOnとOffの差がおおむね4倍以下であればリーダコードを判定することができる
+  */
+  if (integral1 &amp;gt; ((integral0)/4)) return true;
+  else return false;
+}
+
+
+void setup() {
+  // シリアルポートを開く
+  Serial.begin(115200);
+  // アナログ入力の細かさを12bit(4096段階)に設定
+  analogReadResolution(12);
+}
+
+
+void loop() {
+  // ダイオードの状態確認ループ
+  while(now == prev) {
+    now = photoRead();
+    // 一度検出できたらループを極力回さずにディレイさせたい
+    // 副搬送波のL値を誤検出しないようにするため
+    if (now) {
+      if (!detected) {
+        // Off-&amp;gt;On遷移かつリーダコード未検出
+        if (leaderDetect()) {
+          Serial.println(&amp;quot;------- LEADER -------&amp;quot;);
+          detected = true;
+          signalCnt = -1;
+        }
+      }
+    }
+  }
+
+  // 以下は状態変化した瞬間だけ実行される
+  //
+  if (detected) {
+    if (now) {
+      // Off-&amp;gt;On遷移かつリーダコード検出済
+      offSpan = micros() - offTime;
+      // 最初のリーダコードの直後のL値
+      if (signalCnt &amp;lt; 0) {
+        // リピートの検出(3ms未満)
+        if (offSpan &amp;lt; 3000) {
+          Serial.println(&amp;quot;------- REPEAT -------&amp;quot;);
+          Serial.println(&amp;quot;&amp;quot;);
+          signals = 0;
+          signalCnt = -1;
+          detected = false;
+        } else {
+          signalCnt++;
+        }
+      } else {
+        // off時間が1000msより多いか少ないか
+        if (offSpan &amp;lt; 1000) {
+          // 1判定
+          signals += 1&amp;lt;&amp;lt;(31-signalCnt);
+        } else {
+          // 0判定
+        }
+        signalCnt++;
+      }
+      // 570msも待てば必ずLになり次のコード先頭までHにならないので誤検出しない
+      delayMicroseconds(570);
+    } else {
+      // On-&amp;gt;Off遷移かつリーダコード検出済
+      offTime = micros();
+    }
+  }
+  // 反転
+  prev = now;
+
+  // 最後まで読めたら表示する
+  if (signalCnt &amp;gt;= 31) {
+    // カスタムコード16bit
+    int custom = (int)(signals&amp;gt;&amp;gt;16);
+    Serial.print(&amp;quot;Custom code: &amp;quot;); Serial.println(custom,HEX);
+    Serial.print(&amp;quot;    &amp;quot;); Serial.println(custom,BIN);
+    // データコード8bit
+    byte data1 = (byte)((signals&amp;gt;&amp;gt;8)&amp;amp;B11111111);
+    Serial.println(&amp;quot;Data code:&amp;quot;);
+    Serial.print(&amp;quot;    &amp;quot;); Serial.print(data1,BIN); Serial.print(&amp;quot; = &amp;quot;); Serial.println(data1,HEX);
+    // データコード(反転)8bit
+    byte data2 = (byte)(signals&amp;amp;B11111111);
+    Serial.print(&amp;quot;    &amp;quot;); Serial.print(data2,BIN); Serial.print(&amp;quot; = &amp;quot;); Serial.println(data2,HEX);
+    // データ検証
+    byte vf = data1^data2;
+    Serial.println(&amp;quot;Data verify: &amp;quot;);
+    Serial.print(&amp;quot;    &amp;quot;); Serial.print(data1,HEX); Serial.print(&amp;quot; xor &amp;quot;); Serial.print(data2,HEX); Serial.print(&amp;quot; = &amp;quot;); Serial.println(vf,HEX);
+    if (vf == 0xFF) Serial.println(&amp;quot;     [ VERIFIED ]&amp;quot;);
+    else Serial.println(&amp;quot;     [ ERROR ]&amp;quot;);
+    // おわり
+    Serial.println(&amp;quot;------- ------ -------&amp;quot;);
+    Serial.println(&amp;quot;&amp;quot;);
+    signals = 0;
+    signalCnt = -1;
+    detected = false;
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;試してみよう&#34;&gt;試してみよう&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/117/9.png&#34; alt=&#34;&#34; /&gt;
+アップロードが完了したら、Tools -&amp;gt; Serial Monitor からシリアルモニタを表示させ、通信速度を「115200bps」に変更します。その状態のまま、リモコンをフォトダイオードに近づけてボタンを押すと……&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/117/10.png&#34; alt=&#34;&#34; /&gt;
+いくつか値が表示されましたね！
+点線で囲まれたブロックが信号の1セットで、中身には「Custom code」「Data code」「Data verify」が入っています。
+「Custom code」は製品固有のコードで、同じリモコンだと基本的に固定の値です。&lt;/p&gt;
+
+&lt;p&gt;色々ボタンを押していると、「Data code」が変化するようすがわかります。「Data verify」は、信号に含まれている2つのデータを照合して、信号が壊れていないかを確認するためのものです。
+&lt;img src=&#34;https://dotstud.io/img/blog/117/11.png&#34; alt=&#34;&#34; /&gt;
+自宅の扇風機のリモコンで試してみたところ、確かにボタンで値が変わっていることがわかりました。&lt;/p&gt;
+
+&lt;h2 id=&#34;応用編&#34;&gt;応用編&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/117/12.png&#34; alt=&#34;&#34; /&gt;
+Arduino IDEには「シリアルプロッタ」という、グラフを描画できる機能が備わっています。それを利用して、リモコンの信号波形を描画してみるとこんな感じになりました。規則的な波形をところどころに確認することができます。&lt;/p&gt;
+
+&lt;p&gt;また、今回使用したマイコンボード「Arduino Due」は、USB接続の外付けマウス・外付けキーボードとして簡単に動作させることができるライブラリが備わっています。例えば、今回のプログラムにこの機能を取り入れて少し書き換えるだけで、普段使っているTVリモコンでパソコンの動画プレイヤーを制御、なんてこともすぐにできちゃいます。&lt;/p&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;いかがでしたでしょうか？
+フォトダイオードはいろんな種類がありますが、Arduinoのようなマイコンボードを使えば意外と簡単に光センサを作ることができます。この機会にぜひ作ってみては。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
