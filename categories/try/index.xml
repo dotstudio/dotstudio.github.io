@@ -7,8 +7,481 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2018 dotstudio inc.</copyright>
-    <lastBuildDate>Sat, 05 May 2018 14:00:26 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 09 May 2018 08:30:26 +0900</lastBuildDate>
     <atom:link href="/categories/try/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>非接触ICタグで遊ぼう！ArduinoでRFIDリーダRC522を使う方法</title>
+      <link>https://dotstud.io/blog/arduino-use-rfid-reader/</link>
+      <pubDate>Wed, 09 May 2018 08:30:26 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/arduino-use-rfid-reader/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、ちゃんとくです。&lt;/p&gt;
+
+&lt;p&gt;みなさんは「&lt;strong&gt;認証機能&lt;/strong&gt;」というとどんなイメージを持つでしょうか？&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/162/auth.png&#34; alt=&#34;auth&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;Webページを開いて、IDとパスワードを入力して、ログインして……。「&lt;strong&gt;めんどくさい！もっと簡単に認証したい！&lt;/strong&gt;」ということもありますよね。&lt;/p&gt;
+
+&lt;p&gt;そんなときは&lt;strong&gt;非接触ICタグ&lt;/strong&gt;を使って、&lt;strong&gt;ピッとして認証できる装置&lt;/strong&gt;を作ってみましょう！&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/162/touch.png&#34; alt=&#34;touch&#34;&gt;
+
+&lt;/center&gt;
+
+今回はArduinoとRFIDリーダを使って、非接触ICタグをかざすと登録されたユーザかどうか判定するデバイスを作ってみます！&lt;/p&gt;
+
+&lt;p&gt;※ただし今回の実装は&lt;strong&gt;セキュリティ対策を施していない&lt;/strong&gt;ので、ご家庭内や趣味の範囲でお試しください。&lt;/p&gt;
+
+&lt;h2 id=&#34;rfid-nfc-非接触ic&#34;&gt;RFID？NFC？非接触IC？&lt;/h2&gt;
+
+&lt;p&gt;「&lt;strong&gt;RFID&lt;/strong&gt;」とは、電磁界や電波を用いて情報を埋め込んだRFタグとやりとりする無線通信技術です。「&lt;strong&gt;NFC&lt;/strong&gt;」はRFタグの規格の一つで、正式名称は&lt;strong&gt;Near Field Communication&lt;/strong&gt;（近距離無線通信）と言います。&lt;/p&gt;
+
+&lt;p&gt;非接触ICは、&lt;strong&gt;読み取り端末にかざすことで通信ができる電池レスのIC&lt;/strong&gt;です（電池内臓の場合もあります）。&lt;/p&gt;
+
+&lt;p&gt;世界で利用されているMifare（マイフェア）カードやTaspoでは「ISO/IEC 14443 Type A」というNFCの規格、日本で利用されている交通系ICカードでは「FeliCa」という規格が主に利用されています。&lt;/p&gt;
+
+&lt;p&gt;今回利用するRFIDリーダライタのRFID-RC522では、&lt;strong&gt;FeliCa規格のICは読み取ることができません&lt;/strong&gt;。FeliCaを利用したい場合はSony製の&lt;a href=&#34;https://www.sony.co.jp/Products/felica/consumer/index.html&#34;&gt;PaSoRi&lt;/a&gt;やFeliCaリーダライタ&lt;a href=&#34;https://www.switch-science.com/catalog/353/&#34;&gt;RC-S620S&lt;/a&gt;などを使ってみてください。&lt;/p&gt;
+
+&lt;h2 id=&#34;今回使うもの&#34;&gt;今回使うもの&lt;/h2&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/162/use.png&#34; alt=&#34;use&#34;&gt;
+
+&lt;/center&gt;
+
+今回はArduinoまたは互換ボード（写真はGenuino 101）、RFIDリーダライタRC522、その他に判定用のLEDやブレッドボード、ジャンパワイヤを利用します。&lt;/p&gt;
+
+&lt;h3 id=&#34;arduino-互換ボード&#34;&gt;Arduino/互換ボード&lt;/h3&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/162/genuino.png&#34; alt=&#34;genuino&#34;&gt;
+
+&lt;/center&gt;
+
+Arduinoや互換ボードを利用すると、RC522ライブラリをそのまま使えて簡単です。写真ではGenuino 101（※）を使っていますが、今回使うピンの配置はArduino Unoと全く同じです。&lt;/p&gt;
+
+&lt;p&gt;Arduino Mega、Nano v3、Microなども利用できますが、ピンの接続箇所が変わるので今回利用する&lt;a href=&#34;https://github.com/miguelbalboa/rfid&#34;&gt;&lt;strong&gt;MFRC522ライブラリ&lt;/strong&gt;&lt;/a&gt;の&lt;a href=&#34;https://github.com/miguelbalboa/rfid#pin-layout&#34;&gt;Pin Layout&lt;/a&gt;を参考に配線してください。&lt;/p&gt;
+
+&lt;p&gt;&lt;font size=&#34;2&#34;&gt;※Genuino 101はBluetooth搭載のIntel製ボードで、色が好きなので多用しています。ディスコンになってしまったけど……。&lt;/font&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;rfid-rc522&#34;&gt;RFID-RC522&lt;/h3&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/162/rc522set.png&#34; alt=&#34;rc522set&#34;&gt;
+
+&lt;/center&gt;
+
+安価で入手しやすいRFIDリーダライタです。&lt;a href=&#34;https://github.com/miguelbalboa/rfid&#34;&gt;ライブラリ&lt;/a&gt;側でドキュメントとサンプルコードが用意されていて、Arduinoで扱いやすいです。過出力や電波の不要輻射を防ぐため、3.3Vで利用します。&lt;/p&gt;
+
+&lt;p&gt;※RFID-RC522では、&lt;strong&gt;FeliCa規格のICは読み取ることができません&lt;/strong&gt;。FeliCaを利用したい場合はSony製の&lt;a href=&#34;https://www.sony.co.jp/Products/felica/consumer/index.html&#34;&gt;PaSoRi&lt;/a&gt;やFeliCaリーダライタ&lt;a href=&#34;https://www.switch-science.com/catalog/353/&#34;&gt;RC-S620S&lt;/a&gt;などを使ってみてください。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/162/rc522.png&#34; alt=&#34;rc522&#34;&gt;
+
+&lt;/center&gt;
+
+例えばAmazonで「&lt;strong&gt;RC522&lt;/strong&gt;」を検索すると、&lt;u&gt;価格帯の違うものがたくさんでてきます&lt;/u&gt;。&lt;strong&gt;お届け時期&lt;/strong&gt;や&lt;strong&gt;発送元&lt;/strong&gt;（Amazon.co.jpからだと安心かも）、&lt;strong&gt;送料&lt;/strong&gt;、&lt;strong&gt;レビュー&lt;/strong&gt; などに注意して購入しましょう！&lt;/p&gt;
+
+&lt;p&gt;ちゃんとくは急いでいたので、Amazon.co.jpが発送する翌日受け取りできるものを購入しました。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/162/solder.png&#34; alt=&#34;solder&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;ピンヘッダは未実装の状態で届くので、好きな角度の方をはんだづけしておきます（かっこいい！と思ってくの字型のピンヘッダを使いましたが、タグによってはジャンパが邪魔してタッチしづらいです……）。&lt;/p&gt;
+
+&lt;h3 id=&#34;rfid-nfcタグ&#34;&gt;RFID/NFCタグ&lt;/h3&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/162/nfc.png&#34; alt=&#34;nfc&#34;&gt;
+
+&lt;/center&gt;
+
+こちらもAmazonで「&lt;strong&gt;NFCタグ&lt;/strong&gt;」などと検索してみると、かなり安価で手に入ることがわかります。ステッカーを使えば、手持ちのキーホルダーなどを簡単にキーにすることができますね！&lt;/p&gt;
+
+&lt;p&gt;RC522のセットを購入した場合はカードとキーホルダーがついてきますし、「&lt;strong&gt;とりあえず試したいだけ&lt;/strong&gt;」「&lt;strong&gt;認識させたいICタグが既にある&lt;/strong&gt;」という場合は購入しなくて大丈夫です。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/162/shiokara.png&#34; alt=&#34;shiokara&#34;&gt;
+
+&lt;/center&gt;
+
+ちゃんとくは、&lt;strong&gt;シオカラーズの2人（Splatoon）&lt;/strong&gt;に協力してもらおうと思います！！&lt;/p&gt;
+
+&lt;p&gt;これは任天堂のamiiboというフィギュアなんですが、&lt;strong&gt;ゲーム用のNFCを搭載&lt;/strong&gt;していてRFIDリーダで情報を読み取ることができます。&lt;/p&gt;
+
+&lt;h2 id=&#34;識別子を取得する&#34;&gt;識別子を取得する&lt;/h2&gt;
+
+&lt;h3 id=&#34;配線&#34;&gt;配線&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/miguelbalboa/rfid&#34;&gt;MFRC522ライブラリ&lt;/a&gt;の&lt;a href=&#34;https://github.com/miguelbalboa/rfid#pin-layout&#34;&gt;&lt;strong&gt;Pin Layout&lt;/strong&gt;&lt;/a&gt;を参考に、ArduinoとRC522を接続していきます。Arduino Mega、Nano v3、Microなども利用できますが、ピンの接続箇所が変わるのでライブラリのREADMEを参照してください。&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;left&#34;&gt;Signal&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;MFRC522 Reader/PCD Pin&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;Arduino Uno Pin&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;RST/Reset&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;RST&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;9&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;SPI SS&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;SDA(SS)&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;10&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;SPI MOSI&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;MOSI&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;11 / ICSP-4&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;SPI MISO&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;MISO&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;12 / ICSP-1&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;SPI SCK&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;SCK&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;13/ICSP-3&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;上記の表の通り、RC522のSignalの名前の部分を見て、対応するArduino Unoのピンに接続します。&lt;/p&gt;
+
+&lt;p&gt;その他、RC522の「GND」はArduinoの「GND」へ、RC522の「3.3V」はArduinoの「3.3V」へ接続します。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/162/circuit1.png&#34; alt=&#34;circuit1&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/162/map.png&#34; alt=&#34;map&#34;&gt;
+
+&lt;/center&gt;
+
+慣習的に3.3Vを赤、GNDを黒、その他はそれぞれ違う色のジャンパで繋ぐと見やすいです。書いてある通りに繋ぐだけなので、落ち着いて接続しましょう！（IRQというピンは今回は使用しません）&lt;/p&gt;
+
+&lt;p&gt;ブレッドボードの使い方がよくわからない、という方は、ドキュメントの「&lt;a href=&#34;https://dotstud.io/docs/breadboard/&#34;&gt;&lt;strong&gt;ブレッドボード&lt;/strong&gt;&lt;/a&gt;」を参照してください。&lt;/p&gt;
+
+&lt;h3 id=&#34;プログラム&#34;&gt;プログラム&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.arduino.cc/en/main/software&#34;&gt;Arduino IDE&lt;/a&gt;というソフトを使い、Arduinoにプログラムを書き込みます。インストール方法は、ドキュメントの「&lt;a href=&#34;https://dotstud.io/docs/arduinoide-setup/&#34;&gt;&lt;strong&gt;Arduino IDEをPCにインストール&lt;/strong&gt;&lt;/a&gt;」を参照してください。&lt;/p&gt;
+
+&lt;p&gt;まずArduino IDEに、今回利用する&lt;a href=&#34;https://github.com/miguelbalboa/rfid&#34;&gt;&lt;strong&gt;MFRC522ライブラリ&lt;/strong&gt;&lt;/a&gt;をインストールします。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/162/step1.png&#34; alt=&#34;step1&#34;&gt;
+
+  ─ ライブラリマネージャを開く
+
+&lt;/center&gt;
+
+[スケッチ] &amp;gt; [ライブラリをインクルード] &amp;gt; [ライブラリを管理]を選択します。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/162/step2.png&#34; alt=&#34;step2&#34;&gt;
+
+  ─ MFRC522ライブラリをインストール
+
+&lt;/center&gt;
+
+「MFRC」と検索し、MFRC522ライブラリをインストールします。&lt;/p&gt;
+
+&lt;p&gt;エディタには下記のプログラムを貼り付けます。ライブラリの&lt;a href=&#34;https://github.com/miguelbalboa/rfid/blob/master/examples/DumpInfo/DumpInfo.ino&#34;&gt;DumpInfoのサンプルコード&lt;/a&gt;をそのまま利用しています。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;SPI.h&amp;gt;
+#include &amp;lt;MFRC522.h&amp;gt;
+
+constexpr uint8_t RST_PIN = 9;          // Configurable, see typical pin layout above
+constexpr uint8_t SS_PIN = 10;         // Configurable, see typical pin layout above
+
+MFRC522 mfrc522(SS_PIN, RST_PIN);  // Create MFRC522 instance
+
+void setup() {
+		Serial.begin(9600);		// Initialize serial communications with the PC
+		while (!Serial);		// Do nothing if no serial port is opened (added for Arduinos based on ATMEGA32U4)
+		SPI.begin();			// Init SPI bus
+		mfrc522.PCD_Init();		// Init MFRC522
+		mfrc522.PCD_DumpVersionToSerial();	// Show details of PCD - MFRC522 Card Reader details
+		Serial.println(F(&amp;quot;Scan PICC to see UID, SAK, type, and data blocks...&amp;quot;));
+}
+
+void loop() {
+	// Look for new cards
+	if ( ! mfrc522.PICC_IsNewCardPresent()) {
+			return;
+	}
+
+	// Select one of the cards
+	if ( ! mfrc522.PICC_ReadCardSerial()) {
+			return;
+	}
+
+	// Dump debug info about the card; PICC_HaltA() is automatically called
+	mfrc522.PICC_DumpToSerial(&amp;amp;(mfrc522.uid));
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/162/step3.png&#34; alt=&#34;step3&#34;&gt;
+
+&lt;/center&gt;
+
+[ツール] &amp;gt; [ボード]は「&lt;strong&gt;Arduino/Genuino 101&lt;/strong&gt;」、[シリアルポート]は&lt;strong&gt;Arduinoを接続したUSBポート&lt;/strong&gt;を選択します（Windowsの方はCOMポート番号）。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/162/step4.png&#34; alt=&#34;step4&#34;&gt;
+
+&lt;/center&gt;
+
+左上の「➡︎」をクリックしてプログラムを書き込みます。&lt;/p&gt;
+
+&lt;h3 id=&#34;確認&#34;&gt;確認&lt;/h3&gt;
+
+&lt;p&gt;プログラムを書き込めたら、タグの情報を確認します。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/162/monitor.png&#34; alt=&#34;monitor&#34;&gt;
+
+&lt;/center&gt;
+
+[ツール] &amp;gt; [シリアルモニタ]を開きます。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/162/step5.png&#34; alt=&#34;step5&#34;&gt;
+
+&lt;/center&gt;
+
+シリアルモニタを開いた状態でRFIDリーダにタグをかざすと、タグの情報が表示されます。&lt;/p&gt;
+
+&lt;p&gt;登録したいタグをかざし、「&lt;strong&gt;Card UID:&lt;/strong&gt;」以降の部分（画像では消してある部分）をコピーしておきましょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;識別子を元に動作を変える&#34;&gt;識別子を元に動作を変える&lt;/h2&gt;
+
+&lt;p&gt;識別子を取得したNFCタグを「&lt;strong&gt;認証するユーザ&lt;/strong&gt;」、それ以外のタグを「&lt;strong&gt;認証しないユーザ&lt;/strong&gt;」として、Arduino側の動作を変えてみます。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/162/goal.png&#34; alt=&#34;goal&#34;&gt;
+
+&lt;/center&gt;
+
+認証するユーザの場合はLEDを青に、認証しないユーザの場合はLEDを赤に光らせるプログラムを作ってみます。&lt;/p&gt;
+
+&lt;h3 id=&#34;配線-1&#34;&gt;配線&lt;/h3&gt;
+
+&lt;p&gt;回路に、青と赤のLEDを追加します。配線するときは、一旦Arduinoを電源から外します。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/162/circuit2.png&#34; alt=&#34;circuit2&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;p&gt;青いLEDのアノード（＋側・脚が長い方）を8番ピンに、赤いLEDのアノードをアナログの3番ピンに繋ぎ、カソード（ー側）をそれぞれGNDに接続します。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/162/map2.png&#34; alt=&#34;map2&#34;&gt;
+
+  ─ 配線した状態（上の図とLEDの向きが逆になっています）
+
+&lt;/center&gt;
+
+
+&lt;h3 id=&#34;プログラム-1&#34;&gt;プログラム&lt;/h3&gt;
+
+&lt;p&gt;先ほど取得した&lt;strong&gt;タグの識別子とマッチしたら青いLED、それ以外は赤いLEDを光らせるプログラム&lt;/strong&gt;を作成します。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;#defin UID&lt;/code&gt;の部分は、ご自身が取得したタグの識別子に置き換えてください。また、今回赤いLEDはアナログ出力に接続しているので、&lt;code&gt;AnalogWrite()&lt;/code&gt;を利用して光量を0〜255で指定します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;SPI.h&amp;gt;
+#include &amp;lt;MFRC522.h&amp;gt;
+
+constexpr uint8_t RST_PIN = 9;
+constexpr uint8_t SS_PIN = 10;
+
+#define UID &amp;quot;xx xx xx xx xx xx xx&amp;quot; // 取得した識別子を記述
+
+int led_blue = 8;
+int led_red = 3;
+
+MFRC522 mfrc522(SS_PIN, RST_PIN);
+MFRC522::MIFARE_Key key;
+
+void setup() {
+	  Serial.begin(9600);
+	  pinMode(led_blue, OUTPUT);
+	  pinMode(led_red, OUTPUT);
+	  while (!Serial);
+	  SPI.begin();
+	  mfrc522.PCD_Init();
+	  mfrc522.PCD_DumpVersionToSerial();
+	  Serial.println(F(&amp;quot;Scan PICC to see UID, SAK, type, and data blocks...&amp;quot;));
+
+	  dump_byte_array(key.keyByte, MFRC522::MF_KEY_SIZE);
+}
+
+void loop() {
+    if ( ! mfrc522.PICC_IsNewCardPresent()) {
+      	return;
+    }
+    if ( ! mfrc522.PICC_ReadCardSerial()) {
+      	return;
+    }
+
+    String strBuf[mfrc522.uid.size];
+    for (byte i = 0; i &amp;lt; mfrc522.uid.size; i++) {
+      	strBuf[i] =  String(mfrc522.uid.uidByte[i], HEX);
+      	if(strBuf[i].length() == 1){
+        	strBuf[i] = &amp;quot;0&amp;quot; + strBuf[i];
+      	}
+    }
+
+    String strUID = strBuf[0] + &amp;quot; &amp;quot; + strBuf[1] + &amp;quot; &amp;quot; + strBuf[2] + &amp;quot; &amp;quot; + strBuf[3] + &amp;quot; &amp;quot; + strBuf[4] + &amp;quot; &amp;quot; + strBuf[5] + &amp;quot; &amp;quot; + strBuf[6];
+    if ( strUID.equalsIgnoreCase(UID) ){
+	      Serial.println(&amp;quot;chantoku&amp;quot;);
+	      digitalWrite(led_blue, HIGH); // 青いLEDを光らせる
+	      delay(1000); // 1秒待つ
+	      digitalWrite(led_blue, LOW); // 青いLEDを消す
+    } else {
+	      Serial.println(&amp;quot;error!&amp;quot;);
+	      analogWrite(led_red, 180); // 赤いLEDを光らせる
+	      delay(1000); // 1秒待つ
+	      analogWrite(led_red, 0); // 赤いLEDを消す
+    }
+}
+
+void dump_byte_array(byte *buffer, byte bufferSize) {
+    for (byte i = 0; i &amp;lt; bufferSize; i++) {
+        Serial.print(buffer[i] &amp;lt; 0x10 ? &amp;quot; 0&amp;quot; : &amp;quot; &amp;quot;);
+        Serial.print(buffer[i], HEX);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;先ほどと同様の手順でArduinoにプログラムを書き込みます。これで完成です！&lt;/p&gt;
+
+&lt;h2 id=&#34;試してみる&#34;&gt;試してみる&lt;/h2&gt;
+
+&lt;p&gt;さっそく登録したタグを識別できるか試してみましょう。&lt;/p&gt;
+
+&lt;p&gt;アオリちゃん（ピンクの子）が登録したタグ、ホタルちゃん（緑の子）は登録していないタグです。
+&lt;a href=&#34;https://gyazo.com/2a2e957605e230f3d539f331c718f9b4&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/2a2e957605e230f3d539f331c718f9b4.gif&#34; alt=&#34;https://gyazo.com/2a2e957605e230f3d539f331c718f9b4&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;登録したアオリちゃんをタッチした時は青、登録していないホタルちゃんをタッチした時は赤を光らせることができました！&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;非接触通信、無線通信というと難しいイメージがありますが、かなり簡単に実装することができました！この機能を使ってタッチした時間を記録したり、タグの識別を利用して電気をつける場所を変えたりと、いろいろなことに活用できそうです。&lt;/p&gt;
+
+&lt;p&gt;次回は&lt;strong&gt;Wi-Fiに接続してタッチした時間を記録するデバイスの実装方法&lt;/strong&gt;を紹介してみたいと思います。&lt;/p&gt;
+
+&lt;p&gt;それではまた！&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>パソコンやモバイルバッテリーに繋いで動かせるデバイスを作ろう！USB電子工作のすすめ#3 - 改造編</title>
@@ -30,6 +503,9 @@
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;151&#34;&gt;
+  
+      
+      
   
       
       
@@ -1236,6 +1712,9 @@
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/usb-power-supply-making2/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/159/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -1869,6 +2348,9 @@
 
 
 &lt;section class=&#34;link&#34; id=&#34;159&#34;&gt;
+  
+      
+      
   
       
       
@@ -3140,6 +3622,9 @@
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/usb-power-supply-making/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/151/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -3805,6 +4290,9 @@ V字に切り込みを入れたフタをつけたところ、ぴったりはま�
 
 
 &lt;section class=&#34;link&#34; id=&#34;144&#34;&gt;
+  
+      
+      
   
       
       
@@ -5145,6 +5633,9 @@ AWSアカウントでS3にアクセスしたら、まずは「&lt;strong&gt;バ�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nodejs-amazon-alexa-skill/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/144/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -5812,6 +6303,9 @@ exports.handler = function(event, context, callback) {
 
 
 &lt;section class=&#34;link&#34; id=&#34;144&#34;&gt;
+  
+      
+      
   
       
       
@@ -7083,6 +7577,9 @@ Amazon Developerコンソール上のAlexaスキルで「テスト」のタブ�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/usb-power-supply-making/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/151/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -7677,6 +8174,9 @@ Amazon Developerコンソール上のAlexaスキルで「テスト」のタブ�
 
 
 &lt;section class=&#34;link&#34; id=&#34;160&#34;&gt;
+  
+      
+      
   
       
       
@@ -8758,6 +9258,9 @@ USB電源は電流Imaxを上限とした定電圧電源のため、&lt;strong&gt
 &lt;!-- 
 
 &lt;section class=&#34;link&#34; id=&#34;160&#34;&gt;
+  
+      
+      
   
       
       
@@ -10616,6 +11119,9 @@ div.talk-box p {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/mongoose-os-nefry-blink/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/145/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -11316,6 +11822,9 @@ Mongoose OSのコンソールからロータリエンコーダの値を確認す
 
 
 &lt;section class=&#34;link&#34; id=&#34;152&#34;&gt;
+  
+      
+      
   
       
       
@@ -12516,6 +13025,9 @@ Setup WiFiをクリックして、Nefry BTが使うWi-Fi（2.4GHz帯）を設定
 
 
 &lt;section class=&#34;link&#34; id=&#34;153&#34;&gt;
+  
+      
+      
   
       
       
@@ -14132,6 +14644,9 @@ Amazon Developer側の設定ページで、「エンドポイント」に「AWS 
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/gyaruden-kyoko-unicorn-pochette/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/146/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -15115,6 +15630,9 @@ void loop() {
 
 
 &lt;section class=&#34;link&#34; id=&#34;159&#34;&gt;
+  
+      
+      
   
       
       
@@ -16590,6 +17108,9 @@ Aruduino Nanoの5VとGNDのところは、可変抵抗器とLEDテープから�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/gyaruden-kyoko-unicorn-pochette2/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/147/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -17421,358 +17942,6 @@ GPIO.set_button_handler(4, GPIO.PULL_UP, GPIO.INT_EDGE_NEG, 200, function() {
 &lt;p&gt;Nefry BTをJavaScriptでプログラムして、LEDを点灯させるところまでできました。&lt;/p&gt;
 
 &lt;p&gt;ディスプレイも表示させることができるので、次回は、Mongoose OSを使ったディスプレイの表示方法をご紹介しようと思います。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Nefry BT（ESP32）からBLEでNode.jsにデータを送ってみよう</title>
-      <link>https://dotstud.io/blog/nefrybt-ble-bluetooth-peripheral/</link>
-      <pubDate>Fri, 12 Jan 2018 23:58:16 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/nefrybt-ble-bluetooth-peripheral/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、代表ののびすけ（&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;@n0bisuke&lt;/a&gt;）です。Nefry BTを使ってBluetooth / BLEを利用する方法を紹介します。&lt;/p&gt;
-
-&lt;p&gt;ほぼESP32のコードなので、検証してませんが他のESP32系のボードでも動作すると思います。&lt;/p&gt;
-
-&lt;h2 id=&#34;bleについて&#34;&gt;BLEについて&lt;/h2&gt;
-
-&lt;p&gt;BLEには大きく分け&lt;strong&gt;Peripheral （ペリフェラル）&lt;/strong&gt;と&lt;strong&gt;Central（セントラル）&lt;/strong&gt;という二つの役割があります。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Peripheral: 発信側端末、ビーコンやBLEタグなど受信端末に対して情報を送る側&lt;/li&gt;
-&lt;li&gt;Central: 受信側端末、iPhoneやMacなどBLEデバイスの情報を探して受け取る側&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/143/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Nefry BTは書き込むコードによって、PeripheralにもCentralにもなることができます。&lt;/p&gt;
-
-&lt;h2 id=&#34;環境&#34;&gt;環境&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Arduino IDE 1.8.5&lt;/li&gt;
-&lt;li&gt;Nefry ライブラリ 1.1.4&lt;/li&gt;
-&lt;li&gt;Nefry BT R2&lt;/li&gt;
-&lt;li&gt;macOS High Sierra&lt;/li&gt;
-&lt;li&gt;Node.js v9.2.0&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;peripheralの作成&#34;&gt;Peripheralの作成&lt;/h2&gt;
-
-&lt;p&gt;情報発信側のPeripheralをNefry BTで作成します。&lt;/p&gt;
-
-&lt;h3 id=&#34;uuidの作成&#34;&gt;UUIDの作成&lt;/h3&gt;
-
-&lt;p&gt;BLEを利用するためには&lt;strong&gt;SERVICE（サービス）&lt;/strong&gt;と&lt;strong&gt;CHARACTERISTIC（キャラクタリスティック）&lt;/strong&gt;という各機能を司るUUIDを設定する必要があります。プログラミングでいうクラスとメソッドの関係だと思うと良いかもしれません。&lt;/p&gt;
-
-&lt;p&gt;BLEデバイスは部屋の中やカフェ、駅などいたるところに存在するのでそれらのデバイスと自分が所持しているデバイスのIDが競合しないようにユニークな値にする必要があります。そこでUUIDを作成し、設定する必要があります。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://www.uuidgenerator.net/&#34;&gt;https://www.uuidgenerator.net/&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/143/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;このサイトでUUIDが作成出きるので各自作成しましょう。&lt;/p&gt;
-
-&lt;h3 id=&#34;nefry-btのスケッチ&#34;&gt;Nefry BTのスケッチ&lt;/h3&gt;
-
-&lt;p&gt;大元のコードはnkolban氏の&lt;a href=&#34;https://github.com/nkolban/ESP32_BLE_Arduino/blob/f8fe9d7cdfb20caa54b70849826d1ac6e375ff78/examples/BLE_notify/BLE_notify.ino&#34;&gt;こちらのコード&lt;/a&gt;です。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;#define SERVICE_UUID&lt;/code&gt;の箇所と&lt;code&gt;#define CHARACTERISTIC_UUID&lt;/code&gt;の箇所に先ほど作成したUUIDを指定します。&lt;/p&gt;
-
-&lt;p&gt;また&lt;code&gt;BLEDevice::init(&amp;quot;&amp;quot;);&lt;/code&gt;の箇所にBLEデバイスの名前を設定できます。
-以下のコードではNefryBT-n0bisukeという名前を指定しています。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;#include &amp;lt;BLEDevice.h&amp;gt;
-#include &amp;lt;BLEServer.h&amp;gt;
-#include &amp;lt;BLEUtils.h&amp;gt;
-#include &amp;lt;BLE2902.h&amp;gt;
-
-BLECharacteristic *pCharacteristic;
-bool deviceConnected = false;
-uint8_t value = 0;
-
-// See the following for generating UUIDs:
-// https://www.uuidgenerator.net/
-
-#define SERVICE_UUID        &amp;quot;D5875408-FA51-4763-A75D-7D33CECEBC31&amp;quot;
-#define CHARACTERISTIC_UUID &amp;quot;A4F01D8C-A037-43B6-9050-1876A8C23584&amp;quot;
-
-class MyServerCallbacks: public BLEServerCallbacks {
-    void onConnect(BLEServer* pServer) {
-      deviceConnected = true;
-    };
-
-    void onDisconnect(BLEServer* pServer) {
-      deviceConnected = false;
-    }
-};
-
-void setup() {
-  Serial.begin(115200);
-
-  // Create the BLE Device
-  BLEDevice::init(&amp;quot;NefryBT-n0bisuke&amp;quot;);
-
-  // Create the BLE Server
-  BLEServer *pServer = BLEDevice::createServer();
-  pServer-&amp;gt;setCallbacks(new MyServerCallbacks());
-
-  // Create the BLE Service
-  BLEService *pService = pServer-&amp;gt;createService(SERVICE_UUID);
-
-  // Create a BLE Characteristic
-  pCharacteristic = pService-&amp;gt;createCharacteristic(
-                      CHARACTERISTIC_UUID,
-                      BLECharacteristic::PROPERTY_READ   |
-                      BLECharacteristic::PROPERTY_WRITE  |
-                      BLECharacteristic::PROPERTY_NOTIFY |
-                      BLECharacteristic::PROPERTY_INDICATE
-                    );
-
-  // https://www.bluetooth.com/specifications/gatt/viewer?attributeXmlFile=org.bluetooth.descriptor.gatt.client_characteristic_configuration.xml
-  // Create a BLE Descriptor
-  pCharacteristic-&amp;gt;addDescriptor(new BLE2902());
-
-  // Start the service
-  pService-&amp;gt;start();
-
-  // Start advertising
-  pServer-&amp;gt;getAdvertising()-&amp;gt;start();
-  Serial.println(&amp;quot;Waiting a client connection to notify...&amp;quot;);
-}
-
-void loop() {
-
-  if (deviceConnected) {
-    Serial.printf(&amp;quot;*** NOTIFY: %d ***\n&amp;quot;, value);
-    char buffer[10];
-    sprintf(buffer, &amp;quot;{\&amp;quot;val\&amp;quot;:%d}&amp;quot;, value);
-    Serial.printf(buffer);
-    pCharacteristic-&amp;gt;setValue(buffer);
-    pCharacteristic-&amp;gt;notify();
-    //pCharacteristic-&amp;gt;indicate();
-    value++;
-  }
-  delay(2000);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;コンパイルエラーが出ないで書き込みが出来ればOKです。&lt;/p&gt;
-
-&lt;h3 id=&#34;確認&#34;&gt;確認&lt;/h3&gt;
-
-&lt;p&gt;デバッグには&lt;a href=&#34;https://itunes.apple.com/jp/app/lightblue/id639944780?mt=12&#34;&gt;LightBlue&lt;/a&gt;などのBLEデバッグ用のアプリケーションを利用することをお勧めします。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/143/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Nefry BTが起動すると先ほど指定した&lt;strong&gt;NefryBT-n0bisuke&lt;/strong&gt;という名前でBLEデバイスが検出されます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/143/4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;SERVICEのUUIDやCHARACTERISTICのUUIDも先ほど指定したものが表示されていると思います。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;これで問題なく、Nefry BTから情報が発信されていることが確認出来ました。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;centralの作成&#34;&gt;Centralの作成&lt;/h2&gt;
-
-&lt;p&gt;次は受信側のCentralを作成していきます。
-データの確認だけであれば先ほどのLightBlueなどのアプリで確認でも良いのですが、自分のサービスに組み込む際には何かしらのプログラミング言語でアクセスできた方が都合が良いです。&lt;/p&gt;
-
-&lt;h3 id=&#34;nobleの利用&#34;&gt;nobleの利用&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://github.com/sandeepmistry/noble&#34;&gt;noble&lt;/a&gt;はNode.js向けのBLEライブラリです。MacやWindows、Raspberry PiなどのデバイスをBLEのCentralにすることができます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;mkdir ble_central
-cd ble_central
-touch app.js
-npm init -y
-npm i --save noble
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;これで準備とnobleのインストールが完了しました。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;app.js&lt;/code&gt;に以下を記述します。SERVICE_UUIDやCHARACTERISTIC_UUIDは自分で作成したNefry BT側に書き込んだUUIDと同様のものを指定しましょう。&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;[WIP] Async/Awaitに書き換えたい。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
-
-const noble = require(&#39;noble&#39;);
-const serviceuuid = `d5875408fa514763a75d7d33cecebc31`;
-const charauuid = `a4f01d8ca03743b690501876a8c23584`;
-
-//キャラクタリスティックにアクセスしてデータやりとり
-const accessChara = (chara) =&amp;gt; {
-    console.log(&#39;-----Start GATT Access-----&#39;)
-    chara.notify(true, (err) =&amp;gt; {
-        if (err) {
-          console.log(&#39;listen notif error&#39;, err)
-        } else {
-          console.log(&#39;listen notif&#39;)
-        }
-    });
-    chara.on(&#39;data&#39;, (data, isNotif) =&amp;gt; {
-        const jsonStr = data.toString(&#39;utf-8&#39;);
-        const jsonData = JSON.parse(jsonStr);
-        console.log(jsonData);
-    });
-}
-
-
-//discovered BLE device
-const discovered = (peripheral) =&amp;gt; {
-    console.log(`BLE Device Found: ${peripheral.advertisement.localName}(${peripheral.uuid}) RSSI${peripheral.rssi}`);
-
-    if(peripheral.advertisement.localName === &#39;NefryBT-n0bisuke&#39;){
-        noble.stopScanning();
-        console.log(&#39;device found&#39;);
-        console.log(`service discover...`);
-
-        peripheral.connect(error =&amp;gt; {
-            if (error) {
-                console.log(&amp;quot;connection error:&amp;quot;, error)
-            } else {
-                console.log(&amp;quot;device connected&amp;quot;);
-            }
-
-            peripheral.discoverServices([],(err, services) =&amp;gt; {
-                if (error) {
-                    console.log(&amp;quot;discover service error&amp;quot;, error)
-                }
-                console.log(&#39;discover service&#39;);               
-                services.forEach(service =&amp;gt; {
-                    if(service.uuid === serviceuuid){
-                        service.discoverCharacteristics([], (error, charas) =&amp;gt; {
-                            console.log(&#39;discover chara&#39;);
-                            charas.forEach(chara =&amp;gt; {
-                                if(chara.uuid === charauuid){
-                                    console.log(&amp;quot;found chara: &amp;quot;, chara.uuid)
-                                    accessChara(chara);
-                                }
-                            });
-                        });
-                    }
-                });
-            });
-        });
-    }
-}
-
-//BLE scan start
-const scanStart = () =&amp;gt; {
-    noble.startScanning();
-    noble.on(&#39;discover&#39;, discovered);
-}
-
-if(noble.state === &#39;poweredOn&#39;){
-    scanStart();
-}else{
-    noble.on(&#39;stateChange&#39;, scanStart);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;実行&#34;&gt;実行&lt;/h3&gt;
-
-&lt;pre&gt;&lt;code&gt;node app.js
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;で実行します。この時、先ほどのLightBlueなどのアプリでNefryBTにBLEアクセスしていると上手くいかないのでアプリ側の接続は解除しましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/143/5.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Mac側のNode.jsのログはこんな感じで表示されます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;BLE Device Found: LED(59aa15c3a3274ed7b11d334b5c0d0900) RSSI-68
-BLE Device Found: NefryBT-n0bisuke(d0b77d4611f54380b8b63e6d05765ad6) RSSI-49
-device found
-service discover...
-device connected
-discover service
-discover chara
-found chara:  a4f01d8ca03743b690501876a8c23584
------Start GATT Access-----
-listen notif
-{ val: 147 }
-{ val: 148 }
-・
-・
-・
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;解説&#34;&gt;解説&lt;/h3&gt;
-
-&lt;p&gt;NefryBT側ではデバイスにアクセスがありCentralとのコネクションが確立すると、&lt;code&gt;変数value&lt;/code&gt;の値をセット(pCharacteristic-&amp;gt;setValue)して送信（pCharacteristic-&amp;gt;notify）し、valueの値をインクリメントします。&lt;/p&gt;
-
-&lt;p&gt;これを2秒ごとに行うので2秒間隔でNefryBTからMacのNode.jsに情報が送信されます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;・
-(省略)
-・
-・
-void loop() {
-
-  if (deviceConnected) {
-    Serial.printf(&amp;quot;*** NOTIFY: %d ***\n&amp;quot;, value);
-    char buffer[10];
-    sprintf(buffer, &amp;quot;{\&amp;quot;val\&amp;quot;:%d}&amp;quot;, value);
-    Serial.printf(buffer);
-    pCharacteristic-&amp;gt;setValue(buffer);
-    pCharacteristic-&amp;gt;notify();
-    //pCharacteristic-&amp;gt;indicate();
-    value++;
-  }
-  delay(2000);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Node.js（noble）側では、PERIPHERAL -&amp;gt; SERVICE -&amp;gt; CHARACTERISTICと階層的にアクセスしていき、CHARACTERISTICまでアクセスが出きると、accessChara関数が呼ばれます。&lt;/p&gt;
-
-&lt;p&gt;この中の&lt;code&gt;chara.on(&#39;data&#39;)&lt;/code&gt;の箇所でデータが送られてくるたびにイベントが発火して、データの中身を確認できます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;・
-・
-(省略)
-・
-const accessChara = (chara) =&amp;gt; {
-    console.log(&#39;-----Start GATT Access-----&#39;)
-    chara.notify(true, (err) =&amp;gt; {
-        if (err) {
-          console.log(&#39;listen notif error&#39;, err)
-        } else {
-          console.log(&#39;listen notif&#39;)
-        }
-    });
-    chara.on(&#39;data&#39;, (data, isNotif) =&amp;gt; {
-        const jsonStr = data.toString(&#39;utf-8&#39;);
-        const jsonData = JSON.parse(jsonStr);
-        console.log(jsonData);
-    });
-}
-・
-・
-(省略)
-・
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;Nefry BTでBLEを利用する方法を紹介しました。
-Nefry BTでセンサーのデータを取得し、Centralに送信する方法なども応用して作れそうですね。&lt;/p&gt;
-
-&lt;p&gt;これを参考にNefry BTとBLEデバイスの連携などに活用していきましょう。&lt;/p&gt;
-
-&lt;p&gt;今回はNefry BTをPeripheralにする実装でしたが、別の機会でCentralにする方法も紹介できればと思っています。&lt;/p&gt;
-
-&lt;p&gt;それでは！&lt;/p&gt;
-
-&lt;h2 id=&#34;所感&#34;&gt;所感&lt;/h2&gt;
-
-&lt;p&gt;今回の実装ですが色々と途中でのハマりが多いかつ、調べてもまだまだESP32のBLE利用をArduinoでやってる事例は少なくけっこう大変でした。この辺の大変だった知見はQiitaなどでまとめらたらと思っています。お疲れ様です笑&lt;/p&gt;
 </description>
     </item>
     
