@@ -7,8 +7,252 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2018 dotstudio inc.</copyright>
-    <lastBuildDate>Wed, 09 May 2018 08:30:26 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 14 May 2018 10:00:00 +0900</lastBuildDate>
     <atom:link href="/categories/try/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>子供も大人もmicro:bit！基本の操作と初めてのプログラミング</title>
+      <link>https://dotstud.io/blog/microbit-getting-started-pokio/</link>
+      <pubDate>Mon, 14 May 2018 10:00:00 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/microbit-getting-started-pokio/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、ポキオ（&lt;a href=&#34;https://twitter.com/pokiiio&#34;&gt;@pokiiio&lt;/a&gt;）です。&lt;/p&gt;
+
+&lt;p&gt;今回は巷で人気なマイコンボードの&lt;strong&gt;micro:bit&lt;/strong&gt;をプログラミングをしてみようと思います。&lt;/p&gt;
+
+&lt;p&gt;「 &lt;strong&gt;&lt;em&gt;えっ、プログラミングって難しいんでしょ？&lt;/em&gt;&lt;/strong&gt; 」って思われるかも知れません。&lt;/p&gt;
+
+&lt;p&gt;プログラミングと聞くと、&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;必要なソフトのダウンロードが面倒&lt;/li&gt;
+&lt;li&gt;ソフトやドライバーのインストールが面倒&lt;/li&gt;
+&lt;li&gt;プログラミングの知識が必要そう&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;と想像してしまいがちですが、&lt;u&gt;micro:bitなら簡単にできてしまうんです！&lt;/u&gt;&lt;/p&gt;
+
+&lt;p&gt;micro:bitの故郷であるイギリスでは、11歳・12歳の小学生に教育目的で無償で配布されていて、プログラミングの知識がなくても簡単に始められるマイコンボードになっています。&lt;/p&gt;
+
+&lt;p&gt;小学生だけでなく、普段プログラミングをしない&lt;strong&gt;大人でもハマること間違い無しのmicro:bit&lt;/strong&gt;を、サクッと触ってみましょう！&lt;/p&gt;
+
+&lt;h2 id=&#34;micro-bitとは&#34;&gt;micro:bitとは？&lt;/h2&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/165/microbit.png&#34; alt=&#34;microbit&#34;&gt;
+
+&lt;/center&gt;
+
+micro:bitはBBC（英国放送協会）が開発したシングルボードコンピュータで、日本国内でも2000円前後で購入可能です。&lt;strong&gt;&lt;em&gt;お父さんのお小遣いでも買えそうですね！&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;教育目的と謳っていますが、侮ることなかれ。思った以上に高性能です。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;CPU：ARM Cortex-M0&lt;/li&gt;
+&lt;li&gt;インターフェイス：Bluetooth Low Energy（BLE）、USB&lt;/li&gt;
+&lt;li&gt;入出力：3つのI/Oリング、20ピンのエッジコネクター、25個の赤色LED、2個のボタン&lt;/li&gt;
+&lt;li&gt;センサー：光、温度、加速度、磁力&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;スマホなどにも採用されている、低消費電力な通信方式であるBLEに最初から対応しているので、スマホと通信したり、micro:bit同士で通信を行ったりということも可能です。&lt;/p&gt;
+
+&lt;p&gt;また、端子（I/Oリング）はミノムシクリップを挟んで通電できるようになっているので、半田ごて不要で電子工作が楽しめます。また、LEDはマトリックス上に配置されていて、それをつかって文字やマークを表示させることも可能です。&lt;/p&gt;
+
+&lt;p&gt;入出力も豊富で拡張性が高い上に、各種センサー類も最初からついているので、micro:bitを買えば色々楽しめてしまうのです！&lt;/p&gt;
+
+&lt;h2 id=&#34;micro-bitを触ってみよう&#34;&gt;micro:bitを触ってみよう！&lt;/h2&gt;
+
+&lt;p&gt;micro:bitにはデフォルトでサンプルプログラムが入っています。まずはそれを実行してみましょう！&lt;/p&gt;
+
+&lt;p&gt;&lt;font size=&#34;2&#34;&gt;
+（モバイルバッテリーをUSB接続をしたり、別売りのバッテリーモジュールを使って給電をしたりする方法がありますが、今回は&lt;strong&gt;PCとUSB接続することでPCから給電&lt;/strong&gt;してみます。）
+&lt;/font&gt;&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/165/setup.png&#34; alt=&#34;setup&#34;&gt;
+
+&lt;/center&gt;
+
+サンプルプログラムでは、下記のように、ボタンを使ったり、マトリックスLEDを光らせたり、micro:bitを傾けたり、micro:bitの主な機能を試すことが出来ます。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;マトリックスLEDが点滅した後「HELLO」と表示される&lt;/li&gt;
+&lt;li&gt;Aボタンを押すように促されるので、Aボタンを押す&lt;/li&gt;
+&lt;li&gt;Bボタンも押すように促されるので、Bボタンを押す&lt;/li&gt;
+&lt;li&gt;「SHAKE!」micro:bitを振る&lt;/li&gt;
+&lt;li&gt;「CHASE THE DOT!」micro:bitを傾けて点滅するドットを追う&lt;/li&gt;
+&lt;li&gt;「NOW GET CODING!」と表示されてチュートリアル終了&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;このサンプルプログラムですが、&lt;a href=&#34;https://support.microbit.org/support/solutions/articles/19000021613-reset-the-micro-bit-to-factory-defaults&#34;&gt;このページ&lt;/a&gt;からダウンロード可能なので、いつでもMiro:bitを初期化することができます。&lt;/p&gt;
+
+&lt;h2 id=&#34;micro-bitのプログラミングをしてみよう&#34;&gt;micro:bitのプログラミングをしてみよう！&lt;/h2&gt;
+
+&lt;p&gt;次に、実際にプログラミングして、micro:bitを動かしてみます！&lt;/p&gt;
+
+&lt;p&gt;micro:bitのプログラミング方法は主に3つです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;JavaScript Block Editor&lt;/li&gt;
+&lt;li&gt;Python Editor&lt;/li&gt;
+&lt;li&gt;スマホアプリ&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;今回は、環境構築不要で、ブラウザだけで簡単にプログラミングができる、&lt;strong&gt;JavaScript Block Editor&lt;/strong&gt; を使ってみようと思います。&lt;/p&gt;
+
+&lt;h3 id=&#34;エディターを開いてみる&#34;&gt;エディターを開いてみる&lt;/h3&gt;
+
+&lt;p&gt;一般的なエディターは、ソフトをダウンロードして必要なものをインストールするなど、準備に時間がかかることがありますが、 &lt;strong&gt;JavaScript Block Editor&lt;/strong&gt; はウェブブラウザでサイトにアクセスするだけでプログラミングが開始できます！&lt;/p&gt;
+
+&lt;p&gt;実際にアクセスして、エディターを開いてみましょう。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/165/top.png&#34; alt=&#34;top&#34;&gt;
+
+&lt;/center&gt;
+
+&lt;a href=&#34;https://makecode.microbit.org/#lang=ja&#34;&gt;このサイト&lt;/a&gt;にアクセスすると、すぐに準備が完了します。&lt;/p&gt;
+
+&lt;p&gt;エディターは大きく3つのパートに分かれています。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/165/emulator.png&#34; alt=&#34;emulator&#34;&gt;
+
+&lt;/center&gt;
+
+まず、一番左側にあるのがエミュレーターです。エディターでプログラミングをすると、このエミュレーターで自動的にプログラムが実行され、プログラムの動作イメージを確認することができます。&lt;/p&gt;
+
+&lt;p&gt;LEDの光らせ方の確認はもちろん、マウスでエミュレーターをドラッグすると傾きを変えられたり、音を出すプログラムを書いたときは、その音の確認もエディター上で可能です。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/165/menu.png&#34; alt=&#34;menu&#34;&gt;
+
+&lt;/center&gt;
+
+次に、エディター中央にあるのがブロックの一覧です。誰でもプログラミングができるように、Micro:bitに命令ができる処理の塊が、ブロックという単位で表現されています。これらのブロックをつなげることで、シンプルなものから複雑なものまで、知識不要でプログラミングができるエディターなのです。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/165/editor.png&#34; alt=&#34;editor&#34;&gt;
+
+&lt;/center&gt;
+
+エディターの右側にあるエリアは、そのブロックを配置してプログラミングする場所です。初めから存在する &lt;strong&gt;「最初だけ」&lt;/strong&gt; と &lt;strong&gt;「ずっと」&lt;/strong&gt; というブロックに、他のブロックをつなげていくことでプログラミングができます。&lt;/p&gt;
+
+&lt;p&gt;この &lt;strong&gt;「最初だけ」&lt;/strong&gt; は、一度だけ実行させたいブロックをつなげていき、 &lt;strong&gt;「ずっと」&lt;/strong&gt; は繰り返し実行させたいブロックをつなげます。&lt;/p&gt;
+
+&lt;h3 id=&#34;エディターでプログラミングしてみよう&#34;&gt;エディターでプログラミングしてみよう&lt;/h3&gt;
+
+&lt;p&gt;それでは、簡単なプログラミングをしてみましょう。micro:bitのLEDにハートマークを表示させてみましょう。&lt;/p&gt;
+
+&lt;p&gt;まずエディターのメニューの[基本]から[アイコンを表示]というブロックを探します。&lt;/p&gt;
+
+&lt;p&gt;このブロックをプログラミングエリアの &lt;strong&gt;「最初だけ」&lt;/strong&gt; のブロックにドラッグ・アンド・ドロップして、ブロックとブロックをつなげます。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/165/heart1.png&#34; alt=&#34;heart1&#34;&gt;
+
+&lt;/center&gt;
+
+アイコンを表示するという処理を、micro:bit起動時に一度だけ実行します。これにより、好きなアイコンをmicro:bitで表示できます。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/165/heart2.png&#34; alt=&#34;heart2&#34;&gt;
+
+&lt;/center&gt;
+
+ブロック同士が正しくつながると、エミュレーター上でハートマークが表示されているはずです。&lt;/p&gt;
+
+&lt;p&gt;デフォルトのアイコンはハートマークになっていますが、[アイコンを表示]のブロックのプルダウンメニューを開くと様々なアイコンを選択でき、それを表示することもできます。&lt;/p&gt;
+
+&lt;p&gt;プログラミングはこれで終了です。&lt;/p&gt;
+
+&lt;h3 id=&#34;作成したプログラムをmicro-bitで動かしてみよう&#34;&gt;作成したプログラムをmicro:bitで動かしてみよう&lt;/h3&gt;
+
+&lt;p&gt;エディター下部の &lt;strong&gt;「題名未設定」&lt;/strong&gt; と書かれているところに、プログラム名を自由に入力し、[ダウンロード]をクリックします。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/165/heart3.png&#34; alt=&#34;heart3&#34;&gt;
+
+&lt;/center&gt;
+
+すると、拡張子が.hexなファイルが自動でダウンロードされます。ファイル名には、さきほどのプログラム名が含まれます。このファイルをmicro:bitに転送します。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/165/heart4.png&#34; alt=&#34;heart4&#34;&gt;
+
+&lt;/center&gt;
+
+micro:bitをパソコンとUSB接続すると、 &lt;strong&gt;MICROBIT&lt;/strong&gt; というドライブとして認識されます。ダウンロードしてきた.hexファイルを、このドライブ直下にコピーすることでプログラムの書き込みが行えます。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/165/heart5.png&#34; alt=&#34;heart5&#34;&gt;
+
+&lt;/center&gt;
+
+書き込みが完了すると、自動でmicro:bitが再起動します。すると、ハートマークを表示するプログラムが実行されます。&lt;/p&gt;
+
+&lt;p&gt;今回紹介したのはブロックを積み重ねることによってプログラムする方法でしたが、それを&lt;strong&gt;JavaScriptコードと相互変換&lt;/strong&gt;したり、&lt;strong&gt;最初からJavaScriptやPythonを使ってプログラミング&lt;/strong&gt;することも可能です。&lt;/p&gt;
+
+&lt;p&gt;&lt;u&gt;自分のレベルに応じたプログラミング方法も選べるのも、micro:bitの魅力の一つ&lt;/u&gt;です。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;今回は、簡単なプログラムの作成と実行をしてみました。&lt;/p&gt;
+
+&lt;p&gt;micro:bitには、LED以外にボタンや種々のセンサー、またGPIOもあります。それらを使えば、「&lt;strong&gt;ボタンを押すとLEDで表示させているマークを変える&lt;/strong&gt;」「&lt;strong&gt;micro:bitを振ったら文字を表示する&lt;/strong&gt;」などの、すこし凝ったプログラミングも可能です。&lt;/p&gt;
+
+&lt;p&gt;また、スピーカーを端子に接続して音を鳴らしたり、モーターとモータードライバーを接続してラジコンを作ることだって可能で、無限の楽しみ方ができます。&lt;/p&gt;
+
+&lt;p&gt;次回はmicro:bitにスピーカーを接続して、音を鳴らしてみましょう！&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>非接触ICタグで遊ぼう！ArduinoでRFIDリーダRC522を使う方法</title>
@@ -503,6 +747,9 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;151&#34;&gt;
+  
+      
+      
   
       
       
@@ -1415,12 +1662,18 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
       
       
   
+      
+      
+  
 &lt;/section&gt;
 
 &lt;br /&gt;
 
 
 &lt;section class=&#34;link&#34; id=&#34;159&#34;&gt;
+  
+      
+      
   
       
       
@@ -1740,6 +1993,9 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -2654,6 +2910,9 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/usb-power-supply-making2/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/159/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -2673,6 +2932,9 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -3637,6 +3899,9 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/usb-power-supply-making/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/151/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -3656,6 +3921,9 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -4626,6 +4894,9 @@ V字に切り込みを入れたフタをつけたところ、ぴったりはま�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nodejs-amazon-alexa-skill/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/144/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -4645,6 +4916,9 @@ V字に切り込みを入れたフタをつけたところ、ぴったりはま�
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -5654,6 +5928,9 @@ AWSアカウントでS3にアクセスしたら、まずは「&lt;strong&gt;バ�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nodejs-amazon-alexa-skill/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/144/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -5673,6 +5950,9 @@ AWSアカウントでS3にアクセスしたら、まずは「&lt;strong&gt;バ�
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -6645,6 +6925,9 @@ exports.handler = function(event, context, callback) {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nodejs-amazon-alexa-skill/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/144/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -6664,6 +6947,9 @@ exports.handler = function(event, context, callback) {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -7604,6 +7890,9 @@ Amazon Developerコンソール上のAlexaスキルで「テスト」のタブ�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/usb-power-supply-making/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/151/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -7623,6 +7912,9 @@ Amazon Developerコンソール上のAlexaスキルで「テスト」のタブ�
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -8489,6 +8781,9 @@ Amazon Developerコンソール上のAlexaスキルで「テスト」のタブ�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/usb-power-supply-making3/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/160/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -8508,6 +8803,9 @@ Amazon Developerコンソール上のAlexaスキルで「テスト」のタブ�
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -9576,6 +9874,9 @@ USB電源は電流Imaxを上限とした定電圧電源のため、&lt;strong&gt
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/usb-power-supply-making3/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/160/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -9595,6 +9896,9 @@ USB電源は電流Imaxを上限とした定電圧電源のため、&lt;strong&gt
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -11155,6 +11459,9 @@ div.talk-box p {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/mongoose-os-nefry-blink/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/145/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -11174,6 +11481,9 @@ div.talk-box p {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -12176,6 +12486,9 @@ Mongoose OSのコンソールからロータリエンコーダの値を確認す
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/gyaruden-mao-vibes-polo/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/152/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -12195,6 +12508,9 @@ Mongoose OSのコンソールからロータリエンコーダの値を確認す
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -13379,6 +13695,9 @@ Setup WiFiをクリックして、Nefry BTが使うWi-Fi（2.4GHz帯）を設定
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/gyaruden-mao-vibes-polo2/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/153/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -13398,6 +13717,9 @@ Setup WiFiをクリックして、Nefry BTが使うWi-Fi（2.4GHz帯）を設定
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -14689,6 +15011,9 @@ Amazon Developer側の設定ページで、「エンドポイント」に「AWS 
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/gyaruden-kyoko-unicorn-pochette/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/146/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -14708,6 +15033,9 @@ Amazon Developer側の設定ページで、「エンドポイント」に「AWS 
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -15972,6 +16300,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/usb-power-supply-making2/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/159/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -15991,6 +16322,9 @@ void loop() {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -17159,6 +17493,9 @@ Aruduino Nanoの5VとGNDのところは、可変抵抗器とLEDテープから�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/gyaruden-kyoko-unicorn-pochette2/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/147/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -17744,252 +18081,12 @@ Aruduino Nanoの5VとGNDのところは、可変抵抗器とLEDテープから�
       
       
   
+      
+      
+  
 &lt;/section&gt;
 
 &lt;center&gt;▲ 後編をチェック！&lt;/center&gt;&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>JavaScriptで開発できる！Mongoose OSでNefry BTをLチカしよう</title>
-      <link>https://dotstud.io/blog/mongoose-os-nefry-blink/</link>
-      <pubDate>Thu, 08 Feb 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://dotstud.io/blog/mongoose-os-nefry-blink/</guid>
-      
-      <description>
-
-&lt;p&gt;唐突ですが、森田(&lt;a href=&#34;https://twitter.com/morita_pac&#34;&gt;@morita_pac&lt;/a&gt;)と申します。&lt;/p&gt;
-
-&lt;p&gt;ヘビーNefryBTユーザです。持ち歩いていろんな場所でNefry BTを利用したり、ケースを作ったりもしています。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/145/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;通常Nefry BTはArduino言語でプログラムするのですが、今回はJavaScriptで書き込めるようにしたいと思います。&lt;/p&gt;
-
-&lt;p&gt;※この記事内のプログラムはNefy BT（無印）向けです。Nefry BT R2向けのプログラムは別途準備中です。&lt;/p&gt;
-
-&lt;h2 id=&#34;javascriptで開発できるmongoose-osとは&#34;&gt;JavaScriptで開発できるMongoose OSとは&lt;/h2&gt;
-
-&lt;p&gt;今回は&lt;a href=&#34;https://mongoose-os.com/&#34;&gt;Mongoose OS&lt;/a&gt;というIoTのプロト開発を簡単にできるサービスを利用します。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;a href=&#34;https://mongoose-os.com/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/145/2.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;
-▲ Mongoose OS公式サイト
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;Mongoose OSでは、ESP32やESP8266へJavaScript（&lt;a href=&#34;https://github.com/cesanta/mjs&#34;&gt;mJS&lt;/a&gt;）でコードを書き込めます。
-さらには、セキュアで、AWS IoTやGoogleのCloud IoT Coreなどとも連携設定がシンプルにできます。&lt;/p&gt;
-
-&lt;p&gt;Mongoose OSをインストールしている間は元のNefry BTのプログラムは利用できなくなります。（Arduino IDEで書き込むことですぐに戻せます。）&lt;/p&gt;
-
-&lt;h2 id=&#34;mongoose-osの開発環境をセットアップ&#34;&gt;Mongoose OSの開発環境をセットアップ&lt;/h2&gt;
-
-&lt;h3 id=&#34;windowsの場合&#34;&gt;Windowsの場合&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://mongoose-os.com/software.html&#34;&gt;Download Page&lt;/a&gt;から、exeをダウンロードするだけで使えます。（アンチウイルス系のソフトが反応するかもしれません。）なお、以降MacOSでの説明になります。
-&lt;img src=&#34;https://dotstud.io/img/blog/145/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;mac-osの場合&#34;&gt;Mac OSの場合&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://mongoose-os.com/software.html&#34;&gt;Download Page&lt;/a&gt;の、MacOS/Linuxのcurlコマンドをターミナルで実行します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ curl -fsSL https://mongoose-os.com/downloads/mos/install.sh | /bin/bash
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/145/4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ターミナルで以下のようになれば無事完了です。開く場合は、Runの&lt;code&gt;/xxx/.mos/bin/mos&lt;/code&gt;を実行するとWeb UIが開きます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ curl -fsSL https://mongoose-os.com/downloads/mos/install.sh | /bin/bash
-Downloading https://mongoose-os.com/downloads/mos-release/mac/mos ...
-########################################################################
- 100.0%
-Installing into /xxx/.mos/bin/mos ...
-Adding /xxx/.mos/bin to your PATH in /xxx/.profile
-SUCCESS: /xxx/.mos/bin/mos is installed.
-Run &#39;/xxx/.mos/bin/mos --help&#39; to see all available commands.
-Run &#39;/xxx/.mos/bin/mos&#39; without arguments to start a simplified Web UI installer.
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;いざ-mongoose-osをnefry-btに入れてみよう&#34;&gt;いざ、Mongoose  OSをNefry BTに入れてみよう&lt;/h2&gt;
-
-&lt;p&gt;Nefry BTをUSBポートに差し込み、Mongose OSとサンプルコードをFlashします。（次回起動時は、ポート選択のみで利用可能です。）&lt;/p&gt;
-
-&lt;p&gt;Mongoose OSのWeb UIは、ブラウザで開きます。①②③の設定が完了すれば無事、JavaScriptで書き込む準備完了です。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/145/5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;①は、Nefry BTのポートを選択します。ポートが見つからない場合はUSBを認識させるための&lt;a href=&#34;https://www.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers&#34;&gt;ドライバ&lt;/a&gt;をインストールする必要があります。
-②では、Platformで「esp32」とapp「demo-js」を選択し「Flash」ボタンをクリックし、処理が終わるまで待ちます。
-③では、Wi-fi設定を行います。（今回は必須ではないです。）
-全ての設定が完了したら、「Done」ボタンをおしてdevice setupを閉じます。&lt;/p&gt;
-
-&lt;h1 id=&#34;4-基本的なweb-uiとサンプルプログラム&#34;&gt;4. 基本的なWeb UIとサンプルプログラム&lt;/h1&gt;
-
-&lt;h3 id=&#34;web-uiについて&#34;&gt;Web UIについて&lt;/h3&gt;
-
-&lt;p&gt;まず、画面左側Device Filesを選択します。すると、init.jsが選択され、メインプログラムが表示されます。init.jsファイルをメインで編集します。&lt;/p&gt;
-
-&lt;p&gt;編集後、書き込みたい場合は、Save + Rebootボタンで行えます。このコードやファイルの情報は、端末から読んでいますので、コードを書き換えたら、書き込む前にバックアップを取っておくことをお勧めします。
-&lt;img src=&#34;https://dotstud.io/img/blog/145/6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;サンプルプログラムについて&#34;&gt;サンプルプログラムについて&lt;/h3&gt;
-
-&lt;p&gt;デフォルトプログラムを僕の感性でコメントしましたので、ご確認ください。なお、色々と制限付きのJSなので、仕様は&lt;a href=&#34;https://github.com/cesanta/mjs&#34;&gt;こちら&lt;/a&gt;で確認ください。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-js:init.js&#34;&gt;// 利用するAPIを読み出します。Flashした時点のサンプルAPIが呼ばれています。
-// 各APIの仕様やサンプルは画面左のファイル一覧で参照可能です。
-load(&#39;api_config.js&#39;);
-load(&#39;api_events.js&#39;);
-load(&#39;api_gpio.js&#39;);
-load(&#39;api_mqtt.js&#39;);
-load(&#39;api_net.js&#39;);
-load(&#39;api_sys.js&#39;);
-load(&#39;api_timer.js&#39;);
-
-// 変数宣言はletのみです。const, varは使えません。
-let led = Cfg.get(&#39;pins.led&#39;);
-let button = Cfg.get(&#39;pins.button&#39;);
-let topic = &#39;/devices/&#39; + Cfg.get(&#39;device.id&#39;) + &#39;/events&#39;;
-
-print(&#39;LED GPIO:&#39;, led, &#39;button GPIO:&#39;, button);
-
-let getInfo = function() {
-  return JSON.stringify({
-    total_ram: Sys.total_ram(),
-    free_ram: Sys.free_ram()
-  });
-};
-
-// 1秒おきにLEDをチカチカさせてます。ついでにチクタク時を刻んでいます。
-GPIO.set_mode(led, GPIO.MODE_OUTPUT);
-Timer.set(1000 /* 1 sec */, Timer.REPEAT, function() {
-  let value = GPIO.toggle(led);
-  print(value ? &#39;Tick&#39; : &#39;Tock&#39;, &#39;uptime:&#39;, Sys.uptime(), getInfo());
-}, null);
-
-// リセットボタンではない方のボタンを押すとMQTTでpublishします。
-GPIO.set_button_handler(button, GPIO.PULL_UP, GPIO.INT_EDGE_NEG, 200, function() {
-  let message = getInfo();
-  let ok = MQTT.pub(topic, message, 1);
-  print(&#39;Published:&#39;, ok, topic, &#39;-&amp;gt;&#39;, message);
-}, null);
-
-// ネットワークモニタです。
-Event.addGroupHandler(Net.EVENT_GRP, function(ev, evdata, arg) {
-  let evs = &#39;???&#39;;
-  if (ev === Net.STATUS_DISCONNECTED) {
-    evs = &#39;DISCONNECTED&#39;;
-  } else if (ev === Net.STATUS_CONNECTING) {
-    evs = &#39;CONNECTING&#39;;
-  } else if (ev === Net.STATUS_CONNECTED) {
-    evs = &#39;CONNECTED&#39;;
-  } else if (ev === Net.STATUS_GOT_IP) {
-    evs = &#39;GOT_IP&#39;;
-  }
-  print(&#39;== Net event:&#39;, ev, evs);
-}, null);
-
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;nefry-btのフルカラーledを点灯しよう&#34;&gt;Nefry BTのフルカラーLEDを点灯しよう&lt;/h2&gt;
-
-&lt;p&gt;やっと本題に入ります。&lt;/p&gt;
-
-&lt;p&gt;Mongoose OSでは、様々なオープンソースコードがあり、それをインポートすることができます。今回は、NefryBTのフルカラーLEDを点灯させるためにNeoPixelのサンプルコードを入手します。&lt;/p&gt;
-
-&lt;p&gt;画面左のProjectsを選択し、Importをクリックします。
-&lt;img src=&#34;https://dotstud.io/img/blog/145/7.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;App Managerのサーチ部分に「neopixel」と入力し、HARDWAREから「example-neopixel-js」をimportします。完了したらApp Managerの画面を閉じます。
-&lt;img src=&#34;https://dotstud.io/img/blog/145/8.png&#34; alt=&#34;&#34; /&gt;
-次に、サンプルプログラムをNefryBTに書き込みます。&lt;/p&gt;
-
-&lt;p&gt;今ImportしたAppが選択されていることを確認し、①Rebuildアイコンと②Flashアイコンを処理が完了次第、順番にクリックすることで書き込み完了です。（それぞれ少々時間がかかります。）
-&lt;img src=&#34;https://dotstud.io/img/blog/145/9.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Device Filesのinit.jsの内容を以下の内容に書き換えます。Nefry BTのボタンを押したらフルカラーLEDが点灯するという内容のプログラムです。&lt;/p&gt;
-
-&lt;p&gt;※なお、R2に関しては動作確認中ですので、確認次第内容を変更いたします。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-js:init.js&#34;&gt;load(&#39;api_config.js&#39;);
-load(&#39;api_events.js&#39;);
-load(&#39;api_gpio.js&#39;);
-load(&#39;api_sys.js&#39;);
-load(&#39;api_timer.js&#39;);
-load(&#39;api_neopixel.js&#39;);
-
-// 今回は一部しか利用していませんが、NefryのピンNoです。
-let pin = {
-    &amp;quot;nefrybt&amp;quot;:{
-      &amp;quot;sw&amp;quot;: 4,
-      &amp;quot;d0&amp;quot;:22,
-      &amp;quot;d1&amp;quot;:21,
-      &amp;quot;d2&amp;quot;:23,
-      &amp;quot;d3&amp;quot;:19,
-      &amp;quot;d4&amp;quot;:18,
-      &amp;quot;a0&amp;quot;:25,
-      &amp;quot;a1&amp;quot;:26,
-      &amp;quot;a2&amp;quot;:32,
-      &amp;quot;a3&amp;quot;:33,
-      &amp;quot;a4&amp;quot;:27,
-      &amp;quot;a5&amp;quot;:14,
-      &amp;quot;a6&amp;quot;:13,
-      &amp;quot;a7&amp;quot;:35,
-      &amp;quot;LED&amp;quot;:16
-    },
-    &amp;quot;nefrybtR2&amp;quot;:{
-      &amp;quot;sw&amp;quot;: 4,
-      &amp;quot;d0&amp;quot;:22,
-      &amp;quot;d1&amp;quot;:21,
-      &amp;quot;d2&amp;quot;:23,
-      &amp;quot;d3&amp;quot;:19,
-      &amp;quot;d4&amp;quot;:18,
-      &amp;quot;d5&amp;quot;:25,
-      &amp;quot;d6&amp;quot;:26,
-      &amp;quot;d7&amp;quot;:13,
-      &amp;quot;d8&amp;quot;:14,
-      &amp;quot;a0&amp;quot;:33,
-      &amp;quot;a1&amp;quot;:32,
-      &amp;quot;a2&amp;quot;:39,
-      &amp;quot;a3&amp;quot;:36,
-      &amp;quot;LED&amp;quot;:16
-    }
-  };
-
-
-// フルカラーLEDのピンと個数、オーダーを指定しています。
-let Lpin = pin.nefrybt.LED, numPixels = 1, colorOrder = NeoPixel.GRB;
-
-// api_neopixel.jsに基づき初期化を行います。
-let strip = NeoPixel.create(Lpin, numPixels, colorOrder);
-strip.clear();
-strip.setPixel(0,0,0,0);
-strip.show();
-
-// ボタンを押したら赤色をつけます。setpixel(0,0,0,0)は、ピクセルナンバーとRGBになっています。Redの数字は20としていますが、数字をあげるとかなり明るくなります。
-// GPIO.set_button_handlerの仕様は、
-GPIO.set_button_handler(4, GPIO.PULL_UP, GPIO.INT_EDGE_NEG, 200, function() {
-    strip.clear();
-    strip.setPixel(0,20,0,0);
-    strip.show();
-}, null);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;困った時は&#34;&gt;困った時は&lt;/h2&gt;
-
-&lt;p&gt;Q. DeviceLogsにエラーがでている。&lt;/p&gt;
-
-&lt;p&gt;A. Mongoose OS画面右上のdevice setupより、ポートを選択し直してください。それでも治らない場合は、ターミナルにて、&lt;code&gt;control+c&lt;/code&gt;でMongoose OSを一度終わらせて、再起動をしてみてください。&lt;/p&gt;
-
-&lt;p&gt;それでもエラーが発生する場合は、一度Arduino IDEからNefry BTをボードに選択し、何も書いていないコードで書き込み直してください。なお、Nefry BTの状態に戻したい場合もArduino IDEから書き込むことで初期状態にもどせます。&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;Nefry BTをJavaScriptでプログラムして、LEDを点灯させるところまでできました。&lt;/p&gt;
-
-&lt;p&gt;ディスプレイも表示させることができるので、次回は、Mongoose OSを使ったディスプレイの表示方法をご紹介しようと思います。&lt;/p&gt;
 </description>
     </item>
     

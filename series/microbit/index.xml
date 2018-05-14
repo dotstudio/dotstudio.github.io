@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Microbit on dotstudio（ドットスタジオ）</title>
+    <link>https://dotstud.io/series/microbit/</link>
+    <description>Recent content in Microbit on dotstudio（ドットスタジオ）</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>© 2018 dotstudio inc.</copyright>
+    <lastBuildDate>Mon, 14 May 2018 10:00:00 +0900</lastBuildDate>
+    <atom:link href="/series/microbit/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>子供も大人もmicro:bit！基本の操作と初めてのプログラミング</title>
+      <link>https://dotstud.io/blog/microbit-getting-started-pokio/</link>
+      <pubDate>Mon, 14 May 2018 10:00:00 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/microbit-getting-started-pokio/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、ポキオ（&lt;a href=&#34;https://twitter.com/pokiiio&#34;&gt;@pokiiio&lt;/a&gt;）です。&lt;/p&gt;
+
+&lt;p&gt;今回は巷で人気なマイコンボードの&lt;strong&gt;micro:bit&lt;/strong&gt;をプログラミングをしてみようと思います。&lt;/p&gt;
+
+&lt;p&gt;「 &lt;strong&gt;&lt;em&gt;えっ、プログラミングって難しいんでしょ？&lt;/em&gt;&lt;/strong&gt; 」って思われるかも知れません。&lt;/p&gt;
+
+&lt;p&gt;プログラミングと聞くと、&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;必要なソフトのダウンロードが面倒&lt;/li&gt;
+&lt;li&gt;ソフトやドライバーのインストールが面倒&lt;/li&gt;
+&lt;li&gt;プログラミングの知識が必要そう&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;と想像してしまいがちですが、&lt;u&gt;micro:bitなら簡単にできてしまうんです！&lt;/u&gt;&lt;/p&gt;
+
+&lt;p&gt;micro:bitの故郷であるイギリスでは、11歳・12歳の小学生に教育目的で無償で配布されていて、プログラミングの知識がなくても簡単に始められるマイコンボードになっています。&lt;/p&gt;
+
+&lt;p&gt;小学生だけでなく、普段プログラミングをしない&lt;strong&gt;大人でもハマること間違い無しのmicro:bit&lt;/strong&gt;を、サクッと触ってみましょう！&lt;/p&gt;
+
+&lt;h2 id=&#34;micro-bitとは&#34;&gt;micro:bitとは？&lt;/h2&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/165/microbit.png&#34; alt=&#34;microbit&#34;&gt;
+
+&lt;/center&gt;
+
+micro:bitはBBC（英国放送協会）が開発したシングルボードコンピュータで、日本国内でも2000円前後で購入可能です。&lt;strong&gt;&lt;em&gt;お父さんのお小遣いでも買えそうですね！&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;教育目的と謳っていますが、侮ることなかれ。思った以上に高性能です。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;CPU：ARM Cortex-M0&lt;/li&gt;
+&lt;li&gt;インターフェイス：Bluetooth Low Energy（BLE）、USB&lt;/li&gt;
+&lt;li&gt;入出力：3つのI/Oリング、20ピンのエッジコネクター、25個の赤色LED、2個のボタン&lt;/li&gt;
+&lt;li&gt;センサー：光、温度、加速度、磁力&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;スマホなどにも採用されている、低消費電力な通信方式であるBLEに最初から対応しているので、スマホと通信したり、micro:bit同士で通信を行ったりということも可能です。&lt;/p&gt;
+
+&lt;p&gt;また、端子（I/Oリング）はミノムシクリップを挟んで通電できるようになっているので、半田ごて不要で電子工作が楽しめます。また、LEDはマトリックス上に配置されていて、それをつかって文字やマークを表示させることも可能です。&lt;/p&gt;
+
+&lt;p&gt;入出力も豊富で拡張性が高い上に、各種センサー類も最初からついているので、micro:bitを買えば色々楽しめてしまうのです！&lt;/p&gt;
+
+&lt;h2 id=&#34;micro-bitを触ってみよう&#34;&gt;micro:bitを触ってみよう！&lt;/h2&gt;
+
+&lt;p&gt;micro:bitにはデフォルトでサンプルプログラムが入っています。まずはそれを実行してみましょう！&lt;/p&gt;
+
+&lt;p&gt;&lt;font size=&#34;2&#34;&gt;
+（モバイルバッテリーをUSB接続をしたり、別売りのバッテリーモジュールを使って給電をしたりする方法がありますが、今回は&lt;strong&gt;PCとUSB接続することでPCから給電&lt;/strong&gt;してみます。）
+&lt;/font&gt;&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/165/setup.png&#34; alt=&#34;setup&#34;&gt;
+
+&lt;/center&gt;
+
+サンプルプログラムでは、下記のように、ボタンを使ったり、マトリックスLEDを光らせたり、micro:bitを傾けたり、micro:bitの主な機能を試すことが出来ます。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;マトリックスLEDが点滅した後「HELLO」と表示される&lt;/li&gt;
+&lt;li&gt;Aボタンを押すように促されるので、Aボタンを押す&lt;/li&gt;
+&lt;li&gt;Bボタンも押すように促されるので、Bボタンを押す&lt;/li&gt;
+&lt;li&gt;「SHAKE!」micro:bitを振る&lt;/li&gt;
+&lt;li&gt;「CHASE THE DOT!」micro:bitを傾けて点滅するドットを追う&lt;/li&gt;
+&lt;li&gt;「NOW GET CODING!」と表示されてチュートリアル終了&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;このサンプルプログラムですが、&lt;a href=&#34;https://support.microbit.org/support/solutions/articles/19000021613-reset-the-micro-bit-to-factory-defaults&#34;&gt;このページ&lt;/a&gt;からダウンロード可能なので、いつでもMiro:bitを初期化することができます。&lt;/p&gt;
+
+&lt;h2 id=&#34;micro-bitのプログラミングをしてみよう&#34;&gt;micro:bitのプログラミングをしてみよう！&lt;/h2&gt;
+
+&lt;p&gt;次に、実際にプログラミングして、micro:bitを動かしてみます！&lt;/p&gt;
+
+&lt;p&gt;micro:bitのプログラミング方法は主に3つです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;JavaScript Block Editor&lt;/li&gt;
+&lt;li&gt;Python Editor&lt;/li&gt;
+&lt;li&gt;スマホアプリ&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;今回は、環境構築不要で、ブラウザだけで簡単にプログラミングができる、&lt;strong&gt;JavaScript Block Editor&lt;/strong&gt; を使ってみようと思います。&lt;/p&gt;
+
+&lt;h3 id=&#34;エディターを開いてみる&#34;&gt;エディターを開いてみる&lt;/h3&gt;
+
+&lt;p&gt;一般的なエディターは、ソフトをダウンロードして必要なものをインストールするなど、準備に時間がかかることがありますが、 &lt;strong&gt;JavaScript Block Editor&lt;/strong&gt; はウェブブラウザでサイトにアクセスするだけでプログラミングが開始できます！&lt;/p&gt;
+
+&lt;p&gt;実際にアクセスして、エディターを開いてみましょう。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/165/top.png&#34; alt=&#34;top&#34;&gt;
+
+&lt;/center&gt;
+
+&lt;a href=&#34;https://makecode.microbit.org/#lang=ja&#34;&gt;このサイト&lt;/a&gt;にアクセスすると、すぐに準備が完了します。&lt;/p&gt;
+
+&lt;p&gt;エディターは大きく3つのパートに分かれています。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/165/emulator.png&#34; alt=&#34;emulator&#34;&gt;
+
+&lt;/center&gt;
+
+まず、一番左側にあるのがエミュレーターです。エディターでプログラミングをすると、このエミュレーターで自動的にプログラムが実行され、プログラムの動作イメージを確認することができます。&lt;/p&gt;
+
+&lt;p&gt;LEDの光らせ方の確認はもちろん、マウスでエミュレーターをドラッグすると傾きを変えられたり、音を出すプログラムを書いたときは、その音の確認もエディター上で可能です。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/165/menu.png&#34; alt=&#34;menu&#34;&gt;
+
+&lt;/center&gt;
+
+次に、エディター中央にあるのがブロックの一覧です。誰でもプログラミングができるように、Micro:bitに命令ができる処理の塊が、ブロックという単位で表現されています。これらのブロックをつなげることで、シンプルなものから複雑なものまで、知識不要でプログラミングができるエディターなのです。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/165/editor.png&#34; alt=&#34;editor&#34;&gt;
+
+&lt;/center&gt;
+
+エディターの右側にあるエリアは、そのブロックを配置してプログラミングする場所です。初めから存在する &lt;strong&gt;「最初だけ」&lt;/strong&gt; と &lt;strong&gt;「ずっと」&lt;/strong&gt; というブロックに、他のブロックをつなげていくことでプログラミングができます。&lt;/p&gt;
+
+&lt;p&gt;この &lt;strong&gt;「最初だけ」&lt;/strong&gt; は、一度だけ実行させたいブロックをつなげていき、 &lt;strong&gt;「ずっと」&lt;/strong&gt; は繰り返し実行させたいブロックをつなげます。&lt;/p&gt;
+
+&lt;h3 id=&#34;エディターでプログラミングしてみよう&#34;&gt;エディターでプログラミングしてみよう&lt;/h3&gt;
+
+&lt;p&gt;それでは、簡単なプログラミングをしてみましょう。micro:bitのLEDにハートマークを表示させてみましょう。&lt;/p&gt;
+
+&lt;p&gt;まずエディターのメニューの[基本]から[アイコンを表示]というブロックを探します。&lt;/p&gt;
+
+&lt;p&gt;このブロックをプログラミングエリアの &lt;strong&gt;「最初だけ」&lt;/strong&gt; のブロックにドラッグ・アンド・ドロップして、ブロックとブロックをつなげます。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/165/heart1.png&#34; alt=&#34;heart1&#34;&gt;
+
+&lt;/center&gt;
+
+アイコンを表示するという処理を、micro:bit起動時に一度だけ実行します。これにより、好きなアイコンをmicro:bitで表示できます。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/165/heart2.png&#34; alt=&#34;heart2&#34;&gt;
+
+&lt;/center&gt;
+
+ブロック同士が正しくつながると、エミュレーター上でハートマークが表示されているはずです。&lt;/p&gt;
+
+&lt;p&gt;デフォルトのアイコンはハートマークになっていますが、[アイコンを表示]のブロックのプルダウンメニューを開くと様々なアイコンを選択でき、それを表示することもできます。&lt;/p&gt;
+
+&lt;p&gt;プログラミングはこれで終了です。&lt;/p&gt;
+
+&lt;h3 id=&#34;作成したプログラムをmicro-bitで動かしてみよう&#34;&gt;作成したプログラムをmicro:bitで動かしてみよう&lt;/h3&gt;
+
+&lt;p&gt;エディター下部の &lt;strong&gt;「題名未設定」&lt;/strong&gt; と書かれているところに、プログラム名を自由に入力し、[ダウンロード]をクリックします。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/165/heart3.png&#34; alt=&#34;heart3&#34;&gt;
+
+&lt;/center&gt;
+
+すると、拡張子が.hexなファイルが自動でダウンロードされます。ファイル名には、さきほどのプログラム名が含まれます。このファイルをmicro:bitに転送します。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/165/heart4.png&#34; alt=&#34;heart4&#34;&gt;
+
+&lt;/center&gt;
+
+micro:bitをパソコンとUSB接続すると、 &lt;strong&gt;MICROBIT&lt;/strong&gt; というドライブとして認識されます。ダウンロードしてきた.hexファイルを、このドライブ直下にコピーすることでプログラムの書き込みが行えます。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/165/heart5.png&#34; alt=&#34;heart5&#34;&gt;
+
+&lt;/center&gt;
+
+書き込みが完了すると、自動でmicro:bitが再起動します。すると、ハートマークを表示するプログラムが実行されます。&lt;/p&gt;
+
+&lt;p&gt;今回紹介したのはブロックを積み重ねることによってプログラムする方法でしたが、それを&lt;strong&gt;JavaScriptコードと相互変換&lt;/strong&gt;したり、&lt;strong&gt;最初からJavaScriptやPythonを使ってプログラミング&lt;/strong&gt;することも可能です。&lt;/p&gt;
+
+&lt;p&gt;&lt;u&gt;自分のレベルに応じたプログラミング方法も選べるのも、micro:bitの魅力の一つ&lt;/u&gt;です。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;今回は、簡単なプログラムの作成と実行をしてみました。&lt;/p&gt;
+
+&lt;p&gt;micro:bitには、LED以外にボタンや種々のセンサー、またGPIOもあります。それらを使えば、「&lt;strong&gt;ボタンを押すとLEDで表示させているマークを変える&lt;/strong&gt;」「&lt;strong&gt;micro:bitを振ったら文字を表示する&lt;/strong&gt;」などの、すこし凝ったプログラミングも可能です。&lt;/p&gt;
+
+&lt;p&gt;また、スピーカーを端子に接続して音を鳴らしたり、モーターとモータードライバーを接続してラジコンを作ることだって可能で、無限の楽しみ方ができます。&lt;/p&gt;
+
+&lt;p&gt;次回はmicro:bitにスピーカーを接続して、音を鳴らしてみましょう！&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
