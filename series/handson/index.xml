@@ -7,8 +7,361 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2018 dotstudio inc.</copyright>
-    <lastBuildDate>Wed, 09 May 2018 08:30:26 +0900</lastBuildDate>
+    <lastBuildDate>Fri, 01 Jun 2018 10:00:00 +0900</lastBuildDate>
     <atom:link href="/series/handson/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Raspberry Piとサーボモータで踊るはにわ制作</title>
+      <link>https://dotstud.io/blog/dancing-haniwa-servo-raspi/</link>
+      <pubDate>Fri, 01 Jun 2018 10:00:00 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/dancing-haniwa-servo-raspi/</guid>
+      
+      <description>
+
+&lt;p&gt;あ、どうもはにわと申します。
+港町横浜で専門学生やってるものづくりがそこそこ好きなメガネです。&lt;/p&gt;
+
+&lt;p&gt;今回はですねタイトルと名前にあるように動く&lt;strong&gt;┌|∵|┘&lt;/strong&gt;←を作りたいと思うんですよね。&lt;/p&gt;
+
+&lt;p&gt;なぜ作るか……なんですけども&lt;strong&gt;何か大層なことを考えて趣味でものづくりする人ってそうそういない&lt;/strong&gt;と思うんです（┌|∵|┘が作りたいだけ←）。&lt;/p&gt;
+
+&lt;p&gt;今回はRaspberry Piとサーボモータを使って、&lt;strong&gt;踊る┌|∵|┘&lt;/strong&gt;を作ってみます！&lt;/p&gt;
+
+&lt;h2 id=&#34;raspberry-pi-サーボモータ&#34;&gt;Raspberry Pi？サーボモータ？┌|∵|┘？&lt;/h2&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/1.png&#34; alt=&#34;1&#34;&gt;
+
+&lt;/center&gt;
+
+「&lt;a href=&#34;https://www.raspberrypi.org/&#34;&gt;&lt;strong&gt;Raspberry Pi&lt;/strong&gt;&lt;/a&gt;」は、Arduinoに似た何でもできると噂のつよいボードです。
+強さの秘訣は内部でLinux OSが動いたり、直接ディスプレイやキーボード、マウス等を接続できたりすることで、超小型のパソコンと考えてもらって大丈夫です！&lt;/p&gt;
+
+&lt;p&gt;LANケーブルを接続すればネットにも繋がり、中にはWi-Fiモジュールが搭載されていて無線で繋がるものもあります。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/2.png&#34; alt=&#34;2&#34;&gt;
+
+&lt;/center&gt;
+
+「&lt;strong&gt;サーボモータ&lt;/strong&gt;」は、
+普通のモータとは違い回転角度・速度を細かく調整することができ、ラジコンの翼の制御やロボットのアームの制御などに使われます。&lt;/p&gt;
+
+&lt;p&gt;PWMという方法で制御するのですが、詳細は、ドキュメントの「&lt;a href=&#34;https://dotstud.io/docs/pulse-width-modulation/&#34;&gt;PWM制御&lt;/a&gt;」を参考にしてください。&lt;/p&gt;
+
+&lt;p&gt;そして&lt;strong&gt;┌|∵|┘&lt;/strong&gt;です！
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/3.png&#34; alt=&#34;3&#34;&gt;
+
+&lt;/center&gt;
+
+みなさん知ってますよね！？可愛いですよねうん。説明不要ですようん。&lt;/p&gt;
+
+&lt;h2 id=&#34;今回使うもの-欲しいもの&#34;&gt;今回使うもの、欲しいもの&lt;/h2&gt;
+
+&lt;h3 id=&#34;raspberry-pi3-http-akizukidenshi-com-catalog-g-gm-10414&#34;&gt;&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gM-10414/&#34;&gt;Raspberry Pi3&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gM-10414/&#34;&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/4.png&#34; alt=&#34;4&#34;&gt;
+
+&lt;/center&gt;
+&lt;/a&gt;
+Raspberry Pi、通称ラズパイです。今回はRaspberry Pi3を使いますが、別に2でもzeroでも大丈夫かと思われます。ラズパイ上で動かす言語は、RaspbianというOS標準のPython3系を使います。&lt;/p&gt;
+
+&lt;h3 id=&#34;マイクロサーボ9g-sg-90-http-akizukidenshi-com-catalog-g-gm-08761&#34;&gt;&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gM-08761/&#34;&gt;マイクロサーボ9g SG-90&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gM-08761/&#34;&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/5.png&#34; alt=&#34;5&#34;&gt;
+
+&lt;/center&gt;
+&lt;/a&gt;
+安価でお求めやすいサーボモータです。PWMサイクルや制御パルス等色々ありますがそんなことを気にしても物は作れません！とりあえず気にせず行きましょう！&lt;/p&gt;
+
+&lt;h3 id=&#34;ジャンパピン&#34;&gt;ジャンパピン&lt;/h3&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/7.png&#34; alt=&#34;7&#34;&gt;
+
+&lt;/center&gt;
+
+各機器をつなぎ合わせるために使用します。うーん説明終わり！&lt;/p&gt;
+
+&lt;p&gt;Amazon等で「&lt;a href=&#34;https://www.amazon.co.jp/s/ref=nb_sb_noss_1?__mk_ja_JP=%E3%82%AB%E3%82%BF%E3%82%AB%E3%83%8A&amp;amp;url=search-alias%3Daps&amp;amp;field-keywords=%E3%82%B8%E3%83%A3%E3%83%B3%E3%83%91%E3%83%94%E3%83%B3&amp;amp;rh=i%3Aaps%2Ck%3A%E3%82%B8%E3%83%A3%E3%83%B3%E3%83%91%E3%83%94%E3%83%B3&#34;&gt;&lt;strong&gt;ジャンパピン&lt;/strong&gt;&lt;/a&gt;」などと検索してみると、かなり安価で大量に手に入ることがわかります。こんないらねえよ！と思いますよね？私も思います。&lt;/p&gt;
+
+&lt;h3 id=&#34;ブレッドボード&#34;&gt;ブレッドボード&lt;/h3&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/6.png&#34; alt=&#34;6&#34;&gt;
+
+&lt;/center&gt;
+
+「&lt;a href=&#34;https://www.amazon.co.jp/s/ref=nb_sb_noss_1?__mk_ja_JP=%E3%82%AB%E3%82%BF%E3%82%AB%E3%83%8A&amp;amp;url=search-alias%3Daps&amp;amp;field-keywords=%E3%83%96%E3%83%AC%E3%83%83%E3%83%89%E3%83%9C%E3%83%BC%E3%83%89&#34;&gt;&lt;strong&gt;ブレッドボード&lt;/strong&gt;&lt;/a&gt;」と検索するとこんな感じの穴あきの板が手に入ります。ここに先ほどのピン等をさしていきます。&lt;/p&gt;
+
+&lt;p&gt;ブレッドボードの使い方がよくわからない、という方は、ドキュメントの「&lt;a href=&#34;https://dotstud.io/docs/breadboard&#34;&gt;&lt;strong&gt;ブレッドボード&lt;/strong&gt;&lt;/a&gt;」を参照してください。&lt;/p&gt;
+
+&lt;h2 id=&#34;実際に動かす&#34;&gt;実際に動かす&lt;/h2&gt;
+
+&lt;h3 id=&#34;配線&#34;&gt;配線&lt;/h3&gt;
+
+&lt;p&gt;こういった感じに配線していきましょう。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/8.png&#34; alt=&#34;8&#34;&gt;
+
+&lt;/center&gt;
+
+モータを動かすにはパワーを使うため通常は別で電源を用意することが多いですが、1個だけでしたらラズパイからの給電で動くので接続していきましょう。&lt;/p&gt;
+
+&lt;p&gt;SG90の黒をラズパイの「&lt;strong&gt;GND&lt;/strong&gt;」へ、SG90の赤はラズパイの「&lt;strong&gt;5V&lt;/strong&gt;」へ、そして黄色をラズパイの任意のピンへ接続します。今回は2番ピンに接続しておきましょう。近いですし。&lt;/p&gt;
+
+&lt;p&gt;慣習的に5Vを赤、GNDを黒、その他はそれぞれ違う色のジャンパで繋ぐと見やすいです。わかりやすさって大事！！&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/pin.png&#34; alt=&#34;pin&#34;&gt;
+
+&lt;/center&gt;
+
+ラズパイのボード上にはピン名称の記載がありませんが、「&lt;a href=&#34;https://www.google.co.jp/search?q=raspberry+pi+%E3%83%94%E3%83%B3%E3%82%A2%E3%82%B5%E3%82%A4%E3%83%B3&amp;amp;safe=off&amp;amp;rlz=1C5CHFA_enJP706JP706&amp;amp;source=lnms&amp;amp;tbm=isch&amp;amp;sa=X&amp;amp;ved=0ahUKEwjRkLTTw6rbAhWIx7wKHYGRAMEQ_AUICigB&amp;amp;biw=1163&amp;amp;bih=895&#34;&gt;Raspberry Pi ピンアサイン&lt;/a&gt;」などと検索すると調べることができます。&lt;/p&gt;
+
+&lt;h3 id=&#34;プログラム&#34;&gt;プログラム&lt;/h3&gt;
+
+&lt;p&gt;ラズパイの初期設定等はとても詳しく説明してくださってる方がたくさんいるので割愛します！！！Python3とpipがあればOKです。&lt;/p&gt;
+
+&lt;p&gt;SSH接続とかNotepad++とかで遠隔で書き込むのもありですが、それができる人は自分で頑張ってください。今回はラズパイに直接書き込んでいきましょう！&lt;/p&gt;
+
+&lt;p&gt;ラズパイへ電源、HDMI、キーボードを接続しログイン。&lt;/p&gt;
+
+&lt;p&gt;シェルが起動しましたら&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ pip3 install RPi.GPIO
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;とPython上でGPIOを操作できるライブラリを落とします。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ touch motor_test.py
+$ nano motor_test.py
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;でファイルを作成して編集モードにし、以下を記述していきます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import RPi.GPIO as GPIO
+import time
+GPIO.setmode(GPIO.BCM)
+
+gp_out = 2 // SG90の黄色を刺したピン
+GPIO.setup(gp_out, GPIO.OUT)
+motor = GPIO.PWM(gp_out, 50)
+motor.start(0.0)
+
+bot = 2.5
+mid = 7.2
+top = 12.0
+
+motor.ChangeDutyCycle(bot)
+time.sleep(0.5)
+
+motor.ChangeDutyCycle(top)
+time.sleep(0.5)
+
+motor.ChangeDutyCycle(mid)
+time.sleep(0.5)
+
+GPIO.cleanup()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ctrl + x で終了し、yキーで保存します。&lt;/p&gt;
+
+&lt;h3 id=&#34;確認&#34;&gt;確認&lt;/h3&gt;
+
+&lt;p&gt;プログラムを書き込めたら、動かしてみましょう。配線を確認し次のコマンドを叩きましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ python3 motor_test.py
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/170/9.gif&#34; alt=&#34;&#34; /&gt;
+おお！動いた！という事で&lt;code&gt;ChangeDutyCycle()&lt;/code&gt;の中身を変えることで好きな角度に変えることができます。とりあえずの指標として0、90、180度をtop、mid、bot&lt;del&gt;で分けて&lt;/del&gt;という変数に入れていますが、直接数値を入力してもOKです。&lt;/p&gt;
+
+&lt;h2 id=&#34;モータを増やす&#34;&gt;モータを増やす。&lt;/h2&gt;
+
+&lt;p&gt;一つのサーボモータを動かすことには成功しました。なので次はもっと増やしてみましょう。&lt;/p&gt;
+
+&lt;p&gt;具体的には上のプログラムの使いまわしで大丈夫です。使うモータ毎に名前とどのピンを使うかを記述し、&lt;code&gt;名前.ChangeDutyCycle()&lt;/code&gt;とすると対応するサーボモータが作動するようになります。&lt;/p&gt;
+
+&lt;h3 id=&#34;配線-1&#34;&gt;配線&lt;/h3&gt;
+
+&lt;p&gt;では全部で3台動くように追加していきましょう！ラズパイからの給電ではSG90を3台も動かせないので、単3電池2本を追加して電力を補強しつつこういった感じに配線します。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/circuit.png&#34; alt=&#34;circuit&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;電池の赤（+）をブレッドボードの+列へ、黒（-）をｰ列へ刺します。&lt;/p&gt;
+
+&lt;p&gt;各サーボモータの赤をブレッドボードの+列に、サーボモーターの黒をブレッドボードの-列に、ラズパイのGNDをボードの-列へ接続し電源を確保します。&lt;/p&gt;
+
+&lt;p&gt;そしてサーボモータの黄色はGPIO端子の対応するところ（今回は2、3、4番ピン）にぶっ刺します。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/10.png&#34; alt=&#34;10&#34;&gt;
+
+&lt;/center&gt;
+
+Oh…ｺﾞﾁｬｺﾞﾁｬ……&lt;/p&gt;
+
+&lt;h3 id=&#34;プログラム-1&#34;&gt;プログラム&lt;/h3&gt;
+
+&lt;p&gt;さっき書いたプログラムのように記述します。さっきのを書き換えてもOKです！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import RPi.GPIO as GPIO
+import time
+GPIO.setmode(GPIO.BCM)
+
+gp_out = 2
+GPIO.setup(gp_out, GPIO.OUT)
+right = GPIO.PWM(gp_out, 50)
+right.start(0.0)
+
+gp_out = 3
+GPIO.setup(gp_out, GPIO.OUT)
+left = GPIO.PWM(gp_out, 50)
+left.start(0.0)
+
+gp_out = 4
+GPIO.setup(gp_out, GPIO.OUT)
+chest = GPIO.PWM(gp_out, 50)
+chest.start(0.0)
+
+bot = 2.5
+mid = 7.2
+top = 12.0
+
+right.ChangeDutyCycle(bot)
+left.ChangeDutyCycle(bot)
+time.sleep(0.5)
+
+chest.ChangeDutyCycle(mid)
+time.sleep(0.5)
+
+right.ChangeDutyCycle(top)
+chest.ChangeDutyCycle(bot)
+time.sleep(0.5)
+
+chest.ChangeDutyCycle(top)
+right.ChangeDutyCycle(bot)
+left.ChangeDutyCycle(top)
+time.sleep(0.5)
+
+chest.ChangeDutyCycle(mid)
+right.ChangeDutyCycle(top)
+left.ChangeDutyCycle(bot)
+time.sleep(0.5)
+
+GPIO.cleanup()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;こんな感じで！もう好きにやっちゃってくださいな。&lt;/p&gt;
+
+&lt;h2 id=&#34;図工&#34;&gt;図工&lt;/h2&gt;
+
+&lt;p&gt;それでは本題である&lt;strong&gt;┌|∵|┘&lt;/strong&gt;を作ります！皆さん童心に帰って好きな素材で作ってください！&lt;/p&gt;
+
+&lt;p&gt;私は今回牛乳パックで作成していきます。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/11.png&#34; alt=&#34;11&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;p&gt;( ＾ω＾)&lt;br /&gt;
+≡⊃⊂≡&lt;br /&gt;
+こうしてこうして
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/12.png&#34; alt=&#34;12&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;p&gt;( ＾ω＾)&lt;br /&gt;
+⊃ .. ⊂&lt;br /&gt;
+こうじゃ
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/haniwa.png&#34; alt=&#34;haniwa&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;やったぜ&#34;&gt;やったぜ&lt;/h2&gt;
+
+&lt;p&gt;さあさあここまで来たんです！動かしましょうよ！ね！
+&lt;strong&gt;┌|∵|┘起動!!!!!&lt;/strong&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/14.gif&#34; alt=&#34;&#34; /&gt;
+&lt;center&gt;
+&lt;font size=&#34;5&#34;&gt;動いたあああああ！躍ったああああああああ！&lt;/font&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;
+と、いう事で好きにパーツを作ってもらえればどんなものも躍らせられますね……！！踊り自体もPythonで記述しているので、forやifを駆使すれば複雑な踊りだっていけます。ここから皆さんの創造力が試されますぞ！&lt;/p&gt;
+
+&lt;p&gt;それでは長くなりましたがお疲れ様です！皆もなんか動かしてみようぜ！！&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>非接触ICタグで遊ぼう！ArduinoでRFIDリーダRC522を使う方法</title>
@@ -904,6 +1257,9 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/mongoose-os-nefry-blink/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/145/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -923,6 +1279,12 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
+      
+  
+      
       
   
       

@@ -7,8 +7,361 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2018 dotstudio inc.</copyright>
-    <lastBuildDate>Tue, 29 May 2018 10:40:00 +0900</lastBuildDate>
+    <lastBuildDate>Fri, 01 Jun 2018 10:00:00 +0900</lastBuildDate>
     <atom:link href="/categories/try/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Raspberry Piとサーボモータで踊るはにわ制作</title>
+      <link>https://dotstud.io/blog/dancing-haniwa-servo-raspi/</link>
+      <pubDate>Fri, 01 Jun 2018 10:00:00 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/dancing-haniwa-servo-raspi/</guid>
+      
+      <description>
+
+&lt;p&gt;あ、どうもはにわと申します。
+港町横浜で専門学生やってるものづくりがそこそこ好きなメガネです。&lt;/p&gt;
+
+&lt;p&gt;今回はですねタイトルと名前にあるように動く&lt;strong&gt;┌|∵|┘&lt;/strong&gt;←を作りたいと思うんですよね。&lt;/p&gt;
+
+&lt;p&gt;なぜ作るか……なんですけども&lt;strong&gt;何か大層なことを考えて趣味でものづくりする人ってそうそういない&lt;/strong&gt;と思うんです（┌|∵|┘が作りたいだけ←）。&lt;/p&gt;
+
+&lt;p&gt;今回はRaspberry Piとサーボモータを使って、&lt;strong&gt;踊る┌|∵|┘&lt;/strong&gt;を作ってみます！&lt;/p&gt;
+
+&lt;h2 id=&#34;raspberry-pi-サーボモータ&#34;&gt;Raspberry Pi？サーボモータ？┌|∵|┘？&lt;/h2&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/1.png&#34; alt=&#34;1&#34;&gt;
+
+&lt;/center&gt;
+
+「&lt;a href=&#34;https://www.raspberrypi.org/&#34;&gt;&lt;strong&gt;Raspberry Pi&lt;/strong&gt;&lt;/a&gt;」は、Arduinoに似た何でもできると噂のつよいボードです。
+強さの秘訣は内部でLinux OSが動いたり、直接ディスプレイやキーボード、マウス等を接続できたりすることで、超小型のパソコンと考えてもらって大丈夫です！&lt;/p&gt;
+
+&lt;p&gt;LANケーブルを接続すればネットにも繋がり、中にはWi-Fiモジュールが搭載されていて無線で繋がるものもあります。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/2.png&#34; alt=&#34;2&#34;&gt;
+
+&lt;/center&gt;
+
+「&lt;strong&gt;サーボモータ&lt;/strong&gt;」は、
+普通のモータとは違い回転角度・速度を細かく調整することができ、ラジコンの翼の制御やロボットのアームの制御などに使われます。&lt;/p&gt;
+
+&lt;p&gt;PWMという方法で制御するのですが、詳細は、ドキュメントの「&lt;a href=&#34;https://dotstud.io/docs/pulse-width-modulation/&#34;&gt;PWM制御&lt;/a&gt;」を参考にしてください。&lt;/p&gt;
+
+&lt;p&gt;そして&lt;strong&gt;┌|∵|┘&lt;/strong&gt;です！
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/3.png&#34; alt=&#34;3&#34;&gt;
+
+&lt;/center&gt;
+
+みなさん知ってますよね！？可愛いですよねうん。説明不要ですようん。&lt;/p&gt;
+
+&lt;h2 id=&#34;今回使うもの-欲しいもの&#34;&gt;今回使うもの、欲しいもの&lt;/h2&gt;
+
+&lt;h3 id=&#34;raspberry-pi3-http-akizukidenshi-com-catalog-g-gm-10414&#34;&gt;&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gM-10414/&#34;&gt;Raspberry Pi3&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gM-10414/&#34;&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/4.png&#34; alt=&#34;4&#34;&gt;
+
+&lt;/center&gt;
+&lt;/a&gt;
+Raspberry Pi、通称ラズパイです。今回はRaspberry Pi3を使いますが、別に2でもzeroでも大丈夫かと思われます。ラズパイ上で動かす言語は、RaspbianというOS標準のPython3系を使います。&lt;/p&gt;
+
+&lt;h3 id=&#34;マイクロサーボ9g-sg-90-http-akizukidenshi-com-catalog-g-gm-08761&#34;&gt;&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gM-08761/&#34;&gt;マイクロサーボ9g SG-90&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gM-08761/&#34;&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/5.png&#34; alt=&#34;5&#34;&gt;
+
+&lt;/center&gt;
+&lt;/a&gt;
+安価でお求めやすいサーボモータです。PWMサイクルや制御パルス等色々ありますがそんなことを気にしても物は作れません！とりあえず気にせず行きましょう！&lt;/p&gt;
+
+&lt;h3 id=&#34;ジャンパピン&#34;&gt;ジャンパピン&lt;/h3&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/7.png&#34; alt=&#34;7&#34;&gt;
+
+&lt;/center&gt;
+
+各機器をつなぎ合わせるために使用します。うーん説明終わり！&lt;/p&gt;
+
+&lt;p&gt;Amazon等で「&lt;a href=&#34;https://www.amazon.co.jp/s/ref=nb_sb_noss_1?__mk_ja_JP=%E3%82%AB%E3%82%BF%E3%82%AB%E3%83%8A&amp;amp;url=search-alias%3Daps&amp;amp;field-keywords=%E3%82%B8%E3%83%A3%E3%83%B3%E3%83%91%E3%83%94%E3%83%B3&amp;amp;rh=i%3Aaps%2Ck%3A%E3%82%B8%E3%83%A3%E3%83%B3%E3%83%91%E3%83%94%E3%83%B3&#34;&gt;&lt;strong&gt;ジャンパピン&lt;/strong&gt;&lt;/a&gt;」などと検索してみると、かなり安価で大量に手に入ることがわかります。こんないらねえよ！と思いますよね？私も思います。&lt;/p&gt;
+
+&lt;h3 id=&#34;ブレッドボード&#34;&gt;ブレッドボード&lt;/h3&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/6.png&#34; alt=&#34;6&#34;&gt;
+
+&lt;/center&gt;
+
+「&lt;a href=&#34;https://www.amazon.co.jp/s/ref=nb_sb_noss_1?__mk_ja_JP=%E3%82%AB%E3%82%BF%E3%82%AB%E3%83%8A&amp;amp;url=search-alias%3Daps&amp;amp;field-keywords=%E3%83%96%E3%83%AC%E3%83%83%E3%83%89%E3%83%9C%E3%83%BC%E3%83%89&#34;&gt;&lt;strong&gt;ブレッドボード&lt;/strong&gt;&lt;/a&gt;」と検索するとこんな感じの穴あきの板が手に入ります。ここに先ほどのピン等をさしていきます。&lt;/p&gt;
+
+&lt;p&gt;ブレッドボードの使い方がよくわからない、という方は、ドキュメントの「&lt;a href=&#34;https://dotstud.io/docs/breadboard&#34;&gt;&lt;strong&gt;ブレッドボード&lt;/strong&gt;&lt;/a&gt;」を参照してください。&lt;/p&gt;
+
+&lt;h2 id=&#34;実際に動かす&#34;&gt;実際に動かす&lt;/h2&gt;
+
+&lt;h3 id=&#34;配線&#34;&gt;配線&lt;/h3&gt;
+
+&lt;p&gt;こういった感じに配線していきましょう。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/8.png&#34; alt=&#34;8&#34;&gt;
+
+&lt;/center&gt;
+
+モータを動かすにはパワーを使うため通常は別で電源を用意することが多いですが、1個だけでしたらラズパイからの給電で動くので接続していきましょう。&lt;/p&gt;
+
+&lt;p&gt;SG90の黒をラズパイの「&lt;strong&gt;GND&lt;/strong&gt;」へ、SG90の赤はラズパイの「&lt;strong&gt;5V&lt;/strong&gt;」へ、そして黄色をラズパイの任意のピンへ接続します。今回は2番ピンに接続しておきましょう。近いですし。&lt;/p&gt;
+
+&lt;p&gt;慣習的に5Vを赤、GNDを黒、その他はそれぞれ違う色のジャンパで繋ぐと見やすいです。わかりやすさって大事！！&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/pin.png&#34; alt=&#34;pin&#34;&gt;
+
+&lt;/center&gt;
+
+ラズパイのボード上にはピン名称の記載がありませんが、「&lt;a href=&#34;https://www.google.co.jp/search?q=raspberry+pi+%E3%83%94%E3%83%B3%E3%82%A2%E3%82%B5%E3%82%A4%E3%83%B3&amp;amp;safe=off&amp;amp;rlz=1C5CHFA_enJP706JP706&amp;amp;source=lnms&amp;amp;tbm=isch&amp;amp;sa=X&amp;amp;ved=0ahUKEwjRkLTTw6rbAhWIx7wKHYGRAMEQ_AUICigB&amp;amp;biw=1163&amp;amp;bih=895&#34;&gt;Raspberry Pi ピンアサイン&lt;/a&gt;」などと検索すると調べることができます。&lt;/p&gt;
+
+&lt;h3 id=&#34;プログラム&#34;&gt;プログラム&lt;/h3&gt;
+
+&lt;p&gt;ラズパイの初期設定等はとても詳しく説明してくださってる方がたくさんいるので割愛します！！！Python3とpipがあればOKです。&lt;/p&gt;
+
+&lt;p&gt;SSH接続とかNotepad++とかで遠隔で書き込むのもありですが、それができる人は自分で頑張ってください。今回はラズパイに直接書き込んでいきましょう！&lt;/p&gt;
+
+&lt;p&gt;ラズパイへ電源、HDMI、キーボードを接続しログイン。&lt;/p&gt;
+
+&lt;p&gt;シェルが起動しましたら&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ pip3 install RPi.GPIO
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;とPython上でGPIOを操作できるライブラリを落とします。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ touch motor_test.py
+$ nano motor_test.py
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;でファイルを作成して編集モードにし、以下を記述していきます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import RPi.GPIO as GPIO
+import time
+GPIO.setmode(GPIO.BCM)
+
+gp_out = 2 // SG90の黄色を刺したピン
+GPIO.setup(gp_out, GPIO.OUT)
+motor = GPIO.PWM(gp_out, 50)
+motor.start(0.0)
+
+bot = 2.5
+mid = 7.2
+top = 12.0
+
+motor.ChangeDutyCycle(bot)
+time.sleep(0.5)
+
+motor.ChangeDutyCycle(top)
+time.sleep(0.5)
+
+motor.ChangeDutyCycle(mid)
+time.sleep(0.5)
+
+GPIO.cleanup()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ctrl + x で終了し、yキーで保存します。&lt;/p&gt;
+
+&lt;h3 id=&#34;確認&#34;&gt;確認&lt;/h3&gt;
+
+&lt;p&gt;プログラムを書き込めたら、動かしてみましょう。配線を確認し次のコマンドを叩きましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ python3 motor_test.py
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/170/9.gif&#34; alt=&#34;&#34; /&gt;
+おお！動いた！という事で&lt;code&gt;ChangeDutyCycle()&lt;/code&gt;の中身を変えることで好きな角度に変えることができます。とりあえずの指標として0、90、180度をtop、mid、bot&lt;del&gt;で分けて&lt;/del&gt;という変数に入れていますが、直接数値を入力してもOKです。&lt;/p&gt;
+
+&lt;h2 id=&#34;モータを増やす&#34;&gt;モータを増やす。&lt;/h2&gt;
+
+&lt;p&gt;一つのサーボモータを動かすことには成功しました。なので次はもっと増やしてみましょう。&lt;/p&gt;
+
+&lt;p&gt;具体的には上のプログラムの使いまわしで大丈夫です。使うモータ毎に名前とどのピンを使うかを記述し、&lt;code&gt;名前.ChangeDutyCycle()&lt;/code&gt;とすると対応するサーボモータが作動するようになります。&lt;/p&gt;
+
+&lt;h3 id=&#34;配線-1&#34;&gt;配線&lt;/h3&gt;
+
+&lt;p&gt;では全部で3台動くように追加していきましょう！ラズパイからの給電ではSG90を3台も動かせないので、単3電池2本を追加して電力を補強しつつこういった感じに配線します。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/circuit.png&#34; alt=&#34;circuit&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;電池の赤（+）をブレッドボードの+列へ、黒（-）をｰ列へ刺します。&lt;/p&gt;
+
+&lt;p&gt;各サーボモータの赤をブレッドボードの+列に、サーボモーターの黒をブレッドボードの-列に、ラズパイのGNDをボードの-列へ接続し電源を確保します。&lt;/p&gt;
+
+&lt;p&gt;そしてサーボモータの黄色はGPIO端子の対応するところ（今回は2、3、4番ピン）にぶっ刺します。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/10.png&#34; alt=&#34;10&#34;&gt;
+
+&lt;/center&gt;
+
+Oh…ｺﾞﾁｬｺﾞﾁｬ……&lt;/p&gt;
+
+&lt;h3 id=&#34;プログラム-1&#34;&gt;プログラム&lt;/h3&gt;
+
+&lt;p&gt;さっき書いたプログラムのように記述します。さっきのを書き換えてもOKです！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import RPi.GPIO as GPIO
+import time
+GPIO.setmode(GPIO.BCM)
+
+gp_out = 2
+GPIO.setup(gp_out, GPIO.OUT)
+right = GPIO.PWM(gp_out, 50)
+right.start(0.0)
+
+gp_out = 3
+GPIO.setup(gp_out, GPIO.OUT)
+left = GPIO.PWM(gp_out, 50)
+left.start(0.0)
+
+gp_out = 4
+GPIO.setup(gp_out, GPIO.OUT)
+chest = GPIO.PWM(gp_out, 50)
+chest.start(0.0)
+
+bot = 2.5
+mid = 7.2
+top = 12.0
+
+right.ChangeDutyCycle(bot)
+left.ChangeDutyCycle(bot)
+time.sleep(0.5)
+
+chest.ChangeDutyCycle(mid)
+time.sleep(0.5)
+
+right.ChangeDutyCycle(top)
+chest.ChangeDutyCycle(bot)
+time.sleep(0.5)
+
+chest.ChangeDutyCycle(top)
+right.ChangeDutyCycle(bot)
+left.ChangeDutyCycle(top)
+time.sleep(0.5)
+
+chest.ChangeDutyCycle(mid)
+right.ChangeDutyCycle(top)
+left.ChangeDutyCycle(bot)
+time.sleep(0.5)
+
+GPIO.cleanup()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;こんな感じで！もう好きにやっちゃってくださいな。&lt;/p&gt;
+
+&lt;h2 id=&#34;図工&#34;&gt;図工&lt;/h2&gt;
+
+&lt;p&gt;それでは本題である&lt;strong&gt;┌|∵|┘&lt;/strong&gt;を作ります！皆さん童心に帰って好きな素材で作ってください！&lt;/p&gt;
+
+&lt;p&gt;私は今回牛乳パックで作成していきます。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/11.png&#34; alt=&#34;11&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;p&gt;( ＾ω＾)&lt;br /&gt;
+≡⊃⊂≡&lt;br /&gt;
+こうしてこうして
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/12.png&#34; alt=&#34;12&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;p&gt;( ＾ω＾)&lt;br /&gt;
+⊃ .. ⊂&lt;br /&gt;
+こうじゃ
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/haniwa.png&#34; alt=&#34;haniwa&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;やったぜ&#34;&gt;やったぜ&lt;/h2&gt;
+
+&lt;p&gt;さあさあここまで来たんです！動かしましょうよ！ね！
+&lt;strong&gt;┌|∵|┘起動!!!!!&lt;/strong&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/14.gif&#34; alt=&#34;&#34; /&gt;
+&lt;center&gt;
+&lt;font size=&#34;5&#34;&gt;動いたあああああ！躍ったああああああああ！&lt;/font&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;
+と、いう事で好きにパーツを作ってもらえればどんなものも躍らせられますね……！！踊り自体もPythonで記述しているので、forやifを駆使すれば複雑な踊りだっていけます。ここから皆さんの創造力が試されますぞ！&lt;/p&gt;
+
+&lt;p&gt;それでは長くなりましたがお疲れ様です！皆もなんか動かしてみようぜ！！&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>micro:bit同士で通信してみよう！腕の動きに合わせて光る帽子の作り方</title>
@@ -366,6 +719,9 @@
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/microbit-getting-started-pokio/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/165/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -385,6 +741,12 @@
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
+      
+  
+      
       
   
       
@@ -2549,6 +2911,9 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/usb-power-supply-making/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/151/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -2568,6 +2933,12 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
+      
+  
+      
       
   
       
@@ -3455,6 +3826,9 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/usb-power-supply-making2/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/159/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -3474,6 +3848,12 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
+      
+  
+      
       
   
       
@@ -4406,6 +4786,9 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/usb-power-supply-making2/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/159/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -4425,6 +4808,12 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
+      
+  
+      
       
   
       
@@ -5407,6 +5796,9 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/usb-power-supply-making/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/151/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -5426,6 +5818,12 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
+      
+  
+      
       
   
       
@@ -6414,6 +6812,9 @@ V字に切り込みを入れたフタをつけたところ、ぴったりはま�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nodejs-amazon-alexa-skill/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/144/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -6433,6 +6834,12 @@ V字に切り込みを入れたフタをつけたところ、ぴったりはま�
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
+      
+  
+      
       
   
       
@@ -7460,6 +7867,9 @@ AWSアカウントでS3にアクセスしたら、まずは「&lt;strong&gt;バ�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nodejs-amazon-alexa-skill/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/144/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -7479,6 +7889,12 @@ AWSアカウントでS3にアクセスしたら、まずは「&lt;strong&gt;バ�
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
+      
+  
+      
       
   
       
@@ -8469,6 +8885,9 @@ exports.handler = function(event, context, callback) {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nodejs-amazon-alexa-skill/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/144/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -8488,6 +8907,12 @@ exports.handler = function(event, context, callback) {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
+      
+  
+      
       
   
       
@@ -9446,6 +9871,9 @@ Amazon Developerコンソール上のAlexaスキルで「テスト」のタブ�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/usb-power-supply-making/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/151/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -9465,6 +9893,12 @@ Amazon Developerコンソール上のAlexaスキルで「テスト」のタブ�
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
+      
+  
+      
       
   
       
@@ -10349,6 +10783,9 @@ Amazon Developerコンソール上のAlexaスキルで「テスト」のタブ�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/usb-power-supply-making3/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/160/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -10368,6 +10805,12 @@ Amazon Developerコンソール上のAlexaスキルで「テスト」のタブ�
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
+      
+  
+      
       
   
       
@@ -11454,6 +11897,9 @@ USB電源は電流Imaxを上限とした定電圧電源のため、&lt;strong&gt
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/usb-power-supply-making3/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/160/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -11473,6 +11919,12 @@ USB電源は電流Imaxを上限とした定電圧電源のため、&lt;strong&gt
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
+      
+  
+      
       
   
       
@@ -13051,6 +13503,9 @@ div.talk-box p {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/mongoose-os-nefry-blink/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/145/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -13070,6 +13525,12 @@ div.talk-box p {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
+      
+  
+      
       
   
       
@@ -14090,6 +14551,9 @@ Mongoose OSのコンソールからロータリエンコーダの値を確認す
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/gyaruden-mao-vibes-polo/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/152/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -14109,6 +14573,12 @@ Mongoose OSのコンソールからロータリエンコーダの値を確認す
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
+      
+  
+      
       
   
       
@@ -15311,6 +15781,9 @@ Setup WiFiをクリックして、Nefry BTが使うWi-Fi（2.4GHz帯）を設定
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/gyaruden-mao-vibes-polo2/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/153/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -15330,6 +15803,12 @@ Setup WiFiをクリックして、Nefry BTが使うWi-Fi（2.4GHz帯）を設定
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
+      
+  
+      
       
   
       
@@ -16639,6 +17118,9 @@ Amazon Developer側の設定ページで、「エンドポイント」に「AWS 
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/gyaruden-kyoko-unicorn-pochette/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/146/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -16658,6 +17140,12 @@ Amazon Developer側の設定ページで、「エンドポイント」に「AWS 
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
+      
+  
+      
       
   
       
@@ -17940,6 +18428,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/usb-power-supply-making2/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/159/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -18558,175 +19049,14 @@ void loop() {
       
       
   
+      
+      
+  
+      
+      
+  
 &lt;/section&gt;
 &lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>放置されていた3Dプリンタ「Trinus」で初めての3Dプリントに挑戦</title>
-      <link>https://dotstud.io/blog/3d-printer-trinus-usage/</link>
-      <pubDate>Thu, 22 Feb 2018 03:00:43 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/3d-printer-trinus-usage/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、たくろーどんです。大学で&lt;a href=&#34;https://dotstud.io/docs/nefrybt&#34;&gt;NefryBT&lt;/a&gt;を使った工作をしていたら、いつのまにかdotstudioでアルバイトすることになっていました。宇宙工学を勉強しています。以後よろしくお願いします。&lt;/p&gt;
-
-&lt;p&gt;=&amp;gt; 参考: &lt;a href=&#34;https://qiita.com/minwinmin/items/d1f296b8a9cd1a2c22f6&#34;&gt;研究室のみんなとNefry BTを使ってはじめてIoTデバイスをつくってみた&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;今回は、dotstudioに放置されていた3Dプリンタ「Trinus（トライナス）」を使って初めての3Dプリントに挑戦してみます。
-&lt;img src=&#34;https://dotstud.io/img/blog/149/lead.png&#34; alt=&#34;&#34; /&gt;
-これで哲学的なものを錬成していきましょう。&lt;/p&gt;
-
-&lt;h2 id=&#34;3dプリントを始める前に&#34;&gt;3Dプリントを始める前に&lt;/h2&gt;
-
-&lt;h3 id=&#34;3dプリンタとは&#34;&gt;3Dプリンタとは？&lt;/h3&gt;
-
-&lt;p&gt;3Dプリンタとは、その名の通り&lt;strong&gt;3Dのデータを出力できる&lt;/strong&gt;プリンタです。
-&lt;img src=&#34;https://dotstud.io/img/blog/149/3dprint.png&#34; alt=&#34;&#34; /&gt;
-プリンタによりますが、金属、アルミ、ゴムなどさまざまな素材で出力できるため広い分野で活躍しています。&lt;/p&gt;
-
-&lt;p&gt;現在は業務用から一般向けまでさまざまな種類の3Dプリンタが販売されていますが、今回はdotstudioに放置されていた「Trinus（トライナス）」を使ってみます。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;a href=&#34;http://www.trinus3d.com/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/trinus.png&#34; alt=&#34;&#34; /&gt;
-Trinus - Kodama, Inc.&lt;/a&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;3万円代とお手頃価格で、樹脂に加えて木材やアルミも利用でき、別売りのヘッドをつけることでレーザ彫刻機にもなる優れものです。&lt;/p&gt;
-
-&lt;h3 id=&#34;3dプリントには3dデータが必要&#34;&gt;3Dプリントには3Dデータが必要&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;3Dプリントをするためには3Dデータが必要です&lt;/strong&gt;。3Dデータをモデリング（作成すること）方法はいくつかありますが、今回は3D CADソフトを使っています。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/inventor.png&#34; alt=&#34;&#34; /&gt;
-僕はAutodeskの「&lt;a href=&#34;https://www.autodesk.co.jp/products/inventor/overview&#34;&gt;&lt;strong&gt;Inventor&lt;/strong&gt;&lt;/a&gt;」を使ってデータを作成しました。有料ソフトですが、なんと&lt;strong&gt;学生だと3年間無料で&lt;/strong&gt;つかえます！&lt;/p&gt;
-
-&lt;p&gt;Inventorは本格的な機械設計向きなので、簡単に試したい人は同じくAutodeskの「&lt;a href=&#34;https://www.autodesk.co.jp/products/fusion-360/overview&#34;&gt;&lt;strong&gt;fusion360&lt;/strong&gt;&lt;/a&gt;」の方がとっつきやすいかと思います。こちらも個人利用の場合は無料です。&lt;/p&gt;
-
-&lt;p&gt;3D CADソフトは他にも&lt;a href=&#34;https://www.rs-online.com/designspark/mechanical-software-jp&#34;&gt;DesignSpark Mechanical&lt;/a&gt;や&lt;a href=&#34;https://www.freecadweb.org/?lang=ja&#34;&gt;FreeCAD&lt;/a&gt;などいくつかあるので、自分が使いやすいと思ったものを使うと良いでしょう。&lt;/p&gt;
-
-&lt;p&gt;さらにもう一つ。
-プログラマーのためにGithubがあるなら、&lt;strong&gt;メカ系エンジニアのために&lt;a href=&#34;https://grabcad.com/&#34;&gt;GrabcCAD&lt;/a&gt;というものがあります&lt;/strong&gt;。
-&lt;img src=&#34;https://dotstud.io/img/blog/149/grabccad.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ここで、世界中のエンジニアが製作した様々なモデリングを閲覧したり使用したりできます。もし複雑なパーツをモデリングすることが難しければ、GrabCADを参考にしてみるのも手だと思います。&lt;/p&gt;
-
-&lt;h3 id=&#34;trinusの組み立て&#34;&gt;Trinusの組み立て&lt;/h3&gt;
-
-&lt;p&gt;Trinusの組み立てに関しては説明書をご覧ください。
-また、日本語の公式サイトもあります。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;a href=&#34;http://www.trinusjapan.com/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/community.png&#34; alt=&#34;&#34; /&gt;
-http://trinusjapan.com/&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;trinus用ソフト-pango-をインストール&#34;&gt;Trinus用ソフト「Pango」をインストール&lt;/h3&gt;
-
-&lt;p&gt;Trinusで3Dプリントするには、モデリングしたものを扱う専用ソフト「Pango」が必要です。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://trinusjapan.com/softwaredownload/&#34;&gt;こちらのリンク&lt;/a&gt;からインストールしてください。&lt;/p&gt;
-
-&lt;h2 id=&#34;3dプリントに挑戦&#34;&gt;3Dプリントに挑戦！&lt;/h2&gt;
-
-&lt;h3 id=&#34;プリンタ側の準備&#34;&gt;プリンタ側の準備&lt;/h3&gt;
-
-&lt;p&gt;詳しくは&lt;a href=&#34;http://trinusjapan.com/firstprint/&#34;&gt;公式サイト&lt;/a&gt;にのっているので、要点だけ説明します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/printer.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;まず、Trinusの電源をいれるため、コンセントにつなげましょう。電源がつくと「ビッ」という音がします。&lt;/p&gt;
-
-&lt;h3 id=&#34;pangoにデータを取り込む&#34;&gt;Pangoにデータを取り込む&lt;/h3&gt;
-
-&lt;p&gt;パソコンからデータ（stlファイル）をPangoで開きましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/1.png&#34; alt=&#34;&#34; /&gt;
-①のように「書き出し」から「CAD形式」を選択し、stl形式で保存します。&lt;strong&gt;サイズがモデリングと一致&lt;/strong&gt;しているかしっかりと確認してください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/2.png&#34; alt=&#34;&#34; /&gt;
-Pangoでstlファイルを開くと&lt;strong&gt;何故かサイズが10分の1&lt;/strong&gt;になってしまうので（dotstudioだけで起こる現象なのか不明）、元のサイズに戻します。③と④のように比率（Ratio）を10に変えます。Amountは寸法を意味していて、単位はmmです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/3.png&#34; alt=&#34;&#34; /&gt;
-必要があれば3Dプリントしやすいようにモデルの向きを変えましょう。&lt;strong&gt;どのような向きで出力するか&lt;/strong&gt;、これがとても大事です！印刷中に思いがけない失敗を引き起こすことになります。&lt;/p&gt;
-
-&lt;p&gt;⑤のように赤丸部をクリックすると回転軸の表示が出ます。そして、回転したい軸にマウスポインタを持っていきます。⑥のように回転する軸が強調されます。マウスで操作する場合はホイールを動かすことで回転させることができます。パソコンにあるタッチパッドの場合は2本の指で、上下になぞるように動かすと回転します（Windowsの場合）。&lt;/p&gt;
-
-&lt;h3 id=&#34;印刷のシミュレーション&#34;&gt;印刷のシミュレーション&lt;/h3&gt;
-
-&lt;p&gt;実際にどのように印刷が進められるかPango上で確認することもできます。Pangoの上部にある「View」から「Layer」をクリックしてください。
-&lt;img src=&#34;https://dotstud.io/img/blog/149/4.png&#34; alt=&#34;&#34; /&gt;
-すると自分がモデリングしたもの以外に格子状のモデリング（濃いピンクの部分）が追加されています。これは「&lt;strong&gt;ラフト&lt;/strong&gt;」と呼ばれ、3Dプリンタの印刷面と出力するものの間に積層される荒い土台のことです。&lt;/p&gt;
-
-&lt;p&gt;これがあると出力した後に製作物を外しやすく、最終的には除去してゴミとして捨てることができます。&lt;/p&gt;
-
-&lt;h3 id=&#34;データをtrinusに移す&#34;&gt;データをTrinusに移す&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/5.png&#34; alt=&#34;&#34; /&gt;
-データをSDカードに「pcode」形式で保存します。図の赤丸部をクリックし、SDカードにデータをpcode形式で保存します。この形式は、Torinusで出力するために必要な形式です。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/6.png&#34; alt=&#34;&#34; /&gt;
-SDカードをTorinusに接続し、TorinusとパソコンをUSB接続します。&lt;/p&gt;
-
-&lt;h3 id=&#34;出力設定を調整&#34;&gt;出力設定を調整&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/7.png&#34; alt=&#34;&#34; /&gt;
-Pango上部の「Preference」から「Setting」を選択します。ここでは、出力するスピードや厚みなどを設定することができます。&lt;strong&gt;設定はあまりいじる必要はない&lt;/strong&gt;ので、眺めおきましょう！（ただし今回は試行錯誤の結果、Thickness: 0.2mm、Print Speed: 40mm/sとしています）&lt;/p&gt;
-
-&lt;h3 id=&#34;重要-出力位置の初期位置を調整&#34;&gt;【重要】出力位置の初期位置を調整&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/8.png&#34; alt=&#34;&#34; /&gt;
-TorinusとパソコンをUSB接続した状態でPango上部の「View」から「Console」をクリックします。上のような画像が出たら、さらに「Console」をクリックします。　&lt;/p&gt;
-
-&lt;p&gt;そうすると下記のような設定画面があらわれます。&lt;strong&gt;この画面で行う設定が非常に重要です&lt;/strong&gt;。
-&lt;img src=&#34;https://dotstud.io/img/blog/149/9.png&#34; alt=&#34;&#34; /&gt;
-&lt;strong&gt;まず「Home」をクリック&lt;/strong&gt;します。これで、3Dプリンタのノズル（フィラメントが出る部分）が初期位置に戻ります。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/10.png&#34; alt=&#34;&#34; /&gt;
-ここで&lt;strong&gt;z軸の距離（ノズルから出力される面の高さ、画像でいう赤い矢印部分）を確認&lt;/strong&gt;してください。その距離が初期位置で広すぎると上手く出力されません。なので、目視でその距離を縮めましょう。「Offset」をクリックすると&lt;strong&gt;z軸方向の距離を上下&lt;/strong&gt;することができます。&lt;/p&gt;
-
-&lt;h3 id=&#34;出力を開始&#34;&gt;出力を開始！&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/9.png&#34; alt=&#34;&#34; /&gt;
-位置設定が終わったら、「&lt;strong&gt;Heat E」をクリック&lt;/strong&gt;し3Dプリンタのノズルを温めます。どれくらい温まっているかは、Console画面の左下に示す数字（分数部分）で表されます。最後に右のSDカードのイラスト部分をクリックし、保存したpcodeファイルを指定します。3Dプリンタのノズルが十分に温まれば自動で出力が始まります！&lt;/p&gt;
-
-&lt;h3 id=&#34;出力直後にやるべきこと&#34;&gt;出力直後にやるべきこと&lt;/h3&gt;
-
-&lt;p&gt;出力が始まるとその直後に、&lt;strong&gt;ノズルから溶け出たフィラメント&lt;/strong&gt;が垂れてきます。&lt;strong&gt;垂れて固まったフィラメントは出力の邪魔になることもあるので、ピンセットで取り除きましょう&lt;/strong&gt;。下記の図の赤丸で囲った部分がその例です。
-&lt;img src=&#34;https://dotstud.io/img/blog/149/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;あとは見守りながら完成するまで放置しましょう。&lt;/p&gt;
-
-&lt;h2 id=&#34;はじめての出力&#34;&gt;はじめての出力&lt;/h2&gt;
-
-&lt;p&gt;プリンタとデータをセットして出力されるのを待ちます……。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/212276/c7659ea8-e54a-f50a-400a-183218006215.gif&#34; alt=&#34;出力.gif&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;完成しました。
-&lt;img src=&#34;https://dotstud.io/img/blog/149/完成1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;哲学的なゴミです。特に用途はありません。
-&lt;img src=&#34;https://dotstud.io/img/blog/149/完成2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;3dプリンタを使うときに注意すること&#34;&gt;3Dプリンタを使うときに注意すること&lt;/h2&gt;
-
-&lt;p&gt;セットアップの説明でも述べましたが、3Dプリンターを使ってみて注意した方が良い点をもう一度まとめます。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Pango上でモデリングのサイズを要チェック&lt;/li&gt;
-&lt;li&gt;モデリングしたものをどの向きで出力するか&lt;/li&gt;
-&lt;li&gt;初期位置の設定を正確に！（特にz軸方向）&lt;/li&gt;
-&lt;li&gt;出力直後に溶け出したフィラメントを必ず除去&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;3Dプリンタは複雑なものを簡単に出力できるイメージですが、実際に使ってみると経験やコツがいります。やはり、どんな道具も使いこなせるようになるには時間が必要なようです。&lt;/p&gt;
-
-&lt;p&gt;まだまだ3Dプリンターを使う上で学ぶことが多いと感じたので、継続して使っていきたいと思います。&lt;/p&gt;
-
-&lt;p&gt;それではまた。&lt;/p&gt;
 </description>
     </item>
     
