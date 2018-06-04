@@ -1,0 +1,2057 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
+  <meta charset="utf-8">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+    
+
+    
+    
+      
+      
+      
+      
+
+      
+      
+      
+      
+        
+      
+      
+
+      
+      
+    
+
+    
+    
+
+    
+    
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="制御ピンが足りない！そんなときはシフトレジスタを使ってみましょう。7セグメントディスプレイを少ないピンで制御してみます。">
+    <meta name="author" content="dotstudio Inc.">
+    <meta content="https://dotstud.io/img/blog/169/00_eyecatch.png">
+
+    <meta itemprop="name" content="7セグメントディスプレイをArduinoで光らせよう！シフトレジスタでのピンの増やし方 | dotstudio"/>
+    <meta itemprop="image" content="https://dotstud.io/img/blog/169/00_eyecatch.png"/>
+    
+    <meta property="og:title" content="7セグメントディスプレイをArduinoで光らせよう！シフトレジスタでのピンの増やし方 | dotstudio" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://dotstud.io/blog/segment-display-shift-register/" />
+    <meta property="og:site_name" content="dotstudio（ドットスタジオ）" />
+    <meta property="og:image" content="https://dotstud.io/img/blog/169/00_eyecatch.png" />
+    <meta property="og:image:secure_url" content="https://dotstud.io/img/blog/169/00_eyecatch.png" />
+    <meta property="og:description" content="制御ピンが足りない！そんなときはシフトレジスタを使ってみましょう。7セグメントディスプレイを少ないピンで制御してみます。" />
+    <meta property="article:author" content="https://www.facebook.com/dotstud10/" />
+    <meta property="fb:app_id" content="296336307370435" />
+    <meta property="fb:pages" content="1013196712108753" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image:src" content="https://dotstud.io/img/blog/169/00_eyecatch.png">
+    <meta name="twitter:site" content="@dotstud_io" />
+    <meta name="twitter:url" content="https://dotstud.io/blog/segment-display-shift-register/">
+    <meta name="twitter:description" content="制御ピンが足りない！そんなときはシフトレジスタを使ってみましょう。7セグメントディスプレイを少ないピンで制御してみます。">
+    <meta name="twitter:title" content="7セグメントディスプレイをArduinoで光らせよう！シフトレジスタでのピンの増やし方 | dotstudio">
+    <meta name="twitter:creator" content="@dotstud_io" />
+
+    
+    <meta name="google-site-verification" content="oW2fcSG1fFnkDoRCGFJ0IGGebtBr8FjV2twoFMd7Skc" />
+    <title>7セグメントディスプレイをArduinoで光らせよう！シフトレジスタでのピンの増やし方 | dotstudio</title>
+    
+
+    <link rel="stylesheet" href="/css/loader.css">
+    
+    <link rel="stylesheet" href='/css/master.css'>
+    <link rel="stylesheet" href="/css/icon-font.css">
+    
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+
+    <link rel="shortcut icon" type="image/png" href="/img/resources/favicon.png"/>
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="preload" as="style" onload="this.rel='stylesheet'">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel="preload" as="style" onload="this.rel='stylesheet'">
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel="preload" as="style" onload="this.rel='stylesheet'">
+    
+    <link href="/css/lib/hljs.css" rel="preload" as="style" onload="this.rel='stylesheet'">
+    
+
+    
+    
+    
+
+    
+    
+
+    
+    
+    
+    
+
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-K5TRM9Q');</script>
+    
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-5922216421588455",
+        enable_page_level_ads: true
+      });
+    </script>
+</head>
+
+<body>
+  
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K5TRM9Q"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  
+
+  
+  <div id="fb-root"></div>
+  <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v2.8";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));</script>
+
+  
+
+  <header>
+    <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<symbol id="icon-arrow-right" viewBox="0 0 32 32">
+<title>arrow-right</title>
+<path class="path1" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M5.143 5.143l10.349 10.349"></path>
+<path class="path2" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M5.143 26.857l10.349-10.349"></path>
+<path class="path3" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M16.571 26.857l10.349-10.349"></path>
+<path class="path4" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M16.571 5.143l10.349 10.349"></path>
+</symbol>
+<symbol id="icon-hamburger" viewBox="0 0 60 32">
+<title>hamburger</title>
+<path class="path1" fill="none" stroke="#808080" stroke-width="7.1111" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M3.556 3.556h53.333"></path>
+<path class="path2" fill="none" stroke="#808080" stroke-width="7.1111" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M3.556 28.444h53.333"></path>
+</symbol>
+<symbol id="icon-logo-mark" viewBox="0 0 32 32">
+<title>logo-mark</title>
+<path class="path1" d="M19.731 28.8h-19.731v-19.699h19.731zM1.53 27.302h16.672v-16.672h-16.672z"></path>
+<path class="path2" d="M32 22.899h-19.731v-19.699h19.731zM13.798 21.37h16.672v-16.672h-16.672z"></path>
+</symbol>
+<symbol id="icon-social-facebook" viewBox="0 0 32 32">
+<title>social-facebook</title>
+<path class="path1" d="M30.1 0.12h-28.46c-0.974 0.011-1.76 0.804-1.76 1.78 0 0 0 0 0 0v28.46c0 0.983 0.797 1.78 1.78 1.78h15.32v-12.4h-4.16v-4.82h4.16v-3.58c-0.020-0.179-0.031-0.386-0.031-0.596 0-3.203 2.597-5.8 5.8-5.8 0.152 0 0.302 0.006 0.45 0.017-0.016-0.001-0.013-0.001-0.009-0.001 1.3 0 2.582 0.073 3.844 0.214l-0.155 4.286h-2.54c-2 0-2.36 0.96-2.36 2.36v3.1h4.76l-0.62 4.8h-4.12v12.4h8.12c0.983 0 1.78-0.797 1.78-1.78v-28.44c0-0.983-0.797-1.78-1.78-1.78z"></path>
+</symbol>
+<symbol id="icon-social-github" viewBox="0 0 32 32">
+<title>social-github</title>
+<path class="path1" d="M16 0.4c-0.001 0-0.002 0-0.004 0-8.837 0-16 7.163-16 16 0 7.028 4.531 12.997 10.831 15.147 0.913 0.173 1.213-0.307 1.213-0.747s-0.040-1.38-0.040-2.8c-4.44 1.060-5.38-2-5.38-2-0.308-0.987-0.937-1.798-1.763-2.33-1.477-1.010 0.103-0.99 0.103-0.99 1.055 0.144 1.941 0.76 2.451 1.624 0.607 1.039 1.701 1.715 2.953 1.715 0.6 0 1.164-0.155 1.653-0.428 0.062-0.836 0.437-1.58 1.002-2.13-3.559-0.401-7.279-1.781-7.279-8.001-0.001-0.032-0.001-0.069-0.001-0.106 0-1.621 0.624-3.096 1.645-4.198-0.181-0.526-0.283-1.135-0.283-1.769 0-0.85 0.184-1.657 0.514-2.383s1.325-0.404 4.385 1.676c1.199-0.341 2.577-0.537 4-0.537s2.801 0.196 4.107 0.562c2.953-2.026 4.293-1.666 4.293-1.666 0.31 0.683 0.49 1.481 0.49 2.321 0 0.688-0.121 1.348-0.343 1.959 1.030 1.058 1.654 2.533 1.654 4.154 0 0.037-0 0.075-0.001 0.112 0 6.134-3.74 7.494-7.3 7.894 0.685 0.69 1.108 1.641 1.108 2.69 0 0.088-0.003 0.175-0.009 0.261 0.001 2.128 0.001 3.848 0.001 4.368s0.28 0.92 1.1 0.78c6.413-2.183 10.944-8.152 10.944-15.18 0-8.837-7.163-16-16-16-0.015 0-0.031 0-0.046 0z"></path>
+</symbol>
+<symbol id="icon-social-twitter" viewBox="0 0 32 32">
+<title>social-twitter</title>
+<path class="path1" d="M10 29c0.036 0 0.078 0 0.12 0 10.25 0 18.56-8.31 18.56-18.56 0-0.042-0-0.085-0-0.127 0-0.274 0-0.554 0-0.834 1.312-0.959 2.414-2.113 3.289-3.431-1.070 0.454-2.347 0.82-3.686 0.984 1.293-0.819 2.312-2.084 2.804-3.587-1.184 0.679-2.577 1.234-4.062 1.539-1.286-1.244-2.976-2.027-4.849-2.027-3.634 0-6.58 2.946-6.58 6.58 0 0.518 0.060 1.022 0.173 1.506-5.473-0.309-10.286-2.887-13.523-6.813-0.587 0.917-0.919 2.059-0.919 3.278 0 2.258 1.137 4.25 2.871 5.435-1.063-0.025-2.070-0.325-2.95-0.822l0.032 0.017c-0 0.027-0.001 0.058-0.001 0.090 0 3.163 2.239 5.803 5.218 6.423-0.479 0.156-1.078 0.242-1.696 0.242-0.432 0-0.854-0.042-1.263-0.121 0.908 2.637 3.319 4.512 6.175 4.567-2.208 1.746-5.039 2.8-8.116 2.8-0.013 0-0.027-0-0.040-0-0.566-0.018-1.104-0.068-1.633-0.149 2.897 1.868 6.353 2.984 10.068 3.009z"></path>
+</symbol>
+</defs>
+</svg>
+
+    <div class="header">
+  <span class="logo"><a href="/"><svg id="icon-logo" width="100%"><use xlink:href="#icon-logo-mark"></svg></a></span>
+
+  <div class="menu">
+    <input type="checkbox" id="menu-toggle">
+      <label for="menu-toggle" class='label-toggle'>
+        <svg class="icon-hamburger"><use xlink:href="#icon-hamburger"></svg>
+      </label>
+    </input>
+    <ul>
+      <li class="menu-item"><a href="/blog">Blog</a></li>
+      <li class="menu-item"><a href="/docs">Docs</a></li>
+      <li class="menu-item"><a href="/shop">Shop</a></li>
+      <li class="menu-item"><a href="/members">Members</a></li>
+      <li class="menu-item"><a href="/works">works</a></li>
+      <li class="menu-item"><a href="/about">About</a></li>
+      
+    </ul>
+  </div>
+
+</div>
+
+  </header>
+
+
+
+
+ 
+ 
+
+
+	
+		
+	
+
+
+
+
+<ul class="categories">
+	
+	<li><a href="/categories/try/" class="">
+		やってみるIoT
+	</a></li>
+	
+	<li><a href="/categories/learn/" class="">
+		IoTを知ろう
+	</a></li>
+	
+	<li><a href="/categories/event/" class="">
+		イベントレポート
+	</a></li>
+	
+	<li><a href="/categories/tips/" class="">
+		Tips
+	</a></li>
+	
+</ul>
+
+
+
+
+  
+    
+  
+
+
+
+  
+
+  
+
+  
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+<article class="blog-single">
+  <div class="date">2018.06.04</div>
+
+  <img class="blog-single--eyecatch" src="/img/blog/169/00_eyecatch.png" alt="" width="710px">
+
+  <h1 class="blog-single--title">7セグメントディスプレイをArduinoで光らせよう！シフトレジスタでのピンの増やし方</h1>
+
+  <div class="blog-single--information">
+    <a class="author" href="/members/chantoku">
+      <img src="/img/members/chantoku/author.png" alt="" class="author--avatar">
+      <p class="author--name">ちゃんとく</p>
+    </a>
+
+    
+    <a class="series" href="/series/handson">
+        電子工作レシピ
+    </a>
+    
+
+  </div>
+
+  <div class="blog-single--content markdown">
+
+<p>電子工作が趣味なAndroidエンジニアのとまとと申します。</p>
+
+<p>Arduinoはなんでもできて便利ですが、制御ピンの数に限りがあります。そのため、ピンをたくさん使いたいときは困ってしまいますよね。</p>
+
+<p>例えばLEDを100個くらい用意してそれぞれ一つずつパターンを決めて制御したいとき、当然ピンが足りなくなりますよね……。</p>
+
+<p>そんなときのために<strong>制御ピンを増やすことができる方法</strong>を今回は紹介します！今回はたくさんのピンの制御が必要な7セグメントLEDディスプレイを少ないピンで光らせて見たいと思います。</p>
+
+<h2 id="準備するもの">準備するもの</h2>
+
+<p>
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/169/image3.png" alt="image3">
+
+</center>
+
+今回はArduino Uno、7セグメントLEDに加えて、出力を増やすことのできるシフトレジスタや、スイッチングをすることのできるトランジスタを使って行きます。</p>
+
+<h3 id="小型3桁赤色7セグメントled表示器-7ｍｍ高-2381bs-http-akizukidenshi-com-catalog-g-gi-09084">小型3桁赤色7セグメントLED表示器 7ｍｍ高（<a href="http://akizukidenshi.com/catalog/g/gI-09084/">2381BS</a>）</h3>
+
+<p>
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/169/7seg.png" alt="7seg">
+
+</center>
+
+7セグメントLEDは7個のLEDを八の字に組み合わせた電子部品で、それぞれのLEDを独立して制御することにより、数字などを表現することができます。</p>
+
+<p>今回は2381BSという型番のものを使って行きます！</p>
+
+<h3 id="8ビットシフトレジスタ-74hc595-http-akizukidenshi-com-catalog-g-gi-08605">8ビットシフトレジスタ（<a href="http://akizukidenshi.com/catalog/g/gI-08605/">74HC595</a>）</h3>
+
+<p>
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/169/shift.png" alt="shift">
+
+</center>
+
+シフトレジスタは、簡単に説明すると<strong>一つの出力を複数に増やすことのできる電子部品</strong>のことです。</p>
+
+<p>マイコンボードのピンは個数が限られているので、複数のセンサ等を使いたいときはシフトレジスタを用いることにより、資源を有効に使うことができます。</p>
+
+<p>また、シフトレジスタは出力を増やす以外にも複数の入力を１つにまとめることもできます。</p>
+
+<h3 id="トランジスタ-c1815-http-akizukidenshi-com-catalog-g-gi-04268-8個">トランジスタ（<a href="http://akizukidenshi.com/catalog/g/gI-04268/">C1815</a>） 8個</h3>
+
+<p>
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/169/image2.png" alt="image2">
+
+</center>
+
+トランジスタには3本の端子があり、それぞれベース、コレクタ、エミッタと呼ばれます。コレクタ、エミッタ間を導通するかを、ベースに流すか流さないかで制御することができます。今回はこれをスイッチとして使います。</p>
+
+<p>今回使うC1815は平らな面から見て左から順にエミッタ、コレクタ、ベースとなっています。</p>
+
+<h3 id="その他">その他</h3>
+
+<ul>
+<li>カーボン抵抗（<a href="http://akizukidenshi.com/catalog/g/gR-16151/">150Ω</a>） × 8</li>
+<li>カーボン抵抗（<a href="http://akizukidenshi.com/catalog/g/gR-16273/">25KΩ</a>） × 8</li>
+<li>ブレッドボード</li>
+<li>ジャンパ線</li>
+<li>Arduino Unoまたは互換機</li>
+</ul>
+
+<h2 id="配線してみよう">配線してみよう</h2>
+
+<p>今回は初心者の方に取ってはあまり馴染みのないパーツも多いと思うので、それぞれ基本の回路の組み方から見ていきたいと思います。</p>
+
+<p>とにかく7セグの回路が知りたい！と言う方は「<strong>7セグとトランジスタ、シフトレジスタの配線方法</strong>」の項目を見てみてください。</p>
+
+<h3 id="トランジスタの配線方法">トランジスタの配線方法</h3>
+
+<p>まずはトランジスタの使い方から見てみます。
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/169/image1.png" alt="image1">
+
+</center>
+</p>
+
+<p>コレクタに制御したいピン（LEDなど）をつなぎ、ベースに制御するピン（Arduinoの13番など）をつなぎます。最後に、エミッタをGNDに繋げば回路の完成です。ベースのオンオフによってLEDをつけたり消したりすることができます。</p>
+
+<h3 id="シフトレジスタの配線方法">シフトレジスタの配線方法</h3>
+
+<p>シフトレジスタの回路の組み方は次のようになります。
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/169/image5.png" alt="image5">
+
+</center>
+
+シフトレジスタの16番・10番を5Vに、13番・8番をGNDに繋いでいます。14、12、11番はそれぞれ、Arduinoの制御ピン（11、10、9番）に繋いでいます。</p>
+
+<p>余ってる8つのピンをLEDのアノード（+）に繋ぎ、LEDのカソード（−）を抵抗を経由してGNDに繋げば完成です。</p>
+
+<h3 id="7セグとトランジスタ-シフトレジスタの配線方法">7セグとトランジスタ、シフトレジスタの配線方法</h3>
+
+<p>さて、いよいよ7セグを光らせてみましょう！回路は以下の図です。
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/169/image4.png" alt="image4">
+
+</center>
+
+配線がかなり多くなるので、<a href="http://akizukidenshi.com/catalog/g/gP-02315/">短いジャンパ</a>を駆使するのがオススメです。</p>
+
+<p>これで回路は完成です。</p>
+
+<h2 id="プログラムを書き込もう">プログラムを書き込もう</h2>
+
+<p>では、次のプログラムをコピペしてArduino IDEを使ってボードに書き込みましょう！<code>int num = 7</code>には光らせたい数字を代入します。</p>
+
+<p>プログラムの仕様は回路の組み方によって変わるため、今回は同じように組んでください。</p>
+
+<pre><code>#define DATA 11
+#define LATCH 10
+#define CLOCK 9
+
+//  0b10000000   DP
+//  0b01000000   D
+//  0b00100000   E
+//  0b00010000   F
+//  0b00001000   A
+//  0b00000100   G
+//  0b00000010   C
+//  0b00000001   B
+
+static const int num[] {
+  0b01111011,   //ZERO
+  0b00000011,   //ONE
+  0b01101101,   //TWO
+  0b01001111,   //THREE
+  0b00010111,   //FOUR
+  0b01011110,   //FIVE
+  0b01110110,   //SIX
+  0b00001011,   //SEVEN
+  0b01111111,   //EIGHT
+  0b01011111,   //NINE
+};
+
+int count;
+
+void setup()
+{
+  count = 0;
+  pinMode(DATA, OUTPUT);
+  pinMode(LATCH, OUTPUT);
+  pinMode(CLOCK, OUTPUT);
+  pinMode(1, OUTPUT);
+  pinMode(2, OUTPUT);
+  pinMode(3, OUTPUT);
+}
+
+void loop()
+{
+  digitalWrite(1, HIGH);
+  digitalWrite(2, HIGH);
+  digitalWrite(3, HIGH);
+  digitalWrite(LATCH, LOW);
+  shiftOut(DATA, CLOCK, 8, num[count]);
+  digitalWrite(LATCH, HIGH);
+  delay(1000);
+  if (count == 9)
+    count = 0;
+  else
+    count++;
+}
+</code></pre>
+
+<h3 id="プログラムの解説">プログラムの解説</h3>
+
+<p>プログラムの一部を解説していきます。</p>
+
+<pre><code>#define DATA 11
+#define LATCH 10
+#define CLOCK 9
+
+//  0b10000000   DP
+//  0b01000000   D
+//  0b00100000   E
+//  0b00010000   F
+//  0b00001000   A
+//  0b00000100   G
+//  0b00000010   C
+//  0b00000001   B
+
+static const int num[] {
+  0b01111011,   //ZERO
+  0b00000011,   //ONE
+  0b01101101,   //TWO
+  0b01001111,   //THREE
+  0b00010111,   //FOUR
+  0b01011110,   //FIVE
+  0b01110110,   //SIX
+  0b00001011,   //SEVEN
+  0b01111111,   //EIGHT
+  0b01011111,   //NINE
+};
+
+int count; // カウンタ
+</code></pre>
+
+<p>ここでは使うピンと、7セグを光らせるパターンの定義をしています。</p>
+
+<pre><code>void setup()
+{
+  count = 0;
+  pinMode(DATA, OUTPUT);
+  pinMode(LATCH, OUTPUT);
+  pinMode(CLOCK, OUTPUT);
+  pinMode(1, OUTPUT);
+  pinMode(2, OUTPUT);
+  pinMode(3, OUTPUT);
+}
+</code></pre>
+
+<p>ここでは、Arduinoから出力をするピンを指定します。</p>
+
+<pre><code>void loop()
+{
+  digitalWrite(1, HIGH);
+  digitalWrite(2, HIGH);
+  digitalWrite(3, HIGH);
+  digitalWrite(LATCH, LOW);
+  shiftOut(DATA, CLOCK, 8, num[count]);
+  digitalWrite(LATCH, HIGH);
+  delay(1000);
+  if (count == 9)
+    count = 0;
+  else
+    count++;
+}
+</code></pre>
+
+<p>ここで、1、2、3番ピンを全てHIGHにしていますが、LOWに切り替えることにより各7セグを制御することができます。</p>
+
+<p>表示したい数字の配列を読み込み、<code>shiftOut()</code>で光らせたいLEDのピンを指定します。</p>
+
+<p>LATCHピンをLOWにすることにより、<code>shiftOut()</code>でデータを送ることができ、送信後HIGHにすることにより、実際にそれぞれのLEDを光らせることができます。</p>
+
+<h2 id="試してみる">試してみる</h2>
+
+<p>上記のコードで<code>int num = 7</code>を試してみると、このような感じで光らせることができます！
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/169/image6.png" alt="image6">
+
+</center>
+</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>シフトレジスタを用いた回路は電子工作をやりはじめた人には難しいかもしれませんが、初歩的なものの組み合わせでできているのでこの記事を見て試してみるのも面白いと思います。</p>
+
+<p>また今回使ったシフトレジスタは一つだけでしたが、複数組み合わせて身近なLCDディスプレイやLEDキューブ、自作のロボットの制御などのようなものを実現することができます。考え方次第でなんでも作ることができると思います！</p>
+
+<p>ぜひ試してみてください！</p>
+</div>
+
+  
+
+
+
+    
+    
+    
+    <nav class="related">
+      <h2 class="">関連記事</h2>
+      <ul class="cards-related">
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/dancing-haniwa-servo-raspi/">
+                <img class="card-related--thumbnail" src="/img/blog/170/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">Raspberry Piとサーボモータで踊るはにわ制作</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/arduino-use-rfid-reader/">
+                <img class="card-related--thumbnail" src="/img/blog/162/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">非接触ICタグで遊ぼう！ArduinoでRFIDリーダRC522を使う方法</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/mongoose-os-rotary-encoder/">
+                <img class="card-related--thumbnail" src="/img/blog/154/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">くるくる回して値を入力！ロータリエンコーダでインプットの幅を広げよう</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/raspberry-pi-case-making/">
+                <img class="card-related--thumbnail" src="/img/blog/142/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">レーザーカッターで自分だけのRaspberryPiケースを作ってみよう！</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/littlebits-cloudbit-ifttt-blink/">
+                <img class="card-related--thumbnail" src="/img/blog/119/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">日本上陸！littleBits cloudBitモジュールでIFTTT連携してみた！</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/pokio-esp-keikyu-chien/">
+                <img class="card-related--thumbnail" src="/img/blog/099/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">ESP8266を使って京急が遅延すると光るガジェットを作ってみた</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/wionode-ifttt-uv-ornament/">
+                <img class="card-related--thumbnail" src="/img/blog/106/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">Wio NodeとIFTTTで簡単IoT！紫外線情報を取得してみよう</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/seeed-wionode-hands-on/">
+                <img class="card-related--thumbnail" src="/img/blog/095/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">「Wio Node」で半田付けなしの電子工作！温度計作りでIoTはじめの一歩</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/web-bluetooth-remote-blink/">
+                <img class="card-related--thumbnail" src="/img/blog/090/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">話題のWebBluetoothでGenuino101をブラウザからリモートコントロールしてみよう</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/dfrobot-gravity-hands-on/">
+                <img class="card-related--thumbnail" src="/img/blog/087/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">ハードウェア知識ゼロでも大丈夫。「Gravity」で始める電子工作入門</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/littlebits-arduino-analog-number/">
+                <img class="card-related--thumbnail" src="/img/blog/060/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">littleBits Arduinoモジュールでより細かく値を入出力して状況を伝えよう</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+        </ul>
+      </nav>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v2.7&appId=296336307370435";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+  <div class="share">
+    <a href="https://twitter.com/share" class="twitter-share-button" data-size="large" data-hashtags="dotstudio">Tweet</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    &nbsp;
+    <div class="fb-like" data-href="https://dotstud.io/blog/segment-display-shift-register/" data-layout="button_count" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
+
+    &nbsp;
+
+    <div class="hatena-b">
+      <a href="http://b.hatena.ne.jp/entry/s/dotstud.io/blog/segment-display-shift-register" class="hatena-bookmark-button" data-hatena-bookmark-title="7セグメントディスプレイをArduinoで光らせよう！シフトレジスタでのピンの増やし方" data-hatena-bookmark-layout="standard-balloon" data-hatena-bookmark-lang="ja" title="このエントリーをはてなブックマークに追加">
+        <img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" />
+      </a>
+      <script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+    </div>    
+  </div>
+
+</article>
+
+<footer class="footer">
+  <p class="footer-info">
+    <a class="footer-info--item" href="/about">会社概要</a>
+    <a class="footer-info--item" href="/members">メンバー</a>
+    <a class="footer-info--item" href="/legal#tos">利用規約</a>
+    <a class="footer-info--item" href="/legal#sct">特定商取引</a>
+    <a class="footer-info--item" href="/legal#pp">プライバシーポリシー</a>
+  </p>
+  <p class="footer-cr">© 2018 dotstudio inc.</p>
+</footer>
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+
+
+
+
+
+<script src="/js/app.js"></script>
+
+
+<script src="/js/lib/hljs.js"></script>
+<script src="/js/lib/hljs-numbers.js"></script>
+<script>
+  hljs.initHighlightingOnLoad();
+  hljs.initLineNumbersOnLoad();
+</script>
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-78080011-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+
