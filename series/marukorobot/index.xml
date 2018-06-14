@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Marukorobot on dotstudio（ドットスタジオ）</title>
+    <link>https://dotstud.io/series/marukorobot/</link>
+    <description>Recent content in Marukorobot on dotstudio（ドットスタジオ）</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>© 2018 dotstudio inc.</copyright>
+    <lastBuildDate>Thu, 14 Jun 2018 10:00:00 +0900</lastBuildDate>
+    <atom:link href="/series/marukorobot/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Lチカ入門者がロボット入門！歌ったり喋ったりする顔面ロボット作ってみた</title>
+      <link>https://dotstud.io/blog/face-robot-making-maruko/</link>
+      <pubDate>Thu, 14 Jun 2018 10:00:00 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/face-robot-making-maruko/</guid>
+      
+      <description>
+
+&lt;p&gt;都内でひっそりOLやってるへっぽこまるこです。&lt;/p&gt;
+
+&lt;p&gt;電子工作でLチカを覚えたので、そろそろロボット作れるんじゃないかな……。無知が故、そんなことを思い立ってしまったのでロボット（的なのもの）制作に挑戦してみました！&lt;/p&gt;
+
+&lt;p&gt;最初は２分の１サイズぐらいの人型ロボットを作りたかったのですが、なんせLチカ入門レベルでしたので、全身を作って制御するのは厳しいことに気づきました。そこでひとまずは&lt;strong&gt;顔面ロボット&lt;/strong&gt;から挑戦しました！&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;顔のパーツが動く基本の顔面ロボット&lt;/li&gt;
+&lt;li&gt;歌う顔面ロボット&lt;/li&gt;
+&lt;li&gt;IoTな顔面ロボット&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;を制作してみたので、作例と作り方を紹介していきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;マイコンボードとコピペと気合いで意外とやれる&lt;/strong&gt;ので、「ロボットって難しいでしょ？」と思っている方、ぜひ試してみてください！&lt;/p&gt;
+
+&lt;h2 id=&#34;顔面ロボット制作の基本&#34;&gt;顔面ロボット制作の基本&lt;/h2&gt;
+
+&lt;p&gt;顔面ロボットはその名の通り、顔のロボットです……。顔の造形を作って、目や口などの動かせそうなパーツをマイコンボードから制御します。&lt;/p&gt;
+
+&lt;h3 id=&#34;動作制御&#34;&gt;動作制御&lt;/h3&gt;
+
+&lt;p&gt;動作制御に使うのは、基本的に&lt;strong&gt;サーボモータ&lt;/strong&gt;（&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gM-08761/&#34;&gt;SG90&lt;/a&gt;）です。
+&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gM-08761/&#34;&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/172/servo1.png&#34; alt=&#34;servo1&#34;&gt;
+
+&lt;/center&gt;
+&lt;/a&gt;
+サーボモータは回転方向や角度を細かく調整でき、ロボットのパーツ制御に向いています。SG90はお手頃価格（400円程度）なので、試行錯誤も躊躇せずできてうってつけですね。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/172/servo2.png&#34; alt=&#34;servo2&#34;&gt;
+
+&lt;/center&gt;
+
+顔面パーツを動かすには主に&lt;strong&gt;サーボホーン&lt;/strong&gt;（サーボモータの羽の部分）をどうごにょごにょするかを試行錯誤します。&lt;/p&gt;
+
+&lt;p&gt;サーボモータの仕組みについては、ドキュメントの「&lt;a href=&#34;https://dotstud.io/docs/pulse-width-modulation/&#34;&gt;PWM制御（サーボモータの仕組み）&lt;/a&gt;」に詳しく書いてありますので、ぜひそちらをご覧ください！&lt;/p&gt;
+
+&lt;h3 id=&#34;外装&#34;&gt;外装&lt;/h3&gt;
+
+&lt;p&gt;ロボットの外装は主に3Dプリンタで制作します。&lt;/p&gt;
+
+&lt;p&gt;そんな機材ないよ！という方は、既存のものを動かしたり、ファブリケーションスペース（工作機材を利用できる施設）を利用したりしてみてください！&lt;/p&gt;
+
+&lt;p&gt;それでは、ここからは出来上がった顔ロボットと作り方を紹介させていただきます！&lt;/p&gt;
+
+&lt;h2 id=&#34;初号機-あけみ&#34;&gt;初号機（あけみ）&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/172/akemi.gif&#34; alt=&#34;&#34; /&gt;
+あけみちゃんです。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;浮世絵の中の美人を立体にしてみたい&lt;/strong&gt;、そんなことを思いついて、生まれてしまったのがあけみちゃんです。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.amazon.co.jp/%E8%87%AA%E4%BD%9C%E3%83%AD%E3%83%9C%E3%83%83%E3%83%88%E5%85%A5%E9%96%80%E2%80%95%E3%82%A2%E3%83%8B%E3%83%9E%E3%83%88%E3%83%AD%E3%83%8B%E3%82%AF%E3%82%B9%E7%B7%A8-%E6%B5%85%E8%8D%89-%E3%82%AE%E7%A0%94/dp/4901676199/ref=sr_1_1?s=books&amp;amp;ie=UTF8&amp;amp;qid=1526820137&amp;amp;sr=1-1&#34;&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/172/book.png&#34; alt=&#34;book&#34;&gt;
+
+&lt;/center&gt;
+&lt;/a&gt;
+&lt;a href=&#34;https://www.amazon.co.jp/%E8%87%AA%E4%BD%9C%E3%83%AD%E3%83%9C%E3%83%83%E3%83%88%E5%85%A5%E9%96%80%E2%80%95%E3%82%A2%E3%83%8B%E3%83%9E%E3%83%88%E3%83%AD%E3%83%8B%E3%82%AF%E3%82%B9%E7%B7%A8-%E6%B5%85%E8%8D%89-%E3%82%AE%E7%A0%94/dp/4901676199/ref=sr_1_1?s=books&amp;amp;ie=UTF8&amp;amp;qid=1526820137&amp;amp;sr=1-1&#34;&gt;浅草ギ研さんの「自作ロボット製作入門」&lt;/a&gt;という書籍から、機構の動かし方なんかを参考にさせていただきました！
+（久しぶりにamazonでみたらめっちゃ値上がりしてる！！）&lt;/p&gt;
+
+&lt;h3 id=&#34;外装を制作&#34;&gt;外装を制作&lt;/h3&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/172/akemi1.png&#34; alt=&#34;akemi1&#34;&gt;
+
+&lt;/center&gt;
+
+まずは粘土で、作りたい顔のベースを造形します。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/172/akemi2.png&#34; alt=&#34;akemi2&#34;&gt;
+
+&lt;/center&gt;
+
+作った造形を3Dスキャンし、3Dプリントで出力します。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/172/akemi3.png&#34; alt=&#34;akemi3&#34;&gt;
+
+&lt;/center&gt;
+
+出力した造形を元に、パーツ（皮膚や目ん玉やら）を作成します。あけみちゃんの場合、皮膚はラテックス、目ん玉は樹脂粘土でできています。&lt;/p&gt;
+
+&lt;p&gt;&lt;font size=&#34;2&#34;&gt;※写真はラテックスの皮膚を作るためのシリコーン型を作っているところです。&lt;/font&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;動く機構を作る&#34;&gt;動く機構を作る&lt;/h3&gt;
+
+&lt;p&gt;ここでは、サーボホーンに繋がるところがどのようにしたら連携できるかを考え作成します。あけみちゃんは下記2つが実現できるよう、いじりながら模索しました。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;目ん玉が左右に動く&lt;/li&gt;
+&lt;li&gt;口が開閉する&lt;/li&gt;
+&lt;/ul&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/172/akemi4.png&#34; alt=&#34;akemi4&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;とりあえず自分が扱えるもの（発砲スチロールやプラ板やアルミの棒など）で無理矢理動くように仕上げたので、なかなかひどいことになっていますね。&lt;/p&gt;
+
+&lt;h3 id=&#34;回路を組む&#34;&gt;回路を組む&lt;/h3&gt;
+
+&lt;p&gt;どのサーボモータが何度動けばいいか考えながら、電子部品の配線やプログラムを準備します。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/172/akemi5.png&#34; alt=&#34;akemi5&#34;&gt;
+
+&lt;/center&gt;
+
+あけみちゃんは&lt;a href=&#34;http://gadget.renesas.com/ja/product/sakura.html&#34;&gt;GR-SAKURA&lt;/a&gt;というArduino互換のボードを利用しました。Arduino Unoでも同じ配線・プログラムで動かすことができます！&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/172/akemi6.png&#34; alt=&#34;akemi6&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;こんな適当な作りでも、どこがどう動いて欲しいか、サーボの動きがどこと連携しているか、&lt;strong&gt;なんとなーくわかっていれば、動くものは作れるぞ&lt;/strong&gt;、と悟ることができました。&lt;/p&gt;
+
+&lt;h2 id=&#34;弐号機-お誕生日ケーキ&#34;&gt;弐号機（お誕生日ケーキ）&lt;/h2&gt;
+
+&lt;p&gt;お世話になっていた社長さんが誕生日！サプライズケーキを作ろう！！！&lt;/p&gt;
+
+&lt;p&gt;ということで、弐号機はお誕生日ケーキの顔面ロボットを制作しました。
+&lt;img src=&#34;https://dotstud.io/img/blog/172/cake.gif&#34; alt=&#34;&#34; /&gt;
+驚いていただきたかったので、生クリームは本物を使用しました！&lt;/p&gt;
+
+&lt;h3 id=&#34;外装を制作-1&#34;&gt;外装を制作&lt;/h3&gt;
+
+&lt;p&gt;この時は、Fusion360というCADソフトを使ってデータ作成をし、3Dプリント出力をしました。
+造形部分についてはFusion360ののファンサイト&lt;a href=&#34;https://fusion360.3dworks.co.jp/2017/08/01/cake/&#34;&gt;FUSION BASE&lt;/a&gt;でも紹介していただいています！&lt;/p&gt;
+
+&lt;h3 id=&#34;録音した歌を歌わせる&#34;&gt;録音した歌を歌わせる&lt;/h3&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/172/cake1.png&#34; alt=&#34;cake1&#34;&gt;
+
+&lt;/center&gt;
+
+今回はバースデーソングを歌わせたかったので、簡単に実装できそう且つ安価な&lt;a href=&#34;https://www.amazon.co.jp/EasyWordMall-ISD1820-%E9%9F%B3%E5%A3%B0%E9%8C%B2%E9%9F%B3%E3%83%A2%E3%82%B8%E3%83%A5%E3%83%BC%E3%83%AB-%E3%83%AC%E3%82%B3%E3%83%BC%E3%83%80%E3%83%BC-%E3%82%B5%E3%82%A6%E3%83%B3%E3%83%89%E3%82%AA%E3%83%BC%E3%83%87%E3%82%A3%E3%82%AA%E3%82%B9%E3%83%94%E3%83%BC%E3%82%AB%E3%83%BC/dp/B0175U5J08/ref=pd_lpo_vtph_147_bs_lp_t_1?_encoding=UTF8&amp;amp;psc=1&amp;amp;refRID=WNFEK5ESWBE59NKY54ZR&#34;&gt;ISD1820&lt;/a&gt;というチップを使った音声録音・再生モジュールを使いました。&lt;/p&gt;
+
+&lt;p&gt;事前に適当な音源を録音しておき、Lチカの要領でデジタル出力するだで簡単に音声を再生できます。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/172/cake2.png&#34; alt=&#34;cake2&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;ただしこの方法だと、音声に合わせて一文字一文字サーボの角度を調整しなければいけません。一文字の音声が何秒かを測って、&lt;strong&gt;口の開閉に何秒かけるかを一つ一つ書く&lt;/strong&gt;、という地味作業をやっていました。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;
+////口の開閉の制御　一部抜粋
+
+  //mouth1 start  
+  //は
+  m_open();　//口を開ける関数
+  delay(v4);　//v4 待機時間の変数
+  m_close();　//口を閉じる関数
+  //ぴ
+  m_open();
+  delay(v2);
+  m_close();
+  //ば
+  m_open();
+  delay(v4);
+  m_close();
+  //す
+  m_open();
+  delay(v2);
+  m_close();
+  //で
+  m_open();
+  delay(v6);
+  m_close();
+  //とぅ
+  m_open();
+  delay(v6);
+  m_close();
+  //ゆ
+  m_open();
+  delay(v12);
+  m_close();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;参号機-リアルアンパンマン&#34;&gt;参号機（リアルアンパンマン）&lt;/h2&gt;
+
+&lt;p&gt;ケーキを作り終え、せっかくだから&lt;a href=&#34;https://iotlt.connpass.com/event/56277/&#34;&gt;IoTLT&lt;/a&gt;で登壇しようと「食べるIoT」で申し込んでいたのですが、よく考えてみたら、&lt;strong&gt;こいつ、Internetに繋がってない……ただのThingsじゃねーか……&lt;/strong&gt;！と気づいてしまいました。&lt;/p&gt;
+
+&lt;p&gt;食べるIoT……食べられる顔面……あんぱんまん……&lt;strong&gt;これだ！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/172/anpan.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ということで、リアルアンパンマンと題してこんなものを作ってしまったのでした。&lt;/p&gt;
+
+&lt;p&gt;リアルアンパンマンなので&lt;strong&gt;あんぱんは本物&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;また、「お腹すいた」というLINEを送ったらあんぱんが喋る、という機能をつけてIoTっぽくしてみました。&lt;/p&gt;
+
+&lt;h3 id=&#34;あんぱんが喋る機構を制作&#34;&gt;あんぱんが喋る機構を制作&lt;/h3&gt;
+
+&lt;p&gt;あんぱんの中身はこんな感じです。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/172/anpan1.png&#34; alt=&#34;anpan1&#34;&gt;
+
+&lt;/center&gt;
+
+Internetを使いたかったので、マイコンボードはがじぇるねの&lt;a href=&#34;http://gadget.renesas.com/ja/product/citrus.html&#34;&gt;GR-CITRUS + WA-MIKAN&lt;/a&gt;を使用しています。&lt;/p&gt;
+
+&lt;p&gt;ESP8266というWi-Fiモジュールが搭載されているので、&lt;a href=&#34;http://gadget.renesas.com/ja/product/com_sp_milkcocoa.html&#34;&gt;公式サイトのチュートリアル&lt;/a&gt;を参考に簡単にインターネット連携のアプリケーションを作ることができます。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/172/anpan2.png&#34; alt=&#34;anpan2&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;h3 id=&#34;line連携であんぱんが喋るプログラム&#34;&gt;LINE連携であんぱんが喋るプログラム&lt;/h3&gt;
+
+&lt;p&gt;Node Girls主催の&lt;a href=&#34;https://nodegirls-jp.github.io/2017-05-14/&#34;&gt;LINE BOT開発ハンズオン&lt;/a&gt;を参考に（というかほぼ丸っと使わせていただき）、LINE通知をトリガーとして、サーボモータ動かす＆音声再生を実行するようにしています。&lt;/p&gt;
+
+&lt;p&gt;またLINEから送られたデータの受け取りは&lt;strong&gt;簡単にリアルタイムなデータやりとりを実現できる&lt;/strong&gt;&lt;a href=&#34;https://mlkcca.com/&#34;&gt;Milkcocoa&lt;/a&gt;を利用しました。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://speakerdeck.com/n0bisuke/hazimetefalseline-botzuo-cheng&#34;&gt;LINE BOT開発ハンズオンの資料&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/hepppook/project-anpan/blob/master/src/grcitrus_milkcocoa.cpp&#34;&gt;Milkcocoaからデータを受け取るGR-CITRUS側のコード&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;外装を制作-2&#34;&gt;外装を制作&lt;/h3&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/172/anpan3.png&#34; alt=&#34;anpan3&#34;&gt;
+
+&lt;/center&gt;
+
+機構にカバーをつけて、&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/172/anpan4.png&#34; alt=&#34;anpan4&#34;&gt;
+
+&lt;/center&gt;
+
+あんぱん（西友で購入）でデコレーション（？）して完成です。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;電子工作の技術的には初心者レベルなものばがりですが、
+それでも自分で作ったものが動くのは感動です。&lt;/p&gt;
+
+&lt;p&gt;初心者でも玄人でも、自由なものづくりって楽しいですよね！&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
