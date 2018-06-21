@@ -7,8 +7,2174 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2018 dotstudio inc.</copyright>
-    <lastBuildDate>Mon, 14 May 2018 10:00:00 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 14 Jun 2018 10:00:00 +0900</lastBuildDate>
     <atom:link href="/categories/try/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Lチカ入門者がロボット入門！歌ったり喋ったりする顔面ロボット作ってみた</title>
+      <link>https://dotstud.io/blog/face-robot-making-maruko/</link>
+      <pubDate>Thu, 14 Jun 2018 10:00:00 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/face-robot-making-maruko/</guid>
+      
+      <description>
+
+&lt;p&gt;都内でひっそりOLやってるへっぽこまるこです。&lt;/p&gt;
+
+&lt;p&gt;電子工作でLチカを覚えたので、そろそろロボット作れるんじゃないかな……。無知が故、そんなことを思い立ってしまったのでロボット（的なのもの）制作に挑戦してみました！&lt;/p&gt;
+
+&lt;p&gt;最初は２分の１サイズぐらいの人型ロボットを作りたかったのですが、なんせLチカ入門レベルでしたので、全身を作って制御するのは厳しいことに気づきました。そこでひとまずは&lt;strong&gt;顔面ロボット&lt;/strong&gt;から挑戦しました！&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;顔のパーツが動く基本の顔面ロボット&lt;/li&gt;
+&lt;li&gt;歌う顔面ロボット&lt;/li&gt;
+&lt;li&gt;IoTな顔面ロボット&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;を制作してみたので、作例と作り方を紹介していきます。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;マイコンボードとコピペと気合いで意外とやれる&lt;/strong&gt;ので、「ロボットって難しいでしょ？」と思っている方、ぜひ試してみてください！&lt;/p&gt;
+
+&lt;h2 id=&#34;顔面ロボット制作の基本&#34;&gt;顔面ロボット制作の基本&lt;/h2&gt;
+
+&lt;p&gt;顔面ロボットはその名の通り、顔のロボットです……。顔の造形を作って、目や口などの動かせそうなパーツをマイコンボードから制御します。&lt;/p&gt;
+
+&lt;h3 id=&#34;動作制御&#34;&gt;動作制御&lt;/h3&gt;
+
+&lt;p&gt;動作制御に使うのは、基本的に&lt;strong&gt;サーボモータ&lt;/strong&gt;（&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gM-08761/&#34;&gt;SG90&lt;/a&gt;）です。
+&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gM-08761/&#34;&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/172/servo1.png&#34; alt=&#34;servo1&#34;&gt;
+
+&lt;/center&gt;
+&lt;/a&gt;
+サーボモータは回転方向や角度を細かく調整でき、ロボットのパーツ制御に向いています。SG90はお手頃価格（400円程度）なので、試行錯誤も躊躇せずできてうってつけですね。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/172/servo2.png&#34; alt=&#34;servo2&#34;&gt;
+
+&lt;/center&gt;
+
+顔面パーツを動かすには主に&lt;strong&gt;サーボホーン&lt;/strong&gt;（サーボモータの羽の部分）をどうごにょごにょするかを試行錯誤します。&lt;/p&gt;
+
+&lt;p&gt;サーボモータの仕組みについては、ドキュメントの「&lt;a href=&#34;https://dotstud.io/docs/pulse-width-modulation/&#34;&gt;PWM制御（サーボモータの仕組み）&lt;/a&gt;」に詳しく書いてありますので、ぜひそちらをご覧ください！&lt;/p&gt;
+
+&lt;h3 id=&#34;外装&#34;&gt;外装&lt;/h3&gt;
+
+&lt;p&gt;ロボットの外装は主に3Dプリンタで制作します。&lt;/p&gt;
+
+&lt;p&gt;そんな機材ないよ！という方は、既存のものを動かしたり、ファブリケーションスペース（工作機材を利用できる施設）を利用したりしてみてください！&lt;/p&gt;
+
+&lt;p&gt;それでは、ここからは出来上がった顔ロボットと作り方を紹介させていただきます！&lt;/p&gt;
+
+&lt;h2 id=&#34;初号機-あけみ&#34;&gt;初号機（あけみ）&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/172/akemi.gif&#34; alt=&#34;&#34; /&gt;
+あけみちゃんです。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;浮世絵の中の美人を立体にしてみたい&lt;/strong&gt;、そんなことを思いついて、生まれてしまったのがあけみちゃんです。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.amazon.co.jp/%E8%87%AA%E4%BD%9C%E3%83%AD%E3%83%9C%E3%83%83%E3%83%88%E5%85%A5%E9%96%80%E2%80%95%E3%82%A2%E3%83%8B%E3%83%9E%E3%83%88%E3%83%AD%E3%83%8B%E3%82%AF%E3%82%B9%E7%B7%A8-%E6%B5%85%E8%8D%89-%E3%82%AE%E7%A0%94/dp/4901676199/ref=sr_1_1?s=books&amp;amp;ie=UTF8&amp;amp;qid=1526820137&amp;amp;sr=1-1&#34;&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/172/book.png&#34; alt=&#34;book&#34;&gt;
+
+&lt;/center&gt;
+&lt;/a&gt;
+&lt;a href=&#34;https://www.amazon.co.jp/%E8%87%AA%E4%BD%9C%E3%83%AD%E3%83%9C%E3%83%83%E3%83%88%E5%85%A5%E9%96%80%E2%80%95%E3%82%A2%E3%83%8B%E3%83%9E%E3%83%88%E3%83%AD%E3%83%8B%E3%82%AF%E3%82%B9%E7%B7%A8-%E6%B5%85%E8%8D%89-%E3%82%AE%E7%A0%94/dp/4901676199/ref=sr_1_1?s=books&amp;amp;ie=UTF8&amp;amp;qid=1526820137&amp;amp;sr=1-1&#34;&gt;浅草ギ研さんの「自作ロボット製作入門」&lt;/a&gt;という書籍から、機構の動かし方なんかを参考にさせていただきました！
+（久しぶりにamazonでみたらめっちゃ値上がりしてる！！）&lt;/p&gt;
+
+&lt;h3 id=&#34;外装を制作&#34;&gt;外装を制作&lt;/h3&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/172/akemi1.png&#34; alt=&#34;akemi1&#34;&gt;
+
+&lt;/center&gt;
+
+まずは粘土で、作りたい顔のベースを造形します。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/172/akemi2.png&#34; alt=&#34;akemi2&#34;&gt;
+
+&lt;/center&gt;
+
+作った造形を3Dスキャンし、3Dプリントで出力します。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/172/akemi3.png&#34; alt=&#34;akemi3&#34;&gt;
+
+&lt;/center&gt;
+
+出力した造形を元に、パーツ（皮膚や目ん玉やら）を作成します。あけみちゃんの場合、皮膚はラテックス、目ん玉は樹脂粘土でできています。&lt;/p&gt;
+
+&lt;p&gt;&lt;font size=&#34;2&#34;&gt;※写真はラテックスの皮膚を作るためのシリコーン型を作っているところです。&lt;/font&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;動く機構を作る&#34;&gt;動く機構を作る&lt;/h3&gt;
+
+&lt;p&gt;ここでは、サーボホーンに繋がるところがどのようにしたら連携できるかを考え作成します。あけみちゃんは下記2つが実現できるよう、いじりながら模索しました。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;目ん玉が左右に動く&lt;/li&gt;
+&lt;li&gt;口が開閉する&lt;/li&gt;
+&lt;/ul&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/172/akemi4.png&#34; alt=&#34;akemi4&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;とりあえず自分が扱えるもの（発砲スチロールやプラ板やアルミの棒など）で無理矢理動くように仕上げたので、なかなかひどいことになっていますね。&lt;/p&gt;
+
+&lt;h3 id=&#34;回路を組む&#34;&gt;回路を組む&lt;/h3&gt;
+
+&lt;p&gt;どのサーボモータが何度動けばいいか考えながら、電子部品の配線やプログラムを準備します。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/172/akemi5.png&#34; alt=&#34;akemi5&#34;&gt;
+
+&lt;/center&gt;
+
+あけみちゃんは&lt;a href=&#34;http://gadget.renesas.com/ja/product/sakura.html&#34;&gt;GR-SAKURA&lt;/a&gt;というArduino互換のボードを利用しました。Arduino Unoでも同じ配線・プログラムで動かすことができます！&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/172/akemi6.png&#34; alt=&#34;akemi6&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;こんな適当な作りでも、どこがどう動いて欲しいか、サーボの動きがどこと連携しているか、&lt;strong&gt;なんとなーくわかっていれば、動くものは作れるぞ&lt;/strong&gt;、と悟ることができました。&lt;/p&gt;
+
+&lt;h2 id=&#34;弐号機-お誕生日ケーキ&#34;&gt;弐号機（お誕生日ケーキ）&lt;/h2&gt;
+
+&lt;p&gt;お世話になっていた社長さんが誕生日！サプライズケーキを作ろう！！！&lt;/p&gt;
+
+&lt;p&gt;ということで、弐号機はお誕生日ケーキの顔面ロボットを制作しました。
+&lt;img src=&#34;https://dotstud.io/img/blog/172/cake.gif&#34; alt=&#34;&#34; /&gt;
+驚いていただきたかったので、生クリームは本物を使用しました！&lt;/p&gt;
+
+&lt;h3 id=&#34;外装を制作-1&#34;&gt;外装を制作&lt;/h3&gt;
+
+&lt;p&gt;この時は、Fusion360というCADソフトを使ってデータ作成をし、3Dプリント出力をしました。
+造形部分についてはFusion360ののファンサイト&lt;a href=&#34;https://fusion360.3dworks.co.jp/2017/08/01/cake/&#34;&gt;FUSION BASE&lt;/a&gt;でも紹介していただいています！&lt;/p&gt;
+
+&lt;h3 id=&#34;録音した歌を歌わせる&#34;&gt;録音した歌を歌わせる&lt;/h3&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/172/cake1.png&#34; alt=&#34;cake1&#34;&gt;
+
+&lt;/center&gt;
+
+今回はバースデーソングを歌わせたかったので、簡単に実装できそう且つ安価な&lt;a href=&#34;https://www.amazon.co.jp/EasyWordMall-ISD1820-%E9%9F%B3%E5%A3%B0%E9%8C%B2%E9%9F%B3%E3%83%A2%E3%82%B8%E3%83%A5%E3%83%BC%E3%83%AB-%E3%83%AC%E3%82%B3%E3%83%BC%E3%83%80%E3%83%BC-%E3%82%B5%E3%82%A6%E3%83%B3%E3%83%89%E3%82%AA%E3%83%BC%E3%83%87%E3%82%A3%E3%82%AA%E3%82%B9%E3%83%94%E3%83%BC%E3%82%AB%E3%83%BC/dp/B0175U5J08/ref=pd_lpo_vtph_147_bs_lp_t_1?_encoding=UTF8&amp;amp;psc=1&amp;amp;refRID=WNFEK5ESWBE59NKY54ZR&#34;&gt;ISD1820&lt;/a&gt;というチップを使った音声録音・再生モジュールを使いました。&lt;/p&gt;
+
+&lt;p&gt;事前に適当な音源を録音しておき、Lチカの要領でデジタル出力するだで簡単に音声を再生できます。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/172/cake2.png&#34; alt=&#34;cake2&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;ただしこの方法だと、音声に合わせて一文字一文字サーボの角度を調整しなければいけません。一文字の音声が何秒かを測って、&lt;strong&gt;口の開閉に何秒かけるかを一つ一つ書く&lt;/strong&gt;、という地味作業をやっていました。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;
+////口の開閉の制御　一部抜粋
+
+  //mouth1 start  
+  //は
+  m_open();　//口を開ける関数
+  delay(v4);　//v4 待機時間の変数
+  m_close();　//口を閉じる関数
+  //ぴ
+  m_open();
+  delay(v2);
+  m_close();
+  //ば
+  m_open();
+  delay(v4);
+  m_close();
+  //す
+  m_open();
+  delay(v2);
+  m_close();
+  //で
+  m_open();
+  delay(v6);
+  m_close();
+  //とぅ
+  m_open();
+  delay(v6);
+  m_close();
+  //ゆ
+  m_open();
+  delay(v12);
+  m_close();
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;参号機-リアルアンパンマン&#34;&gt;参号機（リアルアンパンマン）&lt;/h2&gt;
+
+&lt;p&gt;ケーキを作り終え、せっかくだから&lt;a href=&#34;https://iotlt.connpass.com/event/56277/&#34;&gt;IoTLT&lt;/a&gt;で登壇しようと「食べるIoT」で申し込んでいたのですが、よく考えてみたら、&lt;strong&gt;こいつ、Internetに繋がってない……ただのThingsじゃねーか……&lt;/strong&gt;！と気づいてしまいました。&lt;/p&gt;
+
+&lt;p&gt;食べるIoT……食べられる顔面……あんぱんまん……&lt;strong&gt;これだ！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/172/anpan.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ということで、リアルアンパンマンと題してこんなものを作ってしまったのでした。&lt;/p&gt;
+
+&lt;p&gt;リアルアンパンマンなので&lt;strong&gt;あんぱんは本物&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;また、「お腹すいた」というLINEを送ったらあんぱんが喋る、という機能をつけてIoTっぽくしてみました。&lt;/p&gt;
+
+&lt;h3 id=&#34;あんぱんが喋る機構を制作&#34;&gt;あんぱんが喋る機構を制作&lt;/h3&gt;
+
+&lt;p&gt;あんぱんの中身はこんな感じです。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/172/anpan1.png&#34; alt=&#34;anpan1&#34;&gt;
+
+&lt;/center&gt;
+
+Internetを使いたかったので、マイコンボードはがじぇるねの&lt;a href=&#34;http://gadget.renesas.com/ja/product/citrus.html&#34;&gt;GR-CITRUS + WA-MIKAN&lt;/a&gt;を使用しています。&lt;/p&gt;
+
+&lt;p&gt;ESP8266というWi-Fiモジュールが搭載されているので、&lt;a href=&#34;http://gadget.renesas.com/ja/product/com_sp_milkcocoa.html&#34;&gt;公式サイトのチュートリアル&lt;/a&gt;を参考に簡単にインターネット連携のアプリケーションを作ることができます。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/172/anpan2.png&#34; alt=&#34;anpan2&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;h3 id=&#34;line連携であんぱんが喋るプログラム&#34;&gt;LINE連携であんぱんが喋るプログラム&lt;/h3&gt;
+
+&lt;p&gt;Node Girls主催の&lt;a href=&#34;https://nodegirls-jp.github.io/2017-05-14/&#34;&gt;LINE BOT開発ハンズオン&lt;/a&gt;を参考に（というかほぼ丸っと使わせていただき）、LINE通知をトリガーとして、サーボモータ動かす＆音声再生を実行するようにしています。&lt;/p&gt;
+
+&lt;p&gt;またLINEから送られたデータの受け取りは&lt;strong&gt;簡単にリアルタイムなデータやりとりを実現できる&lt;/strong&gt;&lt;a href=&#34;https://mlkcca.com/&#34;&gt;Milkcocoa&lt;/a&gt;を利用しました。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://speakerdeck.com/n0bisuke/hazimetefalseline-botzuo-cheng&#34;&gt;LINE BOT開発ハンズオンの資料&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/hepppook/project-anpan/blob/master/src/grcitrus_milkcocoa.cpp&#34;&gt;Milkcocoaからデータを受け取るGR-CITRUS側のコード&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;外装を制作-2&#34;&gt;外装を制作&lt;/h3&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/172/anpan3.png&#34; alt=&#34;anpan3&#34;&gt;
+
+&lt;/center&gt;
+
+機構にカバーをつけて、&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/172/anpan4.png&#34; alt=&#34;anpan4&#34;&gt;
+
+&lt;/center&gt;
+
+あんぱん（西友で購入）でデコレーション（？）して完成です。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;電子工作の技術的には初心者レベルなものばがりですが、
+それでも自分で作ったものが動くのは感動です。&lt;/p&gt;
+
+&lt;p&gt;初心者でも玄人でも、自由なものづくりって楽しいですよね！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Raspberry Piとサーボモータで踊るはにわ制作</title>
+      <link>https://dotstud.io/blog/dancing-haniwa-servo-raspi/</link>
+      <pubDate>Fri, 01 Jun 2018 10:00:00 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/dancing-haniwa-servo-raspi/</guid>
+      
+      <description>
+
+&lt;p&gt;あ、どうもはにわと申します。
+港町横浜で専門学生やってるものづくりがそこそこ好きなメガネです。&lt;/p&gt;
+
+&lt;p&gt;今回はですねタイトルと名前にあるように動く&lt;strong&gt;┌|∵|┘&lt;/strong&gt;←を作りたいと思うんですよね。&lt;/p&gt;
+
+&lt;p&gt;なぜ作るか……なんですけども&lt;strong&gt;何か大層なことを考えて趣味でものづくりする人ってそうそういない&lt;/strong&gt;と思うんです（┌|∵|┘が作りたいだけ←）。&lt;/p&gt;
+
+&lt;p&gt;今回はRaspberry Piとサーボモータを使って、&lt;strong&gt;踊る┌|∵|┘&lt;/strong&gt;を作ってみます！&lt;/p&gt;
+
+&lt;h2 id=&#34;raspberry-pi-サーボモータ&#34;&gt;Raspberry Pi？サーボモータ？┌|∵|┘？&lt;/h2&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/1.png&#34; alt=&#34;1&#34;&gt;
+
+&lt;/center&gt;
+
+「&lt;a href=&#34;https://www.raspberrypi.org/&#34;&gt;&lt;strong&gt;Raspberry Pi&lt;/strong&gt;&lt;/a&gt;」は、Arduinoに似た何でもできると噂のつよいボードです。
+強さの秘訣は内部でLinux OSが動いたり、直接ディスプレイやキーボード、マウス等を接続できたりすることで、超小型のパソコンと考えてもらって大丈夫です！&lt;/p&gt;
+
+&lt;p&gt;LANケーブルを接続すればネットにも繋がり、中にはWi-Fiモジュールが搭載されていて無線で繋がるものもあります。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/2.png&#34; alt=&#34;2&#34;&gt;
+
+&lt;/center&gt;
+
+「&lt;strong&gt;サーボモータ&lt;/strong&gt;」は、
+普通のモータとは違い回転角度・速度を細かく調整することができ、ラジコンの翼の制御やロボットのアームの制御などに使われます。&lt;/p&gt;
+
+&lt;p&gt;PWMという方法で制御するのですが、詳細は、ドキュメントの「&lt;a href=&#34;https://dotstud.io/docs/pulse-width-modulation/&#34;&gt;PWM制御&lt;/a&gt;」を参考にしてください。&lt;/p&gt;
+
+&lt;p&gt;そして&lt;strong&gt;┌|∵|┘&lt;/strong&gt;です！
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/3.png&#34; alt=&#34;3&#34;&gt;
+
+&lt;/center&gt;
+
+みなさん知ってますよね！？可愛いですよねうん。説明不要ですようん。&lt;/p&gt;
+
+&lt;h2 id=&#34;今回使うもの-欲しいもの&#34;&gt;今回使うもの、欲しいもの&lt;/h2&gt;
+
+&lt;h3 id=&#34;raspberry-pi3-http-akizukidenshi-com-catalog-g-gm-10414&#34;&gt;&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gM-10414/&#34;&gt;Raspberry Pi3&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gM-10414/&#34;&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/4.png&#34; alt=&#34;4&#34;&gt;
+
+&lt;/center&gt;
+&lt;/a&gt;
+Raspberry Pi、通称ラズパイです。今回はRaspberry Pi3を使いますが、別に2でもzeroでも大丈夫かと思われます。ラズパイ上で動かす言語は、RaspbianというOS標準のPython3系を使います。&lt;/p&gt;
+
+&lt;h3 id=&#34;マイクロサーボ9g-sg-90-http-akizukidenshi-com-catalog-g-gm-08761&#34;&gt;&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gM-08761/&#34;&gt;マイクロサーボ9g SG-90&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gM-08761/&#34;&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/5.png&#34; alt=&#34;5&#34;&gt;
+
+&lt;/center&gt;
+&lt;/a&gt;
+安価でお求めやすいサーボモータです。PWMサイクルや制御パルス等色々ありますがそんなことを気にしても物は作れません！とりあえず気にせず行きましょう！&lt;/p&gt;
+
+&lt;h3 id=&#34;ジャンパピン&#34;&gt;ジャンパピン&lt;/h3&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/7.png&#34; alt=&#34;7&#34;&gt;
+
+&lt;/center&gt;
+
+各機器をつなぎ合わせるために使用します。うーん説明終わり！&lt;/p&gt;
+
+&lt;p&gt;Amazon等で「&lt;a href=&#34;https://www.amazon.co.jp/s/ref=nb_sb_noss_1?__mk_ja_JP=%E3%82%AB%E3%82%BF%E3%82%AB%E3%83%8A&amp;amp;url=search-alias%3Daps&amp;amp;field-keywords=%E3%82%B8%E3%83%A3%E3%83%B3%E3%83%91%E3%83%94%E3%83%B3&amp;amp;rh=i%3Aaps%2Ck%3A%E3%82%B8%E3%83%A3%E3%83%B3%E3%83%91%E3%83%94%E3%83%B3&#34;&gt;&lt;strong&gt;ジャンパピン&lt;/strong&gt;&lt;/a&gt;」などと検索してみると、かなり安価で大量に手に入ることがわかります。こんないらねえよ！と思いますよね？私も思います。&lt;/p&gt;
+
+&lt;h3 id=&#34;ブレッドボード&#34;&gt;ブレッドボード&lt;/h3&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/6.png&#34; alt=&#34;6&#34;&gt;
+
+&lt;/center&gt;
+
+「&lt;a href=&#34;https://www.amazon.co.jp/s/ref=nb_sb_noss_1?__mk_ja_JP=%E3%82%AB%E3%82%BF%E3%82%AB%E3%83%8A&amp;amp;url=search-alias%3Daps&amp;amp;field-keywords=%E3%83%96%E3%83%AC%E3%83%83%E3%83%89%E3%83%9C%E3%83%BC%E3%83%89&#34;&gt;&lt;strong&gt;ブレッドボード&lt;/strong&gt;&lt;/a&gt;」と検索するとこんな感じの穴あきの板が手に入ります。ここに先ほどのピン等をさしていきます。&lt;/p&gt;
+
+&lt;p&gt;ブレッドボードの使い方がよくわからない、という方は、ドキュメントの「&lt;a href=&#34;https://dotstud.io/docs/breadboard&#34;&gt;&lt;strong&gt;ブレッドボード&lt;/strong&gt;&lt;/a&gt;」を参照してください。&lt;/p&gt;
+
+&lt;h2 id=&#34;実際に動かす&#34;&gt;実際に動かす&lt;/h2&gt;
+
+&lt;h3 id=&#34;配線&#34;&gt;配線&lt;/h3&gt;
+
+&lt;p&gt;こういった感じに配線していきましょう。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/8.png&#34; alt=&#34;8&#34;&gt;
+
+&lt;/center&gt;
+
+モータを動かすにはパワーを使うため通常は別で電源を用意することが多いですが、1個だけでしたらラズパイからの給電で動くので接続していきましょう。&lt;/p&gt;
+
+&lt;p&gt;SG90の黒をラズパイの「&lt;strong&gt;GND&lt;/strong&gt;」へ、SG90の赤はラズパイの「&lt;strong&gt;5V&lt;/strong&gt;」へ、そして黄色をラズパイの任意のピンへ接続します。今回は2番ピンに接続しておきましょう。近いですし。&lt;/p&gt;
+
+&lt;p&gt;慣習的に5Vを赤、GNDを黒、その他はそれぞれ違う色のジャンパで繋ぐと見やすいです。わかりやすさって大事！！&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/pin.png&#34; alt=&#34;pin&#34;&gt;
+
+&lt;/center&gt;
+
+ラズパイのボード上にはピン名称の記載がありませんが、「&lt;a href=&#34;https://www.google.co.jp/search?q=raspberry+pi+%E3%83%94%E3%83%B3%E3%82%A2%E3%82%B5%E3%82%A4%E3%83%B3&amp;amp;safe=off&amp;amp;rlz=1C5CHFA_enJP706JP706&amp;amp;source=lnms&amp;amp;tbm=isch&amp;amp;sa=X&amp;amp;ved=0ahUKEwjRkLTTw6rbAhWIx7wKHYGRAMEQ_AUICigB&amp;amp;biw=1163&amp;amp;bih=895&#34;&gt;Raspberry Pi ピンアサイン&lt;/a&gt;」などと検索すると調べることができます。&lt;/p&gt;
+
+&lt;h3 id=&#34;プログラム&#34;&gt;プログラム&lt;/h3&gt;
+
+&lt;p&gt;ラズパイの初期設定等はとても詳しく説明してくださってる方がたくさんいるので割愛します！！！Python3とpipがあればOKです。&lt;/p&gt;
+
+&lt;p&gt;SSH接続とかNotepad++とかで遠隔で書き込むのもありですが、それができる人は自分で頑張ってください。今回はラズパイに直接書き込んでいきましょう！&lt;/p&gt;
+
+&lt;p&gt;ラズパイへ電源、HDMI、キーボードを接続しログイン。&lt;/p&gt;
+
+&lt;p&gt;シェルが起動しましたら&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ pip3 install RPi.GPIO
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;とPython上でGPIOを操作できるライブラリを落とします。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ touch motor_test.py
+$ nano motor_test.py
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;でファイルを作成して編集モードにし、以下を記述していきます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import RPi.GPIO as GPIO
+import time
+GPIO.setmode(GPIO.BCM)
+
+gp_out = 2 // SG90の黄色を刺したピン
+GPIO.setup(gp_out, GPIO.OUT)
+motor = GPIO.PWM(gp_out, 50)
+motor.start(0.0)
+
+bot = 2.5
+mid = 7.2
+top = 12.0
+
+motor.ChangeDutyCycle(bot)
+time.sleep(0.5)
+
+motor.ChangeDutyCycle(top)
+time.sleep(0.5)
+
+motor.ChangeDutyCycle(mid)
+time.sleep(0.5)
+
+GPIO.cleanup()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ctrl + x で終了し、yキーで保存します。&lt;/p&gt;
+
+&lt;h3 id=&#34;確認&#34;&gt;確認&lt;/h3&gt;
+
+&lt;p&gt;プログラムを書き込めたら、動かしてみましょう。配線を確認し次のコマンドを叩きましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ python3 motor_test.py
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/170/9.gif&#34; alt=&#34;&#34; /&gt;
+おお！動いた！という事で&lt;code&gt;ChangeDutyCycle()&lt;/code&gt;の中身を変えることで好きな角度に変えることができます。とりあえずの指標として0、90、180度をtop、mid、botという変数に入れていますが、直接数値を入力してもOKです。&lt;/p&gt;
+
+&lt;h2 id=&#34;モータを増やす&#34;&gt;モータを増やす。&lt;/h2&gt;
+
+&lt;p&gt;一つのサーボモータを動かすことには成功しました。なので次はもっと増やしてみましょう。&lt;/p&gt;
+
+&lt;p&gt;具体的には上のプログラムの使いまわしで大丈夫です。使うモータ毎に名前とどのピンを使うかを記述し、&lt;code&gt;名前.ChangeDutyCycle()&lt;/code&gt;とすると対応するサーボモータが作動するようになります。&lt;/p&gt;
+
+&lt;h3 id=&#34;配線-1&#34;&gt;配線&lt;/h3&gt;
+
+&lt;p&gt;では全部で3台動くように追加していきましょう！ラズパイからの給電ではSG90を3台も動かせないので、単3電池2本を追加して電力を補強しつつこういった感じに配線します。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/circuit.png&#34; alt=&#34;circuit&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;電池の赤（+）をブレッドボードの+列へ、黒（-）をｰ列へ刺します。&lt;/p&gt;
+
+&lt;p&gt;各サーボモータの赤をブレッドボードの+列に、サーボモーターの黒をブレッドボードの-列に、ラズパイのGNDをボードの-列へ接続し電源を確保します。&lt;/p&gt;
+
+&lt;p&gt;そしてサーボモータの黄色はGPIO端子の対応するところ（今回は2、3、4番ピン）にぶっ刺します。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/10.png&#34; alt=&#34;10&#34;&gt;
+
+&lt;/center&gt;
+
+Oh…ｺﾞﾁｬｺﾞﾁｬ……&lt;/p&gt;
+
+&lt;h3 id=&#34;プログラム-1&#34;&gt;プログラム&lt;/h3&gt;
+
+&lt;p&gt;さっき書いたプログラムのように記述します。さっきのを書き換えてもOKです！&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;import RPi.GPIO as GPIO
+import time
+GPIO.setmode(GPIO.BCM)
+
+gp_out = 2
+GPIO.setup(gp_out, GPIO.OUT)
+right = GPIO.PWM(gp_out, 50)
+right.start(0.0)
+
+gp_out = 3
+GPIO.setup(gp_out, GPIO.OUT)
+left = GPIO.PWM(gp_out, 50)
+left.start(0.0)
+
+gp_out = 4
+GPIO.setup(gp_out, GPIO.OUT)
+chest = GPIO.PWM(gp_out, 50)
+chest.start(0.0)
+
+bot = 2.5
+mid = 7.2
+top = 12.0
+
+right.ChangeDutyCycle(bot)
+left.ChangeDutyCycle(bot)
+time.sleep(0.5)
+
+chest.ChangeDutyCycle(mid)
+time.sleep(0.5)
+
+right.ChangeDutyCycle(top)
+chest.ChangeDutyCycle(bot)
+time.sleep(0.5)
+
+chest.ChangeDutyCycle(top)
+right.ChangeDutyCycle(bot)
+left.ChangeDutyCycle(top)
+time.sleep(0.5)
+
+chest.ChangeDutyCycle(mid)
+right.ChangeDutyCycle(top)
+left.ChangeDutyCycle(bot)
+time.sleep(0.5)
+
+GPIO.cleanup()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;こんな感じで！もう好きにやっちゃってくださいな。&lt;/p&gt;
+
+&lt;h2 id=&#34;図工&#34;&gt;図工&lt;/h2&gt;
+
+&lt;p&gt;それでは本題である&lt;strong&gt;┌|∵|┘&lt;/strong&gt;を作ります！皆さん童心に帰って好きな素材で作ってください！&lt;/p&gt;
+
+&lt;p&gt;私は今回牛乳パックで作成していきます。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/11.png&#34; alt=&#34;11&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;p&gt;( ＾ω＾)&lt;br /&gt;
+≡⊃⊂≡&lt;br /&gt;
+こうしてこうして
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/12.png&#34; alt=&#34;12&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;p&gt;( ＾ω＾)&lt;br /&gt;
+⊃ .. ⊂&lt;br /&gt;
+こうじゃ
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/haniwa.png&#34; alt=&#34;haniwa&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;やったぜ&#34;&gt;やったぜ&lt;/h2&gt;
+
+&lt;p&gt;さあさあここまで来たんです！動かしましょうよ！ね！
+&lt;strong&gt;┌|∵|┘起動!!!!!&lt;/strong&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/170/14.gif&#34; alt=&#34;&#34; /&gt;
+&lt;center&gt;
+&lt;font size=&#34;5&#34;&gt;動いたあああああ！躍ったああああああああ！&lt;/font&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;
+と、いう事で好きにパーツを作ってもらえればどんなものも躍らせられますね……！！踊り自体もPythonで記述しているので、forやifを駆使すれば複雑な踊りだっていけます。ここから皆さんの創造力が試されますぞ！&lt;/p&gt;
+
+&lt;p&gt;それでは長くなりましたがお疲れ様です！皆もなんか動かしてみようぜ！！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>micro:bit同士で通信してみよう！腕の動きに合わせて光る帽子の作り方</title>
+      <link>https://dotstud.io/blog/microbit-flickering-light-hat/</link>
+      <pubDate>Tue, 29 May 2018 10:40:00 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/microbit-flickering-light-hat/</guid>
+      
+      <description>
+
+&lt;p&gt;はじめまして、りんろくです。&lt;/p&gt;
+
+&lt;p&gt;マイコンボード初心者ながらmicro:bitのデザインやサイズ感がすごく好きで、四苦八苦しながらちょっとしたゲームを作ったり、LEDをチカチカさせてみたりしています！&lt;/p&gt;
+
+&lt;p&gt;そんな私ですが、机の上で触っているだけでなく、いつかmicro:bitを外に持ち出せるアイテムとして使えないかなあ……と漠然と思っていました。&lt;/p&gt;
+
+&lt;p&gt;ぼーっとmicro:bitのことを考えていたある日、音楽をやっている知り合いから、数日後のライブに出演するという連絡とともに、&lt;/p&gt;
+
+&lt;p&gt;「ステージから発見できるぐらいの&lt;strong&gt;ちょっと&lt;/strong&gt;目立つアイテムを身につけてきてよ！」&lt;/p&gt;
+
+&lt;p&gt;とのお達しが。&lt;/p&gt;
+
+&lt;p&gt;これはmicro:bitを実戦投入するしかない！この機を逃してはならない！と思いついた私は、その瞬間から動き出しました。&lt;/p&gt;
+
+&lt;p&gt;ということで今回はmicro:bitのチュートリアルも兼ねて、micro:bitを2台使用し、&lt;strong&gt;腕の動きに合わせて光り方を変える帽子を作っていきたい&lt;/strong&gt;と思います！&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/1.png&#34; alt=&#34;1&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;h2 id=&#34;micro-bitとは&#34;&gt;micro:bitとは&lt;/h2&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/2.png&#34; alt=&#34;2&#34;&gt;
+
+&lt;/center&gt;
+
+今回使用する&lt;a href=&#34;http://microbit.org/ja/guide/&#34;&gt;micro:bit&lt;/a&gt;はイギリス発の教育用マイコンボードです。イギリスで11歳と12歳の小学生に無料配布されたことが話題になりました。&lt;/p&gt;
+
+&lt;p&gt;micro:bitには、温度計や加速度センサーを初めとした&lt;a href=&#34;http://microbit.org/ja/guide/features/&#34;&gt;様々な機能&lt;/a&gt;が搭載されており、簡単に制御することができます。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/3.png&#34; alt=&#34;3&#34;&gt;
+
+&lt;/center&gt;
+
+また、micro:bitの特徴の一つとして、様々な機能やイベントを表したブロックを配置することによってプログラムを作成する&lt;strong&gt;ブロックコーディングを採用していること&lt;/strong&gt;が挙げられます（JavaScriptやPythonを用いてコーディングすることも可能です）。&lt;/p&gt;
+
+&lt;p&gt;概要や基本の操作方法はこちらの記事でも紹介しています。
+
+
+&lt;section class=&#34;link&#34; id=&#34;165&#34;&gt;
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+          &lt;div class=&#34;link_content&#34;&gt;
+          &lt;a href=&#34;https://dotstud.io/blog/microbit-getting-started-pokio/&#34;&gt;&lt;/a&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/165/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
+          &lt;/div&gt;
+          &lt;div class=&#34;link_content&#34;&gt;
+            &lt;div class=&#34;link_detail&#34;&gt;
+              &lt;div class=&#34;link_title&#34;&gt;
+                子供も大人もmicro:bit！基本の操作と初めてのプログラミング
+              &lt;/div&gt;
+              &lt;div class=&#34;link_date&#34;&gt;
+                
+                2018-05-14
+              &lt;/div&gt;
+              &lt;div class=&#34;link_desc&#34;&gt;
+                巷で人気なマイコンボードのmicro:bit。安い！早い！楽しい！のプログラミングを楽しみましょう！
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+&lt;/section&gt;
+&lt;/p&gt;
+
+&lt;h3 id=&#34;micro-bitのここが良い&#34;&gt;micro:bitのここが良い！&lt;/h3&gt;
+
+&lt;p&gt;先に言及した通り、micro:bitはイギリスでは無料配布された有名なマイコンボードです。しかしながら日本では未だ広く知られているとは言えません。ではなぜ私はmicro:bitを使うのか、なぜ紹介記事を書いているのか。&lt;/p&gt;
+
+&lt;p&gt;それにはもちろん理由があります。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;とにかく安い&#34;&gt;■ とにかく安い！&lt;/h4&gt;
+
+&lt;p&gt;ArduinoやRaspberry Piといった、現在の主流と言えるマイコンボードが3000円〜6000円程度の価格設定であるのに対し、&lt;strong&gt;micro:bitは2000円前後で買えます！&lt;/strong&gt; とりあえず買ってからどう使うか考えましょう！&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;webコーディングのため環境構築不要&#34;&gt;■ Webコーディングのため環境構築不要！&lt;/h4&gt;
+
+&lt;p&gt;多くのマイコンボードは、プログラミングする際に制御用ソフトウェアのインストールなどの手順を踏む必要があります。&lt;/p&gt;
+
+&lt;p&gt;しかしながら！&lt;/p&gt;
+
+&lt;p&gt;Webコーディングの場合、ネット環境さえあればWebページにアクセスするだけでプログラムを作り始めることができるのです！&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;ledがいっぱいある&#34;&gt;■ LEDがいっぱいある！&lt;/h4&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/4.png&#34; alt=&#34;4&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;LEDが25個搭載されており、自分の好きなマークや文字列を表現することができます！また、光らせたいLEDを自分で選択するほか、いくつかのマークは初めから用意されているため簡単に制御できます！&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;
+以上3点のポイントが、私がmicro:bitを愛する理由です。&lt;/p&gt;
+
+&lt;p&gt;そうなのです。とにかく「&lt;strong&gt;ハードルが低い&lt;/strong&gt;」という点においてmicro:bitは非常に優秀なのです！&lt;/p&gt;
+
+&lt;p&gt;この記事は、micro:bitの諸機能のうち、最も難しい（ように思われるであろう）通信機能に焦点を当てています。&lt;/p&gt;
+
+&lt;p&gt;私もmicro:bitを購入して、様々なプログラムについて触れたあと、通信機能だけが難解であるように感じました。しかし実際にプログラムを作成してみると、そんなことはないのです。&lt;/p&gt;
+
+&lt;p&gt;この記事を読み終わり、自分の手で通信機能を制御したとき、きっとmicro:bitが「触れやすい」マイコンボードであると感じるはずです。&lt;/p&gt;
+
+&lt;h2 id=&#34;全体の流れ&#34;&gt;全体の流れ&lt;/h2&gt;
+
+&lt;p&gt;今回は送信用、受信用としてmicro:bit2台を準備します。&lt;/p&gt;
+
+&lt;p&gt;送信側のmicro:bitは手に持ち、腕を振った際の振動を検知、2種類の信号を送信します。それに対して受信側のmicro:bitは頭（帽子）に装着し、受け取った信号に合わせて光り方を変えます。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/5.png&#34; alt=&#34;5&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;h3 id=&#34;使ったもの&#34;&gt;使ったもの&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;micro:bit 2台（送信用・受信用）&lt;/li&gt;
+&lt;li&gt;バッテリー付属型ケース（&lt;a href=&#34;https://www.switch-science.com/catalog/3177/&#34;&gt;micro:bit用 bat:bitバッテリーケース&lt;/a&gt;）&lt;/li&gt;
+&lt;li&gt;保護用ケース（&lt;a href=&#34;https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-56JT&#34;&gt;MI:pro Case for micro:bit&lt;/a&gt;）&lt;/li&gt;
+&lt;li&gt;単3電池ホルダー（&lt;a href=&#34;https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-55YE&#34;&gt;単3形×2本&lt;/a&gt;）&lt;/li&gt;
+&lt;li&gt;micro:bitを貼り付けるための帽子&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;手首につける側のmicro:bitは余計なコード類が邪魔にならないよう、バッテリーが一体型のケース&lt;a href=&#34;https://www.switch-science.com/catalog/3177/&#34;&gt;&lt;strong&gt;bat:bit&lt;/strong&gt;&lt;/a&gt;を利用します。&lt;/p&gt;
+
+&lt;p&gt;帽子に貼り付ける側は、micro:bitの保護のために&lt;a href=&#34;https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-56JT&#34;&gt;&lt;strong&gt;MI:pro Case for micro:bit&lt;/strong&gt;&lt;/a&gt;というケースを利用しました。バッテリー付属型のbat:bitは背面が電池ケースになっていて帽子への貼り付けが難しいと感じたため、&lt;strong&gt;取り外し可能な単3電池ホルダーから給電を行うこちらのケース&lt;/strong&gt;を採用しました。&lt;/p&gt;
+
+&lt;p&gt;重量の分散もできて一石二鳥といった感じです。&lt;/p&gt;
+
+&lt;h2 id=&#34;2つのmicro-bitで通信する方法&#34;&gt;2つのmicro:bitで通信する方法&lt;/h2&gt;
+
+&lt;p&gt;手に持ったmicro:bitを送信側とし、帽子にくっつけたmicro:bitを受信側として細かい仕様を決めていきます！&lt;/p&gt;
+
+&lt;p&gt;micro:bitでは2つの通信機能が用意されています。&lt;/p&gt;
+
+&lt;h3 id=&#34;標準搭載の無線-radio&#34;&gt;標準搭載の無線（radio）&lt;/h3&gt;
+
+&lt;p&gt;この無線機能はmicro:bit同士の通信を想定したものとなっており、基本的にPCや他デバイスへの信号の送受信はできません。
+グループを設定するだけで通信を開始できるため、他の通信方式と比較して利用しやすいというメリットがあります。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/6.png&#34; alt=&#34;6&#34;&gt;
+
+&lt;/center&gt;
+
+無線機能に関して用意されているブロックはピンク色に統一されています。&lt;/p&gt;
+
+&lt;h3 id=&#34;ble-bluetooth-low-eenergy&#34;&gt;BLE（Bluetooth Low Eenergy）&lt;/h3&gt;
+
+&lt;p&gt;BLEではBluetooth対応のPCやスマートフォンとの通信が可能で、音楽の再生・停止などの特殊なコマンドを使用することができます。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/7.png&#34; alt=&#34;7&#34;&gt;
+
+&lt;/center&gt;
+
+ブロックコーディングの場合、BLEのブロックは拡張機能として実装されているため、パッケージの追加を行う必要があります。&lt;/p&gt;
+
+&lt;p&gt;また、&lt;strong&gt;無線機能とBLEを同時に利用することはできない&lt;/strong&gt;ため、注意が必要です。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;
+各通信機能について簡単にまとめると以下のようになります。&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;center&#34;&gt;&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;通信先&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;その他の特徴&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;無線通信&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;micro:bitのみ&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;通信するための設定が簡単&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;BLE&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;PC、スマートフォンなどのBluetooth対応デバイス&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;特殊な命令を送信できる&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;ということで、今回は2台のmicro:bit間のみでの通信を想定しているため、&lt;strong&gt;無線通信を採用&lt;/strong&gt;します！&lt;/p&gt;
+
+&lt;h2 id=&#34;制作&#34;&gt;制作&lt;/h2&gt;
+
+&lt;p&gt;今回はブロックコーディングを利用してプログラムを作成します。ブロックコーディングでは、様々な役割を持ったブロックをドラッグ＆ドロップで配置し、プログラムを作成していきます。&lt;/p&gt;
+
+&lt;h3 id=&#34;javascriptブロックコーディング&#34;&gt;JavaScriptブロックコーディング&lt;/h3&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/8.png&#34; alt=&#34;8&#34;&gt;
+
+&lt;/center&gt;
+
+今回は、送信側の揺れ方（腕の振り方）によって受信側のアイコン表示を変更したいので、右に傾いたときは大きなハートを表示して、左に傾いたときには小さなハートを表示するようなプログラムを作成します。&lt;/p&gt;
+
+&lt;p&gt;それでは送信側と受信側、それぞれのコードを&lt;a href=&#34;https://makecode.microbit.org/#&#34;&gt;JavaScriptブロックエディタ&lt;/a&gt;で作っていきましょう！&lt;/p&gt;
+
+&lt;h3 id=&#34;送信側を右に傾けたときのコード&#34;&gt;送信側を右に傾けたときのコード&lt;/h3&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/9.png&#34; alt=&#34;9&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;送信側のmicro:bitは、本体が右に傾いているか、左に傾いているかを検知して、それに応じた信号を無線通信によって送信します。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/10.png&#34; alt=&#34;10&#34;&gt;
+
+&lt;/center&gt;
+
+初めに無線のグループ設定をします。「入力」タブから&lt;code&gt;最初だけ&lt;/code&gt;ブロックを配置し、「無線」タブより&lt;code&gt;無線のグループを設定&lt;/code&gt;ブロックを&lt;code&gt;最初だけ&lt;/code&gt;の下に繋げるようにドラッグ&amp;amp;ドロップして配置します。これにより、同じグループに登録されたmicro:bitと通信を行うことができるようになります。&lt;/p&gt;
+
+&lt;p&gt;続いて、送信側のプログラムでは右に揺れた場合と左に揺れた場合で異なる信号を送信する必要があるので、&lt;code&gt;右に傾けたとき&lt;/code&gt;と&lt;code&gt;左に傾けたとき&lt;/code&gt;のブロックをそれぞれ配置し、送信する信号について考えます。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/11.png&#34; alt=&#34;11&#34;&gt;
+
+&lt;/center&gt;
+
+「入力」のタブより&lt;code&gt;ゆさぶられたとき&lt;/code&gt;ブロックを取り出し、『ゆさぶられた』ボタンをクリックして、&lt;code&gt;右に傾けたとき&lt;/code&gt;に変更します。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/12.png&#34; alt=&#34;12&#34;&gt;
+
+&lt;/center&gt;
+
+「無線」タブより&lt;code&gt;無線で文字列を送信&lt;/code&gt;ブロックを繋げます。このブロックでは、送信したい文字列を右側のフォームに直接入力することができます。信号を受信したとき、送信側のmicro:bitが右に傾いたことがわかればよいので、送信する文字列は&amp;rdquo;right&amp;rdquo;とします。&lt;/p&gt;
+
+&lt;p&gt;また、きちんと右に傾いたことを検知し、文字列の送信が行われたかどうかを確認する必要があるので、信号の送信後100ミリ秒だけチェックマークを表示するよう設定します。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/13.png&#34; alt=&#34;13&#34;&gt;
+
+&lt;/center&gt;
+
+「基本」タブより&lt;code&gt;アイコンを表示&lt;/code&gt;、&lt;code&gt;一時停止（ミリ秒）&lt;/code&gt;、&lt;code&gt;表示を消す&lt;/code&gt;の3ブロックを取り出し、順に配置します。アイコンを表示ブロックも右側のアイコン部分をクリックすることで光り方を変更することができます。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/14.png&#34; alt=&#34;14&#34;&gt;
+
+&lt;/center&gt;
+
+ということで右に傾けたときのプログラムが完成しました。&lt;/p&gt;
+
+&lt;h3 id=&#34;送信側を左に傾けたときのコード&#34;&gt;送信側を左に傾けたときのコード&lt;/h3&gt;
+
+&lt;p&gt;同じようにして左に傾けたときのプログラムも作る……と見せかけて、ブロックエディタでもコピー＆ペーストができるので利用します。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/15.png&#34; alt=&#34;15&#34;&gt;
+
+&lt;/center&gt;
+
+右クリック（Macなら二本指でトラックパッドをクリック）から「複製する」を選択しましょう。&lt;/p&gt;
+
+&lt;p&gt;あとはこれまでやってきたことの復習です。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/16.png&#34; alt=&#34;16&#34;&gt;
+
+&lt;/center&gt;
+
+『右に傾けた』ボタンをクリックして&lt;code&gt;左に傾けたとき&lt;/code&gt;ブロックに変更、今度は左に傾けたときのプログラムなので、&lt;code&gt;無線で文字列を送信&lt;/code&gt;ブロックの文字列を&amp;rdquo;right&amp;rdquo;から&amp;rdquo;left&amp;rdquo;に書き換えます。&lt;/p&gt;
+
+&lt;p&gt;これにて送信側のコードは完成です！&lt;/p&gt;
+
+&lt;p&gt;あとは頑張って書いたコードをダウンロードしてmicro:bitに送りましょう！&lt;/p&gt;
+
+&lt;h3 id=&#34;micro-bitに送信側のプログラムを書き込む&#34;&gt;micro:bitに送信側のプログラムを書き込む&lt;/h3&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/17.png&#34; alt=&#34;17&#34;&gt;
+
+&lt;/center&gt;
+
+エディタの左下にあるファイル名フォームに名前を入力しますが、ここで注意！　今回は送信側と受信側、2つのプログラムを作成するため、&lt;strong&gt;どちらが送信側及び受信側であるか判別できるように&lt;/strong&gt;名前をつける必要があります。&lt;/p&gt;
+
+&lt;p&gt;「sender」など、わかりやすい名前をつけてダウンロードボタンをクリックします。&lt;/p&gt;
+
+&lt;p&gt;続いてUSBケーブルでmicro:bitをコンピュータに接続します。接続が完了すると、Macであればファインダーに、Windowsであればエクスプローラに「MICROBIT」という名前でドライブとして表示されます。&lt;/p&gt;
+
+&lt;p&gt;ダウンロードしたhexファイルを「MICROBIT」にドラッグ&amp;amp;ドロップすることで書き込みが始まり、背面のLEDが点滅します。点滅が終わったら書き込みが完了し、プログラムが実行状態になります。&lt;/p&gt;
+
+&lt;p&gt;&lt;font size=&#34;2&#34;&gt;
+注意：micro:bitは&lt;strong&gt;プログラムの保存機能を持たないため、一度書き込んだプログラムを取り出すことはできません&lt;/strong&gt;。
+&lt;/font&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;受信側のコード&#34;&gt;受信側のコード&lt;/h3&gt;
+
+&lt;p&gt;さてさて、次は受信側です。受信側ではどのような機能を実装しなければならないか、今一度確認しましょう。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/18.png&#34; alt=&#34;18&#34;&gt;
+
+&lt;/center&gt;
+
+受け取った信号が右に傾けたことを示すものであった場合、大きなハートをLEDに表示して、左に傾けたことを示すものであった場合は小さなハートをLEDに表示します。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/19.png&#34; alt=&#34;19&#34;&gt;
+
+&lt;/center&gt;
+
+これまで配置したブロックを削除し、新しくプログラムを作成する際は、画面左上の「プロジェクト」より「新しいプロジェクト」を選択します。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/20.png&#34; alt=&#34;20&#34;&gt;
+
+&lt;/center&gt;
+
+というわけで、全てのブロックがリセットされました。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/21.png&#34; alt=&#34;21&#34;&gt;
+
+&lt;/center&gt;
+
+それでは、送信側と同じように無線のグループ設定を行います。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/22.png&#34; alt=&#34;22&#34;&gt;
+
+&lt;/center&gt;
+
+まずは「無線」タブより、&lt;code&gt;無線で受信したとき receivedString&lt;/code&gt;ブロックを配置します。このブロックは、「無線で信号が送られてきたとき、下に繋がっているブロックを実行する」という通常の働きのほかに、&lt;strong&gt;受信した信号の中身をreceivedStringという変数に入れる&lt;/strong&gt;、という働きをします。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/23.png&#34; alt=&#34;23&#34;&gt;
+
+&lt;/center&gt;
+
+次に「論理」タブから&lt;code&gt;もし　真　なら　でなければ&lt;/code&gt;ブロックを取り出します。このブロックは条件を設定し、場合によって分岐させるブロックです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;もし「受信した文字列」が「&amp;rdquo;right&amp;rdquo;」&lt;/li&gt;
+&lt;li&gt;なら「大きなハートを表示」&lt;/li&gt;
+&lt;li&gt;でなければ「小さなハートを表示」&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;今回は、上記のような条件分岐を作成します。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/24.png&#34; alt=&#34;24&#34;&gt;
+
+&lt;/center&gt;
+
+条件式として&lt;code&gt;0 = 0&lt;/code&gt;ブロックを利用します。このブロックは左右に数字同士あるいは文字列同士を繋げることができ、その内容を比較します。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/25.png&#34; alt=&#34;25&#34;&gt;
+
+&lt;/center&gt;
+
+受信した文字列は&lt;code&gt;receivedString&lt;/code&gt;という変数の中に一時的に保存されているので、ここでは変数&lt;code&gt;receivedString&lt;/code&gt;と、&amp;rdquo;right&amp;rdquo;という文字列を比較します。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;receivedString&lt;/code&gt;ブロックは「変数」タブの中から取り出しましょう。&amp;rdquo;right&amp;rdquo;は「高度なブロック」タブを開き、「文字列」タブの中から空白の文字列を取り出します。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/26.png&#34; alt=&#34;26&#34;&gt;
+
+&lt;/center&gt;
+
+「文字列」ブロックの中に&amp;rdquo;right&amp;rdquo;と入力して条件式に組み込みましょう。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/27.png&#34; alt=&#34;27&#34;&gt;
+
+&lt;/center&gt;
+
+続いてLEDの光り方の設定です。受信した信号が&amp;rdquo;right&amp;rdquo;のとき大きなハートを表示して、それ以外のときは小さなハートを表示するよう設定すればよいので、このようになります。&lt;/p&gt;
+
+&lt;p&gt;これにて受信側のプログラムも完成です。送信側と同じように「receiver」など判別可能な名前をつけてダウンロードし、受信側のmicro:bitに取り込みましょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;ケースに入れてmicro-bitを保護&#34;&gt;ケースに入れてmicro:bitを保護&lt;/h2&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/28.png&#34; alt=&#34;28&#34;&gt;
+
+&lt;/center&gt;
+
+受信側のmicro:bitを直で帽子に貼り付けるとショートする可能性があるので、保護ケースとして&lt;a href=&#34;https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-56JT&#34;&gt;MI:pro Case for micro:bit&lt;/a&gt;を使用します。&lt;/p&gt;
+
+&lt;p&gt;組み立て方法については&lt;a href=&#34;https://www.youtube.com/watch?time_continue=128&amp;amp;v=HYfLv07PGrE&#34;&gt;公式動画&lt;/a&gt;がYouTubeにアップロードされているのでここでは割愛します。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/29.png&#34; alt=&#34;29&#34;&gt;
+
+&lt;/center&gt;
+
+送信側micro:bitも同じく損傷対策として一体型ケースの&lt;a href=&#34;https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-57F3&#34;&gt;bat:bit&lt;/a&gt;を装着しました。こちらも&lt;a href=&#34;https://www.youtube.com/watch?v=hF2uFlwebSA&#34;&gt;公式の組み立て解説動画&lt;/a&gt;がYouTubeにアップロードされています。&lt;/p&gt;
+
+&lt;p&gt;私の場合は一体型ケースを装着したmicro:bitをそのまま持って振りましたが、リストバンドに貼り付けるなどしてもよいかもしれません。&lt;/p&gt;
+
+&lt;h2 id=&#34;実際に動かしてみる&#34;&gt;実際に動かしてみる&lt;/h2&gt;
+
+&lt;p&gt;受信側micro:bitを帽子にクリップして送信側を左右に傾けてみます。
+&lt;center&gt;
+&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/H3X1HQ2n8XE&#34; frameborder=&#34;0&#34; allow=&#34;autoplay; encrypted-media&#34; allowfullscreen&gt;&lt;/iframe&gt;
+&lt;/center&gt;
+右に傾けると大きなハート、左に傾けると小さなハートを表示させることができました！&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;非常にシンプルなプログラムではありましたが、radio通信の設定が非常に簡単で使いやすく、スムーズに通信できたのでmicro:bit愛が深まりました。次はBluetooth Low Energyによる通信を試して、micro:bitをより身近なものにしていきたいですね！&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>子供も大人もmicro:bit！基本の操作と初めてのプログラミング</title>
@@ -1083,6 +3249,27 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
   
       
       
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/usb-power-supply-making/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/151/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -1102,6 +3289,21 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
       
   
       
@@ -1980,6 +4182,27 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
   
       
       
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/usb-power-supply-making2/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/159/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -1999,6 +4222,21 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
       
   
       
@@ -2922,6 +5160,27 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
   
       
       
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/usb-power-supply-making2/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/159/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -2941,6 +5200,21 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
       
   
       
@@ -3914,6 +6188,27 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
   
       
       
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/usb-power-supply-making/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/151/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -3933,6 +6228,21 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
       
   
       
@@ -4912,6 +7222,27 @@ V字に切り込みを入れたフタをつけたところ、ぴったりはま�
   
       
       
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nodejs-amazon-alexa-skill/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/144/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -4931,6 +7262,21 @@ V字に切り込みを入れたフタをつけたところ、ぴったりはま�
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
       
   
       
@@ -5949,6 +8295,27 @@ AWSアカウントでS3にアクセスしたら、まずは「&lt;strong&gt;バ�
   
       
       
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nodejs-amazon-alexa-skill/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/144/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -5968,6 +8335,21 @@ AWSアカウントでS3にアクセスしたら、まずは「&lt;strong&gt;バ�
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
       
   
       
@@ -6949,6 +9331,27 @@ exports.handler = function(event, context, callback) {
   
       
       
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nodejs-amazon-alexa-skill/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/144/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -6968,6 +9371,21 @@ exports.handler = function(event, context, callback) {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
       
   
       
@@ -7917,6 +10335,27 @@ Amazon Developerコンソール上のAlexaスキルで「テスト」のタブ�
   
       
       
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/usb-power-supply-making/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/151/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -7936,6 +10375,21 @@ Amazon Developerコンソール上のAlexaスキルで「テスト」のタブ�
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
       
   
       
@@ -8811,6 +11265,27 @@ Amazon Developerコンソール上のAlexaスキルで「テスト」のタブ�
   
       
       
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/usb-power-supply-making3/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/160/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -8830,6 +11305,21 @@ Amazon Developerコンソール上のAlexaスキルで「テスト」のタブ�
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
       
   
       
@@ -9907,6 +12397,27 @@ USB電源は電流Imaxを上限とした定電圧電源のため、&lt;strong&gt
   
       
       
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/usb-power-supply-making3/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/160/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -9926,6 +12437,21 @@ USB電源は電流Imaxを上限とした定電圧電源のため、&lt;strong&gt
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
       
   
       
@@ -11495,6 +14021,27 @@ div.talk-box p {
   
       
       
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/mongoose-os-nefry-blink/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/145/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -11514,6 +14061,21 @@ div.talk-box p {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
       
   
       
@@ -12525,6 +15087,27 @@ Mongoose OSのコンソールからロータリエンコーダの値を確認す
   
       
       
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/gyaruden-mao-vibes-polo/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/152/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -12544,6 +15127,21 @@ Mongoose OSのコンソールからロータリエンコーダの値を確認す
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
       
   
       
@@ -13737,6 +16335,27 @@ Setup WiFiをクリックして、Nefry BTが使うWi-Fi（2.4GHz帯）を設定
   
       
       
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/gyaruden-mao-vibes-polo2/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/153/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -13756,6 +16375,21 @@ Setup WiFiをクリックして、Nefry BTが使うWi-Fi（2.4GHz帯）を設定
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
       
   
       
@@ -15056,6 +17690,27 @@ Amazon Developer側の設定ページで、「エンドポイント」に「AWS 
   
       
       
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/gyaruden-kyoko-unicorn-pochette/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/146/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -15075,6 +17730,21 @@ Amazon Developer側の設定ページで、「エンドポイント」に「AWS 
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
       
   
       
@@ -15826,2315 +18496,6 @@ void loop() {
 うひょー！超かわいくない？！シーンに合わせてかわいめからハードめまで光りかたが調整できちゃうから、現場（クラブ）でモテる未来しか見えない！！！！&lt;/p&gt;
 
 &lt;p&gt;みんなも作ってひからせてみよ！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>パソコンやモバイルバッテリーに繋いで動かせるデバイスを作ろう！USB電子工作のすすめ#1 - 基礎知識編</title>
-      <link>https://dotstud.io/blog/usb-power-supply-making/</link>
-      <pubDate>Mon, 26 Feb 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://dotstud.io/blog/usb-power-supply-making/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、ものづくり担当のうこ(&lt;a href=&#34;https://twitter.com/harmoniko&#34;&gt;@harmoniko&lt;/a&gt;)です。&lt;/p&gt;
-
-&lt;p&gt;みなさんは、&lt;strong&gt;電子工作をするときの電源はどこから取っていますか？&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Arduinoをよく使われる方だと5V端子や3.3V端子から取っている場合が非常に多いですが、ではArduinoを使わない、ピュアな電子工作の場合だとどうしたらいいでしょうか？&lt;/p&gt;
-
-&lt;p&gt;今回は、電子工作用電源としても非常に有用な&lt;strong&gt;USBの基本と扱い方&lt;/strong&gt;についてお伝えします。&lt;/p&gt;
-
-&lt;h2 id=&#34;usbのしくみ&#34;&gt;USBのしくみ&lt;/h2&gt;
-
-&lt;p&gt;「&lt;strong&gt;USB&lt;/strong&gt;」は「&lt;strong&gt;Universal Serial Bus&lt;/strong&gt;」の略で、PCとその周辺機器の間の汎用的な通信規格として1996年に登場しました。USBは1対2本の信号線（※）で順番にデータを送る「&lt;strong&gt;シリアル接続&lt;/strong&gt;」という方式で、複数のデバイスを吊り下げられる「&lt;strong&gt;バス規格&lt;/strong&gt;」の1つです。&lt;/p&gt;
-
-&lt;p&gt;※…USB 2.0まで&lt;/p&gt;
-
-&lt;p&gt;端子は従来のものと比べてシンプルになり、ホストとデバイスをすぐに区別できるようなものになりました。&lt;/p&gt;
-
-&lt;p&gt;USBを使って通信をするには、USBを制御する専用のコントローラハードウェアが必要となるため、電子工作では少し難易度があがります。ただし、&lt;strong&gt;電源を使うだけならケーブルを切って電源のVcc線（+）とGnd線（-）を引き出すだけでよい&lt;/strong&gt;ので、スマホが普及しはじめるよりも早くから電源用ケーブルとしても使われるようになりました。&lt;/p&gt;
-
-&lt;p&gt;USBの簡単な特徴をまとめると、以下のようになります。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;通信は、 1つの「ホスト」（PC側）と1〜複数の「デバイス」（周辺機器側）との間で行われる。&lt;/li&gt;
-&lt;li&gt;ホスト側とデバイス側で端子形状が区別されている（タイプC端子を除く）。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;電源供給用のケーブルおよび端子として使うなら扱いは簡単！&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;ここ数年普及してきている「USB PD」は、大電力の供給が可能でMacBookの給電などにも利用されている。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;さて当記事は、 &lt;strong&gt;「電子工作において電源として気軽に使えるUSB」&lt;/strong&gt; を知っていただくためのものですので、扱いの簡単な「USB2.0規格（タイプC端子を除く）」までを使う前提の説明にとどめます。&lt;/p&gt;
-
-&lt;p&gt;USB3.0規格以降は端子が増えたり電源規格が多様になったりしているため、電子工作での利用であれば、USB2.0規格までの理解で問題ありません。&lt;/p&gt;
-
-&lt;p&gt;さらに詳しくUSBについて知りたい方は、以下のリンクを参考にしてください。&lt;/p&gt;
-
-&lt;p&gt;⇒ 参考: &lt;a href=&#34;https://thinkit.co.jp/article/11142&#34;&gt;現代PCの基礎知識(7):仕様書を紐解くとわかる―本当はややこしいUSB（Think IT）&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;電源に使うことのメリット&#34;&gt;電源に使うことのメリット&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;モバイルバッテリー、PC、コンセントアダプタなど、多彩なソースが選べる。&lt;/li&gt;
-&lt;li&gt;給電方法に汎用性があるため、必要なパーツが安くて手に入りやすい。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;電源に使うことのデメリット&#34;&gt;電源に使うことのデメリット&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;「外部電源」となるため、電池として本体に含めることができない。&lt;/li&gt;
-&lt;li&gt;規格上、5V電圧以外を扱うときや大電流が必要なものには適さない（USB PDを除く）。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;仕様の一覧&#34;&gt;仕様の一覧&lt;/h3&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th align=&#34;left&#34;&gt;&lt;/th&gt;
-&lt;th align=&#34;center&#34;&gt;USB 1.0&lt;/th&gt;
-&lt;th align=&#34;center&#34;&gt;USB 1.1&lt;/th&gt;
-&lt;th align=&#34;center&#34;&gt;USB 2.0&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;端子タイプ（ホスト側）&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;標準A&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;標準A&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;標準A, タイプC&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;端子タイプ（デバイス側）&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;B&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;B&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;ミニA, マイクロA, ミニB, マイクロB, タイプC&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;通信速度&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;12Mビット/秒&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;12Mビット/秒&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;480Mビット/秒&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;定格電圧&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;同右&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;同右&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;約5V（ホスト側4.4~5.25V）&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;最大電流&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;500mA&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;500mA&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;500mA（USB BC拡張:1.5A）&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;以上は通信に関する基本的なバージョン仕様ですが、さらにUSB2.0を拡張したUSB電源専用規格である「USB BC（Battery Charging）」というものがあり、1.5Aまでの電流を流すことが可能となっています。&lt;/p&gt;
-
-&lt;p&gt;また、電子工作で利用するためのUSBパーツは100円ショップなどで購入できます。&lt;strong&gt;100円ショップなどで安価に入手可能なUSBパーツはほぼ100%がUSB2.0規格またはUSB BC規格のもの&lt;/strong&gt;となります。&lt;/p&gt;
-
-&lt;p&gt;よって、電子工作の&lt;strong&gt;電源として&lt;/strong&gt;USBを使ってみたいときは&lt;strong&gt;USB2.0規格またはUSB BC規格&lt;/strong&gt;に準じたUSB部品の仕様を知っておけばOKです。&lt;/p&gt;
-
-&lt;h2 id=&#34;usbケーブルの配線図&#34;&gt;USBケーブルの配線図&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/151/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;USB2.0には、電源線の5V（VccやVBUSとも）とGND、信号線のD-とD+の合計4種類の線があります。ケーブルのほとんどは2層構造になっていて、内側に収められている4本の線の色分けも上図のように決まっています。&lt;/p&gt;
-
-&lt;p&gt;電子工作でUSBを使うときは、「標準Aメス端子を基板に実装する」か、上図のような「標準Aオス端子がついたケーブルの電源線を接続する」ことになるので、端子の順番や色分けは覚えておくと楽です。&lt;/p&gt;
-
-&lt;h2 id=&#34;電圧と電流&#34;&gt;電圧と電流&lt;/h2&gt;
-
-&lt;p&gt;USB電源の基本は「&lt;strong&gt;電圧5V/電流500mAまで&lt;/strong&gt;」です。&lt;/p&gt;
-
-&lt;p&gt;といっても、これはパソコンのような「電源供給」を主目的としないホストから給電する場合の「USB2.0規格」による制限値です。&lt;/p&gt;
-
-&lt;p&gt;電子工作でUSB電源を扱う場合は、モバイルバッテリーやUSBコンセントなどからの給電がほとんどになると思われます。その場合は、USB BC規格の上限値である1.5Aとなりますが、普通はバッテリーやコンセントに最大出力が書いてあります（例：5V/800mA）ので、電流値の最大はそれに従いましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;usbケーブルの注意点&#34;&gt;USBケーブルの注意点&lt;/h4&gt;
-
-&lt;p style=&#34;font-size: 80%&#34;&gt;細かい話をすると、市場で出回る多くの充電器は「最大2.4A出力」などを謳っていて、この場合だとUSB BC規格にもあてはまりません。このような製品は、USBを通信を行わない完全な電源ケーブルとみなし、独自の規格を採用している場合が多いです。よって、電子工作でUSB電源を使うときは、「USB2.0規格の配線」と「使いたい電源供給源（バッテリーやコンセント等）の出力電流」を考慮して回路設計をするのがベストだといえます。難しく考えたくない人は、 **とにかく省エネになるように意識して作る**ようにするのがよいでしょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;span style=&#34;font-size: 80%&#34;&gt;⇒ 参考: &lt;a href=&#34;https://hanpenblog.com/1472/&#34;&gt;乱立するスマホ向け急速充電の規格について調べた（HANPEN-BLOG）&lt;/a&gt;&lt;/span&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;電子工作での利用を考えると電流消費を見ることが大事で、個人で製作する小規模な回路であればほとんどが500mA以内に収まることが多いです。&lt;/p&gt;
-
-&lt;p&gt;ヒーターやモーターを使った回路は例外的で、接続された個数や負荷で変動しますが、最大電流が容易に1Aを超えてしまうことがあります。しかし、どのような場合であっても、個人製作された電子回路は漏電流やショートへの配慮、適切な電流制限などが行われていないことが大半です。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;基本的には、USB電源を利用する自作の電子回路は、安全上の理由からパソコンに接続して給電してはいけません。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;⇒ 参考：&lt;a href=&#34;http://www.wheel.gr.jp/~dai/hardware/usb-port.html&#34;&gt;USBポートは電源ではありません&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;現実には今のパソコンは全て保護回路が入っているため、ブレッドボードを繋げたArduinoにパソコンから給電するといったようなことを行なっていてもまず問題はありません。しかし&lt;strong&gt;危険性は少なからずあるもの&lt;/strong&gt;だとして意識してもらえれば幸いです。&lt;/p&gt;
-
-&lt;p&gt;（15年ほど前のパソコンでは、USB端子に500mA以上の過電流を流すといきなりパソコンの電源ごと落ちるものもありました。）&lt;/p&gt;
-
-&lt;h2 id=&#34;入手方法&#34;&gt;入手方法&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;おすすめは100円ショップ&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/151/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;100円ショップの電気系コーナーに行くと、どこに行っても大抵はUSBケーブルが置いてあります。USBケーブルの中でも取り扱いが多いのは、おそらく次の3つでしょう。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Aオス端子-microBオス端子（スマホ充電用）&lt;/li&gt;
-&lt;li&gt;Aオス端子-Bオス端子（プリンタなどの接続用）&lt;/li&gt;
-&lt;li&gt;Aオス端子-Aメス端子（ケーブル延長用）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;このうち、最後の &lt;strong&gt;Aオス端子-Aメス端子（ケーブル延長用）&lt;/strong&gt; は、置いていない店舗もありますが、&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;ケーブル部分が比較的長い。&lt;/li&gt;
-&lt;li&gt;基本的にはAオス端子側を使うが、工作の内容によってはAメス端子があると便利なことがある。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;といった点から、電子工作で利用するには最もおすすめなケーブルとなっています。売られているのを発見したら、ぜひ買っておきましょう。&lt;/p&gt;
-
-&lt;h2 id=&#34;実際に電子工作で使うには&#34;&gt;実際に電子工作で使うには&lt;/h2&gt;
-
-&lt;p&gt;USBについて、どんなものなのかなんとなくおわかりいただけましたでしょうか？&lt;/p&gt;
-
-&lt;p&gt;とりあえず要約すると、 &lt;strong&gt;「100円で手に入って電子工作で簡単に利用できる汎用電源インターフェース」&lt;/strong&gt; といったところでしょうか。では、実際に使うにはどうすればいいかを見ていきましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/151/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;USBケーブルを電源として利用する上で最も重要なパーツが「Aオス端子」部分となります。&lt;/p&gt;
-
-&lt;p&gt;100円ショップで購入できるUSBケーブルは少なくとも一方がこの端子ですので、この端子から伸びるケーブルを十分長く残したうえでニッパで切断します。長さは、製作するモノによって適切に決めてください。あとから調整できるという意味では長めに切り取るのがよいでしょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/151/4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/151/5.png&#34; alt=&#34;&#34; /&gt;
-切り取った部分の一番外側の皮膜をニッパまたは皮膜剥き用のニッパで1cm程度除去します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/151/6.png&#34; alt=&#34;&#34; /&gt;
-すると細い4本のケーブルが中から出てきますが、このうち赤色と黒色がそれぞれ電源となります。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/151/7.png&#34; alt=&#34;&#34; /&gt;
-残りの2本は信号線で、&lt;del&gt;USB BC規格として大きめの電流を流したい場合は、この信号線を200Ωの抵抗でショートします。が、実際には何もしなくても給電はなされます。&lt;/del&gt;ここでは簡単にするため切り落としました。&lt;/p&gt;
-
-&lt;p style=&#34;font-size: 80%; color: red;&#34;&gt;
-（3/4 修正）200Ωの抵抗を接続するのは充電器側であるとのご指摘をいただき、上記訂正します。
-&lt;/p&gt;
-&lt;p style=&#34;font-size: 80%;&#34;&gt;
-⇒ 出展: USB.orgの&lt;a href =&#34;http://www.usb.org/developers/docs/devclass_docs/&#34;&gt;開発者向けドキュメント&lt;/a&gt;にある「Battery Charging v1.2 Spec and Adopters Agreement.zip」内のBC1.2_FINAL.pdf「Battery Charging Specification, Revision 1.2」3.2.4項「Primary Detection」のFigure 3-6 など）
-&lt;/p&gt;
-
-&lt;p&gt;これで、Aオス端子が電源側、切断したほうが電子回路側となります。&lt;/p&gt;
-
-&lt;p&gt;さて、次回は電池駆動の機器をUSB駆動に改造するために、電源と機器の関係について考えてみたいと思います。&lt;/p&gt;
-
-&lt;p&gt;お楽しみに。
-
-
-&lt;section class=&#34;link&#34; id=&#34;159&#34;&gt;
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-          &lt;div class=&#34;link_content&#34;&gt;
-          &lt;a href=&#34;https://dotstud.io/blog/usb-power-supply-making2/&#34;&gt;&lt;/a&gt;
-          &lt;img src=&#34;https://dotstud.io/img/blog/159/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
-          &lt;/div&gt;
-          &lt;div class=&#34;link_content&#34;&gt;
-            &lt;div class=&#34;link_detail&#34;&gt;
-              &lt;div class=&#34;link_title&#34;&gt;
-                パソコンやモバイルバッテリーに繋いで動かせるデバイスを作ろう！USB電子工作のすすめ#2 - 理論編
-              &lt;/div&gt;
-              &lt;div class=&#34;link_date&#34;&gt;
-                
-                2018-04-30
-              &lt;/div&gt;
-              &lt;div class=&#34;link_desc&#34;&gt;
-                電子工作をする際の電源はどうしていますか？電池駆動の機器をUSB駆動に改造するために、電源と機器の関係を解説していきます。
-              &lt;/div&gt;
-            &lt;/div&gt;
-          &lt;/div&gt;
-        &lt;/section&gt;
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-&lt;/section&gt;
-&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>放置されていた3Dプリンタ「Trinus」で初めての3Dプリントに挑戦</title>
-      <link>https://dotstud.io/blog/3d-printer-trinus-usage/</link>
-      <pubDate>Thu, 22 Feb 2018 03:00:43 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/3d-printer-trinus-usage/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、たくろーどんです。大学で&lt;a href=&#34;https://dotstud.io/docs/nefrybt&#34;&gt;NefryBT&lt;/a&gt;を使った工作をしていたら、いつのまにかdotstudioでアルバイトすることになっていました。宇宙工学を勉強しています。以後よろしくお願いします。&lt;/p&gt;
-
-&lt;p&gt;=&amp;gt; 参考: &lt;a href=&#34;https://qiita.com/minwinmin/items/d1f296b8a9cd1a2c22f6&#34;&gt;研究室のみんなとNefry BTを使ってはじめてIoTデバイスをつくってみた&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;今回は、dotstudioに放置されていた3Dプリンタ「Trinus（トライナス）」を使って初めての3Dプリントに挑戦してみます。
-&lt;img src=&#34;https://dotstud.io/img/blog/149/lead.png&#34; alt=&#34;&#34; /&gt;
-これで哲学的なものを錬成していきましょう。&lt;/p&gt;
-
-&lt;h2 id=&#34;3dプリントを始める前に&#34;&gt;3Dプリントを始める前に&lt;/h2&gt;
-
-&lt;h3 id=&#34;3dプリンタとは&#34;&gt;3Dプリンタとは？&lt;/h3&gt;
-
-&lt;p&gt;3Dプリンタとは、その名の通り&lt;strong&gt;3Dのデータを出力できる&lt;/strong&gt;プリンタです。
-&lt;img src=&#34;https://dotstud.io/img/blog/149/3dprint.png&#34; alt=&#34;&#34; /&gt;
-プリンタによりますが、金属、アルミ、ゴムなどさまざまな素材で出力できるため広い分野で活躍しています。&lt;/p&gt;
-
-&lt;p&gt;現在は業務用から一般向けまでさまざまな種類の3Dプリンタが販売されていますが、今回はdotstudioに放置されていた「Trinus（トライナス）」を使ってみます。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;a href=&#34;http://www.trinus3d.com/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/trinus.png&#34; alt=&#34;&#34; /&gt;
-Trinus - Kodama, Inc.&lt;/a&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;3万円代とお手頃価格で、樹脂に加えて木材やアルミも利用でき、別売りのヘッドをつけることでレーザ彫刻機にもなる優れものです。&lt;/p&gt;
-
-&lt;h3 id=&#34;3dプリントには3dデータが必要&#34;&gt;3Dプリントには3Dデータが必要&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;3Dプリントをするためには3Dデータが必要です&lt;/strong&gt;。3Dデータをモデリング（作成すること）方法はいくつかありますが、今回は3D CADソフトを使っています。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/inventor.png&#34; alt=&#34;&#34; /&gt;
-僕はAutodeskの「&lt;a href=&#34;https://www.autodesk.co.jp/products/inventor/overview&#34;&gt;&lt;strong&gt;Inventor&lt;/strong&gt;&lt;/a&gt;」を使ってデータを作成しました。有料ソフトですが、なんと&lt;strong&gt;学生だと3年間無料で&lt;/strong&gt;つかえます！&lt;/p&gt;
-
-&lt;p&gt;Inventorは本格的な機械設計向きなので、簡単に試したい人は同じくAutodeskの「&lt;a href=&#34;https://www.autodesk.co.jp/products/fusion-360/overview&#34;&gt;&lt;strong&gt;fusion360&lt;/strong&gt;&lt;/a&gt;」の方がとっつきやすいかと思います。こちらも個人利用の場合は無料です。&lt;/p&gt;
-
-&lt;p&gt;3D CADソフトは他にも&lt;a href=&#34;https://www.rs-online.com/designspark/mechanical-software-jp&#34;&gt;DesignSpark Mechanical&lt;/a&gt;や&lt;a href=&#34;https://www.freecadweb.org/?lang=ja&#34;&gt;FreeCAD&lt;/a&gt;などいくつかあるので、自分が使いやすいと思ったものを使うと良いでしょう。&lt;/p&gt;
-
-&lt;p&gt;さらにもう一つ。
-プログラマーのためにGithubがあるなら、&lt;strong&gt;メカ系エンジニアのために&lt;a href=&#34;https://grabcad.com/&#34;&gt;GrabcCAD&lt;/a&gt;というものがあります&lt;/strong&gt;。
-&lt;img src=&#34;https://dotstud.io/img/blog/149/grabccad.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ここで、世界中のエンジニアが製作した様々なモデリングを閲覧したり使用したりできます。もし複雑なパーツをモデリングすることが難しければ、GrabCADを参考にしてみるのも手だと思います。&lt;/p&gt;
-
-&lt;h3 id=&#34;trinusの組み立て&#34;&gt;Trinusの組み立て&lt;/h3&gt;
-
-&lt;p&gt;Trinusの組み立てに関しては説明書をご覧ください。
-また、日本語の公式サイトもあります。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;a href=&#34;http://www.trinusjapan.com/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/community.png&#34; alt=&#34;&#34; /&gt;
-http://trinusjapan.com/&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;trinus用ソフト-pango-をインストール&#34;&gt;Trinus用ソフト「Pango」をインストール&lt;/h3&gt;
-
-&lt;p&gt;Trinusで3Dプリントするには、モデリングしたものを扱う専用ソフト「Pango」が必要です。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://trinusjapan.com/softwaredownload/&#34;&gt;こちらのリンク&lt;/a&gt;からインストールしてください。&lt;/p&gt;
-
-&lt;h2 id=&#34;3dプリントに挑戦&#34;&gt;3Dプリントに挑戦！&lt;/h2&gt;
-
-&lt;h3 id=&#34;プリンタ側の準備&#34;&gt;プリンタ側の準備&lt;/h3&gt;
-
-&lt;p&gt;詳しくは&lt;a href=&#34;http://trinusjapan.com/firstprint/&#34;&gt;公式サイト&lt;/a&gt;にのっているので、要点だけ説明します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/printer.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;まず、Trinusの電源をいれるため、コンセントにつなげましょう。電源がつくと「ビッ」という音がします。&lt;/p&gt;
-
-&lt;h3 id=&#34;pangoにデータを取り込む&#34;&gt;Pangoにデータを取り込む&lt;/h3&gt;
-
-&lt;p&gt;パソコンからデータ（stlファイル）をPangoで開きましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/1.png&#34; alt=&#34;&#34; /&gt;
-①のように「書き出し」から「CAD形式」を選択し、stl形式で保存します。&lt;strong&gt;サイズがモデリングと一致&lt;/strong&gt;しているかしっかりと確認してください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/2.png&#34; alt=&#34;&#34; /&gt;
-Pangoでstlファイルを開くと&lt;strong&gt;何故かサイズが10分の1&lt;/strong&gt;になってしまうので（dotstudioだけで起こる現象なのか不明）、元のサイズに戻します。③と④のように比率（Ratio）を10に変えます。Amountは寸法を意味していて、単位はmmです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/3.png&#34; alt=&#34;&#34; /&gt;
-必要があれば3Dプリントしやすいようにモデルの向きを変えましょう。&lt;strong&gt;どのような向きで出力するか&lt;/strong&gt;、これがとても大事です！印刷中に思いがけない失敗を引き起こすことになります。&lt;/p&gt;
-
-&lt;p&gt;⑤のように赤丸部をクリックすると回転軸の表示が出ます。そして、回転したい軸にマウスポインタを持っていきます。⑥のように回転する軸が強調されます。マウスで操作する場合はホイールを動かすことで回転させることができます。パソコンにあるタッチパッドの場合は2本の指で、上下になぞるように動かすと回転します（Windowsの場合）。&lt;/p&gt;
-
-&lt;h3 id=&#34;印刷のシミュレーション&#34;&gt;印刷のシミュレーション&lt;/h3&gt;
-
-&lt;p&gt;実際にどのように印刷が進められるかPango上で確認することもできます。Pangoの上部にある「View」から「Layer」をクリックしてください。
-&lt;img src=&#34;https://dotstud.io/img/blog/149/4.png&#34; alt=&#34;&#34; /&gt;
-すると自分がモデリングしたもの以外に格子状のモデリング（濃いピンクの部分）が追加されています。これは「&lt;strong&gt;ラフト&lt;/strong&gt;」と呼ばれ、3Dプリンタの印刷面と出力するものの間に積層される荒い土台のことです。&lt;/p&gt;
-
-&lt;p&gt;これがあると出力した後に製作物を外しやすく、最終的には除去してゴミとして捨てることができます。&lt;/p&gt;
-
-&lt;h3 id=&#34;データをtrinusに移す&#34;&gt;データをTrinusに移す&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/5.png&#34; alt=&#34;&#34; /&gt;
-データをSDカードに「pcode」形式で保存します。図の赤丸部をクリックし、SDカードにデータをpcode形式で保存します。この形式は、Torinusで出力するために必要な形式です。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/6.png&#34; alt=&#34;&#34; /&gt;
-SDカードをTorinusに接続し、TorinusとパソコンをUSB接続します。&lt;/p&gt;
-
-&lt;h3 id=&#34;出力設定を調整&#34;&gt;出力設定を調整&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/7.png&#34; alt=&#34;&#34; /&gt;
-Pango上部の「Preference」から「Setting」を選択します。ここでは、出力するスピードや厚みなどを設定することができます。&lt;strong&gt;設定はあまりいじる必要はない&lt;/strong&gt;ので、眺めおきましょう！（ただし今回は試行錯誤の結果、Thickness: 0.2mm、Print Speed: 40mm/sとしています）&lt;/p&gt;
-
-&lt;h3 id=&#34;重要-出力位置の初期位置を調整&#34;&gt;【重要】出力位置の初期位置を調整&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/8.png&#34; alt=&#34;&#34; /&gt;
-TorinusとパソコンをUSB接続した状態でPango上部の「View」から「Console」をクリックします。上のような画像が出たら、さらに「Console」をクリックします。　&lt;/p&gt;
-
-&lt;p&gt;そうすると下記のような設定画面があらわれます。&lt;strong&gt;この画面で行う設定が非常に重要です&lt;/strong&gt;。
-&lt;img src=&#34;https://dotstud.io/img/blog/149/9.png&#34; alt=&#34;&#34; /&gt;
-&lt;strong&gt;まず「Home」をクリック&lt;/strong&gt;します。これで、3Dプリンタのノズル（フィラメントが出る部分）が初期位置に戻ります。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/10.png&#34; alt=&#34;&#34; /&gt;
-ここで&lt;strong&gt;z軸の距離（ノズルから出力される面の高さ、画像でいう赤い矢印部分）を確認&lt;/strong&gt;してください。その距離が初期位置で広すぎると上手く出力されません。なので、目視でその距離を縮めましょう。「Offset」をクリックすると&lt;strong&gt;z軸方向の距離を上下&lt;/strong&gt;することができます。&lt;/p&gt;
-
-&lt;h3 id=&#34;出力を開始&#34;&gt;出力を開始！&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/9.png&#34; alt=&#34;&#34; /&gt;
-位置設定が終わったら、「&lt;strong&gt;Heat E」をクリック&lt;/strong&gt;し3Dプリンタのノズルを温めます。どれくらい温まっているかは、Console画面の左下に示す数字（分数部分）で表されます。最後に右のSDカードのイラスト部分をクリックし、保存したpcodeファイルを指定します。3Dプリンタのノズルが十分に温まれば自動で出力が始まります！&lt;/p&gt;
-
-&lt;h3 id=&#34;出力直後にやるべきこと&#34;&gt;出力直後にやるべきこと&lt;/h3&gt;
-
-&lt;p&gt;出力が始まるとその直後に、&lt;strong&gt;ノズルから溶け出たフィラメント&lt;/strong&gt;が垂れてきます。&lt;strong&gt;垂れて固まったフィラメントは出力の邪魔になることもあるので、ピンセットで取り除きましょう&lt;/strong&gt;。下記の図の赤丸で囲った部分がその例です。
-&lt;img src=&#34;https://dotstud.io/img/blog/149/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;あとは見守りながら完成するまで放置しましょう。&lt;/p&gt;
-
-&lt;h2 id=&#34;はじめての出力&#34;&gt;はじめての出力&lt;/h2&gt;
-
-&lt;p&gt;プリンタとデータをセットして出力されるのを待ちます……。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/212276/c7659ea8-e54a-f50a-400a-183218006215.gif&#34; alt=&#34;出力.gif&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;完成しました。
-&lt;img src=&#34;https://dotstud.io/img/blog/149/完成1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;哲学的なゴミです。特に用途はありません。
-&lt;img src=&#34;https://dotstud.io/img/blog/149/完成2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;3dプリンタを使うときに注意すること&#34;&gt;3Dプリンタを使うときに注意すること&lt;/h2&gt;
-
-&lt;p&gt;セットアップの説明でも述べましたが、3Dプリンターを使ってみて注意した方が良い点をもう一度まとめます。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Pango上でモデリングのサイズを要チェック&lt;/li&gt;
-&lt;li&gt;モデリングしたものをどの向きで出力するか&lt;/li&gt;
-&lt;li&gt;初期位置の設定を正確に！（特にz軸方向）&lt;/li&gt;
-&lt;li&gt;出力直後に溶け出したフィラメントを必ず除去&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;3Dプリンタは複雑なものを簡単に出力できるイメージですが、実際に使ってみると経験やコツがいります。やはり、どんな道具も使いこなせるようになるには時間が必要なようです。&lt;/p&gt;
-
-&lt;p&gt;まだまだ3Dプリンターを使う上で学ぶことが多いと感じたので、継続して使っていきたいと思います。&lt;/p&gt;
-
-&lt;p&gt;それではまた。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>クラブでモテる！つまみ付きユニコーンポーチ　前編</title>
-      <link>https://dotstud.io/blog/gyaruden-kyoko-unicorn-pochette/</link>
-      <pubDate>Thu, 15 Feb 2018 00:00:00 +0000</pubDate>
-      
-      <guid>https://dotstud.io/blog/gyaruden-kyoko-unicorn-pochette/</guid>
-      
-      <description>
-
-&lt;p&gt;みなさん、ちょりおつ！ギャル電きょうこです。ギャルによるギャルのためのテクノロジーを提案するユニット、ギャル電で活動しています。今回は、&lt;strong&gt;クラブ行くときにぎゃんかわに盛れる光るポーチの作り方&lt;/strong&gt;を2回にわけて紹介します。&lt;/p&gt;
-
-&lt;h2 id=&#34;ユニコーンきゃわたん&#34;&gt;ユニコーンきゃわたん&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/146/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ちょっと前から、イケてるヤングの間ではユニコーンがはやってるっぽい。角生えてる馬、かっこいいしかわいいからはやるのも超わかりみある。&lt;/p&gt;
-
-&lt;p&gt;つーことで、イケてるユニコーンっぽいバッグが街には今いっぱい売ってる。今回は、&lt;strong&gt;WEGOで500円のサイズ感もぴったりな超イケてるポーチ&lt;/strong&gt;をゲット。めっちゃリーズナブル！！！！&lt;/p&gt;
-
-&lt;p&gt;コレ光らせたらやばくねってことで、さっそく作ってこう。&lt;/p&gt;
-
-&lt;h2 id=&#34;材料&#34;&gt;材料&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/146/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;①Arduino Nano 互換機&lt;/li&gt;
-&lt;li&gt;②可変抵抗 10KΩ 3個&lt;/li&gt;
-&lt;li&gt;③つまみのキャップ&lt;/li&gt;
-&lt;li&gt;④LEDテープ（WS2812B 60LED/M）LED24個分&lt;/li&gt;
-&lt;li&gt;線材（コネクタは気分で）&lt;/li&gt;
-&lt;li&gt;USB miniB ケーブル&lt;/li&gt;
-&lt;li&gt;プラ板&lt;/li&gt;
-&lt;li&gt;ユニコーンぽいファーのいい感じのポーチ（白系）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;材料はこんな感じ。つまみのキャップはギター用のカッコいいやつを使ったよ。ポーチはだいたいモバイルバッテリーと小銭と携帯が入るくらいのサイズ感のものがおすすめっす。&lt;/p&gt;
-
-&lt;h2 id=&#34;可変抵抗器をアクセントにしてみよう&#34;&gt;可変抵抗器をアクセントにしてみよう&lt;/h2&gt;
-
-&lt;p&gt;可変抵抗器はイケてるキャップをつけるとめっちゃかわいい！&lt;/p&gt;
-
-&lt;p&gt;今回は三つの可変抵抗器の値を変更することで、LEDの&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;明るさ&lt;/li&gt;
-&lt;li&gt;色&lt;/li&gt;
-&lt;li&gt;点灯速度&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;を変更できる仕組みをつくります。&lt;/p&gt;
-
-&lt;h2 id=&#34;配線をはんだ付けしよう&#34;&gt;配線をはんだ付けしよう&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/146/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/146/4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;まずは写真と図のように三つの可変抵抗器のプラスとプラス、マイナスとマイナスを配線でつなぎます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/146/5.png&#34; alt=&#34;&#34; /&gt;
-三つのうちの可変抵抗器の一つに、プラスとマイナスの配線をさらに1セット追加してArduino Nanoの5VとGNDにつなぎます。可変抵抗器の真ん中の線とAruduino NanoのA0〜A1ポートを配線でそれぞれつなぎます。&lt;/p&gt;
-
-&lt;p&gt;LEDテープはDINとD6、5V、GNDをそれぞれAruduino Nanoと配線でつなぎます。
-&lt;img src=&#34;https://dotstud.io/img/blog/146/6.png&#34; alt=&#34;&#34; /&gt;
-Aruduino Nanoの5VとGNDのところは、可変抵抗器とLEDテープからそれぞれ配線がつながります。一つのPINにはんだ付けが難しい場合は、ボードの裏と表にそれぞれ1本ずつ配線をつなげるとはんだ付けがやりやすいです。&lt;/p&gt;
-
-&lt;h2 id=&#34;前編はここまで&#34;&gt;前編はここまで&lt;/h2&gt;
-
-&lt;p&gt;今回は可変抵抗器を三つつなげたので、ちょっと配線とはんだ付けが複雑で疲れちゃったのでここまで！&lt;/p&gt;
-
-&lt;p&gt;後編はArduino Nanoへのプログラム書き込みと、ポーチとLEDを組み立てまっす！&lt;/p&gt;
-
-&lt;p&gt;
-
-&lt;section class=&#34;link&#34; id=&#34;147&#34;&gt;
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-          &lt;div class=&#34;link_content&#34;&gt;
-          &lt;a href=&#34;https://dotstud.io/blog/gyaruden-kyoko-unicorn-pochette2/&#34;&gt;&lt;/a&gt;
-          &lt;img src=&#34;https://dotstud.io/img/blog/147/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
-          &lt;/div&gt;
-          &lt;div class=&#34;link_content&#34;&gt;
-            &lt;div class=&#34;link_detail&#34;&gt;
-              &lt;div class=&#34;link_title&#34;&gt;
-                クラブでモテる！つまみ付きユニコーンポーチ　後編
-              &lt;/div&gt;
-              &lt;div class=&#34;link_date&#34;&gt;
-                
-                2018-02-28
-              &lt;/div&gt;
-              &lt;div class=&#34;link_desc&#34;&gt;
-                超はやってるユニコーンを光らせてイケてるポーチ作ってこ！後編はプログラムの書き込みから完成まで。
-              &lt;/div&gt;
-            &lt;/div&gt;
-          &lt;/div&gt;
-        &lt;/section&gt;
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-&lt;/section&gt;
-
-&lt;center&gt;▲ 後編をチェック！&lt;/center&gt;&lt;/p&gt;
 </description>
     </item>
     
