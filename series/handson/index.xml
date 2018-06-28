@@ -7,8 +7,413 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2018 dotstudio inc.</copyright>
-    <lastBuildDate>Mon, 04 Jun 2018 10:00:00 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 28 Jun 2018 10:00:00 +0900</lastBuildDate>
     <atom:link href="/series/handson/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>M5Stack&#43;GPS&#43;臭気センサをつかってトイレの臭いマップをつくりたい！</title>
+      <link>https://dotstud.io/blog/m5stack-toilet-smell-map/</link>
+      <pubDate>Thu, 28 Jun 2018 10:00:00 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/m5stack-toilet-smell-map/</guid>
+      
+      <description>
+
+&lt;h2 id=&#34;公衆トイレ1級判定士を目指します&#34;&gt;公衆トイレ1級判定士を目指します！&lt;/h2&gt;
+
+&lt;p&gt;ある日の出来事、お出掛け中……&lt;/p&gt;
+
+&lt;div class=&#34;parent&#34;&gt;
+    &lt;div class=&#34;dialogue&#34;&gt;
+        &lt;div class=&#34;image&#34;&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/177/takudooon.png&#34; /&gt;
+          &lt;b&gt;たくろーどん&lt;/b&gt;
+        &lt;/div&gt;
+        &lt;div class=&#34;text&#34;&gt;
+            あー、トイレ、トイレ～！！トイレどこ？どこ？　ﾄﾞｺﾄﾞｺ┗(^o^)┛ﾄﾞｺﾄﾞｺ┏(^o^)┓
+            &lt;br /&gt;
+            &lt;br /&gt;
+            あっ、あの公園に公衆トイレあるやん！！！！
+            &lt;br /&gt;
+            &lt;br /&gt;
+            助かったぁ～～～ L( ＾ω＾ )┘ﾑﾞｫｰﾑﾞｫｰ└( ＾ω＾ )」
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;公衆トイレに急いで駆け込む 三└(┐卍^o^)卍ﾄﾞｩﾙﾙﾙﾙﾙ&lt;/p&gt;
+
+&lt;p&gt;すると……&lt;/p&gt;
+
+&lt;div class=&#34;parent&#34;&gt;
+    &lt;div class=&#34;dialogue&#34;&gt;
+        &lt;div class=&#34;image&#34;&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/177/takudooon.png&#34; /&gt;
+          &lt;b&gt;たくろーどん&lt;/b&gt;
+        &lt;/div&gt;
+        &lt;div class=&#34;text&#34;&gt;
+          臭い、臭い過ぎる！！！！なんやこれは！！！！(`ิิд´ิ)ｷｴｴｴｴｴｰ
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;気分、萎え萎え……。みなさん、こんな経験ありませんか？&lt;/p&gt;
+
+&lt;p&gt;お出掛け中に公衆トイレにお世話になるも、臭いがひどくて気分が下がってしまうなんてことありますよね？&lt;/p&gt;
+
+&lt;p&gt;良い（無臭）公衆トイレと悪い（悪臭）公衆トイレが、どこにあるのか分かったらいいなぁ……。&lt;/p&gt;
+
+&lt;div class=&#34;parent&#34;&gt;
+    &lt;div class=&#34;dialogue&#34;&gt;
+        &lt;div class=&#34;image&#34;&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/177/takudooon.png&#34; /&gt;
+          &lt;b&gt;たくろーどん&lt;/b&gt;
+        &lt;/div&gt;
+        &lt;div class=&#34;text bold&#34;&gt;
+            &lt;b&gt;無ければ自分でつくればええやん！&lt;/b&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;ということで、そんな公衆トイレマップが作れるようなデバイスをつくってみたいと思います。
+たぶん、僕は先駆者なので&lt;strong&gt;公衆トイレ1級判定士&lt;/strong&gt;と名乗ることにします。&lt;/p&gt;
+
+&lt;h2 id=&#34;とりあえずつくってみる&#34;&gt;とりあえずつくってみる&lt;/h2&gt;
+
+&lt;p&gt;今回はM5Stackというとても便利な開発ボードを使ってデバイスを作成していきます（&lt;a href=&#34;https://codezine.jp/article/detail/10853&#34;&gt;M5Stackが便利な話はこちらの記事が参考になります&lt;/a&gt;）。&lt;/p&gt;
+
+&lt;p&gt;下記がイメージ図です。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/177/architecture.png&#34; alt=&#34;architecture&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;p&gt;M5Stackの拡張ボードのGPSを使って位置情報を取得し、臭気センサ（&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gP-00989/&#34;&gt;TGS2450&lt;/a&gt;）で計測した値と紐づけます。そして、&lt;a href=&#34;https://ambidata.io/&#34;&gt;Ambient&lt;/a&gt;（IoT可視化サービス）を使って地図上にマッピングし、良い（無臭）公衆トイレと悪い（悪臭）公衆トイレを可視化していくといった具合です。&lt;/p&gt;
+
+&lt;h2 id=&#34;今回使用する電子部品たち&#34;&gt;今回使用する電子部品たち&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.switch-science.com/catalog/3648/&#34;&gt;M5Stack Gray
+&lt;/a&gt;（今回はM5Stack BasicでもOK）&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.switch-science.com/catalog/3861/&#34;&gt;M5Stack用GPSモジュール&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gP-00989/?customer=z&#34;&gt;TGS2450&lt;/a&gt;（臭気センサ）&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gI-04268/&#34;&gt;2SC1815Y&lt;/a&gt;（トランジスタ、60V150mA）&lt;/li&gt;
+&lt;li&gt;抵抗&lt;/li&gt;
+&lt;li&gt;ユニバーサル基板&lt;/li&gt;
+&lt;li&gt;ジャンパワイヤ&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;実装&#34;&gt;実装&lt;/h2&gt;
+
+&lt;h3 id=&#34;とりあえずarduinoで臭気センサを動かしてみる&#34;&gt;とりあえずArduinoで臭気センサを動かしてみる&lt;/h3&gt;
+
+&lt;p&gt;まず安定感のあるArduinoで臭気センサが動くをことを確認してみます。&lt;/p&gt;
+
+&lt;p&gt;TGS2450のデータシートにあるサンプル回路を試してみたのですがうまくいきませんでした（要検証）。なので、検索した結果、トランジスタを2つ使用した回路が良く使われているようです。&lt;/p&gt;
+
+&lt;p&gt;回路図は以下の通りです。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/177/circuit.png&#34; alt=&#34;circuit&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;p&gt;配線がジャングルになりながらも……
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/177/circuit2.png&#34; alt=&#34;circuit2&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;p&gt;下記のプログラムを動かすと……&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;#include &amp;lt;Arduino.h&amp;gt;
+
+int val = 0;
+
+void setup() {
+    pinMode(3,OUTPUT);
+    pinMode(4,OUTPUT);
+    Serial.begin(115200);
+}
+
+void loop() {
+    for (int i = 0; i &amp;lt;= 3; i++){
+        delay(242);
+        digitalWrite(4,HIGH);
+        delay(8);
+        digitalWrite(4,LOW);
+    }     
+    delay(237);
+    digitalWrite(3,HIGH);
+    delay(3);
+    val = analogRead(5);
+    delay(2);
+    digitalWrite(3,LOW);
+    digitalWrite(4,HIGH);
+    delay(8);
+    digitalWrite(4,LOW);
+    val = 1023 - val;
+    val = val * 5;
+    Serial.println(val);
+    // 3msec loop
+    delay(3000);
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;自室ではこのようにデータが取れました。部屋の中では約345、ユニットバスの中では約360です。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/177/graph.png&#34; alt=&#34;graph&#34;&gt;
+
+&lt;/center&gt;
+
+これをM5Stackに応用していきます。&lt;/p&gt;
+
+&lt;h3 id=&#34;m5stackに実装&#34;&gt;M5Stackに実装&lt;/h3&gt;
+
+&lt;p&gt;M5StackにGPSモジュールをスタックします。そして、先ほどの回路図に従って回路をつくり、ジャンパワイヤを使ってM5Stackとつなげます。&lt;/p&gt;
+
+&lt;p&gt;配線後は以下の様になります。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/177/circuit3.png&#34; alt=&#34;circuit3&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;プログラム&#34;&gt;プログラム&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;#include &amp;lt;M5Stack.h&amp;gt;
+#include &amp;lt;TinyGPS++.h&amp;gt;
+#include &amp;lt;math.h&amp;gt;
+#include &amp;lt;Ambient.h&amp;gt;
+
+WiFiClient client;
+Ambient ambient;
+
+//臭気の強度が代入される変数////////////
+int val = 0;
+/////////////////////////////////////
+
+//デザリングパスワード/////////////////
+//屋外で使用するのでスマートフォンのデザリングを使用します
+//これでAmbientにデータを送信できます
+//const char* ssid = &amp;quot;yourSSID&amp;quot;;
+//const char* password = &amp;quot;yourPW&amp;quot;;
+/////////////////////////////////////
+
+//Ambientの設定//////////////////////
+unsigned int channelId = yourID; // AmbientのチャネルID
+const char* writeKey = &amp;quot;yourWriteKey&amp;quot;; // ライトキー
+////////////////////////////////////
+
+//GPSの設定/////////////////////////
+HardwareSerial GPS_s(2);
+TinyGPSPlus gps;
+////////////////////////////////////
+
+void setup(){
+  //WiFi////////////////////////////////////////////////////////
+  WiFi.begin(ssid, password);  //  Wi-Fi APに接続
+  while (WiFi.status() != WL_CONNECTED) {  //  Wi-Fi AP接続待ち
+      delay(100);
+  }
+  //////////////////////////////////////////////////////////////
+
+  //臭気センサ//////////////////////////////////////////////////
+  pinMode(21,OUTPUT);
+  pinMode(22,OUTPUT);
+  //////////////////////////////////////////////////////////////
+  Serial.begin(115200);
+  M5.begin();
+  GPS_s.begin(9600);
+
+  ambient.begin(channelId, writeKey, &amp;amp;client);
+}
+
+void loop(){
+  char buf[16];
+
+  M5.Lcd.setCursor(0, 70);
+  M5.Lcd.setTextColor(WHITE, BLACK);
+
+  while(!gps.location.isUpdated()){
+    while(GPS_s.available()&amp;gt;0){
+      if(gps.encode(GPS_s.read())){
+         break;
+      }
+     }
+   }
+
+   Serial.printf(&amp;quot;lat: %f, lng: %f\r\n&amp;quot;, gps.location.lat(), gps.location.lng());
+   M5.Lcd.printf(&amp;quot;lat: %f, lng: %f\r\n&amp;quot;, gps.location.lat(), gps.location.lng());
+
+  //GPS測定と臭気の測定&amp;amp;Ambientへ送信////////////////
+  if(M5.BtnA.wasPressed()){
+    //臭気をAmbientに送信///////
+    //計測データの平均値を送信//
+    for (int i = 0; i &amp;lt;= 3; i++){
+        delay(242);
+        digitalWrite(22,HIGH);
+        delay(8);
+        digitalWrite(22,LOW);
+    }     
+    delay(237);
+    digitalWrite(21,HIGH);
+    delay(3);
+    val = analogRead(36);
+    delay(2);
+    digitalWrite(21,LOW);
+    digitalWrite(22,HIGH);
+    delay(8);
+    digitalWrite(22,LOW);
+    val = 1023 - val;
+    val = val * 5;
+    Serial.println(val);
+    // 3msec loop
+    delay(3000);
+    ambient.set(1,val);
+    /////////////////////////////////////////
+
+    //経度・緯度をAmbientを送信///////////////
+    dtostrf(gps.location.lat(),12,8,buf);
+    ambient.set(9, buf);
+    dtostrf(gps.location.lng(), 12, 8, buf);
+    ambient.set(10, buf);
+    ambient.send();
+    /////////////////////////////////////////
+  }
+//////////////////////////////////////////////////
+    m5.update();
+
+}
+
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;動作確認&#34;&gt;動作確認&lt;/h2&gt;
+
+&lt;p&gt;実際に完成したデバイスを動かしてみます。&lt;/p&gt;
+
+&lt;p&gt;M5Stackのボタンを押すと計測されたデータと位置情報がAmbientに表示されるようになりました。自室で試してみたところ以下の図のようになりました（具体的な地名は隠してあります）。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/177/map.png&#34; alt=&#34;map&#34;&gt;
+
+&lt;/center&gt;
+
+屋内なのでGPSに誤差があるようですね。ですが、臭気の強さが強いほど赤く、弱いほど青くマッピングされていることがわかります。&lt;/p&gt;
+
+&lt;p&gt;しかし、疑問があります。それは、&lt;strong&gt;「臭気センサの値が高すぎる！」&lt;/strong&gt;ということです。&lt;/p&gt;
+
+&lt;p&gt;Arduinoの値が信頼できそうなので、明らかにM5Stackで検出した値は間違っていると考えられます。回路は変更していないのですが……「なんでだろう？」という感じです……。&lt;/p&gt;
+
+&lt;h2 id=&#34;とりあえずフィールドワーク&#34;&gt;とりあえずフィールドワーク&lt;/h2&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/177/field.png&#34; alt=&#34;field&#34;&gt;
+
+&lt;/center&gt;
+
+とりあえず、完成した（？）デバイスをもってフィールドワークに出かけてみます。公衆トイレを探しに行きます（在籍している大学で探します）。&lt;/p&gt;
+
+&lt;p&gt;&lt;font size=&#34;2&#34;&gt;
+※ここで公衆トイレとは、「屋外にあるトイレ」を意味します。
+&lt;/font&gt;&lt;/p&gt;
+
+&lt;p&gt;意外と公衆トイレはないものですね……。臭気の数値は正しい値ではないので、この臭気マップは参考になりませんが……
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/177/map2.png&#34; alt=&#34;map2&#34;&gt;
+
+&lt;/center&gt;
+
+このデバイスにはどうやら改良が必要のようです……。&lt;/p&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;M5Stackと拡張モジュールのGPSを使うと簡単に位置情報を取得できることがわかりました。また、Ambientを使えばマッピングも自由自在です。&lt;/p&gt;
+
+&lt;p&gt;さらにセンサを組み合わせて使えば、ロガーのようなものが簡単につくれるでしょう。&lt;/p&gt;
+
+&lt;p&gt;しかし、今回は周期を計測する回路がArduinoでは正常で、M5Stackではうまく計測データがとれないという問題がおこりました。おそらく回路を改良する必要があると思います。&lt;/p&gt;
+
+&lt;p&gt;どうやら、公衆トイレ1級判定士の道のりはまだまだ長いようです……。&lt;/p&gt;
+
+&lt;style&gt;
+.parent {
+    position: relative;
+    margin: 2em 0;
+}
+
+.dialogue {
+    padding: 40px;
+    position: relative;
+    margin: auto;
+    border: 1px solid #C0C0C0;
+    width: 600px;
+    display: table;
+    box-shadow: 0 3px 4px rgba(0, 0, 0, 0.32);
+}
+
+.image {
+    width: 90px;
+    height: 90px;
+    margin-right: 30px;
+    padding-right: 10px;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.image img {
+    border-radius: 50%;
+    border: 2px solid pink;
+}
+
+.text {
+    display: table-cell;
+    padding: 0;
+    vertical-align: middle;
+    padding-left: 30px;
+}
+
+.bold {
+    font-size: 120%;
+}
+&lt;/style&gt;
+</description>
+    </item>
     
     <item>
       <title>7セグメントディスプレイをArduinoで光らせよう！シフトレジスタでのピンの増やし方</title>
@@ -1198,6 +1603,9 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
 
 
 &lt;section class=&#34;link&#34; id=&#34;145&#34;&gt;
+  
+      
+      
   
       
       
