@@ -7,8 +7,2206 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2018 dotstudio inc.</copyright>
-    <lastBuildDate>Fri, 06 Jul 2018 09:00:00 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 10 Jul 2018 10:00:00 +0900</lastBuildDate>
     <atom:link href="/blog/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>ClovaとNefryBT(ESP32)を連携させてみよう</title>
+      <link>https://dotstud.io/blog/clova-ifttt-nefrybt-arduino/</link>
+      <pubDate>Tue, 10 Jul 2018 10:00:00 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/clova-ifttt-nefrybt-arduino/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、代表の&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;LINEのスマートスピーカーClova（正式にはAIアシスタントの名前）が&lt;a href=&#34;http://clova-blog.line.me/ja/archives/7990256.html&#34;&gt;IFTTTに対応&lt;/a&gt;したのでNefry BT（ESP32）と連携してみました。（実は結構前から対応してたんだけど試せてなかった）&lt;/p&gt;
+
+&lt;p&gt;先日作った勤怠システムについては以下の記事をご参照ください。&lt;/p&gt;
+
+
+
+&lt;section class=&#34;link&#34; id=&#34;183&#34;&gt;
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+          &lt;div class=&#34;link_content&#34;&gt;
+          &lt;a href=&#34;https://dotstud.io/blog/keyboard-kintai-system-diy/&#34;&gt;&lt;/a&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/183/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
+          &lt;/div&gt;
+          &lt;div class=&#34;link_content&#34;&gt;
+            &lt;div class=&#34;link_detail&#34;&gt;
+              &lt;div class=&#34;link_title&#34;&gt;
+                NefryBTとキーボードで作る簡易勤怠管理システム
+              &lt;/div&gt;
+              &lt;div class=&#34;link_date&#34;&gt;
+                
+                2018-07-05
+              &lt;/div&gt;
+              &lt;div class=&#34;link_desc&#34;&gt;
+                今日はとある電子工作向けキーパッドを手に入れたのでNefry BTで使ってみて勤怠管理システムを作ってみた話です。
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+&lt;/section&gt;
+
+
+&lt;p&gt;ちなみにこの勤怠システムは割と運用できてます。今の所は。&lt;/p&gt;
+
+&lt;h2 id=&#34;clovaって&#34;&gt;Clovaって？&lt;/h2&gt;
+
+&lt;p&gt;ClovaはLINEが開発したAIアシスタントです。Clova FriendsやClova Friends mini、Clova Waveなどの対応スマートスピーカー端末が販売されています。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;公式サイト: &lt;a href=&#34;https://clova.line.me/&#34;&gt;https://clova.line.me/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;GoogleのGoogle アシスタント（Google Home）やAmazonのAlexa（Amazon Echo）などと同じ並びの立ち位置という認識で大丈夫です。&lt;/p&gt;
+
+&lt;p&gt;LINEといえばスタンプやキャラクターが特徴的ですが、Clova Friendsに関してもLINEが提供しているということもあり、 &lt;strong&gt;キャラクターをベースにしたデバイスが特徴的です&lt;/strong&gt;。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/185/1.png&#34; alt=&#34;1&#34;&gt;
+
+  ─ ちなみにこの写真は先日のLINE CONFERENCE 2018で発表があったミニオンズモデル
+
+&lt;/center&gt;
+
+
+&lt;p&gt;この記事の執筆時点（2018年7月7日）ではまだ開発用SDKは公開されていませんが、IFTTTに対応したというリリースが出ているのでIFTTT経由で色々なサービスと接続することが出来ます。&lt;/p&gt;
+
+&lt;h2 id=&#34;出勤するとclovaがしゃべる&#34;&gt;出勤するとClovaがしゃべる&lt;/h2&gt;
+
+&lt;p&gt;今回作ったものはこんな感じです。&lt;/p&gt;
+
+&lt;p&gt;試してるのはアルバイトの佐々木さんです。ドヤ顔は素です。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;instagram-media&#34; data-instgrm-captioned data-instgrm-permalink=&#34;https://www.instagram.com/p/Bk4KrVtl1qU/&#34; data-instgrm-version=&#34;8&#34; style=&#34; background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);&#34;&gt;&lt;div style=&#34;padding:8px;&#34;&gt; &lt;div style=&#34; background:#F8F8F8; line-height:0; margin-top:40px; padding:28.194444444444443% 0; text-align:center; width:100%;&#34;&gt; &lt;div style=&#34; background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;&#34;&gt;&lt;/div&gt;&lt;/div&gt; &lt;p style=&#34; margin:8px 0 0 0; padding:0 4px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/Bk4KrVtl1qU/&#34; style=&#34; color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;&#34; target=&#34;\_blank&#34;&gt;Nefryとclovaをつないでみた。 #nefry #clova&lt;/a&gt;&lt;/p&gt; &lt;p style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;&#34;&gt;&lt;a href=&#34;https://www.instagram.com/n0bisuke/&#34; style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px;&#34; target=&#34;\_blank&#34;&gt; n0bisuke&lt;/a&gt;さん(@n0bisuke)がシェアした投稿 - &lt;time style=&#34; font-family:Arial,sans-serif; font-size:14px; line-height:17px;&#34; datetime=&#34;2018-07-06T05:00:48+00:00&#34;&gt;2018年 7月月5日午後10時00分PDT&lt;/time&gt;&lt;/p&gt;&lt;/div&gt;&lt;/blockquote&gt; &lt;script async defer src=&#34;//www.instagram.com/embed.js&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;先日作った勤怠システムと連携してキーパッドのボタンを押して出勤登録するとClovaに通知がいきます。&lt;/p&gt;
+
+&lt;h2 id=&#34;nefry-btとclovaを連携してみよう&#34;&gt;Nefry BTとClovaを連携してみよう&lt;/h2&gt;
+
+&lt;p&gt;IFTTTのWebhookを用いてNefry BTからPOSTリクエストを送り、Clova側に通知させます。&lt;/p&gt;
+
+&lt;p&gt;イメージはこんな感じです。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/185/2.png&#34; alt=&#34;2&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;h3 id=&#34;iftttでアプレットの登録&#34;&gt;IFTTTでアプレットの登録&lt;/h3&gt;
+
+&lt;p&gt;アプレットとは連携させるサービスとサービスの組み合わせのことを指します。&lt;/p&gt;
+
+&lt;p&gt;IFTTTのユーザー登録などを完了したら&lt;a href=&#34;https://ifttt.com/create&#34;&gt;アプレット作成&lt;/a&gt;のページから新規のアプレットを作成します。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/185/3.png&#34; alt=&#34;3&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;まず&lt;code&gt;this&lt;/code&gt;を押すとトリガーとなるサービスを選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/185/4.gif&#34; alt=&#34;&#34; /&gt;
+Webhookを選択しましょう。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/185/5.png&#34; alt=&#34;5&#34;&gt;
+
+&lt;/center&gt;
+
+任意のEvent Nameを指定します。&lt;code&gt;clova_things&lt;/code&gt;としました。&lt;/p&gt;
+
+&lt;p&gt;次に&lt;code&gt;that&lt;/code&gt;を押してアウトプットとなるサービスを選択します。
+&lt;img src=&#34;https://dotstud.io/img/blog/185/6.gif&#34; alt=&#34;&#34; /&gt;
+clovaを選択しましょう。&lt;/p&gt;
+
+&lt;p&gt;メッセージ内容の箇所に&lt;code&gt;Value1&lt;/code&gt;を指定します。これはNefry BTから受け取る1つ目の値を指します。
+&lt;img src=&#34;https://i.gyazo.com/d868fea0c1d1738593a1f82d26ffbde2.png&#34; alt=&#34;&#34; /&gt;
+&lt;code&gt;Create action&lt;/code&gt;のボタンを押して次のページで&lt;code&gt;Finish&lt;/code&gt;で完了です。&lt;/p&gt;
+
+&lt;h3 id=&#34;curlで試してみる&#34;&gt;curlで試してみる&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://ifttt.com/services/maker_webhooks/settings&#34;&gt;IFTTTのWebhooksの設定画面&lt;/a&gt;を見てAPI KEYを確認しましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;https://maker.ifttt.com/use/xxxxxxxxx&lt;/code&gt;というURLが表示されていると思いますが、&lt;code&gt;xxxxxxxxx&lt;/code&gt;の箇所がAPI KEYになります。&lt;/p&gt;
+
+&lt;p&gt;curlでは以下のように試せます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ curl -X POST -H &amp;quot;Content-Type: application/json&amp;quot; -d &#39;{&amp;quot;value1&amp;quot;:&amp;quot;てすと&amp;quot;}&#39; https://maker.ifttt.com/trigger/clova_things/with/key/xxxxxxxxx
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;リクエストするURLはこのような形です。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;code&gt;https://maker.ifttt.com/trigger/{{Event Name}}/with/key/{{API KEY}}&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Event Nameは今回の場合は任意の名前として&lt;code&gt;clova_things&lt;/code&gt;としていて、API KEYは&lt;code&gt;xxxxxxxxx&lt;/code&gt;の部分です。&lt;/p&gt;
+
+&lt;h3 id=&#34;nefry-bt側のコード&#34;&gt;Nefry BT側のコード&lt;/h3&gt;
+
+&lt;p&gt;勤怠システムの記事のコードとほぼ同様です。&lt;/p&gt;
+
+
+
+&lt;section class=&#34;link&#34; id=&#34;183&#34;&gt;
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+          &lt;div class=&#34;link_content&#34;&gt;
+          &lt;a href=&#34;https://dotstud.io/blog/keyboard-kintai-system-diy/&#34;&gt;&lt;/a&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/183/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
+          &lt;/div&gt;
+          &lt;div class=&#34;link_content&#34;&gt;
+            &lt;div class=&#34;link_detail&#34;&gt;
+              &lt;div class=&#34;link_title&#34;&gt;
+                NefryBTとキーボードで作る簡易勤怠管理システム
+              &lt;/div&gt;
+              &lt;div class=&#34;link_date&#34;&gt;
+                
+                2018-07-05
+              &lt;/div&gt;
+              &lt;div class=&#34;link_desc&#34;&gt;
+                今日はとある電子工作向けキーパッドを手に入れたのでNefry BTで使ってみて勤怠管理システムを作ってみた話です。
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+&lt;/section&gt;
+
+
+&lt;p&gt;適宜読み替えてください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;WiFiClientSecure.h&amp;gt;
+WiFiClientSecure client;
+const int HTTP_PORT = 443;
+
+//途中省略
+//・
+//・
+//・
+
+void iftttClovaPost(String message){
+  const char* HOST = &amp;quot;maker.ifttt.com&amp;quot;;
+
+  String url = &amp;quot;/trigger/clova_things/with/key/xxxxxxxxx&amp;quot;;
+  url += &amp;quot;?value1=&amp;quot;; //value1にデータを送る
+  url += StrPerEncord(escapeParameter(message).c_str()); //勤怠システム記事参照
+
+  Serial.print(&amp;quot;connecting to &amp;quot;);
+  Serial.println(HOST);
+
+  if (!client.connect(HOST, HTTP_PORT)) {
+    Serial.println(&amp;quot;connection failed&amp;quot;);
+    return;
+  }
+
+  client.println(&amp;quot;POST &amp;quot; + url + &amp;quot; HTTP/1.1&amp;quot;);
+  client.println(&amp;quot;Content-Type: application/json&amp;quot;);
+  client.println(&amp;quot;Content-Type: application/x-www-form-urlencoded&amp;quot;);
+  client.println(&amp;quot;Host: &amp;quot; + String(HOST));
+  client.println(&amp;quot;Connection: close&amp;quot;);
+  client.println();
+
+  unsigned long timeout = millis();
+  while (client.available() == 0) {    
+    if (millis() - timeout &amp;gt; 5000) {
+        Serial.println(&amp;quot;&amp;gt;&amp;gt;&amp;gt; Client Timeout !&amp;quot;);
+        client.stop();
+        return;
+    }
+  }
+
+  // Read all the lines of the reply from server and print them to Serial
+  while(client.available()) {
+      String line = client.readStringUntil(&#39;\r&#39;);
+      Serial.print(line);
+  }
+
+  Serial.println();
+  Serial.println(&amp;quot;closing connection&amp;quot;);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;全体コードは&lt;a href=&#34;https://gist.github.com/n0bisuke/d2fab404e5073e936339a6c3442c1e4c#file-kintai-ino-L94-L133&#34;&gt;こちら&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;h2 id=&#34;試し方と使う際の注意点&#34;&gt;試し方と使う際の注意点&lt;/h2&gt;
+
+&lt;p&gt;さて完成したら試してみます。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;instagram-media&#34; data-instgrm-captioned data-instgrm-permalink=&#34;https://www.instagram.com/p/Bk4KrVtl1qU/&#34; data-instgrm-version=&#34;8&#34; style=&#34; background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);&#34;&gt;&lt;div style=&#34;padding:8px;&#34;&gt; &lt;div style=&#34; background:#F8F8F8; line-height:0; margin-top:40px; padding:28.194444444444443% 0; text-align:center; width:100%;&#34;&gt; &lt;div style=&#34; background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;&#34;&gt;&lt;/div&gt;&lt;/div&gt; &lt;p style=&#34; margin:8px 0 0 0; padding:0 4px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/Bk4KrVtl1qU/&#34; style=&#34; color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;&#34; target=\_blank&#34;&gt;Nefryとclovaをつないでみた。 #nefry #clova&lt;/a&gt;&lt;/p&gt; &lt;p style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;&#34;&gt;&lt;a href=&#34;https://www.instagram.com/n0bisuke/&#34; style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px;&#34; target=&#34;\_blank&#34;&gt; n0bisuke&lt;/a&gt;さん(@n0bisuke)がシェアした投稿 - &lt;time style=&#34; font-family:Arial,sans-serif; font-size:14px; line-height:17px;&#34; datetime=&#34;2018-07-06T05:00:48+00:00&#34;&gt;2018年 7月月5日午後10時00分PDT&lt;/time&gt;&lt;/p&gt;&lt;/div&gt;&lt;/blockquote&gt; &lt;script async defer src=&#34;//www.instagram.com/embed.js&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;キーパッドを押すとClovaに通知がいき、&lt;strong&gt;「通知を読み上げて」&lt;/strong&gt;とClovaに話かけてあげると読み上げてくれます。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;はじめはWebhooksで通知するとそのままClovaが喋ってくれると思ったのですがそうではないので注意です。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;clovaのifttt試してみてるけどぜんぜん喋ってくれない… なんだろう&lt;/p&gt; のびすけ / sugawara (@n0bisuke) &lt;a href=&#34;https://twitter.com/n0bisuke/status/1015057186026737664?ref_src=twsrc%5Etfw&#34;&gt;2018年7月6日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;通知が来た時点で何も喋ってくれないのは分かりにくいですね。現時点だと「通知を読み上げて」と言わないと読み上げてくれないので注意ですね。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;Nefry BTをClovaを繋げることが出来ました。&lt;/p&gt;
+
+&lt;p&gt;IFTTTに繋がると実質何とでも繋げられるので嬉しいですね。&lt;/p&gt;
+
+&lt;p&gt;人間が「通知を読み上げて」と言わなくても喋ってくれるように機能追加してくれることに期待です。&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>最新の超軽量ドローン「Tello」でオフィスの日常を撮影してみた</title>
@@ -223,6 +2421,9 @@
 
 
 &lt;section class=&#34;link&#34; id=&#34;155&#34;&gt;
+  
+      
+      
   
       
       
@@ -1977,6 +4178,9 @@ String escapeParameter(String param) {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/face-robot-making-maruko/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/172/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -3394,6 +5598,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/face-robot-making-maruko/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/172/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -4466,6 +6673,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nodejs-alexa-skill-mp3/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/163/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -5121,6 +7331,9 @@ void loop() {
 
 
 &lt;section class=&#34;link&#34; id=&#34;144&#34;&gt;
+  
+      
+      
   
       
       
@@ -6814,6 +9027,9 @@ void loop(){
 
 
 &lt;section class=&#34;link&#34; id=&#34;098&#34;&gt;
+  
+      
+      
   
       
       
@@ -9181,6 +11397,9 @@ Nefry BTは&lt;strong&gt;最初からWi-Fi・BLE機能がついた開発ボー�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/aogaku-iot-course-report/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/112/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -9685,6 +11904,9 @@ Nefry BTは&lt;strong&gt;最初からWi-Fi・BLE機能がついた開発ボー�
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;121&#34;&gt;
+  
+      
+      
   
       
       
@@ -12023,6 +14245,9 @@ AlexaスキルもGoogle Homeスキルも複数公開してみた君塚さん。�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/microbit-getting-started-pokio/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/165/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -13508,6 +15733,9 @@ AlexaスキルもGoogle Homeスキルも複数公開してみた君塚さん。�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/node-school-before-learn/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/156/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -14153,6 +16381,9 @@ AlexaスキルもGoogle Homeスキルも複数公開してみた君塚さん。�
 
 
 &lt;section class=&#34;link&#34; id=&#34;156&#34;&gt;
+  
+      
+      
   
       
       
@@ -15514,250 +17745,6 @@ console.log(n_num);
 &lt;p&gt;プログラミングを初めて学ぶ方は、新しい情報が多く難しく感じたかもしれません。でも問題を解きながら変数や関数に慣れていけば、&lt;strong&gt;「おっ、こういうことか」とわかる瞬間&lt;/strong&gt;がくるはずです！&lt;/p&gt;
 
 &lt;p&gt;めげずにNode.js勉強頑張っていきましょう！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>子供も大人もmicro:bit！基本の操作と初めてのプログラミング</title>
-      <link>https://dotstud.io/blog/microbit-getting-started-pokio/</link>
-      <pubDate>Mon, 14 May 2018 10:00:00 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/microbit-getting-started-pokio/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、ポキオ（&lt;a href=&#34;https://twitter.com/pokiiio&#34;&gt;@pokiiio&lt;/a&gt;）です。&lt;/p&gt;
-
-&lt;p&gt;今回は巷で人気なマイコンボードの&lt;strong&gt;micro:bit&lt;/strong&gt;をプログラミングをしてみようと思います。&lt;/p&gt;
-
-&lt;p&gt;「 &lt;strong&gt;&lt;em&gt;えっ、プログラミングって難しいんでしょ？&lt;/em&gt;&lt;/strong&gt; 」って思われるかも知れません。&lt;/p&gt;
-
-&lt;p&gt;プログラミングと聞くと、&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;必要なソフトのダウンロードが面倒&lt;/li&gt;
-&lt;li&gt;ソフトやドライバーのインストールが面倒&lt;/li&gt;
-&lt;li&gt;プログラミングの知識が必要そう&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;と想像してしまいがちですが、&lt;u&gt;micro:bitなら簡単にできてしまうんです！&lt;/u&gt;&lt;/p&gt;
-
-&lt;p&gt;micro:bitの故郷であるイギリスでは、11歳・12歳の小学生に教育目的で無償で配布されていて、プログラミングの知識がなくても簡単に始められるマイコンボードになっています。&lt;/p&gt;
-
-&lt;p&gt;小学生だけでなく、普段プログラミングをしない&lt;strong&gt;大人でもハマること間違い無しのmicro:bit&lt;/strong&gt;を、サクッと触ってみましょう！&lt;/p&gt;
-
-&lt;h2 id=&#34;micro-bitとは&#34;&gt;micro:bitとは？&lt;/h2&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/165/microbit.png&#34; alt=&#34;microbit&#34;&gt;
-
-&lt;/center&gt;
-
-micro:bitはBBC（英国放送協会）が開発したシングルボードコンピュータで、日本国内でも2000円前後で購入可能です。&lt;strong&gt;&lt;em&gt;お父さんのお小遣いでも買えそうですね！&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;教育目的と謳っていますが、侮ることなかれ。思った以上に高性能です。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;CPU：ARM Cortex-M0&lt;/li&gt;
-&lt;li&gt;インターフェイス：Bluetooth Low Energy（BLE）、USB&lt;/li&gt;
-&lt;li&gt;入出力：3つのI/Oリング、20ピンのエッジコネクター、25個の赤色LED、2個のボタン&lt;/li&gt;
-&lt;li&gt;センサー：光、温度、加速度、磁力&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;スマホなどにも採用されている、低消費電力な通信方式であるBLEに最初から対応しているので、スマホと通信したり、micro:bit同士で通信を行ったりということも可能です。&lt;/p&gt;
-
-&lt;p&gt;また、端子（I/Oリング）はミノムシクリップを挟んで通電できるようになっているので、半田ごて不要で電子工作が楽しめます。また、LEDはマトリックス上に配置されていて、それをつかって文字やマークを表示させることも可能です。&lt;/p&gt;
-
-&lt;p&gt;入出力も豊富で拡張性が高い上に、各種センサー類も最初からついているので、micro:bitを買えば色々楽しめてしまうのです！&lt;/p&gt;
-
-&lt;h2 id=&#34;micro-bitを触ってみよう&#34;&gt;micro:bitを触ってみよう！&lt;/h2&gt;
-
-&lt;p&gt;micro:bitにはデフォルトでサンプルプログラムが入っています。まずはそれを実行してみましょう！&lt;/p&gt;
-
-&lt;p&gt;&lt;font size=&#34;2&#34;&gt;
-（モバイルバッテリーをUSB接続をしたり、別売りのバッテリーモジュールを使って給電をしたりする方法がありますが、今回は&lt;strong&gt;PCとUSB接続することでPCから給電&lt;/strong&gt;してみます。）
-&lt;/font&gt;&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/165/setup.png&#34; alt=&#34;setup&#34;&gt;
-
-&lt;/center&gt;
-
-サンプルプログラムでは、下記のように、ボタンを使ったり、マトリックスLEDを光らせたり、micro:bitを傾けたり、micro:bitの主な機能を試すことが出来ます。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;マトリックスLEDが点滅した後「HELLO」と表示される&lt;/li&gt;
-&lt;li&gt;Aボタンを押すように促されるので、Aボタンを押す&lt;/li&gt;
-&lt;li&gt;Bボタンも押すように促されるので、Bボタンを押す&lt;/li&gt;
-&lt;li&gt;「SHAKE!」micro:bitを振る&lt;/li&gt;
-&lt;li&gt;「CHASE THE DOT!」micro:bitを傾けて点滅するドットを追う&lt;/li&gt;
-&lt;li&gt;「NOW GET CODING!」と表示されてチュートリアル終了&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;このサンプルプログラムですが、&lt;a href=&#34;https://support.microbit.org/support/solutions/articles/19000021613-reset-the-micro-bit-to-factory-defaults&#34;&gt;このページ&lt;/a&gt;からダウンロード可能なので、いつでもMiro:bitを初期化することができます。&lt;/p&gt;
-
-&lt;h2 id=&#34;micro-bitのプログラミングをしてみよう&#34;&gt;micro:bitのプログラミングをしてみよう！&lt;/h2&gt;
-
-&lt;p&gt;次に、実際にプログラミングして、micro:bitを動かしてみます！&lt;/p&gt;
-
-&lt;p&gt;micro:bitのプログラミング方法は主に3つです。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;JavaScript Block Editor&lt;/li&gt;
-&lt;li&gt;Python Editor&lt;/li&gt;
-&lt;li&gt;スマホアプリ&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;今回は、環境構築不要で、ブラウザだけで簡単にプログラミングができる、&lt;strong&gt;JavaScript Block Editor&lt;/strong&gt; を使ってみようと思います。&lt;/p&gt;
-
-&lt;h3 id=&#34;エディターを開いてみる&#34;&gt;エディターを開いてみる&lt;/h3&gt;
-
-&lt;p&gt;一般的なエディターは、ソフトをダウンロードして必要なものをインストールするなど、準備に時間がかかることがありますが、 &lt;strong&gt;JavaScript Block Editor&lt;/strong&gt; はウェブブラウザでサイトにアクセスするだけでプログラミングが開始できます！&lt;/p&gt;
-
-&lt;p&gt;実際にアクセスして、エディターを開いてみましょう。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/165/top.png&#34; alt=&#34;top&#34;&gt;
-
-&lt;/center&gt;
-
-&lt;a href=&#34;https://makecode.microbit.org/#lang=ja&#34;&gt;このサイト&lt;/a&gt;にアクセスすると、すぐに準備が完了します。&lt;/p&gt;
-
-&lt;p&gt;エディターは大きく3つのパートに分かれています。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/165/emulator.png&#34; alt=&#34;emulator&#34;&gt;
-
-&lt;/center&gt;
-
-まず、一番左側にあるのがエミュレーターです。エディターでプログラミングをすると、このエミュレーターで自動的にプログラムが実行され、プログラムの動作イメージを確認することができます。&lt;/p&gt;
-
-&lt;p&gt;LEDの光らせ方の確認はもちろん、マウスでエミュレーターをドラッグすると傾きを変えられたり、音を出すプログラムを書いたときは、その音の確認もエディター上で可能です。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/165/menu.png&#34; alt=&#34;menu&#34;&gt;
-
-&lt;/center&gt;
-
-次に、エディター中央にあるのがブロックの一覧です。誰でもプログラミングができるように、Micro:bitに命令ができる処理の塊が、ブロックという単位で表現されています。これらのブロックをつなげることで、シンプルなものから複雑なものまで、知識不要でプログラミングができるエディターなのです。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/165/editor.png&#34; alt=&#34;editor&#34;&gt;
-
-&lt;/center&gt;
-
-エディターの右側にあるエリアは、そのブロックを配置してプログラミングする場所です。初めから存在する &lt;strong&gt;「最初だけ」&lt;/strong&gt; と &lt;strong&gt;「ずっと」&lt;/strong&gt; というブロックに、他のブロックをつなげていくことでプログラミングができます。&lt;/p&gt;
-
-&lt;p&gt;この &lt;strong&gt;「最初だけ」&lt;/strong&gt; は、一度だけ実行させたいブロックをつなげていき、 &lt;strong&gt;「ずっと」&lt;/strong&gt; は繰り返し実行させたいブロックをつなげます。&lt;/p&gt;
-
-&lt;h3 id=&#34;エディターでプログラミングしてみよう&#34;&gt;エディターでプログラミングしてみよう&lt;/h3&gt;
-
-&lt;p&gt;それでは、簡単なプログラミングをしてみましょう。micro:bitのLEDにハートマークを表示させてみましょう。&lt;/p&gt;
-
-&lt;p&gt;まずエディターのメニューの[基本]から[アイコンを表示]というブロックを探します。&lt;/p&gt;
-
-&lt;p&gt;このブロックをプログラミングエリアの &lt;strong&gt;「最初だけ」&lt;/strong&gt; のブロックにドラッグ・アンド・ドロップして、ブロックとブロックをつなげます。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/165/heart1.png&#34; alt=&#34;heart1&#34;&gt;
-
-&lt;/center&gt;
-
-アイコンを表示するという処理を、micro:bit起動時に一度だけ実行します。これにより、好きなアイコンをmicro:bitで表示できます。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/165/heart2.png&#34; alt=&#34;heart2&#34;&gt;
-
-&lt;/center&gt;
-
-ブロック同士が正しくつながると、エミュレーター上でハートマークが表示されているはずです。&lt;/p&gt;
-
-&lt;p&gt;デフォルトのアイコンはハートマークになっていますが、[アイコンを表示]のブロックのプルダウンメニューを開くと様々なアイコンを選択でき、それを表示することもできます。&lt;/p&gt;
-
-&lt;p&gt;プログラミングはこれで終了です。&lt;/p&gt;
-
-&lt;h3 id=&#34;作成したプログラムをmicro-bitで動かしてみよう&#34;&gt;作成したプログラムをmicro:bitで動かしてみよう&lt;/h3&gt;
-
-&lt;p&gt;エディター下部の &lt;strong&gt;「題名未設定」&lt;/strong&gt; と書かれているところに、プログラム名を自由に入力し、[ダウンロード]をクリックします。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/165/heart3.png&#34; alt=&#34;heart3&#34;&gt;
-
-&lt;/center&gt;
-
-すると、拡張子が.hexなファイルが自動でダウンロードされます。ファイル名には、さきほどのプログラム名が含まれます。このファイルをmicro:bitに転送します。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/165/heart4.png&#34; alt=&#34;heart4&#34;&gt;
-
-&lt;/center&gt;
-
-micro:bitをパソコンとUSB接続すると、 &lt;strong&gt;MICROBIT&lt;/strong&gt; というドライブとして認識されます。ダウンロードしてきた.hexファイルを、このドライブ直下にコピーすることでプログラムの書き込みが行えます。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/165/heart5.png&#34; alt=&#34;heart5&#34;&gt;
-
-&lt;/center&gt;
-
-書き込みが完了すると、自動でmicro:bitが再起動します。すると、ハートマークを表示するプログラムが実行されます。&lt;/p&gt;
-
-&lt;p&gt;今回紹介したのはブロックを積み重ねることによってプログラムする方法でしたが、それを&lt;strong&gt;JavaScriptコードと相互変換&lt;/strong&gt;したり、&lt;strong&gt;最初からJavaScriptやPythonを使ってプログラミング&lt;/strong&gt;することも可能です。&lt;/p&gt;
-
-&lt;p&gt;&lt;u&gt;自分のレベルに応じたプログラミング方法も選べるのも、micro:bitの魅力の一つ&lt;/u&gt;です。&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;今回は、簡単なプログラムの作成と実行をしてみました。&lt;/p&gt;
-
-&lt;p&gt;micro:bitには、LED以外にボタンや種々のセンサー、またGPIOもあります。それらを使えば、「&lt;strong&gt;ボタンを押すとLEDで表示させているマークを変える&lt;/strong&gt;」「&lt;strong&gt;micro:bitを振ったら文字を表示する&lt;/strong&gt;」などの、すこし凝ったプログラミングも可能です。&lt;/p&gt;
-
-&lt;p&gt;また、スピーカーを端子に接続して音を鳴らしたり、モーターとモータードライバーを接続してラジコンを作ることだって可能で、無限の楽しみ方ができます。&lt;/p&gt;
-
-&lt;p&gt;次回はmicro:bitにスピーカーを接続して、音を鳴らしてみましょう！&lt;/p&gt;
 </description>
     </item>
     
