@@ -7,8 +7,769 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2018 dotstudio inc.</copyright>
-    <lastBuildDate>Tue, 10 Jul 2018 10:00:00 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 12 Jul 2018 10:00:00 +0900</lastBuildDate>
     <atom:link href="/blog/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>PWM制御をマスターしよう！Node-REDでサーボモータを遠隔制御する方法＆初ハンズオンレポート</title>
+      <link>https://dotstud.io/blog/nefry-servo-handson-takudooon/</link>
+      <pubDate>Thu, 12 Jul 2018 10:00:00 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nefry-servo-handson-takudooon/</guid>
+      
+      <description>
+
+&lt;h2 id=&#34;暑さ本番-いよいよ大好きな生ビールの季節がやってまいりました&#34;&gt;暑さ本番、いよいよ大好きな生ビールの季節がやってまいりました！&lt;/h2&gt;
+
+&lt;p&gt;みなさまいかがお過ごしでしょうか？どうも、宇宙エンジニアの&lt;a href=&#34;https://dotstud.io/members/takudooon&#34;&gt;たくろーどん&lt;/a&gt;です。毎日、暑いですね。&lt;/p&gt;
+
+&lt;p&gt;さて先日、&lt;strong&gt;初めてハンズオンイベント&lt;/strong&gt;を企画・実施してみました！題して、「&lt;a href=&#34;https://dotstudio.connpass.com/event/91695/&#34;&gt;&lt;strong&gt;【IoT】PWM制御をマスター！Nefry BT+Node-REDでサーボモータを遠隔制御&lt;/strong&gt;&lt;/a&gt;」！&lt;/p&gt;
+
+&lt;p&gt;「モノづくりをしたい！」「こんなものをつくりたい！」と思っても「&lt;strong&gt;こういう技術がつかえる&lt;/strong&gt;」ということを知らないと、なかなかモノづくりが進みません。&lt;/p&gt;
+
+&lt;p&gt;なので、動くものを作りたいときに便利な&lt;u&gt;&lt;strong&gt;サーボモータとその制御方法であるPWM制御&lt;/strong&gt;をマスターし、&lt;strong&gt;PCからサーボモータを遠隔制御をしよう&lt;/strong&gt;&lt;/u&gt;というのがハンズオンの目論見です。&lt;/p&gt;
+
+&lt;p&gt;では、ちらっとハンズオンの内容を振り返ってみたいと思います。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/187/1.png&#34; alt=&#34;1&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;pwm制御を用いたプログラムの書き方&#34;&gt;PWM制御を用いたプログラムの書き方&lt;/h2&gt;
+
+&lt;h3 id=&#34;pwm制御について&#34;&gt;PWM制御について&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/pulse-width-modulation/&#34;&gt;PWM制御の大まかな説明&lt;/a&gt;は以前、ドキュメントに書きました。ようするに、PWM制御は「&lt;strong&gt;パルスのオン・オフ繰り返し切り替えることで出力される電力を制御&lt;/strong&gt;」するという意味です。&lt;/p&gt;
+
+&lt;p&gt;でも結局のところ、「&lt;strong&gt;PWM制御ってどんなイメージやねん！&lt;/strong&gt;」と多くの方が思うでしょう。&lt;/p&gt;
+
+&lt;p&gt;なので、これがわかりやすいのではないかという説明を思いつきました。それが、下記の動画です。
+&lt;img src=&#34;https://dotstud.io/img/blog/187/2.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;例えば、自宅から最寄りの駅まで走らなければならない状況を考えます。まるで、小学校の算数にでてくるたかしくんの問題を彷彿させますね。知らんけど。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;100%の力で走れば5分で駅につく ≒ 100%出力されるので、5V出力される&lt;/li&gt;
+&lt;li&gt;全力で走って途中で歩くと9分で駅に着く（全体的に80%の力で走る） ≒ 80%出力されるので、4V出力される&lt;/li&gt;
+&lt;li&gt;全力で走って途中で歩くと10分で駅に着く（全体的に50%の力で走る） ≒ 50%出力されるので、2.5V出力される&lt;/li&gt;
+&lt;li&gt;全力で走って途中で歩くと15分で駅に着く（全体的に10%の力で走る） ≒ 10%出力されるので、0.5V出力される&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;というようなイメージです。自宅から駅まで走る場合は走る速さの具合によって、到着時間が伸びます。しかし、電圧の場合は実行電圧（実際に出力される電圧）は下がっていきます。&lt;/p&gt;
+
+&lt;h3 id=&#34;esp32開発ボードでのプログラムについて&#34;&gt;ESP32開発ボードでのプログラムについて&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/nefrybt&#34;&gt;Nefry BT&lt;/a&gt;のようなESP32を搭載しているような開発ボードでPWM制御する場合は、ledc関数を使います。&lt;strong&gt;ESP32ではArduinoでつかうようなanalogWrite関数が実装されていない&lt;/strong&gt;とのことなので注意しましょう（ただし、今後変更される可能性があります）。&lt;/p&gt;
+
+&lt;p&gt;例えば、下記のようなプログラムになります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;
+//基本Iotは2.4GHz帯を使うこと
+#include&amp;lt;Nefry.h&amp;gt;
+#include&amp;quot;esp32-hal-ledc.h&amp;quot;
+
+//PWM信号の周波数をPWMをつくっているクロック周波数で割ったもの
+//ledcSetupでPWMの範囲を8bitに設定したとき、0～255　10bitのときは0～1023となる、2進数の話
+#define PWM_BITWIDTH 16
+
+//わかりやすいように角度に変換する関数/////////////////////
+int deg2pw(int deg, int bit){
+    double ms = ((double) deg - 90.0) * 0.95 / 90.0 + 1.45;
+    return (int) (ms / 20.0 * pow(2, bit));
+}
+//////////////////////////////////////////////////////////
+
+void setup() {
+  Serial.begin(115200);
+//ledcSetup(チャンネル数(0～),周波数(たとえばPWMサイクル20mHzなら50Hzになるという意味(SG90の場合))、分解能は任意(ただし限度はある))
+  ledcSetup(0,50,PWM_BITWIDTH);
+  ledcAttachPin(ピン番号,0);//left_motor
+  Nefry.enableSW();
+}
+
+void loop(){
+   if((Nefry.readSW())){
+      ledcWrite(0,deg2pw(90, PWM_BITWIDTH));
+      delay(800);
+      ledcWrite(0,deg2pw(0, PWM_BITWIDTH));
+   }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;プログラムの書き方&#34;&gt;プログラムの書き方&lt;/h3&gt;
+
+&lt;p&gt;プログラムを詳しく見てましょう。&lt;/p&gt;
+
+&lt;p&gt;ledc関数を使うため、ライブラリ「esp32-hal-ledc.h」を最初にインクルードします。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;#include&amp;quot;esp32-hal-ledc.h&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ライブラリ「esp32-hal-ledc.h」を使うときの主な関数は以下に示すものです。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;ledcSetup（チャンネル,周波数,分解能）&lt;/li&gt;
+&lt;li&gt;ledcAttachPin（ピン番号,チャンネル）：チャンネルはピン番号の識別番号です&lt;/li&gt;
+&lt;li&gt;ledcWrite（チャンネル,パルス幅）：設定した角度になるように与えるべきパルス幅を算出する関数&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;実際の記述は以下のようになります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;void setup() {
+    Serial.begin(115200);
+    ledcSetup(0,50,PWM_BITWIDTH);
+    ledcAttachPin(A2,0);//left_motor
+    Nefry.enableSW();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;分解能は&lt;strong&gt;どれだけ細かく制御するのか&lt;/strong&gt;を表しているイメージです。これは&lt;strong&gt;ビット数&lt;/strong&gt;で表します。&lt;/p&gt;
+
+&lt;p&gt;例えば、分解能を&lt;strong&gt;8ビットとするれば0〜255バイト&lt;/strong&gt;（2の8乗）、&lt;strong&gt;10ビットなら0〜1023バイト&lt;/strong&gt;（2の10乗）となります。&lt;/p&gt;
+
+&lt;p&gt;これを、どのようにPWM制御に使えるのか説明します。PWM制御とは一定電圧の入力から&lt;strong&gt;パルス列のオンとオフの一定周期を作り、オンの時間幅を変化させる電力制御方式&lt;/strong&gt;のことです。つまり、&lt;strong&gt;実効電圧を変化させる&lt;/strong&gt;ことができます。&lt;/p&gt;
+
+&lt;p&gt;なので、例えば、最大5[V]の出力を考えたとき、&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;分解能8ビットだと0→0[V]、127→2.5[V]、255→5[V]&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;分解能10ビットだと0→0[V]、511→2.5[V]、1023→5[V]&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;と表せます。分解能が大きい方が、細かい制御ができることがわかるかと思います。&lt;/p&gt;
+
+&lt;h2 id=&#34;node-red-mqttでサーボモータを遠隔制御&#34;&gt;Node-RED×MQTTでサーボモータを遠隔制御&lt;/h2&gt;
+
+&lt;h3 id=&#34;node-redとは&#34;&gt;Node-REDとは&lt;/h3&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/187/9.png&#34; alt=&#34;9&#34;&gt;
+
+&lt;/center&gt;
+
+&lt;a href=&#34;https://nodered.jp/&#34;&gt;Node-RED&lt;/a&gt;はハードウェアデバイス/APIおよびオンラインサービスを接続するためのツールです。ウェブ上で、フローチャートのように直感的にプログラムをつくることができます。そして、最終的に自分が欲しい仕組みを作り上げるというものです。&lt;/p&gt;
+
+&lt;p&gt;Node-REDを使うには大まかに2パターンあります。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;自分のPC上でローカルで動かす（今回はこちらで進めていきます）&lt;/li&gt;
+&lt;li&gt;外部のサービスを利用する（IBMクラウドやenebularなど）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;導入方法は、&lt;a href=&#34;https://qiita.com/minwinmin/private/6c13d2c912d0d7e8e197&#34;&gt;こちら&lt;/a&gt;で説明していますので参考にしてください。&lt;/p&gt;
+
+&lt;p&gt;また、後ほどNode-REDにフローのコードを貼り付ける必要があるので簡単に貼り付け方法を説明します。&lt;/p&gt;
+
+&lt;p&gt;まずフローのコードをコピーし、Node-REDを立ち上げたら右上のメニュー（3本線）をクリックします。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/187/10.png&#34; alt=&#34;10&#34;&gt;
+
+&lt;/center&gt;
+
+すると上記のような画面があらわれます。「読み込み」をクリックして、あらわれた画面にコピーしたコードを貼り付ければ完了です。&lt;/p&gt;
+
+&lt;h3 id=&#34;mqttとは&#34;&gt;MQTTとは&lt;/h3&gt;
+
+&lt;p&gt;MQTTとは、&lt;strong&gt;多数のデバイスの間で短いメッセージを頻繁に送受信する&lt;/strong&gt;ことを想定した通信プロトコルです。つまりインフラのようなもの、もしくはメッセージを送受信するので土管のようなものをイメージすると良いかと思います。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/187/3.png&#34; alt=&#34;3&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;p&gt;MQTTは先ほど説明したような仕組みの名前です。なので、実際にメッセージを送受信するためにはMQTTブローカーが必要です。イメージは下記の画像のようになります。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/187/4.png&#34; alt=&#34;4&#34;&gt;
+
+&lt;/center&gt;
+
+MQTTブローカーを用意するには、いくつか方法があります（&lt;a href=&#34;http://acro-engineer.hatenablog.com/entry/2015/06/19/120000&#34;&gt;こちらのサイト&lt;/a&gt;にまとめられています）。今回、ハンズオンでつかったの以下の2パターンです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;ローカルホストでMQTTブローカーをたてる&lt;/strong&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/mcollina/mosca&#34;&gt;Mosca&lt;/a&gt;を利用する -&amp;gt; MQTT brokerのためのライブラリ（IBMクラウドのような外部サービスでNode-REDを使う場合、うまくいきませんでした）&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://test.mosquitto.org/&#34;&gt;mosquitto&lt;/a&gt;のテストサーバーを利用する&lt;/strong&gt;
+
+&lt;ul&gt;
+&lt;li&gt;これから記載するプログラムはこちらを使っています。&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;node-redのフローのコード&#34;&gt;Node-REDのフローのコード&lt;/h3&gt;
+
+&lt;p&gt;下記のNode-REDのフローのコードを、Node-REDにコピーして使いましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;7878093f.d68778&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;debug&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;782bda22.769d84&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;active&amp;quot;: true,
+        &amp;quot;tosidebar&amp;quot;: true,
+        &amp;quot;console&amp;quot;: false,
+        &amp;quot;tostatus&amp;quot;: false,
+        &amp;quot;complete&amp;quot;: &amp;quot;payload&amp;quot;,
+        &amp;quot;x&amp;quot;: 522.0130081176758,
+        &amp;quot;y&amp;quot;: 161.99999809265137,
+        &amp;quot;wires&amp;quot;: []
+    },
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;22ca4d97.8e3382&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;inject&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;782bda22.769d84&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;topic&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;payload&amp;quot;: &amp;quot;{\&amp;quot;motor\&amp;quot;:1}&amp;quot;,
+        &amp;quot;payloadType&amp;quot;: &amp;quot;json&amp;quot;,
+        &amp;quot;repeat&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;crontab&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;once&amp;quot;: false,
+        &amp;quot;onceDelay&amp;quot;: 0.1,
+        &amp;quot;x&amp;quot;: 220.01303100585938,
+        &amp;quot;y&amp;quot;: 244.00000190734863,
+        &amp;quot;wires&amp;quot;: [
+            [
+                &amp;quot;6b18ace.785b854&amp;quot;
+            ]
+        ]
+    },
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;6b18ace.785b854&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;mqtt out&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;782bda22.769d84&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;/sub/NefryBT/SAMPLE&amp;quot;,
+        &amp;quot;topic&amp;quot;: &amp;quot;/sub/NefryBT/SAMPLE&amp;quot;,
+        &amp;quot;qos&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;retain&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;broker&amp;quot;: &amp;quot;3890dddf.26f532&amp;quot;,
+        &amp;quot;x&amp;quot;: 508.0130386352539,
+        &amp;quot;y&amp;quot;: 293.9999957084656,
+        &amp;quot;wires&amp;quot;: []
+    },
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;e0581ff4.bce8a&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;inject&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;782bda22.769d84&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;topic&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;payload&amp;quot;: &amp;quot;{\&amp;quot;motor\&amp;quot;:0}&amp;quot;,
+        &amp;quot;payloadType&amp;quot;: &amp;quot;json&amp;quot;,
+        &amp;quot;repeat&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;crontab&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;once&amp;quot;: false,
+        &amp;quot;onceDelay&amp;quot;: 0.1,
+        &amp;quot;x&amp;quot;: 220.01303100585938,
+        &amp;quot;y&amp;quot;: 344.00000190734863,
+        &amp;quot;wires&amp;quot;: [
+            [
+                &amp;quot;6b18ace.785b854&amp;quot;
+            ]
+        ]
+    },
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;3dccf617.5970da&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;mqtt in&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;782bda22.769d84&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;topic&amp;quot;: &amp;quot;/sub/NefryBT/SAMPLE&amp;quot;,
+        &amp;quot;qos&amp;quot;: &amp;quot;2&amp;quot;,
+        &amp;quot;broker&amp;quot;: &amp;quot;cd2e6f9.ab8069&amp;quot;,
+        &amp;quot;x&amp;quot;: 235.09634399414062,
+        &amp;quot;y&amp;quot;: 159.3697967529297,
+        &amp;quot;wires&amp;quot;: [
+            [
+                &amp;quot;7878093f.d68778&amp;quot;
+            ]
+        ]
+    },
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;f5c8b0fb.93d8&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;comment&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;782bda22.769d84&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;Node-RED上に文字列表示&amp;quot;,
+        &amp;quot;info&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;x&amp;quot;: 237.09635162353516,
+        &amp;quot;y&amp;quot;: 114.08594131469727,
+        &amp;quot;wires&amp;quot;: []
+    },
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;47872155.bfb16&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;comment&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;782bda22.769d84&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;MQTTブローカー側に文字列を送信&amp;quot;,
+        &amp;quot;info&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;x&amp;quot;: 265.0130310058594,
+        &amp;quot;y&amp;quot;: 206.0104217529297,
+        &amp;quot;wires&amp;quot;: []
+    },
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;d5a5e79d.ec27a8&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;comment&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;782bda22.769d84&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;MQTTブローカー側に文字列を送信するためのフロー&amp;quot;,
+        &amp;quot;info&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;x&amp;quot;: 609.0130004882812,
+        &amp;quot;y&amp;quot;: 257.0104160308838,
+        &amp;quot;wires&amp;quot;: []
+    },
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;3700aeb9.5a7ec2&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;comment&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;782bda22.769d84&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;ｍosquittoのテストサーバーを利用&amp;quot;,
+        &amp;quot;info&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;x&amp;quot;: 265.0130310058594,
+        &amp;quot;y&amp;quot;: 52.010416984558105,
+        &amp;quot;wires&amp;quot;: []
+    },
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;3890dddf.26f532&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;mqtt-broker&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;broker&amp;quot;: &amp;quot;http://test.mosquitto.org/&amp;quot;,
+        &amp;quot;port&amp;quot;: &amp;quot;1883&amp;quot;,
+        &amp;quot;clientid&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;usetls&amp;quot;: false,
+        &amp;quot;compatmode&amp;quot;: true,
+        &amp;quot;keepalive&amp;quot;: &amp;quot;60&amp;quot;,
+        &amp;quot;cleansession&amp;quot;: true,
+        &amp;quot;birthTopic&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;birthQos&amp;quot;: &amp;quot;0&amp;quot;,
+        &amp;quot;birthPayload&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;closeTopic&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;closeQos&amp;quot;: &amp;quot;0&amp;quot;,
+        &amp;quot;closePayload&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;willTopic&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;willQos&amp;quot;: &amp;quot;0&amp;quot;,
+        &amp;quot;willPayload&amp;quot;: &amp;quot;&amp;quot;
+    },
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;cd2e6f9.ab8069&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;mqtt-broker&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;broker&amp;quot;: &amp;quot;http://test.mosquitto.org/&amp;quot;,
+        &amp;quot;port&amp;quot;: &amp;quot;1883&amp;quot;,
+        &amp;quot;clientid&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;usetls&amp;quot;: false,
+        &amp;quot;compatmode&amp;quot;: true,
+        &amp;quot;keepalive&amp;quot;: &amp;quot;60&amp;quot;,
+        &amp;quot;cleansession&amp;quot;: true,
+        &amp;quot;birthTopic&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;birthQos&amp;quot;: &amp;quot;0&amp;quot;,
+        &amp;quot;birthPayload&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;closeTopic&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;closeQos&amp;quot;: &amp;quot;0&amp;quot;,
+        &amp;quot;closePayload&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;willTopic&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;willQos&amp;quot;: &amp;quot;0&amp;quot;,
+        &amp;quot;willPayload&amp;quot;: &amp;quot;&amp;quot;
+    }
+]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;nefry-btのプログラム&#34;&gt;Nefry BTのプログラム&lt;/h3&gt;
+
+&lt;p&gt;下記がNefry BT側のプログラムになります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;//Nefryがwifiにつながっているか確認、2.4Ghzにつなごう
+//できたtest.mosquitto.orgで使える！
+#include &amp;lt;Nefry.h&amp;gt;
+#include &amp;lt;WiFiClient.h&amp;gt;
+#include &amp;lt;PubSubClient.h&amp;gt;
+#include &amp;lt;ArduinoJson.h&amp;gt;
+#include&amp;quot;esp32-hal-ledc.h&amp;quot;
+#define URL &amp;quot;mosquitto.org&amp;quot;
+
+#define PWM_BITWIDTH 16
+
+int deg2pw(int deg, int bit){
+    double ms = ((double) deg - 90.0) * 0.95 / 90.0 + 1.45;
+    return (int) (ms / 20.0 * pow(2, bit));
+}
+
+IPAddress endpoint;
+const int port = 1883;
+
+const char *pubTopic;
+const char *subTopic;
+const char *deviceName;
+const char *mqtt_server = &amp;quot;test.mosquitto.org&amp;quot;;
+
+WiFiClient httpsClient;
+PubSubClient mqttClient(httpsClient);
+
+
+
+void setup() {
+  ledcSetup(0,50,PWM_BITWIDTH);
+  ledcAttachPin(A2,0);
+
+  //// NefryBT設定画面まわり ////////////////////////////////////////
+
+  // NefryBT
+  pubTopic = &amp;quot;/pub/NefryBT/SAMPLE&amp;quot;;
+  subTopic = &amp;quot;/sub/NefryBT/SAMPLE&amp;quot;;
+  deviceName = &amp;quot;NefryBT_SAMPLE&amp;quot;;  // 複数台で利用する場合は必ずかぶらないように変更する
+  // ローカルホストでMQTTブローカーを立てている場合は、パソコンのIPAddress型に収納。配列っぽく入れる。ここはその都度確認すること
+  //endpoint指定部
+  endpoint[0] = 192;
+  endpoint[1] = 168;
+  endpoint[2] = 43;
+  endpoint[3] = 105;
+
+  //// 以下通常処理 ////////////////////////////////////////
+
+  Serial.begin(115200);
+  //mqttClient.setServer()関数でMQTTブローカーを指定する
+  mqttClient.setServer(mqtt_server, port);
+  mqttClient.setCallback(mqttCallback);
+
+  connectMQTT();
+}
+
+//MQTTがちゃんと動いているか、つながっているかを判断  
+void connectMQTT() {
+    Serial.println(&amp;quot;connectMQTT&amp;quot;);
+    Serial.println(deviceName);
+    while (!mqttClient.connected()) {
+      Serial.print(&amp;quot;.&amp;quot;);
+        if (mqttClient.connect(deviceName)) {
+            Serial.println(&amp;quot;Connected.&amp;quot;);
+            int qos = 0;
+            mqttClient.subscribe(subTopic, qos);
+            Serial.println(&amp;quot;Subscribed.&amp;quot;);
+        } else {
+            Serial.print(&amp;quot;Failed. Error state=&amp;quot;);
+            Serial.print(mqttClient.state());
+            // Wait 5 seconds before retrying
+            delay(5000);
+        }
+    }
+}
+///////////////////////////////////////////////////////
+
+char pubMessage[128];
+
+void mqttCallback (char* topic, byte* payload, unsigned int length) {
+
+    String str = &amp;quot;&amp;quot;;
+    Serial.print(&amp;quot;Received. topic=&amp;quot;);
+    Serial.println(topic);
+    for (int i = 0; i &amp;lt; length; i++) {
+        Serial.print((char)payload[i]);
+        str += (char)payload[i];
+    }
+    Serial.print(&amp;quot;\n&amp;quot;);
+
+    StaticJsonBuffer&amp;lt;200&amp;gt; jsonBuffer;
+
+    JsonObject&amp;amp; root = jsonBuffer.parseObject(str);
+
+    // 読み取った文字列をパース
+    if (!root.success()) {
+      Serial.println(&amp;quot;parseObject() failed&amp;quot;);
+      return;
+    }
+//Node-REDから文字列を読み取ってくる部分//////
+    const char* message = root[&amp;quot;message&amp;quot;];
+    int motor = root[&amp;quot;motor&amp;quot;];
+////////////////////////////////////////////
+    Serial.print(&amp;quot;motor = &amp;quot;);
+    Serial.println(motor);
+///サーボモータを動かす処理//////////////////
+    if( motor == 1 ){
+       for(int i=90; i&amp;lt;=115; i++){
+          ledcWrite(0,deg2pw(i, PWM_BITWIDTH));
+       }
+       delay(800);
+       ledcWrite(0,deg2pw(90, PWM_BITWIDTH));
+    } else {
+       for(int i=90; i&amp;gt;=65; --i){//0～180°の位置で考える、90度が基準点としてそこからどう動くかを考える
+          ledcWrite(0,deg2pw(i, PWM_BITWIDTH));
+       }
+       delay(800);
+       ledcWrite(0,deg2pw(90, PWM_BITWIDTH));
+    }
+
+    Nefry.ndelay(1000);
+
+}
+//////////////////////////////////////////////
+
+//mqttを動かしている部分///////////////////////  
+void mqttLoop() {
+    if (!mqttClient.connected()) {
+        connectMQTT();
+    }
+    mqttClient.loop();
+}
+
+void loop() {
+  mqttLoop();
+ }
+//////////////////////////////////////////////
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;動作させてみると&#34;&gt;動作させてみると……&lt;/h3&gt;
+
+&lt;p&gt;このように、PC上から遠隔でサーボモータを制御できるようになります。
+&lt;img src=&#34;https://dotstud.io/img/blog/187/5.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;node-red-mqttでサーボモータをui-ブラウザ-から制御&#34;&gt;Node-RED×MQTTでサーボモータをUI（ブラウザ）から制御&lt;/h2&gt;
+
+&lt;p&gt;先ほどのプログラムはNode-RED上のボタンを押すとある角度回転するというものでした。次はそれを発展させて、&lt;strong&gt;ブラウザから操作して角度を遠隔で制御&lt;/strong&gt;してみます。&lt;/p&gt;
+
+&lt;p&gt;ハンズオンでは、製作途中にタイムアップしてしまいました。少し難易度高めです。&lt;/p&gt;
+
+&lt;h3 id=&#34;node-redのフローのコード-1&#34;&gt;Node-REDのフローのコード&lt;/h3&gt;
+
+&lt;p&gt;下記のNode-REDのフローのコードをNode-REDにコピーして使いましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;f2dc1b0b.520f98&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;mqtt out&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;fab71764.66ef78&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;topic&amp;quot;: &amp;quot;servo/pan&amp;quot;,
+        &amp;quot;qos&amp;quot;: &amp;quot;1&amp;quot;,
+        &amp;quot;retain&amp;quot;: &amp;quot;false&amp;quot;,
+        &amp;quot;broker&amp;quot;: &amp;quot;954b988c.ec1e08&amp;quot;,
+        &amp;quot;x&amp;quot;: 520,
+        &amp;quot;y&amp;quot;: 400,
+        &amp;quot;wires&amp;quot;: []
+    },
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;954b988c.ec1e08&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;mqtt-broker&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;broker&amp;quot;: &amp;quot;https://test.mosquitto.org/&amp;quot;,
+        &amp;quot;port&amp;quot;: &amp;quot;1883&amp;quot;,
+        &amp;quot;clientid&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;usetls&amp;quot;: false,
+        &amp;quot;compatmode&amp;quot;: true,
+        &amp;quot;keepalive&amp;quot;: &amp;quot;60&amp;quot;,
+        &amp;quot;cleansession&amp;quot;: true,
+        &amp;quot;birthTopic&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;birthQos&amp;quot;: &amp;quot;0&amp;quot;,
+        &amp;quot;birthPayload&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;closeTopic&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;closePayload&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;willTopic&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;willQos&amp;quot;: &amp;quot;0&amp;quot;,
+        &amp;quot;willPayload&amp;quot;: &amp;quot;&amp;quot;
+    }
+]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;nefry-btのプログラム-1&#34;&gt;Nefry BTのプログラム&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;
+#include &amp;lt;Nefry.h&amp;gt;
+#include &amp;lt;WiFiClient.h&amp;gt;
+#include &amp;lt;PubSubClient.h&amp;gt;
+#include &amp;lt;ArduinoJson.h&amp;gt;
+//esp32でPWMを使えるようにするためのライブラリー//
+#include&amp;quot;esp32-hal-ledc.h&amp;quot;
+//////////////////////////////////////////////
+
+//分解能//////////////////////////////////////
+#define PWM_BITWIDTH 16
+//////////////////////////////////////////////
+
+//PWM制御：周波数-&amp;gt;角度に変換(プログラムするときにわかりやすい)//
+int deg2pw(int deg, int bit){
+    double ms = ((double) deg - 90.0) * 0.95 / 90.0 + 1.45;
+    return (int) (ms / 20.0 * pow(2, bit));
+}
+////////////////////////////////////////////////////////////
+
+
+IPAddress endpoint;
+const int port = 1883;
+
+const char *pubTopic;
+const char *subTopic;
+const char *deviceName;
+const char *mqtt_server = &amp;quot;test.mosquitto.org&amp;quot;;
+
+WiFiClient httpsClient;
+PubSubClient mqttClient(httpsClient);
+
+
+
+void setup() {
+  ledcSetup(0,50,PWM_BITWIDTH);
+  ledcAttachPin(A1,0);
+
+  //// NefryBT設定 ////////////////////////////////////////
+
+  // NefryBT
+  pubTopic = &amp;quot;/pub/NefryBT/SAMPLE&amp;quot;;
+  subTopic = &amp;quot;/sub/NefryBT/SAMPLE&amp;quot;;
+  deviceName = &amp;quot;NefryBT_SAMPLE&amp;quot;;  // 複数台で利用する場合は必ずかぶらないように変更する
+  // ローカルホストならパソコンのIPAddress型に収納。配列っぽく入れる。ここはその都度確認すること
+  //mosquittoのテストサーバーを使うときは下記のednpointは気にしなくて大丈夫です
+  endpoint[0] = 192;
+  endpoint[1] = 168;
+  endpoint[2] = 1;
+  endpoint[3] = 1;
+
+  ////////////////////////////////////////////
+
+  Serial.begin(115200);
+
+  mqttClient.setServer(mqtt_server, port);
+  mqttClient.setCallback(mqttCallback);
+
+  connectMQTT();
+}
+
+void connectMQTT() {
+    Serial.println(&amp;quot;connectMQTT&amp;quot;);
+    Serial.println(deviceName);
+    while (!mqttClient.connected()) {
+      Serial.print(&amp;quot;.&amp;quot;);
+        if (mqttClient.connect(deviceName)) {
+            Serial.println(&amp;quot;Connected.&amp;quot;);
+            int qos = 0;
+            mqttClient.subscribe(subTopic, qos);
+            Serial.println(&amp;quot;Subscribed.&amp;quot;);
+        } else {
+            Serial.print(&amp;quot;Failed. Error state=&amp;quot;);
+            Serial.print(mqttClient.state());
+            // Wait 5 seconds before retrying
+            delay(5000);
+        }
+    }
+}
+
+char pubMessage[128];
+
+void mqttCallback (char* topic, byte* payload, unsigned int length) {
+
+    String str = &amp;quot;&amp;quot;;
+    Serial.print(&amp;quot;Received. topic=&amp;quot;);
+    Serial.println(topic);
+    for (int i = 0; i &amp;lt; length; i++) {
+        Serial.print((char)payload[i]);
+        str += (char)payload[i];
+    }
+    Serial.print(&amp;quot;\n&amp;quot;);
+
+    StaticJsonBuffer&amp;lt;200&amp;gt; jsonBuffer;
+
+    JsonObject&amp;amp; root = jsonBuffer.parseObject(str);
+
+    // パースが成功かどうか判断
+    if (!root.success()) {
+      Serial.println(&amp;quot;parseObject() failed&amp;quot;);
+      return;
+    }
+
+    const char* message = root[&amp;quot;message&amp;quot;];
+    int takudooon = root[&amp;quot;takudooon&amp;quot;];
+
+    Serial.print(&amp;quot;takudooon = &amp;quot;);
+    Serial.println(takudooon);
+
+    if( takudooon == 1 ){
+       for(int i=90; i&amp;lt;=115; i++){
+          ledcWrite(0,deg2pw(i, PWM_BITWIDTH));
+       }
+       delay(800);
+       ledcWrite(0,deg2pw(90, PWM_BITWIDTH));
+    } else {
+       for(int i=90; i&amp;gt;=65; --i){//0～180°の位置で考える、90度が基準点としてそこからどう動くかを考える
+          ledcWrite(0,deg2pw(i, PWM_BITWIDTH));
+       }
+       delay(800);
+       ledcWrite(0,deg2pw(90, PWM_BITWIDTH));
+    }
+
+    Nefry.ndelay(1000);
+
+}
+
+void mqttLoop() {
+    if (!mqttClient.connected()) {
+        connectMQTT();
+    }
+    mqttClient.loop();
+}
+
+void loop() {
+  mqttLoop();
+ }
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;操作画面を用意&#34;&gt;操作画面を用意&lt;/h3&gt;
+
+&lt;p&gt;それぞれのプログラムが準備できたら、Node-REDの画面から、
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/187/6.png&#34; alt=&#34;6&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;p&gt;URLの「&lt;code&gt;http://localhost:1880&lt;/code&gt;」を「&lt;code&gt;http://localhost:1880/ui&lt;/code&gt;」と記述すると以下のような操作画面があらわれます。ここから、直感的にサーボモータの角度を遠隔制御できるようになります。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/187/7.png&#34; alt=&#34;7&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;h3 id=&#34;実際に動かすと&#34;&gt;実際に動かすと……&lt;/h3&gt;
+
+&lt;p&gt;このようになります。
+&lt;img src=&#34;https://dotstud.io/img/blog/187/8.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;いろいろな技術を知ることでモノづくりの幅が増え、作ってみたいものを自由に作れるようになってもらえればな、と思います。&lt;/p&gt;
+
+&lt;p&gt;では！&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>ClovaとNefryBT（ESP32）を連携させてみよう</title>
@@ -28,6 +789,9 @@
 
 
 &lt;section class=&#34;link&#34; id=&#34;183&#34;&gt;
+  
+      
+      
   
       
       
@@ -1428,6 +2192,9 @@ clovaを選択しましょう。&lt;/p&gt;
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/keyboard-kintai-system-diy/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/183/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -2421,6 +3188,9 @@ void iftttClovaPost(String message){
 
 
 &lt;section class=&#34;link&#34; id=&#34;155&#34;&gt;
+  
+      
+      
   
       
       
@@ -4181,6 +4951,9 @@ String escapeParameter(String param) {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/face-robot-making-maruko/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/172/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -5601,6 +6374,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/face-robot-making-maruko/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/172/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -6676,6 +7452,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nodejs-alexa-skill-mp3/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/163/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -7331,6 +8110,9 @@ void loop() {
 
 
 &lt;section class=&#34;link&#34; id=&#34;144&#34;&gt;
+  
+      
+      
   
       
       
@@ -9027,6 +9809,9 @@ void loop(){
 
 
 &lt;section class=&#34;link&#34; id=&#34;098&#34;&gt;
+  
+      
+      
   
       
       
@@ -11400,6 +12185,9 @@ Nefry BTは&lt;strong&gt;最初からWi-Fi・BLE機能がついた開発ボー�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/aogaku-iot-course-report/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/112/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -11904,6 +12692,9 @@ Nefry BTは&lt;strong&gt;最初からWi-Fi・BLE機能がついた開発ボー�
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;121&#34;&gt;
+  
+      
+      
   
       
       
@@ -14248,6 +15039,9 @@ AlexaスキルもGoogle Homeスキルも複数公開してみた君塚さん。�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/microbit-getting-started-pokio/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/165/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -15364,2387 +16158,6 @@ AlexaスキルもGoogle Homeスキルも複数公開してみた君塚さん。�
 &lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
 
 &lt;p&gt;非常にシンプルなプログラムではありましたが、radio通信の設定が非常に簡単で使いやすく、スムーズに通信できたのでmicro:bit愛が深まりました。次はBluetooth Low Energyによる通信を試して、micro:bitをより身近なものにしていきたいですね！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>NodeSchoolでNode.jsの学習を始めよう！#2 - 問題1〜3の解答と解説</title>
-      <link>https://dotstud.io/blog/node-school-1-3/</link>
-      <pubDate>Fri, 18 May 2018 10:00:00 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/node-school-1-3/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、ちゃんとくです！&lt;/p&gt;
-
-&lt;p&gt;前回の記事で、&lt;strong&gt;NodeSchoolの概要と基本の解き方&lt;/strong&gt;を紹介しました。
-
-
-&lt;section class=&#34;link&#34; id=&#34;156&#34;&gt;
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-          &lt;div class=&#34;link_content&#34;&gt;
-          &lt;a href=&#34;https://dotstud.io/blog/node-school-before-learn/&#34;&gt;&lt;/a&gt;
-          &lt;img src=&#34;https://dotstud.io/img/blog/156/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
-          &lt;/div&gt;
-          &lt;div class=&#34;link_content&#34;&gt;
-            &lt;div class=&#34;link_detail&#34;&gt;
-              &lt;div class=&#34;link_title&#34;&gt;
-                NodeSchoolでNode.jsの学習を始めよう！インストール手順から基本操作までステップ別解説
-              &lt;/div&gt;
-              &lt;div class=&#34;link_date&#34;&gt;
-                
-                2018-04-20
-              &lt;/div&gt;
-              &lt;div class=&#34;link_desc&#34;&gt;
-                NodeSchoolでNode.jsの学習を進めていきましょう！意外とつまづきやすい操作方法や問題の解き方をステップ別に解説します。
-              &lt;/div&gt;
-            &lt;/div&gt;
-          &lt;/div&gt;
-        &lt;/section&gt;
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-&lt;/section&gt;
-&lt;/p&gt;
-
-&lt;p&gt;今回はカリキュラム「&lt;strong&gt;learnyounode&lt;/strong&gt;」の問題1〜3の解答を解説付きで紹介したいと思います！&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;&lt;font size=2&gt;※筆者はMacユーザのため、基本的にMacに沿った説明になっています。Windows向けの説明も書いていますが、わからないときは適宜調べてみてください。&lt;/font&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h2 id=&#34;はじめに&#34;&gt;はじめに&lt;/h2&gt;
-
-&lt;p&gt;さっそく問題を解いていきましょう。インストール方法や基本の解き方は前回記事をチェック！
-
-
-&lt;section class=&#34;link&#34; id=&#34;156&#34;&gt;
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-          &lt;div class=&#34;link_content&#34;&gt;
-          &lt;a href=&#34;https://dotstud.io/blog/node-school-before-learn/&#34;&gt;&lt;/a&gt;
-          &lt;img src=&#34;https://dotstud.io/img/blog/156/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
-          &lt;/div&gt;
-          &lt;div class=&#34;link_content&#34;&gt;
-            &lt;div class=&#34;link_detail&#34;&gt;
-              &lt;div class=&#34;link_title&#34;&gt;
-                NodeSchoolでNode.jsの学習を始めよう！インストール手順から基本操作までステップ別解説
-              &lt;/div&gt;
-              &lt;div class=&#34;link_date&#34;&gt;
-                
-                2018-04-20
-              &lt;/div&gt;
-              &lt;div class=&#34;link_desc&#34;&gt;
-                NodeSchoolでNode.jsの学習を進めていきましょう！意外とつまづきやすい操作方法や問題の解き方をステップ別に解説します。
-              &lt;/div&gt;
-            &lt;/div&gt;
-          &lt;/div&gt;
-        &lt;/section&gt;
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-&lt;/section&gt;
-&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ cd /your/working/directory
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;まずは解答用のファイルを作成するディレクトリに移動します。パスはご自身のものに置き換えてください。&lt;/p&gt;
-
-&lt;p&gt;おさらいですが、&lt;strong&gt;&lt;code&gt;$&lt;/code&gt;マークはコマンドラインであることを表しているので不要&lt;/strong&gt;ですよ！&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ learnyounode
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;「&lt;strong&gt;learnyounode&lt;/strong&gt;」コマンドでNodeSchoolのカリキュラムを起動します。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/157/1.png&#34; alt=&#34;1&#34;&gt;
-
-&lt;/center&gt;
-
-こんな画面が立ち上がりましたか？カーソルキーで問題を選択します。1問目の「&lt;strong&gt;こんにちは世界&lt;/strong&gt;」からやっていきましょう！&lt;/p&gt;
-
-&lt;h2 id=&#34;問題1-こんにちは世界&#34;&gt;問題1「こんにちは世界」&lt;/h2&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;div class=&#34;question&#34;&gt;
-  &lt;div style=&#34;background: #696969; padding: 4px; text-align: center;color: #fff; font-weight: bold;border-radius: 5px 5px 0 0;&#34;&gt;問題1「こんにちは世界」&lt;/div&gt;
-  &lt;p style=&#34;padding: 0 15px 20px 15px;&#34;&gt;コンソール (stdout) に &amp;ldquo;こんにちは世界&amp;rdquo;と出力するアプリを書いてください。&lt;/p&gt;
-&lt;/div&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;問題の「コンソール」とは&lt;strong&gt;今表示しているコマンドラインツール&lt;/strong&gt;、「アプリ」とはここでは「&lt;strong&gt;Node.jsのプログラム&lt;/strong&gt;」を意味しています。&lt;/p&gt;
-
-&lt;p&gt;この問題は「&lt;u&gt;実行するとコマンドラインに&amp;rdquo;こんにちは世界&amp;rdquo;と表示させるプログラムを書いてみましょう&lt;/u&gt;」ということです。&lt;/p&gt;
-
-&lt;p&gt;ヒントを読んでみると、&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Node.jsのアプリを作るためには .jsという拡張子を持つファイルを新規に作ってJavaScriptを書くだけです。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;とあるので、&lt;code&gt;.js&lt;/code&gt;という拡張子のファイルを作りましょう。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/157/2.png&#34; alt=&#34;2&#34;&gt;
-
-&lt;/center&gt;
-
-今回は1.jsというファイルを作ったので、エディタでファイルを開き、編集していきます。（操作がよくわからないという方は&lt;a href=&#34;https://dotstud.io/blog/node-school-before-learn/&#34;&gt;前回記事&lt;/a&gt;を確認！）&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/157/3.png&#34; alt=&#34;3&#34;&gt;
-
-&lt;/center&gt;
-
-さらにヒントを読んでいくと、&lt;code&gt;console.log(&amp;quot;text&amp;quot;)&lt;/code&gt;と書くとコンソールに出力できます、とありますね。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;console.log()&lt;/code&gt;は「&lt;strong&gt;渡したものをコンソールに表示してね&lt;/strong&gt;」という命令です。関数の&lt;code&gt;()&lt;/code&gt;に入れたものは「&lt;strong&gt;引数&lt;/strong&gt;」と呼ばれ、関数に渡されます。&lt;/p&gt;
-
-&lt;p&gt;上記は&lt;code&gt;console.log()&lt;/code&gt;というメソッドに、&lt;code&gt;&amp;quot;text&amp;quot;&lt;/code&gt;という引数を渡している状態です。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;&amp;quot;&amp;quot;&lt;/code&gt;（または&lt;code&gt;&#39;&#39;&lt;/code&gt;）は、型が「&lt;strong&gt;文字列&lt;/strong&gt;」であることを表しています（その他の型は今後登場します）。&lt;/p&gt;
-
-&lt;p&gt;つまり「こんにちは世界」という文字列を表示させたい場合は、&lt;code&gt;console.log()&lt;/code&gt;の引数に&lt;code&gt;&amp;quot;こんにちは世界&amp;quot;&lt;/code&gt;を渡してあげればよいですね！&lt;/p&gt;
-
-&lt;h3 id=&#34;解答&#34;&gt;解答&lt;/h3&gt;
-
-&lt;pre&gt;&lt;code&gt;console.log(&amp;quot;こんにちは世界&amp;quot;);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;解答用のファイルに、上記のプログラムを書き込みましょう。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ node 1.js
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Node.jsでファイルを実行して試してみます。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/157/4.png&#34; alt=&#34;4&#34;&gt;
-
-&lt;/center&gt;
-
-こんにちは世界、と表示されました。これで良さそうですね！&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ learnyounode verify 1.js
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;上記コマンドを実行して答え合わせをします。正解したら次の問題へ進みましょう！&lt;/p&gt;
-
-&lt;h2 id=&#34;問題2-ベイビーステップ&#34;&gt;問題2「ベイビーステップ」&lt;/h2&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;div class=&#34;question&#34;&gt;
-  &lt;div style=&#34;background: #696969; padding: 4px; text-align: center;color: #fff; font-weight: bold;border-radius: 5px 5px 0 0;&#34;&gt;問題2「ベイビーステップ」&lt;/div&gt;
-  &lt;p style=&#34;padding: 0 15px 20px 15px;&#34;&gt;1つ以上の整数をコマンドライン引数として受け取り、それらを足し合わせた値をコンソール(stdout)に出力するコマンドラインアプリを書いてください。&lt;/p&gt;
-&lt;/div&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;ちょっとレベルが上がりました。先ほどは関数に直接引数を渡しましたが、「&lt;strong&gt;コマンドライン引数&lt;/strong&gt;」は、コマンドラインからプログラムに渡すものを指します。&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;コマンドライン引数を読むためにはグローバル変数の process というオブジェクトが使えます。process には argv という配列のプロパティがあります。その配列の中には全てのコマンドライン引数が入っています。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;とヒントに書いてあります。&lt;/p&gt;
-
-&lt;p&gt;まず&lt;code&gt;process.argv&lt;/code&gt;の挙動を探るため、&lt;code&gt;console.log()&lt;/code&gt;を使って表示させてみましょう。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;console.log(process.argv);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;上記のようなプログラムを書いた&lt;code&gt;.js&lt;/code&gt;ファイルを作成します（&lt;code&gt;2.js&lt;/code&gt;というファイルにしました）。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ node 2.js &amp;quot;hello&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;プログラムに&lt;code&gt;&amp;quot;hello&amp;quot;&lt;/code&gt;という文字列を渡してみます。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/157/5.png&#34; alt=&#34;5&#34;&gt;
-
-&lt;/center&gt;
-
-こんな感じの答えが返ってきました。&lt;code&gt;[]&lt;/code&gt;は「&lt;strong&gt;配列&lt;/strong&gt;」を表していて、&lt;code&gt;,&lt;/code&gt;で区切られた3つの要素が入っています。&lt;/p&gt;
-
-&lt;p&gt;1つ目の要素の&lt;code&gt;/Users/yuka/.nodebrew/node/v9.3.0/bin/node&lt;/code&gt;は皆さんのNode.jsがインストールされているパス、2つ目の要素の&lt;code&gt;/Users/yuka/workspace/nodeschool/learnyounode/2.js&lt;/code&gt;は今実行したファイルのパス、3つ目の要素には&lt;strong&gt;渡したコマンドライン引数&lt;/strong&gt;が入っています。&lt;/p&gt;
-
-&lt;p&gt;コマンドライン引数を表示させるには、&lt;strong&gt;&lt;code&gt;process.argv&lt;/code&gt;の3つ目の要素&lt;/strong&gt;を取り出してあげると良さそうです！&lt;/p&gt;
-
-&lt;p&gt;試しにこんなプログラムを書いてみましょう。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;console.log(process.argv[2]);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;配列の中身の位置を指定して取り出すには、&lt;code&gt;[]&lt;/code&gt;を使います。配列の序列は0から始まるので、3つ目の要素は「0,1,2」で「2」となります。&lt;/p&gt;
-
-&lt;p&gt;このファイルに、先ほどと同様&lt;code&gt;&amp;quot;hello&amp;quot;&lt;/code&gt;を渡してみます。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/157/6.png&#34; alt=&#34;6&#34;&gt;
-
-&lt;/center&gt;
-
-コマンドライン引数だけを表示することができました！&lt;/p&gt;
-
-&lt;p&gt;では&lt;strong&gt;いくつかの引数を渡して足し算するプログラム&lt;/strong&gt;を書いてみます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;console.log(process.argv[2]+process.argv[3]);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;こんなプログラムを書いてみます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ node 2.js 1 1
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;実行して試してみます。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/157/7.png&#34; alt=&#34;7&#34;&gt;
-
-&lt;/center&gt;
-
-「2」となって欲しいところ、「11」となってしまいました。&lt;/p&gt;
-
-&lt;p&gt;これは、「1」という文字列と「1」という文字列をくっつけた結果になってしまっています（ちょっとわからない、という人は&lt;code&gt;$ node 2.js &amp;quot;hel&amp;quot; &amp;quot;lo&amp;quot;&lt;/code&gt;など実行してみてください）。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;process.argv&lt;/code&gt;の要素は全て文字列になるので、プログラムには「&lt;strong&gt;これは数字だよ！&lt;/strong&gt;」と教えてあげないと、わかってくれないんですね。&lt;/p&gt;
-
-&lt;p&gt;ヒントを読んでみると、数字に変換する方法が書いてあります。&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;変換するには、数字の前に + を書きます。Number()を使う方法もあります。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;数字の前に&lt;code&gt;+&lt;/code&gt;をつけるか、&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;console.log(+process.argv[2] + +process.argv[3]);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;Number()&lt;/code&gt;という関数を使って文字列を数字に変換してあげます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;console.log(Number(process.argv[2]) + Number(process.argv[3]));
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;エラーが出てしまった人は、&lt;code&gt;Number()&lt;/code&gt;の頭文字が大文字になっているか、()の数が合っているかなど確認してみてくださいね。&lt;/p&gt;
-
-&lt;h2 id=&#34;問題3-初めてのi-o&#34;&gt;問題3「初めてのI/O！」&lt;/h2&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;div class=&#34;question&#34;&gt;
-  &lt;div style=&#34;background: #696969; padding: 4px; text-align: center;color: #fff; font-weight: bold;border-radius: 5px 5px 0 0;&#34;&gt;問題3「初めてのI/O！」&lt;/div&gt;
-  &lt;p style=&#34;padding: 0 15px 20px 15px;&#34;&gt;同期処理をするファイルシステムの関数を使ってファイルの改行文字(\n)の数を出力するアプリを書いてください。&lt;/p&gt;
-&lt;/div&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;style&gt;
-.question {
-  margin: 2em 0;
-  background: #f1f1f1;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.22);
-  max-width: 450px;
-  color: #696969;
-}
-&lt;/style&gt;
-
-&lt;p&gt;3問目です。この問題は少し難しいので、「ファイルの中身を取り出す」ステップと、「改行を数える」ステップに分けてみます。&lt;/p&gt;
-
-&lt;h3 id=&#34;ファイルの中身を取り出す&#34;&gt;ファイルの中身を取り出す&lt;/h3&gt;
-
-&lt;p&gt;「&lt;strong&gt;同期処理？ファイルシステムの関数？？？&lt;/strong&gt;」となりますね。&lt;/p&gt;
-
-&lt;p&gt;Node.jsには、あらかじめ色々な関数を用意してくれているモジュール（パッケージのようなもの）があります。その一つが&lt;code&gt;fs&lt;/code&gt;（file system）というモジュールです。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;fs&lt;/code&gt;には、ファイルを扱うためのいろいろな関数が用意されています。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;var fs = require(&#39;fs&#39;);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;モジュールを呼び出すためには、上記のように記述します。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;var&lt;/code&gt;は、「&lt;strong&gt;変数の宣言&lt;/strong&gt;」です（最近は&lt;code&gt;var&lt;/code&gt;ではなく&lt;code&gt;const&lt;/code&gt;が推奨）。&lt;code&gt;var fs&lt;/code&gt;の&lt;code&gt;fs&lt;/code&gt;は「&lt;strong&gt;変数名&lt;/strong&gt;」で、任意の名前を付けられます。「fs」という名前の箱に、&lt;code&gt;require(&#39;fs&#39;)&lt;/code&gt;の結果を収納しているイメージです。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;require()&lt;/code&gt;は&lt;strong&gt;モジュールを呼び出す関数&lt;/strong&gt;、引数には文字列で&lt;strong&gt;モジュールの名前&lt;/strong&gt;を渡します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;var fs = require(&#39;fs&#39;);
-console.log(fs.readFileSync(process.argv[2]));
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;3.js&lt;/code&gt;というファイルを作って、上記のようなプログラムで&lt;code&gt;fs&lt;/code&gt;の機能を試してみましょう。ヒントによると&lt;code&gt;fs.readFileSync()&lt;/code&gt;の引数には読み込むファイルのパスを指定するので、コマンドライン引数で渡すようにしてみます。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/157/8.png&#34; alt=&#34;8&#34;&gt;
-
-&lt;/center&gt;
-
-読み込みを試す用に、&lt;code&gt;sample.txt&lt;/code&gt;というテキストファイルを作ってみました。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ node 3.js ./sample.txt
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;実行して試してみます（&lt;code&gt;./&lt;/code&gt;は現在の位置です）。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/157/9.png&#34; alt=&#34;9&#34;&gt;
-
-&lt;/center&gt;
-
-こんな結果が出ました。「なんじゃこりゃ！」ですね&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;readFileSync()&lt;/code&gt;は「Bufferオブジェクト」という形式でファイルの中身を返します。これを文字列に変換するには、&lt;code&gt;toString()&lt;/code&gt;という関数を使います。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;var fs = require(&#39;fs&#39;);
-
-var buf = fs.readFileSync(process.argv[2]);
-var text = buf.toString();
-
-console.log(text);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;取り出したものを変換してから&lt;code&gt;console.log()&lt;/code&gt;してみましょう。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/157/10.png&#34; alt=&#34;10&#34;&gt;
-
-&lt;/center&gt;
-
-文字列として取り出すことができました！&lt;/p&gt;
-
-&lt;h3 id=&#34;改行を数える&#34;&gt;改行を数える&lt;/h3&gt;
-
-&lt;p&gt;改行を数えるには、ヒントのように&lt;code&gt;split()&lt;/code&gt;を使ってみます。&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;JavaScriptの String は .split() 関数を使って分割出来ます。\n を区切り文字として使えば String を1行ずつに分割した Array を受け取ることが出来ます。ただし、ファイルの最後の改行には気をつけてください。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;下記のようなプログラムで、文字列を&lt;code&gt;\n&lt;/code&gt;で分割してみます（&lt;code&gt;\n&lt;/code&gt;は改行を表しています）。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;var fs = require(&#39;fs&#39;);
-
-var buf = fs.readFileSync(process.argv[2]);
-var text = buf.toString();
-
-var array = text.split(&#39;\n&#39;);
-console.log(array);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;実行してみます。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/157/11.png&#34; alt=&#34;11&#34;&gt;
-
-&lt;/center&gt;
-
-ファイルの中身を&lt;code&gt;\n&lt;/code&gt;で区切ることができました！&lt;/p&gt;
-
-&lt;p&gt;ただし、ヒントにあるように、最後に意図しない&lt;code&gt;&#39;&#39;&lt;/code&gt;が入っていますね。これはファイルの最後には改行が入るようになっているためです。&lt;/p&gt;
-
-&lt;p&gt;なので、改行の数を数えるには「要素の数 - 1」をしてあげればよさそうです。&lt;/p&gt;
-
-&lt;p&gt;「こんな関数使いたい！」というときは「JavaScript 配列 要素 数える」などと検索してみましょう。配列の要素を数えるためには、&lt;code&gt;Array.length&lt;/code&gt;というプロパティを使います。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;var fs = require(&#39;fs&#39;);
-
-var buf = fs.readFileSync(process.argv[2]);
-var text = buf.toString();
-
-var array = text.split(&#39;\n&#39;);
-var n_num = array.length - 1;
-
-console.log(n_num);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;上記のように、&lt;code&gt;配列.length&lt;/code&gt;で要素数を数え、最後の改行分の1を引いてみます。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/157/12.png&#34; alt=&#34;12&#34;&gt;
-
-&lt;/center&gt;
-
-意図した数字になりました！&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;$ learnyounode verify 3.js&lt;/code&gt;で答え合わせです。&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;これで「learnyounode」の1〜3問目は終了です。&lt;strong&gt;お疲れ様でした！&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;プログラミングを初めて学ぶ方は、新しい情報が多く難しく感じたかもしれません。でも問題を解きながら変数や関数に慣れていけば、&lt;strong&gt;「おっ、こういうことか」とわかる瞬間&lt;/strong&gt;がくるはずです！&lt;/p&gt;
-
-&lt;p&gt;めげずにNode.js勉強頑張っていきましょう！&lt;/p&gt;
 </description>
     </item>
     
