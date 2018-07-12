@@ -7,8 +7,3284 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2018 dotstudio inc.</copyright>
-    <lastBuildDate>Tue, 03 Apr 2018 10:00:26 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 12 Jul 2018 10:00:00 +0900</lastBuildDate>
     <atom:link href="/series/nefrybt/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>PWM制御をマスターしよう！Node-REDでサーボモータを遠隔制御する方法＆初ハンズオンレポート</title>
+      <link>https://dotstud.io/blog/nefry-servo-handson-takudooon/</link>
+      <pubDate>Thu, 12 Jul 2018 10:00:00 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nefry-servo-handson-takudooon/</guid>
+      
+      <description>
+
+&lt;h2 id=&#34;暑さ本番-いよいよ大好きな生ビールの季節がやってまいりました&#34;&gt;暑さ本番、いよいよ大好きな生ビールの季節がやってまいりました！&lt;/h2&gt;
+
+&lt;p&gt;みなさまいかがお過ごしでしょうか？どうも、宇宙エンジニアの&lt;a href=&#34;https://dotstud.io/members/takudooon&#34;&gt;たくろーどん&lt;/a&gt;です。毎日、暑いですね。&lt;/p&gt;
+
+&lt;p&gt;さて先日、&lt;strong&gt;初めてハンズオンイベント&lt;/strong&gt;を企画・実施してみました！題して、「&lt;a href=&#34;https://dotstudio.connpass.com/event/91695/&#34;&gt;&lt;strong&gt;【IoT】PWM制御をマスター！Nefry BT+Node-REDでサーボモータを遠隔制御&lt;/strong&gt;&lt;/a&gt;」！&lt;/p&gt;
+
+&lt;p&gt;「モノづくりをしたい！」「こんなものをつくりたい！」と思っても「&lt;strong&gt;こういう技術がつかえる&lt;/strong&gt;」ということを知らないと、なかなかモノづくりが進みません。&lt;/p&gt;
+
+&lt;p&gt;なので、動くものを作りたいときに便利な&lt;u&gt;&lt;strong&gt;サーボモータとその制御方法であるPWM制御&lt;/strong&gt;をマスターし、&lt;strong&gt;PCからサーボモータを遠隔制御をしよう&lt;/strong&gt;&lt;/u&gt;というのがハンズオンの目論見です。&lt;/p&gt;
+
+&lt;p&gt;では、ちらっとハンズオンの内容を振り返ってみたいと思います。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/187/1.png&#34; alt=&#34;1&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;pwm制御を用いたプログラムの書き方&#34;&gt;PWM制御を用いたプログラムの書き方&lt;/h2&gt;
+
+&lt;h3 id=&#34;pwm制御について&#34;&gt;PWM制御について&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/pulse-width-modulation/&#34;&gt;PWM制御の大まかな説明&lt;/a&gt;は以前、ドキュメントに書きました。ようするに、PWM制御は「&lt;strong&gt;パルスのオン・オフ繰り返し切り替えることで出力される電力を制御&lt;/strong&gt;」するという意味です。&lt;/p&gt;
+
+&lt;p&gt;でも結局のところ、「&lt;strong&gt;PWM制御ってどんなイメージやねん！&lt;/strong&gt;」と多くの方が思うでしょう。&lt;/p&gt;
+
+&lt;p&gt;なので、これがわかりやすいのではないかという説明を思いつきました。それが、下記の動画です。
+&lt;img src=&#34;https://dotstud.io/img/blog/187/2.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;例えば、自宅から最寄りの駅まで走らなければならない状況を考えます。まるで、小学校の算数にでてくるたかしくんの問題を彷彿させますね。知らんけど。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;100%の力で走れば5分で駅につく ≒ 100%出力されるので、5V出力される&lt;/li&gt;
+&lt;li&gt;全力で走って途中で歩くと9分で駅に着く（全体的に80%の力で走る） ≒ 80%出力されるので、4V出力される&lt;/li&gt;
+&lt;li&gt;全力で走って途中で歩くと10分で駅に着く（全体的に50%の力で走る） ≒ 50%出力されるので、2.5V出力される&lt;/li&gt;
+&lt;li&gt;全力で走って途中で歩くと15分で駅に着く（全体的に10%の力で走る） ≒ 10%出力されるので、0.5V出力される&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;というようなイメージです。自宅から駅まで走る場合は走る速さの具合によって、到着時間が伸びます。しかし、電圧の場合は実行電圧（実際に出力される電圧）は下がっていきます。&lt;/p&gt;
+
+&lt;h3 id=&#34;esp32開発ボードでのプログラムについて&#34;&gt;ESP32開発ボードでのプログラムについて&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/nefrybt&#34;&gt;Nefry BT&lt;/a&gt;のようなESP32を搭載しているような開発ボードでPWM制御する場合は、ledc関数を使います。&lt;strong&gt;ESP32ではArduinoでつかうようなanalogWrite関数が実装されていない&lt;/strong&gt;とのことなので注意しましょう（ただし、今後変更される可能性があります）。&lt;/p&gt;
+
+&lt;p&gt;例えば、下記のようなプログラムになります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;
+//基本Iotは2.4GHz帯を使うこと
+#include&amp;lt;Nefry.h&amp;gt;
+#include&amp;quot;esp32-hal-ledc.h&amp;quot;
+
+//PWM信号の周波数をPWMをつくっているクロック周波数で割ったもの
+//ledcSetupでPWMの範囲を8bitに設定したとき、0～255　10bitのときは0～1023となる、2進数の話
+#define PWM_BITWIDTH 16
+
+//わかりやすいように角度に変換する関数/////////////////////
+int deg2pw(int deg, int bit){
+    double ms = ((double) deg - 90.0) * 0.95 / 90.0 + 1.45;
+    return (int) (ms / 20.0 * pow(2, bit));
+}
+//////////////////////////////////////////////////////////
+
+void setup() {
+  Serial.begin(115200);
+//ledcSetup(チャンネル数(0～),周波数(たとえばPWMサイクル20mHzなら50Hzになるという意味(SG90の場合))、分解能は任意(ただし限度はある))
+  ledcSetup(0,50,PWM_BITWIDTH);
+  ledcAttachPin(ピン番号,0);//left_motor
+  Nefry.enableSW();
+}
+
+void loop(){
+   if((Nefry.readSW())){
+      ledcWrite(0,deg2pw(90, PWM_BITWIDTH));
+      delay(800);
+      ledcWrite(0,deg2pw(0, PWM_BITWIDTH));
+   }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;プログラムの書き方&#34;&gt;プログラムの書き方&lt;/h3&gt;
+
+&lt;p&gt;プログラムを詳しく見てましょう。&lt;/p&gt;
+
+&lt;p&gt;ledc関数を使うため、ライブラリ「esp32-hal-ledc.h」を最初にインクルードします。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;#include&amp;quot;esp32-hal-ledc.h&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ライブラリ「esp32-hal-ledc.h」を使うときの主な関数は以下に示すものです。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;ledcSetup（チャンネル,周波数,分解能）&lt;/li&gt;
+&lt;li&gt;ledcAttachPin（ピン番号,チャンネル）：チャンネルはピン番号の識別番号です&lt;/li&gt;
+&lt;li&gt;ledcWrite（チャンネル,パルス幅）：設定した角度になるように与えるべきパルス幅を算出する関数&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;実際の記述は以下のようになります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;void setup() {
+    Serial.begin(115200);
+    ledcSetup(0,50,PWM_BITWIDTH);
+    ledcAttachPin(A2,0);//left_motor
+    Nefry.enableSW();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;分解能は&lt;strong&gt;どれだけ細かく制御するのか&lt;/strong&gt;を表しているイメージです。これは&lt;strong&gt;ビット数&lt;/strong&gt;で表します。&lt;/p&gt;
+
+&lt;p&gt;例えば、分解能を&lt;strong&gt;8ビットとするれば0〜255バイト&lt;/strong&gt;（2の8乗）、&lt;strong&gt;10ビットなら0〜1023バイト&lt;/strong&gt;（2の10乗）となります。&lt;/p&gt;
+
+&lt;p&gt;これを、どのようにPWM制御に使えるのか説明します。PWM制御とは一定電圧の入力から&lt;strong&gt;パルス列のオンとオフの一定周期を作り、オンの時間幅を変化させる電力制御方式&lt;/strong&gt;のことです。つまり、&lt;strong&gt;実効電圧を変化させる&lt;/strong&gt;ことができます。&lt;/p&gt;
+
+&lt;p&gt;なので、例えば、最大5[V]の出力を考えたとき、&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;分解能8ビットだと0→0[V]、127→2.5[V]、255→5[V]&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;分解能10ビットだと0→0[V]、511→2.5[V]、1023→5[V]&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;と表せます。分解能が大きい方が、細かい制御ができることがわかるかと思います。&lt;/p&gt;
+
+&lt;h2 id=&#34;node-red-mqttでサーボモータを遠隔制御&#34;&gt;Node-RED×MQTTでサーボモータを遠隔制御&lt;/h2&gt;
+
+&lt;h3 id=&#34;node-redとは&#34;&gt;Node-REDとは&lt;/h3&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/187/9.png&#34; alt=&#34;9&#34;&gt;
+
+&lt;/center&gt;
+
+&lt;a href=&#34;https://nodered.jp/&#34;&gt;Node-RED&lt;/a&gt;はハードウェアデバイス/APIおよびオンラインサービスを接続するためのツールです。ウェブ上で、フローチャートのように直感的にプログラムをつくることができます。そして、最終的に自分が欲しい仕組みを作り上げるというものです。&lt;/p&gt;
+
+&lt;p&gt;Node-REDを使うには大まかに2パターンあります。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;自分のPC上でローカルで動かす（今回はこちらで進めていきます）&lt;/li&gt;
+&lt;li&gt;外部のサービスを利用する（IBMクラウドやenebularなど）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;導入方法は、&lt;a href=&#34;https://qiita.com/minwinmin/private/6c13d2c912d0d7e8e197&#34;&gt;こちら&lt;/a&gt;で説明していますので参考にしてください。&lt;/p&gt;
+
+&lt;p&gt;また、後ほどNode-REDにフローのコードを貼り付ける必要があるので簡単に貼り付け方法を説明します。&lt;/p&gt;
+
+&lt;p&gt;まずフローのコードをコピーし、Node-REDを立ち上げたら右上のメニュー（3本線）をクリックします。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/187/10.png&#34; alt=&#34;10&#34;&gt;
+
+&lt;/center&gt;
+
+すると上記のような画面があらわれます。「読み込み」をクリックして、あらわれた画面にコピーしたコードを貼り付ければ完了です。&lt;/p&gt;
+
+&lt;h3 id=&#34;mqttとは&#34;&gt;MQTTとは&lt;/h3&gt;
+
+&lt;p&gt;MQTTとは、&lt;strong&gt;多数のデバイスの間で短いメッセージを頻繁に送受信する&lt;/strong&gt;ことを想定した通信プロトコルです。つまりインフラのようなもの、もしくはメッセージを送受信するので土管のようなものをイメージすると良いかと思います。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/187/3.png&#34; alt=&#34;3&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;p&gt;MQTTは先ほど説明したような仕組みの名前です。なので、実際にメッセージを送受信するためにはMQTTブローカーが必要です。イメージは下記の画像のようになります。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/187/4.png&#34; alt=&#34;4&#34;&gt;
+
+&lt;/center&gt;
+
+MQTTブローカーを用意するには、いくつか方法があります（&lt;a href=&#34;http://acro-engineer.hatenablog.com/entry/2015/06/19/120000&#34;&gt;こちらのサイト&lt;/a&gt;にまとめられています）。今回、ハンズオンでつかったの以下の2パターンです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;ローカルホストでMQTTブローカーをたてる&lt;/strong&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/mcollina/mosca&#34;&gt;Mosca&lt;/a&gt;を利用する -&amp;gt; MQTT brokerのためのライブラリ（IBMクラウドのような外部サービスでNode-REDを使う場合、うまくいきませんでした）&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://test.mosquitto.org/&#34;&gt;mosquitto&lt;/a&gt;のテストサーバーを利用する&lt;/strong&gt;
+
+&lt;ul&gt;
+&lt;li&gt;これから記載するプログラムはこちらを使っています。&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;node-redのフローのコード&#34;&gt;Node-REDのフローのコード&lt;/h3&gt;
+
+&lt;p&gt;下記のNode-REDのフローのコードを、Node-REDにコピーして使いましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;7878093f.d68778&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;debug&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;782bda22.769d84&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;active&amp;quot;: true,
+        &amp;quot;tosidebar&amp;quot;: true,
+        &amp;quot;console&amp;quot;: false,
+        &amp;quot;tostatus&amp;quot;: false,
+        &amp;quot;complete&amp;quot;: &amp;quot;payload&amp;quot;,
+        &amp;quot;x&amp;quot;: 522.0130081176758,
+        &amp;quot;y&amp;quot;: 161.99999809265137,
+        &amp;quot;wires&amp;quot;: []
+    },
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;22ca4d97.8e3382&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;inject&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;782bda22.769d84&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;topic&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;payload&amp;quot;: &amp;quot;{\&amp;quot;motor\&amp;quot;:1}&amp;quot;,
+        &amp;quot;payloadType&amp;quot;: &amp;quot;json&amp;quot;,
+        &amp;quot;repeat&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;crontab&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;once&amp;quot;: false,
+        &amp;quot;onceDelay&amp;quot;: 0.1,
+        &amp;quot;x&amp;quot;: 220.01303100585938,
+        &amp;quot;y&amp;quot;: 244.00000190734863,
+        &amp;quot;wires&amp;quot;: [
+            [
+                &amp;quot;6b18ace.785b854&amp;quot;
+            ]
+        ]
+    },
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;6b18ace.785b854&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;mqtt out&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;782bda22.769d84&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;/sub/NefryBT/SAMPLE&amp;quot;,
+        &amp;quot;topic&amp;quot;: &amp;quot;/sub/NefryBT/SAMPLE&amp;quot;,
+        &amp;quot;qos&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;retain&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;broker&amp;quot;: &amp;quot;3890dddf.26f532&amp;quot;,
+        &amp;quot;x&amp;quot;: 508.0130386352539,
+        &amp;quot;y&amp;quot;: 293.9999957084656,
+        &amp;quot;wires&amp;quot;: []
+    },
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;e0581ff4.bce8a&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;inject&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;782bda22.769d84&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;topic&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;payload&amp;quot;: &amp;quot;{\&amp;quot;motor\&amp;quot;:0}&amp;quot;,
+        &amp;quot;payloadType&amp;quot;: &amp;quot;json&amp;quot;,
+        &amp;quot;repeat&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;crontab&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;once&amp;quot;: false,
+        &amp;quot;onceDelay&amp;quot;: 0.1,
+        &amp;quot;x&amp;quot;: 220.01303100585938,
+        &amp;quot;y&amp;quot;: 344.00000190734863,
+        &amp;quot;wires&amp;quot;: [
+            [
+                &amp;quot;6b18ace.785b854&amp;quot;
+            ]
+        ]
+    },
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;3dccf617.5970da&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;mqtt in&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;782bda22.769d84&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;topic&amp;quot;: &amp;quot;/sub/NefryBT/SAMPLE&amp;quot;,
+        &amp;quot;qos&amp;quot;: &amp;quot;2&amp;quot;,
+        &amp;quot;broker&amp;quot;: &amp;quot;cd2e6f9.ab8069&amp;quot;,
+        &amp;quot;x&amp;quot;: 235.09634399414062,
+        &amp;quot;y&amp;quot;: 159.3697967529297,
+        &amp;quot;wires&amp;quot;: [
+            [
+                &amp;quot;7878093f.d68778&amp;quot;
+            ]
+        ]
+    },
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;f5c8b0fb.93d8&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;comment&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;782bda22.769d84&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;Node-RED上に文字列表示&amp;quot;,
+        &amp;quot;info&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;x&amp;quot;: 237.09635162353516,
+        &amp;quot;y&amp;quot;: 114.08594131469727,
+        &amp;quot;wires&amp;quot;: []
+    },
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;47872155.bfb16&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;comment&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;782bda22.769d84&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;MQTTブローカー側に文字列を送信&amp;quot;,
+        &amp;quot;info&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;x&amp;quot;: 265.0130310058594,
+        &amp;quot;y&amp;quot;: 206.0104217529297,
+        &amp;quot;wires&amp;quot;: []
+    },
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;d5a5e79d.ec27a8&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;comment&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;782bda22.769d84&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;MQTTブローカー側に文字列を送信するためのフロー&amp;quot;,
+        &amp;quot;info&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;x&amp;quot;: 609.0130004882812,
+        &amp;quot;y&amp;quot;: 257.0104160308838,
+        &amp;quot;wires&amp;quot;: []
+    },
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;3700aeb9.5a7ec2&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;comment&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;782bda22.769d84&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;ｍosquittoのテストサーバーを利用&amp;quot;,
+        &amp;quot;info&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;x&amp;quot;: 265.0130310058594,
+        &amp;quot;y&amp;quot;: 52.010416984558105,
+        &amp;quot;wires&amp;quot;: []
+    },
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;3890dddf.26f532&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;mqtt-broker&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;broker&amp;quot;: &amp;quot;http://test.mosquitto.org/&amp;quot;,
+        &amp;quot;port&amp;quot;: &amp;quot;1883&amp;quot;,
+        &amp;quot;clientid&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;usetls&amp;quot;: false,
+        &amp;quot;compatmode&amp;quot;: true,
+        &amp;quot;keepalive&amp;quot;: &amp;quot;60&amp;quot;,
+        &amp;quot;cleansession&amp;quot;: true,
+        &amp;quot;birthTopic&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;birthQos&amp;quot;: &amp;quot;0&amp;quot;,
+        &amp;quot;birthPayload&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;closeTopic&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;closeQos&amp;quot;: &amp;quot;0&amp;quot;,
+        &amp;quot;closePayload&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;willTopic&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;willQos&amp;quot;: &amp;quot;0&amp;quot;,
+        &amp;quot;willPayload&amp;quot;: &amp;quot;&amp;quot;
+    },
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;cd2e6f9.ab8069&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;mqtt-broker&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;broker&amp;quot;: &amp;quot;http://test.mosquitto.org/&amp;quot;,
+        &amp;quot;port&amp;quot;: &amp;quot;1883&amp;quot;,
+        &amp;quot;clientid&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;usetls&amp;quot;: false,
+        &amp;quot;compatmode&amp;quot;: true,
+        &amp;quot;keepalive&amp;quot;: &amp;quot;60&amp;quot;,
+        &amp;quot;cleansession&amp;quot;: true,
+        &amp;quot;birthTopic&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;birthQos&amp;quot;: &amp;quot;0&amp;quot;,
+        &amp;quot;birthPayload&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;closeTopic&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;closeQos&amp;quot;: &amp;quot;0&amp;quot;,
+        &amp;quot;closePayload&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;willTopic&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;willQos&amp;quot;: &amp;quot;0&amp;quot;,
+        &amp;quot;willPayload&amp;quot;: &amp;quot;&amp;quot;
+    }
+]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;nefry-btのプログラム&#34;&gt;Nefry BTのプログラム&lt;/h3&gt;
+
+&lt;p&gt;下記がNefry BT側のプログラムになります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;//Nefryがwifiにつながっているか確認、2.4Ghzにつなごう
+//できたtest.mosquitto.orgで使える！
+#include &amp;lt;Nefry.h&amp;gt;
+#include &amp;lt;WiFiClient.h&amp;gt;
+#include &amp;lt;PubSubClient.h&amp;gt;
+#include &amp;lt;ArduinoJson.h&amp;gt;
+#include&amp;quot;esp32-hal-ledc.h&amp;quot;
+#define URL &amp;quot;mosquitto.org&amp;quot;
+
+#define PWM_BITWIDTH 16
+
+int deg2pw(int deg, int bit){
+    double ms = ((double) deg - 90.0) * 0.95 / 90.0 + 1.45;
+    return (int) (ms / 20.0 * pow(2, bit));
+}
+
+IPAddress endpoint;
+const int port = 1883;
+
+const char *pubTopic;
+const char *subTopic;
+const char *deviceName;
+const char *mqtt_server = &amp;quot;test.mosquitto.org&amp;quot;;
+
+WiFiClient httpsClient;
+PubSubClient mqttClient(httpsClient);
+
+
+
+void setup() {
+  ledcSetup(0,50,PWM_BITWIDTH);
+  ledcAttachPin(A2,0);
+
+  //// NefryBT設定画面まわり ////////////////////////////////////////
+
+  // NefryBT
+  pubTopic = &amp;quot;/pub/NefryBT/SAMPLE&amp;quot;;
+  subTopic = &amp;quot;/sub/NefryBT/SAMPLE&amp;quot;;
+  deviceName = &amp;quot;NefryBT_SAMPLE&amp;quot;;  // 複数台で利用する場合は必ずかぶらないように変更する
+  // ローカルホストでMQTTブローカーを立てている場合は、パソコンのIPAddress型に収納。配列っぽく入れる。ここはその都度確認すること
+  //endpoint指定部
+  endpoint[0] = 192;
+  endpoint[1] = 168;
+  endpoint[2] = 43;
+  endpoint[3] = 105;
+
+  //// 以下通常処理 ////////////////////////////////////////
+
+  Serial.begin(115200);
+  //mqttClient.setServer()関数でMQTTブローカーを指定する
+  mqttClient.setServer(mqtt_server, port);
+  mqttClient.setCallback(mqttCallback);
+
+  connectMQTT();
+}
+
+//MQTTがちゃんと動いているか、つながっているかを判断  
+void connectMQTT() {
+    Serial.println(&amp;quot;connectMQTT&amp;quot;);
+    Serial.println(deviceName);
+    while (!mqttClient.connected()) {
+      Serial.print(&amp;quot;.&amp;quot;);
+        if (mqttClient.connect(deviceName)) {
+            Serial.println(&amp;quot;Connected.&amp;quot;);
+            int qos = 0;
+            mqttClient.subscribe(subTopic, qos);
+            Serial.println(&amp;quot;Subscribed.&amp;quot;);
+        } else {
+            Serial.print(&amp;quot;Failed. Error state=&amp;quot;);
+            Serial.print(mqttClient.state());
+            // Wait 5 seconds before retrying
+            delay(5000);
+        }
+    }
+}
+///////////////////////////////////////////////////////
+
+char pubMessage[128];
+
+void mqttCallback (char* topic, byte* payload, unsigned int length) {
+
+    String str = &amp;quot;&amp;quot;;
+    Serial.print(&amp;quot;Received. topic=&amp;quot;);
+    Serial.println(topic);
+    for (int i = 0; i &amp;lt; length; i++) {
+        Serial.print((char)payload[i]);
+        str += (char)payload[i];
+    }
+    Serial.print(&amp;quot;\n&amp;quot;);
+
+    StaticJsonBuffer&amp;lt;200&amp;gt; jsonBuffer;
+
+    JsonObject&amp;amp; root = jsonBuffer.parseObject(str);
+
+    // 読み取った文字列をパース
+    if (!root.success()) {
+      Serial.println(&amp;quot;parseObject() failed&amp;quot;);
+      return;
+    }
+//Node-REDから文字列を読み取ってくる部分//////
+    const char* message = root[&amp;quot;message&amp;quot;];
+    int motor = root[&amp;quot;motor&amp;quot;];
+////////////////////////////////////////////
+    Serial.print(&amp;quot;motor = &amp;quot;);
+    Serial.println(motor);
+///サーボモータを動かす処理//////////////////
+    if( motor == 1 ){
+       for(int i=90; i&amp;lt;=115; i++){
+          ledcWrite(0,deg2pw(i, PWM_BITWIDTH));
+       }
+       delay(800);
+       ledcWrite(0,deg2pw(90, PWM_BITWIDTH));
+    } else {
+       for(int i=90; i&amp;gt;=65; --i){//0～180°の位置で考える、90度が基準点としてそこからどう動くかを考える
+          ledcWrite(0,deg2pw(i, PWM_BITWIDTH));
+       }
+       delay(800);
+       ledcWrite(0,deg2pw(90, PWM_BITWIDTH));
+    }
+
+    Nefry.ndelay(1000);
+
+}
+//////////////////////////////////////////////
+
+//mqttを動かしている部分///////////////////////  
+void mqttLoop() {
+    if (!mqttClient.connected()) {
+        connectMQTT();
+    }
+    mqttClient.loop();
+}
+
+void loop() {
+  mqttLoop();
+ }
+//////////////////////////////////////////////
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;動作させてみると&#34;&gt;動作させてみると……&lt;/h3&gt;
+
+&lt;p&gt;このように、PC上から遠隔でサーボモータを制御できるようになります。
+&lt;img src=&#34;https://dotstud.io/img/blog/187/5.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;node-red-mqttでサーボモータをui-ブラウザ-から制御&#34;&gt;Node-RED×MQTTでサーボモータをUI（ブラウザ）から制御&lt;/h2&gt;
+
+&lt;p&gt;先ほどのプログラムはNode-RED上のボタンを押すとある角度回転するというものでした。次はそれを発展させて、&lt;strong&gt;ブラウザから操作して角度を遠隔で制御&lt;/strong&gt;してみます。&lt;/p&gt;
+
+&lt;p&gt;ハンズオンでは、製作途中にタイムアップしてしまいました。少し難易度高めです。&lt;/p&gt;
+
+&lt;h3 id=&#34;node-redのフローのコード-1&#34;&gt;Node-REDのフローのコード&lt;/h3&gt;
+
+&lt;p&gt;下記のNode-REDのフローのコードをNode-REDにコピーして使いましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;f2dc1b0b.520f98&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;mqtt out&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;fab71764.66ef78&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;topic&amp;quot;: &amp;quot;servo/pan&amp;quot;,
+        &amp;quot;qos&amp;quot;: &amp;quot;1&amp;quot;,
+        &amp;quot;retain&amp;quot;: &amp;quot;false&amp;quot;,
+        &amp;quot;broker&amp;quot;: &amp;quot;954b988c.ec1e08&amp;quot;,
+        &amp;quot;x&amp;quot;: 520,
+        &amp;quot;y&amp;quot;: 400,
+        &amp;quot;wires&amp;quot;: []
+    },
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;954b988c.ec1e08&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;mqtt-broker&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;broker&amp;quot;: &amp;quot;https://test.mosquitto.org/&amp;quot;,
+        &amp;quot;port&amp;quot;: &amp;quot;1883&amp;quot;,
+        &amp;quot;clientid&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;usetls&amp;quot;: false,
+        &amp;quot;compatmode&amp;quot;: true,
+        &amp;quot;keepalive&amp;quot;: &amp;quot;60&amp;quot;,
+        &amp;quot;cleansession&amp;quot;: true,
+        &amp;quot;birthTopic&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;birthQos&amp;quot;: &amp;quot;0&amp;quot;,
+        &amp;quot;birthPayload&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;closeTopic&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;closePayload&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;willTopic&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;willQos&amp;quot;: &amp;quot;0&amp;quot;,
+        &amp;quot;willPayload&amp;quot;: &amp;quot;&amp;quot;
+    }
+]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;nefry-btのプログラム-1&#34;&gt;Nefry BTのプログラム&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;
+#include &amp;lt;Nefry.h&amp;gt;
+#include &amp;lt;WiFiClient.h&amp;gt;
+#include &amp;lt;PubSubClient.h&amp;gt;
+#include &amp;lt;ArduinoJson.h&amp;gt;
+//esp32でPWMを使えるようにするためのライブラリー//
+#include&amp;quot;esp32-hal-ledc.h&amp;quot;
+//////////////////////////////////////////////
+
+//分解能//////////////////////////////////////
+#define PWM_BITWIDTH 16
+//////////////////////////////////////////////
+
+//PWM制御：周波数-&amp;gt;角度に変換(プログラムするときにわかりやすい)//
+int deg2pw(int deg, int bit){
+    double ms = ((double) deg - 90.0) * 0.95 / 90.0 + 1.45;
+    return (int) (ms / 20.0 * pow(2, bit));
+}
+////////////////////////////////////////////////////////////
+
+
+IPAddress endpoint;
+const int port = 1883;
+
+const char *pubTopic;
+const char *subTopic;
+const char *deviceName;
+const char *mqtt_server = &amp;quot;test.mosquitto.org&amp;quot;;
+
+WiFiClient httpsClient;
+PubSubClient mqttClient(httpsClient);
+
+
+
+void setup() {
+  ledcSetup(0,50,PWM_BITWIDTH);
+  ledcAttachPin(A1,0);
+
+  //// NefryBT設定 ////////////////////////////////////////
+
+  // NefryBT
+  pubTopic = &amp;quot;/pub/NefryBT/SAMPLE&amp;quot;;
+  subTopic = &amp;quot;/sub/NefryBT/SAMPLE&amp;quot;;
+  deviceName = &amp;quot;NefryBT_SAMPLE&amp;quot;;  // 複数台で利用する場合は必ずかぶらないように変更する
+  // ローカルホストならパソコンのIPAddress型に収納。配列っぽく入れる。ここはその都度確認すること
+  //mosquittoのテストサーバーを使うときは下記のednpointは気にしなくて大丈夫です
+  endpoint[0] = 192;
+  endpoint[1] = 168;
+  endpoint[2] = 1;
+  endpoint[3] = 1;
+
+  ////////////////////////////////////////////
+
+  Serial.begin(115200);
+
+  mqttClient.setServer(mqtt_server, port);
+  mqttClient.setCallback(mqttCallback);
+
+  connectMQTT();
+}
+
+void connectMQTT() {
+    Serial.println(&amp;quot;connectMQTT&amp;quot;);
+    Serial.println(deviceName);
+    while (!mqttClient.connected()) {
+      Serial.print(&amp;quot;.&amp;quot;);
+        if (mqttClient.connect(deviceName)) {
+            Serial.println(&amp;quot;Connected.&amp;quot;);
+            int qos = 0;
+            mqttClient.subscribe(subTopic, qos);
+            Serial.println(&amp;quot;Subscribed.&amp;quot;);
+        } else {
+            Serial.print(&amp;quot;Failed. Error state=&amp;quot;);
+            Serial.print(mqttClient.state());
+            // Wait 5 seconds before retrying
+            delay(5000);
+        }
+    }
+}
+
+char pubMessage[128];
+
+void mqttCallback (char* topic, byte* payload, unsigned int length) {
+
+    String str = &amp;quot;&amp;quot;;
+    Serial.print(&amp;quot;Received. topic=&amp;quot;);
+    Serial.println(topic);
+    for (int i = 0; i &amp;lt; length; i++) {
+        Serial.print((char)payload[i]);
+        str += (char)payload[i];
+    }
+    Serial.print(&amp;quot;\n&amp;quot;);
+
+    StaticJsonBuffer&amp;lt;200&amp;gt; jsonBuffer;
+
+    JsonObject&amp;amp; root = jsonBuffer.parseObject(str);
+
+    // パースが成功かどうか判断
+    if (!root.success()) {
+      Serial.println(&amp;quot;parseObject() failed&amp;quot;);
+      return;
+    }
+
+    const char* message = root[&amp;quot;message&amp;quot;];
+    int takudooon = root[&amp;quot;takudooon&amp;quot;];
+
+    Serial.print(&amp;quot;takudooon = &amp;quot;);
+    Serial.println(takudooon);
+
+    if( takudooon == 1 ){
+       for(int i=90; i&amp;lt;=115; i++){
+          ledcWrite(0,deg2pw(i, PWM_BITWIDTH));
+       }
+       delay(800);
+       ledcWrite(0,deg2pw(90, PWM_BITWIDTH));
+    } else {
+       for(int i=90; i&amp;gt;=65; --i){//0～180°の位置で考える、90度が基準点としてそこからどう動くかを考える
+          ledcWrite(0,deg2pw(i, PWM_BITWIDTH));
+       }
+       delay(800);
+       ledcWrite(0,deg2pw(90, PWM_BITWIDTH));
+    }
+
+    Nefry.ndelay(1000);
+
+}
+
+void mqttLoop() {
+    if (!mqttClient.connected()) {
+        connectMQTT();
+    }
+    mqttClient.loop();
+}
+
+void loop() {
+  mqttLoop();
+ }
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;操作画面を用意&#34;&gt;操作画面を用意&lt;/h3&gt;
+
+&lt;p&gt;それぞれのプログラムが準備できたら、Node-REDの画面から、
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/187/6.png&#34; alt=&#34;6&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;p&gt;URLの「&lt;code&gt;http://localhost:1880&lt;/code&gt;」を「&lt;code&gt;http://localhost:1880/ui&lt;/code&gt;」と記述すると以下のような操作画面があらわれます。ここから、直感的にサーボモータの角度を遠隔制御できるようになります。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/187/7.png&#34; alt=&#34;7&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;h3 id=&#34;実際に動かすと&#34;&gt;実際に動かすと……&lt;/h3&gt;
+
+&lt;p&gt;このようになります。
+&lt;img src=&#34;https://dotstud.io/img/blog/187/8.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;いろいろな技術を知ることでモノづくりの幅が増え、作ってみたいものを自由に作れるようになってもらえればな、と思います。&lt;/p&gt;
+
+&lt;p&gt;では！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>ClovaとNefryBT(ESP32)を連携させてみよう</title>
+      <link>https://dotstud.io/blog/clova-ifttt-nefrybt-arduino/</link>
+      <pubDate>Tue, 10 Jul 2018 10:00:00 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/clova-ifttt-nefrybt-arduino/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、代表の&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;LINEのスマートスピーカーClova（正式にはAIアシスタントの名前）が&lt;a href=&#34;http://clova-blog.line.me/ja/archives/7990256.html&#34;&gt;IFTTTに対応&lt;/a&gt;したのでNefry BT（ESP32）と連携してみました。（実は結構前から対応してたんだけど試せてなかった）&lt;/p&gt;
+
+&lt;p&gt;先日作った勤怠システムについては以下の記事をご参照ください。&lt;/p&gt;
+
+
+
+&lt;section class=&#34;link&#34; id=&#34;183&#34;&gt;
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+          &lt;div class=&#34;link_content&#34;&gt;
+          &lt;a href=&#34;https://dotstud.io/blog/keyboard-kintai-system-diy/&#34;&gt;&lt;/a&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/183/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
+          &lt;/div&gt;
+          &lt;div class=&#34;link_content&#34;&gt;
+            &lt;div class=&#34;link_detail&#34;&gt;
+              &lt;div class=&#34;link_title&#34;&gt;
+                NefryBTとキーボードで作る簡易勤怠管理システム
+              &lt;/div&gt;
+              &lt;div class=&#34;link_date&#34;&gt;
+                
+                2018-07-05
+              &lt;/div&gt;
+              &lt;div class=&#34;link_desc&#34;&gt;
+                今日はとある電子工作向けキーパッドを手に入れたのでNefry BTで使ってみて勤怠管理システムを作ってみた話です。
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+&lt;/section&gt;
+
+
+&lt;p&gt;ちなみにこの勤怠システムは割と運用できてます。今の所は。&lt;/p&gt;
+
+&lt;h2 id=&#34;clovaって&#34;&gt;Clovaって？&lt;/h2&gt;
+
+&lt;p&gt;ClovaはLINEが開発したAIアシスタントです。Clova FriendsやClova Friends mini、Clova Waveなどの対応スマートスピーカー端末が販売されています。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;公式サイト: &lt;a href=&#34;https://clova.line.me/&#34;&gt;https://clova.line.me/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;GoogleのGoogle アシスタント（Google Home）やAmazonのAlexa（Amazon Echo）などと同じ並びの立ち位置という認識で大丈夫です。&lt;/p&gt;
+
+&lt;p&gt;LINEといえばスタンプやキャラクターが特徴的ですが、Clova Friendsに関してもLINEが提供しているということもあり、 &lt;strong&gt;キャラクターをベースにしたデバイスが特徴的です&lt;/strong&gt;。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/185/1.png&#34; alt=&#34;1&#34;&gt;
+
+  ─ ちなみにこの写真は先日のLINE CONFERENCE 2018で発表があったミニオンズモデル
+
+&lt;/center&gt;
+
+
+&lt;p&gt;この記事の執筆時点（2018年7月7日）ではまだ開発用SDKは公開されていませんが、IFTTTに対応したというリリースが出ているのでIFTTT経由で色々なサービスと接続することが出来ます。&lt;/p&gt;
+
+&lt;h2 id=&#34;出勤するとclovaがしゃべる&#34;&gt;出勤するとClovaがしゃべる&lt;/h2&gt;
+
+&lt;p&gt;今回作ったものはこんな感じです。&lt;/p&gt;
+
+&lt;p&gt;試してるのはアルバイトの佐々木さんです。ドヤ顔は素です。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;instagram-media&#34; data-instgrm-captioned data-instgrm-permalink=&#34;https://www.instagram.com/p/Bk4KrVtl1qU/&#34; data-instgrm-version=&#34;8&#34; style=&#34; background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);&#34;&gt;&lt;div style=&#34;padding:8px;&#34;&gt; &lt;div style=&#34; background:#F8F8F8; line-height:0; margin-top:40px; padding:28.194444444444443% 0; text-align:center; width:100%;&#34;&gt; &lt;div style=&#34; background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;&#34;&gt;&lt;/div&gt;&lt;/div&gt; &lt;p style=&#34; margin:8px 0 0 0; padding:0 4px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/Bk4KrVtl1qU/&#34; style=&#34; color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;&#34; target=&#34;\_blank&#34;&gt;Nefryとclovaをつないでみた。 #nefry #clova&lt;/a&gt;&lt;/p&gt; &lt;p style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;&#34;&gt;&lt;a href=&#34;https://www.instagram.com/n0bisuke/&#34; style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px;&#34; target=&#34;\_blank&#34;&gt; n0bisuke&lt;/a&gt;さん(@n0bisuke)がシェアした投稿 - &lt;time style=&#34; font-family:Arial,sans-serif; font-size:14px; line-height:17px;&#34; datetime=&#34;2018-07-06T05:00:48+00:00&#34;&gt;2018年 7月月5日午後10時00分PDT&lt;/time&gt;&lt;/p&gt;&lt;/div&gt;&lt;/blockquote&gt; &lt;script async defer src=&#34;//www.instagram.com/embed.js&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;先日作った勤怠システムと連携してキーパッドのボタンを押して出勤登録するとClovaに通知がいきます。&lt;/p&gt;
+
+&lt;h2 id=&#34;nefry-btとclovaを連携してみよう&#34;&gt;Nefry BTとClovaを連携してみよう&lt;/h2&gt;
+
+&lt;p&gt;IFTTTのWebhookを用いてNefry BTからPOSTリクエストを送り、Clova側に通知させます。&lt;/p&gt;
+
+&lt;p&gt;イメージはこんな感じです。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/185/2.png&#34; alt=&#34;2&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;h3 id=&#34;iftttでアプレットの登録&#34;&gt;IFTTTでアプレットの登録&lt;/h3&gt;
+
+&lt;p&gt;アプレットとは連携させるサービスとサービスの組み合わせのことを指します。&lt;/p&gt;
+
+&lt;p&gt;IFTTTのユーザー登録などを完了したら&lt;a href=&#34;https://ifttt.com/create&#34;&gt;アプレット作成&lt;/a&gt;のページから新規のアプレットを作成します。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/185/3.png&#34; alt=&#34;3&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;まず&lt;code&gt;this&lt;/code&gt;を押すとトリガーとなるサービスを選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/185/4.gif&#34; alt=&#34;&#34; /&gt;
+Webhookを選択しましょう。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/185/5.png&#34; alt=&#34;5&#34;&gt;
+
+&lt;/center&gt;
+
+任意のEvent Nameを指定します。&lt;code&gt;clova_things&lt;/code&gt;としました。&lt;/p&gt;
+
+&lt;p&gt;次に&lt;code&gt;that&lt;/code&gt;を押してアウトプットとなるサービスを選択します。
+&lt;img src=&#34;https://dotstud.io/img/blog/185/6.gif&#34; alt=&#34;&#34; /&gt;
+clovaを選択しましょう。&lt;/p&gt;
+
+&lt;p&gt;メッセージ内容の箇所に&lt;code&gt;Value1&lt;/code&gt;を指定します。これはNefry BTから受け取る1つ目の値を指します。
+&lt;img src=&#34;https://i.gyazo.com/d868fea0c1d1738593a1f82d26ffbde2.png&#34; alt=&#34;&#34; /&gt;
+&lt;code&gt;Create action&lt;/code&gt;のボタンを押して次のページで&lt;code&gt;Finish&lt;/code&gt;で完了です。&lt;/p&gt;
+
+&lt;h3 id=&#34;curlで試してみる&#34;&gt;curlで試してみる&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://ifttt.com/services/maker_webhooks/settings&#34;&gt;IFTTTのWebhooksの設定画面&lt;/a&gt;を見てAPI KEYを確認しましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;https://maker.ifttt.com/use/xxxxxxxxx&lt;/code&gt;というURLが表示されていると思いますが、&lt;code&gt;xxxxxxxxx&lt;/code&gt;の箇所がAPI KEYになります。&lt;/p&gt;
+
+&lt;p&gt;curlでは以下のように試せます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ curl -X POST -H &amp;quot;Content-Type: application/json&amp;quot; -d &#39;{&amp;quot;value1&amp;quot;:&amp;quot;てすと&amp;quot;}&#39; https://maker.ifttt.com/trigger/clova_things/with/key/xxxxxxxxx
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;リクエストするURLはこのような形です。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;code&gt;https://maker.ifttt.com/trigger/{{Event Name}}/with/key/{{API KEY}}&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Event Nameは今回の場合は任意の名前として&lt;code&gt;clova_things&lt;/code&gt;としていて、API KEYは&lt;code&gt;xxxxxxxxx&lt;/code&gt;の部分です。&lt;/p&gt;
+
+&lt;h3 id=&#34;nefry-bt側のコード&#34;&gt;Nefry BT側のコード&lt;/h3&gt;
+
+&lt;p&gt;勤怠システムの記事のコードとほぼ同様です。&lt;/p&gt;
+
+
+
+&lt;section class=&#34;link&#34; id=&#34;183&#34;&gt;
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+          &lt;div class=&#34;link_content&#34;&gt;
+          &lt;a href=&#34;https://dotstud.io/blog/keyboard-kintai-system-diy/&#34;&gt;&lt;/a&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/183/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
+          &lt;/div&gt;
+          &lt;div class=&#34;link_content&#34;&gt;
+            &lt;div class=&#34;link_detail&#34;&gt;
+              &lt;div class=&#34;link_title&#34;&gt;
+                NefryBTとキーボードで作る簡易勤怠管理システム
+              &lt;/div&gt;
+              &lt;div class=&#34;link_date&#34;&gt;
+                
+                2018-07-05
+              &lt;/div&gt;
+              &lt;div class=&#34;link_desc&#34;&gt;
+                今日はとある電子工作向けキーパッドを手に入れたのでNefry BTで使ってみて勤怠管理システムを作ってみた話です。
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+&lt;/section&gt;
+
+
+&lt;p&gt;適宜読み替えてください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;WiFiClientSecure.h&amp;gt;
+WiFiClientSecure client;
+const int HTTP_PORT = 443;
+
+//途中省略
+//・
+//・
+//・
+
+void iftttClovaPost(String message){
+  const char* HOST = &amp;quot;maker.ifttt.com&amp;quot;;
+
+  String url = &amp;quot;/trigger/clova_things/with/key/xxxxxxxxx&amp;quot;;
+  url += &amp;quot;?value1=&amp;quot;; //value1にデータを送る
+  url += StrPerEncord(escapeParameter(message).c_str()); //勤怠システム記事参照
+
+  Serial.print(&amp;quot;connecting to &amp;quot;);
+  Serial.println(HOST);
+
+  if (!client.connect(HOST, HTTP_PORT)) {
+    Serial.println(&amp;quot;connection failed&amp;quot;);
+    return;
+  }
+
+  client.println(&amp;quot;POST &amp;quot; + url + &amp;quot; HTTP/1.1&amp;quot;);
+  client.println(&amp;quot;Content-Type: application/json&amp;quot;);
+  client.println(&amp;quot;Content-Type: application/x-www-form-urlencoded&amp;quot;);
+  client.println(&amp;quot;Host: &amp;quot; + String(HOST));
+  client.println(&amp;quot;Connection: close&amp;quot;);
+  client.println();
+
+  unsigned long timeout = millis();
+  while (client.available() == 0) {    
+    if (millis() - timeout &amp;gt; 5000) {
+        Serial.println(&amp;quot;&amp;gt;&amp;gt;&amp;gt; Client Timeout !&amp;quot;);
+        client.stop();
+        return;
+    }
+  }
+
+  // Read all the lines of the reply from server and print them to Serial
+  while(client.available()) {
+      String line = client.readStringUntil(&#39;\r&#39;);
+      Serial.print(line);
+  }
+
+  Serial.println();
+  Serial.println(&amp;quot;closing connection&amp;quot;);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;全体コードは&lt;a href=&#34;https://gist.github.com/n0bisuke/d2fab404e5073e936339a6c3442c1e4c#file-kintai-ino-L94-L133&#34;&gt;こちら&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;h2 id=&#34;試し方と使う際の注意点&#34;&gt;試し方と使う際の注意点&lt;/h2&gt;
+
+&lt;p&gt;さて完成したら試してみます。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;instagram-media&#34; data-instgrm-captioned data-instgrm-permalink=&#34;https://www.instagram.com/p/Bk4KrVtl1qU/&#34; data-instgrm-version=&#34;8&#34; style=&#34; background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);&#34;&gt;&lt;div style=&#34;padding:8px;&#34;&gt; &lt;div style=&#34; background:#F8F8F8; line-height:0; margin-top:40px; padding:28.194444444444443% 0; text-align:center; width:100%;&#34;&gt; &lt;div style=&#34; background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;&#34;&gt;&lt;/div&gt;&lt;/div&gt; &lt;p style=&#34; margin:8px 0 0 0; padding:0 4px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/Bk4KrVtl1qU/&#34; style=&#34; color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;&#34; target=\_blank&#34;&gt;Nefryとclovaをつないでみた。 #nefry #clova&lt;/a&gt;&lt;/p&gt; &lt;p style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;&#34;&gt;&lt;a href=&#34;https://www.instagram.com/n0bisuke/&#34; style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px;&#34; target=&#34;\_blank&#34;&gt; n0bisuke&lt;/a&gt;さん(@n0bisuke)がシェアした投稿 - &lt;time style=&#34; font-family:Arial,sans-serif; font-size:14px; line-height:17px;&#34; datetime=&#34;2018-07-06T05:00:48+00:00&#34;&gt;2018年 7月月5日午後10時00分PDT&lt;/time&gt;&lt;/p&gt;&lt;/div&gt;&lt;/blockquote&gt; &lt;script async defer src=&#34;//www.instagram.com/embed.js&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;キーパッドを押すとClovaに通知がいき、&lt;strong&gt;「通知を読み上げて」&lt;/strong&gt;とClovaに話かけてあげると読み上げてくれます。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;はじめはWebhooksで通知するとそのままClovaが喋ってくれると思ったのですがそうではないので注意です。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;clovaのifttt試してみてるけどぜんぜん喋ってくれない… なんだろう&lt;/p&gt; のびすけ / sugawara (@n0bisuke) &lt;a href=&#34;https://twitter.com/n0bisuke/status/1015057186026737664?ref_src=twsrc%5Etfw&#34;&gt;2018年7月6日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;通知が来た時点で何も喋ってくれないのは分かりにくいですね。現時点だと「通知を読み上げて」と言わないと読み上げてくれないので注意ですね。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;Nefry BTをClovaを繋げることが出来ました。&lt;/p&gt;
+
+&lt;p&gt;IFTTTに繋がると実質何とでも繋げられるので嬉しいですね。&lt;/p&gt;
+
+&lt;p&gt;人間が「通知を読み上げて」と言わなくても喋ってくれるように機能追加してくれることに期待です。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>NefryBTとキーボードで作る簡易勤怠管理システム</title>
+      <link>https://dotstud.io/blog/keyboard-kintai-system-diy/</link>
+      <pubDate>Thu, 05 Jul 2018 10:00:00 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/keyboard-kintai-system-diy/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;今日はとある電子工作向けキーパッドを手に入れたので、&lt;strong&gt;Nefry BTで簡易的な勤怠管理システム&lt;/strong&gt;を作ってみました。ちなみにオチとかないです。&lt;/p&gt;
+
+&lt;h2 id=&#34;使うもの&#34;&gt;使うもの&lt;/h2&gt;
+
+&lt;h3 id=&#34;マトリックスフィルムボタンキーボード-メンブレン式キーボード-4-4&#34;&gt;マトリックスフィルムボタンキーボード メンブレン式キーボード 4*4&lt;/h3&gt;
+
+&lt;p&gt;HiLetgoというストアから出品されています。眺めていて使ってみたいなぁという欲求が湧いたのでポチりました。&lt;/p&gt;
+
+&lt;p&gt;ちなみに5個セットなので、あと4個なにか作れます。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;iframe style=&#34;width:120px;height:240px;&#34; marginwidth=&#34;0&#34; marginheight=&#34;0&#34; scrolling=&#34;no&#34; frameborder=&#34;0&#34; src=&#34;//rcm-fe.amazon-adsystem.com/e/cm?lt1=\å_blank&amp;bc1=000000&amp;IS2=1&amp;bg1=FFFFFF&amp;fc1=000000&amp;lc1=0000FF&amp;t=n0bisuke-22&amp;o=9&amp;p=8&amp;l=as4&amp;m=amazon&amp;f=ifr&amp;ref=as_ss_li_til&amp;asins=B010Q17I8E&amp;linkId=9116436de3640fbe22f359a3eb280f43&#34;&gt;&lt;/iframe&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;arduino-unoで動かしてみる&#34;&gt;Arduino Unoで動かしてみる&lt;/h2&gt;
+
+&lt;p&gt;AmazonのページにはArduino対応と書いているのでどうやら使えるらしい。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://techtutorialsx.com/2017/03/18/esp8266-interfacing-with-a-4x4-matrix-keypad/&#34;&gt;ESP8266: Interfacing with a 4×4 Matrix Keypad
+&lt;/a&gt;という記事があったので参考にArduinoで動かしてみました。&lt;/p&gt;
+
+&lt;h3 id=&#34;配線&#34;&gt;配線&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/3c3b4883c69f25b562906e38f853beb4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Arduino Unoとあとで紹介するNefry BTでの配線はこんな感じです。&lt;/p&gt;
+
+&lt;h3 id=&#34;プログラム&#34;&gt;プログラム&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;Chris--A/Keypad&#34;&gt;こちらのライブラリ&lt;/a&gt;をインストールしましょう。&lt;/p&gt;
+
+&lt;p&gt;ライブラリマネージャからもインストールできます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/d1d90cb4712729faac8272bcf3274767.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Keypad.h&amp;gt;
+
+const byte n_rows = 4;
+const byte n_cols = 4;
+
+char keys[n_rows][n_cols] = {
+  {&#39;1&#39;,&#39;2&#39;,&#39;3&#39;,&#39;A&#39;},
+  {&#39;4&#39;,&#39;5&#39;,&#39;6&#39;,&#39;B&#39;},
+  {&#39;7&#39;,&#39;8&#39;,&#39;9&#39;,&#39;C&#39;},
+  {&#39;*&#39;,&#39;0&#39;,&#39;#&#39;,&#39;D&#39;}
+};
+
+byte colPins[n_rows] = {3, 2, 1, 0};
+byte rowPins[n_cols] = {7, 6, 5, 4};
+
+Keypad myKeypad = Keypad( makeKeymap(keys), rowPins, colPins, n_rows, n_cols);
+
+void setup(){
+  Serial.begin(115200);
+}
+
+void loop(){
+  char myKey = myKeypad.getKey();
+
+  if (myKey != NULL){
+    Serial.print(&amp;quot;Key pressed: &amp;quot;);
+    Serial.println(myKey);
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;実行&#34;&gt;実行&lt;/h3&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;instagram-media&#34; data-instgrm-captioned data-instgrm-permalink=&#34;https://www.instagram.com/p/BkzAcUMB-3K/&#34; data-instgrm-version=&#34;8&#34; style=&#34; background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);&#34;&gt;&lt;div style=&#34;padding:8px;&#34;&gt; &lt;div style=&#34; background:#F8F8F8; line-height:0; margin-top:40px; padding:28.194444444444443% 0; text-align:center; width:100%;&#34;&gt; &lt;div style=&#34; background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;&#34;&gt;&lt;/div&gt;&lt;/div&gt; &lt;p style=&#34; margin:8px 0 0 0; padding:0 4px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/BkzAcUMB-3K/&#34; style=&#34; color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;&#34; target=&#34;_blank&#34;&gt;電子工作用のキーボード使ってみたけどハマることなく試せた 勤怠記録とかオフィスハックの何かに使いたい #dotstudio&lt;/a&gt;&lt;/p&gt; &lt;p style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;&#34;&gt;&lt;a href=&#34;https://www.instagram.com/n0bisuke/&#34; style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px;&#34; target=&#34;_blank&#34;&gt; n0bisuke&lt;/a&gt;さん(@n0bisuke)がシェアした投稿 - &lt;time style=&#34; font-family:Arial,sans-serif; font-size:14px; line-height:17px;&#34; datetime=&#34;2018-07-04T04:53:24+00:00&#34;&gt;2018年 7月月3日午後9時53分PDT&lt;/time&gt;&lt;/p&gt;&lt;/div&gt;&lt;/blockquote&gt; &lt;script async defer src=&#34;//www.instagram.com/embed.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;nefry-btで動作させて勤怠システムに&#34;&gt;Nefry BTで動作させて勤怠システムに&lt;/h2&gt;
+
+&lt;p&gt;出退勤の記録を付ける電子工作は、&lt;strong&gt;今まで何度か作りはしたものの導入まで至っていなかった&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;作り込もうとして力を入れすぎて力尽きる問題&lt;/strong&gt;が大きいと思っています。&lt;/p&gt;
+
+&lt;p&gt;ということで&lt;u&gt;実装がシンプルな勤怠システムをとりあえず導入&lt;/u&gt;してみました。&lt;/p&gt;
+
+&lt;h3 id=&#34;ボタン入力式&#34;&gt;ボタン入力式&lt;/h3&gt;
+
+&lt;p&gt;仕様は&lt;strong&gt;数字を押して選択し、Aボタンで出勤記録、Bボタンで退勤記録&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;ディスプレイには登録している名前が出ます。&lt;/p&gt;
+
+&lt;p&gt;多分そのうちSuica連携とかBLEデバイス連携とか指紋とか声門とかそういうのも試してみる気はするのですが、 &lt;strong&gt;ボタン入力とHTTP通信だけの実装のシンプルさ&lt;/strong&gt;がとりあえず始めるには重要な気がしました。&lt;/p&gt;
+
+&lt;p&gt;制作時間1時間程度。HTTP POST周りで少し手こずってました。&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;instagram-media&#34; data-instgrm-captioned data-instgrm-permalink=&#34;https://www.instagram.com/p/Bkz8a0ihnYF/&#34; data-instgrm-version=&#34;8&#34; style=&#34; background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);&#34;&gt;&lt;div style=&#34;padding:8px;&#34;&gt; &lt;div style=&#34; background:#F8F8F8; line-height:0; margin-top:40px; padding:28.194444444444443% 0; text-align:center; width:100%;&#34;&gt; &lt;div style=&#34; background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;&#34;&gt;&lt;/div&gt;&lt;/div&gt; &lt;p style=&#34; margin:8px 0 0 0; padding:0 4px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/Bkz8a0ihnYF/&#34; style=&#34; color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;&#34; target=&#34;_blank&#34;&gt;Nefryとつないでみた。キーの押し心地がよい&lt;/a&gt;&lt;/p&gt; &lt;p style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;&#34;&gt;&lt;a href=&#34;https://www.instagram.com/n0bisuke/&#34; style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px;&#34; target=&#34;_blank&#34;&gt; n0bisuke&lt;/a&gt;さん(@n0bisuke)がシェアした投稿 - &lt;time style=&#34; font-family:Arial,sans-serif; font-size:14px; line-height:17px;&#34; datetime=&#34;2018-07-04T13:35:59+00:00&#34;&gt;2018年 7月月4日午前6時35分PDT&lt;/time&gt;&lt;/p&gt;&lt;/div&gt;&lt;/blockquote&gt; &lt;script async defer src=&#34;//www.instagram.com/embed.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;実装&#34;&gt;実装&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/nefrybt-http-post/&#34;&gt;Nefry BTでのHTTP POST&lt;/a&gt;も合わせて読むとコード理解が進みます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Keypad.h&amp;gt;
+#include &amp;lt;NefryDisplay.h&amp;gt;
+#include &amp;lt;WiFiClientSecure.h&amp;gt;
+WiFiClientSecure client;
+
+String StrPerEncord(const char* c_str);
+String escapeParameter(String param);
+void hipchatPost(String message);
+
+const int HTTP_PORT = 443;
+const char* HOST = &amp;quot;xxxxxxxxxx.hipchat.com&amp;quot;;
+
+const byte n_rows = 4;
+const byte n_cols = 4;
+
+char keys[n_rows][n_cols] = {
+  {&#39;1&#39;,&#39;2&#39;,&#39;3&#39;,&#39;A&#39;},
+  {&#39;4&#39;,&#39;5&#39;,&#39;6&#39;,&#39;B&#39;},
+  {&#39;7&#39;,&#39;8&#39;,&#39;9&#39;,&#39;C&#39;},
+  {&#39;*&#39;,&#39;0&#39;,&#39;#&#39;,&#39;D&#39;}
+};
+
+byte colPins[n_rows] = {D3, D2, D1, D0};
+byte rowPins[n_cols] = {D7, D6, D5, D4};
+Keypad myKeypad = Keypad( makeKeymap(keys), rowPins, colPins, n_rows, n_cols);
+
+String storeMessage = &amp;quot;&amp;quot;;
+
+//3行目だけにPrint
+void nfDisplay3Print(String mes){
+  NefryDisplay.print(&amp;quot;&amp;quot;);
+  NefryDisplay.print(&amp;quot;&amp;quot;);
+  NefryDisplay.print(mes);
+}
+
+void setup() {
+  Serial.begin(115200);
+  NefryDisplay.setTitle(&amp;quot;KINTAI&amp;quot;);
+  nfDisplay3Print(&amp;quot;Please Input...&amp;quot;);
+}
+
+void loop() {
+  char myKey = myKeypad.getKey();
+  String member = &amp;quot;&amp;quot;;
+
+  //ボタンが押された時の処理
+  if (myKey != NULL){
+    Serial.print(&amp;quot;Key pressed: &amp;quot;);
+    Serial.println(myKey);
+
+    if(String(myKey) == &amp;quot;1&amp;quot;){
+      member += &amp;quot;n0bisuke&amp;quot;;
+      storeMessage = member;
+    }else if(String(myKey) == &amp;quot;2&amp;quot;){
+      member += &amp;quot;chantoku&amp;quot;;
+      storeMessage = member;
+    }else if(String(myKey) == &amp;quot;3&amp;quot;){
+      member += &amp;quot;kiki&amp;quot;;
+      storeMessage = member;
+    }else if(String(myKey) == &amp;quot;4&amp;quot;){
+      member += &amp;quot;takudon&amp;quot;;
+      storeMessage = member;
+    }else if(String(myKey) == &amp;quot;5&amp;quot;){
+      member += &amp;quot;sasakitomohiro&amp;quot;;
+      storeMessage = member;
+    }
+
+    nfDisplay3Print(String(myKey) + &amp;quot;:&amp;quot; + member);
+
+    if(String(myKey) == &amp;quot;A&amp;quot;){
+      nfDisplay3Print(String(myKey) + &amp;quot;: [Office IN] post to HipChat...&amp;quot;);
+
+      storeMessage += &amp;quot;さんが出勤しました。&amp;quot;;
+      hipchatPost(storeMessage); //HipChatに投稿
+      storeMessage = &amp;quot;&amp;quot;; //リセット
+
+      nfDisplay3Print(String(myKey) + &amp;quot;: POST DONE&amp;quot;);
+    }else if(String(myKey) == &amp;quot;B&amp;quot;){
+      nfDisplay3Print(String(myKey) + &amp;quot;: [Office OUT] post to HipChat...&amp;quot;);
+
+      storeMessage += &amp;quot;さんが退勤しました。&amp;quot;;
+      hipchatPost(storeMessage); //HipChatに投稿
+      storeMessage = &amp;quot;&amp;quot;; //リセット
+
+      nfDisplay3Print(String(myKey) + &amp;quot;: POST DONE&amp;quot;);
+    }  
+  }
+}
+
+void hipchatPost(String message){
+  String url = &amp;quot;/v2/room/4651875/notification?auth_token=xxxxxxxxxxxxxxxx&amp;quot;;
+  url += &amp;quot;&amp;amp;color=green&amp;amp;notify=false&amp;amp;message_format=text&amp;amp;message=&amp;quot;;
+  url += StrPerEncord(escapeParameter(message + &amp;quot; (yey)&amp;quot;).c_str());
+
+  Serial.print(&amp;quot;connecting to &amp;quot;);
+  Serial.println(HOST);
+
+  if (!client.connect(HOST, HTTP_PORT)) {
+    Serial.println(&amp;quot;connection failed&amp;quot;);
+    return;
+  }
+
+  client.println(&amp;quot;POST &amp;quot; + url + &amp;quot; HTTP/1.1&amp;quot;);
+  client.println(&amp;quot;Content-Type: application/json&amp;quot;);
+  client.println(&amp;quot;Content-Type: application/x-www-form-urlencoded&amp;quot;);
+  client.println(&amp;quot;Host: &amp;quot; + String(HOST));
+  client.println(&amp;quot;Connection: close&amp;quot;);
+  client.println();
+
+  unsigned long timeout = millis();
+  while (client.available() == 0) {    
+    if (millis() - timeout &amp;gt; 5000) {
+        Serial.println(&amp;quot;&amp;gt;&amp;gt;&amp;gt; Client Timeout !&amp;quot;);
+        client.stop();
+        return;
+    }
+  }
+
+  // Read all the lines of the reply from server and print them to Serial
+  while(client.available()) {
+      String line = client.readStringUntil(&#39;\r&#39;);
+      Serial.print(line);
+  }
+
+  Serial.println();
+  Serial.println(&amp;quot;closing connection&amp;quot;);
+}
+
+String StrPerEncord(const char* c_str) {
+  uint16_t i = 0;
+  String str_ret = &amp;quot;&amp;quot;;
+  char c1[3], c2[3], c3[3];
+
+  while (c_str[i] != &#39;\0&#39;) {
+    if (c_str[i] &amp;gt;= 0xC2 &amp;amp;&amp;amp; c_str[i] &amp;lt;= 0xD1) { //2バイト文字
+      sprintf(c1, &amp;quot;%2x&amp;quot;, c_str[i]);
+      sprintf(c2, &amp;quot;%2x&amp;quot;, c_str[i + 1]);
+      str_ret += &amp;quot;%&amp;quot; + String(c1) + &amp;quot;%&amp;quot; + String(c2);
+      i = i + 2;
+    } else if (c_str[i] &amp;gt;= 0xE2 &amp;amp;&amp;amp; c_str[i] &amp;lt;= 0xEF) {
+      sprintf(c1, &amp;quot;%2x&amp;quot;, c_str[i]);
+      sprintf(c2, &amp;quot;%2x&amp;quot;, c_str[i + 1]);
+      sprintf(c3, &amp;quot;%2x&amp;quot;, c_str[i + 2]);
+      str_ret += &amp;quot;%&amp;quot; + String(c1) + &amp;quot;%&amp;quot; + String(c2) + &amp;quot;%&amp;quot; + String(c3);
+      i = i + 3;
+    } else {
+      str_ret += String(c_str[i]);
+      i++;
+    }
+  }
+  return str_ret;
+}
+
+String escapeParameter(String param) {
+  param.replace(&amp;quot;%&amp;quot;, &amp;quot;%25&amp;quot;);
+  param.replace(&amp;quot;+&amp;quot;, &amp;quot;%2B&amp;quot;);
+  param.replace(&amp;quot; &amp;quot;, &amp;quot;+&amp;quot;);
+  param.replace(&amp;quot;\&amp;quot;&amp;quot;, &amp;quot;%22&amp;quot;);
+  param.replace(&amp;quot;#&amp;quot;, &amp;quot;%23&amp;quot;);
+  param.replace(&amp;quot;$&amp;quot;, &amp;quot;%24&amp;quot;);
+  param.replace(&amp;quot;&amp;amp;&amp;quot;, &amp;quot;%26&amp;quot;);
+  param.replace(&amp;quot;&#39;&amp;quot;, &amp;quot;%27&amp;quot;);
+  param.replace(&amp;quot;(&amp;quot;, &amp;quot;%28&amp;quot;);
+  param.replace(&amp;quot;)&amp;quot;, &amp;quot;%29&amp;quot;);
+  param.replace(&amp;quot;*&amp;quot;, &amp;quot;%2A&amp;quot;);
+  param.replace(&amp;quot;,&amp;quot;, &amp;quot;%2C&amp;quot;);
+  param.replace(&amp;quot;/&amp;quot;, &amp;quot;%2F&amp;quot;);
+  param.replace(&amp;quot;:&amp;quot;, &amp;quot;%3A&amp;quot;);
+  param.replace(&amp;quot;;&amp;quot;, &amp;quot;%3B&amp;quot;);
+  param.replace(&amp;quot;&amp;lt;&amp;quot;, &amp;quot;%3C&amp;quot;);
+  param.replace(&amp;quot;=&amp;quot;, &amp;quot;%3D&amp;quot;);
+  param.replace(&amp;quot;&amp;gt;&amp;quot;, &amp;quot;%3E&amp;quot;);
+  param.replace(&amp;quot;?&amp;quot;, &amp;quot;%3F&amp;quot;);
+  param.replace(&amp;quot;@&amp;quot;, &amp;quot;%40&amp;quot;);
+  param.replace(&amp;quot;[&amp;quot;, &amp;quot;%5B&amp;quot;);
+  param.replace(&amp;quot;\\&amp;quot;, &amp;quot;%5C&amp;quot;);
+  param.replace(&amp;quot;]&amp;quot;, &amp;quot;%5D&amp;quot;);
+  param.replace(&amp;quot;^&amp;quot;, &amp;quot;%5E&amp;quot;);
+  param.replace(&amp;quot;&#39;&amp;quot;, &amp;quot;%60&amp;quot;);
+  param.replace(&amp;quot;{&amp;quot;, &amp;quot;%7B&amp;quot;);
+  param.replace(&amp;quot;|&amp;quot;, &amp;quot;%7C&amp;quot;);
+  param.replace(&amp;quot;}&amp;quot;, &amp;quot;%7D&amp;quot;);
+  return param;
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;運用1日目ですが問題ないです（謎）&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;実際にはシートに記録したりした方が良いと思いますが今後検討です！&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/fcc920005a4a691f37081c936f6968d1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;HipChatの部分はうちの社内がHipChatだからというだけですが、LINEだったりSlackだったりも同様のやり方で連携できます。&lt;/p&gt;
+
+&lt;p&gt;思ったより簡単に試せたなぁという印象なのでみなさんもぜひ試してみてください。&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>自動水やり装置を作ろう！Nefry BTとGroveモジュールでズボラのための電子工作</title>

@@ -7,8 +7,769 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2018 dotstudio inc.</copyright>
-    <lastBuildDate>Thu, 28 Jun 2018 10:00:00 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 12 Jul 2018 10:00:00 +0900</lastBuildDate>
     <atom:link href="/series/handson/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>PWM制御をマスターしよう！Node-REDでサーボモータを遠隔制御する方法＆初ハンズオンレポート</title>
+      <link>https://dotstud.io/blog/nefry-servo-handson-takudooon/</link>
+      <pubDate>Thu, 12 Jul 2018 10:00:00 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nefry-servo-handson-takudooon/</guid>
+      
+      <description>
+
+&lt;h2 id=&#34;暑さ本番-いよいよ大好きな生ビールの季節がやってまいりました&#34;&gt;暑さ本番、いよいよ大好きな生ビールの季節がやってまいりました！&lt;/h2&gt;
+
+&lt;p&gt;みなさまいかがお過ごしでしょうか？どうも、宇宙エンジニアの&lt;a href=&#34;https://dotstud.io/members/takudooon&#34;&gt;たくろーどん&lt;/a&gt;です。毎日、暑いですね。&lt;/p&gt;
+
+&lt;p&gt;さて先日、&lt;strong&gt;初めてハンズオンイベント&lt;/strong&gt;を企画・実施してみました！題して、「&lt;a href=&#34;https://dotstudio.connpass.com/event/91695/&#34;&gt;&lt;strong&gt;【IoT】PWM制御をマスター！Nefry BT+Node-REDでサーボモータを遠隔制御&lt;/strong&gt;&lt;/a&gt;」！&lt;/p&gt;
+
+&lt;p&gt;「モノづくりをしたい！」「こんなものをつくりたい！」と思っても「&lt;strong&gt;こういう技術がつかえる&lt;/strong&gt;」ということを知らないと、なかなかモノづくりが進みません。&lt;/p&gt;
+
+&lt;p&gt;なので、動くものを作りたいときに便利な&lt;u&gt;&lt;strong&gt;サーボモータとその制御方法であるPWM制御&lt;/strong&gt;をマスターし、&lt;strong&gt;PCからサーボモータを遠隔制御をしよう&lt;/strong&gt;&lt;/u&gt;というのがハンズオンの目論見です。&lt;/p&gt;
+
+&lt;p&gt;では、ちらっとハンズオンの内容を振り返ってみたいと思います。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/187/1.png&#34; alt=&#34;1&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;pwm制御を用いたプログラムの書き方&#34;&gt;PWM制御を用いたプログラムの書き方&lt;/h2&gt;
+
+&lt;h3 id=&#34;pwm制御について&#34;&gt;PWM制御について&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/pulse-width-modulation/&#34;&gt;PWM制御の大まかな説明&lt;/a&gt;は以前、ドキュメントに書きました。ようするに、PWM制御は「&lt;strong&gt;パルスのオン・オフ繰り返し切り替えることで出力される電力を制御&lt;/strong&gt;」するという意味です。&lt;/p&gt;
+
+&lt;p&gt;でも結局のところ、「&lt;strong&gt;PWM制御ってどんなイメージやねん！&lt;/strong&gt;」と多くの方が思うでしょう。&lt;/p&gt;
+
+&lt;p&gt;なので、これがわかりやすいのではないかという説明を思いつきました。それが、下記の動画です。
+&lt;img src=&#34;https://dotstud.io/img/blog/187/2.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;例えば、自宅から最寄りの駅まで走らなければならない状況を考えます。まるで、小学校の算数にでてくるたかしくんの問題を彷彿させますね。知らんけど。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;100%の力で走れば5分で駅につく ≒ 100%出力されるので、5V出力される&lt;/li&gt;
+&lt;li&gt;全力で走って途中で歩くと9分で駅に着く（全体的に80%の力で走る） ≒ 80%出力されるので、4V出力される&lt;/li&gt;
+&lt;li&gt;全力で走って途中で歩くと10分で駅に着く（全体的に50%の力で走る） ≒ 50%出力されるので、2.5V出力される&lt;/li&gt;
+&lt;li&gt;全力で走って途中で歩くと15分で駅に着く（全体的に10%の力で走る） ≒ 10%出力されるので、0.5V出力される&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;というようなイメージです。自宅から駅まで走る場合は走る速さの具合によって、到着時間が伸びます。しかし、電圧の場合は実行電圧（実際に出力される電圧）は下がっていきます。&lt;/p&gt;
+
+&lt;h3 id=&#34;esp32開発ボードでのプログラムについて&#34;&gt;ESP32開発ボードでのプログラムについて&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/nefrybt&#34;&gt;Nefry BT&lt;/a&gt;のようなESP32を搭載しているような開発ボードでPWM制御する場合は、ledc関数を使います。&lt;strong&gt;ESP32ではArduinoでつかうようなanalogWrite関数が実装されていない&lt;/strong&gt;とのことなので注意しましょう（ただし、今後変更される可能性があります）。&lt;/p&gt;
+
+&lt;p&gt;例えば、下記のようなプログラムになります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;
+//基本Iotは2.4GHz帯を使うこと
+#include&amp;lt;Nefry.h&amp;gt;
+#include&amp;quot;esp32-hal-ledc.h&amp;quot;
+
+//PWM信号の周波数をPWMをつくっているクロック周波数で割ったもの
+//ledcSetupでPWMの範囲を8bitに設定したとき、0～255　10bitのときは0～1023となる、2進数の話
+#define PWM_BITWIDTH 16
+
+//わかりやすいように角度に変換する関数/////////////////////
+int deg2pw(int deg, int bit){
+    double ms = ((double) deg - 90.0) * 0.95 / 90.0 + 1.45;
+    return (int) (ms / 20.0 * pow(2, bit));
+}
+//////////////////////////////////////////////////////////
+
+void setup() {
+  Serial.begin(115200);
+//ledcSetup(チャンネル数(0～),周波数(たとえばPWMサイクル20mHzなら50Hzになるという意味(SG90の場合))、分解能は任意(ただし限度はある))
+  ledcSetup(0,50,PWM_BITWIDTH);
+  ledcAttachPin(ピン番号,0);//left_motor
+  Nefry.enableSW();
+}
+
+void loop(){
+   if((Nefry.readSW())){
+      ledcWrite(0,deg2pw(90, PWM_BITWIDTH));
+      delay(800);
+      ledcWrite(0,deg2pw(0, PWM_BITWIDTH));
+   }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;プログラムの書き方&#34;&gt;プログラムの書き方&lt;/h3&gt;
+
+&lt;p&gt;プログラムを詳しく見てましょう。&lt;/p&gt;
+
+&lt;p&gt;ledc関数を使うため、ライブラリ「esp32-hal-ledc.h」を最初にインクルードします。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;#include&amp;quot;esp32-hal-ledc.h&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ライブラリ「esp32-hal-ledc.h」を使うときの主な関数は以下に示すものです。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;ledcSetup（チャンネル,周波数,分解能）&lt;/li&gt;
+&lt;li&gt;ledcAttachPin（ピン番号,チャンネル）：チャンネルはピン番号の識別番号です&lt;/li&gt;
+&lt;li&gt;ledcWrite（チャンネル,パルス幅）：設定した角度になるように与えるべきパルス幅を算出する関数&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;実際の記述は以下のようになります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;void setup() {
+    Serial.begin(115200);
+    ledcSetup(0,50,PWM_BITWIDTH);
+    ledcAttachPin(A2,0);//left_motor
+    Nefry.enableSW();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;分解能は&lt;strong&gt;どれだけ細かく制御するのか&lt;/strong&gt;を表しているイメージです。これは&lt;strong&gt;ビット数&lt;/strong&gt;で表します。&lt;/p&gt;
+
+&lt;p&gt;例えば、分解能を&lt;strong&gt;8ビットとするれば0〜255バイト&lt;/strong&gt;（2の8乗）、&lt;strong&gt;10ビットなら0〜1023バイト&lt;/strong&gt;（2の10乗）となります。&lt;/p&gt;
+
+&lt;p&gt;これを、どのようにPWM制御に使えるのか説明します。PWM制御とは一定電圧の入力から&lt;strong&gt;パルス列のオンとオフの一定周期を作り、オンの時間幅を変化させる電力制御方式&lt;/strong&gt;のことです。つまり、&lt;strong&gt;実効電圧を変化させる&lt;/strong&gt;ことができます。&lt;/p&gt;
+
+&lt;p&gt;なので、例えば、最大5[V]の出力を考えたとき、&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;分解能8ビットだと0→0[V]、127→2.5[V]、255→5[V]&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;分解能10ビットだと0→0[V]、511→2.5[V]、1023→5[V]&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;と表せます。分解能が大きい方が、細かい制御ができることがわかるかと思います。&lt;/p&gt;
+
+&lt;h2 id=&#34;node-red-mqttでサーボモータを遠隔制御&#34;&gt;Node-RED×MQTTでサーボモータを遠隔制御&lt;/h2&gt;
+
+&lt;h3 id=&#34;node-redとは&#34;&gt;Node-REDとは&lt;/h3&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/187/9.png&#34; alt=&#34;9&#34;&gt;
+
+&lt;/center&gt;
+
+&lt;a href=&#34;https://nodered.jp/&#34;&gt;Node-RED&lt;/a&gt;はハードウェアデバイス/APIおよびオンラインサービスを接続するためのツールです。ウェブ上で、フローチャートのように直感的にプログラムをつくることができます。そして、最終的に自分が欲しい仕組みを作り上げるというものです。&lt;/p&gt;
+
+&lt;p&gt;Node-REDを使うには大まかに2パターンあります。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;自分のPC上でローカルで動かす（今回はこちらで進めていきます）&lt;/li&gt;
+&lt;li&gt;外部のサービスを利用する（IBMクラウドやenebularなど）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;導入方法は、&lt;a href=&#34;https://qiita.com/minwinmin/private/6c13d2c912d0d7e8e197&#34;&gt;こちら&lt;/a&gt;で説明していますので参考にしてください。&lt;/p&gt;
+
+&lt;p&gt;また、後ほどNode-REDにフローのコードを貼り付ける必要があるので簡単に貼り付け方法を説明します。&lt;/p&gt;
+
+&lt;p&gt;まずフローのコードをコピーし、Node-REDを立ち上げたら右上のメニュー（3本線）をクリックします。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/187/10.png&#34; alt=&#34;10&#34;&gt;
+
+&lt;/center&gt;
+
+すると上記のような画面があらわれます。「読み込み」をクリックして、あらわれた画面にコピーしたコードを貼り付ければ完了です。&lt;/p&gt;
+
+&lt;h3 id=&#34;mqttとは&#34;&gt;MQTTとは&lt;/h3&gt;
+
+&lt;p&gt;MQTTとは、&lt;strong&gt;多数のデバイスの間で短いメッセージを頻繁に送受信する&lt;/strong&gt;ことを想定した通信プロトコルです。つまりインフラのようなもの、もしくはメッセージを送受信するので土管のようなものをイメージすると良いかと思います。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/187/3.png&#34; alt=&#34;3&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;p&gt;MQTTは先ほど説明したような仕組みの名前です。なので、実際にメッセージを送受信するためにはMQTTブローカーが必要です。イメージは下記の画像のようになります。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/187/4.png&#34; alt=&#34;4&#34;&gt;
+
+&lt;/center&gt;
+
+MQTTブローカーを用意するには、いくつか方法があります（&lt;a href=&#34;http://acro-engineer.hatenablog.com/entry/2015/06/19/120000&#34;&gt;こちらのサイト&lt;/a&gt;にまとめられています）。今回、ハンズオンでつかったの以下の2パターンです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;ローカルホストでMQTTブローカーをたてる&lt;/strong&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/mcollina/mosca&#34;&gt;Mosca&lt;/a&gt;を利用する -&amp;gt; MQTT brokerのためのライブラリ（IBMクラウドのような外部サービスでNode-REDを使う場合、うまくいきませんでした）&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://test.mosquitto.org/&#34;&gt;mosquitto&lt;/a&gt;のテストサーバーを利用する&lt;/strong&gt;
+
+&lt;ul&gt;
+&lt;li&gt;これから記載するプログラムはこちらを使っています。&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;node-redのフローのコード&#34;&gt;Node-REDのフローのコード&lt;/h3&gt;
+
+&lt;p&gt;下記のNode-REDのフローのコードを、Node-REDにコピーして使いましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;7878093f.d68778&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;debug&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;782bda22.769d84&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;active&amp;quot;: true,
+        &amp;quot;tosidebar&amp;quot;: true,
+        &amp;quot;console&amp;quot;: false,
+        &amp;quot;tostatus&amp;quot;: false,
+        &amp;quot;complete&amp;quot;: &amp;quot;payload&amp;quot;,
+        &amp;quot;x&amp;quot;: 522.0130081176758,
+        &amp;quot;y&amp;quot;: 161.99999809265137,
+        &amp;quot;wires&amp;quot;: []
+    },
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;22ca4d97.8e3382&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;inject&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;782bda22.769d84&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;topic&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;payload&amp;quot;: &amp;quot;{\&amp;quot;motor\&amp;quot;:1}&amp;quot;,
+        &amp;quot;payloadType&amp;quot;: &amp;quot;json&amp;quot;,
+        &amp;quot;repeat&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;crontab&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;once&amp;quot;: false,
+        &amp;quot;onceDelay&amp;quot;: 0.1,
+        &amp;quot;x&amp;quot;: 220.01303100585938,
+        &amp;quot;y&amp;quot;: 244.00000190734863,
+        &amp;quot;wires&amp;quot;: [
+            [
+                &amp;quot;6b18ace.785b854&amp;quot;
+            ]
+        ]
+    },
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;6b18ace.785b854&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;mqtt out&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;782bda22.769d84&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;/sub/NefryBT/SAMPLE&amp;quot;,
+        &amp;quot;topic&amp;quot;: &amp;quot;/sub/NefryBT/SAMPLE&amp;quot;,
+        &amp;quot;qos&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;retain&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;broker&amp;quot;: &amp;quot;3890dddf.26f532&amp;quot;,
+        &amp;quot;x&amp;quot;: 508.0130386352539,
+        &amp;quot;y&amp;quot;: 293.9999957084656,
+        &amp;quot;wires&amp;quot;: []
+    },
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;e0581ff4.bce8a&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;inject&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;782bda22.769d84&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;topic&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;payload&amp;quot;: &amp;quot;{\&amp;quot;motor\&amp;quot;:0}&amp;quot;,
+        &amp;quot;payloadType&amp;quot;: &amp;quot;json&amp;quot;,
+        &amp;quot;repeat&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;crontab&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;once&amp;quot;: false,
+        &amp;quot;onceDelay&amp;quot;: 0.1,
+        &amp;quot;x&amp;quot;: 220.01303100585938,
+        &amp;quot;y&amp;quot;: 344.00000190734863,
+        &amp;quot;wires&amp;quot;: [
+            [
+                &amp;quot;6b18ace.785b854&amp;quot;
+            ]
+        ]
+    },
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;3dccf617.5970da&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;mqtt in&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;782bda22.769d84&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;topic&amp;quot;: &amp;quot;/sub/NefryBT/SAMPLE&amp;quot;,
+        &amp;quot;qos&amp;quot;: &amp;quot;2&amp;quot;,
+        &amp;quot;broker&amp;quot;: &amp;quot;cd2e6f9.ab8069&amp;quot;,
+        &amp;quot;x&amp;quot;: 235.09634399414062,
+        &amp;quot;y&amp;quot;: 159.3697967529297,
+        &amp;quot;wires&amp;quot;: [
+            [
+                &amp;quot;7878093f.d68778&amp;quot;
+            ]
+        ]
+    },
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;f5c8b0fb.93d8&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;comment&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;782bda22.769d84&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;Node-RED上に文字列表示&amp;quot;,
+        &amp;quot;info&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;x&amp;quot;: 237.09635162353516,
+        &amp;quot;y&amp;quot;: 114.08594131469727,
+        &amp;quot;wires&amp;quot;: []
+    },
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;47872155.bfb16&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;comment&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;782bda22.769d84&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;MQTTブローカー側に文字列を送信&amp;quot;,
+        &amp;quot;info&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;x&amp;quot;: 265.0130310058594,
+        &amp;quot;y&amp;quot;: 206.0104217529297,
+        &amp;quot;wires&amp;quot;: []
+    },
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;d5a5e79d.ec27a8&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;comment&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;782bda22.769d84&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;MQTTブローカー側に文字列を送信するためのフロー&amp;quot;,
+        &amp;quot;info&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;x&amp;quot;: 609.0130004882812,
+        &amp;quot;y&amp;quot;: 257.0104160308838,
+        &amp;quot;wires&amp;quot;: []
+    },
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;3700aeb9.5a7ec2&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;comment&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;782bda22.769d84&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;ｍosquittoのテストサーバーを利用&amp;quot;,
+        &amp;quot;info&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;x&amp;quot;: 265.0130310058594,
+        &amp;quot;y&amp;quot;: 52.010416984558105,
+        &amp;quot;wires&amp;quot;: []
+    },
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;3890dddf.26f532&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;mqtt-broker&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;broker&amp;quot;: &amp;quot;http://test.mosquitto.org/&amp;quot;,
+        &amp;quot;port&amp;quot;: &amp;quot;1883&amp;quot;,
+        &amp;quot;clientid&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;usetls&amp;quot;: false,
+        &amp;quot;compatmode&amp;quot;: true,
+        &amp;quot;keepalive&amp;quot;: &amp;quot;60&amp;quot;,
+        &amp;quot;cleansession&amp;quot;: true,
+        &amp;quot;birthTopic&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;birthQos&amp;quot;: &amp;quot;0&amp;quot;,
+        &amp;quot;birthPayload&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;closeTopic&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;closeQos&amp;quot;: &amp;quot;0&amp;quot;,
+        &amp;quot;closePayload&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;willTopic&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;willQos&amp;quot;: &amp;quot;0&amp;quot;,
+        &amp;quot;willPayload&amp;quot;: &amp;quot;&amp;quot;
+    },
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;cd2e6f9.ab8069&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;mqtt-broker&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;broker&amp;quot;: &amp;quot;http://test.mosquitto.org/&amp;quot;,
+        &amp;quot;port&amp;quot;: &amp;quot;1883&amp;quot;,
+        &amp;quot;clientid&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;usetls&amp;quot;: false,
+        &amp;quot;compatmode&amp;quot;: true,
+        &amp;quot;keepalive&amp;quot;: &amp;quot;60&amp;quot;,
+        &amp;quot;cleansession&amp;quot;: true,
+        &amp;quot;birthTopic&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;birthQos&amp;quot;: &amp;quot;0&amp;quot;,
+        &amp;quot;birthPayload&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;closeTopic&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;closeQos&amp;quot;: &amp;quot;0&amp;quot;,
+        &amp;quot;closePayload&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;willTopic&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;willQos&amp;quot;: &amp;quot;0&amp;quot;,
+        &amp;quot;willPayload&amp;quot;: &amp;quot;&amp;quot;
+    }
+]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;nefry-btのプログラム&#34;&gt;Nefry BTのプログラム&lt;/h3&gt;
+
+&lt;p&gt;下記がNefry BT側のプログラムになります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;//Nefryがwifiにつながっているか確認、2.4Ghzにつなごう
+//できたtest.mosquitto.orgで使える！
+#include &amp;lt;Nefry.h&amp;gt;
+#include &amp;lt;WiFiClient.h&amp;gt;
+#include &amp;lt;PubSubClient.h&amp;gt;
+#include &amp;lt;ArduinoJson.h&amp;gt;
+#include&amp;quot;esp32-hal-ledc.h&amp;quot;
+#define URL &amp;quot;mosquitto.org&amp;quot;
+
+#define PWM_BITWIDTH 16
+
+int deg2pw(int deg, int bit){
+    double ms = ((double) deg - 90.0) * 0.95 / 90.0 + 1.45;
+    return (int) (ms / 20.0 * pow(2, bit));
+}
+
+IPAddress endpoint;
+const int port = 1883;
+
+const char *pubTopic;
+const char *subTopic;
+const char *deviceName;
+const char *mqtt_server = &amp;quot;test.mosquitto.org&amp;quot;;
+
+WiFiClient httpsClient;
+PubSubClient mqttClient(httpsClient);
+
+
+
+void setup() {
+  ledcSetup(0,50,PWM_BITWIDTH);
+  ledcAttachPin(A2,0);
+
+  //// NefryBT設定画面まわり ////////////////////////////////////////
+
+  // NefryBT
+  pubTopic = &amp;quot;/pub/NefryBT/SAMPLE&amp;quot;;
+  subTopic = &amp;quot;/sub/NefryBT/SAMPLE&amp;quot;;
+  deviceName = &amp;quot;NefryBT_SAMPLE&amp;quot;;  // 複数台で利用する場合は必ずかぶらないように変更する
+  // ローカルホストでMQTTブローカーを立てている場合は、パソコンのIPAddress型に収納。配列っぽく入れる。ここはその都度確認すること
+  //endpoint指定部
+  endpoint[0] = 192;
+  endpoint[1] = 168;
+  endpoint[2] = 43;
+  endpoint[3] = 105;
+
+  //// 以下通常処理 ////////////////////////////////////////
+
+  Serial.begin(115200);
+  //mqttClient.setServer()関数でMQTTブローカーを指定する
+  mqttClient.setServer(mqtt_server, port);
+  mqttClient.setCallback(mqttCallback);
+
+  connectMQTT();
+}
+
+//MQTTがちゃんと動いているか、つながっているかを判断  
+void connectMQTT() {
+    Serial.println(&amp;quot;connectMQTT&amp;quot;);
+    Serial.println(deviceName);
+    while (!mqttClient.connected()) {
+      Serial.print(&amp;quot;.&amp;quot;);
+        if (mqttClient.connect(deviceName)) {
+            Serial.println(&amp;quot;Connected.&amp;quot;);
+            int qos = 0;
+            mqttClient.subscribe(subTopic, qos);
+            Serial.println(&amp;quot;Subscribed.&amp;quot;);
+        } else {
+            Serial.print(&amp;quot;Failed. Error state=&amp;quot;);
+            Serial.print(mqttClient.state());
+            // Wait 5 seconds before retrying
+            delay(5000);
+        }
+    }
+}
+///////////////////////////////////////////////////////
+
+char pubMessage[128];
+
+void mqttCallback (char* topic, byte* payload, unsigned int length) {
+
+    String str = &amp;quot;&amp;quot;;
+    Serial.print(&amp;quot;Received. topic=&amp;quot;);
+    Serial.println(topic);
+    for (int i = 0; i &amp;lt; length; i++) {
+        Serial.print((char)payload[i]);
+        str += (char)payload[i];
+    }
+    Serial.print(&amp;quot;\n&amp;quot;);
+
+    StaticJsonBuffer&amp;lt;200&amp;gt; jsonBuffer;
+
+    JsonObject&amp;amp; root = jsonBuffer.parseObject(str);
+
+    // 読み取った文字列をパース
+    if (!root.success()) {
+      Serial.println(&amp;quot;parseObject() failed&amp;quot;);
+      return;
+    }
+//Node-REDから文字列を読み取ってくる部分//////
+    const char* message = root[&amp;quot;message&amp;quot;];
+    int motor = root[&amp;quot;motor&amp;quot;];
+////////////////////////////////////////////
+    Serial.print(&amp;quot;motor = &amp;quot;);
+    Serial.println(motor);
+///サーボモータを動かす処理//////////////////
+    if( motor == 1 ){
+       for(int i=90; i&amp;lt;=115; i++){
+          ledcWrite(0,deg2pw(i, PWM_BITWIDTH));
+       }
+       delay(800);
+       ledcWrite(0,deg2pw(90, PWM_BITWIDTH));
+    } else {
+       for(int i=90; i&amp;gt;=65; --i){//0～180°の位置で考える、90度が基準点としてそこからどう動くかを考える
+          ledcWrite(0,deg2pw(i, PWM_BITWIDTH));
+       }
+       delay(800);
+       ledcWrite(0,deg2pw(90, PWM_BITWIDTH));
+    }
+
+    Nefry.ndelay(1000);
+
+}
+//////////////////////////////////////////////
+
+//mqttを動かしている部分///////////////////////  
+void mqttLoop() {
+    if (!mqttClient.connected()) {
+        connectMQTT();
+    }
+    mqttClient.loop();
+}
+
+void loop() {
+  mqttLoop();
+ }
+//////////////////////////////////////////////
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;動作させてみると&#34;&gt;動作させてみると……&lt;/h3&gt;
+
+&lt;p&gt;このように、PC上から遠隔でサーボモータを制御できるようになります。
+&lt;img src=&#34;https://dotstud.io/img/blog/187/5.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;node-red-mqttでサーボモータをui-ブラウザ-から制御&#34;&gt;Node-RED×MQTTでサーボモータをUI（ブラウザ）から制御&lt;/h2&gt;
+
+&lt;p&gt;先ほどのプログラムはNode-RED上のボタンを押すとある角度回転するというものでした。次はそれを発展させて、&lt;strong&gt;ブラウザから操作して角度を遠隔で制御&lt;/strong&gt;してみます。&lt;/p&gt;
+
+&lt;p&gt;ハンズオンでは、製作途中にタイムアップしてしまいました。少し難易度高めです。&lt;/p&gt;
+
+&lt;h3 id=&#34;node-redのフローのコード-1&#34;&gt;Node-REDのフローのコード&lt;/h3&gt;
+
+&lt;p&gt;下記のNode-REDのフローのコードをNode-REDにコピーして使いましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;f2dc1b0b.520f98&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;mqtt out&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;fab71764.66ef78&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;topic&amp;quot;: &amp;quot;servo/pan&amp;quot;,
+        &amp;quot;qos&amp;quot;: &amp;quot;1&amp;quot;,
+        &amp;quot;retain&amp;quot;: &amp;quot;false&amp;quot;,
+        &amp;quot;broker&amp;quot;: &amp;quot;954b988c.ec1e08&amp;quot;,
+        &amp;quot;x&amp;quot;: 520,
+        &amp;quot;y&amp;quot;: 400,
+        &amp;quot;wires&amp;quot;: []
+    },
+    {
+        &amp;quot;id&amp;quot;: &amp;quot;954b988c.ec1e08&amp;quot;,
+        &amp;quot;type&amp;quot;: &amp;quot;mqtt-broker&amp;quot;,
+        &amp;quot;z&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;name&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;broker&amp;quot;: &amp;quot;https://test.mosquitto.org/&amp;quot;,
+        &amp;quot;port&amp;quot;: &amp;quot;1883&amp;quot;,
+        &amp;quot;clientid&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;usetls&amp;quot;: false,
+        &amp;quot;compatmode&amp;quot;: true,
+        &amp;quot;keepalive&amp;quot;: &amp;quot;60&amp;quot;,
+        &amp;quot;cleansession&amp;quot;: true,
+        &amp;quot;birthTopic&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;birthQos&amp;quot;: &amp;quot;0&amp;quot;,
+        &amp;quot;birthPayload&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;closeTopic&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;closePayload&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;willTopic&amp;quot;: &amp;quot;&amp;quot;,
+        &amp;quot;willQos&amp;quot;: &amp;quot;0&amp;quot;,
+        &amp;quot;willPayload&amp;quot;: &amp;quot;&amp;quot;
+    }
+]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;nefry-btのプログラム-1&#34;&gt;Nefry BTのプログラム&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;
+#include &amp;lt;Nefry.h&amp;gt;
+#include &amp;lt;WiFiClient.h&amp;gt;
+#include &amp;lt;PubSubClient.h&amp;gt;
+#include &amp;lt;ArduinoJson.h&amp;gt;
+//esp32でPWMを使えるようにするためのライブラリー//
+#include&amp;quot;esp32-hal-ledc.h&amp;quot;
+//////////////////////////////////////////////
+
+//分解能//////////////////////////////////////
+#define PWM_BITWIDTH 16
+//////////////////////////////////////////////
+
+//PWM制御：周波数-&amp;gt;角度に変換(プログラムするときにわかりやすい)//
+int deg2pw(int deg, int bit){
+    double ms = ((double) deg - 90.0) * 0.95 / 90.0 + 1.45;
+    return (int) (ms / 20.0 * pow(2, bit));
+}
+////////////////////////////////////////////////////////////
+
+
+IPAddress endpoint;
+const int port = 1883;
+
+const char *pubTopic;
+const char *subTopic;
+const char *deviceName;
+const char *mqtt_server = &amp;quot;test.mosquitto.org&amp;quot;;
+
+WiFiClient httpsClient;
+PubSubClient mqttClient(httpsClient);
+
+
+
+void setup() {
+  ledcSetup(0,50,PWM_BITWIDTH);
+  ledcAttachPin(A1,0);
+
+  //// NefryBT設定 ////////////////////////////////////////
+
+  // NefryBT
+  pubTopic = &amp;quot;/pub/NefryBT/SAMPLE&amp;quot;;
+  subTopic = &amp;quot;/sub/NefryBT/SAMPLE&amp;quot;;
+  deviceName = &amp;quot;NefryBT_SAMPLE&amp;quot;;  // 複数台で利用する場合は必ずかぶらないように変更する
+  // ローカルホストならパソコンのIPAddress型に収納。配列っぽく入れる。ここはその都度確認すること
+  //mosquittoのテストサーバーを使うときは下記のednpointは気にしなくて大丈夫です
+  endpoint[0] = 192;
+  endpoint[1] = 168;
+  endpoint[2] = 1;
+  endpoint[3] = 1;
+
+  ////////////////////////////////////////////
+
+  Serial.begin(115200);
+
+  mqttClient.setServer(mqtt_server, port);
+  mqttClient.setCallback(mqttCallback);
+
+  connectMQTT();
+}
+
+void connectMQTT() {
+    Serial.println(&amp;quot;connectMQTT&amp;quot;);
+    Serial.println(deviceName);
+    while (!mqttClient.connected()) {
+      Serial.print(&amp;quot;.&amp;quot;);
+        if (mqttClient.connect(deviceName)) {
+            Serial.println(&amp;quot;Connected.&amp;quot;);
+            int qos = 0;
+            mqttClient.subscribe(subTopic, qos);
+            Serial.println(&amp;quot;Subscribed.&amp;quot;);
+        } else {
+            Serial.print(&amp;quot;Failed. Error state=&amp;quot;);
+            Serial.print(mqttClient.state());
+            // Wait 5 seconds before retrying
+            delay(5000);
+        }
+    }
+}
+
+char pubMessage[128];
+
+void mqttCallback (char* topic, byte* payload, unsigned int length) {
+
+    String str = &amp;quot;&amp;quot;;
+    Serial.print(&amp;quot;Received. topic=&amp;quot;);
+    Serial.println(topic);
+    for (int i = 0; i &amp;lt; length; i++) {
+        Serial.print((char)payload[i]);
+        str += (char)payload[i];
+    }
+    Serial.print(&amp;quot;\n&amp;quot;);
+
+    StaticJsonBuffer&amp;lt;200&amp;gt; jsonBuffer;
+
+    JsonObject&amp;amp; root = jsonBuffer.parseObject(str);
+
+    // パースが成功かどうか判断
+    if (!root.success()) {
+      Serial.println(&amp;quot;parseObject() failed&amp;quot;);
+      return;
+    }
+
+    const char* message = root[&amp;quot;message&amp;quot;];
+    int takudooon = root[&amp;quot;takudooon&amp;quot;];
+
+    Serial.print(&amp;quot;takudooon = &amp;quot;);
+    Serial.println(takudooon);
+
+    if( takudooon == 1 ){
+       for(int i=90; i&amp;lt;=115; i++){
+          ledcWrite(0,deg2pw(i, PWM_BITWIDTH));
+       }
+       delay(800);
+       ledcWrite(0,deg2pw(90, PWM_BITWIDTH));
+    } else {
+       for(int i=90; i&amp;gt;=65; --i){//0～180°の位置で考える、90度が基準点としてそこからどう動くかを考える
+          ledcWrite(0,deg2pw(i, PWM_BITWIDTH));
+       }
+       delay(800);
+       ledcWrite(0,deg2pw(90, PWM_BITWIDTH));
+    }
+
+    Nefry.ndelay(1000);
+
+}
+
+void mqttLoop() {
+    if (!mqttClient.connected()) {
+        connectMQTT();
+    }
+    mqttClient.loop();
+}
+
+void loop() {
+  mqttLoop();
+ }
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;操作画面を用意&#34;&gt;操作画面を用意&lt;/h3&gt;
+
+&lt;p&gt;それぞれのプログラムが準備できたら、Node-REDの画面から、
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/187/6.png&#34; alt=&#34;6&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;p&gt;URLの「&lt;code&gt;http://localhost:1880&lt;/code&gt;」を「&lt;code&gt;http://localhost:1880/ui&lt;/code&gt;」と記述すると以下のような操作画面があらわれます。ここから、直感的にサーボモータの角度を遠隔制御できるようになります。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/187/7.png&#34; alt=&#34;7&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;h3 id=&#34;実際に動かすと&#34;&gt;実際に動かすと……&lt;/h3&gt;
+
+&lt;p&gt;このようになります。
+&lt;img src=&#34;https://dotstud.io/img/blog/187/8.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;いろいろな技術を知ることでモノづくりの幅が増え、作ってみたいものを自由に作れるようになってもらえればな、と思います。&lt;/p&gt;
+
+&lt;p&gt;では！&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>M5Stack&#43;GPS&#43;臭気センサをつかってトイレの臭いマップをつくりたい！</title>
@@ -1603,6 +2364,21 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
 
 
 &lt;section class=&#34;link&#34; id=&#34;145&#34;&gt;
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
   
       
       
