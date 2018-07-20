@@ -7,8 +7,3259 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2018 dotstudio inc.</copyright>
-    <lastBuildDate>Wed, 18 Jul 2018 10:00:00 +0900</lastBuildDate>
+    <lastBuildDate>Fri, 20 Jul 2018 10:00:00 +0900</lastBuildDate>
     <atom:link href="/blog/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Alexaで自然な発話を目指そう！音声合成マークアップ言語「SSML」を使う方法</title>
+      <link>https://dotstud.io/blog/alexa-skill-using-ssml/</link>
+      <pubDate>Fri, 20 Jul 2018 10:00:00 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/alexa-skill-using-ssml/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、エンジニア兼ライターの&lt;a href=&#34;https://dotstud.io/members/chantoku&#34;&gt;ちゃんとく&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;Alexaスキルの開発では、基本的に&lt;strong&gt;テキストを渡すとそのまま読み上げて&lt;/strong&gt;くれ、句読点を入れると休止に置き換えてくれたり疑問符を入れると語尾をあげたりと、ある程度は自然に調整してくれます。&lt;/p&gt;
+
+&lt;p&gt;でも、「なんだか読み上げが不自然……」「もっと細かく調整したい……」ということがありますよね。&lt;/p&gt;
+
+&lt;p&gt;そんな時は、Alexa Skills Kitで用意されている&lt;u&gt;&lt;strong&gt;音声合成マークアップ言語&lt;/strong&gt;「&lt;a href=&#34;https://developer.amazon.com/ja/docs/custom-skills/speech-synthesis-markup-language-ssml-reference.html&#34;&gt;&lt;strong&gt;SSML&lt;/strong&gt;&lt;/a&gt;」&lt;/u&gt;を使ってみましょう！SSMLを利用すると簡単に効果音・音源を差し込んだり、イントネーションやブレスを細かく整えたりすることができます。&lt;/p&gt;
+
+&lt;p&gt;&lt;font size=&#34;2&#34;&gt;※SSML…Speech Synthesis Markup Language&lt;/font&gt;&lt;/p&gt;
+
+&lt;p&gt;はじめてAlexaスキル開発するよ！という方はこちらから。&lt;/p&gt;
+
+
+
+&lt;section class=&#34;link&#34; id=&#34;144&#34;&gt;
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+          &lt;div class=&#34;link_content&#34;&gt;
+          &lt;a href=&#34;https://dotstud.io/blog/nodejs-amazon-alexa-skill/&#34;&gt;&lt;/a&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/144/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
+          &lt;/div&gt;
+          &lt;div class=&#34;link_content&#34;&gt;
+            &lt;div class=&#34;link_detail&#34;&gt;
+              &lt;div class=&#34;link_title&#34;&gt;
+                Amazon Echoを使いこなそう！Node.jsでAlexaスキル開発 - スマートスピーカーの基本とスキル開発入門
+              &lt;/div&gt;
+              &lt;div class=&#34;link_date&#34;&gt;
+                
+                2018-03-06
+              &lt;/div&gt;
+              &lt;div class=&#34;link_desc&#34;&gt;
+                Amazon Echoで動くAlexaのスキル開発をNode.jsでやってみましょう！
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+&lt;/section&gt;
+
+
+&lt;h2 id=&#34;ssmlとは&#34;&gt;SSMLとは&lt;/h2&gt;
+
+&lt;p&gt;「SSML」は&lt;a href=&#34;https://developer.amazon.com/ja/alexa-skills-kit&#34;&gt;Alexa Skills Kit&lt;/a&gt;で用意されている&lt;strong&gt;音声合成マークアップ言語&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;聞きなれないかもしれませんが、HTMLのタグのように&lt;strong&gt;簡単な記述でプログラムに埋め込む&lt;/strong&gt;ことができます。&lt;/p&gt;
+
+&lt;p&gt;例えば下記のようにテキストを渡すプログラムの場合、&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&#39;LaunchRequest&#39;: function () {
+    const speechOutput = &#39;こんにちは。ちゃんとくのスキルです。&#39;
+    const reprompt = &#39;ちゃんとくスキルです。&#39;
+    this.emit(&#39;:ask&#39;, speechOutput, reprompt);
+},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;SSMLを組み込むと下記のような記述になります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&#39;LaunchRequest&#39;: function () {
+    const speechOutput = &#39;&amp;lt;say-as interpret-as=&amp;quot;interjection&amp;quot;&amp;gt;こんにちは。&amp;lt;/say-as&amp;gt;&amp;lt;break time=&amp;quot;0.5s&amp;quot;/&amp;gt;ちゃんとくのスキルです。&#39;
+    const reprompt = &#39;ちゃんとくスキルです。&#39;
+    this.emit(&#39;:ask&#39;, speechOutput, reprompt);
+},
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;基本的には&lt;strong&gt;①ドキュメントからコピーして&lt;/strong&gt;、&lt;strong&gt;②埋め込むだけ&lt;/strong&gt;、です。簡単そうですよね？&lt;/p&gt;
+
+&lt;p&gt;ここからは大まかにカテゴリ分けしてSSMLタグを紹介していきます！&lt;/p&gt;
+
+&lt;p&gt;「サッとどんな感じか知りたいんじゃ！」という方は、&lt;a href=&#34;https://dotstud.io/blog/alexa-skill-using-ssml/#ssml%E5%85%A8%E9%83%A8%E4%B9%97%E3%81%9B%E3%82%92%E8%A9%A6%E3%81%97%E3%81%A6%E3%81%BF%E3%82%8B&#34;&gt;&lt;strong&gt;SSML全部乗せを試してみる&lt;/strong&gt;&lt;/a&gt;のデモ動画をご覧ください。&lt;/p&gt;
+
+&lt;h2 id=&#34;特殊な読ませ方をさせるタグ&#34;&gt;特殊な読ませ方をさせるタグ&lt;/h2&gt;
+
+&lt;h3 id=&#34;amazon-effect-エフェクト-ささやき声&#34;&gt;amazon:effect / エフェクト（ささやき声）&lt;/h3&gt;
+
+&lt;p&gt;Amazonで提供されている固有のエフェクトが適用されます。今のところ用意されているのは「&lt;code&gt;whispered&lt;/code&gt;」というささやき声のエフェクトだけみたいです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let speechOut = &#39;ささやき声にしたい部分をタグで囲います。&#39;;
+speechOut += &#39;&amp;lt;amazon:effect name=&amp;quot;whispered&amp;quot;&amp;gt;この部分をささやきます。&amp;lt;/amazon:effect&amp;gt;&#39;;
+this.emit(&#39;:tell&#39;, speechOut);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;怒鳴り声とか、悲しい声とか、今後いろいろと実装されたら面白そうですね！&lt;/p&gt;
+
+&lt;h3 id=&#34;say-as-特殊な文章を解釈&#34;&gt;say-as / 特殊な文章を解釈&lt;/h3&gt;
+
+&lt;p&gt;読んで字のごとく、「〜として読ませる」タグで、テキストの形をAlexaに解釈させることができます。例えば「電話番号として読ませる」「一文字ずつとして読ませる」などの機能があります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let speechOut = &#39;例えば93を一文字ずつ読むと&amp;lt;break time=&amp;quot;1s&amp;quot;/&amp;gt;&#39;;
+speechOut += &#39;&amp;lt;say-as interpret-as=&amp;quot;digits&amp;quot;&amp;gt;93&amp;lt;/say-as&amp;gt;&amp;lt;break time=&amp;quot;1s&amp;quot;/&amp;gt;&#39;; // きゅー、さん
+speechOut += &#39;日付として読むと&amp;lt;break time=&amp;quot;1s&amp;quot;/&amp;gt;&#39;;
+speechOut += &#39;&amp;lt;say-as interpret-as=&amp;quot;date&amp;quot; format=&amp;quot;m&amp;quot;&amp;gt;9&amp;lt;/say-as&amp;gt;&amp;lt;say-as interpret-as=&amp;quot;date&amp;quot; format=&amp;quot;d&amp;quot;&amp;gt;3&amp;lt;/say-as&amp;gt;&amp;lt;break time=&amp;quot;1s&amp;quot;/&amp;gt;&#39;; // くがつ、みっか
+this.emit(&#39;:tell&#39;, speechOut);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ちなみに、英字はローマ字読みされるので例えば「IoT」は「いおっと」となってしまいます。&lt;/p&gt;
+
+&lt;p&gt;「アイオーティ」と読ませたい場合は&lt;code&gt;&amp;lt;say-as interpret-as=&amp;quot;characters&amp;quot;&amp;gt;IoT&amp;lt;/say-as&amp;gt;&lt;/code&gt;と一文字ずつ読ませるか、テキストで「アイオーティ」と渡してあげましょう。&lt;/p&gt;
+
+&lt;p&gt;また解釈の一つとして、「&lt;a href=&#34;https://developer.amazon.com/ja/docs/custom-skills/speechcon-reference-interjections-japanese.html&#34;&gt;Speechcon&lt;/a&gt;」という感嘆詞の読み上げが用意されています。「こんにちは」「まあ」「あら」など、&lt;strong&gt;日常的な発話が自然に組み込めるオススメの機能&lt;/strong&gt; です！&lt;/p&gt;
+
+&lt;p&gt;こちらは別記事にまとめました。
+
+
+&lt;section class=&#34;link&#34; id=&#34;180&#34;&gt;
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+          &lt;div class=&#34;link_content&#34;&gt;
+          &lt;a href=&#34;https://dotstud.io/blog/nodejs-alexa-skill-speechcon/&#34;&gt;&lt;/a&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/180/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
+          &lt;/div&gt;
+          &lt;div class=&#34;link_content&#34;&gt;
+            &lt;div class=&#34;link_detail&#34;&gt;
+              &lt;div class=&#34;link_title&#34;&gt;
+                感嘆詞でAlexaと自然な会話を実現！Speechconを使ってスキル開発
+              &lt;/div&gt;
+              &lt;div class=&#34;link_date&#34;&gt;
+                
+                2018-06-30
+              &lt;/div&gt;
+              &lt;div class=&#34;link_desc&#34;&gt;
+                感情表現を豊かにして自然な会話を楽しもう！Speechconを使ってAlexaスキルに感嘆詞を加える方法を紹介します。
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+&lt;/section&gt;
+&lt;/p&gt;
+
+&lt;h3 id=&#34;sub-置き換え&#34;&gt;sub / 置き換え&lt;/h3&gt;
+
+&lt;p&gt;テキストに対して指定の読み方をさせることができます。「宇宙」と書いて「コスモ」と読むような、ルビ的なあれですね……！&lt;/p&gt;
+
+&lt;p&gt;基本的にスキルの利用シーンはVUIのみですが、プログラムの可読性を高めるのに使われるのかなあと思っています。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let speechOut = &#39;好きなアニメは&#39;;
+speechOut += &#39;とある科学の&amp;lt;sub alias=&amp;quot;レールガン&amp;quot;&amp;gt;超電磁砲&amp;lt;/sub&amp;gt;です。&#39;;
+this.emit(&#39;:tell&#39;, speechOut);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;音源を挿入するタグ&#34;&gt;音源を挿入するタグ&lt;/h2&gt;
+
+&lt;h3 id=&#34;audio-mp3の挿入&#34;&gt;audio / MP3の挿入&lt;/h3&gt;
+
+&lt;p&gt;スキル内にMP3音源を埋め込んで再生することができます。&lt;/p&gt;
+
+&lt;p&gt;MP3音源は用意されているライブラリの他に自身が用意したものも利用できますが、&lt;strong&gt;長さやフォーマットが細かく指定&lt;/strong&gt; されています。&lt;/p&gt;
+
+&lt;p&gt;使い方の詳細は下記記事にまとめました。
+
+
+&lt;section class=&#34;link&#34; id=&#34;163&#34;&gt;
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+          &lt;div class=&#34;link_content&#34;&gt;
+          &lt;a href=&#34;https://dotstud.io/blog/nodejs-alexa-skill-mp3/&#34;&gt;&lt;/a&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/163/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
+          &lt;/div&gt;
+          &lt;div class=&#34;link_content&#34;&gt;
+            &lt;div class=&#34;link_detail&#34;&gt;
+              &lt;div class=&#34;link_title&#34;&gt;
+                AlexaスキルでMP3ファイルを流そう！効果音を入れてワンランクアップのスキル開発
+              &lt;/div&gt;
+              &lt;div class=&#34;link_date&#34;&gt;
+                
+                2018-04-30
+              &lt;/div&gt;
+              &lt;div class=&#34;link_desc&#34;&gt;
+                Alexaスキルでは簡単にMP3ファイルを流すことができます。効果音や録音した音声を入れてステップアップしてみましょう！
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+&lt;/section&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;ブレス-区切りを挿入するタグ&#34;&gt;ブレス、区切りを挿入するタグ&lt;/h2&gt;
+
+&lt;h3 id=&#34;break-休止の挿入&#34;&gt;break / 休止の挿入&lt;/h3&gt;
+
+&lt;p&gt;休止時間を秒（s）またはミリ秒（ms）で指定します。または、&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let speechOut = &#39;3秒間待ってやる。&amp;lt;break time=&amp;quot;3s&amp;quot;&amp;gt;&amp;lt;/break&amp;gt;&#39;;
+speechOut += &#39;用意はいいな？&#39;;
+this.emit(&#39;:tell&#39;, speechOut);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;font size=&#34;2&#34;&gt;※最大10秒なので、残念ながら3分待つことはできません。&lt;/font&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;p-段落の挿入&#34;&gt;p / 段落の挿入&lt;/h3&gt;
+
+&lt;p&gt;囲った部分を段落として解釈させます。「。」よりも長めの休止が入ります。これは&lt;code&gt;&amp;lt;break strength=&amp;quot;x-strong&amp;quot; /&amp;gt;&lt;/code&gt;を入れるのと同様の結果になります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let speechOut = &#39;&amp;lt;p&amp;gt;こんにちは。ちゃんとくです。今から大事な話をします。&amp;lt;/p&amp;gt;&#39;;
+speechOut += &#39;&amp;lt;p&amp;gt;実は、すごく焼肉が好きなんですよ。&amp;lt;/p&amp;gt;&#39;;
+this.emit(&#39;:tell&#39;, speechOut);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;s-文章区切りの挿入&#34;&gt;S / 文章区切りの挿入&lt;/h3&gt;
+
+&lt;p&gt;囲った部分を一文として解釈させます。これは末尾に「。」を入れたり、&lt;code&gt;&amp;lt;break strength=&amp;quot;strong&amp;quot; /&amp;gt;&lt;/code&gt;を入れたりするのと同様の結果になります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let speechOut = &#39;&amp;lt;s&amp;gt;こんにちは&amp;lt;/s&amp;gt;&#39;;
+speechOut += &#39;今日はすごく暑いですね&amp;lt;break strength=&amp;quot;strong&amp;quot; /&amp;gt;&#39;;
+speechOut += &#39;こんな日はビールが飲みたい！&#39;;
+this.emit(&#39;:tell&#39;, speechOut);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;速さ-高さ-音量-発音を詳細に設定するタグ&#34;&gt;速さ、高さ、音量、発音を詳細に設定するタグ&lt;/h2&gt;
+
+&lt;h3 id=&#34;emphasis-速さと音量で強調&#34;&gt;emphasis / 速さと音量で強調&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;level&lt;/code&gt;という属性で、音量、速度などを調整して強調させることができます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;const speechOut = &#39;今日は&amp;lt;emphasis level=&amp;quot;strong&amp;quot;&amp;gt;すごく&amp;lt;/emphasis&amp;gt;暑いですね。&#39;;
+this.emit(&#39;:tell&#39;, speechOut);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;prosody-音量-高さ-速さ&#34;&gt;prosody / 音量、高さ、速さ&lt;/h3&gt;
+
+&lt;p&gt;速さ、高さ、音量をそれぞれ指定して調整することができます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let speechOut = &#39;今日は&amp;lt;prosody pitch=&amp;quot;x-low&amp;quot;&amp;gt;すごく&amp;lt;/prosody&amp;gt;暑いですね。&#39;;
+speechOut += &#39;こんな日はビールが&amp;lt;prosody volume=&amp;quot;loud&amp;quot; pitch=&amp;quot;high&amp;quot;&amp;gt;飲みたい！&amp;lt;/prosody&amp;gt;&#39;;
+this.emit(&#39;:tell&#39;, speechOut);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;ssml全部乗せを試してみる&#34;&gt;SSML全部乗せを試してみる&lt;/h2&gt;
+
+&lt;p&gt;読ませてみなきゃわからない、ってことで、SSMLをもりもり使ったサンプルを用意してみました。百聞は一聴にしかず！&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/m7aums3aTDI&#34; frameborder=&#34;0&#34; allow=&#34;autoplay; encrypted-media&#34; allowfullscreen&gt;&lt;/iframe&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;プログラムは下記（とりあえず動く程度でちょっと雑です）。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
+
+const Alexa = require(&#39;alexa-sdk&#39;);
+
+const handlers = {
+    &#39;LaunchRequest&#39;: function () {
+        const speechOutput = &#39;こんにちは。音を流してと言ってみてください。&#39;
+        const reprompt = &#39;音を流します。&#39;
+        this.emit(&#39;:ask&#39;, speechOutput, reprompt);
+    },
+    &#39;WhisperIntent&#39;: function () {
+        let speechOut = &#39;こんな風に囁きます。&#39;;
+        speechOut += &#39;&amp;lt;amazon:effect name=&amp;quot;whispered&amp;quot;&amp;gt;秘密ですよ？&amp;lt;/amazon:effect&amp;gt;&#39;;
+        this.emit(&#39;:ask&#39;, speechOut);
+    },
+    &#39;SayAsIntent&#39;: function () {
+        let speechOut = &#39;例えば93を一文字ずつ読むと&amp;lt;break time=&amp;quot;1s&amp;quot;/&amp;gt;&#39;;
+        speechOut += &#39;&amp;lt;say-as interpret-as=&amp;quot;digits&amp;quot;&amp;gt;93&amp;lt;/say-as&amp;gt;&amp;lt;break time=&amp;quot;1s&amp;quot;/&amp;gt;&#39;;
+        speechOut += &#39;日付として読むと&amp;lt;break time=&amp;quot;1s&amp;quot;/&amp;gt;&#39;;
+        speechOut += &#39;&amp;lt;say-as interpret-as=&amp;quot;date&amp;quot; format=&amp;quot;m&amp;quot;&amp;gt;9&amp;lt;/say-as&amp;gt;&amp;lt;say-as interpret-as=&amp;quot;date&amp;quot; format=&amp;quot;d&amp;quot;&amp;gt;3&amp;lt;/say-as&amp;gt;&amp;lt;break time=&amp;quot;1s&amp;quot;/&amp;gt;&#39;;
+        speechOut += &#39;ちなみにちゃんとくさんの誕生日みたいですよ。&amp;lt;say-as interpret-as=&amp;quot;interjection&amp;quot;&amp;gt;きゃ〜&amp;lt;/say-as&amp;gt;&#39;;
+        this.emit(&#39;:ask&#39;, speechOut);
+    },
+    &#39;SubIntent&#39;: function () {
+        let speechOut = &#39;例えば炭素を表すCと書いて、&#39;;
+        speechOut += &#39;&amp;lt;sub alias=&amp;quot;カーボン&amp;quot;&amp;gt;C&amp;lt;/sub&amp;gt;と読ませることができます。&#39;;
+        this.emit(&#39;:ask&#39;, speechOut);
+    },
+    &#39;SoundIntent&#39;: function () {
+        let speechOut = &#39;音も簡単に流せますよ。&#39;;
+        speechOut += &#39;&amp;lt;audio src=&amp;quot;https://s3.amazonaws.com/ask-soundlibrary/animals/amzn_sfx_dog_med_bark_2x_02.mp3&amp;quot;/&amp;gt;&#39;;
+        this.emit(&#39;:ask&#39;, speechOut);
+    },
+    &#39;EmphasisIntent&#39;: function () {
+        let speechOut = &#39;私本当に、&#39;;
+        speechOut += &#39;&amp;lt;emphasis level=&amp;quot;strong&amp;quot;&amp;gt;本当に&amp;lt;/emphasis&amp;gt;&#39;;
+        speechOut += &#39;焼肉が好きなんです。&#39;;
+        this.emit(&#39;:ask&#39;, speechOut);
+    },
+    &#39;ProsodyIntent&#39;: function () {
+        let speechOut = &#39;大事なことは&amp;lt;prosody rate=&amp;quot;x-slow&amp;quot;&amp;gt;ゆっくり&amp;lt;/prosody&amp;gt;、&#39;;
+        speechOut += &#39;嬉しいことは&amp;lt;prosody pitch=&amp;quot;x-high&amp;quot;&amp;gt;高い声で&amp;lt;/prosody&amp;gt;&#39;;
+        speechOut += &#39;しゃべっちゃいます。&#39;;
+        this.emit(&#39;:ask&#39;, speechOut);
+    },
+    &#39;AMAZON.HelpIntent&#39;: function () {
+        this.emit(&#39;:tell&#39;, this.t(&#39;&#39;));
+    },
+    &#39;AMAZON.CancelIntent&#39;: function () {
+        this.emit(&#39;:tell&#39;, this.t(&#39;&#39;));
+    },
+    &#39;AMAZON.StopIntent&#39;: function () {
+        this.emit(&#39;:tell&#39;, this.t(&#39;&#39;));
+    },
+};
+
+exports.handler = function(event, context, callback) {
+    const alexa = Alexa.handler(event, context, callback);
+    alexa.registerHandlers(handlers);
+    alexa.execute();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;ドキュメントを見て試してみたところ、発音や品詞の解釈など一部日本語スキルには対応していないものもあるようです。&lt;/p&gt;
+
+&lt;p&gt;また一部重複する機能もあるので、可読性や統一性を考えながら実装していくのがよさそうです。&lt;/p&gt;
+
+&lt;p&gt;使いどころを抑えて、Alexaの自然な発話を目指していきましょう！&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>ノスタルジー感あふれる校舎で開発合宿！みんなで「OKUTAMA&#43;」行ってきたレポート</title>
@@ -206,6 +3457,9 @@
 
 
 &lt;section class=&#34;link&#34; id=&#34;184&#34;&gt;
+  
+      
+      
   
       
       
@@ -1828,6 +5082,9 @@
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/office-new-door-notification/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/133/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -2827,6 +6084,9 @@ GPIO.cleanup()
 
 
 &lt;section class=&#34;link&#34; id=&#34;185&#34;&gt;
+  
+      
+      
   
       
       
@@ -5168,6 +8428,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/keyboard-kintai-system-diy/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/183/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -5986,6 +9249,9 @@ clovaを選択しましょう。&lt;/p&gt;
 
 
 &lt;section class=&#34;link&#34; id=&#34;183&#34;&gt;
+  
+      
+      
   
       
       
@@ -7282,6 +10548,9 @@ void iftttClovaPost(String message){
 
 
 &lt;section class=&#34;link&#34; id=&#34;155&#34;&gt;
+  
+      
+      
   
       
       
@@ -9066,6 +12335,9 @@ String escapeParameter(String param) {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/face-robot-making-maruko/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/172/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -10498,6 +13770,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/face-robot-making-maruko/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/172/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -11585,6 +14860,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nodejs-alexa-skill-mp3/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/163/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -12240,6 +15518,9 @@ void loop() {
 
 
 &lt;section class=&#34;link&#34; id=&#34;144&#34;&gt;
+  
+      
+      
   
       
       
@@ -13948,6 +17229,9 @@ void loop(){
 
 
 &lt;section class=&#34;link&#34; id=&#34;098&#34;&gt;
+  
+      
+      
   
       
       
@@ -16345,6 +19629,9 @@ Nefry BTは&lt;strong&gt;最初からWi-Fi・BLE機能がついた開発ボー�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/aogaku-iot-course-report/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/112/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -16849,6 +20136,9 @@ Nefry BTは&lt;strong&gt;最初からWi-Fi・BLE機能がついた開発ボー�
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;121&#34;&gt;
+  
+      
+      
   
       
       
@@ -17849,301 +21139,6 @@ Nefry BTは&lt;strong&gt;最初からWi-Fi・BLE機能がついた開発ボー�
 &lt;/p&gt;
 
 &lt;p&gt;気になった方がいましたらぜひお問い合わせください！（info at dotstud.io まで）&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>7セグメントディスプレイをArduinoで光らせよう！シフトレジスタでのピンの増やし方</title>
-      <link>https://dotstud.io/blog/segment-display-shift-register/</link>
-      <pubDate>Mon, 04 Jun 2018 10:00:00 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/segment-display-shift-register/</guid>
-      
-      <description>
-
-&lt;p&gt;電子工作が趣味なAndroidエンジニアのとまとと申します。&lt;/p&gt;
-
-&lt;p&gt;Arduinoはなんでもできて便利ですが、制御ピンの数に限りがあります。そのため、ピンをたくさん使いたいときは困ってしまいますよね。&lt;/p&gt;
-
-&lt;p&gt;例えばLEDを100個くらい用意してそれぞれ一つずつパターンを決めて制御したいとき、当然ピンが足りなくなりますよね……。&lt;/p&gt;
-
-&lt;p&gt;そんなときのために&lt;strong&gt;制御ピンを増やすことができる方法&lt;/strong&gt;を今回は紹介します！今回はたくさんのピンの制御が必要な7セグメントLEDディスプレイを少ないピンで光らせて見たいと思います。&lt;/p&gt;
-
-&lt;h2 id=&#34;準備するもの&#34;&gt;準備するもの&lt;/h2&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/169/image3.png&#34; alt=&#34;image3&#34;&gt;
-
-&lt;/center&gt;
-
-今回はArduino Uno、7セグメントLEDに加えて、出力を増やすことのできるシフトレジスタや、スイッチングをすることのできるトランジスタを使って行きます。&lt;/p&gt;
-
-&lt;h3 id=&#34;小型3桁赤色7セグメントled表示器-7ｍｍ高-2381bs-http-akizukidenshi-com-catalog-g-gi-09084&#34;&gt;小型3桁赤色7セグメントLED表示器 7ｍｍ高（&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gI-09084/&#34;&gt;2381BS&lt;/a&gt;）&lt;/h3&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/169/7seg.png&#34; alt=&#34;7seg&#34;&gt;
-
-&lt;/center&gt;
-
-7セグメントLEDは7個のLEDを八の字に組み合わせた電子部品で、それぞれのLEDを独立して制御することにより、数字などを表現することができます。&lt;/p&gt;
-
-&lt;p&gt;今回は2381BSという型番のものを使って行きます！&lt;/p&gt;
-
-&lt;h3 id=&#34;8ビットシフトレジスタ-74hc595-http-akizukidenshi-com-catalog-g-gi-08605&#34;&gt;8ビットシフトレジスタ（&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gI-08605/&#34;&gt;74HC595&lt;/a&gt;）&lt;/h3&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/169/shift.png&#34; alt=&#34;shift&#34;&gt;
-
-&lt;/center&gt;
-
-シフトレジスタは、簡単に説明すると&lt;strong&gt;一つの出力を複数に増やすことのできる電子部品&lt;/strong&gt;のことです。&lt;/p&gt;
-
-&lt;p&gt;マイコンボードのピンは個数が限られているので、複数のセンサ等を使いたいときはシフトレジスタを用いることにより、資源を有効に使うことができます。&lt;/p&gt;
-
-&lt;p&gt;また、シフトレジスタは出力を増やす以外にも複数の入力を１つにまとめることもできます。&lt;/p&gt;
-
-&lt;h3 id=&#34;トランジスタ-c1815-http-akizukidenshi-com-catalog-g-gi-04268-8個&#34;&gt;トランジスタ（&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gI-04268/&#34;&gt;C1815&lt;/a&gt;） 8個&lt;/h3&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/169/image2.png&#34; alt=&#34;image2&#34;&gt;
-
-&lt;/center&gt;
-
-トランジスタには3本の端子があり、それぞれベース、コレクタ、エミッタと呼ばれます。コレクタ、エミッタ間を導通するかを、ベースに流すか流さないかで制御することができます。今回はこれをスイッチとして使います。&lt;/p&gt;
-
-&lt;p&gt;今回使うC1815は平らな面から見て左から順にエミッタ、コレクタ、ベースとなっています。&lt;/p&gt;
-
-&lt;h3 id=&#34;その他&#34;&gt;その他&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;カーボン抵抗（&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gR-16151/&#34;&gt;150Ω&lt;/a&gt;） × 8&lt;/li&gt;
-&lt;li&gt;カーボン抵抗（&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gR-16273/&#34;&gt;25KΩ&lt;/a&gt;） × 8&lt;/li&gt;
-&lt;li&gt;ブレッドボード&lt;/li&gt;
-&lt;li&gt;ジャンパ線&lt;/li&gt;
-&lt;li&gt;Arduino Unoまたは互換機&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;配線してみよう&#34;&gt;配線してみよう&lt;/h2&gt;
-
-&lt;p&gt;今回は初心者の方に取ってはあまり馴染みのないパーツも多いと思うので、それぞれ基本の回路の組み方から見ていきたいと思います。&lt;/p&gt;
-
-&lt;p&gt;とにかく7セグの回路が知りたい！と言う方は「&lt;strong&gt;7セグとトランジスタ、シフトレジスタの配線方法&lt;/strong&gt;」の項目を見てみてください。&lt;/p&gt;
-
-&lt;h3 id=&#34;トランジスタの配線方法&#34;&gt;トランジスタの配線方法&lt;/h3&gt;
-
-&lt;p&gt;まずはトランジスタの使い方から見てみます。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/169/image1.png&#34; alt=&#34;image1&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-&lt;p&gt;コレクタに制御したいピン（LEDなど）をつなぎ、ベースに制御するピン（Arduinoの13番など）をつなぎます。最後に、エミッタをGNDに繋げば回路の完成です。ベースのオンオフによってLEDをつけたり消したりすることができます。&lt;/p&gt;
-
-&lt;h3 id=&#34;シフトレジスタの配線方法&#34;&gt;シフトレジスタの配線方法&lt;/h3&gt;
-
-&lt;p&gt;シフトレジスタの回路の組み方は次のようになります。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/169/image5.png&#34; alt=&#34;image5&#34;&gt;
-
-&lt;/center&gt;
-
-シフトレジスタの16番・10番を5Vに、13番・8番をGNDに繋いでいます。14、12、11番はそれぞれ、Arduinoの制御ピン（11、10、9番）に繋いでいます。&lt;/p&gt;
-
-&lt;p&gt;余ってる8つのピンをLEDのアノード（+）に繋ぎ、LEDのカソード（−）を抵抗を経由してGNDに繋げば完成です。&lt;/p&gt;
-
-&lt;h3 id=&#34;7セグとトランジスタ-シフトレジスタの配線方法&#34;&gt;7セグとトランジスタ、シフトレジスタの配線方法&lt;/h3&gt;
-
-&lt;p&gt;さて、いよいよ7セグを光らせてみましょう！回路は以下の図です。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/169/image4.png&#34; alt=&#34;image4&#34;&gt;
-
-&lt;/center&gt;
-
-配線がかなり多くなるので、&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gP-02315/&#34;&gt;短いジャンパ&lt;/a&gt;を駆使するのがオススメです。&lt;/p&gt;
-
-&lt;p&gt;これで回路は完成です。&lt;/p&gt;
-
-&lt;h2 id=&#34;プログラムを書き込もう&#34;&gt;プログラムを書き込もう&lt;/h2&gt;
-
-&lt;p&gt;では、次のプログラムをコピペしてArduino IDEを使ってボードに書き込みましょう！&lt;code&gt;int num = 7&lt;/code&gt;には光らせたい数字を代入します。&lt;/p&gt;
-
-&lt;p&gt;プログラムの仕様は回路の組み方によって変わるため、今回は同じように組んでください。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;#define DATA 11
-#define LATCH 10
-#define CLOCK 9
-
-//  0b10000000   DP
-//  0b01000000   D
-//  0b00100000   E
-//  0b00010000   F
-//  0b00001000   A
-//  0b00000100   G
-//  0b00000010   C
-//  0b00000001   B
-
-static const int num[] {
-  0b01111011,   //ZERO
-  0b00000011,   //ONE
-  0b01101101,   //TWO
-  0b01001111,   //THREE
-  0b00010111,   //FOUR
-  0b01011110,   //FIVE
-  0b01110110,   //SIX
-  0b00001011,   //SEVEN
-  0b01111111,   //EIGHT
-  0b01011111,   //NINE
-};
-
-int count;
-
-void setup()
-{
-  count = 0;
-  pinMode(DATA, OUTPUT);
-  pinMode(LATCH, OUTPUT);
-  pinMode(CLOCK, OUTPUT);
-  pinMode(1, OUTPUT);
-  pinMode(2, OUTPUT);
-  pinMode(3, OUTPUT);
-}
-
-void loop()
-{
-  digitalWrite(1, HIGH);
-  digitalWrite(2, HIGH);
-  digitalWrite(3, HIGH);
-  digitalWrite(LATCH, LOW);
-  shiftOut(DATA, CLOCK, 8, num[count]);
-  digitalWrite(LATCH, HIGH);
-  delay(1000);
-  if (count == 9)
-    count = 0;
-  else
-    count++;
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;プログラムの解説&#34;&gt;プログラムの解説&lt;/h3&gt;
-
-&lt;p&gt;プログラムの一部を解説していきます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;#define DATA 11
-#define LATCH 10
-#define CLOCK 9
-
-//  0b10000000   DP
-//  0b01000000   D
-//  0b00100000   E
-//  0b00010000   F
-//  0b00001000   A
-//  0b00000100   G
-//  0b00000010   C
-//  0b00000001   B
-
-static const int num[] {
-  0b01111011,   //ZERO
-  0b00000011,   //ONE
-  0b01101101,   //TWO
-  0b01001111,   //THREE
-  0b00010111,   //FOUR
-  0b01011110,   //FIVE
-  0b01110110,   //SIX
-  0b00001011,   //SEVEN
-  0b01111111,   //EIGHT
-  0b01011111,   //NINE
-};
-
-int count; // カウンタ
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;ここでは使うピンと、7セグを光らせるパターンの定義をしています。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;void setup()
-{
-  count = 0;
-  pinMode(DATA, OUTPUT);
-  pinMode(LATCH, OUTPUT);
-  pinMode(CLOCK, OUTPUT);
-  pinMode(1, OUTPUT);
-  pinMode(2, OUTPUT);
-  pinMode(3, OUTPUT);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;ここでは、Arduinoから出力をするピンを指定します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;void loop()
-{
-  digitalWrite(1, HIGH);
-  digitalWrite(2, HIGH);
-  digitalWrite(3, HIGH);
-  digitalWrite(LATCH, LOW);
-  shiftOut(DATA, CLOCK, 8, num[count]);
-  digitalWrite(LATCH, HIGH);
-  delay(1000);
-  if (count == 9)
-    count = 0;
-  else
-    count++;
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;ここで、1、2、3番ピンを全てHIGHにしていますが、LOWに切り替えることにより各7セグを制御することができます。&lt;/p&gt;
-
-&lt;p&gt;表示したい数字の配列を読み込み、&lt;code&gt;shiftOut()&lt;/code&gt;で光らせたいLEDのピンを指定します。&lt;/p&gt;
-
-&lt;p&gt;LATCHピンをLOWにすることにより、&lt;code&gt;shiftOut()&lt;/code&gt;でデータを送ることができ、送信後HIGHにすることにより、実際にそれぞれのLEDを光らせることができます。&lt;/p&gt;
-
-&lt;h2 id=&#34;試してみる&#34;&gt;試してみる&lt;/h2&gt;
-
-&lt;p&gt;上記のコードで&lt;code&gt;int num = 7&lt;/code&gt;を試してみると、このような感じで光らせることができます！
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/169/image6.png&#34; alt=&#34;image6&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;シフトレジスタを用いた回路は電子工作をやりはじめた人には難しいかもしれませんが、初歩的なものの組み合わせでできているのでこの記事を見て試してみるのも面白いと思います。&lt;/p&gt;
-
-&lt;p&gt;また今回使ったシフトレジスタは一つだけでしたが、複数組み合わせて身近なLCDディスプレイやLEDキューブ、自作のロボットの制御などのようなものを実現することができます。考え方次第でなんでも作ることができると思います！&lt;/p&gt;
-
-&lt;p&gt;ぜひ試してみてください！&lt;/p&gt;
 </description>
     </item>
     
