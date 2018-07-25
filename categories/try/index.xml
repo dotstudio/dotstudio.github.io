@@ -7,8 +7,282 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2018 dotstudio inc.</copyright>
-    <lastBuildDate>Mon, 23 Jul 2018 10:00:00 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 25 Jul 2018 10:00:24 +0900</lastBuildDate>
     <atom:link href="/categories/try/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>JavaScriptで動くIoT開発ボード「obniz」って？使い方を説明！</title>
+      <link>https://dotstud.io/blog/obniz-hello-world-iot/</link>
+      <pubDate>Wed, 25 Jul 2018 10:00:24 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/obniz-hello-world-iot/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、テクニカルエディターの&lt;a href=&#34;https://dotstud.io/members/kiki&#34;&gt;きき&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;突然ですが、「&lt;strong&gt;IoTってなんだか難しそう。でも、気になる。&lt;/strong&gt;」という方へ。IoT体験、やってみたいですよね？ネットを通してモーターを動かしたり、LEDをチカチカさせたりしてみたいですよね？ね？&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;そんなあなたに読んでほしい！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;初心者でも簡単にIoTプログラミングができるぞ、と噂の開発ボード「&lt;strong&gt;obniz&lt;/strong&gt;」をババンと紹介します！&lt;/p&gt;
+
+&lt;h2 id=&#34;obnizとは&#34;&gt;obnizとは？&lt;/h2&gt;
+
+&lt;p&gt;「&lt;a href=&#34;https://obniz.io/&#34;&gt;&lt;strong&gt;obniz&lt;/strong&gt;（オブナイズ）&lt;/a&gt;」は、&lt;strong&gt;Wi-Fiに繋げるだけでどこからでも操作することができるIoT開発ボード&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/263775/0e90dfcd-4c30-0ab2-b4e2-307f6d3877ca.png&#34; alt=&#34;スクリーンショット 2018-07-11 14.44.18.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;2018年5月18日からCambrianRoboticsが開発・販売しているボードで、価格は&lt;strong&gt;5,980円（税込）&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;クラウドファンディングサイト&lt;a href=&#34;https://www.kickstarter.com/projects/cambrianrobotics/obniz-api-managed-io?ref=card&#34;&gt;&lt;strong&gt;kickstarter&lt;/strong&gt;&lt;/a&gt;では100万円以上の資金を集め、販売後には売り切れ続出と話題になっていましたね！&lt;/p&gt;
+
+&lt;p&gt;日本だけでなく海外にも販売経路を伸ばし、&lt;strong&gt;海外MakerFaire出展&lt;/strong&gt;や&lt;strong&gt;ハンズオン開催&lt;/strong&gt;など取り組んでいるようです。&lt;/p&gt;
+
+&lt;h3 id=&#34;ざっくり特徴紹介&#34;&gt;ざっくり特徴紹介&lt;/h3&gt;
+
+&lt;p&gt;obnizの特徴・機能は多岐にわたるのですが、ざっくりと下記が挙げられます。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;オンラインエディタの利用で環境構築なし&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;JavaScript&lt;/strong&gt;や&lt;strong&gt;ブロックプログラミング&lt;/strong&gt;で開発可能&lt;/li&gt;
+&lt;li&gt;obnizに繋いだモーターやセンサーなどを&lt;strong&gt;ブラウザから制御可能&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;HTMLでのUI連携や、Node.jsで他サービスと回路の連携&lt;/strong&gt;が可能&lt;/li&gt;
+&lt;li&gt;全てのピンでUARTのアサイン可能&lt;/li&gt;
+&lt;li&gt;全てのピンで1A・ドライバ搭載（&lt;strong&gt;モータを直挿し可能&lt;/strong&gt;）&lt;/li&gt;
+&lt;li&gt;電流が大きくなると自動的に停止して警告音を鳴らしてくれる「&lt;strong&gt;過電流保護機能&lt;/strong&gt;」搭載&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;OLEDディスプレイ&lt;/strong&gt;、&lt;strong&gt;Wi-Fi機能&lt;/strong&gt;、&lt;strong&gt;BLE機能&lt;/strong&gt;搭載&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;obnizクラウド&lt;/strong&gt;でAPIから制御可能&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;サーバレス&lt;/strong&gt;でwebhook連携も簡単&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;いかに多機能かわかっていただけたでしょうか……！初心者が使いやすいだけでなく、高性能でもあるようです。&lt;/p&gt;
+
+&lt;p&gt;ざっと公式サイトを読んだだけでも良いことだらけなobniz、早速使ってみましょう〜！&lt;/p&gt;
+
+&lt;h2 id=&#34;obnizを触ってみよう&#34;&gt;obnizを触ってみよう&lt;/h2&gt;
+
+&lt;h3 id=&#34;開封の儀&#34;&gt;開封の儀&lt;/h3&gt;
+
+&lt;p&gt;しゃちょーののびすけさんに「&lt;strong&gt;obnizを貸してください&lt;/strong&gt;」と伝えたら、「&lt;strong&gt;攻めるね〜！！&lt;/strong&gt;」と茶化されたので、なんとなく緊張してしまいますね。&lt;/p&gt;
+
+&lt;p&gt;パッケージはこのような感じです。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/192/2.png&#34; alt=&#34;2&#34;&gt;
+
+&lt;/center&gt;
+
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/192/3.png&#34; alt=&#34;3&#34;&gt;
+
+&lt;/center&gt;
+
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/192/4.png&#34; alt=&#34;4&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;差し色のブルーが可愛いいいい！&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/toy-drone-tello-using/&#34;&gt;前回の記事&lt;/a&gt;では、トイドローン「Tello」で終始遊び倒す内容だったので、きき史上初めての開発ボード。初めてのおつかいならぬ、&lt;strong&gt;初めてのかいふう&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;ジャジャン！！&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/192/1.png&#34; alt=&#34;1&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;obnize本体サイズは&lt;strong&gt;74.5×36.3mm&lt;/strong&gt;なので、私の想像に比べるとなんだか小さかったです。&lt;/p&gt;
+
+&lt;h3 id=&#34;wi-fi設定&#34;&gt;Wi-Fi設定&lt;/h3&gt;
+
+&lt;p&gt;まずはじめに、ケーブルとobnizをつなぎます。&lt;/p&gt;
+
+&lt;p&gt;待って！なんか可愛い子出てきた〜！これは何かの動物なのでしょうか？妖精か何かなのでしょうか？&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/192/8.png&#34; alt=&#34;8&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;「&lt;strong&gt;Switch this!&lt;/strong&gt;」と言われるがままに左上のボタンを押します。&lt;/p&gt;
+
+&lt;p&gt;押すとWi-Fiの設定が始まるので、ディスプレイ上で選択して繋げます。左上のボタンは左右のフリックと押し込みで選択・決定ができるようになっているんですね。&lt;/p&gt;
+
+&lt;h3 id=&#34;オンラインエディタを開く&#34;&gt;オンラインエディタを開く&lt;/h3&gt;
+
+&lt;p&gt;Wi-Fi設定が終わると、QRコードと8桁の番号が表示されます。この番号がobniz idという識別番号になっているようです。（&lt;strong&gt;どこからでも操作できちゃう&lt;/strong&gt;ので、公開しない方が良さそうですね！）&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/192/5.png&#34; alt=&#34;5&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;QRコードをスマートフォンで読みこむとオンラインエディタが開き、このような画面が出てきます。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/192/9.png&#34; alt=&#34;9&#34;&gt;
+
+&lt;/center&gt;
+
+ここにobnizのディスプレイで表示されている8桁のobniz idを入力します。&lt;/p&gt;
+
+&lt;p&gt;obnizはクラウド上のAPIを利用して操作できるので、ソフトウェアやアプリをインストールする必要はありません。&lt;/p&gt;
+
+&lt;p&gt;すごく簡単ですよね？これで準備はばっちりです！&lt;/p&gt;
+
+&lt;h2 id=&#34;obnizのプログラミングをしてみよう&#34;&gt;obnizのプログラミングをしてみよう&lt;/h2&gt;
+
+&lt;h3 id=&#34;始めてすぐさまhello-world&#34;&gt;始めてすぐさまHello World&lt;/h3&gt;
+
+&lt;p&gt;オンラインエディタには、すでに以下のようなコードが書かれています。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/192/10.png&#34; alt=&#34;10&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;p&gt;&lt;font size=&#34;2&#34;&gt;
+※スマートフォンから操作しづらいなあって時は、PCから&lt;a href=&#34;http://obniz.io/program&#34;&gt;オンラインエディタ&lt;/a&gt;を開いてobniz idを入力しましょう。
+&lt;/font&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;obniz.display.print(&amp;quot;Hello World!&amp;quot;)&lt;/code&gt;とあるように、obnizのディスプレイ上に「Hell World」を表示するコードですね。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;&amp;quot;OBNIZ_ID_HERE&amp;quot;&lt;/code&gt;&lt;/strong&gt;のところにも、obniz idを入力しましょう。&lt;/p&gt;
+
+&lt;p&gt;右上の保存＆開くボタンを押すと……&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/192/11.png&#34; alt=&#34;11&#34;&gt;
+
+&lt;/center&gt;
+
+obnizのディスプレイ上でも「&lt;strong&gt;Hello World&lt;/strong&gt;」が表示されました〜！&lt;/p&gt;
+
+&lt;p&gt;私、何もしていないのにHello Worldされている……！&lt;/p&gt;
+
+&lt;h3 id=&#34;ブロックプログラミングでlチカデビュー&#34;&gt;ブロックプログラミングでLチカデビュー&lt;/h3&gt;
+
+&lt;p&gt;obnizを動かすことができた感動と「私何もしていないぞ」感の間で葛藤しているので、その次に簡単な&lt;strong&gt;ブロックプログラミング&lt;/strong&gt;をしてみます。&lt;/p&gt;
+
+&lt;p&gt;ホームページの色合いがふんわりとしていてデザインが可愛らしいので、初心者女子大生もビビることなく進めることができるのもオススメポイントです。&lt;/p&gt;
+
+&lt;p&gt;公式サイトから、&lt;a href=&#34;https://obniz.io/makecode/&#34;&gt;ブロックプログラミング専用エディタ&lt;/a&gt;を開きます。&lt;/p&gt;
+
+&lt;p&gt;はじめに、&lt;strong&gt;My Project&lt;/strong&gt;を選択します。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/192/12.png&#34; alt=&#34;12&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;お久しぶりです、と言わんばかりに再度こちらの画面が表示されるので、obniz idを入力します。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/192/13.png&#34; alt=&#34;13&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;入力すると、ブロックプログラミングの操作画面に変わります。&lt;/p&gt;
+
+&lt;p&gt;こりゃまた可愛すぎるのでは……！？&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/192/6.png&#34; alt=&#34;6&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;こちらもobnizのディスプレイ上に「Hell World」を表示するコードです。簡単に文字を表示させたり、LEDを光らせたり、モーターを動かすこともできます。メニューバーがたくさんあるのでいろんなことを試せますね。&lt;/p&gt;
+
+&lt;p&gt;この時点で「IoTは何から始めればいいのか分からない……」と泣き言を呟いていたあの頃の私が嘘のようにハイテンションです。胸熱なまま、Lチカに挑みます。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/192/7.png&#34; alt=&#34;7&#34;&gt;
+
+&lt;/center&gt;
+
+表示する文字を増やすことも、LEDの秒数も簡単に設定できます。&lt;/p&gt;
+
+&lt;p&gt;そして完成したのがこちら！&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://gyazo.com/5c7e715003a9594450230da781555281&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/5c7e715003a9594450230da781555281.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;font size=&#34;2&#34;&gt;※公式サイトにあるように、抵抗内蔵LEDを使用してください。&lt;/font&gt;&lt;/p&gt;
+
+&lt;p&gt;なんということでしょう。こんなにもすぐにLチカデビューできるなんて！&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;この記事を読んでいる方はお気づきだと思うのですが、&lt;strong&gt;難しいことは何一つしていません&lt;/strong&gt;。そうであるのにもかかわらず、このわくわく感。IoT体験は、&lt;strong&gt;楽しいことだらけ&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;今回はブロックプログラミングを行いましたが、次回はJavaScriptでサーボモータも使ってみたいと思います。&lt;/p&gt;
+
+&lt;p&gt;ホームページには実際の遊び方の説明や作品紹介ページが充実しているので、気軽に始めることができます。初心者の方もそうでない人も、obnizで様々な使い方を試してみてくださいね！&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>【詳細解説】ステッピングモータの仕組みを理解しよう！解説とNefry BTでステッピングモータを使う方法</title>
@@ -24,6 +298,9 @@
 
 
 &lt;section class=&#34;link&#34; id=&#34;187&#34;&gt;
+  
+      
+      
   
       
       
@@ -346,6 +623,9 @@
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -2042,6 +2322,9 @@ void loop()
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nodejs-amazon-alexa-skill/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/144/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -2061,6 +2344,9 @@ void loop()
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -3036,6 +3322,9 @@ this.emit(&#39;:tell&#39;, speechOut);
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nodejs-alexa-skill-speechcon/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/180/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -3055,6 +3344,9 @@ this.emit(&#39;:tell&#39;, speechOut);
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -4118,6 +4410,9 @@ this.emit(&#39;:tell&#39;, speechOut);
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nodejs-alexa-skill-mp3/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/163/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -4137,6 +4432,9 @@ this.emit(&#39;:tell&#39;, speechOut);
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -5348,6 +5646,9 @@ exports.handler = function(event, context, callback) {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/office-new-door-notification/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/133/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -5367,6 +5668,9 @@ exports.handler = function(event, context, callback) {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -6653,6 +6957,9 @@ GPIO.cleanup()
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/clova-ifttt-nefrybt-arduino/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/185/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -6672,6 +6979,9 @@ GPIO.cleanup()
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -8706,6 +9016,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/keyboard-kintai-system-diy/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/183/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -8725,6 +9038,9 @@ void loop() {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -9836,6 +10152,9 @@ clovaを選択しましょう。&lt;/p&gt;
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/keyboard-kintai-system-diy/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/183/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -9855,6 +10174,9 @@ clovaを選択しましょう。&lt;/p&gt;
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -11283,6 +11605,9 @@ String escapeParameter(String param) {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/face-robot-making-maruko/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/172/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -11302,6 +11627,9 @@ String escapeParameter(String param) {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -12724,6 +13052,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/face-robot-making-maruko/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/172/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -12743,6 +13074,9 @@ void loop() {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -13820,6 +14154,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nodejs-alexa-skill-mp3/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/163/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -13839,6 +14176,9 @@ void loop() {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -14871,6 +15211,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nodejs-amazon-alexa-skill/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/144/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -14890,6 +15233,9 @@ void loop() {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -17166,6 +17512,9 @@ GPIO.cleanup()
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/microbit-getting-started-pokio/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/165/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -17185,6 +17534,9 @@ GPIO.cleanup()
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -18526,479 +18878,6 @@ micro:bitをパソコンとUSB接続すると、 &lt;strong&gt;MICROBIT&lt;/stro
 &lt;p&gt;また、スピーカーを端子に接続して音を鳴らしたり、モーターとモータードライバーを接続してラジコンを作ることだって可能で、無限の楽しみ方ができます。&lt;/p&gt;
 
 &lt;p&gt;次回はmicro:bitにスピーカーを接続して、音を鳴らしてみましょう！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>非接触ICタグで遊ぼう！ArduinoでRFIDリーダRC522を使う方法</title>
-      <link>https://dotstud.io/blog/arduino-use-rfid-reader/</link>
-      <pubDate>Wed, 09 May 2018 08:30:26 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/arduino-use-rfid-reader/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、ちゃんとくです。&lt;/p&gt;
-
-&lt;p&gt;みなさんは「&lt;strong&gt;認証機能&lt;/strong&gt;」というとどんなイメージを持つでしょうか？&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/162/auth.png&#34; alt=&#34;auth&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;Webページを開いて、IDとパスワードを入力して、ログインして……。「&lt;strong&gt;めんどくさい！もっと簡単に認証したい！&lt;/strong&gt;」ということもありますよね。&lt;/p&gt;
-
-&lt;p&gt;そんなときは&lt;strong&gt;非接触ICタグ&lt;/strong&gt;を使って、&lt;strong&gt;ピッとして認証できる装置&lt;/strong&gt;を作ってみましょう！&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/162/touch.png&#34; alt=&#34;touch&#34;&gt;
-
-&lt;/center&gt;
-
-今回はArduinoとRFIDリーダを使って、非接触ICタグをかざすと登録されたユーザかどうか判定するデバイスを作ってみます！&lt;/p&gt;
-
-&lt;p&gt;※ただし今回の実装は&lt;strong&gt;セキュリティ対策を施していない&lt;/strong&gt;ので、ご家庭内や趣味の範囲でお試しください。&lt;/p&gt;
-
-&lt;h2 id=&#34;rfid-nfc-非接触ic&#34;&gt;RFID？NFC？非接触IC？&lt;/h2&gt;
-
-&lt;p&gt;「&lt;strong&gt;RFID&lt;/strong&gt;」とは、電磁界や電波を用いて情報を埋め込んだRFタグとやりとりする無線通信技術です。「&lt;strong&gt;NFC&lt;/strong&gt;」はRFタグの規格の一つで、正式名称は&lt;strong&gt;Near Field Communication&lt;/strong&gt;（近距離無線通信）と言います。&lt;/p&gt;
-
-&lt;p&gt;非接触ICは、&lt;strong&gt;読み取り端末にかざすことで通信ができる電池レスのIC&lt;/strong&gt;です（電池内臓の場合もあります）。&lt;/p&gt;
-
-&lt;p&gt;世界で利用されているMifare（マイフェア）カードやTaspoでは「ISO/IEC 14443 Type A」というNFCの規格、日本で利用されている交通系ICカードでは「FeliCa」という規格が主に利用されています。&lt;/p&gt;
-
-&lt;p&gt;今回利用するRFIDリーダライタのRFID-RC522では、&lt;strong&gt;FeliCa規格のICは読み取ることができません&lt;/strong&gt;。FeliCaを利用したい場合はSony製の&lt;a href=&#34;https://www.sony.co.jp/Products/felica/consumer/index.html&#34;&gt;PaSoRi&lt;/a&gt;やFeliCaリーダライタ&lt;a href=&#34;https://www.switch-science.com/catalog/353/&#34;&gt;RC-S620S&lt;/a&gt;などを使ってみてください。&lt;/p&gt;
-
-&lt;h2 id=&#34;今回使うもの&#34;&gt;今回使うもの&lt;/h2&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/162/use.png&#34; alt=&#34;use&#34;&gt;
-
-&lt;/center&gt;
-
-今回はArduinoまたは互換ボード（写真はGenuino 101）、RFIDリーダライタRC522、その他に判定用のLEDやブレッドボード、ジャンパワイヤを利用します。&lt;/p&gt;
-
-&lt;h3 id=&#34;arduino-互換ボード&#34;&gt;Arduino/互換ボード&lt;/h3&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/162/genuino.png&#34; alt=&#34;genuino&#34;&gt;
-
-&lt;/center&gt;
-
-Arduinoや互換ボードを利用すると、RC522ライブラリをそのまま使えて簡単です。写真ではGenuino 101（※）を使っていますが、今回使うピンの配置はArduino Unoと全く同じです。&lt;/p&gt;
-
-&lt;p&gt;Arduino Mega、Nano v3、Microなども利用できますが、ピンの接続箇所が変わるので今回利用する&lt;a href=&#34;https://github.com/miguelbalboa/rfid&#34;&gt;&lt;strong&gt;MFRC522ライブラリ&lt;/strong&gt;&lt;/a&gt;の&lt;a href=&#34;https://github.com/miguelbalboa/rfid#pin-layout&#34;&gt;Pin Layout&lt;/a&gt;を参考に配線してください。&lt;/p&gt;
-
-&lt;p&gt;&lt;font size=&#34;2&#34;&gt;※Genuino 101はBluetooth搭載のIntel製ボードで、色が好きなので多用しています。ディスコンになってしまったけど……。&lt;/font&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;rfid-rc522&#34;&gt;RFID-RC522&lt;/h3&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/162/rc522set.png&#34; alt=&#34;rc522set&#34;&gt;
-
-&lt;/center&gt;
-
-安価で入手しやすいRFIDリーダライタです。&lt;a href=&#34;https://github.com/miguelbalboa/rfid&#34;&gt;ライブラリ&lt;/a&gt;側でドキュメントとサンプルコードが用意されていて、Arduinoで扱いやすいです。過出力や電波の不要輻射を防ぐため、3.3Vで利用します。&lt;/p&gt;
-
-&lt;p&gt;※RFID-RC522では、&lt;strong&gt;FeliCa規格のICは読み取ることができません&lt;/strong&gt;。FeliCaを利用したい場合はSony製の&lt;a href=&#34;https://www.sony.co.jp/Products/felica/consumer/index.html&#34;&gt;PaSoRi&lt;/a&gt;やFeliCaリーダライタ&lt;a href=&#34;https://www.switch-science.com/catalog/353/&#34;&gt;RC-S620S&lt;/a&gt;などを使ってみてください。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/162/rc522.png&#34; alt=&#34;rc522&#34;&gt;
-
-&lt;/center&gt;
-
-例えばAmazonで「&lt;strong&gt;RC522&lt;/strong&gt;」を検索すると、&lt;u&gt;価格帯の違うものがたくさんでてきます&lt;/u&gt;。&lt;strong&gt;お届け時期&lt;/strong&gt;や&lt;strong&gt;発送元&lt;/strong&gt;（Amazon.co.jpからだと安心かも）、&lt;strong&gt;送料&lt;/strong&gt;、&lt;strong&gt;レビュー&lt;/strong&gt; などに注意して購入しましょう！&lt;/p&gt;
-
-&lt;p&gt;ちゃんとくは急いでいたので、Amazon.co.jpが発送する翌日受け取りできるものを購入しました。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/162/solder.png&#34; alt=&#34;solder&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;ピンヘッダは未実装の状態で届くので、好きな角度の方をはんだづけしておきます（かっこいい！と思ってくの字型のピンヘッダを使いましたが、タグによってはジャンパが邪魔してタッチしづらいです……）。&lt;/p&gt;
-
-&lt;h3 id=&#34;rfid-nfcタグ&#34;&gt;RFID/NFCタグ&lt;/h3&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/162/nfc.png&#34; alt=&#34;nfc&#34;&gt;
-
-&lt;/center&gt;
-
-こちらもAmazonで「&lt;strong&gt;NFCタグ&lt;/strong&gt;」などと検索してみると、かなり安価で手に入ることがわかります。ステッカーを使えば、手持ちのキーホルダーなどを簡単にキーにすることができますね！&lt;/p&gt;
-
-&lt;p&gt;RC522のセットを購入した場合はカードとキーホルダーがついてきますし、「&lt;strong&gt;とりあえず試したいだけ&lt;/strong&gt;」「&lt;strong&gt;認識させたいICタグが既にある&lt;/strong&gt;」という場合は購入しなくて大丈夫です。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/162/shiokara.png&#34; alt=&#34;shiokara&#34;&gt;
-
-&lt;/center&gt;
-
-ちゃんとくは、&lt;strong&gt;シオカラーズの2人（Splatoon）&lt;/strong&gt;に協力してもらおうと思います！！&lt;/p&gt;
-
-&lt;p&gt;これは任天堂のamiiboというフィギュアなんですが、&lt;strong&gt;ゲーム用のNFCを搭載&lt;/strong&gt;していてRFIDリーダで情報を読み取ることができます。&lt;/p&gt;
-
-&lt;h2 id=&#34;識別子を取得する&#34;&gt;識別子を取得する&lt;/h2&gt;
-
-&lt;h3 id=&#34;配線&#34;&gt;配線&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://github.com/miguelbalboa/rfid&#34;&gt;MFRC522ライブラリ&lt;/a&gt;の&lt;a href=&#34;https://github.com/miguelbalboa/rfid#pin-layout&#34;&gt;&lt;strong&gt;Pin Layout&lt;/strong&gt;&lt;/a&gt;を参考に、ArduinoとRC522を接続していきます。Arduino Mega、Nano v3、Microなども利用できますが、ピンの接続箇所が変わるのでライブラリのREADMEを参照してください。&lt;/p&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th align=&#34;left&#34;&gt;Signal&lt;/th&gt;
-&lt;th align=&#34;left&#34;&gt;MFRC522 Reader/PCD Pin&lt;/th&gt;
-&lt;th align=&#34;left&#34;&gt;Arduino Uno Pin&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;RST/Reset&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;RST&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;9&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;SPI SS&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;SDA(SS)&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;10&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;SPI MOSI&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;MOSI&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;11 / ICSP-4&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;SPI MISO&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;MISO&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;12 / ICSP-1&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;SPI SCK&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;SCK&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;13/ICSP-3&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;上記の表の通り、RC522のSignalの名前の部分を見て、対応するArduino Unoのピンに接続します。&lt;/p&gt;
-
-&lt;p&gt;その他、RC522の「GND」はArduinoの「GND」へ、RC522の「3.3V」はArduinoの「3.3V」へ接続します。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/162/circuit1.png&#34; alt=&#34;circuit1&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/162/map.png&#34; alt=&#34;map&#34;&gt;
-
-&lt;/center&gt;
-
-慣習的に3.3Vを赤、GNDを黒、その他はそれぞれ違う色のジャンパで繋ぐと見やすいです。書いてある通りに繋ぐだけなので、落ち着いて接続しましょう！（IRQというピンは今回は使用しません）&lt;/p&gt;
-
-&lt;p&gt;ブレッドボードの使い方がよくわからない、という方は、ドキュメントの「&lt;a href=&#34;https://dotstud.io/docs/breadboard/&#34;&gt;&lt;strong&gt;ブレッドボード&lt;/strong&gt;&lt;/a&gt;」を参照してください。&lt;/p&gt;
-
-&lt;h3 id=&#34;プログラム&#34;&gt;プログラム&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://www.arduino.cc/en/main/software&#34;&gt;Arduino IDE&lt;/a&gt;というソフトを使い、Arduinoにプログラムを書き込みます。インストール方法は、ドキュメントの「&lt;a href=&#34;https://dotstud.io/docs/arduinoide-setup/&#34;&gt;&lt;strong&gt;Arduino IDEをPCにインストール&lt;/strong&gt;&lt;/a&gt;」を参照してください。&lt;/p&gt;
-
-&lt;p&gt;まずArduino IDEに、今回利用する&lt;a href=&#34;https://github.com/miguelbalboa/rfid&#34;&gt;&lt;strong&gt;MFRC522ライブラリ&lt;/strong&gt;&lt;/a&gt;をインストールします。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/162/step1.png&#34; alt=&#34;step1&#34;&gt;
-
-  ─ ライブラリマネージャを開く
-
-&lt;/center&gt;
-
-[スケッチ] &amp;gt; [ライブラリをインクルード] &amp;gt; [ライブラリを管理]を選択します。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/162/step2.png&#34; alt=&#34;step2&#34;&gt;
-
-  ─ MFRC522ライブラリをインストール
-
-&lt;/center&gt;
-
-「MFRC」と検索し、MFRC522ライブラリをインストールします。&lt;/p&gt;
-
-&lt;p&gt;エディタには下記のプログラムを貼り付けます。ライブラリの&lt;a href=&#34;https://github.com/miguelbalboa/rfid/blob/master/examples/DumpInfo/DumpInfo.ino&#34;&gt;DumpInfoのサンプルコード&lt;/a&gt;をそのまま利用しています。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;#include &amp;lt;SPI.h&amp;gt;
-#include &amp;lt;MFRC522.h&amp;gt;
-
-constexpr uint8_t RST_PIN = 9;          // Configurable, see typical pin layout above
-constexpr uint8_t SS_PIN = 10;         // Configurable, see typical pin layout above
-
-MFRC522 mfrc522(SS_PIN, RST_PIN);  // Create MFRC522 instance
-
-void setup() {
-		Serial.begin(9600);		// Initialize serial communications with the PC
-		while (!Serial);		// Do nothing if no serial port is opened (added for Arduinos based on ATMEGA32U4)
-		SPI.begin();			// Init SPI bus
-		mfrc522.PCD_Init();		// Init MFRC522
-		mfrc522.PCD_DumpVersionToSerial();	// Show details of PCD - MFRC522 Card Reader details
-		Serial.println(F(&amp;quot;Scan PICC to see UID, SAK, type, and data blocks...&amp;quot;));
-}
-
-void loop() {
-	// Look for new cards
-	if ( ! mfrc522.PICC_IsNewCardPresent()) {
-			return;
-	}
-
-	// Select one of the cards
-	if ( ! mfrc522.PICC_ReadCardSerial()) {
-			return;
-	}
-
-	// Dump debug info about the card; PICC_HaltA() is automatically called
-	mfrc522.PICC_DumpToSerial(&amp;amp;(mfrc522.uid));
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/162/step3.png&#34; alt=&#34;step3&#34;&gt;
-
-&lt;/center&gt;
-
-[ツール] &amp;gt; [ボード]は「&lt;strong&gt;Arduino/Genuino 101&lt;/strong&gt;」、[シリアルポート]は&lt;strong&gt;Arduinoを接続したUSBポート&lt;/strong&gt;を選択します（Windowsの方はCOMポート番号）。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/162/step4.png&#34; alt=&#34;step4&#34;&gt;
-
-&lt;/center&gt;
-
-左上の「➡︎」をクリックしてプログラムを書き込みます。&lt;/p&gt;
-
-&lt;h3 id=&#34;確認&#34;&gt;確認&lt;/h3&gt;
-
-&lt;p&gt;プログラムを書き込めたら、タグの情報を確認します。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/162/monitor.png&#34; alt=&#34;monitor&#34;&gt;
-
-&lt;/center&gt;
-
-[ツール] &amp;gt; [シリアルモニタ]を開きます。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/162/step5.png&#34; alt=&#34;step5&#34;&gt;
-
-&lt;/center&gt;
-
-シリアルモニタを開いた状態でRFIDリーダにタグをかざすと、タグの情報が表示されます。&lt;/p&gt;
-
-&lt;p&gt;登録したいタグをかざし、「&lt;strong&gt;Card UID:&lt;/strong&gt;」以降の部分（画像では消してある部分）をコピーしておきましょう。&lt;/p&gt;
-
-&lt;h2 id=&#34;識別子を元に動作を変える&#34;&gt;識別子を元に動作を変える&lt;/h2&gt;
-
-&lt;p&gt;識別子を取得したNFCタグを「&lt;strong&gt;認証するユーザ&lt;/strong&gt;」、それ以外のタグを「&lt;strong&gt;認証しないユーザ&lt;/strong&gt;」として、Arduino側の動作を変えてみます。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/162/goal.png&#34; alt=&#34;goal&#34;&gt;
-
-&lt;/center&gt;
-
-認証するユーザの場合はLEDを青に、認証しないユーザの場合はLEDを赤に光らせるプログラムを作ってみます。&lt;/p&gt;
-
-&lt;h3 id=&#34;配線-1&#34;&gt;配線&lt;/h3&gt;
-
-&lt;p&gt;回路に、青と赤のLEDを追加します。配線するときは、一旦Arduinoを電源から外します。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/162/circuit2.png&#34; alt=&#34;circuit2&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-&lt;p&gt;青いLEDのアノード（＋側・脚が長い方）を8番ピンに、赤いLEDのアノードをアナログの3番ピンに繋ぎ、カソード（ー側）をそれぞれGNDに接続します。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/162/map2.png&#34; alt=&#34;map2&#34;&gt;
-
-  ─ 配線した状態（上の図とLEDの向きが逆になっています）
-
-&lt;/center&gt;
-
-
-&lt;h3 id=&#34;プログラム-1&#34;&gt;プログラム&lt;/h3&gt;
-
-&lt;p&gt;先ほど取得した&lt;strong&gt;タグの識別子とマッチしたら青いLED、それ以外は赤いLEDを光らせるプログラム&lt;/strong&gt;を作成します。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;#defin UID&lt;/code&gt;の部分は、ご自身が取得したタグの識別子に置き換えてください。また、今回赤いLEDはアナログ出力に接続しているので、&lt;code&gt;AnalogWrite()&lt;/code&gt;を利用して光量を0〜255で指定します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;#include &amp;lt;SPI.h&amp;gt;
-#include &amp;lt;MFRC522.h&amp;gt;
-
-constexpr uint8_t RST_PIN = 9;
-constexpr uint8_t SS_PIN = 10;
-
-#define UID &amp;quot;xx xx xx xx xx xx xx&amp;quot; // 取得した識別子を記述
-
-int led_blue = 8;
-int led_red = 3;
-
-MFRC522 mfrc522(SS_PIN, RST_PIN);
-MFRC522::MIFARE_Key key;
-
-void setup() {
-	  Serial.begin(9600);
-	  pinMode(led_blue, OUTPUT);
-	  pinMode(led_red, OUTPUT);
-	  while (!Serial);
-	  SPI.begin();
-	  mfrc522.PCD_Init();
-	  mfrc522.PCD_DumpVersionToSerial();
-	  Serial.println(F(&amp;quot;Scan PICC to see UID, SAK, type, and data blocks...&amp;quot;));
-
-	  dump_byte_array(key.keyByte, MFRC522::MF_KEY_SIZE);
-}
-
-void loop() {
-    if ( ! mfrc522.PICC_IsNewCardPresent()) {
-      	return;
-    }
-    if ( ! mfrc522.PICC_ReadCardSerial()) {
-      	return;
-    }
-
-    String strBuf[mfrc522.uid.size];
-    for (byte i = 0; i &amp;lt; mfrc522.uid.size; i++) {
-      	strBuf[i] =  String(mfrc522.uid.uidByte[i], HEX);
-      	if(strBuf[i].length() == 1){
-        	strBuf[i] = &amp;quot;0&amp;quot; + strBuf[i];
-      	}
-    }
-
-    String strUID = strBuf[0] + &amp;quot; &amp;quot; + strBuf[1] + &amp;quot; &amp;quot; + strBuf[2] + &amp;quot; &amp;quot; + strBuf[3] + &amp;quot; &amp;quot; + strBuf[4] + &amp;quot; &amp;quot; + strBuf[5] + &amp;quot; &amp;quot; + strBuf[6];
-    if ( strUID.equalsIgnoreCase(UID) ){
-	      Serial.println(&amp;quot;chantoku&amp;quot;);
-	      digitalWrite(led_blue, HIGH); // 青いLEDを光らせる
-	      delay(1000); // 1秒待つ
-	      digitalWrite(led_blue, LOW); // 青いLEDを消す
-    } else {
-	      Serial.println(&amp;quot;error!&amp;quot;);
-	      analogWrite(led_red, 180); // 赤いLEDを光らせる
-	      delay(1000); // 1秒待つ
-	      analogWrite(led_red, 0); // 赤いLEDを消す
-    }
-}
-
-void dump_byte_array(byte *buffer, byte bufferSize) {
-    for (byte i = 0; i &amp;lt; bufferSize; i++) {
-        Serial.print(buffer[i] &amp;lt; 0x10 ? &amp;quot; 0&amp;quot; : &amp;quot; &amp;quot;);
-        Serial.print(buffer[i], HEX);
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;先ほどと同様の手順でArduinoにプログラムを書き込みます。これで完成です！&lt;/p&gt;
-
-&lt;h2 id=&#34;試してみる&#34;&gt;試してみる&lt;/h2&gt;
-
-&lt;p&gt;さっそく登録したタグを識別できるか試してみましょう。&lt;/p&gt;
-
-&lt;p&gt;アオリちゃん（ピンクの子）が登録したタグ、ホタルちゃん（緑の子）は登録していないタグです。
-&lt;a href=&#34;https://gyazo.com/2a2e957605e230f3d539f331c718f9b4&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/2a2e957605e230f3d539f331c718f9b4.gif&#34; alt=&#34;https://gyazo.com/2a2e957605e230f3d539f331c718f9b4&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;登録したアオリちゃんをタッチした時は青、登録していないホタルちゃんをタッチした時は赤を光らせることができました！&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;非接触通信、無線通信というと難しいイメージがありますが、かなり簡単に実装することができました！この機能を使ってタッチした時間を記録したり、タグの識別を利用して電気をつける場所を変えたりと、いろいろなことに活用できそうです。&lt;/p&gt;
-
-&lt;p&gt;次回は&lt;strong&gt;Wi-Fiに接続してタッチした時間を記録するデバイスの実装方法&lt;/strong&gt;を紹介してみたいと思います。&lt;/p&gt;
-
-&lt;p&gt;それではまた！&lt;/p&gt;
 </description>
     </item>
     
