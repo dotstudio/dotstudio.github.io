@@ -7,8 +7,1517 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2018 dotstudio inc.</copyright>
-    <lastBuildDate>Wed, 25 Jul 2018 10:00:24 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 01 Aug 2018 10:32:26 +0900</lastBuildDate>
     <atom:link href="/blog/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>お腹がなる前にobniz!電子工作初心者がおペコ伝達デバイスをつくってみた</title>
+      <link>https://dotstud.io/blog/obniz-tell-be-hungry/</link>
+      <pubDate>Wed, 01 Aug 2018 10:32:26 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/obniz-tell-be-hungry/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、&lt;a href=&#34;https://dotstud.io/members/kiki/&#34;&gt;きき&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;遅めの育ち盛りなのか、お腹がすくのがとても早い今日この頃。お昼が近づいてくると、お腹がぐ〜ぐ〜なってしまうことが多々あります。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/190/opeko.png&#34; alt=&#34;opeko&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;&lt;center&gt;
+&lt;font size=&#34;4&#34;&gt;これ聞こえてる。隣の席のちゃんとくさんに絶対聞こえてる。&lt;/font&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;
+&lt;br /&gt;
+本当に恥ずかしいんですよね、だって女の子だもん。とはいえ、生理現象なので誰もぐ〜ぐ〜を止めることはできません。&lt;/p&gt;
+
+&lt;p&gt;ならば仕方ない、言われる前に言っちゃえ！お腹が鳴る前に「私、お腹が空きましたよ」ということを伝える「&lt;strong&gt;おペコ伝達デバイス&lt;/strong&gt;」を作っちゃいましょう！&lt;/p&gt;
+
+&lt;p&gt;&lt;font size=&#34;2&#34;&gt;※おペコ…お腹がペコペコの意。&lt;/font&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;obnizでおペコ伝達デバイスを作る&#34;&gt;obnizでおペコ伝達デバイスを作る&lt;/h2&gt;
+
+&lt;h3 id=&#34;iot開発ボード-obniz-って&#34;&gt;IoT開発ボード「obniz」って？&lt;/h3&gt;
+
+&lt;p&gt;今回は、JavaScriptで初心者も簡単に開発できる「&lt;strong&gt;&lt;a href=&#34;https://obniz.io/&#34;&gt;obniz&lt;/a&gt;（おぶないず）&lt;/strong&gt;」を使っておペコ伝達デバイスを作ります！&lt;/p&gt;
+
+&lt;p&gt;obnizは、&lt;strong&gt;Wi-Fiに繋げるだけでどこからでも操作することができるIoT開発ボード&lt;/strong&gt;
+です。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/263775/0e90dfcd-4c30-0ab2-b4e2-307f6d3877ca.png&#34; alt=&#34;&#34; /&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Wi-Fi以外のセットアップ不要&lt;/strong&gt;でオンライン上ですぐに開発することができ、&lt;strong&gt;JavaScriptやブロックプログラミング&lt;/strong&gt;で開発できるためプログラミング初心者でも気軽に使い始めることができます。&lt;/p&gt;
+
+&lt;p&gt;また&lt;strong&gt;すべてのI/Oが電圧の切り替えやUART変換に対応&lt;/strong&gt;、&lt;strong&gt;モータドライバ搭載&lt;/strong&gt;で、難しいGPIOを意識することなくハードウェアを利用できます。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;サーバレス機能を用いた他サービスとの連携&lt;/strong&gt;や、&lt;strong&gt;obnizクラウドによるAPI操作機能&lt;/strong&gt;もあり、あると便利な&lt;strong&gt;Bluetooth（BLE）&lt;/strong&gt;や&lt;strong&gt;OLEDディスプレイ&lt;/strong&gt;も搭載です。&lt;/p&gt;
+
+&lt;p&gt;紹介したい機能が多すぎて太字だらけになっちゃいました。もう&lt;u&gt;&lt;strong&gt;欲しい機能全部盛り&lt;/strong&gt;&lt;/u&gt;って感じですね！&lt;/p&gt;
+
+
+
+&lt;section class=&#34;link&#34; id=&#34;192&#34;&gt;
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+          &lt;div class=&#34;link_content&#34;&gt;
+          &lt;a href=&#34;https://dotstud.io/blog/obniz-hello-world-iot/&#34;&gt;&lt;/a&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/192/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
+          &lt;/div&gt;
+          &lt;div class=&#34;link_content&#34;&gt;
+            &lt;div class=&#34;link_detail&#34;&gt;
+              &lt;div class=&#34;link_title&#34;&gt;
+                JavaScriptで動くIoT開発ボード「obniz」って？使い方を説明！
+              &lt;/div&gt;
+              &lt;div class=&#34;link_date&#34;&gt;
+                
+                2018-07-25
+              &lt;/div&gt;
+              &lt;div class=&#34;link_desc&#34;&gt;
+                話題の開発ボード「obniz」でLチカ！簡単なAPI制御やGPIO操作で今すぐIoT開発できちゃうのでは？
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+&lt;/section&gt;
+
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/obniz-hello-world-iot/&#34;&gt;前回の記事&lt;/a&gt;では、obnizデビュー！ということで、セットアップ方法やブロックプログラミングでLチカを試してみました。&lt;/p&gt;
+
+&lt;p&gt;今回はJavaScriptでコードを書いて、Lチカやサーボモーターを動かしてみたいと思います。&lt;/p&gt;
+
+&lt;h3 id=&#34;おペコを伝える方法&#34;&gt;おペコを伝える方法&lt;/h3&gt;
+
+&lt;p&gt;おペコの伝達は以下の2パターンで試してみたいと思います。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;めっちゃ光ってobnizのディスプレイにメッセージを表示させる&lt;/li&gt;
+&lt;li&gt;Twitterで「#お腹すいたなぁ」とツイートすると旗を振って鈴を鳴らす&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;それではお腹がなってしまう前に作らねば〜！&lt;/p&gt;
+
+&lt;h3 id=&#34;今回使用する電子部品たち&#34;&gt;今回使用する電子部品たち&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ジャンパワイヤ ×3&lt;/li&gt;
+&lt;li&gt;サーボモーター ×1&lt;/li&gt;
+&lt;li&gt;内部抵抗が付いているLED （赤 ×1、紫 ×1）&lt;/li&gt;
+&lt;li&gt;旗用の画用紙や鈴など&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;LEDは、obniz公式サイトに「&lt;strong&gt;内部抵抗があるものを使用してください&lt;/strong&gt;」との旨が記載されているので、要注意です。&lt;/p&gt;
+
+&lt;h2 id=&#34;おペコ伝達①-めっちゃ光ってobnizのディスプレイにメッセージが表示される&#34;&gt;おペコ伝達①: めっちゃ光ってobnizのディスプレイにメッセージが表示される&lt;/h2&gt;
+
+&lt;p&gt;専用の&lt;a href=&#34;http://obniz.io/program&#34;&gt;オンラインエディタ&lt;/a&gt;を開き、以下のコードを書きました。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;!-- HTML Example --&amp;gt;
+&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;
+  &amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;width=device-width, initial-scale=1&amp;quot;&amp;gt;
+  &amp;lt;script src=&amp;quot;https://obniz.io/js/jquery-3.2.1.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+  &amp;lt;script src=&amp;quot;https://unpkg.com/obniz@latest/obniz.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+
+&amp;lt;div id=&amp;quot;obniz-debug&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+
+&amp;lt;script&amp;gt;
+    var obniz = new Obniz(&amp;quot;XXXX-XXXX&amp;quot;); // 固有のobniz ID
+
+     obniz.onconnect = function(){
+      obniz.display.clear();
+      obniz.display.print(&amp;quot;ちゃんとくさん&amp;quot;);
+	},4000;
+
+      setInterval(function(){
+        obniz.display.print(&amp;quot;あなたの脳内に&amp;quot;);
+    }, 6000);
+
+   setInterval(function(){
+        obniz.display.print(&amp;quot;呼びかけています&amp;quot;);
+    }, 7000);
+
+   setInterval(function(){
+        obniz.display.print(&amp;quot;お腹が空きました&amp;quot;);
+    }, 8000);
+
+
+    setInterval(function () {
+    var led1 = obniz.wired(&amp;quot;LED&amp;quot;, {anode:4, cathode:5});
+    var led2 = obniz.wired(&amp;quot;LED&amp;quot;, {anode:6, cathode:7});
+    led1.on();
+    led2.off();
+    },1000);
+
+  setInterval(function () {
+    var led1 = obniz.wired(&amp;quot;LED&amp;quot;, {anode:4, cathode:5});
+    var led2 = obniz.wired(&amp;quot;LED&amp;quot;, {anode:6, cathode:7});
+    led1.off()
+    led2.on();
+    },2000);
+
+&amp;lt;/script&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;保存＆開く&lt;/strong&gt;ボタンを押すと……&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/190/2.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;赤と紫のLEDの眩しいことよ……！&lt;/p&gt;
+
+&lt;p&gt;内部抵抗のないLEDを使ってしまうと流れる電流の大きさに耐えられず、LEDが壊れてしまい危険な状態に。obnizでは、自動的に停止して警告音を鳴らしてくれる「&lt;strong&gt;過電流保護機能&lt;/strong&gt;」が起動します。間違えてしまってもなんとかしてくれるので、初心者に優しいですね。&lt;/p&gt;
+
+&lt;p&gt;（公式サイトをちゃんと読まずに内部抵抗のないLEDを使用し、画面上に現れる多数の「&lt;strong&gt;warning&lt;/strong&gt;」と、若干の焦げた匂いに内心ビビりまくったことは内緒ですよ……）&lt;/p&gt;
+
+&lt;h2 id=&#34;おペコ伝達②-twitterで-お腹すいたなぁ-とツイートすると旗を振って鈴を鳴らす&#34;&gt;おペコ伝達②: Twitterで「#お腹すいたなぁ」とツイートすると旗を振って鈴を鳴らす&lt;/h2&gt;
+
+&lt;p&gt;次は、&lt;a href=&#34;https://obniz.io/explore/1&#34;&gt;公式サイトの作品一覧ページ&lt;/a&gt;を参考にして、&lt;strong&gt;目で見てわかるだけでなく、音でも空腹を伝えられるようにします。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;手順は以下の通りです。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Twitter API Keyを取得する&lt;/li&gt;
+&lt;li&gt;Node.jsでサーバモーターを動かす&lt;/li&gt;
+&lt;li&gt;いい感じの旗を作る&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;twitter-api-keyを取得する&#34;&gt;Twitter API Keyを取得する&lt;/h3&gt;
+
+&lt;p&gt;私ははじめての取得だったので手順を載せますが、&lt;strong&gt;そんなんもう知っとるわ&lt;/strong&gt;という方は読み飛ばしちゃってください。&lt;/p&gt;
+
+&lt;p&gt;ちなみに、Twitterの設定であらかじめ電話番号の登録をする必要があります。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/190/3.png&#34; alt=&#34;3&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;&lt;a href=&#34;https://apps.twitter.com/&#34;&gt;Twitter Application Management&lt;/a&gt;を開き、右上の「&lt;strong&gt;Create New App&lt;/strong&gt;」ボタンを押します。&lt;/p&gt;
+
+&lt;p&gt;なんで3個も作ってるのかという理由は後ほど説明します。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/190/4.png&#34; alt=&#34;4&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;ol&gt;
+&lt;li&gt;必須の3箇所に記入&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Developer Agreement&lt;/strong&gt;のチェックボックスを押す&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Create your Twitter application&lt;/strong&gt;を押す&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;これでアプリケーションの作成ができました。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/190/5.png&#34; alt=&#34;5&#34;&gt;
+
+&lt;/center&gt;
+
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/190/6.png&#34; alt=&#34;6&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;&lt;strong&gt;Your Access Token&lt;/strong&gt;は、&lt;strong&gt;Create my access token&lt;/strong&gt;を押すと発行されます。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/190/7.png&#34; alt=&#34;7&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;すんなりと取得することができましたね。&lt;/p&gt;
+
+&lt;h3 id=&#34;node-jsでサーバモーターを動かす&#34;&gt;Node.jsでサーバモーターを動かす&lt;/h3&gt;
+
+&lt;p&gt;参考にしたコードをみると、記入する部分が３箇所あることがわかります。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/190/8.png&#34; alt=&#34;8&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;①数字8桁のobniz固有ID
+②取得した4種類のAPI Key
+③反応してほしい言葉&lt;/p&gt;
+
+&lt;p&gt;をそれぞれ入力します。&lt;/p&gt;
+
+&lt;p&gt;Node.jsでサーバーを立ち上げ、コードを書き込みましょう。&lt;/p&gt;
+
+&lt;p&gt;実際のコードはこちらです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;// Nodejs
+
+var Obniz = require(&#39;obniz&#39;);
+var Twitter = require(&#39;twitter&#39;);
+
+var obniz = new Obniz(&amp;quot;0000-0000&amp;quot;);
+
+var servo;
+obniz.onconnect = function(){
+  servo = obniz.wired(&amp;quot;ServoMotor&amp;quot;, {signal:0,vcc:1, gnd:2});
+  servo.angle(10);
+  }
+
+
+var client = new Twitter({
+    consumer_key: &#39;ConsumerKey&#39;,
+    consumer_secret: &#39;Secret&#39;,
+    access_token_key: &#39;TokenKey&#39;,
+    access_token_secret: &#39;TokenSeacret&#39;
+  });
+
+var stream = client.stream(&#39;statuses/filter&#39;, {track: &#39;#お腹すいたなぁ&#39;});
+stream.on(&#39;data&#39;, function(event) {
+  if (event) {
+    var count = 0;
+    var angles = [75,45,75,45,75,45,75]
+    var timer = setInterval(function(){
+      count++;
+      servo.angle(angles[count]);
+      if (count &amp;gt;= 6){
+        clearInterval(timer);
+      }
+    }, 500);
+  }
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;③は「&lt;strong&gt;#お腹すいたなぁ&lt;/strong&gt;」にしました。「お腹すいた」「ご飯食べたい」ではなく、「すいたなぁ」と語尾を弱くすることで「&lt;strong&gt;すみません、私もうお腹空きすぎて力が入らんのです……&lt;/strong&gt;」といった申し訳なさと弱々しい感情の表現にこだわりました。&lt;/p&gt;
+
+&lt;p&gt;サーボモーターの配線は、以下の通りに繋いでください。
+・茶色：GND→2
+・赤：電源［＋］→1
+・オレンジ：制御信号→0&lt;/p&gt;
+
+&lt;p&gt;文字を変えてみたり、角度を調節してみたり……を繰り返しすぎると、Twitterから「&lt;strong&gt;あなた短時間で何回も起動しすぎよ&lt;/strong&gt;」というエラーが表示されます。エラーが解除されるまで15分ほど待たなければいけないので、待たなくていいように3つのTwitter API Keyを取得して交互に使用しました。&lt;/p&gt;
+
+&lt;p&gt;起動するとこんな感じです。
+&lt;img src=&#34;https://dotstud.io/img/blog/190/9.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;はじめてサーボモーター動かせたよ〜！楽しいよ〜！&lt;/p&gt;
+
+&lt;h3 id=&#34;いい感じの旗を作る&#34;&gt;いい感じの旗を作る&lt;/h3&gt;
+
+&lt;p&gt;久しぶりのプチ図画工作、付箋をチョキチョキ。&lt;/p&gt;
+
+&lt;p&gt;小学４年生で所属していた「図工クラブ」での経験が発揮された瞬間です。旗は2パターン作ってみました。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/190/10.png&#34; alt=&#34;10&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;不器用な私史上、かなりいい方です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/190/11.gif&#34; alt=&#34;&#34; /&gt;
+事後報告バージョン&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/190/12.gif&#34; alt=&#34;&#34; /&gt;
+事前報告バージョン&lt;/p&gt;
+
+&lt;p&gt;なんだか旗の振り方が少し不器用ですが、作り手に似たということにしてこのまま進みます。&lt;/p&gt;
+
+&lt;h2 id=&#34;お腹が鳴りそうになってきた&#34;&gt;お腹が鳴りそうになってきた&lt;/h2&gt;
+
+&lt;p&gt;それではobnizをこっそりちゃんとくさんのデスクに仕込みます。&lt;/p&gt;
+
+&lt;h3 id=&#34;①ledライトとディスプレイ表示で視覚に訴えるスタイル&#34;&gt;①LEDライトとディスプレイ表示で視覚に訴えるスタイル&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/190/13.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;div class=&#34;parent&#34;&gt;
+    &lt;div class=&#34;dialogue&#34;&gt;
+        &lt;div class=&#34;img image_w&#34;&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/190/obniz1.png&#34; /&gt;
+          &lt;section class=&#34;name&#34;&gt;obniz&lt;/section&gt;
+        &lt;/div&gt;
+        &lt;div class=&#34;text&#34;&gt;
+            （……ちゃんとくさん……きこえますか……ききです……今……あなたの脳内に……直接……呼びかけています……お腹が空きました……）
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;parent&#34;&gt;
+    &lt;div class=&#34;dialogue&#34;&gt;
+        &lt;div class=&#34;img image_c&#34;&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/190/chantoku.png&#34; /&gt;
+          &lt;section class=&#34;name&#34;&gt;ちゃんとく&lt;/section&gt;
+        &lt;/div&gt;
+        &lt;div class=&#34;text&#34;&gt;
+            「目がやられた」
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&#34;②旗と鈴の音で視覚のみならず聴覚にも訴えるスタイル&#34;&gt;②旗と鈴の音で視覚のみならず聴覚にも訴えるスタイル&lt;/h3&gt;
+
+&lt;p&gt;鈴はピンクのお守りについている鈴しかありませんでした。予想以上にキュートな仕上がりです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/190/14.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;div class=&#34;parent&#34;&gt;
+    &lt;div class=&#34;dialogue&#34;&gt;
+        &lt;div class=&#34;img image_w&#34;&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/190/obniz2.png&#34; /&gt;
+          &lt;section class=&#34;name&#34;&gt;obniz&lt;/section&gt;
+        &lt;/div&gt;
+        &lt;div class=&#34;text&#34;&gt;
+            「きき、おペコです…！（ブンブン）」
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;parent&#34;&gt;
+    &lt;div class=&#34;dialogue&#34;&gt;
+        &lt;div class=&#34;img image_c&#34;&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/190/chantoku.png&#34; /&gt;
+          &lt;section class=&#34;name&#34;&gt;ちゃんとく&lt;/section&gt;
+        &lt;/div&gt;
+        &lt;div class=&#34;text&#34;&gt;
+            「驚いた」
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;思ったより激しめに旗が動く&lt;/strong&gt;ので、こちらの方が空腹感はより伝わると思います。微かな驚きとともにおペコを伝えることができました。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;div class=&#34;parent&#34;&gt;
+    &lt;div class=&#34;dialogue&#34;&gt;
+        &lt;div class=&#34;img image_c&#34;&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/190/chantoku.png&#34; /&gt;
+          &lt;section class=&#34;name&#34;&gt;ちゃんとく&lt;/section&gt;
+        &lt;/div&gt;
+        &lt;div class=&#34;text&#34;&gt;
+            「そろそろお昼にしようか！」
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;parent&#34;&gt;
+    &lt;div class=&#34;dialogue&#34;&gt;
+        &lt;div class=&#34;img image_c&#34;&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/190/opeko2.png&#34; /&gt;
+          &lt;section class=&#34;name&#34;&gt;きき&lt;/section&gt;
+        &lt;/div&gt;
+        &lt;div class=&#34;text&#34;&gt;
+            「やっっっった〜〜〜〜！！！（歓喜）」
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;いかがでしたでしょうか？&lt;/p&gt;
+
+&lt;p&gt;obnizを使えば、&lt;strong&gt;お腹がぐ〜ぐ〜なって恥ずかしい思いをすることもないし、お昼のタイミングを早めることもできます&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;みなさんも会社の上司のデスクや、学校の気になるあの子の机に仕込みまくり、日々のおペコ問題を解消していきましょう！&lt;/p&gt;
+
+&lt;p&gt;ではでは、私はランチタイムに入ることにします〜！&lt;/p&gt;
+
+&lt;style&gt;
+.dialogue {
+    padding: 10px;
+    display: table;
+}
+
+.img {
+    margin-right: 10px;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.img img {
+    margin-left: 10px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+.image_n img {
+    border: 2px solid blue;
+}
+
+.image_c img {
+    border: 2px solid pink;
+}
+
+.image_w img {
+    border-radius: 50%;
+    border: 2px solid green;
+}
+
+.image_t img {
+    border-radius: 50%;
+    border: 2px solid red;
+}
+
+.image_s img {
+    border-radius: 50%;
+    border: 2px solid brown;
+}
+.name {
+    font-weight: bold;
+    text-align: center;
+    margin-left: 10px;
+}
+
+.text {
+    display: table-cell;
+    padding: 0;
+    vertical-align: middle;
+    padding-left: 20px;
+}
+&lt;/style&gt;
+</description>
+    </item>
     
     <item>
       <title>JavaScriptで動くIoT開発ボード「obniz」って？使い方を説明！</title>
@@ -403,6 +1912,9 @@ obnizのディスプレイ上でも「&lt;strong&gt;Hello World&lt;/strong&gt;�
 
 
 &lt;section class=&#34;link&#34; id=&#34;175&#34;&gt;
+  
+      
+      
   
       
       
@@ -1597,6 +3109,9 @@ obnizのディスプレイ上でも「&lt;strong&gt;Hello World&lt;/strong&gt;�
 
 
 &lt;section class=&#34;link&#34; id=&#34;187&#34;&gt;
+  
+      
+      
   
       
       
@@ -3624,6 +5139,9 @@ void loop()
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nodejs-amazon-alexa-skill/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/144/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -4303,6 +5821,9 @@ this.emit(&#39;:tell&#39;, speechOut);
 
 
 &lt;section class=&#34;link&#34; id=&#34;180&#34;&gt;
+  
+      
+      
   
       
       
@@ -5340,6 +6861,9 @@ this.emit(&#39;:tell&#39;, speechOut);
 
 
 &lt;section class=&#34;link&#34; id=&#34;163&#34;&gt;
+  
+      
+      
   
       
       
@@ -6996,6 +8520,9 @@ exports.handler = function(event, context, callback) {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/toy-drone-tello-using/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/184/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -7889,6 +9416,9 @@ exports.handler = function(event, context, callback) {
 
 
 &lt;section class=&#34;link&#34; id=&#34;133&#34;&gt;
+  
+      
+      
   
       
       
@@ -9335,6 +10865,9 @@ GPIO.cleanup()
 
 
 &lt;section class=&#34;link&#34; id=&#34;185&#34;&gt;
+  
+      
+      
   
       
       
@@ -11703,6 +13236,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/keyboard-kintai-system-diy/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/183/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -12524,6 +14060,9 @@ clovaを選択しましょう。&lt;/p&gt;
 
 
 &lt;section class=&#34;link&#34; id=&#34;183&#34;&gt;
+  
+      
+      
   
       
       
@@ -13835,6 +15374,9 @@ void iftttClovaPost(String message){
 
 
 &lt;section class=&#34;link&#34; id=&#34;155&#34;&gt;
+  
+      
+      
   
       
       
@@ -15646,6 +17188,9 @@ String escapeParameter(String param) {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/face-robot-making-maruko/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/172/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -17093,6 +18638,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/face-robot-making-maruko/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/172/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -18195,6 +19743,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nodejs-alexa-skill-mp3/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/163/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -18853,6 +20404,9 @@ void loop() {
 
 
 &lt;section class=&#34;link&#34; id=&#34;144&#34;&gt;
+  
+      
+      
   
       
       
@@ -20452,99 +22006,6 @@ void loop(){
     font-size: 120%;
 }
 &lt;/style&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>IoTおもちゃでテクノロジーを体験！おすすめ知育玩具5選</title>
-      <link>https://dotstud.io/blog/internet-of-things-gadget/</link>
-      <pubDate>Tue, 26 Jun 2018 10:00:00 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/internet-of-things-gadget/</guid>
-      
-      <description>
-
-&lt;p&gt;「プログラミング教育に興味があるけど、まずは子どもに何をさせればいいのか分からないな……。」&lt;/p&gt;
-
-&lt;p&gt;将来プログラミングを子どもに学ばせたいと思い、子供向けのスクールや本を調べているパパさんママさんは多いのではないでしょうか。&lt;/p&gt;
-
-&lt;p&gt;そんなパパさんママさんへおすすめしたいのは、&lt;strong&gt;「IoT」のおもちゃ&lt;/strong&gt;たち。&lt;/p&gt;
-
-&lt;p&gt;IoTとは、”&lt;strong&gt;Internet of Things&lt;/strong&gt;”の略です。身の周りのあらゆるモノがインターネットと繋がる世界をさし、日本語では「&lt;strong&gt;モノのインターネット&lt;/strong&gt;」と呼ばれています。&lt;/p&gt;
-
-&lt;p&gt;そんなIoT要素を取り入れたおもちゃでは、インターネットと繋がることで、体験を通してテクノロジーの可能性を知ることができます。&lt;/p&gt;
-
-&lt;p&gt;良質かつ安心して楽しめるおもちゃを普及することを目的として、2008年に日本玩具協会によって創設された「日本おもちゃ大賞」でも、&lt;strong&gt;IoTおもちゃは注目されている分野&lt;/strong&gt;なのです。&lt;/p&gt;
-
-&lt;p&gt;プログラミングに興味をもつはじめの一歩として、楽しく遊びながらテクノロジーの可能性を知ることができる最強おもちゃたちをご紹介します。&lt;/p&gt;
-
-&lt;h2 id=&#34;レゴブロックを自在に動かせる-レゴ-ブースト-lego-boost&#34;&gt;レゴブロックを自在に動かせる「レゴ ブースト（LEGO BOOST）」&lt;/h2&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/1v2ul6ar3hY&#34; frameborder=&#34;0&#34; allow=&#34;autoplay; encrypted-media&#34; allowfullscreen&gt;&lt;/iframe&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://www.lego.com/ja-jp/service/device-guide/boost&#34;&gt;レゴブースト&lt;/a&gt;は、レゴブロックにプログラミング要素を取り入れた、IoT仕様のおもちゃです。組み立てて遊ぶだけでなく、その後に&lt;strong&gt;タブレットやスマートフォンでレゴを思い通りに動かすことができる&lt;/strong&gt;のです。&lt;/p&gt;
-
-&lt;p&gt;1セットにつき、ロボット、ギター、ネコ、ローバー、生産ラインの5つの完成モデルの組み立てることができるので、長く学びながら楽しめるおもちゃです。&lt;/p&gt;
-
-&lt;h2 id=&#34;新幹線をスマホで操縦-ダブルカメラドクターイエロー&#34;&gt;新幹線をスマホで操縦！「ダブルカメラドクターイエロー」&lt;/h2&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/wADoSRfS4gs&#34; frameborder=&#34;0&#34; allow=&#34;autoplay; encrypted-media&#34; allowfullscreen&gt;&lt;/iframe&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://www.takaratomy.co.jp/products/plarail/tettei/set/16_09_pte/&#34;&gt;ダブルカメラドクターイエロー&lt;/a&gt;は、車体についた2つのカメラを見てスマートフォンから操縦できる、&lt;strong&gt;運転手気分を味わえるIoTおもちゃ&lt;/strong&gt;です。&lt;/p&gt;
-
-&lt;p&gt;車体の正面についているカメラからは駅での発車・停車のリアルな運転を、車体の側面についているカメラからは別の列車とすれ違う時や併走するときの迫力を味わうことができます。&lt;/p&gt;
-
-&lt;p&gt;「マスコン」という専用のコントローラを利用してよりリアルな操縦感も楽しめます。プラレールが大好きなお子さんにはぴったりですね！&lt;/p&gt;
-
-&lt;h2 id=&#34;持っているおもちゃに合わせて自由に遠隔操作ができるようになる-toio-トイオ&#34;&gt;持っているおもちゃに合わせて自由に遠隔操作ができるようになる「toio（トイオ）」&lt;/h2&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/m6j2cLEwRsY&#34; frameborder=&#34;0&#34; allow=&#34;autoplay; encrypted-media&#34; allowfullscreen&gt;&lt;/iframe&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;子どもたち自らの創意工夫によって遊ぶ楽しさが広がる体感型のトイ・プラットフォーム 「&lt;a href=&#34;https://first-flight.sony.com/pj/toio&#34;&gt;toio&lt;/a&gt;」。&lt;/p&gt;
-
-&lt;p&gt;既存のおもちゃにくっつけたり、載せたりすることで、「toio」がおもちゃが動かすための基盤になります。そうすることで、アクションゲームやパズルゲーム、動きのある工作などを直接触りながら楽しめます。&lt;/p&gt;
-
-&lt;p&gt;「&lt;strong&gt;toioコンソール&lt;/strong&gt;」という本体が1つ、高性能モーターにより自由自在に動かすことのできる「&lt;strong&gt;toioコアキューブ&lt;/strong&gt;」が2つ、2個のキューブの動きを制御できる「&lt;strong&gt;toio リング&lt;/strong&gt;」が2つ入っています。&lt;/p&gt;
-
-&lt;p&gt;既存のおもちゃにくっつけたり、載せたりするだけで、アクションゲームやパズルゲーム、動きのある工作などを直接触りながら楽しめます。&lt;/p&gt;
-
-&lt;p&gt;toioのホームページでは、紙を切るだけで生き物のように動き出す「シャクトリー」や「めだま生物」などを簡単に作れる「&lt;a href=&#34;https://youtu.be/SphUHrlj1Tk&#34;&gt;工作生物　ゲズンロイド&lt;/a&gt;」キットも紹介されています。&lt;/p&gt;
-
-&lt;h2 id=&#34;昔ながらのけん玉もiotで世界とつながる-電玉-でんだま&#34;&gt;昔ながらのけん玉もIoTで世界とつながる「電玉(でんだま)」&lt;/h2&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/RMu_xSnvz6s&#34; frameborder=&#34;0&#34; allow=&#34;autoplay; encrypted-media&#34; allowfullscreen&gt;&lt;/iframe&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;世界中の人と遠隔対戦ができるIoTけん玉である&lt;a href=&#34;https://dendama.co.jp/&#34;&gt;電玉&lt;/a&gt;。本体のけん玉と、タブレットやスマートフォンで専用のアプリケーションを使用して遊びます。内蔵されているセンサーによって、けん玉の触れた場所や、人の動きを察知して技を判別します。&lt;/p&gt;
-
-&lt;p&gt;けん玉自体は、幅広い世代に親しまれていて、遊び方も分かりやすいので、お子さんからおじいちゃん・おばあちゃんまで一緒に遊ぶことができます。一人で遊ぶときでも、遠隔対戦を使用すれば、いつでもどこでも対戦できます。&lt;/p&gt;
-
-&lt;h2 id=&#34;1本の乾電池型デバイスで家にあるおもちゃをハック-mabeee-マビー&#34;&gt;1本の乾電池型デバイスで家にあるおもちゃをハック！「MaBeee（マビー）」&lt;/h2&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/gs6oVPBK_D4&#34; frameborder=&#34;0&#34; allow=&#34;autoplay; encrypted-media&#34; allowfullscreen&gt;&lt;/iframe&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://mabeee.mobi/&#34;&gt;MaBeee（マビー）&lt;/a&gt;は、単三電池型のデバイスで、電池の代わりにおもちゃなどにセットするだけでおもちゃを簡単かつ安全にハックすることができます。&lt;/p&gt;
-
-&lt;p&gt;専用のスマートフォンアプリを使って、電源のオン・オフを切り替えたり、電気の量を制御して光る強さを変えたりすることができます。またビジュアルプログラミング言語「&lt;strong&gt;Scratch&lt;/strong&gt;」で自分でプログラムを作ることもできるので、プログラミングを学び始める第一歩に最適かもしれません。&lt;/p&gt;
-
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-
-&lt;p&gt;いかがでしたか？&lt;/p&gt;
-
-&lt;p&gt;今遊んでいるおもちゃにくっつけてIoTとして遊ぶことができたり、一から自分で作ることができたり、様々な使い方をすることができます。&lt;/p&gt;
-
-&lt;p&gt;また、手に取りやすい面白さがありつつも、プログラミングの仕組みについてもしっかり学ぶことができます。楽しみながらプログラミングそのものへの興味を持つことができれば、今後の学習へのやる気も上がりますよね。&lt;/p&gt;
-
-&lt;p&gt;今後もよりいっそう盛り上がっていくであろう、IoTおもちゃ業界。お子さんと一緒にぜひ遊んでみてください。&lt;/p&gt;
 </description>
     </item>
     
