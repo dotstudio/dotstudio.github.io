@@ -7,8 +7,275 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2018 dotstudio inc.</copyright>
-    <lastBuildDate>Mon, 02 Jan 2017 15:00:53 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 21 Aug 2018 15:51:00 +0900</lastBuildDate>
     <atom:link href="/series/azure/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Azure WebAppsでカスタムドメイン&#43;SSL対応するメモ</title>
+      <link>https://dotstud.io/blog/webapps-custom-domain-ssl/</link>
+      <pubDate>Tue, 21 Aug 2018 15:51:00 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/webapps-custom-domain-ssl/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;うちの会社では&lt;strong&gt;Azure&lt;/strong&gt;をよく使ってます。僕個人だとAzureのPaaSサービスの&lt;strong&gt;WebApps&lt;/strong&gt;（Heroku的なやつです）をよく使うのですが、カスタムドメインでの運用とSSL対応で詰まったので手順を紹介していきます。&lt;/p&gt;
+
+&lt;p&gt;この手のサービスはUIがガンガン変わるので、2018年8月版って感じですね。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;ちなみに今日は甲子園決勝で大阪桐蔭高校VS秋田県立金足農業高校の試合を見ながら記事を書いてます。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;金足頑張れ〜！&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;「さすがに見るでしょ」と言いながら甲子園観戦し始める東北出身のしゃちょー &lt;a href=&#34;https://twitter.com/hashtag/%E3%82%B9%E3%82%BF%E3%82%B8%E3%82%AA%E6%97%A5%E8%AA%8C?src=hash&amp;amp;ref_src=twsrc%5Etfw&#34;&gt;#スタジオ日誌&lt;/a&gt; &lt;a href=&#34;https://twitter.com/hashtag/dotstudio?src=hash&amp;amp;ref_src=twsrc%5Etfw&#34;&gt;#dotstudio&lt;/a&gt; &lt;a href=&#34;https://t.co/hg89N055o2&#34;&gt;pic.twitter.com/hg89N055o2&lt;/a&gt;&lt;/p&gt; ドットスタジオ (@dotstud_io) &lt;a href=&#34;https://twitter.com/dotstud_io/status/1031780753850265600?ref_src=twsrc%5Etfw&#34;&gt;2018年8月21日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;azure-web-apps&#34;&gt;Azure Web Apps&lt;/h2&gt;
+
+&lt;p&gt;Web Appsでは有料プラン以上でカスタムドメインを使える模様です。&lt;/p&gt;
+
+&lt;p&gt;通常はWeb Appsにアプリケーションをデプロイすると&lt;code&gt;https://xxxxxxx.azurewebsites.net/&lt;/code&gt; といったURLが付与されます。&lt;/p&gt;
+
+&lt;p&gt;デフォルトでSSL使えるし結構便利です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/3500760306fa71fc507d80ecfa376c1d.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;web-appsでカスタムドメイン&#34;&gt;Web Appsでカスタムドメイン&lt;/h2&gt;
+
+&lt;h3 id=&#34;web-apps側の設定&#34;&gt;Web Apps側の設定&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;カスタムドメイン&lt;/code&gt;のメニューを選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;今回利用する&lt;code&gt;graspin.studio&lt;/code&gt;というドメインを入力して検証します。&lt;/p&gt;
+
+&lt;p&gt;ホスト名レコードタイプの選択はAレコードとCNAMEがありますが、今回はAレコードにします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;下の方に&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ホスト名の利用可否&lt;/li&gt;
+&lt;li&gt;ドメイン所有権&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;の情報がありますが、たぶんこの時点でドメイン所有権の欄が×になってると思います。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;TXTとAレコードをドメイン事業者の管理画面で設定していきます。&lt;/p&gt;
+
+&lt;p&gt;設定する値はAタイプにIPアドレス、TXTタイプにWebAppsのドメインです。
+この画面を開いたままで次のドメイン事業者のサイトにいきましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;お名前-com側での設定&#34;&gt;お名前.com側での設定&lt;/h3&gt;
+
+&lt;p&gt;むーむードメインやValueドメインなど色々なサイトがありますが、今回僕は&lt;a href=&#34;https://www.onamae.com/&#34;&gt;お名前.com&lt;/a&gt;を利用してドメインを取得したのでお名前.comでの設定を紹介します。&lt;/p&gt;
+
+&lt;p&gt;Azureの管理画面で表示されたIPアドレスをAタイプに、WebAppsのドメインをTXTタイプに設定して保存します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;浸透するまで少し時間がかかるので10分程度待ちます。（場合によってはもっとかかる時もあります）&lt;/p&gt;
+
+&lt;h3 id=&#34;web-apps側で再度確認&#34;&gt;Web Apps側で再度確認&lt;/h3&gt;
+
+&lt;p&gt;もう一度Web Apps側で検証ボタンを押すと認証が成功していることがわかります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;ホスト名の追加&lt;/code&gt;ボタンがアクティブになるので、追加しましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;追加されました。&lt;/p&gt;
+
+&lt;p&gt;これで&lt;code&gt;http://graspin.studio&lt;/code&gt;でアクセスできるようになりました。&lt;/p&gt;
+
+&lt;p&gt;Web Apps のカスタムドメイン設定は完了です。&lt;/p&gt;
+
+&lt;h2 id=&#34;let-s-encryptでssl対応する&#34;&gt;Let&amp;rsquo;s EncryptでSSL対応する&lt;/h2&gt;
+
+&lt;p&gt;カスタムドメインではSSL対応の設定をしないとHTTPSは使えないので、無料SSLサーバ証明書のLet&amp;rsquo;s Encryptを利用して設定してみます。&lt;/p&gt;
+
+&lt;p&gt;手元の環境はmacOS High Sierraです。&lt;/p&gt;
+
+&lt;h3 id=&#34;certbotインストール&#34;&gt;certbotインストール&lt;/h3&gt;
+
+&lt;p&gt;certbotというコマンドで証明書を作るのですが、&lt;/p&gt;
+
+&lt;p&gt;通常手順だと最初からmacOSだと厳しいみたいなエラーを言われました。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;WARNING: certbot-auto support for this macOS is DEPRECATED!
+Please visit certbot.eff.org to learn how to download a version of
+Certbot that is packaged for your system. While an existing version
+of certbot-auto may work currently, we have stopped supporting updating
+system packages for your system. Please switch to a packaged version
+as soon as possible.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://certbot.eff.org/lets-encrypt/osx-other&#34;&gt;https://certbot.eff.org/lets-encrypt/osx-other&lt;/a&gt; をみるとbrewで入れて欲しいらしいです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;brew  install certbot
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;証明書pemファイルの作成&#34;&gt;証明書pemファイルの作成&lt;/h3&gt;
+
+&lt;p&gt;色々と調べたのですが、&lt;a href=&#34;https://blog.shibayan.jp/entry/20151111/1447172124&#34;&gt;しばやんさんの記事&lt;/a&gt;が分かりやすかったです。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;sudo certbot certonly -a manual -d 利用するドメイン --server https://acme-v01.api.letsencrypt.org/directory --agree-dev-preview&lt;/code&gt;という形でコマンドをmacから実行します。今回は&lt;code&gt;graspin.studio&lt;/code&gt;を利用するので以下の内容になります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo certbot certonly -a manual -d graspin.studio --server https://acme-v01.api.letsencrypt.org/directory --agree-dev-preview
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;コマンドを実行すると対話式のターミナルでYesとかAgreeとかの入力を求められますが適宜入力して進めます。&lt;/p&gt;
+
+&lt;p&gt;以下のような表示が出て来ます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Create a file containing just this data:
+
+JQwu2TQUGdwCz5yApVx2SL5WpQOi5L2dwogABs6N6IU.XWM53woMKdjZiJrQHxBvqVcPSSUQPf1wfTUxo2e6d-g
+
+And make it available on your web server at this URL:
+
+http://graspin.studio/.well-known/acme-challenge/JQwu2TQUGdwCz5yApVx2SL5WpQOi5L2dwogABs6N6IU
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Press Enter to Continue
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;ここで一度作業を止めましょう。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;これはドメインを所持してるか確認するためのフローで、&lt;code&gt;Let&#39;s Encrypt&lt;/code&gt;側から指定したエンドポイントに指定したレスポンスがあるようなサーバーを作ってね、という確認フローです。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;http://graspin.studio/.well-known/acme-challenge/JQwu2TQUGdwCz5yApVx2SL5WpQOi5L2dwogABs6N6IU&lt;/code&gt;というエンドポイントを用意して、&lt;code&gt;JQwu2TQUGdwCz5yApVx2SL5WpQOi5L2dwogABs6N6IU.XWM53woMKdjZiJrQHxBvqVcPSSUQPf1wfTUxo2e6d-g&lt;/code&gt;という表示がされるようにしてね、という意味です。&lt;/p&gt;
+
+&lt;p&gt;ちなみにこの文字列たちは毎回変わるので適宜読み変えます。&lt;/p&gt;
+
+&lt;p&gt;Node.js/Expressでサーバーを立ててましたが、以下のように設定しました。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
+
+const express = require(&#39;express&#39;);
+const app = express();
+const PORT = process.env.PORT || 3000;
+const bodyParser = require(&#39;body-parser&#39;);
+app.use(bodyParser());
+app.use(express.static(__dirname+&#39;/src/public&#39;));
+
+//ここが今回の設定箇所
+app.get(&#39;/.well-known/acme-challenge/JQwu2TQUGdwCz5yApVx2SL5WpQOi5L2dwogABs6N6IU&#39;, (req,res)=&amp;gt;{
+    res.send(`JQwu2TQUGdwCz5yApVx2SL5WpQOi5L2dwogABs6N6IU.XWM53woMKdjZiJrQHxBvqVcPSSUQPf1wfTUxo2e6d-g`);
+});
+
+app.listen(PORT);
+console.log(`listening on *: ${PORT}`);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Web Appsにデプロイしなおして、サーバーを更新します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/7.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;アクセスするとこのような感じで指定された文字列が表示されるようにします。
+設定が完了したら、ターミナルの&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Press Enter to Continue
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;で止めていた入力を再開し、Enterを押しましょう。&lt;/p&gt;
+
+&lt;p&gt;すると認証が始まり、問題なければ以下のように&lt;code&gt;Congratulations!&lt;/code&gt;と表示されます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Waiting for verification...
+Cleaning up challenges
+Use of --agree-dev-preview is deprecated.
+
+IMPORTANT NOTES:
+ - Congratulations! Your certificate and chain have been saved at:
+   /etc/letsencrypt/live/graspin.studio/fullchain.pem
+   Your key file has been saved at:
+   /etc/letsencrypt/live/graspin.studio/privkey.pem
+   Your cert will expire on 2018-11-18. To obtain a new or tweaked
+   version of this certificate in the future, simply run certbot
+   again. To non-interactively renew *all* of your certificates, run
+   &amp;quot;certbot renew&amp;quot;
+ - If you like Certbot, please consider supporting our work by:
+
+   Donating to ISRG / Let&#39;s Encrypt:   https://letsencrypt.org/donate
+   Donating to EFF:                    https://eff.org/donate-le
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;デフォルトで以下の場所にpemファイルが作成されます。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;/etc/letsencrypt/live/ドメイン名/fullchain.pem&lt;/li&gt;
+&lt;li&gt;/etc/letsencrypt/live/ドメイン名/privkey.pem&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;pemファイルからpfxファイルを作成&#34;&gt;pemファイルからpfxファイルを作成&lt;/h3&gt;
+
+&lt;p&gt;Web Appsではpfxファイルを読み込ませてSSLの設定をします。&lt;/p&gt;
+
+&lt;p&gt;pemファイルのあるディレクトリで以下を実行します。(この手順なくても良いかも)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mv privkey.pem privkey.key
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;privkey.pem&lt;/code&gt;を&lt;code&gt;privkey.key&lt;/code&gt;ファイルにリネームしました。&lt;/p&gt;
+
+&lt;p&gt;以下で&lt;code&gt;pfx&lt;/code&gt;ファイルを作成します。パスワード設定を求められるので適当なものを設定します。設定しないとWebApps側で認識できないので設定しましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;openssl pkcs12 -export -in fullchain.pem -inkey privkey.key -out sample.pfx
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Permissionなどのエラーが出る場合は&lt;code&gt;sudo&lt;/code&gt;実行しましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;web-appsで設定&#34;&gt;Web Appsで設定&lt;/h3&gt;
+
+&lt;p&gt;SSL設定メニューの&lt;code&gt;証明書アップロード&lt;/code&gt;からpfxファイルをアップロードします。このとき先ほどのパスワードの入力します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/8.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;あとはバインディング追加からホスト名を選択し、証明書を選択すればOKです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/9.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;確認&#34;&gt;確認&lt;/h3&gt;
+
+&lt;p&gt;浸透するまでに時間がかかるのですが、少ししたら&lt;code&gt;https://graspin.studio&lt;/code&gt;にアクセスできるようになってました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/7b48e9f2c1c4a91e2a543359f8ebe5c6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;おまけ&#34;&gt;おまけ&lt;/h2&gt;
+
+&lt;p&gt;追加で設定した内容です。簡単！&lt;/p&gt;
+
+&lt;h3 id=&#34;httpにアクセスがあってもhttpsにリダイレクトさせる&#34;&gt;HTTPにアクセスがあってもHTTPSにリダイレクトさせる&lt;/h3&gt;
+
+&lt;p&gt;SSL設定の&lt;code&gt;HTTPSのみ&lt;/code&gt;をオンにするだけです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;http2対応&#34;&gt;HTTP2対応&lt;/h3&gt;
+
+&lt;p&gt;アプリケーション設定の&lt;code&gt;HTTPバージョン&lt;/code&gt;を&lt;code&gt;2.0&lt;/code&gt;にするだけです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;Web Appsの最近っぽい情報がなかったのでまとめてみました。&lt;/p&gt;
+
+&lt;p&gt;備忘録ですが他の誰かの参考にもなれば幸いです！&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>AzureでMySQLのセットアップと接続方法</title>

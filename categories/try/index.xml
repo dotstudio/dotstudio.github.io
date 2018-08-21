@@ -7,8 +7,275 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2018 dotstudio inc.</copyright>
-    <lastBuildDate>Fri, 17 Aug 2018 12:24:56 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 21 Aug 2018 15:51:00 +0900</lastBuildDate>
     <atom:link href="/categories/try/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Azure WebAppsでカスタムドメイン&#43;SSL対応するメモ</title>
+      <link>https://dotstud.io/blog/webapps-custom-domain-ssl/</link>
+      <pubDate>Tue, 21 Aug 2018 15:51:00 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/webapps-custom-domain-ssl/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;うちの会社では&lt;strong&gt;Azure&lt;/strong&gt;をよく使ってます。僕個人だとAzureのPaaSサービスの&lt;strong&gt;WebApps&lt;/strong&gt;（Heroku的なやつです）をよく使うのですが、カスタムドメインでの運用とSSL対応で詰まったので手順を紹介していきます。&lt;/p&gt;
+
+&lt;p&gt;この手のサービスはUIがガンガン変わるので、2018年8月版って感じですね。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;ちなみに今日は甲子園決勝で大阪桐蔭高校VS秋田県立金足農業高校の試合を見ながら記事を書いてます。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;金足頑張れ〜！&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;「さすがに見るでしょ」と言いながら甲子園観戦し始める東北出身のしゃちょー &lt;a href=&#34;https://twitter.com/hashtag/%E3%82%B9%E3%82%BF%E3%82%B8%E3%82%AA%E6%97%A5%E8%AA%8C?src=hash&amp;amp;ref_src=twsrc%5Etfw&#34;&gt;#スタジオ日誌&lt;/a&gt; &lt;a href=&#34;https://twitter.com/hashtag/dotstudio?src=hash&amp;amp;ref_src=twsrc%5Etfw&#34;&gt;#dotstudio&lt;/a&gt; &lt;a href=&#34;https://t.co/hg89N055o2&#34;&gt;pic.twitter.com/hg89N055o2&lt;/a&gt;&lt;/p&gt; ドットスタジオ (@dotstud_io) &lt;a href=&#34;https://twitter.com/dotstud_io/status/1031780753850265600?ref_src=twsrc%5Etfw&#34;&gt;2018年8月21日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;azure-web-apps&#34;&gt;Azure Web Apps&lt;/h2&gt;
+
+&lt;p&gt;Web Appsでは有料プラン以上でカスタムドメインを使える模様です。&lt;/p&gt;
+
+&lt;p&gt;通常はWeb Appsにアプリケーションをデプロイすると&lt;code&gt;https://xxxxxxx.azurewebsites.net/&lt;/code&gt; といったURLが付与されます。&lt;/p&gt;
+
+&lt;p&gt;デフォルトでSSL使えるし結構便利です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/3500760306fa71fc507d80ecfa376c1d.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;web-appsでカスタムドメイン&#34;&gt;Web Appsでカスタムドメイン&lt;/h2&gt;
+
+&lt;h3 id=&#34;web-apps側の設定&#34;&gt;Web Apps側の設定&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;カスタムドメイン&lt;/code&gt;のメニューを選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;今回利用する&lt;code&gt;graspin.studio&lt;/code&gt;というドメインを入力して検証します。&lt;/p&gt;
+
+&lt;p&gt;ホスト名レコードタイプの選択はAレコードとCNAMEがありますが、今回はAレコードにします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;下の方に&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ホスト名の利用可否&lt;/li&gt;
+&lt;li&gt;ドメイン所有権&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;の情報がありますが、たぶんこの時点でドメイン所有権の欄が×になってると思います。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;TXTとAレコードをドメイン事業者の管理画面で設定していきます。&lt;/p&gt;
+
+&lt;p&gt;設定する値はAタイプにIPアドレス、TXTタイプにWebAppsのドメインです。
+この画面を開いたままで次のドメイン事業者のサイトにいきましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;お名前-com側での設定&#34;&gt;お名前.com側での設定&lt;/h3&gt;
+
+&lt;p&gt;むーむードメインやValueドメインなど色々なサイトがありますが、今回僕は&lt;a href=&#34;https://www.onamae.com/&#34;&gt;お名前.com&lt;/a&gt;を利用してドメインを取得したのでお名前.comでの設定を紹介します。&lt;/p&gt;
+
+&lt;p&gt;Azureの管理画面で表示されたIPアドレスをAタイプに、WebAppsのドメインをTXTタイプに設定して保存します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;浸透するまで少し時間がかかるので10分程度待ちます。（場合によってはもっとかかる時もあります）&lt;/p&gt;
+
+&lt;h3 id=&#34;web-apps側で再度確認&#34;&gt;Web Apps側で再度確認&lt;/h3&gt;
+
+&lt;p&gt;もう一度Web Apps側で検証ボタンを押すと認証が成功していることがわかります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;ホスト名の追加&lt;/code&gt;ボタンがアクティブになるので、追加しましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;追加されました。&lt;/p&gt;
+
+&lt;p&gt;これで&lt;code&gt;http://graspin.studio&lt;/code&gt;でアクセスできるようになりました。&lt;/p&gt;
+
+&lt;p&gt;Web Apps のカスタムドメイン設定は完了です。&lt;/p&gt;
+
+&lt;h2 id=&#34;let-s-encryptでssl対応する&#34;&gt;Let&amp;rsquo;s EncryptでSSL対応する&lt;/h2&gt;
+
+&lt;p&gt;カスタムドメインではSSL対応の設定をしないとHTTPSは使えないので、無料SSLサーバ証明書のLet&amp;rsquo;s Encryptを利用して設定してみます。&lt;/p&gt;
+
+&lt;p&gt;手元の環境はmacOS High Sierraです。&lt;/p&gt;
+
+&lt;h3 id=&#34;certbotインストール&#34;&gt;certbotインストール&lt;/h3&gt;
+
+&lt;p&gt;certbotというコマンドで証明書を作るのですが、&lt;/p&gt;
+
+&lt;p&gt;通常手順だと最初からmacOSだと厳しいみたいなエラーを言われました。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;WARNING: certbot-auto support for this macOS is DEPRECATED!
+Please visit certbot.eff.org to learn how to download a version of
+Certbot that is packaged for your system. While an existing version
+of certbot-auto may work currently, we have stopped supporting updating
+system packages for your system. Please switch to a packaged version
+as soon as possible.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://certbot.eff.org/lets-encrypt/osx-other&#34;&gt;https://certbot.eff.org/lets-encrypt/osx-other&lt;/a&gt; をみるとbrewで入れて欲しいらしいです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;brew  install certbot
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;証明書pemファイルの作成&#34;&gt;証明書pemファイルの作成&lt;/h3&gt;
+
+&lt;p&gt;色々と調べたのですが、&lt;a href=&#34;https://blog.shibayan.jp/entry/20151111/1447172124&#34;&gt;しばやんさんの記事&lt;/a&gt;が分かりやすかったです。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;sudo certbot certonly -a manual -d 利用するドメイン --server https://acme-v01.api.letsencrypt.org/directory --agree-dev-preview&lt;/code&gt;という形でコマンドをmacから実行します。今回は&lt;code&gt;graspin.studio&lt;/code&gt;を利用するので以下の内容になります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo certbot certonly -a manual -d graspin.studio --server https://acme-v01.api.letsencrypt.org/directory --agree-dev-preview
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;コマンドを実行すると対話式のターミナルでYesとかAgreeとかの入力を求められますが適宜入力して進めます。&lt;/p&gt;
+
+&lt;p&gt;以下のような表示が出て来ます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Create a file containing just this data:
+
+JQwu2TQUGdwCz5yApVx2SL5WpQOi5L2dwogABs6N6IU.XWM53woMKdjZiJrQHxBvqVcPSSUQPf1wfTUxo2e6d-g
+
+And make it available on your web server at this URL:
+
+http://graspin.studio/.well-known/acme-challenge/JQwu2TQUGdwCz5yApVx2SL5WpQOi5L2dwogABs6N6IU
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Press Enter to Continue
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;ここで一度作業を止めましょう。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;これはドメインを所持してるか確認するためのフローで、&lt;code&gt;Let&#39;s Encrypt&lt;/code&gt;側から指定したエンドポイントに指定したレスポンスがあるようなサーバーを作ってね、という確認フローです。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;http://graspin.studio/.well-known/acme-challenge/JQwu2TQUGdwCz5yApVx2SL5WpQOi5L2dwogABs6N6IU&lt;/code&gt;というエンドポイントを用意して、&lt;code&gt;JQwu2TQUGdwCz5yApVx2SL5WpQOi5L2dwogABs6N6IU.XWM53woMKdjZiJrQHxBvqVcPSSUQPf1wfTUxo2e6d-g&lt;/code&gt;という表示がされるようにしてね、という意味です。&lt;/p&gt;
+
+&lt;p&gt;ちなみにこの文字列たちは毎回変わるので適宜読み変えます。&lt;/p&gt;
+
+&lt;p&gt;Node.js/Expressでサーバーを立ててましたが、以下のように設定しました。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
+
+const express = require(&#39;express&#39;);
+const app = express();
+const PORT = process.env.PORT || 3000;
+const bodyParser = require(&#39;body-parser&#39;);
+app.use(bodyParser());
+app.use(express.static(__dirname+&#39;/src/public&#39;));
+
+//ここが今回の設定箇所
+app.get(&#39;/.well-known/acme-challenge/JQwu2TQUGdwCz5yApVx2SL5WpQOi5L2dwogABs6N6IU&#39;, (req,res)=&amp;gt;{
+    res.send(`JQwu2TQUGdwCz5yApVx2SL5WpQOi5L2dwogABs6N6IU.XWM53woMKdjZiJrQHxBvqVcPSSUQPf1wfTUxo2e6d-g`);
+});
+
+app.listen(PORT);
+console.log(`listening on *: ${PORT}`);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Web Appsにデプロイしなおして、サーバーを更新します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/7.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;アクセスするとこのような感じで指定された文字列が表示されるようにします。
+設定が完了したら、ターミナルの&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Press Enter to Continue
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;で止めていた入力を再開し、Enterを押しましょう。&lt;/p&gt;
+
+&lt;p&gt;すると認証が始まり、問題なければ以下のように&lt;code&gt;Congratulations!&lt;/code&gt;と表示されます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Waiting for verification...
+Cleaning up challenges
+Use of --agree-dev-preview is deprecated.
+
+IMPORTANT NOTES:
+ - Congratulations! Your certificate and chain have been saved at:
+   /etc/letsencrypt/live/graspin.studio/fullchain.pem
+   Your key file has been saved at:
+   /etc/letsencrypt/live/graspin.studio/privkey.pem
+   Your cert will expire on 2018-11-18. To obtain a new or tweaked
+   version of this certificate in the future, simply run certbot
+   again. To non-interactively renew *all* of your certificates, run
+   &amp;quot;certbot renew&amp;quot;
+ - If you like Certbot, please consider supporting our work by:
+
+   Donating to ISRG / Let&#39;s Encrypt:   https://letsencrypt.org/donate
+   Donating to EFF:                    https://eff.org/donate-le
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;デフォルトで以下の場所にpemファイルが作成されます。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;/etc/letsencrypt/live/ドメイン名/fullchain.pem&lt;/li&gt;
+&lt;li&gt;/etc/letsencrypt/live/ドメイン名/privkey.pem&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;pemファイルからpfxファイルを作成&#34;&gt;pemファイルからpfxファイルを作成&lt;/h3&gt;
+
+&lt;p&gt;Web Appsではpfxファイルを読み込ませてSSLの設定をします。&lt;/p&gt;
+
+&lt;p&gt;pemファイルのあるディレクトリで以下を実行します。(この手順なくても良いかも)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mv privkey.pem privkey.key
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;privkey.pem&lt;/code&gt;を&lt;code&gt;privkey.key&lt;/code&gt;ファイルにリネームしました。&lt;/p&gt;
+
+&lt;p&gt;以下で&lt;code&gt;pfx&lt;/code&gt;ファイルを作成します。パスワード設定を求められるので適当なものを設定します。設定しないとWebApps側で認識できないので設定しましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;openssl pkcs12 -export -in fullchain.pem -inkey privkey.key -out sample.pfx
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Permissionなどのエラーが出る場合は&lt;code&gt;sudo&lt;/code&gt;実行しましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;web-appsで設定&#34;&gt;Web Appsで設定&lt;/h3&gt;
+
+&lt;p&gt;SSL設定メニューの&lt;code&gt;証明書アップロード&lt;/code&gt;からpfxファイルをアップロードします。このとき先ほどのパスワードの入力します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/8.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;あとはバインディング追加からホスト名を選択し、証明書を選択すればOKです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/9.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;確認&#34;&gt;確認&lt;/h3&gt;
+
+&lt;p&gt;浸透するまでに時間がかかるのですが、少ししたら&lt;code&gt;https://graspin.studio&lt;/code&gt;にアクセスできるようになってました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/7b48e9f2c1c4a91e2a543359f8ebe5c6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;おまけ&#34;&gt;おまけ&lt;/h2&gt;
+
+&lt;p&gt;追加で設定した内容です。簡単！&lt;/p&gt;
+
+&lt;h3 id=&#34;httpにアクセスがあってもhttpsにリダイレクトさせる&#34;&gt;HTTPにアクセスがあってもHTTPSにリダイレクトさせる&lt;/h3&gt;
+
+&lt;p&gt;SSL設定の&lt;code&gt;HTTPSのみ&lt;/code&gt;をオンにするだけです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;http2対応&#34;&gt;HTTP2対応&lt;/h3&gt;
+
+&lt;p&gt;アプリケーション設定の&lt;code&gt;HTTPバージョン&lt;/code&gt;を&lt;code&gt;2.0&lt;/code&gt;にするだけです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;Web Appsの最近っぽい情報がなかったのでまとめてみました。&lt;/p&gt;
+
+&lt;p&gt;備忘録ですが他の誰かの参考にもなれば幸いです！&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>【夏の自由工作2018】夏が暑すぎるのでオゾン発生素子でオゾンを発生させ（ようとし）た</title>
@@ -1667,6 +1934,9 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/led-eyelash-gadget-report/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/126/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -2250,6 +2520,9 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
 
 
 &lt;section class=&#34;link&#34; id=&#34;185&#34;&gt;
+  
+      
+      
   
       
       
@@ -3683,6 +3956,9 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/line-clova-skill-tutorial/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/186/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -4442,6 +4718,9 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
 
 
 &lt;section class=&#34;link&#34; id=&#34;186&#34;&gt;
+  
+      
+      
   
       
       
@@ -6119,6 +6398,9 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nodejs-install-use-nodebrew/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/136/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -6727,6 +7009,9 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;158&#34;&gt;
+  
+      
+      
   
       
       
@@ -8867,6 +9152,9 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
       
       
   
+      
+      
+  
 &lt;/section&gt;
 &lt;/p&gt;
 
@@ -9221,6 +9509,9 @@ Intent:CurreySearchIntent
 
 
 &lt;section class=&#34;link&#34; id=&#34;192&#34;&gt;
+  
+      
+      
   
       
       
@@ -11377,6 +11668,9 @@ obnizのディスプレイ上でも「&lt;strong&gt;Hello World&lt;/strong&gt;�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nefry-servo-handson-takudooon/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/187/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -13164,6 +13458,9 @@ void loop()
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nodejs-amazon-alexa-skill/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/144/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -13864,6 +14161,9 @@ this.emit(&#39;:tell&#39;, speechOut);
 
 
 &lt;section class=&#34;link&#34; id=&#34;180&#34;&gt;
+  
+      
+      
   
       
       
@@ -15384,6 +15684,9 @@ this.emit(&#39;:tell&#39;, speechOut);
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nodejs-alexa-skill-mp3/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/163/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -16197,6 +16500,9 @@ exports.handler = function(event, context, callback) {
 
 
 &lt;section class=&#34;link&#34; id=&#34;133&#34;&gt;
+  
+      
+      
   
       
       
@@ -18063,6 +18369,9 @@ GPIO.cleanup()
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/clova-ifttt-nefrybt-arduino/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/185/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -19050,6 +19359,9 @@ GPIO.cleanup()
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;195&#34;&gt;
+  
+      
+      
   
       
       
@@ -21279,6 +21591,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/keyboard-kintai-system-diy/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/183/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -22121,6 +22436,9 @@ clovaを選択しましょう。&lt;/p&gt;
 
 
 &lt;section class=&#34;link&#34; id=&#34;183&#34;&gt;
+  
+      
+      
   
       
       
@@ -23587,2664 +23905,6 @@ String escapeParameter(String param) {
 &lt;p&gt;HipChatの部分はうちの社内がHipChatだからというだけですが、LINEだったりSlackだったりも同様のやり方で連携できます。&lt;/p&gt;
 
 &lt;p&gt;思ったより簡単に試せたなぁという印象なのでみなさんもぜひ試してみてください。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Let&#39;s 顔面製造！ダンボールとサーボモータで喋る顔面ロボットを作ろう</title>
-      <link>https://dotstud.io/blog/face-robot-making-basic/</link>
-      <pubDate>Wed, 04 Jul 2018 10:00:00 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/face-robot-making-basic/</guid>
-      
-      <description>
-
-&lt;p&gt;都内でひっそりOLやってるへっぽこまるこです！&lt;/p&gt;
-
-&lt;p&gt;電子工作に入門してサーボモータが動かせるようになったので、顔面ロボット（っぽいもの）を工作してみました！&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;メインの材料で使う材料はダンボールです&lt;/strong&gt;！Amazonさんからたくさん届きますよね！ダンボール！！&lt;/p&gt;
-
-&lt;p&gt;その他にも身近な材料をかき集めて図工感覚で作れるので、ぜひ試してみてください！&lt;/p&gt;
-
-&lt;h2 id=&#34;完成イメージ&#34;&gt;完成イメージ&lt;/h2&gt;
-
-&lt;p&gt;下記のような動きをもたせると、それっぽい顔面ロボットを作ることができます。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;目が開閉する&lt;/li&gt;
-&lt;li&gt;目ん玉が左右に動く&lt;/li&gt;
-&lt;li&gt;口が上下に動く&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;これまでに制作した顔面ロボットの作例は前回記事で紹介しています。&lt;/p&gt;
-
-
-
-&lt;section class=&#34;link&#34; id=&#34;172&#34;&gt;
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-          &lt;div class=&#34;link_content&#34;&gt;
-          &lt;a href=&#34;https://dotstud.io/blog/face-robot-making-maruko/&#34;&gt;&lt;/a&gt;
-          &lt;img src=&#34;https://dotstud.io/img/blog/172/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
-          &lt;/div&gt;
-          &lt;div class=&#34;link_content&#34;&gt;
-            &lt;div class=&#34;link_detail&#34;&gt;
-              &lt;div class=&#34;link_title&#34;&gt;
-                Lチカ入門者がロボット入門！歌ったり喋ったりする顔面ロボット作ってみた
-              &lt;/div&gt;
-              &lt;div class=&#34;link_date&#34;&gt;
-                
-                2018-06-14
-              &lt;/div&gt;
-              &lt;div class=&#34;link_desc&#34;&gt;
-                Lチカ入門者でもロボット制作はできまぁす！歌ったり喋ったりIoTだったりする顔面ロボットの制作記です。
-              &lt;/div&gt;
-            &lt;/div&gt;
-          &lt;/div&gt;
-        &lt;/section&gt;
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-&lt;/section&gt;
-
-
-&lt;p&gt;今回は顔面ロボット入門として、喋ってるように口が動くものを作ってみます！&lt;/p&gt;
-
-&lt;p&gt;完成イメージはこちら。
-&lt;img src=&#34;https://dotstud.io/img/blog/173/demo.gif&#34; alt=&#34;&#34; /&gt;
-よく見ると&lt;strong&gt;下顎（下唇）が上がったり下がったりしてるだけ&lt;/strong&gt;ですね？！&lt;/p&gt;
-
-&lt;p&gt;これぐらいだったらどうにかできそうだと思いませんか？？&lt;/p&gt;
-
-&lt;h2 id=&#34;動作の制御はサーボモータ&#34;&gt;動作の制御はサーボモータ&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gM-08761/&#34;&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/172/servo1.png&#34; alt=&#34;servo1&#34;&gt;
-
-&lt;/center&gt;
-&lt;/a&gt;
-サーボモータの仕組みについては、dotstudioさんドキュメントの「&lt;a href=&#34;https://dotstud.io/docs/pulse-width-modulation/&#34;&gt;PWM制御（サーボモータの仕組み）&lt;/a&gt;」に詳しく書いてありますので、
-ぜひそちらをご覧ください！&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/173/servo2.png&#34; alt=&#34;servo2&#34;&gt;
-
-&lt;/center&gt;
-
-サーボモータは角度を制御できるモジュールですが、取り付けるサーボホーン（サーボモータの羽の部分）にちょっと手を加えることで工作の幅が広がります！&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://www.amazon.co.jp/gp/product/B018VYJIEU/ref=oh_aui_search_detailpage?ie=UTF8&amp;amp;psc=1&#34;&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/173/arduino.png&#34; alt=&#34;arduino&#34;&gt;
-
-&lt;/center&gt;
-&lt;/a&gt;
-マイコンボードは、今回はArduino Unoの互換ボード&lt;a href=&#34;https://www.amazon.co.jp/gp/product/B018VYJIEU/ref=oh_aui_search_detailpage?ie=UTF8&amp;amp;psc=1&#34;&gt;EasyWordMall UNO R3開発ボード&lt;/a&gt;を使います。Arduino Unoでも同じピンに配線すれば同様に動かせますので、試してみてください！&lt;/p&gt;
-
-&lt;h2 id=&#34;let-s-工作&#34;&gt;Let&amp;rsquo;s 工作！&lt;/h2&gt;
-
-&lt;h3 id=&#34;設計して切り出す&#34;&gt;設計して切り出す&lt;/h3&gt;
-
-&lt;p&gt;作りたい顔のイメージを書いて、なんとなくサーボモータなどの位置を掴んでみます。
-細かいことはやりながら考えるとして（適当！)、ベースの顔の型紙を作成します。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/173/make1.png&#34; alt=&#34;make1&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-&lt;p&gt;設計図を元に型紙を作成します。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/173/make2.png&#34; alt=&#34;make2&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-&lt;p&gt;型紙に合わせてダンボールをカットします。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/173/make3.png&#34; alt=&#34;make3&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-&lt;p&gt;ダンボールのパーツを貼り合わせます。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/173/make4.png&#34; alt=&#34;make4&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-&lt;p&gt;ダンボールに貼る布に切り込みを入れます。
-(口をパクパクさせるためです)
-ほつれ止めのため、切り込みにはトップコートを塗っておくとよいです。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/173/make5.png&#34; alt=&#34;make5&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-&lt;h3 id=&#34;布を貼り付ける&#34;&gt;布を貼り付ける&lt;/h3&gt;
-
-&lt;p&gt;布を貼って行きます。
-ダンボールに適量ボンドを塗り、上から布を被せるように貼っていきます。
-ボンドのつけすぎには注意です。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/173/make6.png&#34; alt=&#34;make6&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-&lt;p&gt;おもて面が全て貼れたら、余った部分を裏面に貼り付け、余分な布をカットします。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/173/make7.png&#34; alt=&#34;make7&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-&lt;p&gt;一通り貼るとこんな感じです。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/173/make8.png&#34; alt=&#34;make8&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-&lt;p&gt;裏面にも布を貼ります。
-首が折れそうだったので、竹ひごを入れてついでに補強をしておきます。
-また、底面には、百均タッパの蓋をグルーガンで貼っておきます。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/173/make9.png&#34; alt=&#34;make9&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-&lt;h3 id=&#34;サーボホーンを拡張&#34;&gt;サーボホーンを拡張&lt;/h3&gt;
-
-&lt;p&gt;サーボモータで口を動かせるよう、サーボホーンを拡張します。&lt;/p&gt;
-
-&lt;p&gt;コンビニなんかでもらえるフォークを加工します。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/173/make10.png&#34; alt=&#34;make10&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-&lt;p&gt;ライターで少しずつ炙ると曲げることができるので、だいたい直角になるように折り曲げます。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/173/make11.png&#34; alt=&#34;make11&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/173/make13.png&#34; alt=&#34;make13&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;ペンチやカッターなどで必要な長さにカットして、ピンバイスで穴を開けます。
-（カットの際は充分に気をつけましょう！）
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/173/make14.png&#34; alt=&#34;make14&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-&lt;p&gt;サーボモータに付属しているサーボホーンと今作ったフォークのパーツをくっつけます。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/173/make15.png&#34; alt=&#34;make15&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/173/make16.png&#34; alt=&#34;make16&#34;&gt;
-
-&lt;/center&gt;
-
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/173/make17.png&#34; alt=&#34;make17&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;グルーガンで補強しておましょう。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/173/make18.png&#34; alt=&#34;make18&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-&lt;h3 id=&#34;パーツを合体&#34;&gt;パーツを合体&lt;/h3&gt;
-
-&lt;p&gt;サーボモータを本体と合体させていきます。&lt;/p&gt;
-
-&lt;p&gt;裏面から、サーボホーンの先と下唇にあたる部分の接着部分を確認します。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/173/make19.png&#34; alt=&#34;make19&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-&lt;p&gt;強力粘着テープで貼り付けます。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/173/make20.png&#34; alt=&#34;make20&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-&lt;h3 id=&#34;唇と顔パーツを貼り付け&#34;&gt;唇と顔パーツを貼り付け&lt;/h3&gt;
-
-&lt;p&gt;唇を作ります。唇に厚みをもたせるため、唇の形にカットしたダンボールに、一回り小さい赤のフェルトを貼ります。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/173/mouse1.png&#34; alt=&#34;mouse1&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-&lt;p&gt;上から再度フェルトを貼ります。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/173/mouse2.png&#34; alt=&#34;mouse2&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-&lt;p&gt;おもて面から唇をグルーガンなどで接着します。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/173/mouse3.png&#34; alt=&#34;mouse3&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-&lt;p&gt;お好みで口以外の顔のパーツを貼り付けます。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/173/parts1.png&#34; alt=&#34;parts1&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-&lt;p&gt;私は、目（発泡スチロールの球を加工）、眉毛（フェルトをカット）、まつ毛（百均のつけまつ毛）と髪の毛（百均の付け毛）を用意してみました！
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/173/parts2.png&#34; alt=&#34;parts2&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-&lt;h2 id=&#34;サーボモータを動かすプログラム&#34;&gt;サーボモータを動かすプログラム&lt;/h2&gt;
-
-&lt;p&gt;以下のようなプログラムを準備して、マイコンボードに書き込んでおきます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;# include &amp;lt;Servo.h&amp;gt;
-
-Servo myservo;
-int pos = 0;  
-
-void setup() {
-  myservo.attach(9);
-}
-
-void loop() {
-  for (pos = 0; pos &amp;lt;= 25; pos += 1) {
-    myservo.write(pos);
-    delay(5);
-  }
-  for (pos = 25; pos &amp;gt;= 0; pos -= 1) {
-    myservo.write(pos);
-    delay(5);
-  }
-  for (pos = 0; pos &amp;lt;= 25; pos += 1) {
-    myservo.write(pos);
-    delay(5);
-  }
-  for (pos = 25; pos &amp;gt;= 0; pos -= 1) {
-    myservo.write(pos);
-    delay(5);
-  }
-    delay(20);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;配線して動作を調整&#34;&gt;配線して動作を調整&lt;/h2&gt;
-
-&lt;p&gt;サーボモータから出ている３つの線の先端をカットします。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/173/circuit1.png&#34; alt=&#34;circuit1&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-&lt;p&gt;先端の皮を１センチほど向いて、こよりのように撚り合せます。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/173/circuit2.png&#34; alt=&#34;circuit2&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-&lt;p&gt;マイコンボードに配線します。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/173/circuit3.png&#34; alt=&#34;circuit3&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/173/circuit4.png&#34; alt=&#34;circuit4&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;制御を微調整します。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/173/circuit5.png&#34; alt=&#34;circuit5&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-&lt;h2 id=&#34;試してみる&#34;&gt;試してみる&lt;/h2&gt;
-
-&lt;p&gt;動かします！
-&lt;img src=&#34;https://dotstud.io/img/blog/173/demo2.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;図工感覚で電子工作して動くものができました！&lt;/p&gt;
-
-&lt;p&gt;サーボモータを増やしたりスピーカをつけたりと、同じような機構でさまざまな工夫ができます。&lt;/p&gt;
-
-
-
-&lt;section class=&#34;link&#34; id=&#34;172&#34;&gt;
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-          &lt;div class=&#34;link_content&#34;&gt;
-          &lt;a href=&#34;https://dotstud.io/blog/face-robot-making-maruko/&#34;&gt;&lt;/a&gt;
-          &lt;img src=&#34;https://dotstud.io/img/blog/172/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
-          &lt;/div&gt;
-          &lt;div class=&#34;link_content&#34;&gt;
-            &lt;div class=&#34;link_detail&#34;&gt;
-              &lt;div class=&#34;link_title&#34;&gt;
-                Lチカ入門者がロボット入門！歌ったり喋ったりする顔面ロボット作ってみた
-              &lt;/div&gt;
-              &lt;div class=&#34;link_date&#34;&gt;
-                
-                2018-06-14
-              &lt;/div&gt;
-              &lt;div class=&#34;link_desc&#34;&gt;
-                Lチカ入門者でもロボット制作はできまぁす！歌ったり喋ったりIoTだったりする顔面ロボットの制作記です。
-              &lt;/div&gt;
-            &lt;/div&gt;
-          &lt;/div&gt;
-        &lt;/section&gt;
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-&lt;/section&gt;
-
-
-&lt;p&gt;イベントの受付や、お子さんとの工作のネタにいかがでしょうか？！ぜひ、いろんなオリジナルの顔面を作ってみてください！！&lt;/p&gt;
-
-&lt;h2 id=&#34;おまけ-パリピモード&#34;&gt;おまけ：パリピモード&lt;/h2&gt;
-
-&lt;p&gt;目ん玉を加工して瞳にマイコン内臓フルカラーLED（HIGHにするとランダムに光るもの）を埋め込んで……
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/173/paripi1.png&#34; alt=&#34;paripi1&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-&lt;p&gt;ぶっさします……
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/173/paripi2.png&#34; alt=&#34;paripi2&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-&lt;p&gt;Arduinoのデジタル出力ピン（今回は11と12）にLEDを接続して&lt;a href=&#34;https://github.com/hepppook/project-cardboard/blob/master/src/face-paripi.ino&#34;&gt;プログラム&lt;/a&gt;を書き込み……&lt;/p&gt;
-
-&lt;p&gt;動かします！
-&lt;img src=&#34;https://dotstud.io/img/blog/173/demo3.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 </description>
     </item>
     

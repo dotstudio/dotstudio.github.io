@@ -7,8 +7,275 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2018 dotstudio inc.</copyright>
-    <lastBuildDate>Tue, 21 Aug 2018 10:18:24 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 21 Aug 2018 15:51:00 +0900</lastBuildDate>
     <atom:link href="/blog/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Azure WebAppsでカスタムドメイン&#43;SSL対応するメモ</title>
+      <link>https://dotstud.io/blog/webapps-custom-domain-ssl/</link>
+      <pubDate>Tue, 21 Aug 2018 15:51:00 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/webapps-custom-domain-ssl/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;うちの会社では&lt;strong&gt;Azure&lt;/strong&gt;をよく使ってます。僕個人だとAzureのPaaSサービスの&lt;strong&gt;WebApps&lt;/strong&gt;（Heroku的なやつです）をよく使うのですが、カスタムドメインでの運用とSSL対応で詰まったので手順を紹介していきます。&lt;/p&gt;
+
+&lt;p&gt;この手のサービスはUIがガンガン変わるので、2018年8月版って感じですね。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;ちなみに今日は甲子園決勝で大阪桐蔭高校VS秋田県立金足農業高校の試合を見ながら記事を書いてます。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;金足頑張れ〜！&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;「さすがに見るでしょ」と言いながら甲子園観戦し始める東北出身のしゃちょー &lt;a href=&#34;https://twitter.com/hashtag/%E3%82%B9%E3%82%BF%E3%82%B8%E3%82%AA%E6%97%A5%E8%AA%8C?src=hash&amp;amp;ref_src=twsrc%5Etfw&#34;&gt;#スタジオ日誌&lt;/a&gt; &lt;a href=&#34;https://twitter.com/hashtag/dotstudio?src=hash&amp;amp;ref_src=twsrc%5Etfw&#34;&gt;#dotstudio&lt;/a&gt; &lt;a href=&#34;https://t.co/hg89N055o2&#34;&gt;pic.twitter.com/hg89N055o2&lt;/a&gt;&lt;/p&gt; ドットスタジオ (@dotstud_io) &lt;a href=&#34;https://twitter.com/dotstud_io/status/1031780753850265600?ref_src=twsrc%5Etfw&#34;&gt;2018年8月21日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;azure-web-apps&#34;&gt;Azure Web Apps&lt;/h2&gt;
+
+&lt;p&gt;Web Appsでは有料プラン以上でカスタムドメインを使える模様です。&lt;/p&gt;
+
+&lt;p&gt;通常はWeb Appsにアプリケーションをデプロイすると&lt;code&gt;https://xxxxxxx.azurewebsites.net/&lt;/code&gt; といったURLが付与されます。&lt;/p&gt;
+
+&lt;p&gt;デフォルトでSSL使えるし結構便利です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/3500760306fa71fc507d80ecfa376c1d.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;web-appsでカスタムドメイン&#34;&gt;Web Appsでカスタムドメイン&lt;/h2&gt;
+
+&lt;h3 id=&#34;web-apps側の設定&#34;&gt;Web Apps側の設定&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;カスタムドメイン&lt;/code&gt;のメニューを選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;今回利用する&lt;code&gt;graspin.studio&lt;/code&gt;というドメインを入力して検証します。&lt;/p&gt;
+
+&lt;p&gt;ホスト名レコードタイプの選択はAレコードとCNAMEがありますが、今回はAレコードにします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;下の方に&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ホスト名の利用可否&lt;/li&gt;
+&lt;li&gt;ドメイン所有権&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;の情報がありますが、たぶんこの時点でドメイン所有権の欄が×になってると思います。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;TXTとAレコードをドメイン事業者の管理画面で設定していきます。&lt;/p&gt;
+
+&lt;p&gt;設定する値はAタイプにIPアドレス、TXTタイプにWebAppsのドメインです。
+この画面を開いたままで次のドメイン事業者のサイトにいきましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;お名前-com側での設定&#34;&gt;お名前.com側での設定&lt;/h3&gt;
+
+&lt;p&gt;むーむードメインやValueドメインなど色々なサイトがありますが、今回僕は&lt;a href=&#34;https://www.onamae.com/&#34;&gt;お名前.com&lt;/a&gt;を利用してドメインを取得したのでお名前.comでの設定を紹介します。&lt;/p&gt;
+
+&lt;p&gt;Azureの管理画面で表示されたIPアドレスをAタイプに、WebAppsのドメインをTXTタイプに設定して保存します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;浸透するまで少し時間がかかるので10分程度待ちます。（場合によってはもっとかかる時もあります）&lt;/p&gt;
+
+&lt;h3 id=&#34;web-apps側で再度確認&#34;&gt;Web Apps側で再度確認&lt;/h3&gt;
+
+&lt;p&gt;もう一度Web Apps側で検証ボタンを押すと認証が成功していることがわかります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;ホスト名の追加&lt;/code&gt;ボタンがアクティブになるので、追加しましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;追加されました。&lt;/p&gt;
+
+&lt;p&gt;これで&lt;code&gt;http://graspin.studio&lt;/code&gt;でアクセスできるようになりました。&lt;/p&gt;
+
+&lt;p&gt;Web Apps のカスタムドメイン設定は完了です。&lt;/p&gt;
+
+&lt;h2 id=&#34;let-s-encryptでssl対応する&#34;&gt;Let&amp;rsquo;s EncryptでSSL対応する&lt;/h2&gt;
+
+&lt;p&gt;カスタムドメインではSSL対応の設定をしないとHTTPSは使えないので、無料SSLサーバ証明書のLet&amp;rsquo;s Encryptを利用して設定してみます。&lt;/p&gt;
+
+&lt;p&gt;手元の環境はmacOS High Sierraです。&lt;/p&gt;
+
+&lt;h3 id=&#34;certbotインストール&#34;&gt;certbotインストール&lt;/h3&gt;
+
+&lt;p&gt;certbotというコマンドで証明書を作るのですが、&lt;/p&gt;
+
+&lt;p&gt;通常手順だと最初からmacOSだと厳しいみたいなエラーを言われました。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;WARNING: certbot-auto support for this macOS is DEPRECATED!
+Please visit certbot.eff.org to learn how to download a version of
+Certbot that is packaged for your system. While an existing version
+of certbot-auto may work currently, we have stopped supporting updating
+system packages for your system. Please switch to a packaged version
+as soon as possible.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://certbot.eff.org/lets-encrypt/osx-other&#34;&gt;https://certbot.eff.org/lets-encrypt/osx-other&lt;/a&gt; をみるとbrewで入れて欲しいらしいです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;brew  install certbot
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;証明書pemファイルの作成&#34;&gt;証明書pemファイルの作成&lt;/h3&gt;
+
+&lt;p&gt;色々と調べたのですが、&lt;a href=&#34;https://blog.shibayan.jp/entry/20151111/1447172124&#34;&gt;しばやんさんの記事&lt;/a&gt;が分かりやすかったです。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;sudo certbot certonly -a manual -d 利用するドメイン --server https://acme-v01.api.letsencrypt.org/directory --agree-dev-preview&lt;/code&gt;という形でコマンドをmacから実行します。今回は&lt;code&gt;graspin.studio&lt;/code&gt;を利用するので以下の内容になります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo certbot certonly -a manual -d graspin.studio --server https://acme-v01.api.letsencrypt.org/directory --agree-dev-preview
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;コマンドを実行すると対話式のターミナルでYesとかAgreeとかの入力を求められますが適宜入力して進めます。&lt;/p&gt;
+
+&lt;p&gt;以下のような表示が出て来ます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Create a file containing just this data:
+
+JQwu2TQUGdwCz5yApVx2SL5WpQOi5L2dwogABs6N6IU.XWM53woMKdjZiJrQHxBvqVcPSSUQPf1wfTUxo2e6d-g
+
+And make it available on your web server at this URL:
+
+http://graspin.studio/.well-known/acme-challenge/JQwu2TQUGdwCz5yApVx2SL5WpQOi5L2dwogABs6N6IU
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Press Enter to Continue
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;ここで一度作業を止めましょう。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;これはドメインを所持してるか確認するためのフローで、&lt;code&gt;Let&#39;s Encrypt&lt;/code&gt;側から指定したエンドポイントに指定したレスポンスがあるようなサーバーを作ってね、という確認フローです。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;http://graspin.studio/.well-known/acme-challenge/JQwu2TQUGdwCz5yApVx2SL5WpQOi5L2dwogABs6N6IU&lt;/code&gt;というエンドポイントを用意して、&lt;code&gt;JQwu2TQUGdwCz5yApVx2SL5WpQOi5L2dwogABs6N6IU.XWM53woMKdjZiJrQHxBvqVcPSSUQPf1wfTUxo2e6d-g&lt;/code&gt;という表示がされるようにしてね、という意味です。&lt;/p&gt;
+
+&lt;p&gt;ちなみにこの文字列たちは毎回変わるので適宜読み変えます。&lt;/p&gt;
+
+&lt;p&gt;Node.js/Expressでサーバーを立ててましたが、以下のように設定しました。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
+
+const express = require(&#39;express&#39;);
+const app = express();
+const PORT = process.env.PORT || 3000;
+const bodyParser = require(&#39;body-parser&#39;);
+app.use(bodyParser());
+app.use(express.static(__dirname+&#39;/src/public&#39;));
+
+//ここが今回の設定箇所
+app.get(&#39;/.well-known/acme-challenge/JQwu2TQUGdwCz5yApVx2SL5WpQOi5L2dwogABs6N6IU&#39;, (req,res)=&amp;gt;{
+    res.send(`JQwu2TQUGdwCz5yApVx2SL5WpQOi5L2dwogABs6N6IU.XWM53woMKdjZiJrQHxBvqVcPSSUQPf1wfTUxo2e6d-g`);
+});
+
+app.listen(PORT);
+console.log(`listening on *: ${PORT}`);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Web Appsにデプロイしなおして、サーバーを更新します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/7.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;アクセスするとこのような感じで指定された文字列が表示されるようにします。
+設定が完了したら、ターミナルの&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Press Enter to Continue
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;で止めていた入力を再開し、Enterを押しましょう。&lt;/p&gt;
+
+&lt;p&gt;すると認証が始まり、問題なければ以下のように&lt;code&gt;Congratulations!&lt;/code&gt;と表示されます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Waiting for verification...
+Cleaning up challenges
+Use of --agree-dev-preview is deprecated.
+
+IMPORTANT NOTES:
+ - Congratulations! Your certificate and chain have been saved at:
+   /etc/letsencrypt/live/graspin.studio/fullchain.pem
+   Your key file has been saved at:
+   /etc/letsencrypt/live/graspin.studio/privkey.pem
+   Your cert will expire on 2018-11-18. To obtain a new or tweaked
+   version of this certificate in the future, simply run certbot
+   again. To non-interactively renew *all* of your certificates, run
+   &amp;quot;certbot renew&amp;quot;
+ - If you like Certbot, please consider supporting our work by:
+
+   Donating to ISRG / Let&#39;s Encrypt:   https://letsencrypt.org/donate
+   Donating to EFF:                    https://eff.org/donate-le
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;デフォルトで以下の場所にpemファイルが作成されます。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;/etc/letsencrypt/live/ドメイン名/fullchain.pem&lt;/li&gt;
+&lt;li&gt;/etc/letsencrypt/live/ドメイン名/privkey.pem&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;pemファイルからpfxファイルを作成&#34;&gt;pemファイルからpfxファイルを作成&lt;/h3&gt;
+
+&lt;p&gt;Web Appsではpfxファイルを読み込ませてSSLの設定をします。&lt;/p&gt;
+
+&lt;p&gt;pemファイルのあるディレクトリで以下を実行します。(この手順なくても良いかも)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;mv privkey.pem privkey.key
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;privkey.pem&lt;/code&gt;を&lt;code&gt;privkey.key&lt;/code&gt;ファイルにリネームしました。&lt;/p&gt;
+
+&lt;p&gt;以下で&lt;code&gt;pfx&lt;/code&gt;ファイルを作成します。パスワード設定を求められるので適当なものを設定します。設定しないとWebApps側で認識できないので設定しましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;openssl pkcs12 -export -in fullchain.pem -inkey privkey.key -out sample.pfx
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Permissionなどのエラーが出る場合は&lt;code&gt;sudo&lt;/code&gt;実行しましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;web-appsで設定&#34;&gt;Web Appsで設定&lt;/h3&gt;
+
+&lt;p&gt;SSL設定メニューの&lt;code&gt;証明書アップロード&lt;/code&gt;からpfxファイルをアップロードします。このとき先ほどのパスワードの入力します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/8.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;あとはバインディング追加からホスト名を選択し、証明書を選択すればOKです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/9.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;確認&#34;&gt;確認&lt;/h3&gt;
+
+&lt;p&gt;浸透するまでに時間がかかるのですが、少ししたら&lt;code&gt;https://graspin.studio&lt;/code&gt;にアクセスできるようになってました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/7b48e9f2c1c4a91e2a543359f8ebe5c6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;おまけ&#34;&gt;おまけ&lt;/h2&gt;
+
+&lt;p&gt;追加で設定した内容です。簡単！&lt;/p&gt;
+
+&lt;h3 id=&#34;httpにアクセスがあってもhttpsにリダイレクトさせる&#34;&gt;HTTPにアクセスがあってもHTTPSにリダイレクトさせる&lt;/h3&gt;
+
+&lt;p&gt;SSL設定の&lt;code&gt;HTTPSのみ&lt;/code&gt;をオンにするだけです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;http2対応&#34;&gt;HTTP2対応&lt;/h3&gt;
+
+&lt;p&gt;アプリケーション設定の&lt;code&gt;HTTPバージョン&lt;/code&gt;を&lt;code&gt;2.0&lt;/code&gt;にするだけです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;Web Appsの最近っぽい情報がなかったのでまとめてみました。&lt;/p&gt;
+
+&lt;p&gt;備忘録ですが他の誰かの参考にもなれば幸いです！&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>IoT開発・電子工作を始めたい初心者向け！おすすめ書籍6選</title>
@@ -1411,6 +1678,9 @@ void loop() {
 
 
 &lt;section class=&#34;link&#34; id=&#34;201&#34;&gt;
+  
+      
+      
   
       
       
@@ -3369,6 +3639,9 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/led-eyelash-gadget-report/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/126/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -3953,6 +4226,9 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;196&#34;&gt;
+  
+      
+      
   
       
       
@@ -5036,6 +5312,9 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
 
 
 &lt;section class=&#34;link&#34; id=&#34;197&#34;&gt;
+  
+      
+      
   
       
       
@@ -7142,6 +7421,9 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/maker-fair-tokyo-2017/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/120/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -8200,6 +8482,9 @@ Twitterで「限定」と見て最速で買いに行ったクッキー。他に�
 
 
 &lt;section class=&#34;link&#34; id=&#34;185&#34;&gt;
+  
+      
+      
   
       
       
@@ -9633,6 +9918,9 @@ Twitterで「限定」と見て最速で買いに行ったクッキー。他に�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/line-clova-skill-tutorial/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/186/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -10392,6 +10680,9 @@ Twitterで「限定」と見て最速で買いに行ったクッキー。他に�
 
 
 &lt;section class=&#34;link&#34; id=&#34;186&#34;&gt;
+  
+      
+      
   
       
       
@@ -12069,6 +12360,9 @@ Twitterで「限定」と見て最速で買いに行ったクッキー。他に�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nodejs-install-use-nodebrew/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/136/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -12677,6 +12971,9 @@ Twitterで「限定」と見て最速で買いに行ったクッキー。他に�
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;158&#34;&gt;
+  
+      
+      
   
       
       
@@ -14817,6 +15114,9 @@ Twitterで「限定」と見て最速で買いに行ったクッキー。他に�
       
       
   
+      
+      
+  
 &lt;/section&gt;
 &lt;/p&gt;
 
@@ -15254,6 +15554,9 @@ Intent:CurreySearchIntent
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;174&#34;&gt;
+  
+      
+      
   
       
       
@@ -16850,6 +17153,9 @@ Intent:CurreySearchIntent
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/saison-iot-course-report/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/121/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -17480,6 +17786,9 @@ Intent:CurreySearchIntent
 
 
 &lt;section class=&#34;link&#34; id=&#34;192&#34;&gt;
+  
+      
+      
   
       
       
@@ -18990,284 +19299,6 @@ stream.on(&#39;data&#39;, function(event) {
     padding-left: 20px;
 }
 &lt;/style&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>JavaScriptで動くIoT開発ボード「obniz」って？使い方を説明！</title>
-      <link>https://dotstud.io/blog/obniz-hello-world-iot/</link>
-      <pubDate>Wed, 25 Jul 2018 10:00:24 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/obniz-hello-world-iot/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、テクニカルエディターの&lt;a href=&#34;https://dotstud.io/members/kiki&#34;&gt;きき&lt;/a&gt;です。&lt;/p&gt;
-
-&lt;p&gt;突然ですが、「&lt;strong&gt;IoTってなんだか難しそう。でも、気になる。&lt;/strong&gt;」という方へ。IoT体験、やってみたいですよね？ネットを通してモーターを動かしたり、LEDをチカチカさせたりしてみたいですよね？ね？&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;そんなあなたに読んでほしい！&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;初心者でも簡単にIoTプログラミングができるぞ、と噂の開発ボード「&lt;strong&gt;obniz&lt;/strong&gt;」をババンと紹介します！&lt;/p&gt;
-
-&lt;h2 id=&#34;obnizとは&#34;&gt;obnizとは？&lt;/h2&gt;
-
-&lt;p&gt;「&lt;a href=&#34;https://obniz.io/&#34;&gt;&lt;strong&gt;obniz&lt;/strong&gt;（オブナイズ）&lt;/a&gt;」は、&lt;strong&gt;Wi-Fiに繋げるだけでどこからでも操作することができるIoT開発ボード&lt;/strong&gt;です。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/263775/0e90dfcd-4c30-0ab2-b4e2-307f6d3877ca.png&#34; alt=&#34;スクリーンショット 2018-07-11 14.44.18.png&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;2018年5月18日からCambrianRoboticsが開発・販売しているボードで、価格は&lt;strong&gt;5,980円（税込）&lt;/strong&gt;です。&lt;/p&gt;
-
-&lt;p&gt;クラウドファンディングサイト&lt;a href=&#34;https://www.kickstarter.com/projects/cambrianrobotics/obniz-api-managed-io?ref=card&#34;&gt;&lt;strong&gt;kickstarter&lt;/strong&gt;&lt;/a&gt;では100万円以上の資金を集め、販売後には売り切れ続出と話題になっていましたね！&lt;/p&gt;
-
-&lt;p&gt;日本だけでなく海外にも販売経路を伸ばし、&lt;strong&gt;海外MakerFaire出展&lt;/strong&gt;や&lt;strong&gt;ハンズオン開催&lt;/strong&gt;など取り組んでいるようです。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://amzn.to/2KnvxXV&#34;&gt;Amazon購入リンク&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;ざっくり特徴紹介&#34;&gt;ざっくり特徴紹介&lt;/h3&gt;
-
-&lt;p&gt;obnizの特徴・機能は多岐にわたるのですが、ざっくりと下記が挙げられます。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;オンラインエディタの利用で環境構築なし&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;JavaScript&lt;/strong&gt;や&lt;strong&gt;ブロックプログラミング&lt;/strong&gt;で開発可能&lt;/li&gt;
-&lt;li&gt;obnizに繋いだモーターやセンサーなどを&lt;strong&gt;ブラウザから制御可能&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;HTMLでのUI連携や、Node.jsで他サービスと回路の連携&lt;/strong&gt;が可能&lt;/li&gt;
-&lt;li&gt;全てのピンでUARTのアサイン可能&lt;/li&gt;
-&lt;li&gt;全てのピンで1A・ドライバ搭載（&lt;strong&gt;モータを直挿し可能&lt;/strong&gt;）&lt;/li&gt;
-&lt;li&gt;電流が大きくなると自動的に停止して警告音を鳴らしてくれる「&lt;strong&gt;過電流保護機能&lt;/strong&gt;」搭載&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;OLEDディスプレイ&lt;/strong&gt;、&lt;strong&gt;Wi-Fi機能&lt;/strong&gt;、&lt;strong&gt;BLE機能&lt;/strong&gt;搭載&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;obnizクラウド&lt;/strong&gt;でAPIから制御可能&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;サーバレス&lt;/strong&gt;でwebhook連携も簡単&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;いかに多機能かわかっていただけたでしょうか……！初心者が使いやすいだけでなく、高性能でもあるようです。&lt;/p&gt;
-
-&lt;p&gt;ざっと公式サイトを読んだだけでも良いことだらけなobniz、早速使ってみましょう〜！&lt;/p&gt;
-
-&lt;h2 id=&#34;obnizを触ってみよう&#34;&gt;obnizを触ってみよう&lt;/h2&gt;
-
-&lt;h3 id=&#34;開封の儀&#34;&gt;開封の儀&lt;/h3&gt;
-
-&lt;p&gt;しゃちょーののびすけさんに「&lt;strong&gt;obnizを貸してください&lt;/strong&gt;」と伝えたら、「&lt;strong&gt;攻めるね〜！！&lt;/strong&gt;」と茶化されたので、なんとなく緊張してしまいますね。&lt;/p&gt;
-
-&lt;p&gt;パッケージはこのような感じです。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/192/2.png&#34; alt=&#34;2&#34;&gt;
-
-&lt;/center&gt;
-
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/192/3.png&#34; alt=&#34;3&#34;&gt;
-
-&lt;/center&gt;
-
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/192/4.png&#34; alt=&#34;4&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;差し色のブルーが可愛いいいい！&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/toy-drone-tello-using/&#34;&gt;前回の記事&lt;/a&gt;では、トイドローン「Tello」で終始遊び倒す内容だったので、きき史上初めての開発ボード。初めてのおつかいならぬ、&lt;strong&gt;初めてのかいふう&lt;/strong&gt;です。&lt;/p&gt;
-
-&lt;p&gt;ジャジャン！！&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/192/1.png&#34; alt=&#34;1&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;obnize本体サイズは&lt;strong&gt;74.5×36.3mm&lt;/strong&gt;なので、私の想像に比べるとなんだか小さかったです。&lt;/p&gt;
-
-&lt;h3 id=&#34;wi-fi設定&#34;&gt;Wi-Fi設定&lt;/h3&gt;
-
-&lt;p&gt;まずはじめに、ケーブルとobnizをつなぎます。&lt;/p&gt;
-
-&lt;p&gt;待って！なんか可愛い子出てきた〜！これは何かの動物なのでしょうか？妖精か何かなのでしょうか？&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/192/8.png&#34; alt=&#34;8&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;「&lt;strong&gt;Switch this!&lt;/strong&gt;」と言われるがままに左上のボタンを押します。&lt;/p&gt;
-
-&lt;p&gt;押すとWi-Fiの設定が始まるので、ディスプレイ上で選択して繋げます。左上のボタンは左右のフリックと押し込みで選択・決定ができるようになっているんですね。&lt;/p&gt;
-
-&lt;h3 id=&#34;オンラインエディタを開く&#34;&gt;オンラインエディタを開く&lt;/h3&gt;
-
-&lt;p&gt;Wi-Fi設定が終わると、QRコードと8桁の番号が表示されます。この番号がobniz idという識別番号になっているようです。（&lt;strong&gt;どこからでも操作できちゃう&lt;/strong&gt;ので、公開しない方が良さそうですね！）&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/192/5.png&#34; alt=&#34;5&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;QRコードをスマートフォンで読みこむとオンラインエディタが開き、このような画面が出てきます。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/192/9.png&#34; alt=&#34;9&#34;&gt;
-
-&lt;/center&gt;
-
-ここにobnizのディスプレイで表示されている8桁のobniz idを入力します。&lt;/p&gt;
-
-&lt;p&gt;obnizはクラウド上のAPIを利用して操作できるので、ソフトウェアやアプリをインストールする必要はありません。&lt;/p&gt;
-
-&lt;p&gt;すごく簡単ですよね？これで準備はばっちりです！&lt;/p&gt;
-
-&lt;h2 id=&#34;obnizのプログラミングをしてみよう&#34;&gt;obnizのプログラミングをしてみよう&lt;/h2&gt;
-
-&lt;h3 id=&#34;始めてすぐさまhello-world&#34;&gt;始めてすぐさまHello World&lt;/h3&gt;
-
-&lt;p&gt;オンラインエディタには、すでに以下のようなコードが書かれています。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/192/10.png&#34; alt=&#34;10&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-&lt;p&gt;&lt;font size=&#34;2&#34;&gt;
-※スマートフォンから操作しづらいなあって時は、PCから&lt;a href=&#34;http://obniz.io/program&#34;&gt;オンラインエディタ&lt;/a&gt;を開いてobniz idを入力しましょう。
-&lt;/font&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;obniz.display.print(&amp;quot;Hello World!&amp;quot;)&lt;/code&gt;とあるように、obnizのディスプレイ上に「Hell World」を表示するコードですね。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;code&gt;&amp;quot;OBNIZ_ID_HERE&amp;quot;&lt;/code&gt;&lt;/strong&gt;のところにも、obniz idを入力しましょう。&lt;/p&gt;
-
-&lt;p&gt;右上の保存＆開くボタンを押すと……&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/192/11.png&#34; alt=&#34;11&#34;&gt;
-
-&lt;/center&gt;
-
-obnizのディスプレイ上でも「&lt;strong&gt;Hello World&lt;/strong&gt;」が表示されました〜！&lt;/p&gt;
-
-&lt;p&gt;私、何もしていないのにHello Worldされている……！&lt;/p&gt;
-
-&lt;h3 id=&#34;ブロックプログラミングでlチカデビュー&#34;&gt;ブロックプログラミングでLチカデビュー&lt;/h3&gt;
-
-&lt;p&gt;obnizを動かすことができた感動と「私何もしていないぞ」感の間で葛藤しているので、その次に簡単な&lt;strong&gt;ブロックプログラミング&lt;/strong&gt;をしてみます。&lt;/p&gt;
-
-&lt;p&gt;ホームページの色合いがふんわりとしていてデザインが可愛らしいので、初心者女子大生もビビることなく進めることができるのもオススメポイントです。&lt;/p&gt;
-
-&lt;p&gt;公式サイトから、&lt;a href=&#34;https://obniz.io/makecode/&#34;&gt;ブロックプログラミング専用エディタ&lt;/a&gt;を開きます。&lt;/p&gt;
-
-&lt;p&gt;はじめに、&lt;strong&gt;My Project&lt;/strong&gt;を選択します。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/192/12.png&#34; alt=&#34;12&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;お久しぶりです、と言わんばかりに再度こちらの画面が表示されるので、obniz idを入力します。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/192/13.png&#34; alt=&#34;13&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;入力すると、ブロックプログラミングの操作画面に変わります。&lt;/p&gt;
-
-&lt;p&gt;こりゃまた可愛すぎるのでは……！？&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/192/6.png&#34; alt=&#34;6&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;こちらもobnizのディスプレイ上に「Hell World」を表示するコードです。簡単に文字を表示させたり、LEDを光らせたり、モーターを動かすこともできます。メニューバーがたくさんあるのでいろんなことを試せますね。&lt;/p&gt;
-
-&lt;p&gt;この時点で「IoTは何から始めればいいのか分からない……」と泣き言を呟いていたあの頃の私が嘘のようにハイテンションです。胸熱なまま、Lチカに挑みます。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/192/7.png&#34; alt=&#34;7&#34;&gt;
-
-&lt;/center&gt;
-
-表示する文字を増やすことも、LEDの秒数も簡単に設定できます。&lt;/p&gt;
-
-&lt;p&gt;そして完成したのがこちら！&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://gyazo.com/5c7e715003a9594450230da781555281&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/5c7e715003a9594450230da781555281.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;font size=&#34;2&#34;&gt;※公式サイトにあるように、抵抗内蔵LEDを使用してください。&lt;/font&gt;&lt;/p&gt;
-
-&lt;p&gt;なんということでしょう。こんなにもすぐにLチカデビューできるなんて！&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;この記事を読んでいる方はお気づきだと思うのですが、&lt;strong&gt;難しいことは何一つしていません&lt;/strong&gt;。そうであるのにもかかわらず、このわくわく感。IoT体験は、&lt;strong&gt;楽しいことだらけ&lt;/strong&gt;です。&lt;/p&gt;
-
-&lt;p&gt;今回はブロックプログラミングを行いましたが、次回はJavaScriptでサーボモータも使ってみたいと思います。&lt;/p&gt;
-
-&lt;p&gt;ホームページには実際の遊び方の説明や作品紹介ページが充実しているので、気軽に始めることができます。初心者の方もそうでない人も、obnizで様々な使い方を試してみてくださいね！&lt;/p&gt;
 </description>
     </item>
     
