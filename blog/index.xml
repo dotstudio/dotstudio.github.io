@@ -7,8 +7,2292 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2018 dotstudio inc.</copyright>
-    <lastBuildDate>Tue, 21 Aug 2018 15:51:00 +0900</lastBuildDate>
+    <lastBuildDate>Sat, 25 Aug 2018 21:23:40 +0900</lastBuildDate>
     <atom:link href="/blog/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>ClovaスキルでMP3ファイルを再生してみよう #asciihack #linebootawards</title>
+      <link>https://dotstud.io/blog/nodejs-clova-skill-mp3/</link>
+      <pubDate>Sat, 25 Aug 2018 21:23:40 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nodejs-clova-skill-mp3/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://asciistartup.connpass.com/event/91483/&#34;&gt;&lt;code&gt;#asciihack&lt;/code&gt;&lt;/a&gt; にてClovaでMP3再生したいという話があったので試してみました。&lt;/p&gt;
+
+&lt;p&gt;ハッカソン中の走り書きです。ご了承ください。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;デモを先にみたい人は&lt;a href=&#34;https://dotstud.io/blog/nodejs-clova-skill-mp3/#デモ&#34;&gt;ページ下部&lt;/a&gt;へ！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Google Homeで有名な、&lt;code&gt;みそ氏&lt;/code&gt;の&lt;a href=&#34;https://qiita.com/miso_develop/items/6b256c1e8757c0ace4a9&#34;&gt;Clova公式SDK(Node.js)の使い方まとめ&lt;/a&gt;が参考になります。&lt;/p&gt;
+
+&lt;p&gt;Node.jsのSDKでのやり方です。ちなみにNode.jsのバージョンは10.8.0で試しています。&lt;/p&gt;
+
+&lt;p&gt;CEKの細かい仕様には触れません。&lt;/p&gt;
+
+&lt;h2 id=&#34;一旦スキルを作る&#34;&gt;一旦スキルを作る&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/clova-cek-nodejs-tutorial/&#34;&gt;Clova CEKでのスキル開発の始め方〜Node.jsで開発スタート編〜&lt;/a&gt;などを読みつつClova CEKのSDKをインストールしつつ対話モデル作ったり、Clovaスキルの基本を作りましょう。&lt;/p&gt;
+
+
+
+&lt;section class=&#34;link&#34; id=&#34;195&#34;&gt;
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+          &lt;div class=&#34;link_content&#34;&gt;
+          &lt;a href=&#34;https://dotstud.io/blog/clova-cek-nodejs-tutorial/&#34;&gt;&lt;/a&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/195/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
+          &lt;/div&gt;
+          &lt;div class=&#34;link_content&#34;&gt;
+            &lt;div class=&#34;link_detail&#34;&gt;
+              &lt;div class=&#34;link_title&#34;&gt;
+                Clova CEKでのスキル開発の始め方〜Node.jsで開発スタート編〜
+              &lt;/div&gt;
+              &lt;div class=&#34;link_date&#34;&gt;
+                
+                2018-08-03
+              &lt;/div&gt;
+              &lt;div class=&#34;link_desc&#34;&gt;
+                Clova CEKのNode.jsチュートリアルです。カレースキルを作ります。
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+&lt;/section&gt;
+
+
+&lt;p&gt;この記事のコードを見ると該当箇所が分かります。&lt;/p&gt;
+
+&lt;h2 id=&#34;起動時にmp3を再生&#34;&gt;起動時にMP3を再生&lt;/h2&gt;
+
+&lt;p&gt;基本は以下のように、指定したサーバー上のMP3を再生できます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;responseHelper.setSimpleSpeech(
+    clova.SpeechBuilder.createSpeechUrl(&#39;https://exsample.com/myaudio.mp3&#39;)
+);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;.onLaunchRequest()&lt;/code&gt;の中で実行すれば起動時にMP3を再生できます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//起動時に喋る
+.onLaunchRequest(responseHelper =&amp;gt; {
+    responseHelper.setSimpleSpeech(
+        clova.SpeechBuilder.createSpeechUrl(&#39;https://exsample.com/myaudio.mp3&#39;)
+    );
+})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;このコードは前に書いたチュートリアルの一部を改変しているので、どこが該当箇所か確認してみて下さい。&lt;/p&gt;
+
+&lt;p&gt;
+
+&lt;section class=&#34;link&#34; id=&#34;195&#34;&gt;
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+          &lt;div class=&#34;link_content&#34;&gt;
+          &lt;a href=&#34;https://dotstud.io/blog/clova-cek-nodejs-tutorial/&#34;&gt;&lt;/a&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/195/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
+          &lt;/div&gt;
+          &lt;div class=&#34;link_content&#34;&gt;
+            &lt;div class=&#34;link_detail&#34;&gt;
+              &lt;div class=&#34;link_title&#34;&gt;
+                Clova CEKでのスキル開発の始め方〜Node.jsで開発スタート編〜
+              &lt;/div&gt;
+              &lt;div class=&#34;link_date&#34;&gt;
+                
+                2018-08-03
+              &lt;/div&gt;
+              &lt;div class=&#34;link_desc&#34;&gt;
+                Clova CEKのNode.jsチュートリアルです。カレースキルを作ります。
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+&lt;/section&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;呼びかけてmp3を再生&#34;&gt;呼びかけてMP3を再生&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;.onIntentRequest()&lt;/code&gt;の中で実行すれば呼びかけに応じてMP3を再生できます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; //ユーザーからの発話が来たら反応する箇所
+.onIntentRequest(async responseHelper =&amp;gt; {
+    responseHelper.setSimpleSpeech(
+        clova.SpeechBuilder.createSpeechUrl(&#39;https://exsample.com/myaudio.mp3&#39;)
+    );
+})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;mp3を連続再生&#34;&gt;MP3を連続再生&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;responseHelper.setSimpleSpeech()&lt;/code&gt;で1回再生できましたが、&lt;code&gt;responseHelper.setSpeechList()&lt;/code&gt;では配列を与えることで連続再生が出来ます。&lt;/p&gt;
+
+&lt;p&gt;(謎に)10回再生。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//省略
+let SpeechList = [];
+for (let index = 0; index &amp;lt; 10; index++) {
+    SpeechList.push(clova.SpeechBuilder.createSpeechUrl(&#39;https://exsample.com/myaudio.mp3&#39;));
+}
+responseHelper.setSpeechList(SpeechList);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;デモ&#34;&gt;デモ&lt;/h2&gt;
+
+&lt;p&gt;シオカラーズが応援してくれるサンプル。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;のびすけ: 応援スキルを起動して&lt;/li&gt;
+&lt;li&gt;Clova: mp3再生&lt;/li&gt;
+&lt;li&gt;のびすけ: もっと応援して&lt;/li&gt;
+&lt;li&gt;Clova: mp3を10回再生&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;instagram-media&#34; data-instgrm-captioned data-instgrm-permalink=&#34;https://www.instagram.com/p/Bm5rRMhBszI/?utm_source=ig_embed&#34; data-instgrm-version=&#34;9&#34; style=&#34; background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);&#34;&gt;&lt;div style=&#34;padding:8px;&#34;&gt; &lt;div style=&#34; background:#F8F8F8; line-height:0; margin-top:40px; padding:28.125% 0; text-align:center; width:100%;&#34;&gt; &lt;div style=&#34; background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;&#34;&gt;&lt;/div&gt;&lt;/div&gt; &lt;p style=&#34; margin:8px 0 0 0; padding:0 4px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/Bm5rRMhBszI/?utm_source=ig_embed&#34; style=&#34; color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;&#34; target=&#34;_blank&#34;&gt;MP3再生してみている #asciihack&lt;/a&gt;&lt;/p&gt; &lt;p style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;&#34;&gt;&lt;a href=&#34;https://www.instagram.com/n0bisuke/?utm_source=ig_embed&#34; style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px;&#34; target=&#34;_blank&#34;&gt; n0bisuke&lt;/a&gt;さん(@n0bisuke)がシェアした投稿 - &lt;time style=&#34; font-family:Arial,sans-serif; font-size:14px; line-height:17px;&#34; datetime=&#34;2018-08-25T12:05:46+00:00&#34;&gt;2018年 8月月25日午前5時05分PDT&lt;/time&gt;&lt;/p&gt;&lt;/div&gt;&lt;/blockquote&gt; &lt;script async defer src=&#34;//www.instagram.com/embed.js&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;音源、権利的に大丈夫かな&amp;hellip;&amp;hellip;ガクブル
+（怒られたら直そう）&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;基本の形は&lt;code&gt;clova.SpeechBuilder.createSpeechUrl(&#39;https://exsample.com/myaudio.mp3&#39;)&lt;/code&gt;で再生出来ます。&lt;/p&gt;
+
+&lt;p&gt;1回再生は&lt;code&gt;responseHelper.setSimpleSpeech()&lt;/code&gt;で、連続再生は&lt;code&gt;responseHelper.setSpeechList()&lt;/code&gt;で&lt;code&gt;clova.SpeechBuilder.createSpeechUrl()&lt;/code&gt;を実行です。&lt;/p&gt;
+
+&lt;p&gt;細かい仕様が気になる人は&lt;a href=&#34;https://clova-developers.line.me/guide/#/CEK/Guides/Build_Custom_Extension.md#DirectClientToPlayAudio&#34;&gt;ドキュメントのこの辺&lt;/a&gt;をご参照ください！&lt;/p&gt;
+
+&lt;p&gt;ではでは、引き続きハッカソンがんばりましょ！&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Azure WebAppsでカスタムドメイン&#43;SSL対応するメモ</title>
@@ -1987,6 +4271,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/summer-homework-2018-chantoku/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/201/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -3642,6 +5929,9 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/led-eyelash-gadget-report/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/126/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -4226,6 +6516,9 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;196&#34;&gt;
+  
+      
+      
   
       
       
@@ -5312,6 +7605,9 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
 
 
 &lt;section class=&#34;link&#34; id=&#34;197&#34;&gt;
+  
+      
+      
   
       
       
@@ -7424,6 +9720,9 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/maker-fair-tokyo-2017/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/120/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -8482,6 +10781,9 @@ Twitterで「限定」と見て最速で買いに行ったクッキー。他に�
 
 
 &lt;section class=&#34;link&#34; id=&#34;185&#34;&gt;
+  
+      
+      
   
       
       
@@ -9921,6 +12223,9 @@ Twitterで「限定」と見て最速で買いに行ったクッキー。他に�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/line-clova-skill-tutorial/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/186/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -10680,6 +12985,9 @@ Twitterで「限定」と見て最速で買いに行ったクッキー。他に�
 
 
 &lt;section class=&#34;link&#34; id=&#34;186&#34;&gt;
+  
+      
+      
   
       
       
@@ -12363,6 +14671,9 @@ Twitterで「限定」と見て最速で買いに行ったクッキー。他に�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nodejs-install-use-nodebrew/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/136/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -12971,6 +15282,9 @@ Twitterで「限定」と見て最速で買いに行ったクッキー。他に�
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;158&#34;&gt;
+  
+      
+      
   
       
       
@@ -15117,6 +17431,9 @@ Twitterで「限定」と見て最速で買いに行ったクッキー。他に�
       
       
   
+      
+      
+  
 &lt;/section&gt;
 &lt;/p&gt;
 
@@ -15554,6 +17871,9 @@ Intent:CurreySearchIntent
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;174&#34;&gt;
+  
+      
+      
   
       
       
@@ -17156,6 +19476,9 @@ Intent:CurreySearchIntent
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/saison-iot-course-report/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/121/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -17724,1581 +20047,6 @@ Intent:CurreySearchIntent
 &lt;/p&gt;
 
 &lt;p&gt;気になった方がいましたらぜひお問い合わせください！（info at dotstud.io まで）&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>お腹がなる前にobniz!電子工作初心者がおペコ伝達デバイスをつくってみた</title>
-      <link>https://dotstud.io/blog/obniz-tell-be-hungry/</link>
-      <pubDate>Wed, 01 Aug 2018 10:32:26 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/obniz-tell-be-hungry/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、&lt;a href=&#34;https://dotstud.io/members/kiki/&#34;&gt;きき&lt;/a&gt;です。&lt;/p&gt;
-
-&lt;p&gt;遅めの育ち盛りなのか、お腹がすくのがとても早い今日この頃。お昼が近づいてくると、お腹がぐ〜ぐ〜なってしまうことが多々あります。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/190/opeko.png&#34; alt=&#34;opeko&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;&lt;center&gt;
-&lt;font size=&#34;4&#34;&gt;これ聞こえてる。隣の席のちゃんとくさんに絶対聞こえてる。&lt;/font&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;
-&lt;br /&gt;
-本当に恥ずかしいんですよね、だって女の子だもん。とはいえ、生理現象なので誰もぐ〜ぐ〜を止めることはできません。&lt;/p&gt;
-
-&lt;p&gt;ならば仕方ない、言われる前に言っちゃえ！お腹が鳴る前に「私、お腹が空きましたよ」ということを伝える「&lt;strong&gt;おペコ伝達デバイス&lt;/strong&gt;」を作っちゃいましょう！&lt;/p&gt;
-
-&lt;p&gt;&lt;font size=&#34;2&#34;&gt;※おペコ…お腹がペコペコの意。&lt;/font&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;obnizでおペコ伝達デバイスを作る&#34;&gt;obnizでおペコ伝達デバイスを作る&lt;/h2&gt;
-
-&lt;h3 id=&#34;iot開発ボード-obniz-って&#34;&gt;IoT開発ボード「obniz」って？&lt;/h3&gt;
-
-&lt;p&gt;今回は、JavaScriptで初心者も簡単に開発できる「&lt;strong&gt;&lt;a href=&#34;https://obniz.io/&#34;&gt;obniz&lt;/a&gt;（おぶないず）&lt;/strong&gt;」を使っておペコ伝達デバイスを作ります！&lt;/p&gt;
-
-&lt;p&gt;obnizは、&lt;strong&gt;Wi-Fiに繋げるだけでどこからでも操作することができるIoT開発ボード&lt;/strong&gt;
-です。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/263775/0e90dfcd-4c30-0ab2-b4e2-307f6d3877ca.png&#34; alt=&#34;&#34; /&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Wi-Fi以外のセットアップ不要&lt;/strong&gt;でオンライン上ですぐに開発することができ、&lt;strong&gt;JavaScriptやブロックプログラミング&lt;/strong&gt;で開発できるためプログラミング初心者でも気軽に使い始めることができます。&lt;/p&gt;
-
-&lt;p&gt;また&lt;strong&gt;すべてのI/Oが電圧の切り替えやUART変換に対応&lt;/strong&gt;、&lt;strong&gt;モータドライバ搭載&lt;/strong&gt;で、難しいGPIOを意識することなくハードウェアを利用できます。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;サーバレス機能を用いた他サービスとの連携&lt;/strong&gt;や、&lt;strong&gt;obnizクラウドによるAPI操作機能&lt;/strong&gt;もあり、あると便利な&lt;strong&gt;Bluetooth（BLE）&lt;/strong&gt;や&lt;strong&gt;OLEDディスプレイ&lt;/strong&gt;も搭載です。&lt;/p&gt;
-
-&lt;p&gt;紹介したい機能が多すぎて太字だらけになっちゃいました。もう&lt;u&gt;&lt;strong&gt;欲しい機能全部盛り&lt;/strong&gt;&lt;/u&gt;って感じですね！&lt;/p&gt;
-
-
-
-&lt;section class=&#34;link&#34; id=&#34;192&#34;&gt;
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-          &lt;div class=&#34;link_content&#34;&gt;
-          &lt;a href=&#34;https://dotstud.io/blog/obniz-hello-world-iot/&#34;&gt;&lt;/a&gt;
-          &lt;img src=&#34;https://dotstud.io/img/blog/192/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
-          &lt;/div&gt;
-          &lt;div class=&#34;link_content&#34;&gt;
-            &lt;div class=&#34;link_detail&#34;&gt;
-              &lt;div class=&#34;link_title&#34;&gt;
-                JavaScriptで動くIoT開発ボード「obniz」って？使い方を説明！
-              &lt;/div&gt;
-              &lt;div class=&#34;link_date&#34;&gt;
-                
-                2018-07-25
-              &lt;/div&gt;
-              &lt;div class=&#34;link_desc&#34;&gt;
-                話題の開発ボード「obniz」でLチカ！簡単なAPI制御やGPIO操作で今すぐIoT開発できちゃうのでは？
-              &lt;/div&gt;
-            &lt;/div&gt;
-          &lt;/div&gt;
-        &lt;/section&gt;
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-&lt;/section&gt;
-
-
-&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/obniz-hello-world-iot/&#34;&gt;前回の記事&lt;/a&gt;では、obnizデビュー！ということで、セットアップ方法やブロックプログラミングでLチカを試してみました。&lt;/p&gt;
-
-&lt;p&gt;今回はJavaScriptでコードを書いて、Lチカやサーボモーターを動かしてみたいと思います。&lt;/p&gt;
-
-&lt;h3 id=&#34;おペコを伝える方法&#34;&gt;おペコを伝える方法&lt;/h3&gt;
-
-&lt;p&gt;おペコの伝達は以下の2パターンで試してみたいと思います。&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;めっちゃ光ってobnizのディスプレイにメッセージを表示させる&lt;/li&gt;
-&lt;li&gt;Twitterで「#お腹すいたなぁ」とツイートすると旗を振って鈴を鳴らす&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;それではお腹がなってしまう前に作らねば〜！&lt;/p&gt;
-
-&lt;h3 id=&#34;今回使用する電子部品たち&#34;&gt;今回使用する電子部品たち&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;ジャンパワイヤ ×3&lt;/li&gt;
-&lt;li&gt;サーボモーター ×1&lt;/li&gt;
-&lt;li&gt;内部抵抗が付いているLED （赤 ×1、紫 ×1）&lt;/li&gt;
-&lt;li&gt;旗用の画用紙や鈴など&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;LEDは、obniz公式サイトに「&lt;strong&gt;内部抵抗があるものを使用してください&lt;/strong&gt;」との旨が記載されているので、要注意です。&lt;/p&gt;
-
-&lt;h2 id=&#34;おペコ伝達①-めっちゃ光ってobnizのディスプレイにメッセージが表示される&#34;&gt;おペコ伝達①: めっちゃ光ってobnizのディスプレイにメッセージが表示される&lt;/h2&gt;
-
-&lt;p&gt;専用の&lt;a href=&#34;http://obniz.io/program&#34;&gt;オンラインエディタ&lt;/a&gt;を開き、以下のコードを書きました。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;!-- HTML Example --&amp;gt;
-&amp;lt;html&amp;gt;
-&amp;lt;head&amp;gt;
-  &amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;width=device-width, initial-scale=1&amp;quot;&amp;gt;
-  &amp;lt;script src=&amp;quot;https://obniz.io/js/jquery-3.2.1.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-  &amp;lt;script src=&amp;quot;https://unpkg.com/obniz@latest/obniz.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-&amp;lt;/head&amp;gt;
-&amp;lt;body&amp;gt;
-
-&amp;lt;div id=&amp;quot;obniz-debug&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
-
-&amp;lt;script&amp;gt;
-    var obniz = new Obniz(&amp;quot;XXXX-XXXX&amp;quot;); // 固有のobniz ID
-
-     obniz.onconnect = function(){
-      obniz.display.clear();
-      obniz.display.print(&amp;quot;ちゃんとくさん&amp;quot;);
-	},4000;
-
-      setInterval(function(){
-        obniz.display.print(&amp;quot;あなたの脳内に&amp;quot;);
-    }, 6000);
-
-   setInterval(function(){
-        obniz.display.print(&amp;quot;呼びかけています&amp;quot;);
-    }, 7000);
-
-   setInterval(function(){
-        obniz.display.print(&amp;quot;お腹が空きました&amp;quot;);
-    }, 8000);
-
-
-    setInterval(function () {
-    var led1 = obniz.wired(&amp;quot;LED&amp;quot;, {anode:4, cathode:5});
-    var led2 = obniz.wired(&amp;quot;LED&amp;quot;, {anode:6, cathode:7});
-    led1.on();
-    led2.off();
-    },1000);
-
-  setInterval(function () {
-    var led1 = obniz.wired(&amp;quot;LED&amp;quot;, {anode:4, cathode:5});
-    var led2 = obniz.wired(&amp;quot;LED&amp;quot;, {anode:6, cathode:7});
-    led1.off()
-    led2.on();
-    },2000);
-
-&amp;lt;/script&amp;gt;
-&amp;lt;/body&amp;gt;
-&amp;lt;/html&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;保存＆開く&lt;/strong&gt;ボタンを押すと……&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/190/2.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;赤と紫のLEDの眩しいことよ……！&lt;/p&gt;
-
-&lt;p&gt;内部抵抗のないLEDを使ってしまうと流れる電流の大きさに耐えられず、LEDが壊れてしまい危険な状態に。obnizでは、自動的に停止して警告音を鳴らしてくれる「&lt;strong&gt;過電流保護機能&lt;/strong&gt;」が起動します。間違えてしまってもなんとかしてくれるので、初心者に優しいですね。&lt;/p&gt;
-
-&lt;p&gt;（公式サイトをちゃんと読まずに内部抵抗のないLEDを使用し、画面上に現れる多数の「&lt;strong&gt;warning&lt;/strong&gt;」と、若干の焦げた匂いに内心ビビりまくったことは内緒ですよ……）&lt;/p&gt;
-
-&lt;h2 id=&#34;おペコ伝達②-twitterで-お腹すいたなぁ-とツイートすると旗を振って鈴を鳴らす&#34;&gt;おペコ伝達②: Twitterで「#お腹すいたなぁ」とツイートすると旗を振って鈴を鳴らす&lt;/h2&gt;
-
-&lt;p&gt;次は、&lt;a href=&#34;https://obniz.io/explore/1&#34;&gt;公式サイトの作品一覧ページ&lt;/a&gt;を参考にして、&lt;strong&gt;目で見てわかるだけでなく、音でも空腹を伝えられるようにします。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;手順は以下の通りです。&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;Twitter API Keyを取得する&lt;/li&gt;
-&lt;li&gt;Node.jsでサーバモーターを動かす&lt;/li&gt;
-&lt;li&gt;いい感じの旗を作る&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&#34;twitter-api-keyを取得する&#34;&gt;Twitter API Keyを取得する&lt;/h3&gt;
-
-&lt;p&gt;私ははじめての取得だったので手順を載せますが、&lt;strong&gt;そんなんもう知っとるわ&lt;/strong&gt;という方は読み飛ばしちゃってください。&lt;/p&gt;
-
-&lt;p&gt;ちなみに、Twitterの設定であらかじめ電話番号の登録をする必要があります。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/190/3.png&#34; alt=&#34;3&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;&lt;a href=&#34;https://apps.twitter.com/&#34;&gt;Twitter Application Management&lt;/a&gt;を開き、右上の「&lt;strong&gt;Create New App&lt;/strong&gt;」ボタンを押します。&lt;/p&gt;
-
-&lt;p&gt;なんで3個も作ってるのかという理由は後ほど説明します。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/190/4.png&#34; alt=&#34;4&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;ol&gt;
-&lt;li&gt;必須の3箇所に記入&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Developer Agreement&lt;/strong&gt;のチェックボックスを押す&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Create your Twitter application&lt;/strong&gt;を押す&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;これでアプリケーションの作成ができました。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/190/5.png&#34; alt=&#34;5&#34;&gt;
-
-&lt;/center&gt;
-
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/190/6.png&#34; alt=&#34;6&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;&lt;strong&gt;Your Access Token&lt;/strong&gt;は、&lt;strong&gt;Create my access token&lt;/strong&gt;を押すと発行されます。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/190/7.png&#34; alt=&#34;7&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;すんなりと取得することができましたね。&lt;/p&gt;
-
-&lt;h3 id=&#34;node-jsでサーバモーターを動かす&#34;&gt;Node.jsでサーバモーターを動かす&lt;/h3&gt;
-
-&lt;p&gt;参考にしたコードをみると、記入する部分が３箇所あることがわかります。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/190/8.png&#34; alt=&#34;8&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;①数字8桁のobniz固有ID
-②取得した4種類のAPI Key
-③反応してほしい言葉&lt;/p&gt;
-
-&lt;p&gt;をそれぞれ入力します。&lt;/p&gt;
-
-&lt;p&gt;Node.jsでサーバーを立ち上げ、コードを書き込みましょう。&lt;/p&gt;
-
-&lt;p&gt;実際のコードはこちらです。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;// Nodejs
-
-var Obniz = require(&#39;obniz&#39;);
-var Twitter = require(&#39;twitter&#39;);
-
-var obniz = new Obniz(&amp;quot;0000-0000&amp;quot;);
-
-var servo;
-obniz.onconnect = function(){
-  servo = obniz.wired(&amp;quot;ServoMotor&amp;quot;, {signal:0,vcc:1, gnd:2});
-  servo.angle(10);
-  }
-
-
-var client = new Twitter({
-    consumer_key: &#39;ConsumerKey&#39;,
-    consumer_secret: &#39;Secret&#39;,
-    access_token_key: &#39;TokenKey&#39;,
-    access_token_secret: &#39;TokenSeacret&#39;
-  });
-
-var stream = client.stream(&#39;statuses/filter&#39;, {track: &#39;#お腹すいたなぁ&#39;});
-stream.on(&#39;data&#39;, function(event) {
-  if (event) {
-    var count = 0;
-    var angles = [75,45,75,45,75,45,75]
-    var timer = setInterval(function(){
-      count++;
-      servo.angle(angles[count]);
-      if (count &amp;gt;= 6){
-        clearInterval(timer);
-      }
-    }, 500);
-  }
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;③は「&lt;strong&gt;#お腹すいたなぁ&lt;/strong&gt;」にしました。「お腹すいた」「ご飯食べたい」ではなく、「すいたなぁ」と語尾を弱くすることで「&lt;strong&gt;すみません、私もうお腹空きすぎて力が入らんのです……&lt;/strong&gt;」といった申し訳なさと弱々しい感情の表現にこだわりました。&lt;/p&gt;
-
-&lt;p&gt;サーボモーターの配線は、以下の通りに繋いでください。
-・茶色：GND→2
-・赤：電源［＋］→1
-・オレンジ：制御信号→0&lt;/p&gt;
-
-&lt;p&gt;文字を変えてみたり、角度を調節してみたり……を繰り返しすぎると、Twitterから「&lt;strong&gt;あなた短時間で何回も起動しすぎよ&lt;/strong&gt;」というエラーが表示されます。エラーが解除されるまで15分ほど待たなければいけないので、待たなくていいように3つのTwitter API Keyを取得して交互に使用しました。&lt;/p&gt;
-
-&lt;p&gt;起動するとこんな感じです。
-&lt;img src=&#34;https://dotstud.io/img/blog/190/9.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;はじめてサーボモーター動かせたよ〜！楽しいよ〜！&lt;/p&gt;
-
-&lt;h3 id=&#34;いい感じの旗を作る&#34;&gt;いい感じの旗を作る&lt;/h3&gt;
-
-&lt;p&gt;久しぶりのプチ図画工作、付箋をチョキチョキ。&lt;/p&gt;
-
-&lt;p&gt;小学４年生で所属していた「図工クラブ」での経験が発揮された瞬間です。旗は2パターン作ってみました。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/190/10.png&#34; alt=&#34;10&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;不器用な私史上、かなりいい方です。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/190/11.gif&#34; alt=&#34;&#34; /&gt;
-事後報告バージョン&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/190/12.gif&#34; alt=&#34;&#34; /&gt;
-事前報告バージョン&lt;/p&gt;
-
-&lt;p&gt;なんだか旗の振り方が少し不器用ですが、作り手に似たということにしてこのまま進みます。&lt;/p&gt;
-
-&lt;h2 id=&#34;お腹が鳴りそうになってきた&#34;&gt;お腹が鳴りそうになってきた&lt;/h2&gt;
-
-&lt;p&gt;それではobnizをこっそりちゃんとくさんのデスクに仕込みます。&lt;/p&gt;
-
-&lt;h3 id=&#34;①ledライトとディスプレイ表示で視覚に訴えるスタイル&#34;&gt;①LEDライトとディスプレイ表示で視覚に訴えるスタイル&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/190/13.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;div class=&#34;parent&#34;&gt;
-    &lt;div class=&#34;dialogue&#34;&gt;
-        &lt;div class=&#34;img image_w&#34;&gt;
-          &lt;img src=&#34;https://dotstud.io/img/blog/190/obniz1.png&#34; /&gt;
-          &lt;section class=&#34;name&#34;&gt;obniz&lt;/section&gt;
-        &lt;/div&gt;
-        &lt;div class=&#34;text&#34;&gt;
-            （……ちゃんとくさん……きこえますか……ききです……今……あなたの脳内に……直接……呼びかけています……お腹が空きました……）
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div class=&#34;parent&#34;&gt;
-    &lt;div class=&#34;dialogue&#34;&gt;
-        &lt;div class=&#34;img image_c&#34;&gt;
-          &lt;img src=&#34;https://dotstud.io/img/blog/190/chantoku.png&#34; /&gt;
-          &lt;section class=&#34;name&#34;&gt;ちゃんとく&lt;/section&gt;
-        &lt;/div&gt;
-        &lt;div class=&#34;text&#34;&gt;
-            「目がやられた」
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&#34;②旗と鈴の音で視覚のみならず聴覚にも訴えるスタイル&#34;&gt;②旗と鈴の音で視覚のみならず聴覚にも訴えるスタイル&lt;/h3&gt;
-
-&lt;p&gt;鈴はピンクのお守りについている鈴しかありませんでした。予想以上にキュートな仕上がりです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/190/14.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;div class=&#34;parent&#34;&gt;
-    &lt;div class=&#34;dialogue&#34;&gt;
-        &lt;div class=&#34;img image_w&#34;&gt;
-          &lt;img src=&#34;https://dotstud.io/img/blog/190/obniz2.png&#34; /&gt;
-          &lt;section class=&#34;name&#34;&gt;obniz&lt;/section&gt;
-        &lt;/div&gt;
-        &lt;div class=&#34;text&#34;&gt;
-            「きき、おペコです…！（ブンブン）」
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div class=&#34;parent&#34;&gt;
-    &lt;div class=&#34;dialogue&#34;&gt;
-        &lt;div class=&#34;img image_c&#34;&gt;
-          &lt;img src=&#34;https://dotstud.io/img/blog/190/chantoku.png&#34; /&gt;
-          &lt;section class=&#34;name&#34;&gt;ちゃんとく&lt;/section&gt;
-        &lt;/div&gt;
-        &lt;div class=&#34;text&#34;&gt;
-            「驚いた」
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
-
-&lt;p&gt;&lt;strong&gt;思ったより激しめに旗が動く&lt;/strong&gt;ので、こちらの方が空腹感はより伝わると思います。微かな驚きとともにおペコを伝えることができました。&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;div class=&#34;parent&#34;&gt;
-    &lt;div class=&#34;dialogue&#34;&gt;
-        &lt;div class=&#34;img image_c&#34;&gt;
-          &lt;img src=&#34;https://dotstud.io/img/blog/190/chantoku.png&#34; /&gt;
-          &lt;section class=&#34;name&#34;&gt;ちゃんとく&lt;/section&gt;
-        &lt;/div&gt;
-        &lt;div class=&#34;text&#34;&gt;
-            「そろそろお昼にしようか！」
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
-
-&lt;div class=&#34;parent&#34;&gt;
-    &lt;div class=&#34;dialogue&#34;&gt;
-        &lt;div class=&#34;img image_c&#34;&gt;
-          &lt;img src=&#34;https://dotstud.io/img/blog/190/opeko2.png&#34; /&gt;
-          &lt;section class=&#34;name&#34;&gt;きき&lt;/section&gt;
-        &lt;/div&gt;
-        &lt;div class=&#34;text&#34;&gt;
-            「やっっっった〜〜〜〜！！！（歓喜）」
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-
-&lt;p&gt;いかがでしたでしょうか？&lt;/p&gt;
-
-&lt;p&gt;obnizを使えば、&lt;strong&gt;お腹がぐ〜ぐ〜なって恥ずかしい思いをすることもないし、お昼のタイミングを早めることもできます&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;みなさんも会社の上司のデスクや、学校の気になるあの子の机に仕込みまくり、日々のおペコ問題を解消していきましょう！&lt;/p&gt;
-
-&lt;p&gt;ではでは、私はランチタイムに入ることにします〜！&lt;/p&gt;
-
-&lt;style&gt;
-.dialogue {
-    padding: 10px;
-    display: table;
-}
-
-.img {
-    margin-right: 10px;
-    display: table-cell;
-    vertical-align: middle;
-}
-
-.img img {
-    margin-left: 10px;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-}
-
-.image_n img {
-    border: 2px solid blue;
-}
-
-.image_c img {
-    border: 2px solid pink;
-}
-
-.image_w img {
-    border-radius: 50%;
-    border: 2px solid green;
-}
-
-.image_t img {
-    border-radius: 50%;
-    border: 2px solid red;
-}
-
-.image_s img {
-    border-radius: 50%;
-    border: 2px solid brown;
-}
-.name {
-    font-weight: bold;
-    text-align: center;
-    margin-left: 10px;
-}
-
-.text {
-    display: table-cell;
-    padding: 0;
-    vertical-align: middle;
-    padding-left: 20px;
-}
-&lt;/style&gt;
 </description>
     </item>
     

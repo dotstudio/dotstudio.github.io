@@ -7,8 +7,2292 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2018 dotstudio inc.</copyright>
-    <lastBuildDate>Tue, 21 Aug 2018 15:51:00 +0900</lastBuildDate>
+    <lastBuildDate>Sat, 25 Aug 2018 21:23:40 +0900</lastBuildDate>
     <atom:link href="/categories/try/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>ClovaスキルでMP3ファイルを再生してみよう #asciihack #linebootawards</title>
+      <link>https://dotstud.io/blog/nodejs-clova-skill-mp3/</link>
+      <pubDate>Sat, 25 Aug 2018 21:23:40 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nodejs-clova-skill-mp3/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://asciistartup.connpass.com/event/91483/&#34;&gt;&lt;code&gt;#asciihack&lt;/code&gt;&lt;/a&gt; にてClovaでMP3再生したいという話があったので試してみました。&lt;/p&gt;
+
+&lt;p&gt;ハッカソン中の走り書きです。ご了承ください。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;デモを先にみたい人は&lt;a href=&#34;https://dotstud.io/blog/nodejs-clova-skill-mp3/#デモ&#34;&gt;ページ下部&lt;/a&gt;へ！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Google Homeで有名な、&lt;code&gt;みそ氏&lt;/code&gt;の&lt;a href=&#34;https://qiita.com/miso_develop/items/6b256c1e8757c0ace4a9&#34;&gt;Clova公式SDK(Node.js)の使い方まとめ&lt;/a&gt;が参考になります。&lt;/p&gt;
+
+&lt;p&gt;Node.jsのSDKでのやり方です。ちなみにNode.jsのバージョンは10.8.0で試しています。&lt;/p&gt;
+
+&lt;p&gt;CEKの細かい仕様には触れません。&lt;/p&gt;
+
+&lt;h2 id=&#34;一旦スキルを作る&#34;&gt;一旦スキルを作る&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/clova-cek-nodejs-tutorial/&#34;&gt;Clova CEKでのスキル開発の始め方〜Node.jsで開発スタート編〜&lt;/a&gt;などを読みつつClova CEKのSDKをインストールしつつ対話モデル作ったり、Clovaスキルの基本を作りましょう。&lt;/p&gt;
+
+
+
+&lt;section class=&#34;link&#34; id=&#34;195&#34;&gt;
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+          &lt;div class=&#34;link_content&#34;&gt;
+          &lt;a href=&#34;https://dotstud.io/blog/clova-cek-nodejs-tutorial/&#34;&gt;&lt;/a&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/195/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
+          &lt;/div&gt;
+          &lt;div class=&#34;link_content&#34;&gt;
+            &lt;div class=&#34;link_detail&#34;&gt;
+              &lt;div class=&#34;link_title&#34;&gt;
+                Clova CEKでのスキル開発の始め方〜Node.jsで開発スタート編〜
+              &lt;/div&gt;
+              &lt;div class=&#34;link_date&#34;&gt;
+                
+                2018-08-03
+              &lt;/div&gt;
+              &lt;div class=&#34;link_desc&#34;&gt;
+                Clova CEKのNode.jsチュートリアルです。カレースキルを作ります。
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+&lt;/section&gt;
+
+
+&lt;p&gt;この記事のコードを見ると該当箇所が分かります。&lt;/p&gt;
+
+&lt;h2 id=&#34;起動時にmp3を再生&#34;&gt;起動時にMP3を再生&lt;/h2&gt;
+
+&lt;p&gt;基本は以下のように、指定したサーバー上のMP3を再生できます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;responseHelper.setSimpleSpeech(
+    clova.SpeechBuilder.createSpeechUrl(&#39;https://exsample.com/myaudio.mp3&#39;)
+);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;.onLaunchRequest()&lt;/code&gt;の中で実行すれば起動時にMP3を再生できます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//起動時に喋る
+.onLaunchRequest(responseHelper =&amp;gt; {
+    responseHelper.setSimpleSpeech(
+        clova.SpeechBuilder.createSpeechUrl(&#39;https://exsample.com/myaudio.mp3&#39;)
+    );
+})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;このコードは前に書いたチュートリアルの一部を改変しているので、どこが該当箇所か確認してみて下さい。&lt;/p&gt;
+
+&lt;p&gt;
+
+&lt;section class=&#34;link&#34; id=&#34;195&#34;&gt;
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+          &lt;div class=&#34;link_content&#34;&gt;
+          &lt;a href=&#34;https://dotstud.io/blog/clova-cek-nodejs-tutorial/&#34;&gt;&lt;/a&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/195/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
+          &lt;/div&gt;
+          &lt;div class=&#34;link_content&#34;&gt;
+            &lt;div class=&#34;link_detail&#34;&gt;
+              &lt;div class=&#34;link_title&#34;&gt;
+                Clova CEKでのスキル開発の始め方〜Node.jsで開発スタート編〜
+              &lt;/div&gt;
+              &lt;div class=&#34;link_date&#34;&gt;
+                
+                2018-08-03
+              &lt;/div&gt;
+              &lt;div class=&#34;link_desc&#34;&gt;
+                Clova CEKのNode.jsチュートリアルです。カレースキルを作ります。
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+&lt;/section&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;呼びかけてmp3を再生&#34;&gt;呼びかけてMP3を再生&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;.onIntentRequest()&lt;/code&gt;の中で実行すれば呼びかけに応じてMP3を再生できます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; //ユーザーからの発話が来たら反応する箇所
+.onIntentRequest(async responseHelper =&amp;gt; {
+    responseHelper.setSimpleSpeech(
+        clova.SpeechBuilder.createSpeechUrl(&#39;https://exsample.com/myaudio.mp3&#39;)
+    );
+})
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;mp3を連続再生&#34;&gt;MP3を連続再生&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;responseHelper.setSimpleSpeech()&lt;/code&gt;で1回再生できましたが、&lt;code&gt;responseHelper.setSpeechList()&lt;/code&gt;では配列を与えることで連続再生が出来ます。&lt;/p&gt;
+
+&lt;p&gt;(謎に)10回再生。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//省略
+let SpeechList = [];
+for (let index = 0; index &amp;lt; 10; index++) {
+    SpeechList.push(clova.SpeechBuilder.createSpeechUrl(&#39;https://exsample.com/myaudio.mp3&#39;));
+}
+responseHelper.setSpeechList(SpeechList);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;デモ&#34;&gt;デモ&lt;/h2&gt;
+
+&lt;p&gt;シオカラーズが応援してくれるサンプル。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;のびすけ: 応援スキルを起動して&lt;/li&gt;
+&lt;li&gt;Clova: mp3再生&lt;/li&gt;
+&lt;li&gt;のびすけ: もっと応援して&lt;/li&gt;
+&lt;li&gt;Clova: mp3を10回再生&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;instagram-media&#34; data-instgrm-captioned data-instgrm-permalink=&#34;https://www.instagram.com/p/Bm5rRMhBszI/?utm_source=ig_embed&#34; data-instgrm-version=&#34;9&#34; style=&#34; background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);&#34;&gt;&lt;div style=&#34;padding:8px;&#34;&gt; &lt;div style=&#34; background:#F8F8F8; line-height:0; margin-top:40px; padding:28.125% 0; text-align:center; width:100%;&#34;&gt; &lt;div style=&#34; background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;&#34;&gt;&lt;/div&gt;&lt;/div&gt; &lt;p style=&#34; margin:8px 0 0 0; padding:0 4px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/Bm5rRMhBszI/?utm_source=ig_embed&#34; style=&#34; color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;&#34; target=&#34;_blank&#34;&gt;MP3再生してみている #asciihack&lt;/a&gt;&lt;/p&gt; &lt;p style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;&#34;&gt;&lt;a href=&#34;https://www.instagram.com/n0bisuke/?utm_source=ig_embed&#34; style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px;&#34; target=&#34;_blank&#34;&gt; n0bisuke&lt;/a&gt;さん(@n0bisuke)がシェアした投稿 - &lt;time style=&#34; font-family:Arial,sans-serif; font-size:14px; line-height:17px;&#34; datetime=&#34;2018-08-25T12:05:46+00:00&#34;&gt;2018年 8月月25日午前5時05分PDT&lt;/time&gt;&lt;/p&gt;&lt;/div&gt;&lt;/blockquote&gt; &lt;script async defer src=&#34;//www.instagram.com/embed.js&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;音源、権利的に大丈夫かな&amp;hellip;&amp;hellip;ガクブル
+（怒られたら直そう）&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;基本の形は&lt;code&gt;clova.SpeechBuilder.createSpeechUrl(&#39;https://exsample.com/myaudio.mp3&#39;)&lt;/code&gt;で再生出来ます。&lt;/p&gt;
+
+&lt;p&gt;1回再生は&lt;code&gt;responseHelper.setSimpleSpeech()&lt;/code&gt;で、連続再生は&lt;code&gt;responseHelper.setSpeechList()&lt;/code&gt;で&lt;code&gt;clova.SpeechBuilder.createSpeechUrl()&lt;/code&gt;を実行です。&lt;/p&gt;
+
+&lt;p&gt;細かい仕様が気になる人は&lt;a href=&#34;https://clova-developers.line.me/guide/#/CEK/Guides/Build_Custom_Extension.md#DirectClientToPlayAudio&#34;&gt;ドキュメントのこの辺&lt;/a&gt;をご参照ください！&lt;/p&gt;
+
+&lt;p&gt;ではでは、引き続きハッカソンがんばりましょ！&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Azure WebAppsでカスタムドメイン&#43;SSL対応するメモ</title>
@@ -1937,6 +4221,9 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/led-eyelash-gadget-report/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/126/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -2520,6 +4807,9 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
 
 
 &lt;section class=&#34;link&#34; id=&#34;185&#34;&gt;
+  
+      
+      
   
       
       
@@ -3959,6 +6249,9 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/line-clova-skill-tutorial/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/186/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -4718,6 +7011,9 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
 
 
 &lt;section class=&#34;link&#34; id=&#34;186&#34;&gt;
+  
+      
+      
   
       
       
@@ -6401,6 +8697,9 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nodejs-install-use-nodebrew/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/136/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -7009,6 +9308,9 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;158&#34;&gt;
+  
+      
+      
   
       
       
@@ -9155,6 +11457,9 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
       
       
   
+      
+      
+  
 &lt;/section&gt;
 &lt;/p&gt;
 
@@ -9509,6 +11814,9 @@ Intent:CurreySearchIntent
 
 
 &lt;section class=&#34;link&#34; id=&#34;192&#34;&gt;
+  
+      
+      
   
       
       
@@ -11671,6 +13979,9 @@ obnizのディスプレイ上でも「&lt;strong&gt;Hello World&lt;/strong&gt;�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nefry-servo-handson-takudooon/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/187/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -13461,6 +15772,9 @@ void loop()
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nodejs-amazon-alexa-skill/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/144/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -14161,6 +16475,9 @@ this.emit(&#39;:tell&#39;, speechOut);
 
 
 &lt;section class=&#34;link&#34; id=&#34;180&#34;&gt;
+  
+      
+      
   
       
       
@@ -15687,6 +18004,9 @@ this.emit(&#39;:tell&#39;, speechOut);
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nodejs-alexa-skill-mp3/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/163/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -16500,6 +18820,9 @@ exports.handler = function(event, context, callback) {
 
 
 &lt;section class=&#34;link&#34; id=&#34;133&#34;&gt;
+  
+      
+      
   
       
       
@@ -18372,6 +20695,9 @@ GPIO.cleanup()
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/clova-ifttt-nefrybt-arduino/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/185/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -19359,6 +21685,9 @@ GPIO.cleanup()
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;195&#34;&gt;
+  
+      
+      
   
       
       
@@ -21594,6 +23923,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/keyboard-kintai-system-diy/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/183/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -22799,6 +25131,9 @@ clovaを選択しましょう。&lt;/p&gt;
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/keyboard-kintai-system-diy/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/183/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -23600,311 +25935,6 @@ void iftttClovaPost(String message){
 &lt;p&gt;IFTTTに繋がると実質何とでも繋げられるので嬉しいですね。&lt;/p&gt;
 
 &lt;p&gt;人間が「通知を読み上げて」と言わなくても喋ってくれるように機能追加してくれることに期待です。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>NefryBTとキーボードで作る簡易勤怠管理システム</title>
-      <link>https://dotstud.io/blog/keyboard-kintai-system-diy/</link>
-      <pubDate>Thu, 05 Jul 2018 10:00:00 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/keyboard-kintai-system-diy/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
-
-&lt;p&gt;今日はとある電子工作向けキーパッドを手に入れたので、&lt;strong&gt;Nefry BTで簡易的な勤怠管理システム&lt;/strong&gt;を作ってみました。ちなみにオチとかないです。&lt;/p&gt;
-
-&lt;h2 id=&#34;使うもの&#34;&gt;使うもの&lt;/h2&gt;
-
-&lt;h3 id=&#34;マトリックスフィルムボタンキーボード-メンブレン式キーボード-4-4&#34;&gt;マトリックスフィルムボタンキーボード メンブレン式キーボード 4*4&lt;/h3&gt;
-
-&lt;p&gt;HiLetgoというストアから出品されています。眺めていて使ってみたいなぁという欲求が湧いたのでポチりました。&lt;/p&gt;
-
-&lt;p&gt;ちなみに5個セットなので、あと4個なにか作れます。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;iframe style=&#34;width:120px;height:240px;&#34; marginwidth=&#34;0&#34; marginheight=&#34;0&#34; scrolling=&#34;no&#34; frameborder=&#34;0&#34; src=&#34;//rcm-fe.amazon-adsystem.com/e/cm?lt1=\å_blank&amp;bc1=000000&amp;IS2=1&amp;bg1=FFFFFF&amp;fc1=000000&amp;lc1=0000FF&amp;t=n0bisuke-22&amp;o=9&amp;p=8&amp;l=as4&amp;m=amazon&amp;f=ifr&amp;ref=as_ss_li_til&amp;asins=B010Q17I8E&amp;linkId=9116436de3640fbe22f359a3eb280f43&#34;&gt;&lt;/iframe&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;arduino-unoで動かしてみる&#34;&gt;Arduino Unoで動かしてみる&lt;/h2&gt;
-
-&lt;p&gt;AmazonのページにはArduino対応と書いているのでどうやら使えるらしい。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://techtutorialsx.com/2017/03/18/esp8266-interfacing-with-a-4x4-matrix-keypad/&#34;&gt;ESP8266: Interfacing with a 4×4 Matrix Keypad
-&lt;/a&gt;という記事があったので参考にArduinoで動かしてみました。&lt;/p&gt;
-
-&lt;h3 id=&#34;配線&#34;&gt;配線&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/3c3b4883c69f25b562906e38f853beb4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Arduino Unoとあとで紹介するNefry BTでの配線はこんな感じです。&lt;/p&gt;
-
-&lt;h3 id=&#34;プログラム&#34;&gt;プログラム&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;Chris--A/Keypad&#34;&gt;こちらのライブラリ&lt;/a&gt;をインストールしましょう。&lt;/p&gt;
-
-&lt;p&gt;ライブラリマネージャからもインストールできます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/d1d90cb4712729faac8272bcf3274767.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;#include &amp;lt;Keypad.h&amp;gt;
-
-const byte n_rows = 4;
-const byte n_cols = 4;
-
-char keys[n_rows][n_cols] = {
-  {&#39;1&#39;,&#39;2&#39;,&#39;3&#39;,&#39;A&#39;},
-  {&#39;4&#39;,&#39;5&#39;,&#39;6&#39;,&#39;B&#39;},
-  {&#39;7&#39;,&#39;8&#39;,&#39;9&#39;,&#39;C&#39;},
-  {&#39;*&#39;,&#39;0&#39;,&#39;#&#39;,&#39;D&#39;}
-};
-
-byte colPins[n_rows] = {3, 2, 1, 0};
-byte rowPins[n_cols] = {7, 6, 5, 4};
-
-Keypad myKeypad = Keypad( makeKeymap(keys), rowPins, colPins, n_rows, n_cols);
-
-void setup(){
-  Serial.begin(115200);
-}
-
-void loop(){
-  char myKey = myKeypad.getKey();
-
-  if (myKey != NULL){
-    Serial.print(&amp;quot;Key pressed: &amp;quot;);
-    Serial.println(myKey);
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;実行&#34;&gt;実行&lt;/h3&gt;
-
-&lt;p&gt;&lt;blockquote class=&#34;instagram-media&#34; data-instgrm-captioned data-instgrm-permalink=&#34;https://www.instagram.com/p/BkzAcUMB-3K/&#34; data-instgrm-version=&#34;8&#34; style=&#34; background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);&#34;&gt;&lt;div style=&#34;padding:8px;&#34;&gt; &lt;div style=&#34; background:#F8F8F8; line-height:0; margin-top:40px; padding:28.194444444444443% 0; text-align:center; width:100%;&#34;&gt; &lt;div style=&#34; background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;&#34;&gt;&lt;/div&gt;&lt;/div&gt; &lt;p style=&#34; margin:8px 0 0 0; padding:0 4px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/BkzAcUMB-3K/&#34; style=&#34; color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;&#34; target=&#34;_blank&#34;&gt;電子工作用のキーボード使ってみたけどハマることなく試せた 勤怠記録とかオフィスハックの何かに使いたい #dotstudio&lt;/a&gt;&lt;/p&gt; &lt;p style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;&#34;&gt;&lt;a href=&#34;https://www.instagram.com/n0bisuke/&#34; style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px;&#34; target=&#34;_blank&#34;&gt; n0bisuke&lt;/a&gt;さん(@n0bisuke)がシェアした投稿 - &lt;time style=&#34; font-family:Arial,sans-serif; font-size:14px; line-height:17px;&#34; datetime=&#34;2018-07-04T04:53:24+00:00&#34;&gt;2018年 7月月3日午後9時53分PDT&lt;/time&gt;&lt;/p&gt;&lt;/div&gt;&lt;/blockquote&gt; &lt;script async defer src=&#34;//www.instagram.com/embed.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;nefry-btで動作させて勤怠システムに&#34;&gt;Nefry BTで動作させて勤怠システムに&lt;/h2&gt;
-
-&lt;p&gt;出退勤の記録を付ける電子工作は、&lt;strong&gt;今まで何度か作りはしたものの導入まで至っていなかった&lt;/strong&gt;です。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;作り込もうとして力を入れすぎて力尽きる問題&lt;/strong&gt;が大きいと思っています。&lt;/p&gt;
-
-&lt;p&gt;ということで&lt;u&gt;実装がシンプルな勤怠システムをとりあえず導入&lt;/u&gt;してみました。&lt;/p&gt;
-
-&lt;h3 id=&#34;ボタン入力式&#34;&gt;ボタン入力式&lt;/h3&gt;
-
-&lt;p&gt;仕様は&lt;strong&gt;数字を押して選択し、Aボタンで出勤記録、Bボタンで退勤記録&lt;/strong&gt;です。&lt;/p&gt;
-
-&lt;p&gt;ディスプレイには登録している名前が出ます。&lt;/p&gt;
-
-&lt;p&gt;多分そのうちSuica連携とかBLEデバイス連携とか指紋とか声門とかそういうのも試してみる気はするのですが、 &lt;strong&gt;ボタン入力とHTTP通信だけの実装のシンプルさ&lt;/strong&gt;がとりあえず始めるには重要な気がしました。&lt;/p&gt;
-
-&lt;p&gt;制作時間1時間程度。HTTP POST周りで少し手こずってました。&lt;/p&gt;
-
-&lt;p&gt;&lt;blockquote class=&#34;instagram-media&#34; data-instgrm-captioned data-instgrm-permalink=&#34;https://www.instagram.com/p/Bkz8a0ihnYF/&#34; data-instgrm-version=&#34;8&#34; style=&#34; background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);&#34;&gt;&lt;div style=&#34;padding:8px;&#34;&gt; &lt;div style=&#34; background:#F8F8F8; line-height:0; margin-top:40px; padding:28.194444444444443% 0; text-align:center; width:100%;&#34;&gt; &lt;div style=&#34; background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;&#34;&gt;&lt;/div&gt;&lt;/div&gt; &lt;p style=&#34; margin:8px 0 0 0; padding:0 4px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/Bkz8a0ihnYF/&#34; style=&#34; color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;&#34; target=&#34;_blank&#34;&gt;Nefryとつないでみた。キーの押し心地がよい&lt;/a&gt;&lt;/p&gt; &lt;p style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;&#34;&gt;&lt;a href=&#34;https://www.instagram.com/n0bisuke/&#34; style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px;&#34; target=&#34;_blank&#34;&gt; n0bisuke&lt;/a&gt;さん(@n0bisuke)がシェアした投稿 - &lt;time style=&#34; font-family:Arial,sans-serif; font-size:14px; line-height:17px;&#34; datetime=&#34;2018-07-04T13:35:59+00:00&#34;&gt;2018年 7月月4日午前6時35分PDT&lt;/time&gt;&lt;/p&gt;&lt;/div&gt;&lt;/blockquote&gt; &lt;script async defer src=&#34;//www.instagram.com/embed.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;実装&#34;&gt;実装&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/nefrybt-http-post/&#34;&gt;Nefry BTでのHTTP POST&lt;/a&gt;も合わせて読むとコード理解が進みます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;#include &amp;lt;Keypad.h&amp;gt;
-#include &amp;lt;NefryDisplay.h&amp;gt;
-#include &amp;lt;WiFiClientSecure.h&amp;gt;
-WiFiClientSecure client;
-
-String StrPerEncord(const char* c_str);
-String escapeParameter(String param);
-void hipchatPost(String message);
-
-const int HTTP_PORT = 443;
-const char* HOST = &amp;quot;xxxxxxxxxx.hipchat.com&amp;quot;;
-
-const byte n_rows = 4;
-const byte n_cols = 4;
-
-char keys[n_rows][n_cols] = {
-  {&#39;1&#39;,&#39;2&#39;,&#39;3&#39;,&#39;A&#39;},
-  {&#39;4&#39;,&#39;5&#39;,&#39;6&#39;,&#39;B&#39;},
-  {&#39;7&#39;,&#39;8&#39;,&#39;9&#39;,&#39;C&#39;},
-  {&#39;*&#39;,&#39;0&#39;,&#39;#&#39;,&#39;D&#39;}
-};
-
-byte colPins[n_rows] = {D3, D2, D1, D0};
-byte rowPins[n_cols] = {D7, D6, D5, D4};
-Keypad myKeypad = Keypad( makeKeymap(keys), rowPins, colPins, n_rows, n_cols);
-
-String storeMessage = &amp;quot;&amp;quot;;
-
-//3行目だけにPrint
-void nfDisplay3Print(String mes){
-  NefryDisplay.print(&amp;quot;&amp;quot;);
-  NefryDisplay.print(&amp;quot;&amp;quot;);
-  NefryDisplay.print(mes);
-}
-
-void setup() {
-  Serial.begin(115200);
-  NefryDisplay.setTitle(&amp;quot;KINTAI&amp;quot;);
-  nfDisplay3Print(&amp;quot;Please Input...&amp;quot;);
-}
-
-void loop() {
-  char myKey = myKeypad.getKey();
-  String member = &amp;quot;&amp;quot;;
-
-  //ボタンが押された時の処理
-  if (myKey != NULL){
-    Serial.print(&amp;quot;Key pressed: &amp;quot;);
-    Serial.println(myKey);
-
-    if(String(myKey) == &amp;quot;1&amp;quot;){
-      member += &amp;quot;n0bisuke&amp;quot;;
-      storeMessage = member;
-    }else if(String(myKey) == &amp;quot;2&amp;quot;){
-      member += &amp;quot;chantoku&amp;quot;;
-      storeMessage = member;
-    }else if(String(myKey) == &amp;quot;3&amp;quot;){
-      member += &amp;quot;kiki&amp;quot;;
-      storeMessage = member;
-    }else if(String(myKey) == &amp;quot;4&amp;quot;){
-      member += &amp;quot;takudon&amp;quot;;
-      storeMessage = member;
-    }else if(String(myKey) == &amp;quot;5&amp;quot;){
-      member += &amp;quot;sasakitomohiro&amp;quot;;
-      storeMessage = member;
-    }
-
-    nfDisplay3Print(String(myKey) + &amp;quot;:&amp;quot; + member);
-
-    if(String(myKey) == &amp;quot;A&amp;quot;){
-      nfDisplay3Print(String(myKey) + &amp;quot;: [Office IN] post to HipChat...&amp;quot;);
-
-      storeMessage += &amp;quot;さんが出勤しました。&amp;quot;;
-      hipchatPost(storeMessage); //HipChatに投稿
-      storeMessage = &amp;quot;&amp;quot;; //リセット
-
-      nfDisplay3Print(String(myKey) + &amp;quot;: POST DONE&amp;quot;);
-    }else if(String(myKey) == &amp;quot;B&amp;quot;){
-      nfDisplay3Print(String(myKey) + &amp;quot;: [Office OUT] post to HipChat...&amp;quot;);
-
-      storeMessage += &amp;quot;さんが退勤しました。&amp;quot;;
-      hipchatPost(storeMessage); //HipChatに投稿
-      storeMessage = &amp;quot;&amp;quot;; //リセット
-
-      nfDisplay3Print(String(myKey) + &amp;quot;: POST DONE&amp;quot;);
-    }  
-  }
-}
-
-void hipchatPost(String message){
-  String url = &amp;quot;/v2/room/4651875/notification?auth_token=xxxxxxxxxxxxxxxx&amp;quot;;
-  url += &amp;quot;&amp;amp;color=green&amp;amp;notify=false&amp;amp;message_format=text&amp;amp;message=&amp;quot;;
-  url += StrPerEncord(escapeParameter(message + &amp;quot; (yey)&amp;quot;).c_str());
-
-  Serial.print(&amp;quot;connecting to &amp;quot;);
-  Serial.println(HOST);
-
-  if (!client.connect(HOST, HTTP_PORT)) {
-    Serial.println(&amp;quot;connection failed&amp;quot;);
-    return;
-  }
-
-  client.println(&amp;quot;POST &amp;quot; + url + &amp;quot; HTTP/1.1&amp;quot;);
-  client.println(&amp;quot;Content-Type: application/json&amp;quot;);
-  client.println(&amp;quot;Content-Type: application/x-www-form-urlencoded&amp;quot;);
-  client.println(&amp;quot;Host: &amp;quot; + String(HOST));
-  client.println(&amp;quot;Connection: close&amp;quot;);
-  client.println();
-
-  unsigned long timeout = millis();
-  while (client.available() == 0) {    
-    if (millis() - timeout &amp;gt; 5000) {
-        Serial.println(&amp;quot;&amp;gt;&amp;gt;&amp;gt; Client Timeout !&amp;quot;);
-        client.stop();
-        return;
-    }
-  }
-
-  // Read all the lines of the reply from server and print them to Serial
-  while(client.available()) {
-      String line = client.readStringUntil(&#39;\r&#39;);
-      Serial.print(line);
-  }
-
-  Serial.println();
-  Serial.println(&amp;quot;closing connection&amp;quot;);
-}
-
-String StrPerEncord(const char* c_str) {
-  uint16_t i = 0;
-  String str_ret = &amp;quot;&amp;quot;;
-  char c1[3], c2[3], c3[3];
-
-  while (c_str[i] != &#39;\0&#39;) {
-    if (c_str[i] &amp;gt;= 0xC2 &amp;amp;&amp;amp; c_str[i] &amp;lt;= 0xD1) { //2バイト文字
-      sprintf(c1, &amp;quot;%2x&amp;quot;, c_str[i]);
-      sprintf(c2, &amp;quot;%2x&amp;quot;, c_str[i + 1]);
-      str_ret += &amp;quot;%&amp;quot; + String(c1) + &amp;quot;%&amp;quot; + String(c2);
-      i = i + 2;
-    } else if (c_str[i] &amp;gt;= 0xE2 &amp;amp;&amp;amp; c_str[i] &amp;lt;= 0xEF) {
-      sprintf(c1, &amp;quot;%2x&amp;quot;, c_str[i]);
-      sprintf(c2, &amp;quot;%2x&amp;quot;, c_str[i + 1]);
-      sprintf(c3, &amp;quot;%2x&amp;quot;, c_str[i + 2]);
-      str_ret += &amp;quot;%&amp;quot; + String(c1) + &amp;quot;%&amp;quot; + String(c2) + &amp;quot;%&amp;quot; + String(c3);
-      i = i + 3;
-    } else {
-      str_ret += String(c_str[i]);
-      i++;
-    }
-  }
-  return str_ret;
-}
-
-String escapeParameter(String param) {
-  param.replace(&amp;quot;%&amp;quot;, &amp;quot;%25&amp;quot;);
-  param.replace(&amp;quot;+&amp;quot;, &amp;quot;%2B&amp;quot;);
-  param.replace(&amp;quot; &amp;quot;, &amp;quot;+&amp;quot;);
-  param.replace(&amp;quot;\&amp;quot;&amp;quot;, &amp;quot;%22&amp;quot;);
-  param.replace(&amp;quot;#&amp;quot;, &amp;quot;%23&amp;quot;);
-  param.replace(&amp;quot;$&amp;quot;, &amp;quot;%24&amp;quot;);
-  param.replace(&amp;quot;&amp;amp;&amp;quot;, &amp;quot;%26&amp;quot;);
-  param.replace(&amp;quot;&#39;&amp;quot;, &amp;quot;%27&amp;quot;);
-  param.replace(&amp;quot;(&amp;quot;, &amp;quot;%28&amp;quot;);
-  param.replace(&amp;quot;)&amp;quot;, &amp;quot;%29&amp;quot;);
-  param.replace(&amp;quot;*&amp;quot;, &amp;quot;%2A&amp;quot;);
-  param.replace(&amp;quot;,&amp;quot;, &amp;quot;%2C&amp;quot;);
-  param.replace(&amp;quot;/&amp;quot;, &amp;quot;%2F&amp;quot;);
-  param.replace(&amp;quot;:&amp;quot;, &amp;quot;%3A&amp;quot;);
-  param.replace(&amp;quot;;&amp;quot;, &amp;quot;%3B&amp;quot;);
-  param.replace(&amp;quot;&amp;lt;&amp;quot;, &amp;quot;%3C&amp;quot;);
-  param.replace(&amp;quot;=&amp;quot;, &amp;quot;%3D&amp;quot;);
-  param.replace(&amp;quot;&amp;gt;&amp;quot;, &amp;quot;%3E&amp;quot;);
-  param.replace(&amp;quot;?&amp;quot;, &amp;quot;%3F&amp;quot;);
-  param.replace(&amp;quot;@&amp;quot;, &amp;quot;%40&amp;quot;);
-  param.replace(&amp;quot;[&amp;quot;, &amp;quot;%5B&amp;quot;);
-  param.replace(&amp;quot;\\&amp;quot;, &amp;quot;%5C&amp;quot;);
-  param.replace(&amp;quot;]&amp;quot;, &amp;quot;%5D&amp;quot;);
-  param.replace(&amp;quot;^&amp;quot;, &amp;quot;%5E&amp;quot;);
-  param.replace(&amp;quot;&#39;&amp;quot;, &amp;quot;%60&amp;quot;);
-  param.replace(&amp;quot;{&amp;quot;, &amp;quot;%7B&amp;quot;);
-  param.replace(&amp;quot;|&amp;quot;, &amp;quot;%7C&amp;quot;);
-  param.replace(&amp;quot;}&amp;quot;, &amp;quot;%7D&amp;quot;);
-  return param;
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;運用1日目ですが問題ないです（謎）&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;実際にはシートに記録したりした方が良いと思いますが今後検討です！&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/fcc920005a4a691f37081c936f6968d1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;HipChatの部分はうちの社内がHipChatだからというだけですが、LINEだったりSlackだったりも同様のやり方で連携できます。&lt;/p&gt;
-
-&lt;p&gt;思ったより簡単に試せたなぁという印象なのでみなさんもぜひ試してみてください。&lt;/p&gt;
 </description>
     </item>
     
