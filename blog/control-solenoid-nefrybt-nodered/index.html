@@ -3776,452 +3776,466 @@ void loop() {
 </section>
 
 
-<pre><code>
-[
-    {
-        &quot;id&quot;: &quot;2c912723.4f0338&quot;,
-        &quot;type&quot;: &quot;http in&quot;,
-        &quot;z&quot;: &quot;57519a9b.8fba94&quot;,
-        &quot;name&quot;: &quot;&quot;,
-        &quot;url&quot;: &quot;sensor4&quot;,
-        &quot;method&quot;: &quot;get&quot;,
-        &quot;upload&quot;: false,
-        &quot;swaggerDoc&quot;: &quot;&quot;,
-        &quot;x&quot;: 70,
-        &quot;y&quot;: 100,
-        &quot;wires&quot;: [
-            [
-                &quot;94c3393a.020d68&quot;
-            ]
-        ]
-    },
-    {
-        &quot;id&quot;: &quot;94c3393a.020d68&quot;,
-        &quot;type&quot;: &quot;template&quot;,
-        &quot;z&quot;: &quot;57519a9b.8fba94&quot;,
-        &quot;name&quot;: &quot;HTML&quot;,
-        &quot;field&quot;: &quot;payload&quot;,
-        &quot;fieldType&quot;: &quot;msg&quot;,
-        &quot;format&quot;: &quot;html&quot;,
-        &quot;syntax&quot;: &quot;mustache&quot;,
-        &quot;template&quot;: &quot;&lt;!DOCTYPE html&gt;\n&lt;html lang=\&quot;ja\&quot;&gt;\n&lt;head&gt;\n&lt;meta charset=\&quot;utf-8\&quot;&gt;\n&lt;meta name=\&quot;viewport\&quot; content=\&quot;width=device-width,initial-scale=1\&quot;&gt;\n&lt;title&gt;加速度検出&lt;/title&gt;\n&lt;/head&gt;\n \n&lt;body&gt;\n&lt;div id=\&quot;datatxt\&quot;&gt;データの表示&lt;/div&gt; \n \n&lt;script&gt;\n    var encrypted = \&quot;{{{req.connection.encrypted}}}\&quot;;\n    if (encrypted === \&quot;true\&quot;) {\n        var wsUri = \&quot;wss://{{{req.hostname}}}:{{{req.connection.localPort}}}/accl1\&quot;;\n    }\n    else {\n        var wsUri = \&quot;ws://{{{req.hostname}}}:{{{req.connection.localPort}}}/accl1\&quot;;\n    }\n    var ws = new WebSocket(wsUri);\n\n    var accx = null;\n    var accy = null;\n    var accz = null;\n\n    function sendMessage() {\n        // 画面書き換え\n        var txt = \&quot;wsUri:\&quot; + wsUri + \&quot;&lt;br&gt;\&quot;;\n        txt += \&quot;x:\&quot; + accx + \&quot;&lt;br&gt;\&quot;;\n        txt += \&quot;y:\&quot; + accy + \&quot;&lt;br&gt;\&quot;;\n        txt += \&quot;z:\&quot; + accz + \&quot;&lt;br&gt;\&quot;;\n\n        var datatxt = document.getElementById(\&quot;datatxt\&quot;);\n        datatxt.innerHTML = txt;\n\n        // WebSocket送信\n        var payload = {\n            'accx': accx,\n            'accy': accy,\n            'accz': accz,\n        };\n        ws.send(JSON.stringify(payload));\n    }\n\n    function handleMotionEvent(evt) {\n        //加速度\n        accx = evt.acceleration.x;\n        accy = evt.acceleration.y;\n        accz = evt.acceleration.z;\n    }\n\n    window.addEventListener(\&quot;devicemotion\&quot;, handleMotionEvent, true); //情報変更ごとにイベント発生\n    window.setInterval(sendMessage, 500); // 500msごとにイベント発生\n\n&lt;/script&gt;\n&lt;/body&gt;\n&lt;/html&gt;&quot;,
-        &quot;output&quot;: &quot;str&quot;,
-        &quot;x&quot;: 317.00000762939453,
-        &quot;y&quot;: 100.00000286102295,
-        &quot;wires&quot;: [
-            [
-                &quot;c9b732b9.d5df9&quot;
-            ]
-        ]
-    },
-    {
-        &quot;id&quot;: &quot;c9b732b9.d5df9&quot;,
-        &quot;type&quot;: &quot;http response&quot;,
-        &quot;z&quot;: &quot;57519a9b.8fba94&quot;,
-        &quot;name&quot;: &quot;&quot;,
-        &quot;statusCode&quot;: &quot;&quot;,
-        &quot;headers&quot;: {},
-        &quot;x&quot;: 541.0000152587891,
-        &quot;y&quot;: 100.00000190734863,
-        &quot;wires&quot;: []
-    },
-    {
-        &quot;id&quot;: &quot;af4fa6f9.139f88&quot;,
-        &quot;type&quot;: &quot;websocket in&quot;,
-        &quot;z&quot;: &quot;57519a9b.8fba94&quot;,
-        &quot;name&quot;: &quot;&quot;,
-        &quot;server&quot;: &quot;250c9625.e420aa&quot;,
-        &quot;client&quot;: &quot;&quot;,
-        &quot;x&quot;: 60,
-        &quot;y&quot;: 220,
-        &quot;wires&quot;: [
-            [
-                &quot;1c16e58e.096d5a&quot;
-            ]
-        ]
-    },
-    {
-        &quot;id&quot;: &quot;1c16e58e.096d5a&quot;,
-        &quot;type&quot;: &quot;json&quot;,
-        &quot;z&quot;: &quot;57519a9b.8fba94&quot;,
-        &quot;name&quot;: &quot;加速度をjson形式に変換&quot;,
-        &quot;property&quot;: &quot;payload&quot;,
-        &quot;action&quot;: &quot;&quot;,
-        &quot;pretty&quot;: false,
-        &quot;x&quot;: 310,
-        &quot;y&quot;: 320,
-        &quot;wires&quot;: [
-            [
-                &quot;b50a0d6c.0c67a&quot;,
-                &quot;10eecadd.b9fbe5&quot;,
-                &quot;1c843637.566a8a&quot;
-            ]
-        ]
-    },
-    {
-        &quot;id&quot;: &quot;b50a0d6c.0c67a&quot;,
-        &quot;type&quot;: &quot;switch&quot;,
-        &quot;z&quot;: &quot;57519a9b.8fba94&quot;,
-        &quot;name&quot;: &quot;加速度判定&quot;,
-        &quot;property&quot;: &quot;payload.accz&quot;,
-        &quot;propertyType&quot;: &quot;msg&quot;,
-        &quot;rules&quot;: [
-            {
-                &quot;t&quot;: &quot;gt&quot;,
-                &quot;v&quot;: &quot;10&quot;,
-                &quot;vt&quot;: &quot;num&quot;
-            },
-            {
-                &quot;t&quot;: &quot;btwn&quot;,
-                &quot;v&quot;: &quot;6&quot;,
-                &quot;vt&quot;: &quot;num&quot;,
-                &quot;v2&quot;: &quot;10&quot;,
-                &quot;v2t&quot;: &quot;num&quot;
-            },
-            {
-                &quot;t&quot;: &quot;lte&quot;,
-                &quot;v&quot;: &quot;5&quot;,
-                &quot;vt&quot;: &quot;num&quot;
-            }
-        ],
-        &quot;checkall&quot;: &quot;true&quot;,
-        &quot;repair&quot;: false,
-        &quot;outputs&quot;: 3,
-        &quot;x&quot;: 533.0000152587891,
-        &quot;y&quot;: 312.0000088214874,
-        &quot;wires&quot;: [
-            [
-                &quot;326dd035.413f1&quot;
-            ],
-            [
-                &quot;dddabb62.392ea8&quot;
-            ],
-            [
-                &quot;7c53f99b.cba9e8&quot;
-            ]
-        ]
-    },
-    {
-        &quot;id&quot;: &quot;ec7a3c72.a1361&quot;,
-        &quot;type&quot;: &quot;debug&quot;,
-        &quot;z&quot;: &quot;57519a9b.8fba94&quot;,
-        &quot;name&quot;: &quot;&quot;,
-        &quot;active&quot;: true,
-        &quot;tosidebar&quot;: true,
-        &quot;console&quot;: false,
-        &quot;tostatus&quot;: false,
-        &quot;complete&quot;: &quot;payload&quot;,
-        &quot;x&quot;: 1110,
-        &quot;y&quot;: 320,
-        &quot;wires&quot;: []
-    },
-    {
-        &quot;id&quot;: &quot;d1c70b54.eb01d8&quot;,
-        &quot;type&quot;: &quot;comment&quot;,
-        &quot;z&quot;: &quot;57519a9b.8fba94&quot;,
-        &quot;name&quot;: &quot;加速度を出力&quot;,
-        &quot;info&quot;: &quot;&quot;,
-        &quot;x&quot;: 70,
-        &quot;y&quot;: 60,
-        &quot;wires&quot;: []
-    },
-    {
-        &quot;id&quot;: &quot;10eecadd.b9fbe5&quot;,
-        &quot;type&quot;: &quot;mqtt out&quot;,
-        &quot;z&quot;: &quot;57519a9b.8fba94&quot;,
-        &quot;name&quot;: &quot;/NefryBT/SOLE&quot;,
-        &quot;topic&quot;: &quot;/NefryBT/SOLE&quot;,
-        &quot;qos&quot;: &quot;&quot;,
-        &quot;retain&quot;: &quot;&quot;,
-        &quot;broker&quot;: &quot;f9299578.86bcb8&quot;,
-        &quot;x&quot;: 470.0000915527344,
-        &quot;y&quot;: 530.0000152587891,
-        &quot;wires&quot;: []
-    },
-    {
-        &quot;id&quot;: &quot;1c843637.566a8a&quot;,
-        &quot;type&quot;: &quot;debug&quot;,
-        &quot;z&quot;: &quot;57519a9b.8fba94&quot;,
-        &quot;name&quot;: &quot;&quot;,
-        &quot;active&quot;: false,
-        &quot;tosidebar&quot;: true,
-        &quot;console&quot;: false,
-        &quot;tostatus&quot;: false,
-        &quot;complete&quot;: &quot;payload&quot;,
-        &quot;x&quot;: 311.00004959106445,
-        &quot;y&quot;: 583.0000152587891,
-        &quot;wires&quot;: []
-    },
-    {
-        &quot;id&quot;: &quot;326dd035.413f1&quot;,
-        &quot;type&quot;: &quot;change&quot;,
-        &quot;z&quot;: &quot;57519a9b.8fba94&quot;,
-        &quot;name&quot;: &quot;accz &gt; 10 のときの文字列「large」&quot;,
-        &quot;rules&quot;: [
-            {
-                &quot;t&quot;: &quot;set&quot;,
-                &quot;p&quot;: &quot;payload&quot;,
-                &quot;pt&quot;: &quot;msg&quot;,
-                &quot;to&quot;: &quot;large&quot;,
-                &quot;tot&quot;: &quot;str&quot;
-            }
-        ],
-        &quot;action&quot;: &quot;&quot;,
-        &quot;property&quot;: &quot;&quot;,
-        &quot;from&quot;: &quot;&quot;,
-        &quot;to&quot;: &quot;&quot;,
-        &quot;reg&quot;: false,
-        &quot;x&quot;: 818.000020980835,
-        &quot;y&quot;: 274.00000762939453,
-        &quot;wires&quot;: [
-            [
-                &quot;ec7a3c72.a1361&quot;
-            ]
-        ]
-    },
-    {
-        &quot;id&quot;: &quot;dddabb62.392ea8&quot;,
-        &quot;type&quot;: &quot;change&quot;,
-        &quot;z&quot;: &quot;57519a9b.8fba94&quot;,
-        &quot;name&quot;: &quot;accz:6~10 のときの文字列「medium」&quot;,
-        &quot;rules&quot;: [
-            {
-                &quot;t&quot;: &quot;set&quot;,
-                &quot;p&quot;: &quot;payload&quot;,
-                &quot;pt&quot;: &quot;msg&quot;,
-                &quot;to&quot;: &quot;medium&quot;,
-                &quot;tot&quot;: &quot;str&quot;
-            }
-        ],
-        &quot;action&quot;: &quot;&quot;,
-        &quot;property&quot;: &quot;&quot;,
-        &quot;from&quot;: &quot;&quot;,
-        &quot;to&quot;: &quot;&quot;,
-        &quot;reg&quot;: false,
-        &quot;x&quot;: 840,
-        &quot;y&quot;: 320,
-        &quot;wires&quot;: [
-            [
-                &quot;ec7a3c72.a1361&quot;
-            ]
-        ]
-    },
-    {
-        &quot;id&quot;: &quot;7c53f99b.cba9e8&quot;,
-        &quot;type&quot;: &quot;change&quot;,
-        &quot;z&quot;: &quot;57519a9b.8fba94&quot;,
-        &quot;name&quot;: &quot;accz &lt;= 5 のときの文字列「small」&quot;,
-        &quot;rules&quot;: [
-            {
-                &quot;t&quot;: &quot;set&quot;,
-                &quot;p&quot;: &quot;payload&quot;,
-                &quot;pt&quot;: &quot;msg&quot;,
-                &quot;to&quot;: &quot;small&quot;,
-                &quot;tot&quot;: &quot;str&quot;
-            }
-        ],
-        &quot;action&quot;: &quot;&quot;,
-        &quot;property&quot;: &quot;&quot;,
-        &quot;from&quot;: &quot;&quot;,
-        &quot;to&quot;: &quot;&quot;,
-        &quot;reg&quot;: false,
-        &quot;x&quot;: 820,
-        &quot;y&quot;: 360,
-        &quot;wires&quot;: [
-            [
-                &quot;ec7a3c72.a1361&quot;
-            ]
-        ]
-    },
-    {
-        &quot;id&quot;: &quot;53d3ea65.523574&quot;,
-        &quot;type&quot;: &quot;comment&quot;,
-        &quot;z&quot;: &quot;57519a9b.8fba94&quot;,
-        &quot;name&quot;: &quot;加速度を受信して橋渡し&quot;,
-        &quot;info&quot;: &quot;&quot;,
-        &quot;x&quot;: 110,
-        &quot;y&quot;: 180,
-        &quot;wires&quot;: []
-    },
-    {
-        &quot;id&quot;: &quot;422cdf71.4a17e&quot;,
-        &quot;type&quot;: &quot;comment&quot;,
-        &quot;z&quot;: &quot;57519a9b.8fba94&quot;,
-        &quot;name&quot;: &quot;MQTTで加速度をjson形式で送信&quot;,
-        &quot;info&quot;: &quot;&quot;,
-        &quot;x&quot;: 520.0000152587891,
-        &quot;y&quot;: 490.00001430511475,
-        &quot;wires&quot;: []
-    },
-    {
-        &quot;id&quot;: &quot;d24b4e1f.58b25&quot;,
-        &quot;type&quot;: &quot;comment&quot;,
-        &quot;z&quot;: &quot;57519a9b.8fba94&quot;,
-        &quot;name&quot;: &quot;デバック画面に加速度の具合を表示させる部分&quot;,
-        &quot;info&quot;: &quot;&quot;,
-        &quot;x&quot;: 641.0000152587891,
-        &quot;y&quot;: 226.00000667572021,
-        &quot;wires&quot;: []
-    },
-    {
-        &quot;id&quot;: &quot;250c9625.e420aa&quot;,
-        &quot;type&quot;: &quot;websocket-listener&quot;,
-        &quot;z&quot;: &quot;&quot;,
-        &quot;path&quot;: &quot;/accl1&quot;,
-        &quot;wholemsg&quot;: &quot;false&quot;
-    },
-    {
-        &quot;id&quot;: &quot;f9299578.86bcb8&quot;,
-        &quot;type&quot;: &quot;mqtt-broker&quot;,
-        &quot;z&quot;: &quot;&quot;,
-        &quot;name&quot;: &quot;&quot;,
-        &quot;broker&quot;: &quot;http://test.mosquitto.org/&quot;,
-        &quot;port&quot;: &quot;1883&quot;,
-        &quot;clientid&quot;: &quot;&quot;,
-        &quot;usetls&quot;: false,
-        &quot;compatmode&quot;: true,
-        &quot;keepalive&quot;: &quot;60&quot;,
-        &quot;cleansession&quot;: true,
-        &quot;birthTopic&quot;: &quot;&quot;,
-        &quot;birthQos&quot;: &quot;0&quot;,
-        &quot;birthPayload&quot;: &quot;&quot;,
-        &quot;closeTopic&quot;: &quot;&quot;,
-        &quot;closeQos&quot;: &quot;0&quot;,
-        &quot;closePayload&quot;: &quot;&quot;,
-        &quot;willTopic&quot;: &quot;&quot;,
-        &quot;willQos&quot;: &quot;0&quot;,
-        &quot;willPayload&quot;: &quot;&quot;
-    }
-]
-
-</code></pre>
+<div class="accbox">
+    <label for="label1">クリックしてコードを表示</labe>
+    <input type="checkbox" id="label1" class="cssacc" />
+    <div class="accshow">
+      <pre>
+      <code class="hljs hljs-line-numbers">
+      [
+          {
+              "id": "2c912723.4f0338",
+              "type": "http in",
+              "z": "57519a9b.8fba94",
+              "name": "",
+              "url": "sensor4",
+              "method": "get",
+              "upload": false,
+              "swaggerDoc": "",
+              "x": 70,
+              "y": 100,
+              "wires": [
+                  [
+                      "94c3393a.020d68"
+                  ]
+              ]
+          },
+          {
+              "id": "94c3393a.020d68",
+              "type": "template",
+              "z": "57519a9b.8fba94",
+              "name": "HTML",
+              "field": "payload",
+              "fieldType": "msg",
+              "format": "html",
+              "syntax": "mustache",
+              "template": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n<title>加速度検出</title>\n</head>\n \n<body>\n<div id=\"datatxt\">データの表示</div> \n \n<script>\n    var encrypted = \"{{{req.connection.encrypted}}}\";\n    if (encrypted === \"true\") {\n        var wsUri = \"wss://{{{req.hostname}}}:{{{req.connection.localPort}}}/accl1\";\n    }\n    else {\n        var wsUri = \"ws://{{{req.hostname}}}:{{{req.connection.localPort}}}/accl1\";\n    }\n    var ws = new WebSocket(wsUri);\n\n    var accx = null;\n    var accy = null;\n    var accz = null;\n\n    function sendMessage() {\n        // 画面書き換え\n        var txt = \"wsUri:\" + wsUri + \"<br>\";\n        txt += \"x:\" + accx + \"<br>\";\n        txt += \"y:\" + accy + \"<br>\";\n        txt += \"z:\" + accz + \"<br>\";\n\n        var datatxt = document.getElementById(\"datatxt\");\n        datatxt.innerHTML = txt;\n\n        // WebSocket送信\n        var payload = {\n            'accx': accx,\n            'accy': accy,\n            'accz': accz,\n        };\n        ws.send(JSON.stringify(payload));\n    }\n\n    function handleMotionEvent(evt) {\n        //加速度\n        accx = evt.acceleration.x;\n        accy = evt.acceleration.y;\n        accz = evt.acceleration.z;\n    }\n\n    window.addEventListener(\"devicemotion\", handleMotionEvent, true); //情報変更ごとにイベント発生\n    window.setInterval(sendMessage, 500); // 500msごとにイベント発生\n\n</script>\n</body>\n</html>",
+              "output": "str",
+              "x": 317.00000762939453,
+              "y": 100.00000286102295,
+              "wires": [
+                  [
+                      "c9b732b9.d5df9"
+                  ]
+              ]
+          },
+          {
+              "id": "c9b732b9.d5df9",
+              "type": "http response",
+              "z": "57519a9b.8fba94",
+              "name": "",
+              "statusCode": "",
+              "headers": {},
+              "x": 541.0000152587891,
+              "y": 100.00000190734863,
+              "wires": []
+          },
+          {
+              "id": "af4fa6f9.139f88",
+              "type": "websocket in",
+              "z": "57519a9b.8fba94",
+              "name": "",
+              "server": "250c9625.e420aa",
+              "client": "",
+              "x": 60,
+              "y": 220,
+              "wires": [
+                  [
+                      "1c16e58e.096d5a"
+                  ]
+              ]
+          },
+          {
+              "id": "1c16e58e.096d5a",
+              "type": "json",
+              "z": "57519a9b.8fba94",
+              "name": "加速度をjson形式に変換",
+              "property": "payload",
+              "action": "",
+              "pretty": false,
+              "x": 310,
+              "y": 320,
+              "wires": [
+                  [
+                      "b50a0d6c.0c67a",
+                      "10eecadd.b9fbe5",
+                      "1c843637.566a8a"
+                  ]
+              ]
+          },
+          {
+              "id": "b50a0d6c.0c67a",
+              "type": "switch",
+              "z": "57519a9b.8fba94",
+              "name": "加速度判定",
+              "property": "payload.accz",
+              "propertyType": "msg",
+              "rules": [
+                  {
+                      "t": "gt",
+                      "v": "10",
+                      "vt": "num"
+                  },
+                  {
+                      "t": "btwn",
+                      "v": "6",
+                      "vt": "num",
+                      "v2": "10",
+                      "v2t": "num"
+                  },
+                  {
+                      "t": "lte",
+                      "v": "5",
+                      "vt": "num"
+                  }
+              ],
+              "checkall": "true",
+              "repair": false,
+              "outputs": 3,
+              "x": 533.0000152587891,
+              "y": 312.0000088214874,
+              "wires": [
+                  [
+                      "326dd035.413f1"
+                  ],
+                  [
+                      "dddabb62.392ea8"
+                  ],
+                  [
+                      "7c53f99b.cba9e8"
+                  ]
+              ]
+          },
+          {
+              "id": "ec7a3c72.a1361",
+              "type": "debug",
+              "z": "57519a9b.8fba94",
+              "name": "",
+              "active": true,
+              "tosidebar": true,
+              "console": false,
+              "tostatus": false,
+              "complete": "payload",
+              "x": 1110,
+              "y": 320,
+              "wires": []
+          },
+          {
+              "id": "d1c70b54.eb01d8",
+              "type": "comment",
+              "z": "57519a9b.8fba94",
+              "name": "加速度を出力",
+              "info": "",
+              "x": 70,
+              "y": 60,
+              "wires": []
+          },
+          {
+              "id": "10eecadd.b9fbe5",
+              "type": "mqtt out",
+              "z": "57519a9b.8fba94",
+              "name": "/NefryBT/SOLE",
+              "topic": "/NefryBT/SOLE",
+              "qos": "",
+              "retain": "",
+              "broker": "f9299578.86bcb8",
+              "x": 470.0000915527344,
+              "y": 530.0000152587891,
+              "wires": []
+          },
+          {
+              "id": "1c843637.566a8a",
+              "type": "debug",
+              "z": "57519a9b.8fba94",
+              "name": "",
+              "active": false,
+              "tosidebar": true,
+              "console": false,
+              "tostatus": false,
+              "complete": "payload",
+              "x": 311.00004959106445,
+              "y": 583.0000152587891,
+              "wires": []
+          },
+          {
+              "id": "326dd035.413f1",
+              "type": "change",
+              "z": "57519a9b.8fba94",
+              "name": "accz > 10 のときの文字列「large」",
+              "rules": [
+                  {
+                      "t": "set",
+                      "p": "payload",
+                      "pt": "msg",
+                      "to": "large",
+                      "tot": "str"
+                  }
+              ],
+              "action": "",
+              "property": "",
+              "from": "",
+              "to": "",
+              "reg": false,
+              "x": 818.000020980835,
+              "y": 274.00000762939453,
+              "wires": [
+                  [
+                      "ec7a3c72.a1361"
+                  ]
+              ]
+          },
+          {
+              "id": "dddabb62.392ea8",
+              "type": "change",
+              "z": "57519a9b.8fba94",
+              "name": "accz:6~10 のときの文字列「medium」",
+              "rules": [
+                  {
+                      "t": "set",
+                      "p": "payload",
+                      "pt": "msg",
+                      "to": "medium",
+                      "tot": "str"
+                  }
+              ],
+              "action": "",
+              "property": "",
+              "from": "",
+              "to": "",
+              "reg": false,
+              "x": 840,
+              "y": 320,
+              "wires": [
+                  [
+                      "ec7a3c72.a1361"
+                  ]
+              ]
+          },
+          {
+              "id": "7c53f99b.cba9e8",
+              "type": "change",
+              "z": "57519a9b.8fba94",
+              "name": "accz <= 5 のときの文字列「small」",
+              "rules": [
+                  {
+                      "t": "set",
+                      "p": "payload",
+                      "pt": "msg",
+                      "to": "small",
+                      "tot": "str"
+                  }
+              ],
+              "action": "",
+              "property": "",
+              "from": "",
+              "to": "",
+              "reg": false,
+              "x": 820,
+              "y": 360,
+              "wires": [
+                  [
+                      "ec7a3c72.a1361"
+                  ]
+              ]
+          },
+          {
+              "id": "53d3ea65.523574",
+              "type": "comment",
+              "z": "57519a9b.8fba94",
+              "name": "加速度を受信して橋渡し",
+              "info": "",
+              "x": 110,
+              "y": 180,
+              "wires": []
+          },
+          {
+              "id": "422cdf71.4a17e",
+              "type": "comment",
+              "z": "57519a9b.8fba94",
+              "name": "MQTTで加速度をjson形式で送信",
+              "info": "",
+              "x": 520.0000152587891,
+              "y": 490.00001430511475,
+              "wires": []
+          },
+          {
+              "id": "d24b4e1f.58b25",
+              "type": "comment",
+              "z": "57519a9b.8fba94",
+              "name": "デバック画面に加速度の具合を表示させる部分",
+              "info": "",
+              "x": 641.0000152587891,
+              "y": 226.00000667572021,
+              "wires": []
+          },
+          {
+              "id": "250c9625.e420aa",
+              "type": "websocket-listener",
+              "z": "",
+              "path": "/accl1",
+              "wholemsg": "false"
+          },
+          {
+              "id": "f9299578.86bcb8",
+              "type": "mqtt-broker",
+              "z": "",
+              "name": "",
+              "broker": "http://test.mosquitto.org/",
+              "port": "1883",
+              "clientid": "",
+              "usetls": false,
+              "compatmode": true,
+              "keepalive": "60",
+              "cleansession": true,
+              "birthTopic": "",
+              "birthQos": "0",
+              "birthPayload": "",
+              "closeTopic": "",
+              "closeQos": "0",
+              "closePayload": "",
+              "willTopic": "",
+              "willQos": "0",
+              "willPayload": ""
+          }
+      ]
+      </code>
+      </pre>
+    </div>
+</div>
 
 <h3 id="nefry-btにプログラムを書き込む">Nefry BTにプログラムを書き込む</h3>
 
 <p>Nefry BTに書き込むプログラムはこちらです。</p>
 
-<pre><code class="language-c++">
-#include &lt;Nefry.h&gt;
-#include &lt;WiFiClient.h&gt;
-#include &lt;PubSubClient.h&gt;
-#include &lt;ArduinoJson.h&gt;
+<div class="accbox">
+    <label for="label2">クリックしてコードを表示</labe>
+    <input type="checkbox" id="label2" class="cssacc" />
+    <div class="accshow">
+      <pre>
+      <code class="language-c++ hljs cpp">
+      #include &lt;Nefry.h&gt;
+      #include &lt;WiFiClient.h&gt;
+      #include &lt;PubSubClient.h&gt;
+      #include &lt;ArduinoJson.h&gt;
 
-IPAddress endpoint;
-const int port = 1883;
+      IPAddress endpoint;
+      const int port = 1883;
 
-const char *pubTopic;
-const char *subTopic;
-const char *deviceName;
-const char *mqtt_server = &quot;test.mosquitto.org&quot;;
+      const char *pubTopic;
+      const char *subTopic;
+      const char *deviceName;
+      const char *mqtt_server = "test.mosquitto.org";
 
-WiFiClient httpsClient;
-PubSubClient mqttClient(httpsClient);
+      WiFiClient httpsClient;
+      PubSubClient mqttClient(httpsClient);
 
 
 
-void setup() {
-  ////ソレノイドのピン設定/////////////////////////////////
-  pinMode(D4, OUTPUT);
+      void setup() {
+        ////ソレノイドのピン設定/////////////////////////////////
+        pinMode(D4, OUTPUT);
 
-  //// NefryBT設定 ////////////////////////////////////////
+        //// NefryBT設定 ////////////////////////////////////////
 
-  // NefryBT
-  subTopic = &quot;/NefryBT/SOLE&quot;;
-  deviceName = &quot;NefryBT_SOLE&quot;;  // 複数台で利用する場合は必ずかぶらないように変更する
+        // NefryBT
+        subTopic = "/NefryBT/SOLE";
+        deviceName = "NefryBT_SOLE";  // 複数台で利用する場合は必ずかぶらないように変更する
 
-  Serial.begin(115200);
+        Serial.begin(115200);
 
-  mqttClient.setServer(mqtt_server, port);
-  mqttClient.setCallback(mqttCallback);
+        mqttClient.setServer(mqtt_server, port);
+        mqttClient.setCallback(mqttCallback);
 
-  connectMQTT();
-}
-
-void connectMQTT() {
-    Serial.println(&quot;connectMQTT&quot;);
-    Serial.println(deviceName);
-    while (!mqttClient.connected()) {
-      Serial.print(&quot;.&quot;);
-        if (mqttClient.connect(deviceName)) {
-            Serial.println(&quot;Connected.&quot;);
-            int qos = 0;
-            mqttClient.subscribe(subTopic, qos);
-            Serial.println(&quot;Subscribed.&quot;);
-        } else {
-            Serial.print(&quot;Failed. Error state=&quot;);
-            Serial.print(mqttClient.state());
-            // Wait 5 seconds before retrying
-            delay(5000);
-        }
-    }
-}
-
-char pubMessage[128];
-
-void mqttCallback (char* topic, byte* payload, unsigned int length) {
-
-    String str = &quot;&quot;;
-    Serial.print(&quot;Received. topic=&quot;);
-    Serial.println(topic);
-    for (int i = 0; i &lt; length; i++) {
-        Serial.print((char)payload[i]);
-        str += (char)payload[i];
-    }
-    Serial.print(&quot;\n&quot;);
-
-    StaticJsonBuffer&lt;200&gt; jsonBuffer;
-
-    JsonObject&amp; root = jsonBuffer.parseObject(str);
-
-    // パースが成功かどうか判断
-    if (!root.success()) {
-      Serial.println(&quot;parseObject() failed&quot;);
-      return;
-    }
-   //z軸方向の加速度を取り出している
-    const char* message = root[&quot;message&quot;];
-    int accz = root[&quot;accz&quot;];
-
-    Serial.print(&quot;accz = &quot;);
-    Serial.println(accz);
-
-   //加速度に応じてソレノイドのシュコシュコ速度が変化
-    if(accz &gt;= 10 || accz &lt;= -10){
-       Serial.println(&quot;シュコシュコシュコ&quot;);
-       digitalWrite(D4,LOW);
-       delay(50);
-       digitalWrite(D4,HIGH);
-       delay(50);
-    }else if(10 &gt; accz &gt;= 6 || -10 &lt; accz &lt;= 6){
-       Serial.println(&quot;シュコシュコ&quot;);
-       digitalWrite(D4,LOW);
-       delay(200);
-       digitalWrite(D4,HIGH);
-       delay(200);
-    }else{
-       Serial.println(&quot;シュコ&quot;);
-       digitalWrite(D4,LOW);
-       delay(500);
-       digitalWrite(D4,HIGH);
-       delay(500);    
-    }
-
-    delay(100);
-
-}
-
-void mqttLoop() {
-    if (!mqttClient.connected()) {
         connectMQTT();
-    }
-    mqttClient.loop();
-}
+      }
 
-void loop() {
-  mqttLoop();
- }
+      void connectMQTT() {
+          Serial.println("connectMQTT");
+          Serial.println(deviceName);
+          while (!mqttClient.connected()) {
+            Serial.print(".");
+              if (mqttClient.connect(deviceName)) {
+                  Serial.println("Connected.");
+                  int qos = 0;
+                  mqttClient.subscribe(subTopic, qos);
+                  Serial.println("Subscribed.");
+              } else {
+                  Serial.print("Failed. Error state=");
+                  Serial.print(mqttClient.state());
+                  // Wait 5 seconds before retrying
+                  delay(5000);
+              }
+          }
+      }
 
-</code></pre>
+      char pubMessage[128];
+
+      void mqttCallback (char* topic, byte* payload, unsigned int length) {
+
+          String str = "";
+          Serial.print("Received. topic=");
+          Serial.println(topic);
+          for (int i = 0; i < length; i++) {
+              Serial.print((char)payload[i]);
+              str += (char)payload[i];
+          }
+          Serial.print("\n");
+
+          StaticJsonBuffer<200> jsonBuffer;
+
+          JsonObject& root = jsonBuffer.parseObject(str);
+
+          // パースが成功かどうか判断
+          if (!root.success()) {
+            Serial.println("parseObject() failed");
+            return;
+          }
+         //z軸方向の加速度を取り出している
+          const char* message = root["message"];
+          int accz = root["accz"];
+
+          Serial.print("accz = ");
+          Serial.println(accz);
+
+         //加速度に応じてソレノイドのシュコシュコ速度が変化
+          if(accz >= 10 || accz <= -10){
+             Serial.println("シュコシュコシュコ");
+             digitalWrite(D4,LOW);
+             delay(50);
+             digitalWrite(D4,HIGH);
+             delay(50);
+          }else if(10 > accz >= 6 || -10 < accz <= 6){
+             Serial.println("シュコシュコ");
+             digitalWrite(D4,LOW);
+             delay(200);
+             digitalWrite(D4,HIGH);
+             delay(200);
+          }else{
+             Serial.println("シュコ");
+             digitalWrite(D4,LOW);
+             delay(500);
+             digitalWrite(D4,HIGH);
+             delay(500);    
+          }
+
+          delay(100);
+
+      }
+
+      void mqttLoop() {
+          if (!mqttClient.connected()) {
+              connectMQTT();
+          }
+          mqttClient.loop();
+      }
+
+      void loop() {
+        mqttLoop();
+       }
+      </code>
+      </pre>
+    </div>
+</div>
 
 <h3 id="動かしてみると-1">動かしてみると</h3>
 
@@ -4255,6 +4269,49 @@ void loop() {
 <h2 id="参考">参考</h2>
 
 <p><a href="http://www.takaha.co.jp/technological/action.html">ソレノイドの動作説明</a>: ソレノイドの製造・販売で有名なタカハ機工株式会社より</p>
+
+<style>
+.accbox {
+    margin: 2em 0;
+    padding: 0;
+    max-width: 710px;
+}
+
+
+.accbox label {
+    display: block;
+    margin: 1.5px 0;
+    padding : 11px 12px;
+    color :#ffffff;
+    font-weight: bold;
+    background :#2f2f2f;
+    cursor :pointer;
+    transition: all 0.5s;
+}
+
+.accbox label:hover {
+    background :#A4A4A4;
+}
+
+.accbox input {
+    display: none;
+}
+
+.accbox .accshow {
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: 0.8s;
+}
+
+.cssacc:checked + .accshow {
+    height: auto;
+    padding: 5px;
+    background: #eaeaea;
+    opacity: 1;
+}
+</style>
 </div>
 
     <div class="share-foot">
