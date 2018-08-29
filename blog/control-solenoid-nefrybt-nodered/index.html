@@ -3809,7 +3809,7 @@ void loop() {
               "fieldType": "msg",
               "format": "html",
               "syntax": "mustache",
-              "template": "<!DOCTYPE html>\n<html lang=\"ja\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n<title>加速度検出</title>\n</head>\n \n<body>\n<div id=\"datatxt\">データの表示</div> \n \n<script>\n    var encrypted = \"{{{req.connection.encrypted}}}\";\n    if (encrypted === \"true\") {\n        var wsUri = \"wss://{{{req.hostname}}}:{{{req.connection.localPort}}}/accl1\";\n    }\n    else {\n        var wsUri = \"ws://{{{req.hostname}}}:{{{req.connection.localPort}}}/accl1\";\n    }\n    var ws = new WebSocket(wsUri);\n\n    var accx = null;\n    var accy = null;\n    var accz = null;\n\n    function sendMessage() {\n        // 画面書き換え\n        var txt = \"wsUri:\" + wsUri + \"<br>\";\n        txt += \"x:\" + accx + \"<br>\";\n        txt += \"y:\" + accy + \"<br>\";\n        txt += \"z:\" + accz + \"<br>\";\n\n        var datatxt = document.getElementById(\"datatxt\");\n        datatxt.innerHTML = txt;\n\n        // WebSocket送信\n        var payload = {\n            'accx': accx,\n            'accy': accy,\n            'accz': accz,\n        };\n        ws.send(JSON.stringify(payload));\n    }\n\n    function handleMotionEvent(evt) {\n        //加速度\n        accx = evt.acceleration.x;\n        accy = evt.acceleration.y;\n        accz = evt.acceleration.z;\n    }\n\n    window.addEventListener(\"devicemotion\", handleMotionEvent, true); //情報変更ごとにイベント発生\n    window.setInterval(sendMessage, 500); // 500msごとにイベント発生\n\n</script>\n</body>\n</html>",
+              "template": "&lt;!DOCTYPE html&gt;\n&lt;html lang=\"ja\"&gt;\n&lt;head&gt;\n&lt;meta charset=\"utf-8\"&gt;\n&lt;meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"&gt;\n&lt;title&gt;加速度検出&lt;/title&gt;\n&lt;/head&gt;\n \n&lt;body&gt;\n&lt;div id=\"datatxt\"&gt;データの表示&lt;/div&gt; \n \n&lt;script&gt;\n    var encrypted = \"{{{req.connection.encrypted}}}\";\n    if (encrypted === \"true\") {\n        var wsUri = \"wss://{{{req.hostname}}}:{{{req.connection.localPort}}}/accl1\";\n    }\n    else {\n        var wsUri = \"ws://{{{req.hostname}}}:{{{req.connection.localPort}}}/accl1\";\n    }\n    var ws = new WebSocket(wsUri);\n\n    var accx = null;\n    var accy = null;\n    var accz = null;\n\n    function sendMessage() {\n        // 画面書き換え\n        var txt = \"wsUri:\" + wsUri + \"&lt;br&gt;\";\n        txt += \"x:\" + accx + \"&lt;br&gt;\";\n        txt += \"y:\" + accy + \"&lt;br&gt;\";\n        txt += \"z:\" + accz + \"&lt;br&gt;\";\n\n        var datatxt = document.getElementById(\"datatxt\");\n        datatxt.innerHTML = txt;\n\n        // WebSocket送信\n        var payload = {\n            'accx': accx,\n            'accy': accy,\n            'accz': accz,\n        };\n        ws.send(JSON.stringify(payload));\n    }\n\n    function handleMotionEvent(evt) {\n        //加速度\n        accx = evt.acceleration.x;\n        accy = evt.acceleration.y;\n        accz = evt.acceleration.z;\n    }\n\n    window.addEventListener(\"devicemotion\", handleMotionEvent, true); //情報変更ごとにイベント発生\n    window.setInterval(sendMessage, 500); // 500msごとにイベント発生\n\n&lt;/script&gt;\n&lt;/body&gt;\n&lt;/html&gt;",
               "output": "str",
               "x": 317.00000762939453,
               "y": 100.00000286102295,
@@ -3961,7 +3961,7 @@ void loop() {
               "id": "326dd035.413f1",
               "type": "change",
               "z": "57519a9b.8fba94",
-              "name": "accz > 10 のときの文字列「large」",
+              "name": "accz &gt; 10 のときの文字列「large」",
               "rules": [
                   {
                       "t": "set",
@@ -4015,7 +4015,7 @@ void loop() {
               "id": "7c53f99b.cba9e8",
               "type": "change",
               "z": "57519a9b.8fba94",
-              "name": "accz <= 5 のときの文字列「small」",
+              "name": "accz &lt;= 5 のときの文字列「small」",
               "rules": [
                   {
                       "t": "set",
