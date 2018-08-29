@@ -7,8 +7,82 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2018 dotstudio inc.</copyright>
-    <lastBuildDate>Fri, 18 May 2018 10:00:00 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 29 Aug 2018 09:40:49 +0900</lastBuildDate>
     <atom:link href="/categories/tips/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>MacのWi-Fi設定をコマンドラインで！面倒な設定を簡潔に済まして快適なMac生活</title>
+      <link>https://dotstud.io/blog/macos-wifi-setup-command/</link>
+      <pubDate>Wed, 29 Aug 2018 09:40:49 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/macos-wifi-setup-command/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;今日はMacのWi-Fi設定をコマンドラインから行う方法を紹介します。&lt;/p&gt;
+
+&lt;h2 id=&#34;macのwi-fiの再接続はけっこう時間がかかる&#34;&gt;MacのWi-Fiの再接続はけっこう時間がかかる&lt;/h2&gt;
+
+&lt;p&gt;通常はこんな感じで再接続になりますが、 &lt;strong&gt;実際30秒くらい&lt;/strong&gt; はかかってました。
+（このGIFでは途中カットしてます）&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/9e71e7ca2c6f1c7c5e0bca0a57a21159.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;コマンドからやるとかなり速い&#34;&gt;コマンドからやるとかなり速い&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;コマンドから実行すると6秒くらい&lt;/strong&gt;で再接続できました！&lt;/p&gt;
+
+&lt;p&gt;驚きです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/9f2043a45286942d16335b621a8f900a.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Macのターミナルアプリから&lt;code&gt;networksetup&lt;/code&gt;コマンドで実行できます。以下の３つの実行例があればかなり役に立つと思います。&lt;/p&gt;
+
+&lt;h3 id=&#34;wi-fiをオンにする&#34;&gt;Wi-Fiをオンにする&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo networksetup -setairportpower en0 on
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;wi-fiをオフにする&#34;&gt;Wi-Fiをオフにする&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo networksetup -setairportpower en0 off
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;指定したwi-fiのssidに接続する&#34;&gt;指定したWi-FiのSSIDに接続する&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo networksetup -setairportnetwork en0 &amp;lt;SSID&amp;gt; &amp;lt;PASSWORD&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;結構簡単ですね。&lt;/p&gt;
+
+&lt;p&gt;上のGIFでは、オンにするコマンドとSSIDに接続するコマンドを二つ実行しています。&lt;/p&gt;
+
+&lt;h2 id=&#34;iot機器への接続にも役立つ&#34;&gt;IoT機器への接続にも役立つ&lt;/h2&gt;
+
+&lt;p&gt;単純に接続するまでの時間が短縮できるメリットもありますが、Nefry BTやM5StackといったIoTデバイスのWi-Fi設定をする際に、デバイスが発信するアクセスポイントにMacから接続するときにも役立ちます。。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/nefrybt-wifi-setup/&#34;&gt;Nefry BTのWi-Fiセットアップ&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/810321bedd5c1d3991c60d9d51704fb1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;この際に、会場のWi-Fiの混雑状況によってはうまく繋がらない場合も多いのですが、コマンドから直接指定してあげるとスムーズに接続できる確率があがります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo networksetup -setairportnetwork en0 NefryBT-XXXX
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;などで試してみましょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;IoT周りで動いてる人でも意外と知らない知見なのかなと思い書いてみました。&lt;/p&gt;
+
+&lt;p&gt;とくにハンズオンや授業をやる際には重宝するテクニックだと思います。&lt;/p&gt;
+
+&lt;p&gt;それでは！&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>NodeSchoolでNode.jsの学習を始めよう！#2 - 問題1〜3の解答と解説</title>
@@ -25,6 +99,9 @@
 
 
 &lt;section class=&#34;link&#34; id=&#34;156&#34;&gt;
+  
+      
+      
   
       
       
@@ -1132,6 +1209,9 @@
 
 
 &lt;section class=&#34;link&#34; id=&#34;156&#34;&gt;
+  
+      
+      
   
       
       
@@ -3088,6 +3168,9 @@ NodeSchoolは&lt;strong&gt;JavaScriptに関するいろいろな授業を集め�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/how-to-use-cli/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/158/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -3770,6 +3853,9 @@ NodeSchoolは&lt;strong&gt;JavaScriptに関するいろいろな授業を集め�
 
 
 &lt;section class=&#34;link&#34; id=&#34;136&#34;&gt;
+  
+      
+      
   
       
       
@@ -5125,6 +5211,9 @@ $ cd nodeschool/
 
 
 &lt;section class=&#34;link&#34; id=&#34;135&#34;&gt;
+  
+      
+      
   
       
       
@@ -7880,6 +7969,9 @@ NYはブルックリンスタイルをイメージした自慢のオシャレキ
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/hexo-static-site-vol2/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/107/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -8519,6 +8611,9 @@ Archivesはしばらく不要なので消しました。ついでにEventsとSta
 
 
 &lt;section class=&#34;link&#34; id=&#34;105&#34;&gt;
+  
+      
+      
   
       
       
@@ -9757,6 +9852,9 @@ FacebookとTwitterのみ残しました。&lt;/p&gt;
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;108&#34;&gt;
+  
+      
+      
   
       
       
@@ -11594,6 +11692,9 @@ titleを修正して、「info」というタグを設定してみました。&l
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/hexo-static-site-vol2/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/107/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -12356,84 +12457,6 @@ dotstudioのロゴに合わせて黒にしたいところですが、実は黒�
 &lt;p&gt;AzureでMySQLを利用する方法を紹介しました。&lt;/p&gt;
 
 &lt;p&gt;ポータルのUIや仕様が調べて見つけたページと少し異なる部分がありましたが今回の内容と合わせて参考になれば幸いです。&lt;/p&gt;
-
-&lt;p&gt;それでは。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Node.jsでファイル監視を行うchokidarを使ってみよう</title>
-      <link>https://dotstud.io/blog/nodejs-npm-chokidar-fswatch/</link>
-      <pubDate>Mon, 26 Dec 2016 14:00:27 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/nodejs-npm-chokidar-fswatch/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、dotstudio代表の&lt;a href=&#34;http://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/nodejs-npm-readline-sync/&#34;&gt;Node.jsでコマンドラインツール作るときに使いやすいreadline-sync&lt;/a&gt;に続いて、Node.jsのモジュール紹介です。&lt;/p&gt;
-
-&lt;p&gt;Gitなどを用いて開発を行っていると「ファイルの変更を検知して何かを実行したい」という場面があります。
-今日はそんな場面で活用できるファイル監視を行うモジュールを紹介します。&lt;/p&gt;
-
-&lt;h2 id=&#34;執筆時点のマシンスペック&#34;&gt;執筆時点のマシンスペック&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;macOS Sierra (v10.12)&lt;/li&gt;
-&lt;li&gt;Node.js v6.6.0&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;何か不具合があったときに参照してください。&lt;/p&gt;
-
-&lt;h2 id=&#34;インストール&#34;&gt;インストール&lt;/h2&gt;
-
-&lt;p&gt;URL: &lt;a href=&#34;https://github.com/paulmillr/chokidar&#34;&gt;chokidar&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;npm init&lt;/code&gt;で&lt;code&gt;package.json&lt;/code&gt;を作成してから進めます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;npm init --yes
-npm i --save chokidar
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;サンプルを動かしてみる&#34;&gt;サンプルを動かしてみる&lt;/h2&gt;
-
-&lt;h3 id=&#34;ファイル監視&#34;&gt;ファイル監視&lt;/h3&gt;
-
-&lt;p&gt;app.jsを作成します。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;const chokidar = require(&#39;chokidar&#39;);
-
-// One-liner for current directory, ignores .dotfiles
-chokidar.watch(&#39;.&#39;, {ignored: /[\/\\]\./}).on(&#39;all&#39;, (event, path) =&amp;gt; {
-  console.log(event, path);
-});
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;app.jsを保存したらアプリケーションを起動しましょう。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;node app
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;これで、nodeコマンドを実行したディレクトリ以下のファイルを監視しはじめます。&lt;/p&gt;
-
-&lt;p&gt;先ほど実行した&lt;code&gt;npm init --yes&lt;/code&gt;で&lt;code&gt;package.json&lt;/code&gt;が作成されます。&lt;code&gt;app.js&lt;/code&gt;を実行したまま&lt;code&gt;package.json&lt;/code&gt;を編集してみましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/1e9ddbebcda4037874c803f91d6a8b66.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;このように、変更があったファイルを検知してくれます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;・
-・
-・
-change package.json
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-
-&lt;p&gt;chokidarを使ってファイル監視して「特定のファイルが更新されたら〇〇する」というトリガーを簡単に作れます。&lt;/p&gt;
-
-&lt;p&gt;プロジェクト管理などで活用してみてください。&lt;/p&gt;
 
 &lt;p&gt;それでは。&lt;/p&gt;
 </description>

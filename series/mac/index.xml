@@ -7,8 +7,82 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2018 dotstudio inc.</copyright>
-    <lastBuildDate>Thu, 14 Dec 2017 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 29 Aug 2018 09:40:49 +0900</lastBuildDate>
     <atom:link href="/series/mac/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>MacのWi-Fi設定をコマンドラインで！面倒な設定を簡潔に済まして快適なMac生活</title>
+      <link>https://dotstud.io/blog/macos-wifi-setup-command/</link>
+      <pubDate>Wed, 29 Aug 2018 09:40:49 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/macos-wifi-setup-command/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;今日はMacのWi-Fi設定をコマンドラインから行う方法を紹介します。&lt;/p&gt;
+
+&lt;h2 id=&#34;macのwi-fiの再接続はけっこう時間がかかる&#34;&gt;MacのWi-Fiの再接続はけっこう時間がかかる&lt;/h2&gt;
+
+&lt;p&gt;通常はこんな感じで再接続になりますが、 &lt;strong&gt;実際30秒くらい&lt;/strong&gt; はかかってました。
+（このGIFでは途中カットしてます）&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/9e71e7ca2c6f1c7c5e0bca0a57a21159.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;コマンドからやるとかなり速い&#34;&gt;コマンドからやるとかなり速い&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;コマンドから実行すると6秒くらい&lt;/strong&gt;で再接続できました！&lt;/p&gt;
+
+&lt;p&gt;驚きです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/9f2043a45286942d16335b621a8f900a.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Macのターミナルアプリから&lt;code&gt;networksetup&lt;/code&gt;コマンドで実行できます。以下の３つの実行例があればかなり役に立つと思います。&lt;/p&gt;
+
+&lt;h3 id=&#34;wi-fiをオンにする&#34;&gt;Wi-Fiをオンにする&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo networksetup -setairportpower en0 on
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;wi-fiをオフにする&#34;&gt;Wi-Fiをオフにする&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo networksetup -setairportpower en0 off
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;指定したwi-fiのssidに接続する&#34;&gt;指定したWi-FiのSSIDに接続する&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo networksetup -setairportnetwork en0 &amp;lt;SSID&amp;gt; &amp;lt;PASSWORD&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;結構簡単ですね。&lt;/p&gt;
+
+&lt;p&gt;上のGIFでは、オンにするコマンドとSSIDに接続するコマンドを二つ実行しています。&lt;/p&gt;
+
+&lt;h2 id=&#34;iot機器への接続にも役立つ&#34;&gt;IoT機器への接続にも役立つ&lt;/h2&gt;
+
+&lt;p&gt;単純に接続するまでの時間が短縮できるメリットもありますが、Nefry BTやM5StackといったIoTデバイスのWi-Fi設定をする際に、デバイスが発信するアクセスポイントにMacから接続するときにも役立ちます。。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/nefrybt-wifi-setup/&#34;&gt;Nefry BTのWi-Fiセットアップ&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/810321bedd5c1d3991c60d9d51704fb1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;この際に、会場のWi-Fiの混雑状況によってはうまく繋がらない場合も多いのですが、コマンドから直接指定してあげるとスムーズに接続できる確率があがります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;sudo networksetup -setairportnetwork en0 NefryBT-XXXX
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;などで試してみましょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;IoT周りで動いてる人でも意外と知らない知見なのかなと思い書いてみました。&lt;/p&gt;
+
+&lt;p&gt;とくにハンズオンや授業をやる際には重宝するテクニックだと思います。&lt;/p&gt;
+
+&lt;p&gt;それでは！&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>【予測変換】Macで日本語の変換ウィンドウが消えなくなったときの対処法【邪魔】</title>
