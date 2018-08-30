@@ -7,8 +7,883 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2018 dotstudio inc.</copyright>
-    <lastBuildDate>Thu, 30 Aug 2018 08:20:28 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 30 Aug 2018 09:40:24 +0900</lastBuildDate>
     <atom:link href="/blog/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>【ハンズオン資料】Nefry BTと人感センサで防犯LINE BOTを作ってみよう</title>
+      <link>https://dotstud.io/blog/nefrybt-handson-pir-linebot/</link>
+      <pubDate>Thu, 30 Aug 2018 09:40:24 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nefrybt-handson-pir-linebot/</guid>
+      
+      <description>
+
+&lt;p&gt;この記事は8/30の&lt;a href=&#34;https://algyan.connpass.com/event/90564/&#34;&gt;IoT超入門！「Nefry BT」無料お試し体験ハンズオン！&lt;/a&gt;向け資料です。&lt;strong&gt;記事を読んで試せる内容&lt;/strong&gt;になっているので、参加されていない方もぜひ試してみてください！&lt;/p&gt;
+
+&lt;p&gt;最終的にはこんなものが出来上がります。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://gyazo.com/a2548f0ff2534496f75b85e87b5b629d&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/a2548f0ff2534496f75b85e87b5b629d.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;スライド資料は[こちら]()です。&lt;/p&gt;
+
+&lt;section class=&#34;caution&#34;&gt;
+&lt;p&gt;■ハンズオンの進行について&lt;/p&gt;
+ハンズオンはこのページに沿って進めます。進められる方は、どんどん進めていきましょう！リンクは別タブや別ウィンドウで開くのがオススメです。
+&lt;/section&gt;
+
+&lt;section class=&#34;caution&#34;&gt;
+&lt;p&gt;■Nefry BTドキュメントについて&lt;/p&gt;
+この授業に合わせて諸々リニューアルしたため、WIP状態の部分が多いです。ご了承ください（わかりづらい部分ぜひ教えてください）。近日中にアップデートします。
+&lt;/section&gt;
+
+&lt;h2 id=&#34;今回やってみること&#34;&gt;今回やってみること&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;人が近づくと自分のLINEに通知がくる仕組み&lt;/strong&gt;を、Nefry BT、LINE（、Azure）を使って作ってみます。近づくと点灯する玄関の防犯ライトに近いイメージです。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/architecture.png&#34; alt=&#34;architecture&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;h3 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h3&gt;
+
+&lt;h4 id=&#34;nefry-bt-ディスプレイ&#34;&gt;■Nefry BT＆ディスプレイ&lt;/h4&gt;
+
+&lt;p&gt;Nefry BTは「ESP-WROOM-32」というWi-Fi・BLE通信モジュールを搭載した、Arduinoと同じように開発できるマイコンボードです。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/nefry.png&#34; alt=&#34;nefry&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/grove/&#34;&gt;Grove&lt;/a&gt;という刺すだけで配線できるモジュール対応のコネクタを搭載していて、&lt;strong&gt;ハードウェアをあまり意識せず&lt;/strong&gt;に開発できます。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;grove-pirモーションセンサ&#34;&gt;■Grove PIRモーションセンサ&lt;/h4&gt;
+
+&lt;p&gt;刺すだけで配線できる&lt;a href=&#34;https://dotstud.io/docs/grove/&#34;&gt;Grove&lt;/a&gt;シリーズの、人感センサです。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/motion_sensor.png&#34; alt=&#34;motion_sensor&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;arduino-ide&#34;&gt;■Arduino IDE&lt;/h4&gt;
+
+&lt;p&gt;開発（プログラムの書き込み）には&lt;a href=&#34;https://www.arduino.cc/en/Main/Software&#34;&gt;Arduino IDE&lt;/a&gt;というフリーソフトウェアを利用します。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/arduinoide-setup/&#34;&gt;こちら&lt;/a&gt;の手順を見ながらご自身のPCにインストールしてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;lineアカウント&#34;&gt;■LINEアカウント&lt;/h4&gt;
+
+&lt;p&gt;今回はLINE通知の機能を作成します。LINEアカウントをご用意ください。&lt;/p&gt;
+
+&lt;p&gt;また、PCから設定する際にメールアドレスでのログインが必要になります。あらかじめスマートフォンアプリでメールアドレスを設定しておいてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;azureアカウント&#34;&gt;■Azureアカウント&lt;/h4&gt;
+
+&lt;p&gt;WIP&lt;/p&gt;
+
+&lt;h2 id=&#34;事前準備-セットアップ&#34;&gt;事前準備（セットアップ）&lt;/h2&gt;
+
+&lt;h3 id=&#34;nefry-btのwi-fi設定&#34;&gt;Nefry BTのWi-Fi設定&lt;/h3&gt;
+
+&lt;p&gt;まずはNefry BTがインターネットにつながるよう、会場のWi-Fi情報をNefry BTに教えてあげます。&lt;/p&gt;
+
+&lt;p&gt;Nefry BTとPCを直接通信させ（アドホックモード）、立ち上がるNefryポータル（設定ウィンドウ）からSSIDとパスワードを入力する手順です。&lt;a href=&#34;https://dotstud.io/docs/nefrybt-setup-wifi/&#34;&gt;こちら&lt;/a&gt;の手順を見ながら進めてみてください。&lt;/p&gt;
+
+&lt;p&gt;一度設定したら、同じWi-Fiを使っている間は起動するだけで接続されます。Wi-Fi情報は5つまで保存でき、消去もできます。&lt;/p&gt;
+
+&lt;h3 id=&#34;開発環境-arduino-ide-にボードを追加&#34;&gt;開発環境（Arduino IDE）にボードを追加&lt;/h3&gt;
+
+&lt;p&gt;Nefty BTの開発にはフリーソフトウェアの&lt;a href=&#34;https://www.arduino.cc/en/Main/Software&#34;&gt;Arduino IDE&lt;/a&gt;を利用します。インストールがまだの方は「&lt;a href=&#34;https://dotstud.io/docs/arduinoide-setup/&#34;&gt;Arduino IDEのインストール&lt;/a&gt;」を見ながら進めてください。&lt;/p&gt;
+
+&lt;p&gt;Arduino IDEには、Nefry BTのボード情報の追加が必要です。「&lt;a href=&#34;https://dotstud.io/docs/nefrybt-setup-arduino-ide/&#34;&gt;環境構築（Arduino IDE）&lt;/a&gt;」を見ながら追加してください。&lt;/p&gt;
+
+&lt;section class=&#34;caution&#34;&gt;
+&lt;p&gt;■PCにUSB接続できない方&lt;/p&gt;
+セキュリティやポートの問題でPCにUSB接続できない方は、&lt;a href=&#34;https://dotstud.io/docs/nefrybt-program-zip/&#34;&gt;Wi-Fi経由でプログラムの書き込み&lt;/a&gt;が可能です。給電はコンセントやモバイルバッテリーから直接行ってください。
+&lt;/section&gt;
+
+&lt;h2 id=&#34;はじめてのプログラムを書き込んでみる&#34;&gt;はじめてのプログラムを書き込んでみる&lt;/h2&gt;
+
+&lt;p&gt;まずはNefry BTに簡単なプログラムを書き込んでみましょう。Nefry BTは、最初から下記の機能が搭載されています。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;内蔵フルカラーLED&lt;/li&gt;
+&lt;li&gt;スイッチ（SW/RST）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;まずはlチカ&#34;&gt;まずはLチカ&lt;/h3&gt;
+
+&lt;p&gt;最初のプログラムとして、Lチカをやってみます。LEDチカチカの略で、Webでいう”Hello, World!”です。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;arduino-ideでプログラムを書く&#34;&gt;■Arduino IDEでプログラムを書く&lt;/h4&gt;
+
+&lt;p&gt;Arduino IDEを立ち上げ、メニューから&lt;strong&gt;&lt;code&gt;ファイル &amp;gt; 新規ファイル&lt;/code&gt;&lt;/strong&gt;を選択します。下記のような画面が開きます。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/ide.png&#34; alt=&#34;ide&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;エディタ部分に、下記のプログラムをコピーして貼り付けましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+
+void setup() {
+}
+
+void loop() {
+  Nefry.setLed(0, 0, 255); //色合いをRGBで指定
+  Nefry.ndelay(1000); //1秒待つ
+  Nefry.setLed(0, 0, 0); //LEDをオフにする
+  Nefry.ndelay(1000); //1秒待つ
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;下記でプログラムの内容を解説しています。&lt;/p&gt;
+
+&lt;section class=&#34;caution&#34;&gt;
+&lt;p&gt;■PCにUSB接続できない方&lt;/p&gt;
+セキュリティやポートの問題でPCにUSB接続できない方は、&lt;a href=&#34;&#34;&gt;Wi-Fi経由でプログラムのアップロード&lt;/a&gt;が可能です。その場合、下記の書き込み手順は不要です。給電はコンセントやモバイルバッテリーから直接行ってください。
+&lt;/section&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;ボードを選択&#34;&gt;■ボードを選択&lt;/h4&gt;
+
+&lt;p&gt;メニューの&lt;strong&gt;&lt;code&gt;ツール &amp;gt; ボード &amp;gt; Nefry BT R2 / R3&lt;/code&gt;&lt;/strong&gt;を選択します。この際、ボードは使っているリビジョンに合わせて選択してください。（参照：&lt;a href=&#34;https://dotstud.io/docs/nefrybt-setup-revision/&#34;&gt;リビジョンを確認&lt;/a&gt;）&lt;/p&gt;
+
+&lt;p&gt;例えば、使っている基板がR3の場合は&lt;strong&gt;&lt;code&gt;ツール &amp;gt; ボード &amp;gt; Nefry BT R2 / R3&lt;/code&gt;&lt;/strong&gt;を選択します。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/select_board.png&#34; alt=&#34;select_board&#34;&gt;
+
+&lt;/center&gt;
+
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/select_board2.png&#34; alt=&#34;select_board2&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;シリアルポートを選択&#34;&gt;■シリアルポートを選択&lt;/h4&gt;
+
+&lt;p&gt;Nefry BTをPCのUSBポートにさします。プログラムはこのポートを介して、シリアル通信でNefry BTに流し込まれます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefrybt/power_supply.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Macの場合は、メニューの&lt;strong&gt;&lt;code&gt;ツール &amp;gt; シリアルポート &amp;gt; /dev/cu.usbserial-xxxxxx&lt;/code&gt;&lt;/strong&gt;を選択します。環境によっては&lt;strong&gt;&lt;code&gt;/dev/tty.usbserial-xxxxxx&lt;/code&gt;&lt;/strong&gt;などの場合もあります。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/select_port.png&#34; alt=&#34;select_port&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;Windowsの場合は、&lt;strong&gt;&lt;code&gt;ツール &amp;gt; シリアルポート &amp;gt; /dev/COM-XX&lt;/code&gt;&lt;/strong&gt;を選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;font size=&#34;2&#34;&gt;
+※Nefry BTを抜き差しすると、シリアルポートの選択が解除される場合があります。適宜確認しましょう。
+&lt;/font&gt;&lt;/p&gt;
+
+&lt;section class=&#34;caution&#34;&gt;
+&lt;p&gt;■シリアルポートが選択できない方&lt;/p&gt;
+USBドライバのインストールが必要な場合があります。&lt;a href=&#34;&#34;&gt;こちら&lt;/a&gt;を参照して、USBを認識させるためのドライバをインストールしてください。また、Arduino IDEの再起動やUSBの抜き差しで認識する場合があります。
+&lt;/section&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;名前をつけて保存&#34;&gt;■名前をつけて保存&lt;/h4&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;ファイル&amp;gt;名前をつけて保存&lt;/code&gt;&lt;/strong&gt;を選択して保存します。「NefryLedBlink」など、後からみてわかりやすい名前がオススメです。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;プログラムを書き込む&#34;&gt;■プログラムを書き込む&lt;/h4&gt;
+
+&lt;p&gt;「✔️」を押してプログラムをコンパイルします。
+&lt;img src=&#34;https://dotstud.io/img/docs/nefrybt/compile.png&#34; alt=&#34;&#34; /&gt;
+この手順は省略しても大丈夫ですが、シンタックス（文法）チェックをしてくれるので実施するのがオススメです。&lt;/p&gt;
+
+&lt;p&gt;左上の「→」ボタンを押してNefry BTにプログラムを書き込みます。
+&lt;img src=&#34;https://dotstud.io/img/docs/nefrybt/write.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ESP32モジュールの特性上、書き込みに1分ほどかかります。エラーが出てしまうときは、「&lt;a href=&#34;https://dotstud.io/docs/nefrybt-error-handling-2/&#34;&gt;コンパイルは成功するのに書き込みが失敗する&lt;/a&gt;」を参照してください。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;動作を確認&#34;&gt;■動作を確認&lt;/h4&gt;
+
+&lt;p&gt;起動したら、「青いLEDが1秒ごとに光る」ことを確認しましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://gyazo.com/801e9ff4982f3326e6f1c3a133fd8de3&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/801e9ff4982f3326e6f1c3a133fd8de3.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;プログラムの解説&#34;&gt;■プログラムの解説&lt;/h4&gt;
+
+&lt;p&gt;プログラムの要所を説明していきます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;冒頭でライブラリを読み込んでいます。Nefry BTのライブラリでできることは「&lt;a href=&#34;https://dotstud.io/docs/nefrybt-liblary/&#34;&gt;Nefryのライブラリ&lt;/a&gt;」を参照してください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;void setup() {
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;起動時に処理される部分です。今回はなにもしません。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;void loop() {
+  Nefry.setLed(0, 0, 255); //色合いをRGBで指定
+  Nefry.ndelay(1000); //1秒待つ
+  Nefry.setLed(0, 0, 0); //LEDをオフにする
+  Nefry.ndelay(1000); //1秒待つ
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;起動時に繰り返し実行する部分です。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;Nefry.setLed()&lt;/code&gt;という関数で、光らせる色合いをRGBの順で指定します。始めにR=0, G=0, B=255を渡しているので、青く光ります。&lt;/p&gt;
+
+&lt;p&gt;続いて&lt;code&gt;Nefry.ndelay()&lt;/code&gt;という関数で次の処理まで指定した時間待ちます。Arduinoでは時間はミリ秒で指定するので、1000は1秒です。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;Nefry.setLed()&lt;/code&gt;に0, 0, 0を渡すことで、LEDはオフになります。オンとオフのあと1秒ずつ待つことで、点滅を表現しています。&lt;/p&gt;
+
+&lt;h3 id=&#34;スイッチを押したらlチカ&#34;&gt;スイッチを押したらLチカ&lt;/h3&gt;
+
+&lt;h4 id=&#34;arduino-ideでプログラムを書く-1&#34;&gt;■Arduino IDEでプログラムを書く&lt;/h4&gt;
+
+&lt;p&gt;同様の手順で新規ファイルを作成し、下記のプログラムをNefry BTに書き込みます。おさらいがてら、やってみましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+
+void setup() {
+   // スイッチを有効化
+   Nefry.enableSW();
+}
+
+void loop() {
+    // スイッチが押されたら
+    if (Nefry.readSW()) {
+        Nefry.setLed(255, 0, 0);
+        Nefry.ndelay(1000);
+    }
+    // 青色に戻す
+    Nefry.setLed(0, 0, 255);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;下記でプログラムの内容を解説しています。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;動作を確認-1&#34;&gt;■動作を確認&lt;/h4&gt;
+
+&lt;p&gt;スイッチ（RSTではない方）を押したら、LEDが赤く光ることを確認します。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://gyazo.com/73185cad56d6374e6ad394eafbfef51d&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/73185cad56d6374e6ad394eafbfef51d.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;プログラムの解説-1&#34;&gt;■プログラムの解説&lt;/h4&gt;
+
+&lt;p&gt;プログラムの要所を説明します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;void setup() {
+   // スイッチを有効化
+   Nefry.enableSW();
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;起動時の処理では、&lt;code&gt;Nefry.enableSW()&lt;/code&gt;という関数でスイッチを有効化しています。マイコンボードでは、入力・出力に使うピンなどは&lt;code&gt;setup()&lt;/code&gt;関数内で有効化します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;void loop() {
+    // スイッチが押されたら
+    if (Nefry.readSW()) {
+        Nefry.setLed(255, 0, 0);
+        Nefry.ndelay(1000);
+    }
+    // 青色に戻す
+    Nefry.setLed(0, 0, 255);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;if(){}&lt;/code&gt;という条件式で、スイッチが押されたことを取得します。スイッチが押されたら1秒間赤いLEDを光らせます。スイッチが押されている以外のときは、青色のLEDを光らせます。&lt;/p&gt;
+
+&lt;h2 id=&#34;オフラインでgroveセンサを試す&#34;&gt;オフラインでGroveセンサを試す&lt;/h2&gt;
+
+&lt;p&gt;次は、配線してセンサのデータを取得してみます。&lt;strong&gt;まずはインターネットに繋がらない電子工作&lt;/strong&gt;、です。&lt;/p&gt;
+
+&lt;p&gt;エラーの切り分け（どこでエラーが起こっているか）を特定するために、自分で開発するときもステップバイステップでできているか確認しつつ進めるのがオススメです。&lt;/p&gt;
+
+&lt;h3 id=&#34;grove-pirモーションセンサを接続&#34;&gt;Grove PIRモーションセンサを接続&lt;/h3&gt;
+
+&lt;p&gt;Groveは刺すだけで配線できるのでGNDや信号線などの確認は必要ありませんが、デジタル・アナログ・I2Cなどの通信方法？はGroveモジュールによって違います。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/seeed_wiki.png&#34; alt=&#34;seeed_wiki&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;PIRモーションセンサの製造元・SeeedStudioの&lt;a href=&#34;http://wiki.seeedstudio.com/Grove-PIR_Motion_Sensor/&#34;&gt;Wikiページ&lt;/a&gt;を見てみると、デジタルで読みとることがわかります。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/connection.png&#34; alt=&#34;connection&#34;&gt;
+
+&lt;/center&gt;
+
+Nefry BTのデジタル入力に対応する、「D2」というソケットに差し込みます。少し硬いですが、カチッと言うまで押し込めます。&lt;strong&gt;配線作業は常に電源オフの状態&lt;/strong&gt;で行います。&lt;/p&gt;
+
+&lt;section class=&#34;caution&#34;&gt;
+&lt;p&gt;■Nefry BT（無印）を使っている方&lt;/p&gt;
+Nefry BT（無印）において、D0・D1ピンはディスプレイの制御（I2C通信）に使用されているため、正常に動作しないことがあります（Nefry BT R2以降では修正されています）。リビジョンの調べ方は「&lt;a href=&#34;https://dotstud.io/docs/nefrybt-setup-revision/&#34;&gt;リビジョンの確認&lt;/a&gt;」をご参照ください。
+&lt;/section&gt;
+
+&lt;h3 id=&#34;プログラムを書き込む-1&#34;&gt;プログラムを書き込む&lt;/h3&gt;
+
+&lt;h4 id=&#34;プログラム&#34;&gt;■プログラム&lt;/h4&gt;
+
+&lt;p&gt;以下のプログラムをNefry BTに書き込みます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+
+#define PIR_MOTION_SENSOR D2
+
+void setup()
+{
+    pinMode(PIR_MOTION_SENSOR, INPUT);
+}
+
+void loop()
+{
+    if(digitalRead(PIR_MOTION_SENSOR)) {
+        Nefry.println(&amp;quot;誰かきたよ&amp;quot;);
+    } else {
+        Nefry.println(&amp;quot;監視中&amp;quot;);
+    }
+    delay(200);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;書き込み手順は、上記の「&lt;a href=&#34;#はじめてのプログラムを書き込んでみる&#34;&gt;はじめてのプログラムを書き込んでみる&lt;/a&gt;」を参照してくださいね。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;動作を確認-2&#34;&gt;■動作を確認&lt;/h4&gt;
+
+&lt;p&gt;メニューの&lt;strong&gt;&lt;code&gt;ツール&amp;gt;シリアルモニタ&lt;/code&gt;&lt;/strong&gt;を選択して開きます。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/serial_monitor.png&#34; alt=&#34;serial_monitor&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;p&gt;右下のbps設定を「115200bps」に変更します。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/bps.png&#34; alt=&#34;bps&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;p&gt;人感センサに手をかざすと、シリアルモニタに「誰かきたよ」というメッセージが流れます。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://gyazo.com/adaf9534c9e944f3131336058a304671&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/adaf9534c9e944f3131336058a304671.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;プログラムの解説-2&#34;&gt;■プログラムの解説&lt;/h4&gt;
+
+&lt;p&gt;プログラムの要所を解説します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#define PIR_MOTION_SENSOR D2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;#define&lt;/code&gt;で、配線したピンの場所を定義しています。「PIR_MOTION_SENSOR」という名前の箱に「D2」という値を入れているイメージです。&lt;/p&gt;
+
+&lt;p&gt;こうしておくことで、あとでピンの場所を変えても、ここの値だけ変更すればOKになります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;void setup()
+{
+    pinMode(PIR_MOTION_SENSOR, INPUT);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;setup関数内ではスイッチのとき同様、今回使うピンを有効化しています。&lt;code&gt;pinMode({ピンの場所}, {モード})&lt;/code&gt;で指定します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;void loop()
+{
+    if(digitalRead(PIR_MOTION_SENSOR)) {
+        Nefry.println(&amp;quot;誰かきたよ&amp;quot;);
+    } else {
+        Nefry.println(&amp;quot;監視中&amp;quot;);
+    }
+    delay(200);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;loop関数では、モーションセンサに入力があったとき/それ以外のときで処理を分けています。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;digitalRead({ピン番号})&lt;/code&gt;で指定したピンの信号を読み取っていて、戻り値は「人を検知している = HIGH」「検知していない = LOW」です。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;if(digitalRead(PIR_MOTION_SENSOR)) {}&lt;/code&gt; の部分は&lt;code&gt;if(digitalRead(PIR_MOTION_SENSOR) == HIGH) {&lt;/code&gt;と同義で、比較演算子を省略するとHIGHのときにに実行されます。&lt;/p&gt;
+
+&lt;p&gt;200ミリ秒待つことで、0.2秒に1回センサの値をチェックするようになっています。&lt;/p&gt;
+
+&lt;h2 id=&#34;lineに通知してみる&#34;&gt;LINEに通知してみる&lt;/h2&gt;
+
+&lt;p&gt;それでは、人感センサが検知したら（= 人が来たら）自分のLINEに通知がくるようにしてみましょう。LINEが提供している、LINE Notifyというサービスを使っていきます。&lt;/p&gt;
+
+&lt;h3 id=&#34;lineの設定&#34;&gt;LINEの設定&lt;/h3&gt;
+
+&lt;h4 id=&#34;line-notifyアカウントと友達になる&#34;&gt;■LINE Notifyアカウントと友達になる&lt;/h4&gt;
+
+&lt;p&gt;LINE Notifyでは、「LINE Notify」というアカウントからメッセージが届きます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/109f4aa667871bcdb82342d6e2ac3233.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;まずはQRコードを読み取り、アカウントと友達になっておきましょう。&lt;/p&gt;
+
+&lt;h4 id=&#34;トークンを作成&#34;&gt;■トークンを作成&lt;/h4&gt;
+
+&lt;p&gt;自分のLINEと紐付けるために、トークン（鍵のようなもの）を発行します。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://notify-bot.line.me/my/&#34;&gt;LINE Notifyの設定ページ&lt;/a&gt;にいき、「トークンを発行する」ボタンを押します。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/token_button.png&#34; alt=&#34;token_button&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;p&gt;下記のようなウィンドウが表示されます。「トークン名」にはLINE Notifyが何のサービスと連携したかわかる名前をつけましょう。通知するルームは、今回は「1:1」を選択します。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/token_config.png&#34; alt=&#34;token_config&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;p&gt;トークンが発行されたら、コピーしてメモしておきます（あとで使います）。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/token_create.png&#34; alt=&#34;token_create&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;h3 id=&#34;プログラムを書き込む-2&#34;&gt;プログラムを書き込む&lt;/h3&gt;
+
+&lt;h4 id=&#34;プログラム-1&#34;&gt;■プログラム&lt;/h4&gt;
+
+&lt;p&gt;以下のプログラムをNefry BTに書き込みます。すごく長いですが、後ほど説明します。&lt;/p&gt;
+
+&lt;div class=&#34;accbox&#34;&gt;
+    &lt;label for=&#34;label1&#34;&gt;クリックしてコードを表示&lt;/labe&gt;
+    &lt;input type=&#34;checkbox&#34; id=&#34;label1&#34; class=&#34;cssacc&#34; /&gt;
+    &lt;div class=&#34;accshow&#34;&gt;
+      &lt;pre&gt;
+      &lt;code class=&#34;language-c++ hljs cpp&#34;&gt;
+      #include &amp;lt;Nefry.h&amp;gt;
+      #include &amp;lt;WiFiClientSecure.h&amp;gt;
+
+      #define PIR_MOTION_SENSOR D2
+
+      WiFiClientSecure client;
+      String LineAuth, SendMessageLINE;
+      String StrPerEncord(const char* c_str);
+      String escapeParameter(String param);
+
+      void setup() {
+          pinMode(PIR_MOTION_SENSOR, INPUT);
+          Nefry.setStoreTitle(&#34;LINE Auth&#34;, 0);
+          Nefry.setStoreTitle(&#34;LINEMessage&#34;, 1);
+          LineAuth = Nefry.getStoreStr(0);
+          SendMessageLINE = Nefry.getStoreStr(1);
+      }
+
+      void loop() {
+          if(digitalRead(PIR_MOTION_SENSOR)) {
+              Nefry.println(&#34;誰かきたよ&#34;);
+              if (!LineAuth.equals(&#34;&#34;)) {   
+                  if (SendMessageLINE.equals(&#34;&#34;)) {
+                      SendMessageLINE = &#34;Welcome to the NefryBT world!&#34;;
+                  }
+                  LineSend();
+                  delay(300000);
+              }
+          } else {
+              Nefry.println(&#34;監視中&#34;);
+          }
+          delay(200);
+      }
+
+      void LineSend() {
+        const char* host = &#34;notify-api.line.me&#34;;
+        Serial.println(&#34;\nStarting connection to server...&#34;);
+        if (!client.connect(host, 443)) {
+          Serial.println(&#34;Connection failed!&#34;);
+        } else {
+          Serial.println(&#34;Connected to server!&#34;);
+          String url = &#34;/api/notify&#34;;
+          url += &#34;?message=&#34;;
+          url += StrPerEncord(escapeParameter(SendMessageLINE).c_str());
+          Serial.println(StrPerEncord(SendMessageLINE.c_str()));
+          Serial.println(url);
+          client.print(String(&#34;POST &#34;) + url + &#34; HTTP/1.1\r\n&#34; +
+                       &#34;Authorization: Bearer &#34; + LineAuth + &#34;\r\n&#34; +
+                       &#34;Content-Type: application/x-www-form-urlencoded\r\n&#34; +
+                       &#34;Host: &#34; + host + &#34;\r\n&#34; +
+                       &#34;Connection: close\r\n\r\n&#34;);
+          client.println();
+          unsigned long timeout = millis();
+          while (client.available() == 0) {
+            if (millis() - timeout &amp;gt; 5000) {
+              Serial.println(&#34;&amp;gt;&amp;gt;&amp;gt; Client Timeout !&#34;);
+              client.stop();
+              return;
+            }
+          }
+          while (client.available()) {
+            String line = client.readStringUntil(&#39;\r&#39;);
+            Serial.print(line);
+          }
+          Serial.println();
+          Serial.println(&#34;closing connection&#34;);
+        }
+      }
+
+      String StrPerEncord(const char* c_str) {
+        uint16_t i = 0;
+        String str_ret = &#34;&#34;;
+        char c1[3], c2[3], c3[3];
+        while (c_str[i] != &#39;\0&#39;) {
+          if (c_str[i] &amp;gt;= 0xC2 &amp;&amp; c_str[i] &amp;lt;= 0xD1) { //2バイト文字
+            sprintf(c1, &#34;%2x&#34;, c_str[i]);
+            sprintf(c2, &#34;%2x&#34;, c_str[i + 1]);
+            str_ret += &#34;%&#34; + String(c1) + &#34;%&#34; + String(c2);
+            i = i + 2;
+          } else if (c_str[i] &amp;gt;= 0xE2 &amp;&amp; c_str[i] &amp;lt;= 0xEF) {
+            sprintf(c1, &#34;%2x&#34;, c_str[i]);
+            sprintf(c2, &#34;%2x&#34;, c_str[i + 1]);
+            sprintf(c3, &#34;%2x&#34;, c_str[i + 2]);
+            str_ret += &#34;%&#34; + String(c1) + &#34;%&#34; + String(c2) + &#34;%&#34; + String(c3);
+            i = i + 3;
+          } else {
+            str_ret += String(c_str[i]);
+            i++;
+          }
+        }
+        return str_ret;
+      }
+
+      String escapeParameter(String param) {
+        param.replace(&#34;%&#34;, &#34;%25&#34;);
+        param.replace(&#34;+&#34;, &#34;%2B&#34;);
+        param.replace(&#34; &#34;, &#34;+&#34;);
+        param.replace(&#34;\&#34;&#34;, &#34;%22&#34;);
+        param.replace(&#34;#&#34;, &#34;%23&#34;);
+        param.replace(&#34;$&#34;, &#34;%24&#34;);
+        param.replace(&#34;&amp;&#34;, &#34;%26&#34;);
+        param.replace(&#34;&#39;&#34;, &#34;%27&#34;);
+        param.replace(&#34;(&#34;, &#34;%28&#34;);
+        param.replace(&#34;)&#34;, &#34;%29&#34;);
+        param.replace(&#34;*&#34;, &#34;%2A&#34;);
+        param.replace(&#34;,&#34;, &#34;%2C&#34;);
+        param.replace(&#34;/&#34;, &#34;%2F&#34;);
+        param.replace(&#34;:&#34;, &#34;%3A&#34;);
+        param.replace(&#34;;&#34;, &#34;%3B&#34;);
+        param.replace(&#34;&amp;lt;&#34;, &#34;%3C&#34;);
+        param.replace(&#34;=&#34;, &#34;%3D&#34;);
+        param.replace(&#34;&amp;gt;&#34;, &#34;%3E&#34;);
+        param.replace(&#34;?&#34;, &#34;%3F&#34;);
+        param.replace(&#34;@&#34;, &#34;%40&#34;);
+        param.replace(&#34;[&#34;, &#34;%5B&#34;);
+        param.replace(&#34;\\&#34;, &#34;%5C&#34;);
+        param.replace(&#34;]&#34;, &#34;%5D&#34;);
+        param.replace(&#34;^&#34;, &#34;%5E&#34;);
+        param.replace(&#34;&#39;&#34;, &#34;%60&#34;);
+        param.replace(&#34;{&#34;, &#34;%7B&#34;);
+        param.replace(&#34;|&#34;, &#34;%7C&#34;);
+        param.replace(&#34;}&#34;, &#34;%7D&#34;);
+        return param;
+      }
+      &lt;/code&gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;書き込み手順は、上記の「&lt;a href=&#34;#はじめてのプログラムを書き込んでみる&#34;&gt;はじめてのプログラムを書き込んでみる&lt;/a&gt;」を参照してくださいね。&lt;/p&gt;
+
+&lt;h3 id=&#34;nefry-btにトークン情報を設定&#34;&gt;Nefry BTにトークン情報を設定&lt;/h3&gt;
+
+&lt;p&gt;ディスプレイに表示されているIPアドレスに接続し、&lt;a href=&#34;https://dotstud.io/docs/nefrybt-basic-portal/&#34;&gt;Nefryポータル&lt;/a&gt;を開きます。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/nefry_portal.png&#34; alt=&#34;nefry_portal&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;p&gt;「DataStore」のページに行くと2つのフォームが用意されているので、「LINE Auth」には先ほどコピーしたトークン、「LINEMessage」には送りたいメッセージを入力します。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/nefry_config.png&#34; alt=&#34;nefry_config&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;動作を確認-3&#34;&gt;■動作を確認&lt;/h4&gt;
+
+&lt;p&gt;さっそく完成したものを動かしてみましょう。&lt;/p&gt;
+
+&lt;p&gt;センサに人が近づくと……&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://gyazo.com/a2548f0ff2534496f75b85e87b5b629d&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/a2548f0ff2534496f75b85e87b5b629d.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;LINEに通知されました！&lt;/p&gt;
+
+&lt;p&gt;完成できた方、お疲れ様でした〜！&lt;/p&gt;
+
+&lt;h3 id=&#34;プログラムの解説-3&#34;&gt;プログラムの解説&lt;/h3&gt;
+
+&lt;p&gt;例のすごく長いコードについて、要所を説明します。大事なところはちょっとだけです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;void setup() {
+     pinMode(PIR_MOTION_SENSOR, INPUT);
+     Nefry.setStoreTitle(&amp;quot;LINE Auth&amp;quot;, 0);
+     Nefry.setStoreTitle(&amp;quot;LINEMessage&amp;quot;, 1);
+     LineAuth = Nefry.getStoreStr(0);
+     SendMessageLINE = Nefry.getStoreStr(1);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;Nefry.setStoreTitle()&lt;/code&gt;関数を使い、Nefry BTのDataStore機能に場所を作っています。この値はNefryポータル側から入力でき、変更があってもプログラムを書き換える必要はありません。&lt;/p&gt;
+
+&lt;p&gt;また値を&lt;code&gt;getStoreStr({チャンネル番号})&lt;/code&gt;で、ポータル側で設定した値を受け取っています。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;void loop() {
+    if(digitalRead(PIR_MOTION_SENSOR)) {
+        Nefry.println(&amp;quot;誰かきたよ&amp;quot;);
+        if (!LineAuth.equals(&amp;quot;&amp;quot;)) {   
+            if (SendMessageLINE.equals(&amp;quot;&amp;quot;)) {
+                SendMessageLINE = &amp;quot;Welcome to the NefryBT world!&amp;quot;;
+            }
+            LineSend();
+            delay(300000);
+        }
+    } else {
+        Nefry.println(&amp;quot;監視中&amp;quot;);
+    }
+    delay(200);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;先ほど同様人感センサが検知したとき、という条件文を作っています。LINEAuthの値、SendMessageLINEの値がそれぞれ入っているかを確認し、&lt;code&gt;LineSend()&lt;/code&gt;というユーザ定義の関数を実行しています。&lt;/p&gt;
+
+&lt;p&gt;何度も連続してLINEが来るとウザいので、一度送ったあとは30秒待ちます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;void LineSend() {
+  const char* host = &amp;quot;notify-api.line.me&amp;quot;;
+  ・
+  ・
+  ・
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;LINE送信を実装している部分です、が、これ以降は&lt;strong&gt;気にしなくていいです&lt;/strong&gt;。この部分は&lt;a href=&#34;https://dotstud.io/docs/nefrybt-default/&#34;&gt;初期プログラム&lt;/a&gt;をコピーして作っています。&lt;/p&gt;
+
+&lt;p&gt;たぶん近々ライブラリ化されます。&lt;/p&gt;
+
+&lt;h2 id=&#34;応用課題-データをクラウドに送ってみる-ロギング&#34;&gt;応用課題: データをクラウドに送ってみる（ロギング）&lt;/h2&gt;
+
+&lt;p&gt;WIP（追記します）&lt;/p&gt;
+
+&lt;h2 id=&#34;関連情報&#34;&gt;関連情報&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://dotstud.io/shop/nefry-bt-set/&#34;&gt;Nefr BTの購入&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Nefry BTはこちらから購入できます（送料無料）。その他にも千石電商、ツクモ、若松通商、共立電子などの実店舗やECサイトで購入できます。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://dotstud.io/docs/nefrybt/&#34;&gt;Nefry BTドキュメント&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Nefry BTでは、IFTTTを使ったWebサービスとの連携や、その他のクラウドサービスとの連携も簡単です。ディスプレイを使ったイラスト描画や、100以上あるGroveモジュールの活用なども、ぜひ試してみてください。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://www.facebook.com/groups/nefry&#34;&gt;Nefryユーザーグループ（FB）&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Nefryユーザ同士が交流するページです。質問を投稿して解決した事例もたくさんありますので、困った際などはぜひお気軽にご利用ください。開発者もよく登場します。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://nefry.connpass.com/event/97692/&#34;&gt;Nefry User Meetup!&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Nefryユーザによる開催イベントです。ハンズオンやLT会、もくもく会などを実施しています。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://dotstudio.connpass.com/&#34;&gt;dotstudioイベント&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;dotstudioによる開催イベントです。Nefry BT以外の題材を扱うことも多いです。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;style&gt;
+.caution {
+    border: 1px solid #BFBFBF;
+    padding: 1em 2em;
+    margin: 2em 0;
+    color: #474747;
+    background: whitesmoke;/*背景色*/
+    border-left: double 7px #0B0B61;/*左線*/
+    font-size: 90%;
+}
+
+.caution &gt; p {
+    font-weight: bold;
+    margin: 0 0 10px 0;
+    padding: 0;
+}
+
+blockquote {
+    font-size:80%;
+}
+
+.accbox {
+    margin: 2em 0;
+    padding: 0;
+    max-width: 710px;
+}
+
+
+.accbox label {
+    display: block;
+    margin: 1.5px 0;
+    padding : 11px 12px;
+    color :#ffffff;
+    font-weight: bold;
+    background :#2f2f2f;
+    cursor :pointer;
+    transition: all 0.5s;
+}
+
+.accbox label:hover {
+    background :#A4A4A4;
+}
+
+.accbox input {
+    display: none;
+}
+
+.accbox .accshow {
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: 0.8s;
+}
+
+.cssacc:checked + .accshow {
+    height: auto;
+    padding: 5px;
+    background: #eaeaea;
+    opacity: 1;
+}
+&lt;/style&gt;
+</description>
+    </item>
     
     <item>
       <title>【IoT開発・電子工作の初心者必見】初開発で購入すべき必要な道具を紹介！</title>
@@ -30,6 +905,9 @@
 
 
 &lt;section class=&#34;link&#34; id=&#34;199&#34;&gt;
+  
+      
+      
   
       
       
@@ -1759,6 +2637,9 @@
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/arduino-use-rfid-reader/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/162/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -2448,6 +3329,9 @@
 
 
 &lt;section class=&#34;link&#34; id=&#34;183&#34;&gt;
+  
+      
+      
   
       
       
@@ -4163,6 +5047,9 @@
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/microbit-getting-started-pokio/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/165/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -4856,6 +5743,9 @@
 
 
 &lt;section class=&#34;link&#34; id=&#34;190&#34;&gt;
+  
+      
+      
   
       
       
@@ -6061,6 +6951,9 @@
 
 
 &lt;section class=&#34;link&#34; id=&#34;188&#34;&gt;
+  
+      
+      
   
       
       
@@ -8220,6 +9113,9 @@
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/akihabara-guide-for-beginners/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/091/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -8802,6 +9698,9 @@
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;187&#34;&gt;
+  
+      
+      
   
       
       
@@ -10446,6 +11345,9 @@
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/stepper-motor-nefrybt-control/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/189/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -11271,6 +12173,9 @@ void loop() {
 
 
 &lt;section class=&#34;link&#34; id=&#34;187&#34;&gt;
+  
+      
+      
   
       
       
@@ -13574,6 +14479,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/control-solenoid-nefrybt-nodered/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/214/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -14412,6 +15320,9 @@ void loop() {
 
 
 &lt;section class=&#34;link&#34; id=&#34;214&#34;&gt;
+  
+      
+      
   
       
       
@@ -16183,6 +17094,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/clova-cek-nodejs-tutorial/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/195/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -16971,6 +17885,9 @@ void loop() {
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;195&#34;&gt;
+  
+      
+      
   
       
       
@@ -20400,6 +21317,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/summer-homework-2018-chantoku/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/201/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -22166,6 +23086,9 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/led-eyelash-gadget-report/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/126/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -22753,6 +23676,9 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;196&#34;&gt;
+  
+      
+      
   
       
       
@@ -24376,6 +25302,9 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/mftokyo-2018-chantoku-report/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/197/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -25249,359 +26178,6 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
 &lt;p&gt;さて、皆さんはどんなものを購入しましたか？こんなの買ったよ〜という話があればぜひ教えてください！&lt;/p&gt;
 
 &lt;p&gt;ではでは！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>ロボット組み立てからプログラミングまでも学べるSTEAM教育向けロボットとは？「Robo3 Mio」の遊び方を紹介</title>
-      <link>https://dotstud.io/blog/smart-toy-robo3-mio-using/</link>
-      <pubDate>Thu, 09 Aug 2018 10:35:00 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/smart-toy-robo3-mio-using/</guid>
-      
-      <description>
-
-&lt;p&gt;みなさんこんにちは、テクニカルエディターの&lt;a href=&#34;https://dotstud.io/members/kiki/&#34;&gt;きき&lt;/a&gt;です。&lt;/p&gt;
-
-&lt;p&gt;IT領域の拡大にともない、教育業界で「STEM（ステム）教育」という言葉を耳にすることが多くなっています。名前の由来は、&lt;strong&gt;科学（Science）、技術（Technology）、工学（Engineering）、数学（Mathematics）&lt;/strong&gt;の頭文字から、この4つの領域での知見を増やすことを目的とした教育という意味です。&lt;/p&gt;
-
-&lt;p&gt;それに加えて、最近では&lt;u&gt;&lt;strong&gt;芸術（Arts）が加わったSTEAM教育&lt;/strong&gt;&lt;/u&gt;にもより一層注目が集まっています。&lt;/p&gt;
-
-&lt;p&gt;注目を浴びていることはわかりつつも、パパさんママさんは具体的に子どもに何をすればいいのか分かりづらいですよね。そんなときにおすすめ！&lt;strong&gt;STEAM教育に特化した知育ロボット「Robo3 Mio」&lt;/strong&gt;を紹介します。&lt;/p&gt;
-
-&lt;p&gt;遊びながらプログラミングの世界へ踏み出してみましょう〜！&lt;/p&gt;
-
-&lt;h2 id=&#34;robo3-mioって&#34;&gt;Robo3 Mioって？&lt;/h2&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/194/1.png&#34; alt=&#34;1&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;&lt;a href=&#34;https://www.amazon.co.jp/Robo3-STEAM-%E3%83%AD%E3%83%9C%E3%83%83%E3%83%88-%E7%B5%84%E3%81%BF%E7%AB%8B%E3%81%A6-%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0-%E8%B5%A4%E5%A4%96%E7%B7%9A%E5%8F%97%E4%BF%A1%E6%AD%A9%E8%A1%8C-%E9%9A%9C%E5%AE%B3%E5%9B%9E%E9%81%BF-%E3%82%A2%E3%83%83%E3%83%97%E3%82%B0%E3%83%AC%E3%83%BC%E3%83%89%E6%94%AF%E6%8C%81-LED-%E3%82%AD%E3%83%83%E3%83%88RC-%E4%BD%93%E6%84%9F%E8%84%B3%E6%B3%A2%E3%82%B3%E3%83%B3%E3%83%88%E3%83%AD%E3%83%BC%E3%83%AB-%E4%B8%AD%E5%B0%8F%E5%AD%A6%E7%94%9F-%E7%A7%91%E5%AD%A6%E6%8A%80%E8%A1%93%E5%B7%A5%E5%AD%A6%E7%BE%8E%E8%A1%93%E6%95%B0%E5%AD%A6-%E7%9F%A5%E8%82%B2/dp/B07DWSNKGC&#34;&gt;Robo3 Mio&lt;/a&gt;は、ロボットの組み立てからプログラミングの仕組みまでを学ぶことができる知育ロボットです。&lt;/p&gt;
-
-&lt;p&gt;開発したのは、2016年1月に設立した中国のHarbin Zhiqu Technology会社。&lt;a href=&#34;http://www.robo3.cn/en/&#34;&gt;公式サイト&lt;/a&gt;では、英語か中国語の案内のみですが、通販サイトで購入することができます。値段は税込12,458円です（2018年7月31日現在）。&lt;/p&gt;
-
-&lt;h3 id=&#34;ざっくり特徴紹介&#34;&gt;ざっくり特徴紹介&lt;/h3&gt;
-
-&lt;p&gt;高性能で様々な遊び方ができるRobo3 Mioの特徴をまとめてみました。&lt;/p&gt;
-
-&lt;p&gt;・&lt;strong&gt;Blootooh4.0接続のみ&lt;/strong&gt;で、iOS・Androidデバイスと繋げて制御することが可能&lt;br /&gt;
-・&lt;strong&gt;スピーカーやフルカラーLED&lt;/strong&gt;だけでなく、&lt;strong&gt;赤外線受信機&lt;/strong&gt;なども搭載&lt;br /&gt;
-・&lt;strong&gt;フルカラーでイラストが載っているマニュアル&lt;/strong&gt;が付いているため簡単に組み立てが可能&lt;br /&gt;
-・&lt;strong&gt;専用の無料アプリ&lt;/strong&gt;でブロックプログラミングが可能&lt;br /&gt;
-・ビジュアルプログラミングツール「Scratch」をベースとしたツール&lt;strong&gt;「Robo3」&lt;/strong&gt;での制御可能（windowsのみ）&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;以上のように、様々な機能がついていることが分かりますね。&lt;/p&gt;
-
-&lt;p&gt;それでは早速、開封の儀をはじめます！&lt;/p&gt;
-
-&lt;h2 id=&#34;開封の儀&#34;&gt;開封の儀&lt;/h2&gt;
-
-&lt;p&gt;ゆるキャラ感漂うパッケージがもうすでに超絶可愛いです。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/194/2.png&#34; alt=&#34;2&#34;&gt;
-
-&lt;/center&gt;
-
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/194/3.png&#34; alt=&#34;3&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;可愛いのはパッケージだけではありません。開いたらより一層可愛いんですよ……っ！&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/194/4.png&#34; alt=&#34;4&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;カラフルな箱たちが収納されています。二十歳過ぎた私ですらこんなにもテンションが上がっているので、子どもたちはもっと喜ぶのではないでしょうか。&lt;u&gt;クリスマスプレゼントとして自分の子どもにあげたいなぁ（妄想）&lt;/u&gt;。&lt;/p&gt;
-
-&lt;h3 id=&#34;付属品紹介&#34;&gt;付属品紹介&lt;/h3&gt;
-
-&lt;p&gt;4種類の箱とマニュアルが入っているので、バババッとひとつずつ箱の中身を紹介します。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/194/5.png&#34; alt=&#34;5&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;はじめに一番大きい青の箱から開けます。&lt;/p&gt;
-
-&lt;p&gt;箱の中からまさかの5つ目の箱が出てきました。こういうスタイルのサプライズもあるとは！マトリョーシカみたいですね。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/194/6.png&#34; alt=&#34;6&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;&lt;strong&gt;【Car body + motor】&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;・Car body ×1&lt;br /&gt;
-・Motor ×2（オレンジの箱）&lt;br /&gt;
-・Parts package ×いっぱい&lt;/p&gt;
-
-&lt;p&gt;開け始めて早々にややこしい部品たちがたくさん出てきました。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/194/7.png&#34; alt=&#34;7&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;何気に初めてのロボット組み立て（？）なので、こういうのは不慣れです。パーツを失くしてしまいそうで怖いよう……。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/194/8.png&#34; alt=&#34;8&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;&lt;strong&gt;【Mainboard】&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;・Mainboard ×1&lt;br /&gt;
-・Remote controller ×1&lt;br /&gt;
-・Lithium battery ×1&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/194/9.png&#34; alt=&#34;9&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;&lt;strong&gt;【Wheel】&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;・Hub ×2&lt;br /&gt;
-・Tyre ×2&lt;br /&gt;
-・Front wheel ×1&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/194/10.png&#34; alt=&#34;10&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;&lt;strong&gt;【Module】&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;・Expression panel ×1&lt;br /&gt;
-・LED matrix module ×1&lt;br /&gt;
-・USB Bluetooth module ×1&lt;br /&gt;
-・Ultrasonic module ×1&lt;br /&gt;
-・Line follower module ×1&lt;/p&gt;
-
-&lt;p&gt;付属品は以上です。「これからロボット組み立てるぞ」感がしてきました。&lt;/p&gt;
-
-&lt;h2 id=&#34;組み立てよう&#34;&gt;組み立てよう&lt;/h2&gt;
-
-&lt;p&gt;それでは組み立てていきます。&lt;u&gt;STEPは全部で8段階！&lt;/u&gt;&lt;/p&gt;
-
-&lt;p&gt;マニュアルにはイラストで見やすく説明されているので、順調に進めることができます。&lt;/p&gt;
-
-&lt;p&gt;ひとりもくもくと進めている私ですが、コツコツ完成に近づいていく様子はものづくり感があって嬉しいです。
-3STEP目の途中経過はこのような感じです。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/194/11.png&#34; alt=&#34;11&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;h3 id=&#34;dotstudio-mio-完成&#34;&gt;dotstudio_Mio、完成！&lt;/h3&gt;
-
-&lt;p&gt;そんなこんなで組み立て完成です！&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/194/12.png&#34; alt=&#34;12&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;サイズは&lt;strong&gt;17cm x 13cm x 9cm&lt;/strong&gt;なので、結構大きいように思います。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/194/13.png&#34; alt=&#34;13&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;重さは&lt;strong&gt;約440g&lt;/strong&gt;。&lt;u&gt;「440g 重さ」で調べたらだいたいサッカーボール1つ分&lt;/u&gt;とのことです。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/194/14.png&#34; alt=&#34;14&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;h2 id=&#34;動かしてみよう&#34;&gt;動かしてみよう&lt;/h2&gt;
-
-&lt;p&gt;Mioの電源を入れるとチカチカ光りながら割と大声で「ミオ〜！！！」と喋り出すのでちょっとビビります。&lt;/p&gt;
-
-&lt;h3 id=&#34;アプリのインストール&#34;&gt;アプリのインストール&lt;/h3&gt;
-
-&lt;p&gt;はじめに「Mio」をダウンロードします。アイコンもめっちゃ可愛いですね。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/194/15.png&#34; alt=&#34;15&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;h3 id=&#34;接続する&#34;&gt;接続する&lt;/h3&gt;
-
-&lt;p&gt;Mioは、Bluetoothでデバイスと接続することができます。
-右上のBluetoothマークを押すと自動で近くにいるMioを探して接続してくれます。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/194/16.png&#34; alt=&#34;16&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;名前は&lt;u&gt;「dotstudio_Mio」&lt;/u&gt;にしました（ひねりがない）。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/194/17.png&#34; alt=&#34;17&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;左側にチラっと見えているボタンを押すと、サイドバーが出てきます。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/194/18.png&#34; alt=&#34;18&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;一番はじめに出てくるページは&lt;strong&gt;Manualモード&lt;/strong&gt;です。左の円型ハンドルで移動操作、右のカラーパネルでLEDの色を操作できます。他にも、デバイスをシャカシャカ振ると、その動きに合わせてMioが動く&lt;strong&gt;Shakingモード&lt;/strong&gt;など、6種類のモードがあります。&lt;/p&gt;
-
-&lt;h3 id=&#34;ビジュアルプログラミングで動かしてみよう&#34;&gt;ビジュアルプログラミングで動かしてみよう&lt;/h3&gt;
-
-&lt;p&gt;今回は、一番下の&lt;strong&gt;Programモード&lt;/strong&gt;を行います。このモードでは&lt;strong&gt;ブロックプログラミング&lt;/strong&gt;でMioを動かすことができます。&lt;u&gt;動きや色の命令が書いてあるブロックを組み合わせるだけで制御可能なので、簡単にIoT体験ができるツール&lt;/u&gt;です。子どもが簡単にプログラミングを勉強できるので、教育現場でも注目されています。&lt;/p&gt;
-
-&lt;p&gt;右上のサイドバーから&lt;strong&gt;Newボタン&lt;/strong&gt;を押します。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/194/19.png&#34; alt=&#34;19&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;左のサイドバーには、「Motion（動き）」「Display（色や音楽）」「event（デバイスが動いた時に）」など、組み合わせ次第で複雑なプログラムを書くことも可能です。&lt;/p&gt;
-
-&lt;p&gt;今回は以下のようなプログラムにしてみます。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/194/20.png&#34; alt=&#34;20&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;右に動いて左に動き、ピンク色からラベンダー色に光ったらくるっと回っていえい！って感じですね。&lt;/p&gt;
-
-&lt;p&gt;実際の動きはこちらです。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/bloWoSJILIY&#34; frameborder=&#34;0&#34; allow=&#34;autoplay; encrypted-media&#34; allowfullscreen&gt;&lt;/iframe&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;我らがdotstudio_Mio、しっかりと動いてくれました。愛着が爆上がりです。&lt;/p&gt;
-
-&lt;h3 id=&#34;おわりに&#34;&gt;おわりに&lt;/h3&gt;
-
-&lt;p&gt;いかがでしたでしょうか？&lt;/p&gt;
-
-&lt;p&gt;デザインも可愛く、ロボットの組み立てからブロックプログラミングを用いたプログラミングを勉強することもできます。STEAM教育に特化している知育玩具というのも頷けますね。&lt;/p&gt;
-
-&lt;p&gt;また、&lt;u&gt;ブロックプログラミングだけでなく、Scratchで動かすこともできます。&lt;/u&gt;理解度によって様々な遊び方ができるMio、みなさんも遊んでみてください！&lt;/p&gt;
 </description>
     </item>
     
