@@ -7,8 +7,155 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2018 dotstudio inc.</copyright>
-    <lastBuildDate>Tue, 21 Aug 2018 15:51:00 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 03 Sep 2018 08:46:35 +0900</lastBuildDate>
     <atom:link href="/series/azure/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Azure WebApps on LinuxでNuxt.js&#43;Expressの環境をデプロイする</title>
+      <link>https://dotstud.io/blog/azure-webapps-nuxt-express/</link>
+      <pubDate>Mon, 03 Sep 2018 08:46:35 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/azure-webapps-nuxt-express/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;Azure WebApps on Linuxの環境にNuxt.js+Expressの環境をデプロイしたときのメモです。&lt;/p&gt;
+
+&lt;p&gt;けっこうハマったので備忘録として残しておきます。知り合いのMSのサポートエンジニアさんに質問したら休日にも関わらずチャットで答えてくれてマジ感謝です。&lt;/p&gt;
+
+&lt;p&gt;ということで手順をおさらいしつつ紹介します。&lt;/p&gt;
+
+&lt;p&gt;ちなみにWebApps on Dockerはこちらにまとめました。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://qiita.com/n0bisuke/items/412f2fcc673513866e44&#34;&gt;Azure WebAppsにNuxt.js+Expressの環境をDockerでデプロイしたときのメモ&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;nuxt-js-expressのテンプレート&#34;&gt;Nuxt.js+Expressのテンプレート&lt;/h2&gt;
+
+&lt;p&gt;↑のDocker記事にも書いたNuxt.js+Expressのテンプレートです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;vue init nuxt-community/express-template .
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これでテンプレートが作成されます。&lt;/p&gt;
+
+&lt;h2 id=&#34;webapps-on-linuxのアプリケーションを作成&#34;&gt;WebApps on Linuxのアプリケーションを作成&lt;/h2&gt;
+
+&lt;p&gt;Azureのポータル画面から作成していきます。&lt;/p&gt;
+
+&lt;p&gt;2018年9月時点の画面なので画面は適宜読み替えてください。
+この手のサービス管理画面はよく変わります。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;OSの箇所をLinuxに選択&lt;/strong&gt;します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/d647ff415a9b33eda5cd0cd3aabe1c4e.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;ランタイムスタックはNode.jsの最新&lt;/strong&gt;にしましょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;デプロイオプション&#34;&gt;デプロイオプション&lt;/h2&gt;
+
+&lt;p&gt;デプロイ方法を選びます。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;ローカルGitリポジトリ&lt;/strong&gt;を選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/b7ee5bf06243a6402cfd1f8f12bfc3a9.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;概要に&lt;code&gt;GitクローンURL&lt;/code&gt;が表示されます。ここに対してpushすることでデプロイできるようになります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/701e1339df4dbf9ea0605a9ed5d717a7.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;https://&amp;lt;ユーザー名&amp;gt;@&amp;lt;アプリ名&amp;gt;.scm.azurewebsites.net:443/&amp;lt;アプリ名&amp;gt;.git&lt;/code&gt;的なURLです。&lt;/p&gt;
+
+&lt;p&gt;設定したユーザー名とパスワードを使ってGit Pushできます。&lt;/p&gt;
+
+&lt;h2 id=&#34;アプリケーション設定&#34;&gt;アプリケーション設定&lt;/h2&gt;
+
+&lt;h3 id=&#34;スタートアップファイル&#34;&gt;スタートアップファイル&lt;/h3&gt;
+
+&lt;p&gt;通常、Azure WebApps on LinuxはPM2というプロセス監視ツールを内部で使っていて、PM2で利用する&lt;code&gt;process.json&lt;/code&gt;というファイルを編集して起動スクリプトを指定します。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/wbuchwalter/azure-content/blob/master/articles/app-service-web/app-service-linux-using-nodejs-pm2.md&#34;&gt;WebAppsのドキュメント&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://pm2.keymetrics.io/docs/usage/application-declaration/&#34;&gt;pm2のドキュメント&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;通常は特定のjsファイルを指定したりするのですがNuxt.jsの場合、Nuxtコマンドで起動するので&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;node_modules/nuxt/bin/nuxt-start&lt;/code&gt;を指定します。&lt;/p&gt;
+
+&lt;p&gt;これでサーバーが再起動した際にNuxt.jsが起動します。&lt;/p&gt;
+
+&lt;h3 id=&#34;hostを-0-0-0-0-に&#34;&gt;HOSTを&lt;code&gt;0.0.0.0&lt;/code&gt;に&lt;/h3&gt;
+
+&lt;p&gt;また、設定でHOSTを&lt;code&gt;0.0.0.0&lt;/code&gt;に設定します。&lt;/p&gt;
+
+&lt;p&gt;これを指定しないと&lt;code&gt;localhost&lt;/code&gt;接続になってしまい、WebApps内部ではうまいこと動いてくれない模様です。&lt;/p&gt;
+
+&lt;p&gt;Keenさんの&lt;a href=&#34;https://keens.github.io/blog/2016/02/24/bind_addressnoimigayouyakuwakatta/&#34;&gt;Bind Addressの意味がようやく分かった&lt;/a&gt;の記事にもあるように&lt;code&gt;0.0.0.0&lt;/code&gt;はワイルドカードとして使えるので指定します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/00346583f202e15200e90ccea658a4ef.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;package-jsonにpostinstallで-nuxt-build-させる&#34;&gt;package.jsonにpostinstallで&lt;code&gt;nuxt build&lt;/code&gt;させる&lt;/h2&gt;
+
+&lt;p&gt;まだこれでもうまくいかなかったです。&lt;/p&gt;
+
+&lt;p&gt;Nuxts.jsはnpm startすると&lt;code&gt;nuxt build &amp;amp;&amp;amp; nuxt start&lt;/code&gt;という形でビルド-&amp;gt;起動という順番になります。ビルドすると&lt;code&gt;.nuxt&lt;/code&gt;フォルダが作成され、その中のプログラムを使って起動します。&lt;/p&gt;
+
+&lt;p&gt;ということで、WebAppsにデプロイしたらデプロイ先でビルドを走らせる必要があります。通常デプロイすると&lt;code&gt;npm start&lt;/code&gt;が走り、その中で&lt;code&gt;nuxt build &amp;amp;&amp;amp; nuxt start&lt;/code&gt;が実行されるため、問題なさそうなのですが、なぜかこれだとビルドがうまくいかず&lt;code&gt;postinstall&lt;/code&gt;の箇所でビルドをさせるとうまく動いてくれました。&lt;/p&gt;
+
+&lt;p&gt;package.jsonのscriptsの箇所に&lt;code&gt;&amp;quot;postinstall&amp;quot;: &amp;quot;cd /home/site/wwwroot &amp;amp;&amp;amp; /opt/nodejs/9.4.0/bin/node ./node_modules/nuxt/bin/nuxt-build&amp;quot;,&lt;/code&gt;を入れてあげます。&lt;/p&gt;
+
+&lt;p&gt;WebApss側ではデプロイしたソースコードは&lt;code&gt;/home/site/wwwroot&lt;/code&gt;に保存されるのでそこに移動してビルドする形です。&lt;/p&gt;
+
+&lt;p&gt;ちなみに、&lt;code&gt;/opt/nodejs/9.4.0/bin/node ./node_modules/nuxt/bin/nuxt-build&amp;quot;&lt;/code&gt;の箇所は&lt;code&gt;npm run build&lt;/code&gt;や&lt;code&gt;nuxt build&lt;/code&gt;の中身である&lt;code&gt;nuxt-build&lt;/code&gt;を実行するものですが、そのまま&lt;code&gt;npm run build&lt;/code&gt;を指定しておくとWebApps上で実行されるNode.jsのバージョンが古く、&lt;code&gt;async&lt;/code&gt;などの構文でエラーを起こしてしまい、&lt;code&gt;nuxt build&lt;/code&gt;が上手くいかない模様です。なので&lt;code&gt;/opt/nodejs/9.4.0/bin/node&lt;/code&gt;でバージョンを指定してあげると上手くビルドしてくれます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;async ready() {
+remote:         ^^^^^
+remote: SyntaxError: Unexpected identifier
+・
+・
+・
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;git-pushしてビルド確認&#34;&gt;git pushしてビルド確認&lt;/h2&gt;
+
+&lt;p&gt;ここまで設定できるとgit pushしてビルドが成功すると思います。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ git push origin master
+・
+・
+結構長い
+・
+・
+remote: Finished successfully.
+remote: Running post deployment command(s)...
+remote: Deployment successful.
+remote: App container will begin restart within 10 seconds.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;という形で&lt;code&gt;Finished successfully&lt;/code&gt;や&lt;code&gt;Deployment successful.&lt;/code&gt;のメッセージが出ればデプロイ成功です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://camo.qiitausercontent.com/3bec96ccb48cf22dd880982f9ca1a6d938bd5c38/68747470733a2f2f692e6779617a6f2e636f6d2f36383163646639613562366266386161623935626138386537326665313431652e706e67&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;こんな感じのサイトが&lt;code&gt;https://&amp;lt;アプリ名&amp;gt;.azurewebsites.net&lt;/code&gt;にアクセスすると表示されると思います。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;nuxt build&lt;/code&gt;がWebApps上でなかなか動作してくれない&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;HOSTの&lt;code&gt;0.0.0.0&lt;/code&gt;の指定&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;この二点を気をつければWebApps on LinuxでNuxt.jsの環境を整えられました。&lt;/p&gt;
+
+&lt;p&gt;参考になれば幸いです。&lt;/p&gt;
+
+&lt;p&gt;やさしいMSのサポートエンジニアさんマジでありがとう&amp;hellip;&amp;hellip;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Azure WebAppsでカスタムドメイン&#43;SSL対応するメモ</title>

@@ -7,8 +7,155 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2018 dotstudio inc.</copyright>
-    <lastBuildDate>Fri, 31 Aug 2018 03:16:15 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 03 Sep 2018 08:46:35 +0900</lastBuildDate>
     <atom:link href="/blog/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Azure WebApps on LinuxでNuxt.js&#43;Expressの環境をデプロイする</title>
+      <link>https://dotstud.io/blog/azure-webapps-nuxt-express/</link>
+      <pubDate>Mon, 03 Sep 2018 08:46:35 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/azure-webapps-nuxt-express/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;Azure WebApps on Linuxの環境にNuxt.js+Expressの環境をデプロイしたときのメモです。&lt;/p&gt;
+
+&lt;p&gt;けっこうハマったので備忘録として残しておきます。知り合いのMSのサポートエンジニアさんに質問したら休日にも関わらずチャットで答えてくれてマジ感謝です。&lt;/p&gt;
+
+&lt;p&gt;ということで手順をおさらいしつつ紹介します。&lt;/p&gt;
+
+&lt;p&gt;ちなみにWebApps on Dockerはこちらにまとめました。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://qiita.com/n0bisuke/items/412f2fcc673513866e44&#34;&gt;Azure WebAppsにNuxt.js+Expressの環境をDockerでデプロイしたときのメモ&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;nuxt-js-expressのテンプレート&#34;&gt;Nuxt.js+Expressのテンプレート&lt;/h2&gt;
+
+&lt;p&gt;↑のDocker記事にも書いたNuxt.js+Expressのテンプレートです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;vue init nuxt-community/express-template .
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これでテンプレートが作成されます。&lt;/p&gt;
+
+&lt;h2 id=&#34;webapps-on-linuxのアプリケーションを作成&#34;&gt;WebApps on Linuxのアプリケーションを作成&lt;/h2&gt;
+
+&lt;p&gt;Azureのポータル画面から作成していきます。&lt;/p&gt;
+
+&lt;p&gt;2018年9月時点の画面なので画面は適宜読み替えてください。
+この手のサービス管理画面はよく変わります。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;OSの箇所をLinuxに選択&lt;/strong&gt;します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/d647ff415a9b33eda5cd0cd3aabe1c4e.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;ランタイムスタックはNode.jsの最新&lt;/strong&gt;にしましょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;デプロイオプション&#34;&gt;デプロイオプション&lt;/h2&gt;
+
+&lt;p&gt;デプロイ方法を選びます。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;ローカルGitリポジトリ&lt;/strong&gt;を選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/b7ee5bf06243a6402cfd1f8f12bfc3a9.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;概要に&lt;code&gt;GitクローンURL&lt;/code&gt;が表示されます。ここに対してpushすることでデプロイできるようになります。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/701e1339df4dbf9ea0605a9ed5d717a7.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;https://&amp;lt;ユーザー名&amp;gt;@&amp;lt;アプリ名&amp;gt;.scm.azurewebsites.net:443/&amp;lt;アプリ名&amp;gt;.git&lt;/code&gt;的なURLです。&lt;/p&gt;
+
+&lt;p&gt;設定したユーザー名とパスワードを使ってGit Pushできます。&lt;/p&gt;
+
+&lt;h2 id=&#34;アプリケーション設定&#34;&gt;アプリケーション設定&lt;/h2&gt;
+
+&lt;h3 id=&#34;スタートアップファイル&#34;&gt;スタートアップファイル&lt;/h3&gt;
+
+&lt;p&gt;通常、Azure WebApps on LinuxはPM2というプロセス監視ツールを内部で使っていて、PM2で利用する&lt;code&gt;process.json&lt;/code&gt;というファイルを編集して起動スクリプトを指定します。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/wbuchwalter/azure-content/blob/master/articles/app-service-web/app-service-linux-using-nodejs-pm2.md&#34;&gt;WebAppsのドキュメント&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://pm2.keymetrics.io/docs/usage/application-declaration/&#34;&gt;pm2のドキュメント&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;通常は特定のjsファイルを指定したりするのですがNuxt.jsの場合、Nuxtコマンドで起動するので&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;node_modules/nuxt/bin/nuxt-start&lt;/code&gt;を指定します。&lt;/p&gt;
+
+&lt;p&gt;これでサーバーが再起動した際にNuxt.jsが起動します。&lt;/p&gt;
+
+&lt;h3 id=&#34;hostを-0-0-0-0-に&#34;&gt;HOSTを&lt;code&gt;0.0.0.0&lt;/code&gt;に&lt;/h3&gt;
+
+&lt;p&gt;また、設定でHOSTを&lt;code&gt;0.0.0.0&lt;/code&gt;に設定します。&lt;/p&gt;
+
+&lt;p&gt;これを指定しないと&lt;code&gt;localhost&lt;/code&gt;接続になってしまい、WebApps内部ではうまいこと動いてくれない模様です。&lt;/p&gt;
+
+&lt;p&gt;Keenさんの&lt;a href=&#34;https://keens.github.io/blog/2016/02/24/bind_addressnoimigayouyakuwakatta/&#34;&gt;Bind Addressの意味がようやく分かった&lt;/a&gt;の記事にもあるように&lt;code&gt;0.0.0.0&lt;/code&gt;はワイルドカードとして使えるので指定します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/00346583f202e15200e90ccea658a4ef.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;package-jsonにpostinstallで-nuxt-build-させる&#34;&gt;package.jsonにpostinstallで&lt;code&gt;nuxt build&lt;/code&gt;させる&lt;/h2&gt;
+
+&lt;p&gt;まだこれでもうまくいかなかったです。&lt;/p&gt;
+
+&lt;p&gt;Nuxts.jsはnpm startすると&lt;code&gt;nuxt build &amp;amp;&amp;amp; nuxt start&lt;/code&gt;という形でビルド-&amp;gt;起動という順番になります。ビルドすると&lt;code&gt;.nuxt&lt;/code&gt;フォルダが作成され、その中のプログラムを使って起動します。&lt;/p&gt;
+
+&lt;p&gt;ということで、WebAppsにデプロイしたらデプロイ先でビルドを走らせる必要があります。通常デプロイすると&lt;code&gt;npm start&lt;/code&gt;が走り、その中で&lt;code&gt;nuxt build &amp;amp;&amp;amp; nuxt start&lt;/code&gt;が実行されるため、問題なさそうなのですが、なぜかこれだとビルドがうまくいかず&lt;code&gt;postinstall&lt;/code&gt;の箇所でビルドをさせるとうまく動いてくれました。&lt;/p&gt;
+
+&lt;p&gt;package.jsonのscriptsの箇所に&lt;code&gt;&amp;quot;postinstall&amp;quot;: &amp;quot;cd /home/site/wwwroot &amp;amp;&amp;amp; /opt/nodejs/9.4.0/bin/node ./node_modules/nuxt/bin/nuxt-build&amp;quot;,&lt;/code&gt;を入れてあげます。&lt;/p&gt;
+
+&lt;p&gt;WebApss側ではデプロイしたソースコードは&lt;code&gt;/home/site/wwwroot&lt;/code&gt;に保存されるのでそこに移動してビルドする形です。&lt;/p&gt;
+
+&lt;p&gt;ちなみに、&lt;code&gt;/opt/nodejs/9.4.0/bin/node ./node_modules/nuxt/bin/nuxt-build&amp;quot;&lt;/code&gt;の箇所は&lt;code&gt;npm run build&lt;/code&gt;や&lt;code&gt;nuxt build&lt;/code&gt;の中身である&lt;code&gt;nuxt-build&lt;/code&gt;を実行するものですが、そのまま&lt;code&gt;npm run build&lt;/code&gt;を指定しておくとWebApps上で実行されるNode.jsのバージョンが古く、&lt;code&gt;async&lt;/code&gt;などの構文でエラーを起こしてしまい、&lt;code&gt;nuxt build&lt;/code&gt;が上手くいかない模様です。なので&lt;code&gt;/opt/nodejs/9.4.0/bin/node&lt;/code&gt;でバージョンを指定してあげると上手くビルドしてくれます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;async ready() {
+remote:         ^^^^^
+remote: SyntaxError: Unexpected identifier
+・
+・
+・
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;git-pushしてビルド確認&#34;&gt;git pushしてビルド確認&lt;/h2&gt;
+
+&lt;p&gt;ここまで設定できるとgit pushしてビルドが成功すると思います。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ git push origin master
+・
+・
+結構長い
+・
+・
+remote: Finished successfully.
+remote: Running post deployment command(s)...
+remote: Deployment successful.
+remote: App container will begin restart within 10 seconds.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;という形で&lt;code&gt;Finished successfully&lt;/code&gt;や&lt;code&gt;Deployment successful.&lt;/code&gt;のメッセージが出ればデプロイ成功です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://camo.qiitausercontent.com/3bec96ccb48cf22dd880982f9ca1a6d938bd5c38/68747470733a2f2f692e6779617a6f2e636f6d2f36383163646639613562366266386161623935626138386537326665313431652e706e67&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;こんな感じのサイトが&lt;code&gt;https://&amp;lt;アプリ名&amp;gt;.azurewebsites.net&lt;/code&gt;にアクセスすると表示されると思います。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;nuxt build&lt;/code&gt;がWebApps上でなかなか動作してくれない&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;HOSTの&lt;code&gt;0.0.0.0&lt;/code&gt;の指定&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;この二点を気をつければWebApps on LinuxでNuxt.jsの環境を整えられました。&lt;/p&gt;
+
+&lt;p&gt;参考になれば幸いです。&lt;/p&gt;
+
+&lt;p&gt;やさしいMSのサポートエンジニアさんマジでありがとう&amp;hellip;&amp;hellip;&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>【取材がこないので自分にインタビューした】未経験からWebエンジニアになったちゃんとく氏がIoTを仕事に選んだ理由</title>
@@ -172,7 +319,7 @@
 ---なるほど！エンジニア仲間と喋ることで、基礎力的な部分が形成されるわけですね。
 &lt;/p&gt;
 
-&lt;p&gt;エンジニア間の常識っぽいことって、&lt;strong&gt;独学で体系的に学ぶことが難しい&lt;/strong&gt;と思うんです。なので同じ界隈で活動している人たちと話すことは大事だと思っていて、今でもコミュニティ参加はできるだけするようにしています。&lt;strong&gt;勉強会に参加したからといって直接業務に直結するわけではないので、バランス感覚は大事&lt;/strong&gt;だとは思いますけどね。&lt;/p&gt;
+&lt;p&gt;エンジニア間の常識っぽいことって、&lt;strong&gt;独学で体系的に学ぶことが難しい&lt;/strong&gt;と思うんです。なので同じ界隈で活動している人たちと話すことは大事だと思っていて、今でもコミュニティ参加はできるだけするようにしています。&lt;strong&gt;勉強会に参加したからといって業務に直結するわけではないので、バランス感覚は大事&lt;/strong&gt;だとは思いますけどね。&lt;/p&gt;
 
 &lt;h2 id=&#34;作れる幅は広いほどいい-モノ作りの枠の捉え方&#34;&gt;作れる幅は広いほどいい。モノ作りの枠の捉え方&lt;/h2&gt;
 
@@ -909,140 +1056,34 @@ void loop()
 
 &lt;p&gt;以下のプログラムをNefry BTに書き込みます。すごく長いですが、後ほど説明します。&lt;/p&gt;
 
-&lt;div class=&#34;accbox&#34;&gt;
-    &lt;label for=&#34;label1&#34;&gt;クリックしてコードを表示&lt;/labe&gt;
-    &lt;input type=&#34;checkbox&#34; id=&#34;label1&#34; class=&#34;cssacc&#34; /&gt;
-    &lt;div class=&#34;accshow&#34;&gt;
-      &lt;pre&gt;
-      &lt;code class=&#34;language-c++ hljs cpp&#34;&gt;
-      #include &amp;lt;Nefry.h&amp;gt;
-      #include &amp;lt;WiFiClientSecure.h&amp;gt;
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+#include &amp;lt;NefryLineNotify.h&amp;gt;
 
-      #define PIR_MOTION_SENSOR D2
+#define PIR_MOTION_SENSOR D2
+String auth, message;
 
-      WiFiClientSecure client;
-      String LineAuth, SendMessageLINE;
-      String StrPerEncord(const char* c_str);
-      String escapeParameter(String param);
+void setup() {
+    pinMode(PIR_MOTION_SENSOR, INPUT);
+    Nefry.setStoreTitle(&amp;quot;LINE Auth&amp;quot;,0);
+    Nefry.setStoreTitle(&amp;quot;LINEMessage&amp;quot;,1);
+    auth = Nefry.getStoreStr(0);   
+    message = Nefry.getStoreStr(1);
+    Nefry.enableSW();
+}
 
-      void setup() {
-          pinMode(PIR_MOTION_SENSOR, INPUT);
-          Nefry.setStoreTitle(&#34;LINE Auth&#34;, 0);
-          Nefry.setStoreTitle(&#34;LINEMessage&#34;, 1);
-          LineAuth = Nefry.getStoreStr(0);
-          SendMessageLINE = Nefry.getStoreStr(1);
-      }
-
-      void loop() {
-          if(digitalRead(PIR_MOTION_SENSOR)) {
-              Nefry.println(&#34;誰かきたよ&#34;);
-              if (!LineAuth.equals(&#34;&#34;)) {   
-                  if (SendMessageLINE.equals(&#34;&#34;)) {
-                      SendMessageLINE = &#34;Welcome to the NefryBT world!&#34;;
-                  }
-                  LineSend();
-                  delay(1000*30);
-              }
-          } else {
-              Nefry.println(&#34;監視中&#34;);
-          }
-          delay(200);
-      }
-
-      void LineSend() {
-        const char* host = &#34;notify-api.line.me&#34;;
-        Serial.println(&#34;\nStarting connection to server...&#34;);
-        if (!client.connect(host, 443)) {
-          Serial.println(&#34;Connection failed!&#34;);
-        } else {
-          Serial.println(&#34;Connected to server!&#34;);
-          String url = &#34;/api/notify&#34;;
-          url += &#34;?message=&#34;;
-          url += StrPerEncord(escapeParameter(SendMessageLINE).c_str());
-          Serial.println(StrPerEncord(SendMessageLINE.c_str()));
-          Serial.println(url);
-          client.print(String(&#34;POST &#34;) + url + &#34; HTTP/1.1\r\n&#34; +
-                       &#34;Authorization: Bearer &#34; + LineAuth + &#34;\r\n&#34; +
-                       &#34;Content-Type: application/x-www-form-urlencoded\r\n&#34; +
-                       &#34;Host: &#34; + host + &#34;\r\n&#34; +
-                       &#34;Connection: close\r\n\r\n&#34;);
-          client.println();
-          unsigned long timeout = millis();
-          while (client.available() == 0) {
-            if (millis() - timeout &amp;gt; 5000) {
-              Serial.println(&#34;&amp;gt;&amp;gt;&amp;gt; Client Timeout !&#34;);
-              client.stop();
-              return;
-            }
-          }
-          while (client.available()) {
-            String line = client.readStringUntil(&#39;\r&#39;);
-            Serial.print(line);
-          }
-          Serial.println();
-          Serial.println(&#34;closing connection&#34;);
+void loop() {
+    if(digitalRead(PIR_MOTION_SENSOR)) {
+        Nefry.println(&amp;quot;誰かきたよ&amp;quot;);
+        if (!LineNotify.send(auth, message)) {
+            Nefry.setLed(255, 0, 0);
         }
-      }
-
-      String StrPerEncord(const char* c_str) {
-        uint16_t i = 0;
-        String str_ret = &#34;&#34;;
-        char c1[3], c2[3], c3[3];
-        while (c_str[i] != &#39;\0&#39;) {
-          if (c_str[i] &amp;gt;= 0xC2 &amp;&amp; c_str[i] &amp;lt;= 0xD1) { //2バイト文字
-            sprintf(c1, &#34;%2x&#34;, c_str[i]);
-            sprintf(c2, &#34;%2x&#34;, c_str[i + 1]);
-            str_ret += &#34;%&#34; + String(c1) + &#34;%&#34; + String(c2);
-            i = i + 2;
-          } else if (c_str[i] &amp;gt;= 0xE2 &amp;&amp; c_str[i] &amp;lt;= 0xEF) {
-            sprintf(c1, &#34;%2x&#34;, c_str[i]);
-            sprintf(c2, &#34;%2x&#34;, c_str[i + 1]);
-            sprintf(c3, &#34;%2x&#34;, c_str[i + 2]);
-            str_ret += &#34;%&#34; + String(c1) + &#34;%&#34; + String(c2) + &#34;%&#34; + String(c3);
-            i = i + 3;
-          } else {
-            str_ret += String(c_str[i]);
-            i++;
-          }
-        }
-        return str_ret;
-      }
-
-      String escapeParameter(String param) {
-        param.replace(&#34;%&#34;, &#34;%25&#34;);
-        param.replace(&#34;+&#34;, &#34;%2B&#34;);
-        param.replace(&#34; &#34;, &#34;+&#34;);
-        param.replace(&#34;\&#34;&#34;, &#34;%22&#34;);
-        param.replace(&#34;#&#34;, &#34;%23&#34;);
-        param.replace(&#34;$&#34;, &#34;%24&#34;);
-        param.replace(&#34;&amp;&#34;, &#34;%26&#34;);
-        param.replace(&#34;&#39;&#34;, &#34;%27&#34;);
-        param.replace(&#34;(&#34;, &#34;%28&#34;);
-        param.replace(&#34;)&#34;, &#34;%29&#34;);
-        param.replace(&#34;*&#34;, &#34;%2A&#34;);
-        param.replace(&#34;,&#34;, &#34;%2C&#34;);
-        param.replace(&#34;/&#34;, &#34;%2F&#34;);
-        param.replace(&#34;:&#34;, &#34;%3A&#34;);
-        param.replace(&#34;;&#34;, &#34;%3B&#34;);
-        param.replace(&#34;&amp;lt;&#34;, &#34;%3C&#34;);
-        param.replace(&#34;=&#34;, &#34;%3D&#34;);
-        param.replace(&#34;&amp;gt;&#34;, &#34;%3E&#34;);
-        param.replace(&#34;?&#34;, &#34;%3F&#34;);
-        param.replace(&#34;@&#34;, &#34;%40&#34;);
-        param.replace(&#34;[&#34;, &#34;%5B&#34;);
-        param.replace(&#34;\\&#34;, &#34;%5C&#34;);
-        param.replace(&#34;]&#34;, &#34;%5D&#34;);
-        param.replace(&#34;^&#34;, &#34;%5E&#34;);
-        param.replace(&#34;&#39;&#34;, &#34;%60&#34;);
-        param.replace(&#34;{&#34;, &#34;%7B&#34;);
-        param.replace(&#34;|&#34;, &#34;%7C&#34;);
-        param.replace(&#34;}&#34;, &#34;%7D&#34;);
-        return param;
-      }
-      &lt;/code&gt;
-      &lt;/pre&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
+        Nefry.ndelay(1000*30);
+    } else {
+        Nefry.println(&amp;quot;監視中&amp;quot;);
+    }
+    delay(200);
+}
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;書き込み手順は、上記の「&lt;a href=&#34;#はじめてのプログラムを書き込んでみる&#34;&gt;はじめてのプログラムを書き込んでみる&lt;/a&gt;」を参照してくださいね。&lt;/p&gt;
 
@@ -1089,28 +1130,26 @@ void loop()
 &lt;p&gt;例のすごく長いコードについて、要所を説明します。大事なところはちょっとだけです。&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;void setup() {
-     pinMode(PIR_MOTION_SENSOR, INPUT);
-     Nefry.setStoreTitle(&amp;quot;LINE Auth&amp;quot;, 0);
-     Nefry.setStoreTitle(&amp;quot;LINEMessage&amp;quot;, 1);
-     LineAuth = Nefry.getStoreStr(0);
-     SendMessageLINE = Nefry.getStoreStr(1);
+    pinMode(PIR_MOTION_SENSOR, INPUT);
+    Nefry.setStoreTitle(&amp;quot;LINE Auth&amp;quot;,0);
+    Nefry.setStoreTitle(&amp;quot;LINEMessage&amp;quot;,1);
+    auth = Nefry.getStoreStr(0);   
+    message = Nefry.getStoreStr(1);
+    Nefry.enableSW();
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;code&gt;Nefry.setStoreTitle()&lt;/code&gt;関数を使い、Nefry BTのDataStore機能に場所を作っています。この値はNefryポータル側から入力でき、変更があってもプログラムを書き換える必要はありません。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Nefry.setStoreTitle({タイトル}, {チャンネル番号})&lt;/code&gt;関数を使い、Nefry BTのDataStore機能に場所を作っています。この値はNefryポータル側から入力でき、変更があってもプログラムを書き換える必要はありません。&lt;/p&gt;
 
 &lt;p&gt;また値を&lt;code&gt;getStoreStr({チャンネル番号})&lt;/code&gt;で、ポータル側で設定した値を受け取っています。&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;void loop() {
     if(digitalRead(PIR_MOTION_SENSOR)) {
         Nefry.println(&amp;quot;誰かきたよ&amp;quot;);
-        if (!LineAuth.equals(&amp;quot;&amp;quot;)) {   
-            if (SendMessageLINE.equals(&amp;quot;&amp;quot;)) {
-                SendMessageLINE = &amp;quot;Welcome to the NefryBT world!&amp;quot;;
-            }
-            LineSend();
-            delay(1000*30));
+        if (!LineNotify.send(auth, message)) {
+            Nefry.setLed(255, 0, 0);
         }
+        Nefry.ndelay(1000*30);
     } else {
         Nefry.println(&amp;quot;監視中&amp;quot;);
     }
@@ -1118,20 +1157,13 @@ void loop()
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;先ほど同様人感センサが検知したとき、という条件文を作っています。LINEAuthの値、SendMessageLINEの値がそれぞれ入っているかを確認し、&lt;code&gt;LineSend()&lt;/code&gt;というユーザ定義の関数を実行しています。&lt;/p&gt;
+&lt;p&gt;先ほど同様人感センサが検知したとき、という条件文を作っています。&lt;code&gt;LineNotify.send()&lt;/code&gt;関数を使い、もし送れなかったときは赤いLEDを光らせるという処理をしています（&lt;code&gt;!&lt;/code&gt;は&lt;code&gt;!==&lt;/code&gt;と同義で、&lt;code&gt;FALSE&lt;/code&gt;が返ったときに実行されます）。&lt;/p&gt;
 
 &lt;p&gt;何度も連続してLINEが来るとウザいので、一度送ったあとは30秒待ちます。&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;void LineSend() {
-  const char* host = &amp;quot;notify-api.line.me&amp;quot;;
-  ・
-  ・
-  ・
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;del&gt;LINE送信を実装している部分です、が、これ以降は&lt;strong&gt;気にしなくていいです&lt;/strong&gt;。この部分は&lt;a href=&#34;https://dotstud.io/docs/nefrybt-default/&#34;&gt;初期プログラム&lt;/a&gt;をコピーして作っています。たぶん近々ライブラリ化されます。&lt;/del&gt;&lt;/p&gt;
 
-&lt;p&gt;LINE送信を実装している部分です、が、これ以降は&lt;strong&gt;気にしなくていいです&lt;/strong&gt;。この部分は&lt;a href=&#34;https://dotstud.io/docs/nefrybt-default/&#34;&gt;初期プログラム&lt;/a&gt;をコピーして作っています。&lt;/p&gt;
-
-&lt;p&gt;たぶん近々ライブラリ化されます。&lt;/p&gt;
+&lt;p&gt;LINE Notifyがライブラリ化されたので編集しました！&lt;/p&gt;
 
 &lt;h2 id=&#34;応用課題-データをクラウドに送ってみる-ロギング&#34;&gt;応用課題: データをクラウドに送ってみる（ロギング）&lt;/h2&gt;
 
@@ -1264,6 +1296,9 @@ blockquote {
 
 
 &lt;section class=&#34;link&#34; id=&#34;199&#34;&gt;
+  
+      
+      
   
       
       
@@ -3005,6 +3040,9 @@ blockquote {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/arduino-use-rfid-reader/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/162/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -3694,6 +3732,9 @@ blockquote {
 
 
 &lt;section class=&#34;link&#34; id=&#34;183&#34;&gt;
+  
+      
+      
   
       
       
@@ -5421,6 +5462,9 @@ blockquote {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/microbit-getting-started-pokio/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/165/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -6114,6 +6158,9 @@ blockquote {
 
 
 &lt;section class=&#34;link&#34; id=&#34;190&#34;&gt;
+  
+      
+      
   
       
       
@@ -7325,6 +7372,9 @@ blockquote {
 
 
 &lt;section class=&#34;link&#34; id=&#34;188&#34;&gt;
+  
+      
+      
   
       
       
@@ -9496,6 +9546,9 @@ blockquote {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/akihabara-guide-for-beginners/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/091/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -10078,6 +10131,9 @@ blockquote {
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;187&#34;&gt;
+  
+      
+      
   
       
       
@@ -11734,6 +11790,9 @@ blockquote {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/stepper-motor-nefrybt-control/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/189/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -12559,6 +12618,9 @@ void loop() {
 
 
 &lt;section class=&#34;link&#34; id=&#34;187&#34;&gt;
+  
+      
+      
   
       
       
@@ -14874,6 +14936,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/control-solenoid-nefrybt-nodered/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/214/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -15712,6 +15777,9 @@ void loop() {
 
 
 &lt;section class=&#34;link&#34; id=&#34;214&#34;&gt;
+  
+      
+      
   
       
       
@@ -17495,6 +17563,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/clova-cek-nodejs-tutorial/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/195/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -18283,6 +18354,9 @@ void loop() {
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;195&#34;&gt;
+  
+      
+      
   
       
       
@@ -21724,6 +21798,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/summer-homework-2018-chantoku/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/201/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -22639,1426 +22716,6 @@ void loop() {
     padding-left: 30px;
 }
 &lt;/style&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>【夏の自由工作2018】改札や自販機にピッとするたび光る！非接触発光LEDで光るネイル作ってみた</title>
-      <link>https://dotstud.io/blog/summer-homework-2018-chantoku/</link>
-      <pubDate>Mon, 13 Aug 2018 04:13:36 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/summer-homework-2018-chantoku/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、&lt;a href=&#34;https://dotstud.io/members/chantoku&#34;&gt;ちゃんとく&lt;/a&gt;です。世間はすっかり夏休みですね！&lt;/p&gt;
-
-&lt;p&gt;弊dotstudioも絶賛夏休み中ですが、夏休みといえば宿題、宿題といえば自由工作………。&lt;/p&gt;
-
-&lt;p&gt;ということで、&lt;strong&gt;特別企画・夏の自由工作2018&lt;/strong&gt;を開催します！！！（ドンドンドンドン）&lt;/p&gt;
-
-&lt;p&gt;この記事を皮切りに、1週間連続でdotstudioメンバーが自由工作を発表していきますよ〜。実際の自由工作に役立つガジェットも登場するかも！？&lt;/p&gt;
-
-&lt;p&gt;初日からギリギリ更新ですが、それも宿題の醍醐味ですねっ☆&lt;/p&gt;
-
-&lt;h2 id=&#34;光るネイルを作ろう&#34;&gt;光るネイルを作ろう&lt;/h2&gt;
-
-&lt;p&gt;小さな爪の上に回路やら電源やらを考えるのは面倒なので、今回は「&lt;strong&gt;非接触ICリーダーに反応して光るLEDモジュール&lt;/strong&gt;」を使っていきます。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://gyazo.com/564206a6c714e9e73b23c33194d62be5&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/564206a6c714e9e73b23c33194d62be5.png&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;
-共立電子さんで売っている「&lt;a href=&#34;http://eleshop.jp/shop/g/g402524/&#34;&gt;NFC非接触発光LED&lt;/a&gt;」というモジュールは、改札や自動販売機の非接触ICリーダーにかざすと光る性質があります。&lt;/p&gt;
-
-&lt;p&gt;形もサイズもネイル用に作られたと言っても過言ではないな……！&lt;/p&gt;
-
-&lt;h2 id=&#34;ざっくりデザイン&#34;&gt;ざっくりデザイン&lt;/h2&gt;
-
-&lt;p&gt;ネイルを作る前に、ざっくりデザインを考えます。せっかく光らせるので、電子工作風にしてみました。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/201/design.png&#34; alt=&#34;design&#34;&gt;
-
-&lt;/center&gt;
-
-でーん。Genuino風ネイル〜！緑の丸部分がLEDの想定です。&lt;/p&gt;
-
-&lt;p&gt;マイコンボードの中で1番好きな配色のGenuino 101（※）というArduino互換ボードをベースにしてみました。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://gyazo.com/9fe1b9fac74db201332a22408038f03a&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/9fe1b9fac74db201332a22408038f03a.png&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;font size=&#34;2&#34;&gt;
-※残念ながら生産停止になってしまいました……。悲しい……。
-&lt;/font&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h2&gt;
-
-&lt;h3 id=&#34;nfc非接触発光led&#34;&gt;NFC非接触発光LED&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://gyazo.com/1f05e8e9d0a32242cef1a0c9f9e8ce61&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/1f05e8e9d0a32242cef1a0c9f9e8ce61.png&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;
-今回はネイルのデザインに合わせてブルーグリーンという色にしました！お安いので各指に乗せても大丈夫。&lt;/p&gt;
-
-&lt;h3 id=&#34;ネイルアート用ネイルチップ&#34;&gt;ネイルアート用ネイルチップ&lt;/h3&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/201/chip.png&#34; alt=&#34;chip&#34;&gt;
-
-&lt;/center&gt;
-
-ドン・キホーテで購入。普通のやつです。&lt;/p&gt;
-
-&lt;h3 id=&#34;好きな色のネイル&#34;&gt;好きな色のネイル&lt;/h3&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/201/nail.png&#34; alt=&#34;nail&#34;&gt;
-
-&lt;/center&gt;
-
-こちらもドン・キホーテで1番安いものを購入。ちょっと不安でしたが、発色もいいしガンガン重ね塗りできるのでオススメです！&lt;/p&gt;
-
-&lt;p&gt;あとは剥がれるのを防止する用にトップコートがあると◎。&lt;/p&gt;
-
-&lt;h3 id=&#34;ネイルグルー&#34;&gt;ネイルグルー&lt;/h3&gt;
-
-&lt;p&gt;ネイルチップを貼る用に、専用のグルーやテープを用意します。&lt;/p&gt;
-
-&lt;p&gt;100円均一などで購入できます。剥がす際にアセトンが必要なものもあるので注意！&lt;/p&gt;
-
-&lt;h2 id=&#34;制作&#34;&gt;制作&lt;/h2&gt;
-
-&lt;p&gt;制作といってもネイルを塗っていくだけなのですが、簡単に紹介します。&lt;strong&gt;ちゃんとく、雑なのであまり参考にしないでください&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/201/1.png&#34; alt=&#34;1&#34;&gt;
-
-&lt;/center&gt;
-
-ネイルチップにベース色を塗っていきます。「適当でいけるだろ！」と思ってたんですが、すごく持ちづらかったので&lt;strong&gt;セロテープを丸めたものをくっつけて&lt;/strong&gt;土台にしています。&lt;/p&gt;
-
-&lt;p&gt;ネイルをたっぷり取って、中央からハケを平たくするイメージで塗るのがコツって聞いたような聞いてないような……。一度塗って&lt;strong&gt;完全に乾くのを待って&lt;/strong&gt;から、二、三回重ね塗りをしていきます。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/201/2.png&#34; alt=&#34;2&#34;&gt;
-
-&lt;/center&gt;
-
-あとでラインを引くので根元は適当でOK。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/201/3.png&#34; alt=&#34;3&#34;&gt;
-
-&lt;/center&gt;
-
-小指はデザインに沿って、ちょんちょんちょんとドットを配置。なぜか仮面ライダーを想起させる仕上がり。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/201/4.png&#34; alt=&#34;4&#34;&gt;
-
-&lt;/center&gt;
-
-LEDを載せる爪は、まずLEDを配置（&lt;strong&gt;裏面がシールになっています、最高&lt;/strong&gt;）。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/201/5.png&#34; alt=&#34;5&#34;&gt;
-
-&lt;/center&gt;
-
-LED部分だけ残すように、上からゴリゴリネイルを塗ります。なんか浮いてる気もするけど気にしない気にしない。&lt;/p&gt;
-
-&lt;p&gt;全体をしっかりと乾かして完成〜！&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/201/after.png&#34; alt=&#34;after&#34;&gt;
-
-&lt;/center&gt;
-
-え？デザイン画と違う？&lt;/p&gt;
-
-&lt;p&gt;&lt;font size=&#34;4&#34;&gt;Arduinoマークなんて書けるわけないだろ！！！！&lt;/font&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;
-色は渋いのにつけてみると意外と派手な仕上がり。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/201/after2.png&#34; alt=&#34;after2&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-&lt;h2 id=&#34;街に出て光ってみる&#34;&gt;街に出て光ってみる&lt;/h2&gt;
-
-&lt;p&gt;せっかく作ったので、実際にかざして光らせてみます！&lt;/p&gt;
-
-&lt;p&gt;自販機を探して10分、なかなか非接触IC搭載の自販機が見つからない……。駅前とかじゃないと、意外とないもんです。&lt;/p&gt;
-
-&lt;p&gt;ようやく見つけたのはタバコの自販機。TASPOも光る仕様で助かったー。&lt;/p&gt;
-
-&lt;p&gt;リーダーに爪をかざすと……
-&lt;a href=&#34;https://gyazo.com/620360121553296154cf2c5b9e90b3dc&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/620360121553296154cf2c5b9e90b3dc.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;
-ちゃんと光った〜！さりげなくて良い感じ！&lt;/p&gt;
-
-&lt;h2 id=&#34;光るアレとコラボさせてみる&#34;&gt;光るアレとコラボさせてみる&lt;/h2&gt;
-
-&lt;p&gt;さらにさらに、せっかくなので&lt;strong&gt;光るアレとコラボ&lt;/strong&gt;させてみます。&lt;/p&gt;
-
-&lt;p&gt;どん。
-&lt;a href=&#34;https://gyazo.com/0b99edfda6b97c48f38fd82a87c99e02&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/0b99edfda6b97c48f38fd82a87c99e02.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;font size=&#34;4&#34;&gt;光ってる。私いま最高に光ってる。&lt;/font&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;
-ちなみにこれ1人で撮影しているのですが、初めて「ええい、ままよっ！」という気持ちになりました。&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;安くて超簡単に作れる上、オシャレにも自由工作にも活用できる（？）のでオススメです！&lt;/p&gt;
-
-&lt;p&gt;ぜひ試してみてください〜！&lt;/p&gt;
-
-&lt;p&gt;明日の自由工作発表は、しゃちょーの&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です！お楽しみに！&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-↓↓光るアレの紹介記事はこちら↓↓
-&lt;/center&gt;
-
-
-&lt;section class=&#34;link&#34; id=&#34;126&#34;&gt;
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-          &lt;div class=&#34;link_content&#34;&gt;
-          &lt;a href=&#34;https://dotstud.io/blog/led-eyelash-gadget-report/&#34;&gt;&lt;/a&gt;
-          &lt;img src=&#34;https://dotstud.io/img/blog/126/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
-          &lt;/div&gt;
-          &lt;div class=&#34;link_content&#34;&gt;
-            &lt;div class=&#34;link_detail&#34;&gt;
-              &lt;div class=&#34;link_title&#34;&gt;
-                【検証】光るまつげ！？クラブで目立つこと間違いなしのLEDまつげを試してみた
-              &lt;/div&gt;
-              &lt;div class=&#34;link_date&#34;&gt;
-                
-                2017-09-11
-              &lt;/div&gt;
-              &lt;div class=&#34;link_desc&#34;&gt;
-                秋葉原で見かけた面白プロダクトを実際に検証してみます。第一弾はLEDまつげ！使い方や使用感をレポートします！
-              &lt;/div&gt;
-            &lt;/div&gt;
-          &lt;/div&gt;
-        &lt;/section&gt;
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-&lt;/section&gt;
-&lt;/p&gt;
 </description>
     </item>
     

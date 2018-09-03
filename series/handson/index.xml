@@ -548,140 +548,34 @@ void loop()
 
 &lt;p&gt;以下のプログラムをNefry BTに書き込みます。すごく長いですが、後ほど説明します。&lt;/p&gt;
 
-&lt;div class=&#34;accbox&#34;&gt;
-    &lt;label for=&#34;label1&#34;&gt;クリックしてコードを表示&lt;/labe&gt;
-    &lt;input type=&#34;checkbox&#34; id=&#34;label1&#34; class=&#34;cssacc&#34; /&gt;
-    &lt;div class=&#34;accshow&#34;&gt;
-      &lt;pre&gt;
-      &lt;code class=&#34;language-c++ hljs cpp&#34;&gt;
-      #include &amp;lt;Nefry.h&amp;gt;
-      #include &amp;lt;WiFiClientSecure.h&amp;gt;
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+#include &amp;lt;NefryLineNotify.h&amp;gt;
 
-      #define PIR_MOTION_SENSOR D2
+#define PIR_MOTION_SENSOR D2
+String auth, message;
 
-      WiFiClientSecure client;
-      String LineAuth, SendMessageLINE;
-      String StrPerEncord(const char* c_str);
-      String escapeParameter(String param);
+void setup() {
+    pinMode(PIR_MOTION_SENSOR, INPUT);
+    Nefry.setStoreTitle(&amp;quot;LINE Auth&amp;quot;,0);
+    Nefry.setStoreTitle(&amp;quot;LINEMessage&amp;quot;,1);
+    auth = Nefry.getStoreStr(0);   
+    message = Nefry.getStoreStr(1);
+    Nefry.enableSW();
+}
 
-      void setup() {
-          pinMode(PIR_MOTION_SENSOR, INPUT);
-          Nefry.setStoreTitle(&#34;LINE Auth&#34;, 0);
-          Nefry.setStoreTitle(&#34;LINEMessage&#34;, 1);
-          LineAuth = Nefry.getStoreStr(0);
-          SendMessageLINE = Nefry.getStoreStr(1);
-      }
-
-      void loop() {
-          if(digitalRead(PIR_MOTION_SENSOR)) {
-              Nefry.println(&#34;誰かきたよ&#34;);
-              if (!LineAuth.equals(&#34;&#34;)) {   
-                  if (SendMessageLINE.equals(&#34;&#34;)) {
-                      SendMessageLINE = &#34;Welcome to the NefryBT world!&#34;;
-                  }
-                  LineSend();
-                  delay(1000*30);
-              }
-          } else {
-              Nefry.println(&#34;監視中&#34;);
-          }
-          delay(200);
-      }
-
-      void LineSend() {
-        const char* host = &#34;notify-api.line.me&#34;;
-        Serial.println(&#34;\nStarting connection to server...&#34;);
-        if (!client.connect(host, 443)) {
-          Serial.println(&#34;Connection failed!&#34;);
-        } else {
-          Serial.println(&#34;Connected to server!&#34;);
-          String url = &#34;/api/notify&#34;;
-          url += &#34;?message=&#34;;
-          url += StrPerEncord(escapeParameter(SendMessageLINE).c_str());
-          Serial.println(StrPerEncord(SendMessageLINE.c_str()));
-          Serial.println(url);
-          client.print(String(&#34;POST &#34;) + url + &#34; HTTP/1.1\r\n&#34; +
-                       &#34;Authorization: Bearer &#34; + LineAuth + &#34;\r\n&#34; +
-                       &#34;Content-Type: application/x-www-form-urlencoded\r\n&#34; +
-                       &#34;Host: &#34; + host + &#34;\r\n&#34; +
-                       &#34;Connection: close\r\n\r\n&#34;);
-          client.println();
-          unsigned long timeout = millis();
-          while (client.available() == 0) {
-            if (millis() - timeout &amp;gt; 5000) {
-              Serial.println(&#34;&amp;gt;&amp;gt;&amp;gt; Client Timeout !&#34;);
-              client.stop();
-              return;
-            }
-          }
-          while (client.available()) {
-            String line = client.readStringUntil(&#39;\r&#39;);
-            Serial.print(line);
-          }
-          Serial.println();
-          Serial.println(&#34;closing connection&#34;);
+void loop() {
+    if(digitalRead(PIR_MOTION_SENSOR)) {
+        Nefry.println(&amp;quot;誰かきたよ&amp;quot;);
+        if (!LineNotify.send(auth, message)) {
+            Nefry.setLed(255, 0, 0);
         }
-      }
-
-      String StrPerEncord(const char* c_str) {
-        uint16_t i = 0;
-        String str_ret = &#34;&#34;;
-        char c1[3], c2[3], c3[3];
-        while (c_str[i] != &#39;\0&#39;) {
-          if (c_str[i] &amp;gt;= 0xC2 &amp;&amp; c_str[i] &amp;lt;= 0xD1) { //2バイト文字
-            sprintf(c1, &#34;%2x&#34;, c_str[i]);
-            sprintf(c2, &#34;%2x&#34;, c_str[i + 1]);
-            str_ret += &#34;%&#34; + String(c1) + &#34;%&#34; + String(c2);
-            i = i + 2;
-          } else if (c_str[i] &amp;gt;= 0xE2 &amp;&amp; c_str[i] &amp;lt;= 0xEF) {
-            sprintf(c1, &#34;%2x&#34;, c_str[i]);
-            sprintf(c2, &#34;%2x&#34;, c_str[i + 1]);
-            sprintf(c3, &#34;%2x&#34;, c_str[i + 2]);
-            str_ret += &#34;%&#34; + String(c1) + &#34;%&#34; + String(c2) + &#34;%&#34; + String(c3);
-            i = i + 3;
-          } else {
-            str_ret += String(c_str[i]);
-            i++;
-          }
-        }
-        return str_ret;
-      }
-
-      String escapeParameter(String param) {
-        param.replace(&#34;%&#34;, &#34;%25&#34;);
-        param.replace(&#34;+&#34;, &#34;%2B&#34;);
-        param.replace(&#34; &#34;, &#34;+&#34;);
-        param.replace(&#34;\&#34;&#34;, &#34;%22&#34;);
-        param.replace(&#34;#&#34;, &#34;%23&#34;);
-        param.replace(&#34;$&#34;, &#34;%24&#34;);
-        param.replace(&#34;&amp;&#34;, &#34;%26&#34;);
-        param.replace(&#34;&#39;&#34;, &#34;%27&#34;);
-        param.replace(&#34;(&#34;, &#34;%28&#34;);
-        param.replace(&#34;)&#34;, &#34;%29&#34;);
-        param.replace(&#34;*&#34;, &#34;%2A&#34;);
-        param.replace(&#34;,&#34;, &#34;%2C&#34;);
-        param.replace(&#34;/&#34;, &#34;%2F&#34;);
-        param.replace(&#34;:&#34;, &#34;%3A&#34;);
-        param.replace(&#34;;&#34;, &#34;%3B&#34;);
-        param.replace(&#34;&amp;lt;&#34;, &#34;%3C&#34;);
-        param.replace(&#34;=&#34;, &#34;%3D&#34;);
-        param.replace(&#34;&amp;gt;&#34;, &#34;%3E&#34;);
-        param.replace(&#34;?&#34;, &#34;%3F&#34;);
-        param.replace(&#34;@&#34;, &#34;%40&#34;);
-        param.replace(&#34;[&#34;, &#34;%5B&#34;);
-        param.replace(&#34;\\&#34;, &#34;%5C&#34;);
-        param.replace(&#34;]&#34;, &#34;%5D&#34;);
-        param.replace(&#34;^&#34;, &#34;%5E&#34;);
-        param.replace(&#34;&#39;&#34;, &#34;%60&#34;);
-        param.replace(&#34;{&#34;, &#34;%7B&#34;);
-        param.replace(&#34;|&#34;, &#34;%7C&#34;);
-        param.replace(&#34;}&#34;, &#34;%7D&#34;);
-        return param;
-      }
-      &lt;/code&gt;
-      &lt;/pre&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
+        Nefry.ndelay(1000*30);
+    } else {
+        Nefry.println(&amp;quot;監視中&amp;quot;);
+    }
+    delay(200);
+}
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;書き込み手順は、上記の「&lt;a href=&#34;#はじめてのプログラムを書き込んでみる&#34;&gt;はじめてのプログラムを書き込んでみる&lt;/a&gt;」を参照してくださいね。&lt;/p&gt;
 
@@ -728,28 +622,26 @@ void loop()
 &lt;p&gt;例のすごく長いコードについて、要所を説明します。大事なところはちょっとだけです。&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;void setup() {
-     pinMode(PIR_MOTION_SENSOR, INPUT);
-     Nefry.setStoreTitle(&amp;quot;LINE Auth&amp;quot;, 0);
-     Nefry.setStoreTitle(&amp;quot;LINEMessage&amp;quot;, 1);
-     LineAuth = Nefry.getStoreStr(0);
-     SendMessageLINE = Nefry.getStoreStr(1);
+    pinMode(PIR_MOTION_SENSOR, INPUT);
+    Nefry.setStoreTitle(&amp;quot;LINE Auth&amp;quot;,0);
+    Nefry.setStoreTitle(&amp;quot;LINEMessage&amp;quot;,1);
+    auth = Nefry.getStoreStr(0);   
+    message = Nefry.getStoreStr(1);
+    Nefry.enableSW();
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;code&gt;Nefry.setStoreTitle()&lt;/code&gt;関数を使い、Nefry BTのDataStore機能に場所を作っています。この値はNefryポータル側から入力でき、変更があってもプログラムを書き換える必要はありません。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Nefry.setStoreTitle({タイトル}, {チャンネル番号})&lt;/code&gt;関数を使い、Nefry BTのDataStore機能に場所を作っています。この値はNefryポータル側から入力でき、変更があってもプログラムを書き換える必要はありません。&lt;/p&gt;
 
 &lt;p&gt;また値を&lt;code&gt;getStoreStr({チャンネル番号})&lt;/code&gt;で、ポータル側で設定した値を受け取っています。&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;void loop() {
     if(digitalRead(PIR_MOTION_SENSOR)) {
         Nefry.println(&amp;quot;誰かきたよ&amp;quot;);
-        if (!LineAuth.equals(&amp;quot;&amp;quot;)) {   
-            if (SendMessageLINE.equals(&amp;quot;&amp;quot;)) {
-                SendMessageLINE = &amp;quot;Welcome to the NefryBT world!&amp;quot;;
-            }
-            LineSend();
-            delay(1000*30));
+        if (!LineNotify.send(auth, message)) {
+            Nefry.setLed(255, 0, 0);
         }
+        Nefry.ndelay(1000*30);
     } else {
         Nefry.println(&amp;quot;監視中&amp;quot;);
     }
@@ -757,20 +649,13 @@ void loop()
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;先ほど同様人感センサが検知したとき、という条件文を作っています。LINEAuthの値、SendMessageLINEの値がそれぞれ入っているかを確認し、&lt;code&gt;LineSend()&lt;/code&gt;というユーザ定義の関数を実行しています。&lt;/p&gt;
+&lt;p&gt;先ほど同様人感センサが検知したとき、という条件文を作っています。&lt;code&gt;LineNotify.send()&lt;/code&gt;関数を使い、もし送れなかったときは赤いLEDを光らせるという処理をしています（&lt;code&gt;!&lt;/code&gt;は&lt;code&gt;!==&lt;/code&gt;と同義で、&lt;code&gt;FALSE&lt;/code&gt;が返ったときに実行されます）。&lt;/p&gt;
 
 &lt;p&gt;何度も連続してLINEが来るとウザいので、一度送ったあとは30秒待ちます。&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;void LineSend() {
-  const char* host = &amp;quot;notify-api.line.me&amp;quot;;
-  ・
-  ・
-  ・
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;del&gt;LINE送信を実装している部分です、が、これ以降は&lt;strong&gt;気にしなくていいです&lt;/strong&gt;。この部分は&lt;a href=&#34;https://dotstud.io/docs/nefrybt-default/&#34;&gt;初期プログラム&lt;/a&gt;をコピーして作っています。たぶん近々ライブラリ化されます。&lt;/del&gt;&lt;/p&gt;
 
-&lt;p&gt;LINE送信を実装している部分です、が、これ以降は&lt;strong&gt;気にしなくていいです&lt;/strong&gt;。この部分は&lt;a href=&#34;https://dotstud.io/docs/nefrybt-default/&#34;&gt;初期プログラム&lt;/a&gt;をコピーして作っています。&lt;/p&gt;
-
-&lt;p&gt;たぶん近々ライブラリ化されます。&lt;/p&gt;
+&lt;p&gt;LINE Notifyがライブラリ化されたので編集しました！&lt;/p&gt;
 
 &lt;h2 id=&#34;応用課題-データをクラウドに送ってみる-ロギング&#34;&gt;応用課題: データをクラウドに送ってみる（ロギング）&lt;/h2&gt;
 
@@ -3237,6 +3122,9 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
 
 
 &lt;section class=&#34;link&#34; id=&#34;145&#34;&gt;
+  
+      
+      
   
       
       
