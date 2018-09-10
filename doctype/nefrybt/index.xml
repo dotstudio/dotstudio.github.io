@@ -1029,9 +1029,10 @@ void setup() {
 }
 
 void loop() {
-    // スイッチが押されている間
-    while (Nefry.readSW()) {
+    // スイッチが押されたら
+    if (Nefry.readSW()) {
         Nefry.setLed(255, 0, 0);
+        Nefry.ndelay(1000);
     }
     // 青色に戻す
     Nefry.setLed(0, 0, 255);
@@ -1075,25 +1076,27 @@ void loop() {
 
 &lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/64ebbce11ab3b3efacfd83c86c194483.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
 
-&lt;p&gt;初期状態で書かれているコードを削除して、以下のコードに差し替えましょう（行頭の数字は不要です）。内蔵LEDが1秒ごとに点滅するコードです。&lt;/p&gt;
+&lt;p&gt;初期状態で書かれているコードを削除して、以下のコードに差し替えましょう（行頭の数字は不要です）。スイッチを押すと、内蔵LEDが1秒赤く光るコードです。&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;// Nefryライブラリの読み込み
-#include &amp;lt;Nefry.h&amp;gt;
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
 
 void setup() {
-    Nefry.enableSW();
+   // スイッチを有効化
+   Nefry.enableSW();
 }
 
 void loop() {
-  while (Nefry.readSW()) {
-      Nefry.setLed(255, 0, 0);
-  }
-  // スイッチが押されていない場合は青色に戻す
-  Nefry.setLed(0, 0, 255);
+    // スイッチが押されたら
+    if (Nefry.readSW()) {
+        Nefry.setLed(255, 0, 0);
+        Nefry.ndelay(1000);
+    }
+    // 青色に戻す
+    Nefry.setLed(0, 0, 255);
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;ちなみに、&lt;strong&gt;&lt;code&gt;while (Nefry.readSW){}&lt;/code&gt;&lt;/strong&gt;は&lt;strong&gt;&lt;code&gt;while (Nefry.readSW == HIGH){}&lt;/code&gt;&lt;/strong&gt;と同義です。比較を省略した場合、Trueのとき（つまりHIGHのとき）に条件式が実行されます。&lt;/p&gt;
+&lt;p&gt;ちなみに、&lt;strong&gt;&lt;code&gt;if (Nefry.readSW){}&lt;/code&gt;&lt;/strong&gt;は&lt;strong&gt;&lt;code&gt;if (Nefry.readSW == HIGH){}&lt;/code&gt;&lt;/strong&gt;と同義です。比較を省略した場合、Trueのとき（つまりHIGHのとき）に条件式が実行されます。&lt;/p&gt;
 
 &lt;h3 id=&#34;プログラムの保存とボードに書き込み&#34;&gt;プログラムの保存とボードに書き込み&lt;/h3&gt;
 
@@ -1105,7 +1108,7 @@ void loop() {
 
 &lt;h3 id=&#34;確認&#34;&gt;確認&lt;/h3&gt;
 
-&lt;p&gt;プラグラムを書き込んでNefry BTが再起動したら試してみましょう。スイッチを押している間、内蔵LEDが赤に光ります。&lt;/p&gt;
+&lt;p&gt;プラグラムを書き込んでNefry BTが再起動したら試してみましょう。スイッチを押したら内蔵LEDが赤に光ります。&lt;/p&gt;
 
 &lt;p&gt;お疲れ様でした！&lt;/p&gt;
 

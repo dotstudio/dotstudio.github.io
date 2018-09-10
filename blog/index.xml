@@ -7,8 +7,235 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2018 dotstudio inc.</copyright>
-    <lastBuildDate>Fri, 07 Sep 2018 02:54:08 +0900</lastBuildDate>
+    <lastBuildDate>Sun, 09 Sep 2018 04:58:49 +0900</lastBuildDate>
     <atom:link href="/blog/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>無料で手軽！コマンド一つで静的サイトホスティングできるSurgeを試してみた。</title>
+      <link>https://dotstud.io/blog/static-site-hosting-surge/</link>
+      <pubDate>Sun, 09 Sep 2018 04:58:49 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/static-site-hosting-surge/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;最近VuePressを触っていて、簡単に静的サイトホスティングできるサービスを探していました。&lt;/p&gt;
+
+&lt;p&gt;そこで発見した&lt;strong&gt;Surge（サージ）というサービスがすごく簡単だった&lt;/strong&gt;ので紹介します。&lt;/p&gt;
+
+&lt;p&gt;（日本語記事なさそうだったので勢いで書いておこう）&lt;/p&gt;
+
+&lt;h2 id=&#34;surgeとは&#34;&gt;Surgeとは&lt;/h2&gt;
+
+&lt;p&gt;静的サイトホスティングが無料で行えるサービスです。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;コマンド一発でデプロイが出来る&lt;/strong&gt;のが特徴で、&lt;strong&gt;使い方がすごくシンプルで感動&lt;/strong&gt;しました。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;a href=&#34;https://surge.sh/&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/f25b1dfae03feef05a74739a4385a8eb.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;https://surge.sh/&#34;&gt;surge公式サイト&lt;/a&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;ちなみにサージって読むっぽいです。有料プランもありますがその辺は割愛して無料でできるところを紹介します。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.npmjs.com/package/surge&#34;&gt;surge - npm&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;無料でどこまで使えるの？って気になる人は&lt;a href=&#34;https://surge.sh/help/why-is-surge-free&#34;&gt;Why is Surge free?&lt;/a&gt;という記事もあるので読んでみましょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;surgeのインストールと使い方&#34;&gt;Surgeのインストールと使い方&lt;/h2&gt;
+
+&lt;h3 id=&#34;インストール&#34;&gt;インストール&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;npm i -g surge
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;デプロイ&#34;&gt;デプロイ&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;surge
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;font size=&#34;4&#34;&gt;以上!!! &lt;/font&gt;めちゃ簡単ですね。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;でも本当にこれだけなので驚きです。&lt;code&gt;now.sh&lt;/code&gt;に似た使い勝手。&lt;/p&gt;
+
+&lt;p&gt;初めて使うときはメールアドレスとパスワードの入力をターミナル上で求められるのでそこでユーザー登録出来るのも個人的には好きです。&lt;strong&gt;ターミナルだけで完結します&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;デプロイすると&lt;strong&gt;&lt;code&gt;xxxxxxx.surge.sh&lt;/code&gt;&lt;/strong&gt;という形式のURLが発行されるので、アクセスすればOKです。&lt;/p&gt;
+
+&lt;h2 id=&#34;もう少し詳しく&#34;&gt;もう少し詳しく&lt;/h2&gt;
+
+&lt;p&gt;surgeコマンドは、今いる場所を起点にそのままホスティングします。&lt;/p&gt;
+
+&lt;p&gt;例えばmysiteフォルダ内部に&lt;code&gt;index.html&lt;/code&gt;を置いてたとします。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ cd mysite
+$ ls
+index.html
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;mysiteフォルダ内にいる状態で&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;surge ./
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;とすればmysiteフォルダをまるっとホスティングできます。&lt;/p&gt;
+
+&lt;h3 id=&#34;場所を指定してデプロイ&#34;&gt;場所を指定してデプロイ&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;surge &amp;lt;フォルダの場所&amp;gt;&lt;/code&gt;という形でデプロイできます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;surge ~/myblog/.vuepress/dist
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;vuepressを使ったデプロイだとこんな感じでした&lt;/p&gt;
+
+&lt;h3 id=&#34;場所とドメインを指定してデプロイ&#34;&gt;場所とドメインを指定してデプロイ&lt;/h3&gt;
+
+&lt;p&gt;さらにドメインを指定してデプロイができます。&lt;/p&gt;
+
+&lt;p&gt;通常のデプロイだと、surgeコマンドでデプロイするたびに新しいドメインが生成されるので、更新性のあるサイトだと使い勝手が良くないです。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;surge &amp;lt;フォルダの場所&amp;gt; &amp;lt;ドメイン&amp;gt;&lt;/code&gt;という形でデプロイすれば&lt;strong&gt;毎回同じドメインにデプロイできます。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;surge ~/myblog/.vuepress/dist hogehoge.surge.sh
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;このコマンドを何回実行しても&lt;code&gt;hogehoge.surge.sh&lt;/code&gt;にデプロイされるので更新しても安心です。&lt;/p&gt;
+
+&lt;p&gt;確か&lt;code&gt;now.sh&lt;/code&gt;だと毎回ドメインが発行されてaliasを貼り直さないといけない感じだったのでそこが少し手間だなぁと感じてました。この辺は後述します。&lt;/p&gt;
+
+&lt;h2 id=&#34;カスタムドメインも無料で使える&#34;&gt;カスタムドメインも無料で使える&lt;/h2&gt;
+
+&lt;p&gt;無料でカスタムドメインを利用できます。&lt;/p&gt;
+
+&lt;p&gt;「&lt;a href=&#34;https://surge.sh/help/adding-a-custom-domain&#34;&gt;Adding a custom domain - surge&lt;/a&gt;」を見るとやり方が書いてるのですが、利用しているドメイン事業者の管理画面で&lt;code&gt;cname&lt;/code&gt;の値に&lt;code&gt;na-west1.surge.sh&lt;/code&gt;を指定しましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;grasping.studio&lt;/code&gt;というドメインをお名前.comで管理しているので、&lt;code&gt;hogehoge.graspin.studio&lt;/code&gt;を利用したい場合は以下のように設定します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/9e316c5d1c6eeeebab84fb08819bdd37.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;更新してしばらく経つ（体感5~10分程度）と&lt;code&gt;hogehoge.graspin.studio&lt;/code&gt;に対してデプロイできるようになります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ surge ~/myblog/.vuepress/dist hogehoge.graspin.studio
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;その他使い方&#34;&gt;その他使い方&lt;/h2&gt;
+
+&lt;p&gt;surgeコマンドのサブコマンドもいくつかあるので紹介します。&lt;/p&gt;
+
+&lt;h3 id=&#34;surge-list-アプリケーション一覧&#34;&gt;&lt;code&gt;surge list&lt;/code&gt; - アプリケーション一覧&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;$ surge list
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/904da5a62e40457539116e012d101418.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;surge-teardown-アプリケーション削除&#34;&gt;&lt;code&gt;surge teardown&lt;/code&gt; - アプリケーション削除&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;teardown&lt;/code&gt;ってあんまり聞かないですけど他のサービスで言うところのrmとかremoveとかと同じような意味合いです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ surge teardown &amp;lt;アプリケーションのドメイン&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;surge-whoami-アカウント情報の確認&#34;&gt;&lt;code&gt;surge whoami&lt;/code&gt; - アカウント情報の確認&lt;/h3&gt;
+
+&lt;p&gt;ログインしているアカウントのメールアドレスが表示されます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ surge whoami
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;surge-logout-アカウントからログアウトする&#34;&gt;&lt;code&gt;surge logout&lt;/code&gt; - アカウントからログアウトする&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;$ surge logout
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;surge-login-ログインしなおす&#34;&gt;&lt;code&gt;surge login&lt;/code&gt; - ログインしなおす&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;$ surge login
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;他のメンバーと共同でデプロイする&#34;&gt;他のメンバーと共同でデプロイする&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;--add&lt;/code&gt;というオプションをつけてデプロイするとアプリケーションに指定したメールアドレスのユーザーもデプロイ出来るようになります。&lt;/p&gt;
+
+&lt;p&gt;ユーザー&lt;code&gt;hogehoge@gmail.com&lt;/code&gt;さんをアプリケーション&lt;code&gt;hogehoge.graspin.studio&lt;/code&gt;へのデプロイ権限を渡しつつ、&lt;code&gt;public&lt;/code&gt;フォルダをデプロイする。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;surge --add hogehoge@gmail.com public hogehoge.graspin.studio
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;この辺りもコマンドラインからやれて便利ですね。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;surge --remove&lt;/code&gt;でユーザーの権限を削除することもできます。&lt;/p&gt;
+
+&lt;h2 id=&#34;他のサービスと比較してどうか&#34;&gt;他のサービスと比較してどうか?&lt;/h2&gt;
+
+&lt;p&gt;無料で使えるその他のホスティングサービスとの比較です。主観です。&lt;/p&gt;
+
+&lt;p&gt;この辺、実は違う！みたいな話あれば@n0bisukeまでコメントください〜。&lt;/p&gt;
+
+&lt;h3 id=&#34;netlfy&#34;&gt;Netlfy&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.netlify.com/&#34;&gt;https://www.netlify.com/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;フォルダをドラッグ&amp;amp;ドロップでデプロイ出来るのは個人的に結構好きですが、毎回URLが再発行されてしまうのが少し手間がある印象です。&lt;/p&gt;
+
+&lt;p&gt;netlfyのcliツールもあるみたいですが手順がsurgeよりはある模様&lt;/p&gt;
+
+&lt;h3 id=&#34;heroku&#34;&gt;heroku&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://heroku.com/&#34;&gt;http://heroku.com/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;サーバーサイドのプログラムを含めてデプロイするときには良さそうです。
+僕もよく使います。&lt;/p&gt;
+
+&lt;p&gt;デバッグなどでけっこう詰まるのと、surgeほどの手軽さではないです。&lt;/p&gt;
+
+&lt;p&gt;とはいえサーバーサイドプログラムまで利用したかったら選択肢になります。&lt;/p&gt;
+
+&lt;h3 id=&#34;github-pages-bitbucket-pages&#34;&gt;GitHub Pages &amp;amp; Bitbucket Pages&lt;/h3&gt;
+
+&lt;p&gt;GitHub PagesとBitbucket Pagesは使い勝手はほぼ同じ印象で、git pushするだけで公開できます。&lt;/p&gt;
+
+&lt;p&gt;Webエンジニアなら当たり前のように使いますが、SSHやGitコマンドは最初少しハードルがあるかも。&lt;/p&gt;
+
+&lt;p&gt;更新されるまでに少し時間がかかること、GitHubだとソースコードが（無料だと）公開されてしまうのでそこに抵抗感がある人がいるかも。&lt;/p&gt;
+
+&lt;p&gt;静的サイトなのでどっちにしても公開されているようなものだけどなんとなく。&lt;/p&gt;
+
+&lt;h3 id=&#34;gitlab-pages&#34;&gt;GitLab Pages&lt;/h3&gt;
+
+&lt;p&gt;CIを動かして作るのでCIの記述になれてないと最初少しハマるかもしれません。&lt;/p&gt;
+
+&lt;p&gt;その分やれることも多いので個人的には注目してます。&lt;/p&gt;
+
+&lt;h3 id=&#34;now&#34;&gt;now&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.now.sh/&#34;&gt;https://www.now.sh/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;これはめちゃ便利で&lt;code&gt;now&lt;/code&gt;コマンドだけでデプロイできて&lt;code&gt;surge&lt;/code&gt;とほぼ同じ使い勝手です。更新のたびに毎回URLが変わってしまうのでそこを解消できたら良いなぁと思うのと、同時に無料プランだと作れるアプリケーションの制限があって現状だと毎回削除していくのも結構手間があるなぁという印象です。&lt;/p&gt;
+
+&lt;p&gt;（&lt;code&gt;now&lt;/code&gt;はもしかしたら設定でなんとかなるのかも??）&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;Surge&lt;/code&gt;どうでしょう？&lt;/p&gt;
+
+&lt;p&gt;コマンド一発で出来るので、サクッと作成したWebサイトを誰かにシェアしたり、
+ハンズオンや授業などでも使いやすいと思います。&lt;/p&gt;
+
+&lt;p&gt;僕も昨日知ったばかりですが今の所すごく良い印象です。&lt;/p&gt;
+
+&lt;p&gt;ぜひ使ってみてください。&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>【優勝賞金1000万】LINE BOOT AWARDSの勢いが止まらない！斬新アイデアが飛び出した東京ハッカソンの様子をレポート #linebootawards</title>
@@ -278,6 +505,9 @@ blockquote &gt; p {
 
 
 &lt;section class=&#34;link&#34; id=&#34;055&#34;&gt;
+  
+      
+      
   
       
       
@@ -2351,6 +2581,9 @@ blockquote &gt; p {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/mabeee-summer-horror-comic/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/026/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -2710,6 +2943,9 @@ blockquote &gt; p {
 
 
 &lt;section class=&#34;link&#34; id=&#34;184&#34;&gt;
+  
+      
+      
   
       
       
@@ -4649,6 +4885,9 @@ blockquote &gt; p {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/akihabara-guide-for-beginners/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/091/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -5140,6 +5379,9 @@ blockquote &gt; p {
 
 
 &lt;section class=&#34;link&#34; id=&#34;208&#34;&gt;
+  
+      
+      
   
       
       
@@ -6977,6 +7219,9 @@ blockquote &gt; p {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/office-new-door-notification/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/133/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -7576,6 +7821,9 @@ blockquote &gt; p {
 
 
 &lt;section class=&#34;link&#34; id=&#34;155&#34;&gt;
+  
+      
+      
   
       
       
@@ -9261,6 +9509,9 @@ blockquote &gt; p {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/no-more-sales-intercom/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/188/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -10004,6 +10255,9 @@ blockquote &gt; p {
 
 
 &lt;section class=&#34;link&#34; id=&#34;183&#34;&gt;
+  
+      
+      
   
       
       
@@ -11940,6 +12194,9 @@ blockquote &gt; p {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/gyaruden-hadeike-display-cap/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/094/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -12434,6 +12691,9 @@ blockquote &gt; p {
 
 
 &lt;section class=&#34;link&#34; id=&#34;126&#34;&gt;
+  
+      
+      
   
       
       
@@ -13648,6 +13908,9 @@ blockquote &gt; p {
 
 
 &lt;section class=&#34;link&#34; id=&#34;201&#34;&gt;
+  
+      
+      
   
       
       
@@ -15553,6 +15816,9 @@ blockquote &gt; p {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/pokio-esp-keikyu-chien/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/099/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -16080,6 +16346,9 @@ blockquote &gt; p {
 
 
 &lt;section class=&#34;link&#34; id=&#34;172&#34;&gt;
+  
+      
+      
   
       
       
@@ -17789,6 +18058,9 @@ blockquote &gt; p {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/m5stack-toilet-smell-map/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/177/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -18508,6 +18780,9 @@ blockquote &gt; p {
 
 
 &lt;section class=&#34;link&#34; id=&#34;195&#34;&gt;
+  
+      
+      
   
       
       
@@ -20292,6 +20567,9 @@ blockquote &gt; p {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nodejs-amazon-alexa-skill/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/144/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -21250,7 +21528,7 @@ remote: App container will begin restart within 10 seconds.
 ---なるほど！エンジニア仲間と喋ることで、基礎力的な部分が形成されるわけですね。
 &lt;/p&gt;
 
-&lt;p&gt;エンジニア間の常識っぽいことって、&lt;strong&gt;独学で体系的に学ぶことが難しい&lt;/strong&gt;と思うんです。なので同じ界隈で活動している人たちと話すことは大事だと思っていて、今でもコミュニティ参加はできるだけするようにしています。&lt;strong&gt;勉強会に参加したからといって直接業務に直結するわけではないので、バランス感覚は大事&lt;/strong&gt;だとは思いますけどね。&lt;/p&gt;
+&lt;p&gt;エンジニア間の常識っぽいことって、&lt;strong&gt;独学で体系的に学ぶことが難しい&lt;/strong&gt;と思うんです。なので同じ界隈で活動している人たちと話すことは大事だと思っていて、今でもコミュニティ参加はできるだけするようにしています。&lt;strong&gt;勉強会に参加したからといって業務に直結するわけではないので、バランス感覚は大事&lt;/strong&gt;だとは思いますけどね。&lt;/p&gt;
 
 &lt;h2 id=&#34;作れる幅は広いほどいい-モノ作りの枠の捉え方&#34;&gt;作れる幅は広いほどいい。モノ作りの枠の捉え方&lt;/h2&gt;
 
@@ -21987,140 +22265,34 @@ void loop()
 
 &lt;p&gt;以下のプログラムをNefry BTに書き込みます。すごく長いですが、後ほど説明します。&lt;/p&gt;
 
-&lt;div class=&#34;accbox&#34;&gt;
-    &lt;label for=&#34;label1&#34;&gt;クリックしてコードを表示&lt;/labe&gt;
-    &lt;input type=&#34;checkbox&#34; id=&#34;label1&#34; class=&#34;cssacc&#34; /&gt;
-    &lt;div class=&#34;accshow&#34;&gt;
-      &lt;pre&gt;
-      &lt;code class=&#34;language-c++ hljs cpp&#34;&gt;
-      #include &amp;lt;Nefry.h&amp;gt;
-      #include &amp;lt;WiFiClientSecure.h&amp;gt;
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+#include &amp;lt;NefryLineNotify.h&amp;gt;
 
-      #define PIR_MOTION_SENSOR D2
+#define PIR_MOTION_SENSOR D2
+String auth, message;
 
-      WiFiClientSecure client;
-      String LineAuth, SendMessageLINE;
-      String StrPerEncord(const char* c_str);
-      String escapeParameter(String param);
+void setup() {
+    pinMode(PIR_MOTION_SENSOR, INPUT);
+    Nefry.setStoreTitle(&amp;quot;LINE Auth&amp;quot;,0);
+    Nefry.setStoreTitle(&amp;quot;LINEMessage&amp;quot;,1);
+    auth = Nefry.getStoreStr(0);   
+    message = Nefry.getStoreStr(1);
+    Nefry.enableSW();
+}
 
-      void setup() {
-          pinMode(PIR_MOTION_SENSOR, INPUT);
-          Nefry.setStoreTitle(&#34;LINE Auth&#34;, 0);
-          Nefry.setStoreTitle(&#34;LINEMessage&#34;, 1);
-          LineAuth = Nefry.getStoreStr(0);
-          SendMessageLINE = Nefry.getStoreStr(1);
-      }
-
-      void loop() {
-          if(digitalRead(PIR_MOTION_SENSOR)) {
-              Nefry.println(&#34;誰かきたよ&#34;);
-              if (!LineAuth.equals(&#34;&#34;)) {   
-                  if (SendMessageLINE.equals(&#34;&#34;)) {
-                      SendMessageLINE = &#34;Welcome to the NefryBT world!&#34;;
-                  }
-                  LineSend();
-                  delay(1000*30);
-              }
-          } else {
-              Nefry.println(&#34;監視中&#34;);
-          }
-          delay(200);
-      }
-
-      void LineSend() {
-        const char* host = &#34;notify-api.line.me&#34;;
-        Serial.println(&#34;\nStarting connection to server...&#34;);
-        if (!client.connect(host, 443)) {
-          Serial.println(&#34;Connection failed!&#34;);
-        } else {
-          Serial.println(&#34;Connected to server!&#34;);
-          String url = &#34;/api/notify&#34;;
-          url += &#34;?message=&#34;;
-          url += StrPerEncord(escapeParameter(SendMessageLINE).c_str());
-          Serial.println(StrPerEncord(SendMessageLINE.c_str()));
-          Serial.println(url);
-          client.print(String(&#34;POST &#34;) + url + &#34; HTTP/1.1\r\n&#34; +
-                       &#34;Authorization: Bearer &#34; + LineAuth + &#34;\r\n&#34; +
-                       &#34;Content-Type: application/x-www-form-urlencoded\r\n&#34; +
-                       &#34;Host: &#34; + host + &#34;\r\n&#34; +
-                       &#34;Connection: close\r\n\r\n&#34;);
-          client.println();
-          unsigned long timeout = millis();
-          while (client.available() == 0) {
-            if (millis() - timeout &amp;gt; 5000) {
-              Serial.println(&#34;&amp;gt;&amp;gt;&amp;gt; Client Timeout !&#34;);
-              client.stop();
-              return;
-            }
-          }
-          while (client.available()) {
-            String line = client.readStringUntil(&#39;\r&#39;);
-            Serial.print(line);
-          }
-          Serial.println();
-          Serial.println(&#34;closing connection&#34;);
+void loop() {
+    if(digitalRead(PIR_MOTION_SENSOR)) {
+        Nefry.println(&amp;quot;誰かきたよ&amp;quot;);
+        if (!LineNotify.send(auth, message)) {
+            Nefry.setLed(255, 0, 0);
         }
-      }
-
-      String StrPerEncord(const char* c_str) {
-        uint16_t i = 0;
-        String str_ret = &#34;&#34;;
-        char c1[3], c2[3], c3[3];
-        while (c_str[i] != &#39;\0&#39;) {
-          if (c_str[i] &amp;gt;= 0xC2 &amp;&amp; c_str[i] &amp;lt;= 0xD1) { //2バイト文字
-            sprintf(c1, &#34;%2x&#34;, c_str[i]);
-            sprintf(c2, &#34;%2x&#34;, c_str[i + 1]);
-            str_ret += &#34;%&#34; + String(c1) + &#34;%&#34; + String(c2);
-            i = i + 2;
-          } else if (c_str[i] &amp;gt;= 0xE2 &amp;&amp; c_str[i] &amp;lt;= 0xEF) {
-            sprintf(c1, &#34;%2x&#34;, c_str[i]);
-            sprintf(c2, &#34;%2x&#34;, c_str[i + 1]);
-            sprintf(c3, &#34;%2x&#34;, c_str[i + 2]);
-            str_ret += &#34;%&#34; + String(c1) + &#34;%&#34; + String(c2) + &#34;%&#34; + String(c3);
-            i = i + 3;
-          } else {
-            str_ret += String(c_str[i]);
-            i++;
-          }
-        }
-        return str_ret;
-      }
-
-      String escapeParameter(String param) {
-        param.replace(&#34;%&#34;, &#34;%25&#34;);
-        param.replace(&#34;+&#34;, &#34;%2B&#34;);
-        param.replace(&#34; &#34;, &#34;+&#34;);
-        param.replace(&#34;\&#34;&#34;, &#34;%22&#34;);
-        param.replace(&#34;#&#34;, &#34;%23&#34;);
-        param.replace(&#34;$&#34;, &#34;%24&#34;);
-        param.replace(&#34;&amp;&#34;, &#34;%26&#34;);
-        param.replace(&#34;&#39;&#34;, &#34;%27&#34;);
-        param.replace(&#34;(&#34;, &#34;%28&#34;);
-        param.replace(&#34;)&#34;, &#34;%29&#34;);
-        param.replace(&#34;*&#34;, &#34;%2A&#34;);
-        param.replace(&#34;,&#34;, &#34;%2C&#34;);
-        param.replace(&#34;/&#34;, &#34;%2F&#34;);
-        param.replace(&#34;:&#34;, &#34;%3A&#34;);
-        param.replace(&#34;;&#34;, &#34;%3B&#34;);
-        param.replace(&#34;&amp;lt;&#34;, &#34;%3C&#34;);
-        param.replace(&#34;=&#34;, &#34;%3D&#34;);
-        param.replace(&#34;&amp;gt;&#34;, &#34;%3E&#34;);
-        param.replace(&#34;?&#34;, &#34;%3F&#34;);
-        param.replace(&#34;@&#34;, &#34;%40&#34;);
-        param.replace(&#34;[&#34;, &#34;%5B&#34;);
-        param.replace(&#34;\\&#34;, &#34;%5C&#34;);
-        param.replace(&#34;]&#34;, &#34;%5D&#34;);
-        param.replace(&#34;^&#34;, &#34;%5E&#34;);
-        param.replace(&#34;&#39;&#34;, &#34;%60&#34;);
-        param.replace(&#34;{&#34;, &#34;%7B&#34;);
-        param.replace(&#34;|&#34;, &#34;%7C&#34;);
-        param.replace(&#34;}&#34;, &#34;%7D&#34;);
-        return param;
-      }
-      &lt;/code&gt;
-      &lt;/pre&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
+        Nefry.ndelay(1000*30);
+    } else {
+        Nefry.println(&amp;quot;監視中&amp;quot;);
+    }
+    delay(200);
+}
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;書き込み手順は、上記の「&lt;a href=&#34;#はじめてのプログラムを書き込んでみる&#34;&gt;はじめてのプログラムを書き込んでみる&lt;/a&gt;」を参照してくださいね。&lt;/p&gt;
 
@@ -22167,28 +22339,26 @@ void loop()
 &lt;p&gt;例のすごく長いコードについて、要所を説明します。大事なところはちょっとだけです。&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;void setup() {
-     pinMode(PIR_MOTION_SENSOR, INPUT);
-     Nefry.setStoreTitle(&amp;quot;LINE Auth&amp;quot;, 0);
-     Nefry.setStoreTitle(&amp;quot;LINEMessage&amp;quot;, 1);
-     LineAuth = Nefry.getStoreStr(0);
-     SendMessageLINE = Nefry.getStoreStr(1);
+    pinMode(PIR_MOTION_SENSOR, INPUT);
+    Nefry.setStoreTitle(&amp;quot;LINE Auth&amp;quot;,0);
+    Nefry.setStoreTitle(&amp;quot;LINEMessage&amp;quot;,1);
+    auth = Nefry.getStoreStr(0);   
+    message = Nefry.getStoreStr(1);
+    Nefry.enableSW();
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;&lt;code&gt;Nefry.setStoreTitle()&lt;/code&gt;関数を使い、Nefry BTのDataStore機能に場所を作っています。この値はNefryポータル側から入力でき、変更があってもプログラムを書き換える必要はありません。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Nefry.setStoreTitle({タイトル}, {チャンネル番号})&lt;/code&gt;関数を使い、Nefry BTのDataStore機能に場所を作っています。この値はNefryポータル側から入力でき、変更があってもプログラムを書き換える必要はありません。&lt;/p&gt;
 
 &lt;p&gt;また値を&lt;code&gt;getStoreStr({チャンネル番号})&lt;/code&gt;で、ポータル側で設定した値を受け取っています。&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;void loop() {
     if(digitalRead(PIR_MOTION_SENSOR)) {
         Nefry.println(&amp;quot;誰かきたよ&amp;quot;);
-        if (!LineAuth.equals(&amp;quot;&amp;quot;)) {   
-            if (SendMessageLINE.equals(&amp;quot;&amp;quot;)) {
-                SendMessageLINE = &amp;quot;Welcome to the NefryBT world!&amp;quot;;
-            }
-            LineSend();
-            delay(1000*30));
+        if (!LineNotify.send(auth, message)) {
+            Nefry.setLed(255, 0, 0);
         }
+        Nefry.ndelay(1000*30);
     } else {
         Nefry.println(&amp;quot;監視中&amp;quot;);
     }
@@ -22196,20 +22366,13 @@ void loop()
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;先ほど同様人感センサが検知したとき、という条件文を作っています。LINEAuthの値、SendMessageLINEの値がそれぞれ入っているかを確認し、&lt;code&gt;LineSend()&lt;/code&gt;というユーザ定義の関数を実行しています。&lt;/p&gt;
+&lt;p&gt;先ほど同様人感センサが検知したとき、という条件文を作っています。&lt;code&gt;LineNotify.send()&lt;/code&gt;関数を使い、もし送れなかったときは赤いLEDを光らせるという処理をしています（&lt;code&gt;!&lt;/code&gt;は&lt;code&gt;!==&lt;/code&gt;と同義で、&lt;code&gt;FALSE&lt;/code&gt;が返ったときに実行されます）。&lt;/p&gt;
 
 &lt;p&gt;何度も連続してLINEが来るとウザいので、一度送ったあとは30秒待ちます。&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;void LineSend() {
-  const char* host = &amp;quot;notify-api.line.me&amp;quot;;
-  ・
-  ・
-  ・
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;del&gt;LINE送信を実装している部分です、が、これ以降は&lt;strong&gt;気にしなくていいです&lt;/strong&gt;。この部分は&lt;a href=&#34;https://dotstud.io/docs/nefrybt-default/&#34;&gt;初期プログラム&lt;/a&gt;をコピーして作っています。たぶん近々ライブラリ化されます。&lt;/del&gt;&lt;/p&gt;
 
-&lt;p&gt;LINE送信を実装している部分です、が、これ以降は&lt;strong&gt;気にしなくていいです&lt;/strong&gt;。この部分は&lt;a href=&#34;https://dotstud.io/docs/nefrybt-default/&#34;&gt;初期プログラム&lt;/a&gt;をコピーして作っています。&lt;/p&gt;
-
-&lt;p&gt;たぶん近々ライブラリ化されます。&lt;/p&gt;
+&lt;p&gt;LINE Notifyがライブラリ化されたので編集しました！&lt;/p&gt;
 
 &lt;h2 id=&#34;応用課題-データをクラウドに送ってみる-ロギング&#34;&gt;応用課題: データをクラウドに送ってみる（ロギング）&lt;/h2&gt;
 
@@ -22342,6 +22505,9 @@ blockquote {
 
 
 &lt;section class=&#34;link&#34; id=&#34;199&#34;&gt;
+  
+      
+      
   
       
       
@@ -24101,6 +24267,9 @@ blockquote {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/arduino-use-rfid-reader/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/162/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -24790,6 +24959,9 @@ blockquote {
 
 
 &lt;section class=&#34;link&#34; id=&#34;183&#34;&gt;
+  
+      
+      
   
       
       
@@ -26535,6 +26707,9 @@ blockquote {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/microbit-getting-started-pokio/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/165/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -27228,6 +27403,9 @@ blockquote {
 
 
 &lt;section class=&#34;link&#34; id=&#34;190&#34;&gt;
+  
+      
+      
   
       
       
@@ -28448,6 +28626,9 @@ blockquote {
 
 
 &lt;section class=&#34;link&#34; id=&#34;188&#34;&gt;
+  
+      
+      
   
       
       
@@ -30637,6 +30818,9 @@ blockquote {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/akihabara-guide-for-beginners/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/091/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -31219,6 +31403,9 @@ blockquote {
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;187&#34;&gt;
+  
+      
+      
   
       
       
@@ -32893,6 +33080,9 @@ blockquote {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/stepper-motor-nefrybt-control/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/189/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -33718,6 +33908,9 @@ void loop() {
 
 
 &lt;section class=&#34;link&#34; id=&#34;187&#34;&gt;
+  
+      
+      
   
       
       
@@ -36051,6 +36244,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/control-solenoid-nefrybt-nodered/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/214/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -36889,6 +37085,9 @@ void loop() {
 
 
 &lt;section class=&#34;link&#34; id=&#34;214&#34;&gt;
+  
+      
+      
   
       
       
@@ -38690,6 +38889,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/clova-cek-nodejs-tutorial/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/195/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -39478,6 +39680,9 @@ void loop() {
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;195&#34;&gt;
+  
+      
+      
   
       
       
@@ -41830,298 +42035,6 @@ Massimo Banzi　翻訳：船田巧&lt;/p&gt;
         &lt;/div&gt;
         &lt;div class=&#34;text&#34;&gt;
             完成までたどり着けなかったのは残念ですが、なんかすごそうなので90点です。
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
-
-&lt;style&gt;
-.parent {
-    position: relative;
-    margin: 2em 0;
-}
-
-.dialogue {
-    padding: 30px;
-    position: relative;
-    margin: auto;
-    border: 1px solid #C0C0C0;
-    width: 600px;
-    display: table;
-    box-shadow: 0 3px 4px rgba(0, 0, 0, 0.32);
-}
-
-.speaker {
-    width: 70px;
-    height: 70px;
-    margin-right: 30px;
-    padding-right: 10px;
-    display: table-cell;
-    vertical-align: middle;
-    font-size: 90%;
-}
-
-.speaker img {
-    border-radius: 50%;
-    border: 2px solid pink;
-}
-
-.text {
-    display: table-cell;
-    padding: 0;
-    vertical-align: middle;
-    padding-left: 30px;
-}
-&lt;/style&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>【夏の自由工作2018】学校の工作課題におすすめ！毛糸と和紙を使ってランプシェード作ってみた</title>
-      <link>https://dotstud.io/blog/summer-homework-2018-kiki/</link>
-      <pubDate>Thu, 16 Aug 2018 12:24:37 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/summer-homework-2018-kiki/</guid>
-      
-      <description>
-
-&lt;p&gt;みなさんこんにちは、テクニカルエディターの&lt;a href=&#34;https://dotstud.io/members/kiki/&#34;&gt;きき&lt;/a&gt;です。&lt;/p&gt;
-
-&lt;p&gt;突然ですが、dotstudioで自由工作記事を執筆するということで正直な気持ちを申し上げます。&lt;/p&gt;
-
-&lt;p&gt;アイデアが何も思い浮かびません。本当に、恥ずかしいことながらこれっっっっぽっっっっちも浮かばないのです。切ない。他のみんなはすごいのに、ううう……。&lt;/p&gt;
-
-&lt;p&gt;ということで！！！&lt;/p&gt;
-
-&lt;p&gt;いっそのこと振り切って小学生・中学生の夏休みの自由工作課題向け！&lt;strong&gt;簡単に作れるランプシェード&lt;/strong&gt;を作りまーす！LEDを使っているので許してください……！&lt;/p&gt;
-
-&lt;h2 id=&#34;準備するよ&#34;&gt;準備するよ&lt;/h2&gt;
-
-&lt;p&gt;youtubeを見るのが大好きな私は、ひたすら「電子工作 初心者」「電子工作 LED」などのワードでひたすら検索しまくり、見つけたのが今回作るランプシェード。毛糸で作るバージョンと和紙を作るバージョンの2種類作ってみました。&lt;/p&gt;
-
-&lt;h3 id=&#34;使うもの&#34;&gt;使うもの&lt;/h3&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/204/1.png&#34; alt=&#34;1&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;【毛糸のランプシェード】&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;毛糸 ×2&lt;/li&gt;
-&lt;li&gt;紙コップ ×1&lt;/li&gt;
-&lt;li&gt;木工用ボンド ×1&lt;/li&gt;
-&lt;li&gt;手袋 ×1&lt;/li&gt;
-&lt;li&gt;水風船 ×好きなだけ&lt;/li&gt;
-&lt;li&gt;ハケ&lt;/li&gt;
-&lt;li&gt;つまようじ ×1&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;【和紙のランプシェード】&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;和紙 ×1（今回はフラワーペーパーを使っています）&lt;/li&gt;
-&lt;li&gt;紙コップ ×1&lt;/li&gt;
-&lt;li&gt;水のり ×1&lt;/li&gt;
-&lt;li&gt;手袋 ×1&lt;/li&gt;
-&lt;li&gt;風船（大きいやつ） ×好きなだけ&lt;/li&gt;
-&lt;li&gt;ハケ&lt;/li&gt;
-&lt;li&gt;つまようじ ×1&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;材料は全部100均で購入できるので準備自体がささっとできます。&lt;/p&gt;
-
-&lt;h3 id=&#34;使用したled&#34;&gt;使用したLED&lt;/h3&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/204/2.png&#34; alt=&#34;2&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.amazon.co.jp/LED%E3%82%A4%E3%83%AB%E3%83%9F%E3%83%8D%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E3%83%A9%E3%82%A4%E3%83%88-LeHom-%E3%82%B9%E3%83%88%E3%83%AA%E3%83%B3%E3%82%B0%E3%83%A9%E3%82%A4%E3%83%88-%E3%83%95%E3%82%A7%E3%82%A2%E3%83%AA%E3%83%BC%E3%83%A9%E3%82%A4%E3%83%88-%E3%82%A6%E3%82%A9%E3%83%BC%E3%83%A0%E3%83%9B%E3%83%AF%E3%82%A4%E3%83%88/dp/B075B49YB1&#34;&gt;LEDイルミネーションライト 5M50LED&lt;/a&gt;: &lt;u&gt;単三電池3本で動きます&lt;/u&gt;&lt;/li&gt;
-&lt;li&gt;LEDキャンドルライト: 100均で買いました（100均すごい）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;早速つくるよ&#34;&gt;早速つくるよ&lt;/h2&gt;
-
-&lt;h3 id=&#34;毛糸のランプシェードのつくりかた&#34;&gt;毛糸のランプシェードのつくりかた&lt;/h3&gt;
-
-&lt;p&gt;①楽器を吹くかのような心意気で&lt;strong&gt;水風船を膨らませます&lt;/strong&gt;。大きさは全体的に丸くなるくらいですね。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/204/3.png&#34; alt=&#34;3&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;今回は9個つくりたいので予備に10個膨らませました。童心に戻りますね。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/204/9.png&#34; alt=&#34;9&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;②&lt;strong&gt;紙コップに木工用ボンドと水を入れて混ぜます&lt;/strong&gt;。量は目分量です（ざっくり）。&lt;/p&gt;
-
-&lt;p&gt;③&lt;strong&gt;毛糸を風船にくるくる巻きつけます&lt;/strong&gt;。力加減のバランスが地味に難しくて、緩くなると解けてしまい、きつくなると風船が変形します。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/204/4.png&#34; alt=&#34;4&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;④&lt;strong&gt;ハケで①で作ったボンド水を毛糸に塗ります。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;⑤&lt;strong&gt;半日乾かします。&lt;/strong&gt;&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/204/5.png&#34; alt=&#34;5&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;触ってみて、コツコツ音がなるようになっていたらいい感じです。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/204/6.png&#34; alt=&#34;6&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;⑥&lt;strong&gt;つまようじで風船を割ります&lt;/strong&gt;。音フェチなら絶対喜ぶであろう音を聞くことができますよ。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/204/7.png&#34; alt=&#34;7&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;⑦&lt;strong&gt;LEDイルミネーションライトの電球を毛糸の中に入れます&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;完成形はのちほど披露しますね！次は和紙のランプシェードです。&lt;/p&gt;
-
-&lt;h3 id=&#34;和紙のランプシェードのつくりかた&#34;&gt;和紙のランプシェードのつくりかた&lt;/h3&gt;
-
-&lt;p&gt;①楽器を吹くかのような心意気の2倍の肺活量で&lt;strong&gt;風船を膨らませます&lt;/strong&gt;。こちらも丸い形になるように膨らませます。&lt;/p&gt;
-
-&lt;p&gt;②&lt;strong&gt;和紙をちぎります&lt;/strong&gt;。小さくちぎりすぎると貼るときに大変なので、大きいサイズでも用意しておくと疲れません。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/204/8.png&#34; alt=&#34;8&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;③&lt;strong&gt;紙コップに水のりと水を入れて混ぜます&lt;/strong&gt;。こちらも量は目分量です。&lt;/p&gt;
-
-&lt;p&gt;④&lt;strong&gt;風船に和紙をペタペタ貼ります&lt;/strong&gt;。破けてしまうと切ないので、三重くらいにしました。&lt;/p&gt;
-
-&lt;p&gt;⑤&lt;strong&gt;半日乾かします&lt;/strong&gt;。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/204/10.png&#34; alt=&#34;10&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;⑥&lt;strong&gt;つまようじで風船を割ります&lt;/strong&gt;。毛糸の時とはまた違う音フェチの楽しみがあります。&lt;/p&gt;
-
-&lt;p&gt;⑦&lt;strong&gt;キャンドルライトの上に被せます&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;h2 id=&#34;完成したよ&#34;&gt;完成したよ&lt;/h2&gt;
-
-&lt;h3 id=&#34;毛糸のランプシェードはうつくし&#34;&gt;毛糸のランプシェードはうつくし&lt;/h3&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/204/11.png&#34; alt=&#34;11&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;思っていたよりそれっぽいインテリア感が出ている……！&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/04fa3635bc80d3d88cda862fc6005dc4.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;チカチカさせるとこんな感じです。&lt;/p&gt;
-
-&lt;p&gt;我が家の門番、くま大先生にも巻きつけてみました。めっちゃハートウォーミングじゃないですかせんせいっ……！！&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/47c12fa8aad3a4b83883ac8352d34b27.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;
-&lt;center&gt;
-くま大先生「可愛いし、なかなか悪くないね」
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;和紙のランプシェードはいとをかし&#34;&gt;和紙のランプシェードはいとをかし&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/fa2ca28729df24f48ce5ff5a392aa7e5.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;和紙のランプシェードは、LEDの橙色が強すぎて、ピンク色感がなくなってしまいました。もうちょっと薄めな色のLEDにしたらピンク感出るのかなぁ……。&lt;/p&gt;
-
-&lt;p&gt;でも、なんだか風情ありますね。心が浄化されます。&lt;/p&gt;
-
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-
-&lt;p&gt;お子さま向けの自由工作をやってみましたが、いかがでしたでしょうか？「夏休みの自由課題に何作ればいいんや！」と悩んでいる方はぜひ作ってみてくださいー！&lt;/p&gt;
-
-&lt;p&gt;ついに明日は自由工作企画最終日！宇宙エンジニアの&lt;a href=&#34;https://dotstud.io/members/takudooon/&#34;&gt;たくろーどん&lt;/a&gt;です！&lt;/p&gt;
-
-&lt;div class=&#34;parent&#34;&gt;
-    &lt;div class=&#34;dialogue&#34;&gt;
-        &lt;div class=&#34;speaker&#34;&gt;
-          &lt;img src=&#34;https://dotstud.io/img/members/chantoku/author.png&#34; /&gt;
-          &lt;b&gt;ちゃんとく&lt;/b&gt;
-        &lt;/div&gt;
-        &lt;div class=&#34;text&#34;&gt;
-            かわいい。100点。えこひいきです。
         &lt;/div&gt;
     &lt;/div&gt;
 &lt;/div&gt;

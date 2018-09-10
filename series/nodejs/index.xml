@@ -7,8 +7,235 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2018 dotstudio inc.</copyright>
-    <lastBuildDate>Fri, 18 May 2018 10:00:00 +0900</lastBuildDate>
+    <lastBuildDate>Sun, 09 Sep 2018 04:58:49 +0900</lastBuildDate>
     <atom:link href="/series/nodejs/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>無料で手軽！コマンド一つで静的サイトホスティングできるSurgeを試してみた。</title>
+      <link>https://dotstud.io/blog/static-site-hosting-surge/</link>
+      <pubDate>Sun, 09 Sep 2018 04:58:49 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/static-site-hosting-surge/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;最近VuePressを触っていて、簡単に静的サイトホスティングできるサービスを探していました。&lt;/p&gt;
+
+&lt;p&gt;そこで発見した&lt;strong&gt;Surge（サージ）というサービスがすごく簡単だった&lt;/strong&gt;ので紹介します。&lt;/p&gt;
+
+&lt;p&gt;（日本語記事なさそうだったので勢いで書いておこう）&lt;/p&gt;
+
+&lt;h2 id=&#34;surgeとは&#34;&gt;Surgeとは&lt;/h2&gt;
+
+&lt;p&gt;静的サイトホスティングが無料で行えるサービスです。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;コマンド一発でデプロイが出来る&lt;/strong&gt;のが特徴で、&lt;strong&gt;使い方がすごくシンプルで感動&lt;/strong&gt;しました。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;a href=&#34;https://surge.sh/&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/f25b1dfae03feef05a74739a4385a8eb.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;
+&lt;a href=&#34;https://surge.sh/&#34;&gt;surge公式サイト&lt;/a&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;ちなみにサージって読むっぽいです。有料プランもありますがその辺は割愛して無料でできるところを紹介します。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.npmjs.com/package/surge&#34;&gt;surge - npm&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;無料でどこまで使えるの？って気になる人は&lt;a href=&#34;https://surge.sh/help/why-is-surge-free&#34;&gt;Why is Surge free?&lt;/a&gt;という記事もあるので読んでみましょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;surgeのインストールと使い方&#34;&gt;Surgeのインストールと使い方&lt;/h2&gt;
+
+&lt;h3 id=&#34;インストール&#34;&gt;インストール&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;npm i -g surge
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;デプロイ&#34;&gt;デプロイ&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;surge
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;font size=&#34;4&#34;&gt;以上!!! &lt;/font&gt;めちゃ簡単ですね。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;でも本当にこれだけなので驚きです。&lt;code&gt;now.sh&lt;/code&gt;に似た使い勝手。&lt;/p&gt;
+
+&lt;p&gt;初めて使うときはメールアドレスとパスワードの入力をターミナル上で求められるのでそこでユーザー登録出来るのも個人的には好きです。&lt;strong&gt;ターミナルだけで完結します&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;デプロイすると&lt;strong&gt;&lt;code&gt;xxxxxxx.surge.sh&lt;/code&gt;&lt;/strong&gt;という形式のURLが発行されるので、アクセスすればOKです。&lt;/p&gt;
+
+&lt;h2 id=&#34;もう少し詳しく&#34;&gt;もう少し詳しく&lt;/h2&gt;
+
+&lt;p&gt;surgeコマンドは、今いる場所を起点にそのままホスティングします。&lt;/p&gt;
+
+&lt;p&gt;例えばmysiteフォルダ内部に&lt;code&gt;index.html&lt;/code&gt;を置いてたとします。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ cd mysite
+$ ls
+index.html
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;mysiteフォルダ内にいる状態で&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;surge ./
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;とすればmysiteフォルダをまるっとホスティングできます。&lt;/p&gt;
+
+&lt;h3 id=&#34;場所を指定してデプロイ&#34;&gt;場所を指定してデプロイ&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;surge &amp;lt;フォルダの場所&amp;gt;&lt;/code&gt;という形でデプロイできます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;surge ~/myblog/.vuepress/dist
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;vuepressを使ったデプロイだとこんな感じでした&lt;/p&gt;
+
+&lt;h3 id=&#34;場所とドメインを指定してデプロイ&#34;&gt;場所とドメインを指定してデプロイ&lt;/h3&gt;
+
+&lt;p&gt;さらにドメインを指定してデプロイができます。&lt;/p&gt;
+
+&lt;p&gt;通常のデプロイだと、surgeコマンドでデプロイするたびに新しいドメインが生成されるので、更新性のあるサイトだと使い勝手が良くないです。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;surge &amp;lt;フォルダの場所&amp;gt; &amp;lt;ドメイン&amp;gt;&lt;/code&gt;という形でデプロイすれば&lt;strong&gt;毎回同じドメインにデプロイできます。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;surge ~/myblog/.vuepress/dist hogehoge.surge.sh
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;このコマンドを何回実行しても&lt;code&gt;hogehoge.surge.sh&lt;/code&gt;にデプロイされるので更新しても安心です。&lt;/p&gt;
+
+&lt;p&gt;確か&lt;code&gt;now.sh&lt;/code&gt;だと毎回ドメインが発行されてaliasを貼り直さないといけない感じだったのでそこが少し手間だなぁと感じてました。この辺は後述します。&lt;/p&gt;
+
+&lt;h2 id=&#34;カスタムドメインも無料で使える&#34;&gt;カスタムドメインも無料で使える&lt;/h2&gt;
+
+&lt;p&gt;無料でカスタムドメインを利用できます。&lt;/p&gt;
+
+&lt;p&gt;「&lt;a href=&#34;https://surge.sh/help/adding-a-custom-domain&#34;&gt;Adding a custom domain - surge&lt;/a&gt;」を見るとやり方が書いてるのですが、利用しているドメイン事業者の管理画面で&lt;code&gt;cname&lt;/code&gt;の値に&lt;code&gt;na-west1.surge.sh&lt;/code&gt;を指定しましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;grasping.studio&lt;/code&gt;というドメインをお名前.comで管理しているので、&lt;code&gt;hogehoge.graspin.studio&lt;/code&gt;を利用したい場合は以下のように設定します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/9e316c5d1c6eeeebab84fb08819bdd37.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;更新してしばらく経つ（体感5~10分程度）と&lt;code&gt;hogehoge.graspin.studio&lt;/code&gt;に対してデプロイできるようになります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ surge ~/myblog/.vuepress/dist hogehoge.graspin.studio
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;その他使い方&#34;&gt;その他使い方&lt;/h2&gt;
+
+&lt;p&gt;surgeコマンドのサブコマンドもいくつかあるので紹介します。&lt;/p&gt;
+
+&lt;h3 id=&#34;surge-list-アプリケーション一覧&#34;&gt;&lt;code&gt;surge list&lt;/code&gt; - アプリケーション一覧&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;$ surge list
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/904da5a62e40457539116e012d101418.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;surge-teardown-アプリケーション削除&#34;&gt;&lt;code&gt;surge teardown&lt;/code&gt; - アプリケーション削除&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;teardown&lt;/code&gt;ってあんまり聞かないですけど他のサービスで言うところのrmとかremoveとかと同じような意味合いです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ surge teardown &amp;lt;アプリケーションのドメイン&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;surge-whoami-アカウント情報の確認&#34;&gt;&lt;code&gt;surge whoami&lt;/code&gt; - アカウント情報の確認&lt;/h3&gt;
+
+&lt;p&gt;ログインしているアカウントのメールアドレスが表示されます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ surge whoami
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;surge-logout-アカウントからログアウトする&#34;&gt;&lt;code&gt;surge logout&lt;/code&gt; - アカウントからログアウトする&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;$ surge logout
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;surge-login-ログインしなおす&#34;&gt;&lt;code&gt;surge login&lt;/code&gt; - ログインしなおす&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;$ surge login
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;他のメンバーと共同でデプロイする&#34;&gt;他のメンバーと共同でデプロイする&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;--add&lt;/code&gt;というオプションをつけてデプロイするとアプリケーションに指定したメールアドレスのユーザーもデプロイ出来るようになります。&lt;/p&gt;
+
+&lt;p&gt;ユーザー&lt;code&gt;hogehoge@gmail.com&lt;/code&gt;さんをアプリケーション&lt;code&gt;hogehoge.graspin.studio&lt;/code&gt;へのデプロイ権限を渡しつつ、&lt;code&gt;public&lt;/code&gt;フォルダをデプロイする。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;surge --add hogehoge@gmail.com public hogehoge.graspin.studio
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;この辺りもコマンドラインからやれて便利ですね。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;surge --remove&lt;/code&gt;でユーザーの権限を削除することもできます。&lt;/p&gt;
+
+&lt;h2 id=&#34;他のサービスと比較してどうか&#34;&gt;他のサービスと比較してどうか?&lt;/h2&gt;
+
+&lt;p&gt;無料で使えるその他のホスティングサービスとの比較です。主観です。&lt;/p&gt;
+
+&lt;p&gt;この辺、実は違う！みたいな話あれば@n0bisukeまでコメントください〜。&lt;/p&gt;
+
+&lt;h3 id=&#34;netlfy&#34;&gt;Netlfy&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.netlify.com/&#34;&gt;https://www.netlify.com/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;フォルダをドラッグ&amp;amp;ドロップでデプロイ出来るのは個人的に結構好きですが、毎回URLが再発行されてしまうのが少し手間がある印象です。&lt;/p&gt;
+
+&lt;p&gt;netlfyのcliツールもあるみたいですが手順がsurgeよりはある模様&lt;/p&gt;
+
+&lt;h3 id=&#34;heroku&#34;&gt;heroku&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://heroku.com/&#34;&gt;http://heroku.com/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;サーバーサイドのプログラムを含めてデプロイするときには良さそうです。
+僕もよく使います。&lt;/p&gt;
+
+&lt;p&gt;デバッグなどでけっこう詰まるのと、surgeほどの手軽さではないです。&lt;/p&gt;
+
+&lt;p&gt;とはいえサーバーサイドプログラムまで利用したかったら選択肢になります。&lt;/p&gt;
+
+&lt;h3 id=&#34;github-pages-bitbucket-pages&#34;&gt;GitHub Pages &amp;amp; Bitbucket Pages&lt;/h3&gt;
+
+&lt;p&gt;GitHub PagesとBitbucket Pagesは使い勝手はほぼ同じ印象で、git pushするだけで公開できます。&lt;/p&gt;
+
+&lt;p&gt;Webエンジニアなら当たり前のように使いますが、SSHやGitコマンドは最初少しハードルがあるかも。&lt;/p&gt;
+
+&lt;p&gt;更新されるまでに少し時間がかかること、GitHubだとソースコードが（無料だと）公開されてしまうのでそこに抵抗感がある人がいるかも。&lt;/p&gt;
+
+&lt;p&gt;静的サイトなのでどっちにしても公開されているようなものだけどなんとなく。&lt;/p&gt;
+
+&lt;h3 id=&#34;gitlab-pages&#34;&gt;GitLab Pages&lt;/h3&gt;
+
+&lt;p&gt;CIを動かして作るのでCIの記述になれてないと最初少しハマるかもしれません。&lt;/p&gt;
+
+&lt;p&gt;その分やれることも多いので個人的には注目してます。&lt;/p&gt;
+
+&lt;h3 id=&#34;now&#34;&gt;now&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.now.sh/&#34;&gt;https://www.now.sh/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;これはめちゃ便利で&lt;code&gt;now&lt;/code&gt;コマンドだけでデプロイできて&lt;code&gt;surge&lt;/code&gt;とほぼ同じ使い勝手です。更新のたびに毎回URLが変わってしまうのでそこを解消できたら良いなぁと思うのと、同時に無料プランだと作れるアプリケーションの制限があって現状だと毎回削除していくのも結構手間があるなぁという印象です。&lt;/p&gt;
+
+&lt;p&gt;（&lt;code&gt;now&lt;/code&gt;はもしかしたら設定でなんとかなるのかも??）&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;Surge&lt;/code&gt;どうでしょう？&lt;/p&gt;
+
+&lt;p&gt;コマンド一発で出来るので、サクッと作成したWebサイトを誰かにシェアしたり、
+ハンズオンや授業などでも使いやすいと思います。&lt;/p&gt;
+
+&lt;p&gt;僕も昨日知ったばかりですが今の所すごく良い印象です。&lt;/p&gt;
+
+&lt;p&gt;ぜひ使ってみてください。&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>NodeSchoolでNode.jsの学習を始めよう！#2 - 問題1〜3の解答と解説</title>
@@ -25,6 +252,9 @@
 
 
 &lt;section class=&#34;link&#34; id=&#34;156&#34;&gt;
+  
+      
+      
   
       
       
@@ -1246,6 +1476,9 @@
 
 
 &lt;section class=&#34;link&#34; id=&#34;156&#34;&gt;
+  
+      
+      
   
       
       
@@ -3430,6 +3663,9 @@ NodeSchoolは&lt;strong&gt;JavaScriptに関するいろいろな授業を集め�
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/how-to-use-cli/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/158/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -4112,6 +4348,9 @@ NodeSchoolは&lt;strong&gt;JavaScriptに関するいろいろな授業を集め�
 
 
 &lt;section class=&#34;link&#34; id=&#34;136&#34;&gt;
+  
+      
+      
   
       
       
@@ -5489,6 +5728,9 @@ Macの場合はツールバーの「シェル」から「新規ウィンドウ�
 
 
 &lt;section class=&#34;link&#34; id=&#34;135&#34;&gt;
+  
+      
+      
   
       
       
@@ -8351,6 +8593,9 @@ main();
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/hexo-static-site-vol2/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/107/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -9140,6 +9385,9 @@ Archivesはしばらく不要なので消しました。ついでにEventsとSta
 
 
 &lt;section class=&#34;link&#34; id=&#34;105&#34;&gt;
+  
+      
+      
   
       
       
@@ -11113,6 +11361,9 @@ FacebookとTwitterのみ残しました。&lt;/p&gt;
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/hexo-static-site-vol3/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/108/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -11891,6 +12142,9 @@ titleを修正して、「info」というタグを設定してみました。&l
 
 
 &lt;section class=&#34;link&#34; id=&#34;107&#34;&gt;
+  
+      
+      
   
       
       
@@ -14053,303 +14307,6 @@ npm i
 &lt;p&gt;実際のところ、Pepperと同じネットワークにNode.js（とNightmare）が動く環境が必要なので、運用などは難しそうです。しかし、喋ってくれること自体は通知として気づきやすいので、かなりアリだと思っています。&lt;/p&gt;
 
 &lt;p&gt;試せる方はぜひ試してみてください！　それでは。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>史上初!? NodeBotsの日本向けキットを作成しました！ #nodebots</title>
-      <link>https://dotstud.io/blog/nodebots-kit-guide-vol1/</link>
-      <pubDate>Tue, 26 Jul 2016 14:48:32 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/nodebots-kit-guide-vol1/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、dotstudio代表の&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。
-今日は、世界で人気のNode.js/Johnny-Fiveのワークショップ「&lt;a href=&#34;https://github.com/tableflip/nodebot-workshop&#34;&gt;NodeBot Workshop&lt;/a&gt;」で使うアイテムをまとめた、「&lt;strong&gt;NodeBot Workshop Kit JP ver&lt;/strong&gt;」というキットを作ったのでその紹介をします。
-また、 NodeBot Workshopの1問目の配線解説も本記事で行いますので、ぜひ挑戦してみてください！&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;NodeBot Workshop向けにカスタマイズされたキットはおそらく世界初です！&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;NodeBotsの入門は&lt;a href=&#34;http://liginc.co.jp/283711&#34;&gt;こちらの記事(Webな人でもハードウェア制御が簡単に！Node.jsでJavaScript Roboticsを楽しもう #nodebots_jp)&lt;/a&gt;を参照してください！&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;購入ページは&lt;a href=&#34;https://dotstud.io/projects/nodebots-seeeduino-for-beginners/&#34;&gt;こちら&lt;/a&gt;になります。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h2 id=&#34;iotやるときの-まずはじめに何を買えばいいか分からない-を解消&#34;&gt;IoTやるときの”まずはじめに何を買えばいいか分からない”を解消&lt;/h2&gt;
-
-&lt;p&gt;　入門者にとって最初に何を買えばいいのかって分からないんですよね。NodeBot Workshopでもプログラムまでは書くことができるけど、実際に電子工作をするフェーズで何を準備すればいいのか分からないという人がけっこういました。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://nodebots.io/&#34;&gt;http://nodebots.io/&lt;/a&gt; にも掲載されてますが、&amp;rdquo;最初にこれを買うといいよ&amp;rdquo;というキットは海外ではいくつか存在します。
-&lt;img src=&#34;https://dotstud.io/img/blog/004/01_nodebots_kit.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ただこれらは&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;国際輸送になるため、手元に届くまでにお金と時間がけっこうかかってしまう&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;利用されているマイコンボードは日本の電波法の認証(技摘)が通っていないものもある&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;などの問題点&lt;/strong&gt; がありました。そのため、日本国内でNodeBot WorkshopやJohnny-Fiveに対応しているマイコンボードやセンサーの代替品を探して利用するのが早いし確実なのですが、これも手間と時間が掛かります。&lt;/p&gt;
-
-&lt;p&gt;そこで僕たちの方でNodeBot WorkshopやJohnny-Fiveに対応しているキットを作ることにして、今回のキット開発に至りました。
-&lt;img src=&#34;https://dotstud.io/img/blog/004/02_kitpackage.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;今回用意したキットはプロトタイピングボードも含めてキット化してあるので、 &lt;strong&gt;とりあえずこれを買ってNodeBot Workshopをやれば入門できる&lt;/strong&gt;状態になります。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;試したい！&lt;/code&gt;と思った時にサクッと試せるキットになっています。&lt;/p&gt;
-
-&lt;h2 id=&#34;nodebot-workshop-kit-jp-ver-の中身を解説&#34;&gt;「NodeBot Workshop Kit JP ver」の中身を解説！&lt;/h2&gt;
-
-&lt;p&gt;実際に中身を見てみましょう。&lt;/p&gt;
-
-&lt;h3 id=&#34;nodebot-workshopの設問&#34;&gt;NodeBot Workshopの設問&lt;/h3&gt;
-
-&lt;p&gt;準備は&lt;a href=&#34;http://liginc.co.jp/283711&#34;&gt;こちらの記事&lt;/a&gt;を参考にしてください。&lt;/p&gt;
-
-&lt;p&gt;インストールするとNodeBot Workshopコマンドが使えるようになります。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;$ nodebot-workshop
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/004/03_screenshot.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ここまで動くようにしておきましょう。
-各問題のタイトルと内容は以下になります。&lt;/p&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th align=&#34;left&#34;&gt;番号&lt;/th&gt;
-&lt;th align=&#34;left&#34;&gt;タイトル&lt;/th&gt;
-&lt;th align=&#34;left&#34;&gt;タイトル(日本語)&lt;/th&gt;
-&lt;th align=&#34;left&#34;&gt;概要&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;1問&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;Blink Blink&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;Lチカ&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;LEDをチカチカ点滅させよう&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;2問&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;Servo Wave&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;サーボウェーブ&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;サーボモータを動かそう&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;3問&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;Spin Moter Spin&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;くるくるモーター回転&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;DCモータを動かそう&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;4問&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;Light Switch&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;ライトスイッチ&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;スイッチとLEDを連動させよう&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;5問&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;Street Lamp&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;ストリートランプ&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;照度センサとLEDを連動させよう&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;6問&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;Ping Bell&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;ピングベル&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;メッセージを受信すると音が鳴るUDPサーバーを作ろう&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;7問&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;Robot Arm&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;ロボットアーム&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;サーボモータとポテンショメータを連動させよう&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;8問&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;Remote Temperature&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;遠隔地の温度&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;温度を教えてくれるRPCサーバーを作ろう&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;9問&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;Fire Alarm&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;火災報知器&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;温度センサとブザーを使って火災報知器を作ろう&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;h3 id=&#34;キットの内容物&#34;&gt;キットの内容物&lt;/h3&gt;
-
-&lt;p&gt;こちらの写真がキットの中身です。パーツの名前と見た目が一致しない人は要確認です。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/004/04_nodebotskit.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;各設問でどのパーツを利用するかを以下の表にまとめました。困ったときは確認しましょう。&lt;/p&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th align=&#34;left&#34;&gt;ID&lt;/th&gt;
-&lt;th align=&#34;left&#34;&gt;NAME&lt;/th&gt;
-&lt;th align=&#34;left&#34;&gt;利用する問題番号&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;a&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;&lt;a href=&#34;http://www.seeedstudio.com/wiki/Seeeduino_v4.2&#34;&gt;Seeeduino v4.2&lt;/a&gt;&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;1~9&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;b&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;USBmicroB ケーブル&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;1~9&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;c&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;ブレッドボード&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;1~9&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;d&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;ジャンプワイヤ&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;1~9&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;e&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;カーボン抵抗 330Ω&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;1,4,5,9&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;f&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;カーボン抵抗 10kΩ&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;4,5,9&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;g&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;LED&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;1,4,5,9&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;h&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;マイクロサーボモータ&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;2,7&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;i&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;小型DCモータ&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;3&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;j&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;タクトスイッチ&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;4,9&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;k&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;CdSセル 1MΩ(照度センサ)&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;5&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;l&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;半固定抵抗 (ポテンショメータ)&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;7&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;n&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;温度センサ&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;8,9&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;m&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;圧電ブザー&lt;/td&gt;
-&lt;td align=&#34;left&#34;&gt;6,9&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;h3 id=&#34;1問目のlチカの回路図解説&#34;&gt;1問目のLチカの回路図解説&lt;/h3&gt;
-
-&lt;p&gt;1秒ごとにLチカさせるプログラムを書く問題です。問題文は&lt;a href=&#34;https://github.com/tableflip/nodebot-workshop/blob/master/exercises/blink_blink/problem.ja.md&#34;&gt;こちら&lt;/a&gt;をどうぞ。&lt;/p&gt;
-
-&lt;h4 id=&#34;準備物&#34;&gt;準備物&lt;/h4&gt;
-
-&lt;p&gt;先ほどの表のIDと照らし合わせて見てみましょう。
-ちなみにすべての問題でa~dは利用します。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;a: Seeeduino&lt;/li&gt;
-&lt;li&gt;b: USBmicroB ケーブル&lt;/li&gt;
-&lt;li&gt;c: ブレッドボード&lt;/li&gt;
-&lt;li&gt;d: ジャンプワイヤ x 2&lt;/li&gt;
-&lt;li&gt;e: カーボン抵抗 330Ω&lt;/li&gt;
-&lt;li&gt;g: LED&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&#34;配線&#34;&gt;配線&lt;/h4&gt;
-
-&lt;p&gt;1問目はLEDを点灯させることが目的です。SeeeduinoとLEDを線でつないでみましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/004/05_fritzing.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;実行&#34;&gt;実行&lt;/h4&gt;
-
-&lt;p&gt;プログラムを作成し、配線も行ったら実際に&lt;code&gt;nodeコマンド&lt;/code&gt;で実行してみましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/004/06_exec.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;プログラムと配線が成功していれば、こんな感じでLEDが点滅します。&lt;/p&gt;
-
-&lt;p&gt;どうでしょう、できましたか?&lt;/p&gt;
-
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-
-&lt;p&gt;NodeBotsでイベントを開催したり、こういった記事を書いたりしてますが、JavaScript Robotics界がもっと盛り上がって欲しいという気持ちがあります。
-ブラウザの実装はやはりJavaScriptなので、JavaScriptでハードウェア制御できるとWeb側もHW側も共通言語を使うことができて、JSerにはかなり楽しい世界になるのではないでしょうか？&lt;/p&gt;
-
-&lt;p&gt;今回のNodeBot Workshop Kitを使うことで、そういったJavaScript好きな人がハードウェアやセンサー選びでつまづかないためのものになればいいなと思っています。
-イベントなどでも販売していきますが、とりあえずはオンラインで買えるようにしてあります。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;まぁ僕がいたらせっかくのオフィスもダーツ仕様になりますよね &lt;a href=&#34;https://t.co/bej7l8QBCE&#34;&gt;pic.twitter.com/bej7l8QBCE&lt;/a&gt;&lt;/p&gt; chachamaru (@chachmaru) &lt;a href=&#34;https://twitter.com/chachmaru/status/757848176657260544&#34;&gt;2016年7月26日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;こんな感じ(笑)で丁寧に梱包してますのでご興味を持った方がいれば是非試してみてください！&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;購入ページは&lt;a href=&#34;https://dotstud.io/projects/nodebots-seeeduino-for-beginners/&#34;&gt;こちら&lt;/a&gt;になります。&lt;/p&gt;
-&lt;/blockquote&gt;
 </description>
     </item>
     
