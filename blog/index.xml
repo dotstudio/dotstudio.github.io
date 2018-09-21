@@ -7,8 +7,3486 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2018 dotstudio inc.</copyright>
-    <lastBuildDate>Sat, 15 Sep 2018 10:56:31 +0900</lastBuildDate>
+    <lastBuildDate>Fri, 21 Sep 2018 11:59:14 +0900</lastBuildDate>
     <atom:link href="/blog/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>【ハンズオン資料】Clovaでセンサー連携やってみよう！Nefry BTで温湿度をチェック</title>
+      <link>https://dotstud.io/blog/nefrybt-clova-handson-awards/</link>
+      <pubDate>Fri, 21 Sep 2018 11:59:14 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/nefrybt-clova-handson-awards/</guid>
+      
+      <description>
+
+&lt;p&gt;この記事は9/21の&lt;a href=&#34;https://linedev.connpass.com/event/101177/&#34;&gt;センサデータをClova連携！LINE BOOT AWARDS×NefryBTハンズオン&lt;/a&gt;向け資料です。&lt;strong&gt;記事を読んで試せる内容&lt;/strong&gt;になっているので、参加されていない方もぜひ試してみてください！&lt;/p&gt;
+
+&lt;section class=&#34;caution&#34;&gt;
+&lt;p&gt;■ハンズオンの進行について&lt;/p&gt;
+
+ハンズオンはこのページに沿って進めます。進められる方は、どんどん進めていきましょう！リンクは別タブや別ウィンドウで開くのがオススメです。
+&lt;/section&gt;
+
+&lt;section class=&#34;caution&#34;&gt;
+&lt;p&gt;■Nefry BTドキュメントについて&lt;/p&gt;
+諸々リニューアルしたばかりのため、WIP状態の部分が多いです。ご了承ください（わかりづらい部分ぜひ教えてください）。近日中にアップデートします。
+&lt;/section&gt;
+
+&lt;h2 id=&#34;今回やってみること&#34;&gt;今回やってみること&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Clovaから遠隔の場所の温度・湿度を確認できる仕組み&lt;/strong&gt;を、Clova、Nefry BT、Groveセンサ、RunKitを使って実装してみます。温湿度チェック以外にも、不在時の開閉検知や異常検知などに転用できる仕組みになっています！&lt;/p&gt;
+
+&lt;h3 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h3&gt;
+
+&lt;h4 id=&#34;nefry-bt-ディスプレイ&#34;&gt;■Nefry BT＆ディスプレイ&lt;/h4&gt;
+
+&lt;p&gt;Nefry BTは「ESP-WROOM-32」というWi-Fi・BLE通信モジュールを搭載した、Arduinoと同じように開発できるマイコンボードです。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/nefry.png&#34; alt=&#34;nefry&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/grove/&#34;&gt;Grove&lt;/a&gt;という刺すだけで配線できるモジュール対応のコネクタを搭載していて、&lt;strong&gt;ハードウェアをあまり意識せず&lt;/strong&gt; に開発できます。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;grove温湿度センサ&#34;&gt;■Grove温湿度センサ&lt;/h4&gt;
+
+&lt;p&gt;刺すだけで配線できる&lt;a href=&#34;https://dotstud.io/docs/grove/&#34;&gt;Grove&lt;/a&gt;の、温湿度センサです。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/220/grove.png&#34; alt=&#34;grove&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;clova-friends-clova-friends-mini&#34;&gt;■Clova Friends / Clova Friends mini&lt;/h4&gt;
+
+&lt;p&gt;LINE株式会社が提供するスマートスピーカです。スキルを作るところまではデバイスがなくてもできます。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/220/friends.png&#34; alt=&#34;friends&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;かわいい。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;arduino-ide&#34;&gt;■Arduino IDE&lt;/h4&gt;
+
+&lt;p&gt;開発（プログラムの書き込み）には&lt;a href=&#34;https://www.arduino.cc/en/Main/Software&#34;&gt;Arduino IDE&lt;/a&gt;というフリーソフトウェアを利用します。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/arduinoide-setup/&#34;&gt;こちら&lt;/a&gt;の手順を見ながらご自身のPCにインストールしてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;lineアカウント&#34;&gt;■LINEアカウント&lt;/h4&gt;
+
+&lt;p&gt;Clovaスキルを開発するために、LINEアカウントが必要です。&lt;a href=&#34;https://developers.line.me/console/&#34;&gt;こちら&lt;/a&gt;からログインできるか試しておいてください。&lt;/p&gt;
+
+&lt;section class=&#34;caution&#34;&gt;
+PCから設定する際にメールアドレスでのログインが必要になります。あらかじめスマートフォンアプリでメールアドレスを設定しておいてください。
+&lt;/section&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;runkit&#34;&gt;■RunKit&lt;/h4&gt;
+
+&lt;p&gt;またはえねぶら、firebase使う&lt;/p&gt;
+
+&lt;h2 id=&#34;事前準備&#34;&gt;事前準備&lt;/h2&gt;
+
+&lt;h3 id=&#34;開発環境-arduino-ide-にボードを追加&#34;&gt;開発環境（Arduino IDE）にボードを追加&lt;/h3&gt;
+
+&lt;p&gt;Nefty BTの開発にはフリーソフトウェアの&lt;a href=&#34;https://www.arduino.cc/en/Main/Software&#34;&gt;Arduino IDE&lt;/a&gt;を利用します。インストールがまだの方は「&lt;a href=&#34;https://dotstud.io/docs/arduinoide-setup/&#34;&gt;Arduino IDEのインストール&lt;/a&gt;」を見ながら進めてください。&lt;/p&gt;
+
+&lt;p&gt;Arduino IDEには、Nefry BTのボード情報の追加が必要です。「&lt;a href=&#34;https://dotstud.io/docs/nefrybt-setup-arduino-ide/&#34;&gt;環境構築（Arduino IDE）&lt;/a&gt;」を見ながら追加してください。&lt;/p&gt;
+
+&lt;section class=&#34;caution&#34;&gt;
+&lt;p&gt;■PCにUSB接続できない方&lt;/p&gt;
+セキュリティやポートの問題でPCにUSB接続できない方は、&lt;a href=&#34;https://dotstud.io/docs/nefrybt-program-zip/&#34;&gt;Wi-Fi経由でプログラムの書き込み&lt;/a&gt;が可能です。給電はコンセントやモバイルバッテリーから直接行ってください。
+&lt;/section&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Wi-Fi設定はプログラムで書き込める？&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;はじめてのプログラムを書き込んでみる&#34;&gt;はじめてのプログラムを書き込んでみる&lt;/h2&gt;
+
+&lt;p&gt;まずはNefry BTに簡単なプログラムを書き込んでみましょう。Nefry BTは、最初から下記の機能が搭載されています。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;内蔵フルカラーLED&lt;/li&gt;
+&lt;li&gt;スイッチ（SW/RST）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;最初のプログラムとして、Lチカをやってみます。LEDチカチカの略で、Webでいう”Hello, World!”です。&lt;/p&gt;
+
+&lt;h3 id=&#34;nefry-btを起動&#34;&gt;Nefry BTを起動&lt;/h3&gt;
+
+&lt;p&gt;さっそくNefry BTを起動してみましょう！&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/220/on.png&#34; alt=&#34;on&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;PCやコンセント、モバイルバッテリーなどに接続し、給電します。緑色のLEDが点滅したあと、ランダムに光ります。&lt;/p&gt;
+
+&lt;p&gt;電源を切るときは、給電をやめます。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/220/off.png&#34; alt=&#34;off&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;マイコンボードは基本的に、給電によって電源のON/OFFを制御します。再起動時には最後に書き込んだプログラムが実行されます。&lt;/p&gt;
+
+&lt;h3 id=&#34;arduino-ideでプログラムを書く&#34;&gt;Arduino IDEでプログラムを書く&lt;/h3&gt;
+
+&lt;p&gt;Arduino IDEを立ち上げ、メニューから&lt;strong&gt;&lt;code&gt;ファイル &amp;gt; 新規ファイル&lt;/code&gt;&lt;/strong&gt; を選択します。下記のような画面が開きます。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/ide.png&#34; alt=&#34;ide&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;エディタ部分に、下記のプログラムをコピーして貼り付けましょう。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+
+void setup() {
+}
+
+void loop() {
+  Nefry.setLed(0, 0, 255); //色合いをRGBで指定
+  Nefry.ndelay(1000); //1秒待つ
+  Nefry.setLed(0, 0, 0); //LEDをオフにする
+  Nefry.ndelay(1000); //1秒待つ
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;下記でプログラムの内容を解説しています。&lt;/p&gt;
+
+&lt;section class=&#34;caution&#34;&gt;
+&lt;p&gt;■PCにUSB接続できない方&lt;/p&gt;
+セキュリティやポートの問題でPCにUSB接続できない方は、&lt;a href=&#34;&#34;&gt;Wi-Fi経由でプログラムのアップロード&lt;/a&gt;が可能です。その場合、下記の書き込み手順は不要です。給電はコンセントやモバイルバッテリーから行ってください。
+&lt;/section&gt;
+
+&lt;h3 id=&#34;ボードを選択&#34;&gt;ボードを選択&lt;/h3&gt;
+
+&lt;p&gt;メニューの&lt;strong&gt;&lt;code&gt;ツール &amp;gt; ボード &amp;gt; Nefry BT R2 / R3&lt;/code&gt;&lt;/strong&gt; を選択します。この際、ボードは使っているリビジョンに合わせて選択してください。（参照：&lt;a href=&#34;https://dotstud.io/docs/nefrybt-setup-revision/&#34;&gt;リビジョンを確認&lt;/a&gt;）&lt;/p&gt;
+
+&lt;p&gt;2018年4月以降販売しているNefry BT、ハンズオンで貸し出しているNefry BTは全てR3です。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/select_board.png&#34; alt=&#34;select_board&#34;&gt;
+
+&lt;/center&gt;
+
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/select_board2.png&#34; alt=&#34;select_board2&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;h3 id=&#34;シリアルポートを選択&#34;&gt;シリアルポートを選択&lt;/h3&gt;
+
+&lt;p&gt;Nefry BTをPCのUSBポートにさします。プログラムはこのポートを介して、シリアル通信でNefry BTに流し込まれます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefrybt/power_supply.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Macの場合は、メニューの&lt;strong&gt;&lt;code&gt;ツール &amp;gt; シリアルポート &amp;gt; /dev/cu.usbserial-xxxxxx&lt;/code&gt;&lt;/strong&gt; を選択します。環境によっては&lt;strong&gt;&lt;code&gt;/dev/tty.usbserial-xxxxxx&lt;/code&gt;&lt;/strong&gt; などの場合もあります。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/select_port.png&#34; alt=&#34;select_port&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;Windowsの場合は、&lt;strong&gt;&lt;code&gt;ツール &amp;gt; シリアルポート &amp;gt; /dev/COM-XX&lt;/code&gt;&lt;/strong&gt; を選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;font size=&#34;2&#34;&gt;
+※Nefry BTを抜き差しすると、シリアルポートの選択が解除される場合があります。適宜確認しましょう。
+&lt;/font&gt;&lt;/p&gt;
+
+&lt;section class=&#34;caution&#34;&gt;
+&lt;p&gt;■シリアルポートが選択できない方&lt;/p&gt;
+USBドライバのインストールが必要な場合があります。&lt;a href=&#34;&#34;&gt;こちら&lt;/a&gt;を参照して、USBを認識させるためのドライバをインストールしてください。また、Arduino IDEの再起動やUSBの抜き差しで認識する場合があります。
+&lt;/section&gt;
+
+&lt;h3 id=&#34;名前をつけて保存&#34;&gt;名前をつけて保存&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;ファイル&amp;gt;名前をつけて保存&lt;/code&gt;&lt;/strong&gt; を選択して保存します。「NefryLedBlink」など、後からみてわかりやすい名前がオススメです。&lt;/p&gt;
+
+&lt;h3 id=&#34;プログラムを書き込む&#34;&gt;プログラムを書き込む&lt;/h3&gt;
+
+&lt;p&gt;「✔️」を押してプログラムをコンパイルします。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/220/compile.png&#34; alt=&#34;compile&#34;&gt;
+
+&lt;/center&gt;
+
+この手順は省略しても大丈夫ですが、シンタックス（文法）チェックをしてくれるので実施するのがオススメです。&lt;/p&gt;
+
+&lt;p&gt;左上の「→」ボタンを押してNefry BTにプログラムを書き込みます。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/220/write.png&#34; alt=&#34;write&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;p&gt;ESP32モジュールの特性上、書き込みに1分ほどかかります。エラーが出てしまうときは、「&lt;a href=&#34;https://dotstud.io/docs/nefrybt-error-handling-2/&#34;&gt;コンパイルは成功するのに書き込みが失敗する&lt;/a&gt;」を参照してください。&lt;/p&gt;
+
+&lt;h3 id=&#34;動作を確認&#34;&gt;動作を確認&lt;/h3&gt;
+
+&lt;p&gt;起動したら、「青いLEDが1秒ごとに光る」ことを確認しましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://gyazo.com/801e9ff4982f3326e6f1c3a133fd8de3&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/801e9ff4982f3326e6f1c3a133fd8de3.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;プログラムの解説&#34;&gt;プログラムの解説&lt;/h3&gt;
+
+&lt;p&gt;プログラムの要所を説明していきます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;冒頭でライブラリを読み込んでいます。Nefry BTのライブラリでできることは「&lt;a href=&#34;https://dotstud.io/docs/nefrybt-liblary/&#34;&gt;Nefryのライブラリ&lt;/a&gt;」を参照してください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;void setup() {
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;起動時に処理される部分です。今回はなにもしません。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;void loop() {
+  Nefry.setLed(0, 0, 255); //色合いをRGBで指定
+  Nefry.ndelay(1000); //1秒待つ
+  Nefry.setLed(0, 0, 0); //LEDをオフにする
+  Nefry.ndelay(1000); //1秒待つ
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;起動時に繰り返し実行する部分です。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;Nefry.setLed()&lt;/code&gt;という関数で、光らせる色合いをRGBの順で指定します。始めにR=0, G=0, B=255を渡しているので、青く光ります。&lt;/p&gt;
+
+&lt;p&gt;続いて&lt;code&gt;Nefry.ndelay()&lt;/code&gt;という関数で次の処理まで指定した時間待ちます。Arduinoでは時間はミリ秒で指定するので、1000は1秒です。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;Nefry.setLed()&lt;/code&gt;に0, 0, 0を渡すことで、LEDはオフになります。オンとオフのあと1秒ずつ待つことで、点滅を表現しています。&lt;/p&gt;
+
+&lt;h2 id=&#34;オフラインで温湿度センサを試す&#34;&gt;オフラインで温湿度センサを試す&lt;/h2&gt;
+
+&lt;p&gt;次は、配線してセンサのデータを取得してみます。まずは&lt;strong&gt;インターネットに繋がらない電子工作&lt;/strong&gt;、です。&lt;/p&gt;
+
+&lt;p&gt;エラーの切り分け（どこでエラーが起こっているか）を特定するために、自分で開発するときもステップバイステップでできているか確認しつつ進めるのがオススメです。&lt;/p&gt;
+
+&lt;h3 id=&#34;grove-温湿度センサを接続&#34;&gt;Grove 温湿度センサを接続&lt;/h3&gt;
+
+&lt;p&gt;Groveは刺すだけで配線できるのでGNDや信号線などの確認は必要ありませんが、デジタル・アナログ・I2Cなどの通信方法はGroveモジュールによって違います。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/220/wiki.png&#34; alt=&#34;wiki&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;読み取り方式は製造元・SeeedStudioの&lt;a href=&#34;http://wiki.seeedstudio.com/Grove-TemperatureAndHumidity_Sensor/&#34;&gt;Wikiページ&lt;/a&gt;などを見て確認しましょう。&lt;/p&gt;
+
+&lt;p&gt;（配線）&lt;/p&gt;
+
+&lt;p&gt;今回は「A0」というソケットに差し込みます。少し硬いですが、カチッと言うまで押し込めます。&lt;strong&gt;配線作業は常に電源オフの状態&lt;/strong&gt; で行います。&lt;/p&gt;
+
+&lt;h3 id=&#34;温湿度センサを扱うライブラリを読み込む&#34;&gt;温湿度センサを扱うライブラリを読み込む&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://github.com/adafruit/DHT-sensor-library&#34;&gt;https://github.com/adafruit/DHT-sensor-library&lt;/a&gt;
+&lt;a href=&#34;https://github.com/adafruit/Adafruit_Sensor&#34;&gt;https://github.com/adafruit/Adafruit_Sensor&lt;/a&gt;&lt;/p&gt;
+
+&lt;section class=&#34;caution&#34;&gt;
+&lt;p&gt;■ライブラリとは&lt;/p&gt;
+センサや外部サービスを使うために、あらかじめプログラムを書きパッケージ化したものです。既に誰かが作ってくれているものを取り込んだり、自作したりできます。
+&lt;/section&gt;
+
+&lt;h3 id=&#34;プログラムを書き込む-1&#34;&gt;プログラムを書き込む&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;quot;DHT.h&amp;quot;
+
+#define DHTPIN A0
+#define DHTTYPE DHT11
+
+DHT dht(DHTPIN, DHTTYPE);
+
+void setup() {
+  Serial.begin(9600);
+  Serial.println(&amp;quot;温度・湿度をチェック&amp;quot;);
+
+  dht.begin();
+}
+
+void loop() {
+  delay(2000);
+
+  float h = dht.readHumidity();
+  float t = dht.readTemperature();
+
+  if (isnan(h) || isnan(t)) {
+    Serial.println(&amp;quot;読み取りに失敗しました…&amp;quot;);
+    return;
+  }
+
+  Serial.print(&amp;quot;湿度: &amp;quot;);
+  Serial.print(h);
+  Serial.print(&amp;quot; %\t&amp;quot;);
+  Serial.print(&amp;quot;温度: &amp;quot;);
+  Serial.print(t);
+  Serial.println(&amp;quot; *C &amp;quot;);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;書き込み手順は、上記の「&lt;a href=&#34;#はじめてのプログラムを書き込んでみる&#34;&gt;はじめてのプログラムを書き込んでみる&lt;/a&gt;」を参照してくださいね。&lt;/p&gt;
+
+&lt;h3 id=&#34;動作を確認-1&#34;&gt;動作を確認&lt;/h3&gt;
+
+&lt;p&gt;メニューの&lt;strong&gt;&lt;code&gt;ツール&amp;gt;シリアルモニタ&lt;/code&gt;&lt;/strong&gt; を選択して開きます。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/serial_monitor.png&#34; alt=&#34;serial_monitor&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;p&gt;右下のbps設定を「9600bps」に変更します。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/220/bps.png&#34; alt=&#34;bps&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;p&gt;2秒ごとに、シリアルモニタに温度と湿度が表示されて行きます。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://gyazo.com/8f0016c6724057c1bb758286fb78dfc2&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/8f0016c6724057c1bb758286fb78dfc2.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;あまり動きがないですが、息を吹きかけると湿度が上がることを確認できます。&lt;/p&gt;
+
+&lt;h2 id=&#34;温度のデータをfirebaseに送信する&#34;&gt;温度のデータをfirebaseに送信する&lt;/h2&gt;
+
+&lt;p&gt;この温度データをClovaと連携できるように、クラウドサービスを使ってWeb上にロギングします。&lt;/p&gt;
+
+&lt;p&gt;今回はGoogleが提供する&lt;a href=&#34;https://firebase.google.com/?hl=ja&#34;&gt;&lt;strong&gt;Firebase&lt;/strong&gt;&lt;/a&gt;を利用します。FirebaseはBaaSと呼ばれるバックエンドを提供してくれるサービスで、データベースや認証部分などの機能をサーバ側のコードを書かずに実装できます。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/220/firebase.png&#34; alt=&#34;firebase&#34;&gt;
+
+&lt;/center&gt;
+
+&lt;center&gt;
+&lt;a href=&#34;https://firebase.google.com/?hl=ja&#34;&gt;公式サイト&lt;/a&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;AndroidやiOS、WebやUnityなど各言語向けにSDKが出ており、簡単に機能を自分のアプリに組み込むことができます。機械学習や認証機能などさまざまなサービスが提供されています。&lt;/p&gt;
+
+&lt;p&gt;Nefry BTのFirebaseライブラリでできる機能は、「&lt;strong&gt;Realtime　Database&lt;/strong&gt;」の読み書きです。（参照：&lt;a href=&#34;https://dotstud.io/docs/nefrybt-service-firebase/&#34;&gt;Firebaseライブラリ&lt;/a&gt;）&lt;/p&gt;
+
+&lt;p&gt;まずはNefry BTから読み書きするために、Firebaseの準備をしていきます。&lt;/p&gt;
+
+&lt;h3 id=&#34;firebaseにデータベースを作成&#34;&gt;Firebaseにデータベースを作成&lt;/h3&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/220/fb1.png&#34; alt=&#34;fb1&#34;&gt;
+
+&lt;/center&gt;
+
+&lt;a href=&#34;https://firebase.google.com/?hl=ja&#34;&gt;公式サイト&lt;/a&gt;の右上の「コンソールへ移動」を選択し、移動します。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/220/fb2.png&#34; alt=&#34;fb2&#34;&gt;
+
+&lt;/center&gt;
+
+「プロジェクトを追加」を選択して新規プロジェクトを作成します。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/220/fb3.png&#34; alt=&#34;fb3&#34;&gt;
+
+&lt;/center&gt;
+
+任意のプロジェクト名・地域・ロケーションを選択し、規約を確認・同意して「プロジェクトを作成」で作成します。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/220/fb4.png&#34; alt=&#34;fb4&#34;&gt;
+
+&lt;/center&gt;
+
+作成後に移動したページから、「Datebase」を選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://gyazo.com/fa657148cb81616f54b1db41712486eb&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/fa657148cb81616f54b1db41712486eb.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;
+移動先のページから「Realtime Datebase」を探し、「データベースを作成」をクリックします。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/220/fb5.png&#34; alt=&#34;fb5&#34;&gt;
+
+&lt;/center&gt;
+
+セキュリティルールはとりあえず「テストモードで開始」を選択します。実稼働する際には、適したセキュリティルールを選択してください。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/220/fb6.png&#34; alt=&#34;fb6&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;準備が完了すると、次のような画面が表示されます。赤枠の&lt;strong&gt;&lt;code&gt;https://projectname-XXXX.com/&lt;/code&gt;&lt;/strong&gt; というURLを、後ほどNefry BTに設定するのでコピーしておきます。&lt;/p&gt;
+
+&lt;h3 id=&#34;firebaseにデータを送信&#34;&gt;Firebaseにデータを送信&lt;/h3&gt;
+
+&lt;p&gt;Nefry BTに、作成したデータベースに値を送信するプログラムを書き込みます。下記のプログラムのうち、&lt;strong&gt;2点編集してから&lt;/strong&gt; 書き込んでください。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;利用するWi-FiのSSID・パスワード&lt;/li&gt;
+&lt;li&gt;Firebaseで取得したURL（&lt;code&gt;https://&lt;/code&gt;と末尾の&lt;code&gt;/&lt;/code&gt;は除く）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;#include &amp;quot;DHT.h&amp;quot;
+#include &amp;lt;NefryFireBase.h&amp;gt;
+#include &amp;lt;NefryDisplay.h&amp;gt;
+
+#define DHTPIN A0
+#define DHTTYPE DHT11
+
+DHT dht(DHTPIN, DHTTYPE);
+NefryFireBase firebase;
+
+void setup() {
+  Nefry.addWiFi(&amp;quot;SSID&amp;quot;,&amp;quot;PASSWORD&amp;quot;); // Wi-FiのSSID、パスワード
+  Nefry.saveWiFi();
+  dht.begin();
+  firebase.begin(&amp;quot;nefryfirebase-XXXX.com&amp;quot;); // Firebaseで取得したURL（https://と末尾の/は不要）
+}
+
+void loop() {
+  float t = dht.readTemperature();
+
+  if (isnan(t)) {
+    NefryDisplay.print(&amp;quot;error!&amp;quot;);
+    return;
+  }
+
+  DataElement elem = DataElement();
+  elem.setValue(&amp;quot;temp&amp;quot;, t);
+  firebase.send(&amp;quot;NefryTemp&amp;quot;, &amp;amp;elem);
+
+  delay(1000*10);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;データが送信されていることを確認&#34;&gt;データが送信されていることを確認&lt;/h3&gt;
+
+&lt;p&gt;Firebaseのページに戻り、データが受信できていることを確認します。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/220/fb7.png&#34; alt=&#34;fb7&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;これでClovaでデータを扱う準備ができました！&lt;/p&gt;
+
+&lt;p&gt;現状ではFirebaseのURLを知っている誰でもデータを書き込めてしまいますが、シークレットキーによる認証をかけることもできます。詳細は「&lt;a href=&#34;https://dotstud.io/docs/nefrybt-service-firebase/&#34;&gt;Firebaseライブラリ&lt;/a&gt;」を参照してください。&lt;/p&gt;
+
+&lt;h2 id=&#34;clovaスキルを作成する&#34;&gt;Clovaスキルを作成する&lt;/h2&gt;
+
+
+
+&lt;section class=&#34;link&#34; id=&#34;195&#34;&gt;
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+          &lt;div class=&#34;link_content&#34;&gt;
+          &lt;a href=&#34;https://dotstud.io/blog/clova-cek-nodejs-tutorial/&#34;&gt;&lt;/a&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/195/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
+          &lt;/div&gt;
+          &lt;div class=&#34;link_content&#34;&gt;
+            &lt;div class=&#34;link_detail&#34;&gt;
+              &lt;div class=&#34;link_title&#34;&gt;
+                Clova CEKでのスキル開発の始め方〜Node.jsで開発スタート編〜
+              &lt;/div&gt;
+              &lt;div class=&#34;link_date&#34;&gt;
+                
+                2018-08-03
+              &lt;/div&gt;
+              &lt;div class=&#34;link_desc&#34;&gt;
+                Clova CEKのNode.jsチュートリアルです。カレースキルを作ります。
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+&lt;/section&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;Clovaスキル作成&lt;/li&gt;
+&lt;li&gt;Node.jsプロジェクト作成&lt;/li&gt;
+&lt;li&gt;ngrokで実行&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;const clova = require(&#39;@line/clova-cek-sdk-nodejs&#39;);
+const express = require(&#39;express&#39;);
+
+const extensionId = &#39;XXX&#39;; // Clovaで設定したExtention ID
+const template = &#39;「部屋の温度を教えて」と聞いてください。&#39;;
+
+const clovaSkillHandler = clova.Client
+    .configureSkill()
+
+    //起動時に喋る
+    .onLaunchRequest(responseHelper =&amp;gt; {
+        responseHelper.setSimpleSpeech({
+            lang: &#39;ja&#39;,
+            type: &#39;PlainText&#39;,
+            value: &#39;部屋の温度をチェックします。&#39;,
+        });
+    })
+
+    //ユーザーからの発話が来たら反応する箇所
+    .onIntentRequest(async responseHelper =&amp;gt; {
+        const intent = responseHelper.getIntentName();
+        const sessionId = responseHelper.getSessionId();
+
+        console.log(&#39;Intent:&#39; + intent);
+
+        if (intent === &#39;GetDataIntent&#39;) {
+            let speech = {
+                lang: &#39;ja&#39;,
+                type: &#39;PlainText&#39;,
+                value: &#39;現在の温度は28度です&#39;
+            };
+            responseHelper.setSimpleSpeech(speech);
+            responseHelper.setSimpleSpeech(speech, true);
+        }
+    })
+
+    //終了時
+    .onSessionEndedRequest(responseHelper =&amp;gt; {
+        const sessionId = responseHelper.getSessionId();
+    })
+    .handle();
+
+
+const app = new express();
+const port = process.env.PORT || 3000;
+
+//リクエストの検証を行う場合。環境変数APPLICATION_ID(値はClova Developer Center上で入力したExtension ID)が必須
+const clovaMiddleware = clova.Middleware({applicationId: extensionId});
+app.post(&#39;/clova&#39;, clovaMiddleware, clovaSkillHandler);
+
+app.listen(port, () =&amp;gt; console.log(`Server running on ${port}`));
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;firebaseとclovaスキルを連携する&#34;&gt;firebaseとClovaスキルを連携する&lt;/h2&gt;
+
+&lt;p&gt;休憩時間に追加します〜！&lt;/p&gt;
+
+&lt;h2 id=&#34;関連情報&#34;&gt;関連情報&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://dotstud.io/shop/nefry-bt-set/&#34;&gt;Nefr BTの購入&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Nefry BTはこちらから購入できます（送料無料）。その他にも千石電商、ツクモ、若松通商、共立電子などの実店舗やECサイトで購入できます。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://dotstud.io/docs/nefrybt/&#34;&gt;Nefry BTドキュメント&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Nefry BTでは、IFTTTを使ったWebサービスとの連携や、その他のクラウドサービスとの連携も簡単です。ディスプレイを使ったイラスト描画や、100以上あるGroveモジュールの活用なども、ぜひ試してみてください。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://www.facebook.com/groups/nefry&#34;&gt;Nefryユーザーグループ（FB）&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Nefryユーザ同士が交流するページです。質問を投稿して解決した事例もたくさんありますので、困った際などはぜひお気軽にご利用ください。開発者もよく登場します。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://nefry.connpass.com/event/97692/&#34;&gt;Nefry User Meetup!&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Nefryユーザによる開催イベントです。ハンズオンやLT会、もくもく会などを実施しています。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://dotstudio.connpass.com/&#34;&gt;dotstudioイベント&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;dotstudioによる開催イベントです。Nefry BT以外の題材を扱うことも多いです。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;style&gt;
+.caution {
+    border: 1px solid #BFBFBF;
+    padding: 1em 2em;
+    margin: 2em 0;
+    color: #474747;
+    background: whitesmoke;/*背景色*/
+    border-left: double 7px #0B0B61;/*左線*/
+    font-size: 90%;
+}
+
+.caution &gt; p {
+    font-weight: bold;
+    margin: 0 0 10px 0;
+    padding: 0;
+}
+
+blockquote {
+    font-size:80%;
+}
+
+.accbox {
+    margin: 2em 0;
+    padding: 0;
+    max-width: 710px;
+}
+
+
+.accbox label {
+    display: block;
+    margin: 1.5px 0;
+    padding : 11px 12px;
+    color :#ffffff;
+    font-weight: bold;
+    background :#2f2f2f;
+    cursor :pointer;
+    transition: all 0.5s;
+}
+
+.accbox label:hover {
+    background :#A4A4A4;
+}
+
+.accbox input {
+    display: none;
+}
+
+.accbox .accshow {
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: 0.8s;
+}
+
+.cssacc:checked + .accshow {
+    height: auto;
+    padding: 5px;
+    background: #eaeaea;
+    opacity: 1;
+}
+&lt;/style&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>陸の孤島NAISTでのLINE BOOT AWARDSハッカソン開催レポート！ #linebootawards</title>
+      <link>https://dotstud.io/blog/naist-line-hack-2018/</link>
+      <pubDate>Sun, 16 Sep 2018 10:32:26 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/naist-line-hack-2018/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;優勝賞金1000万円&lt;/strong&gt;の&lt;a href=&#34;https://www.line-community.me/awards/&#34;&gt;LINE BOOT AWARDS&lt;/a&gt;関連で各地でイベント開催しています。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/9743f1768c6cbcde7c70e17721e71e4a.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;dotstudioでは運営サポートとして入っていて、各地で関連イベントを実施しています。今回はNAISTで開催されたハッカソンです。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://linedev.connpass.com/event/96813/&#34;&gt;イベント募集connpassページ - 【9/15-16】奈良先端科学技術大学院大学ユビ研×LINE BOOT AWARDSハッカソン&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://togetter.com/li/1267465&#34;&gt;togetterツイートまとめ - 陸の孤島でレベルの高い学生たちによるハックバトル！ NAIST x LINE BOOT AWARDSハッカソンツイートまとめ！ #linebootawards&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://photos.app.goo.gl/MSB3vB1fFAmjy8L77&#34;&gt;写真アルバム&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;ちなみに、アワード自体にはこの記事で触れないので詳細は公式ページをご参照ください。&lt;/p&gt;
+
+&lt;p&gt;それではレポートやっていき。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/99c2d7e5b13ba0d19303d36397533cd2.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;奈良先端科学技術大学院大学-naist&#34;&gt;奈良先端科学技術大学院大学 NAIST&lt;/h2&gt;
+
+&lt;p&gt;まず、&lt;a href=&#34;http://www.naist.jp/&#34;&gt;NAIST&lt;/a&gt;ってどこだ？って話があると思うのですが、ここ↓です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/a38bcf5e1f67c4fba6474838560245a3.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;秋葉原からだと新幹線を使って4Hくらいで到着します。&lt;/p&gt;
+
+&lt;p&gt;奈良って京都か新大阪で新幹線乗り換えをするんですねぇ&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://ja.wikipedia.org/wiki/%E5%A5%88%E8%89%AF%E5%85%88%E7%AB%AF%E7%A7%91%E5%AD%A6%E6%8A%80%E8%A1%93%E5%A4%A7%E5%AD%A6%E9%99%A2%E5%A4%A7%E5%AD%A6&#34;&gt;ウィキペディアの情報&lt;/a&gt;によると「奈良先端科学技術大学院大学（ならせんたんかがくぎじゅつだいがくいんだいがく、英語: Nara Institute of Science and Technology）は、奈良県生駒市高山町8916番地の5に本部を置く日本の国立大学である。1991年に設置された。大学の略称はNAIST（ナイスト）、奈良先端大学。」&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://style.nikkei.com/article/DGXNASFB2100B_R21C13A2000000?channel=DF130120166109&amp;amp;style=1&#34;&gt;さようなら「日本一大きな村」　岩手県滝沢村&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;参考記事のタイトルが悲しげですが村から市になることで、&lt;strong&gt;村民は町民を通り越して市民に二階級特進&lt;/strong&gt;というなかなか貴重な経験をしています。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;それから名産はスイカとさつまいもなどがあって&amp;hellip;&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;
+&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&amp;hellip;&amp;hellip;滝沢市の話はまだまだ話せますがこの辺りでやめておかないと編集担当に怒られそうなので次にいきましょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;naist-x-lineハッカソン&#34;&gt;NAIST x LINEハッカソン&lt;/h2&gt;
+
+&lt;p&gt;滝沢市主催となっていますが、滝沢市に即した課題だけでなく、幅広いアイディアを対象としました。&lt;/p&gt;
+
+&lt;p&gt;「LINEの技術、プロダクトを使って身近な課題を解決する」が今回のテーマです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/191/02.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;参加者は&lt;a href=&#34;https://www.iwate-u.ac.jp/&#34;&gt;岩手大学&lt;/a&gt;や&lt;a href=&#34;https://www.iwate-pu.ac.jp/&#34;&gt;岩手県立大学&lt;/a&gt;（のびすけの母校）の学生を中心に20代前半の若者が多い会となりました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/191/03.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;今回の全体司会は佐々木さん&#34;&gt;今回の全体司会は佐々木さん&lt;/h3&gt;
+
+&lt;p&gt;メインの司会者は&lt;a href=&#34;https://dotstud.io/members/tomato/&#34;&gt;佐々木さん&lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;写真左のモナ王を二つ食べてる人です。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;instagram-media&#34; data-instgrm-captioned data-instgrm-permalink=&#34;https://www.instagram.com/p/BlexenahMDw/&#34; data-instgrm-version=&#34;9&#34; style=&#34; background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);&#34;&gt;&lt;div style=&#34;padding:8px;&#34;&gt; &lt;div style=&#34; background:#F8F8F8; line-height:0; margin-top:40px; padding:37.4537037037037% 0; text-align:center; width:100%;&#34;&gt; &lt;div style=&#34; background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;&#34;&gt;&lt;/div&gt;&lt;/div&gt; &lt;p style=&#34; margin:8px 0 0 0; padding:0 4px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/BlexenahMDw/&#34; style=&#34; color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;&#34; target=&#34;_blank&#34;&gt;滝沢市の職員さんからモナ王もらって2人分食べてる佐々木さん。 とひいてる人 #linebootawards&lt;/a&gt;&lt;/p&gt; &lt;p style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;&#34;&gt;&lt;a href=&#34;https://www.instagram.com/n0bisuke/&#34; style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px;&#34; target=&#34;_blank&#34;&gt; n0bisuke&lt;/a&gt;さん(@n0bisuke)がシェアした投稿 - &lt;time style=&#34; font-family:Arial,sans-serif; font-size:14px; line-height:17px;&#34; datetime=&#34;2018-07-21T04:47:24+00:00&#34;&gt;2018年 7月月20日午後9時47分PDT&lt;/time&gt;&lt;/p&gt;&lt;/div&gt;&lt;/blockquote&gt; &lt;script async defer src=&#34;//www.instagram.com/embed.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;こちらでは1回の食事でパスタセットとカレーセットを食べ尽くしてました。&lt;/p&gt;
+
+&lt;p&gt;&lt;blockquote class=&#34;instagram-media&#34; data-instgrm-captioned data-instgrm-permalink=&#34;https://www.instagram.com/p/BlenXeNnCZ5/&#34; data-instgrm-version=&#34;9&#34; style=&#34; background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);&#34;&gt;&lt;div style=&#34;padding:8px;&#34;&gt; &lt;div style=&#34; background:#F8F8F8; line-height:0; margin-top:40px; padding:28.125% 0; text-align:center; width:100%;&#34;&gt; &lt;div style=&#34; background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;&#34;&gt;&lt;/div&gt;&lt;/div&gt; &lt;p style=&#34; margin:8px 0 0 0; padding:0 4px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/BlenXeNnCZ5/&#34; style=&#34; color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;&#34; target=&#34;_blank&#34;&gt;カレーとパスタをめちゃ早く食べたことを弁明してる人とひいてる人 #linebootawards&lt;/a&gt;&lt;/p&gt; &lt;p style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;&#34;&gt;&lt;a href=&#34;https://www.instagram.com/n0bisuke/&#34; style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px;&#34; target=&#34;_blank&#34;&gt; n0bisuke&lt;/a&gt;さん(@n0bisuke)がシェアした投稿 - &lt;time style=&#34; font-family:Arial,sans-serif; font-size:14px; line-height:17px;&#34; datetime=&#34;2018-07-21T03:20:13+00:00&#34;&gt;2018年 7月月20日午後8時20分PDT&lt;/time&gt;&lt;/p&gt;&lt;/div&gt;&lt;/blockquote&gt; &lt;script async defer src=&#34;//www.instagram.com/embed.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;ちなみに彼はうちの会社のロゴを秒速で壊したことで有名です。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;【悲報】本日初出勤のアルバイターとまと君、登場して5分で弊社のロゴを破壊🙄 &lt;a href=&#34;https://twitter.com/hashtag/%E3%82%B9%E3%82%BF%E3%82%B8%E3%82%AA%E6%97%A5%E8%AA%8C?src=hash&amp;amp;ref_src=twsrc%5Etfw&#34;&gt;#スタジオ日誌&lt;/a&gt; &lt;a href=&#34;https://t.co/wMKQfregWp&#34;&gt;pic.twitter.com/wMKQfregWp&lt;/a&gt;&lt;/p&gt; ドットスタジオ (@dotstud_io) &lt;a href=&#34;https://twitter.com/dotstud_io/status/1002417905164644352?ref_src=twsrc%5Etfw&#34;&gt;2018年6月1日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;という佐々木さんが全体司会です（ちょっとノイズだったかも）。&lt;/p&gt;
+
+&lt;p&gt;僕はアワードの説明をしたり、運営手伝ったり、メンタリングしたり、技術サポートしたり、審査にも入ったりしました。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;&lt;a href=&#34;https://twitter.com/hashtag/linebootawards?src=hash&amp;amp;ref_src=twsrc%5Etfw&#34;&gt;#linebootawards&lt;/a&gt; &lt;br&gt;のびすけさーん！ &lt;a href=&#34;https://t.co/z6hhmENGYW&#34;&gt;pic.twitter.com/z6hhmENGYW&lt;/a&gt;&lt;/p&gt; kazu (@_kzumu) &lt;a href=&#34;https://twitter.com/_kzumu/status/1020468168064610305?ref_src=twsrc%5Etfw&#34;&gt;2018年7月21日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;全体の流れ&#34;&gt;全体の流れ&lt;/h3&gt;
+
+&lt;p&gt;全体の流れ自体は養老乃瀧のハッカソンなどと概ね同様の流れでした。&lt;/p&gt;
+
+
+
+&lt;section class=&#34;link&#34; id=&#34;175&#34;&gt;
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+          &lt;div class=&#34;link_content&#34;&gt;
+          &lt;a href=&#34;https://dotstud.io/blog/yoro-hack-2018-report/&#34;&gt;&lt;/a&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/175/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
+          &lt;/div&gt;
+          &lt;div class=&#34;link_content&#34;&gt;
+            &lt;div class=&#34;link_detail&#34;&gt;
+              &lt;div class=&#34;link_title&#34;&gt;
+                過去最大の盛り上がりを見せた「養老乃瀧ハッカソン2018」を実施レポート！
+              &lt;/div&gt;
+              &lt;div class=&#34;link_date&#34;&gt;
+                
+                2018-06-21
+              &lt;/div&gt;
+              &lt;div class=&#34;link_desc&#34;&gt;
+                二年目となる養老乃瀧ハッカソン。今回も大盛況でした！ハッカソンでマグロ解体ショーはやばいですね
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+&lt;/section&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;オープニング&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;審査員兼今回の滝沢市側の窓口となってくれた滝沢市役所の黒澤さんからインプットタイム。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/191/04.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;アイディアピッチ&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;各々抱えてる課題などを話します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/191/05.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;チームビルディング&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;ピッチの内容を踏まえて方向性が似ている人や気の合う人とチームを組みます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/191/06.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;アイディアソン&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;チームメンバーがまとまったらチームごとで何を作るか、どんな課題を解決するかをディスカッションします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/191/07.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ハックタイム&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;チームとしてのアイディアや方向性がまとまったら開発スタートです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/191/08.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;発表&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;最後は作ったプロダクトを発表します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/191/09.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;という流れです。&lt;/p&gt;
+
+&lt;h2 id=&#34;lineグループでハッカソン運営をしてみた&#34;&gt;LINEグループでハッカソン運営をしてみた&lt;/h2&gt;
+
+&lt;p&gt;少し話がそれますが、&lt;/p&gt;
+
+&lt;p&gt;今回はLINEが関係するハッカソンということもあり、LINEアカウントは全員が持っていました（そうじゃなくても若者はだいたいLINEやってますね）。&lt;/p&gt;
+
+&lt;p&gt;ということでハッカソン参加者と運営側の連絡は全員をいれたLINEグループで運用をしてみることに。&lt;/p&gt;
+
+&lt;p&gt;割とコミュニケーション取りやすいかつ新規でアカウントを作る必要がない（すでにみんなアカウントがある）ので導入のしやすさはメリットとしてありそうです。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;instagram-media&#34; data-instgrm-captioned data-instgrm-permalink=&#34;https://www.instagram.com/p/Blg9Mq8hJf6/&#34; data-instgrm-version=&#34;9&#34; style=&#34; background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);&#34;&gt;&lt;div style=&#34;padding:8px;&#34;&gt; &lt;div style=&#34; background:#F8F8F8; line-height:0; margin-top:40px; padding:50.0% 0; text-align:center; width:100%;&#34;&gt; &lt;div style=&#34; background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;&#34;&gt;&lt;/div&gt;&lt;/div&gt; &lt;p style=&#34; margin:8px 0 0 0; padding:0 4px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/Blg9Mq8hJf6/&#34; style=&#34; color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;&#34; target=&#34;_blank&#34;&gt;ハッカソンの発表順をLINEのあみだくじで決める #linebootawards&lt;/a&gt;&lt;/p&gt; &lt;p style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;&#34;&gt;&lt;a href=&#34;https://www.instagram.com/n0bisuke/&#34; style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px;&#34; target=&#34;_blank&#34;&gt; n0bisuke&lt;/a&gt;さん(@n0bisuke)がシェアした投稿 - &lt;time style=&#34; font-family:Arial,sans-serif; font-size:14px; line-height:17px;&#34; datetime=&#34;2018-07-22T01:08:17+00:00&#34;&gt;2018年 7月月21日午後6時08分PDT&lt;/time&gt;&lt;/p&gt;&lt;/div&gt;&lt;/blockquote&gt; &lt;script async defer src=&#34;//www.instagram.com/embed.js&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;ちなみに最後の発表の順番はLINEグループ内の機能であるあみだくじを使ってみたりと試せるものを試そうというスタンスです（笑）&lt;/p&gt;
+
+&lt;h2 id=&#34;プロダクト紹介&#34;&gt;プロダクト紹介&lt;/h2&gt;
+
+&lt;p&gt;今回は&lt;a href=&#34;https://protopedia.net/&#34;&gt;protopedia&lt;/a&gt;に作品を登録してもらう形式にしたので詳細や使い方はprotopediaのページをご覧ください。&lt;/p&gt;
+
+&lt;h3 id=&#34;monoby&#34;&gt;monoby&lt;/h3&gt;
+
+&lt;p&gt;言いにくいことをClovaが代弁してくれるサービスです。&lt;/p&gt;
+
+&lt;p&gt;授業や会議などで質問しにくい状況に活躍しそう。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://protopedia.net/prototype/970af30e481057c48f87e101b61e6994&#34;&gt;monoby&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;instagram-media&#34; data-instgrm-captioned data-instgrm-permalink=&#34;https://www.instagram.com/p/Blhp5n1hSSs/&#34; data-instgrm-version=&#34;9&#34; style=&#34; background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);&#34;&gt;&lt;div style=&#34;padding:8px;&#34;&gt; &lt;div style=&#34; background:#F8F8F8; line-height:0; margin-top:40px; padding:50.0% 0; text-align:center; width:100%;&#34;&gt; &lt;div style=&#34; background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;&#34;&gt;&lt;/div&gt;&lt;/div&gt; &lt;p style=&#34; margin:8px 0 0 0; padding:0 4px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/Blhp5n1hSSs/&#34; style=&#34; color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;&#34; target=&#34;_blank&#34;&gt;発表すたーと！ 言いにくいことをclovaが代弁してくれるサービス。授業や会議などで質問しにくい状況に活躍 #linebootawards&lt;/a&gt;&lt;/p&gt; &lt;p style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;&#34;&gt;&lt;a href=&#34;https://www.instagram.com/n0bisuke/&#34; style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px;&#34; target=&#34;_blank&#34;&gt; n0bisuke&lt;/a&gt;さん(@n0bisuke)がシェアした投稿 - &lt;time style=&#34; font-family:Arial,sans-serif; font-size:14px; line-height:17px;&#34; datetime=&#34;2018-07-22T07:38:54+00:00&#34;&gt;2018年 7月月22日午前12時38分PDT&lt;/time&gt;&lt;/p&gt;&lt;/div&gt;&lt;/blockquote&gt; &lt;script async defer src=&#34;//www.instagram.com/embed.js&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;kuru&#34;&gt;Kuru?&lt;/h3&gt;
+
+&lt;p&gt;登録から参加までが全てLINEで完結するLINE BOTです。&lt;/p&gt;
+
+&lt;p&gt;connpassなどの外部サイトと連携していく想定のようです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://protopedia.net/prototype/0663a4ddceacb40b095eda264a85f15c&#34;&gt;kuru?&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;instagram-media&#34; data-instgrm-captioned data-instgrm-permalink=&#34;https://www.instagram.com/p/BlhqpvrhVGk/&#34; data-instgrm-version=&#34;9&#34; style=&#34; background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);&#34;&gt;&lt;div style=&#34;padding:8px;&#34;&gt; &lt;div style=&#34; background:#F8F8F8; line-height:0; margin-top:40px; padding:37.4537037037037% 0; text-align:center; width:100%;&#34;&gt; &lt;div style=&#34; background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;&#34;&gt;&lt;/div&gt;&lt;/div&gt; &lt;p style=&#34; margin:8px 0 0 0; padding:0 4px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/BlhqpvrhVGk/&#34; style=&#34; color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;&#34; target=&#34;_blank&#34;&gt;LINE Beaconでヒッチハイカーとドライバーのマッチング #linebootawards&lt;/a&gt;&lt;/p&gt; &lt;p style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;&#34;&gt;&lt;a href=&#34;https://www.instagram.com/n0bisuke/&#34; style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px;&#34; target=&#34;_blank&#34;&gt; n0bisuke&lt;/a&gt;さん(@n0bisuke)がシェアした投稿 - &lt;time style=&#34; font-family:Arial,sans-serif; font-size:14px; line-height:17px;&#34; datetime=&#34;2018-07-22T07:45:28+00:00&#34;&gt;2018年 7月月22日午前12時45分PDT&lt;/time&gt;&lt;/p&gt;&lt;/div&gt;&lt;/blockquote&gt; &lt;script async defer src=&#34;//www.instagram.com/embed.js&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;hitch-hack&#34;&gt;Hitch Hack&lt;/h3&gt;
+
+&lt;p&gt;LINE BeaconとMessage APIを用いたヒッチハイク支援サービスです。&lt;/p&gt;
+
+&lt;p&gt;ヒッチハイクをする人が、より簡単にドライバーを探すことができます。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://protopedia.net/prototype/299fb2142d7de959380f91c01c3a293c&#34;&gt;Hitch Hack&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;instagram-media&#34; data-instgrm-captioned data-instgrm-permalink=&#34;https://www.instagram.com/p/BlhqaQtBk87/&#34; data-instgrm-version=&#34;9&#34; style=&#34; background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);&#34;&gt;&lt;div style=&#34;padding:8px;&#34;&gt; &lt;div style=&#34; background:#F8F8F8; line-height:0; margin-top:40px; padding:37.4537037037037% 0; text-align:center; width:100%;&#34;&gt; &lt;div style=&#34; background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;&#34;&gt;&lt;/div&gt;&lt;/div&gt; &lt;p style=&#34; margin:8px 0 0 0; padding:0 4px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/BlhqaQtBk87/&#34; style=&#34; color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;&#34; target=&#34;_blank&#34;&gt;LINEの友達たちが参加しているイベント情報をしれて登録できるチャットボット #linebootawards&lt;/a&gt;&lt;/p&gt; &lt;p style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;&#34;&gt;&lt;a href=&#34;https://www.instagram.com/n0bisuke/&#34; style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px;&#34; target=&#34;_blank&#34;&gt; n0bisuke&lt;/a&gt;さん(@n0bisuke)がシェアした投稿 - &lt;time style=&#34; font-family:Arial,sans-serif; font-size:14px; line-height:17px;&#34; datetime=&#34;2018-07-22T07:43:21+00:00&#34;&gt;2018年 7月月22日午前12時43分PDT&lt;/time&gt;&lt;/p&gt;&lt;/div&gt;&lt;/blockquote&gt; &lt;script async defer src=&#34;//www.instagram.com/embed.js&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;teduna&#34;&gt;Teduna&lt;/h3&gt;
+
+&lt;p&gt;集合住宅居住者向けのコミュニケーションアプリです。&lt;/p&gt;
+
+&lt;p&gt;隣の住民がうるさい、自分が契約している駐車場に他の車が止まっていた、などの場合にBOT経由で住民に声を伝えることができます。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://protopedia.net/prototype/56352739f59643540a3a6e16985f62c7&#34;&gt;Teduna&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/191/10.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;結果発表&#34;&gt;結果発表&lt;/h2&gt;
+
+&lt;p&gt;今回は以下の賞がありました。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;最優秀賞（審査員合議）&lt;/li&gt;
+&lt;li&gt;滝沢賞（滝沢市職員が選定）&lt;/li&gt;
+&lt;li&gt;LINE賞（のびすけが選定）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;instagram-media&#34; data-instgrm-captioned data-instgrm-permalink=&#34;https://www.instagram.com/p/Blhy7_IBWHg/&#34; data-instgrm-version=&#34;9&#34; style=&#34; background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);&#34;&gt;&lt;div style=&#34;padding:8px;&#34;&gt; &lt;div style=&#34; background:#F8F8F8; line-height:0; margin-top:40px; padding:50.0% 0; text-align:center; width:100%;&#34;&gt; &lt;div style=&#34; background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;&#34;&gt;&lt;/div&gt;&lt;/div&gt; &lt;p style=&#34; margin:8px 0 0 0; padding:0 4px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/Blhy7_IBWHg/&#34; style=&#34; color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;&#34; target=&#34;_blank&#34;&gt;滝沢賞 てづな LINE賞と最優秀賞が チームぶらうん！ おめでとうございます！ #linebootawards&lt;/a&gt;&lt;/p&gt; &lt;p style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;&#34;&gt;&lt;a href=&#34;https://www.instagram.com/n0bisuke/&#34; style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px;&#34; target=&#34;_blank&#34;&gt; n0bisuke&lt;/a&gt;さん(@n0bisuke)がシェアした投稿 - &lt;time style=&#34; font-family:Arial,sans-serif; font-size:14px; line-height:17px;&#34; datetime=&#34;2018-07-22T08:57:52+00:00&#34;&gt;2018年 7月月22日午前1時57分PDT&lt;/time&gt;&lt;/p&gt;&lt;/div&gt;&lt;/blockquote&gt; &lt;script async defer src=&#34;//www.instagram.com/embed.js&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;Tedunaが滝沢賞、Monoby（チームぶらうん）が最優秀賞とLINE賞のダブル受賞です。&lt;/p&gt;
+
+&lt;p&gt;実装内容（完成度）と新規性や実際に使えるかどうかなどを判断基準に審査員に刺さった内容が受賞となった形です。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;という形であっという間の二日間でした。今回はハッカソン自体が初参加の若い子たちが多く、彼らにとってもいい経験になったのではないでしょうか。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/191/11.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;アワード本体の申し込みはまだスタートしてないですが、継続開発をして岩手から全国のグランプリを取る作品が出てきて欲しいですね。&lt;/p&gt;
+
+&lt;p&gt;ちなみにアワード期間中は、こんな感じでイベントを一緒にやれる地方のコミュニティや団体を探しています。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ClovaやLINE Beaconの貸し出し&lt;/li&gt;
+&lt;li&gt;懇親会費用などのサポート&lt;/li&gt;
+&lt;li&gt;会場や足代なども（一部？）サポート&lt;/li&gt;
+&lt;li&gt;技術サポートでLINEのエンジニアを派遣（都合が付けば）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;などが出来る（らしい）ので興味のある方はぜひお問い合わせください〜
+（↑は公式文言じゃないのであしからず）&lt;/p&gt;
+
+&lt;p&gt;とりあえず &lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;@n0bisuke&lt;/a&gt; 宛で大丈夫です笑&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Clova CEKでのスキル開発の始め方〜Pythonで開発スタート編〜</title>
@@ -32,6 +3510,12 @@
 
 
 &lt;section class=&#34;link&#34; id=&#34;195&#34;&gt;
+  
+      
+      
+  
+      
+      
   
       
       
@@ -1740,6 +5224,12 @@
   
       
       
+  
+      
+      
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/clova-ifttt-nefrybt-arduino/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/185/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -2474,6 +5964,12 @@
 
 
 &lt;section class=&#34;link&#34; id=&#34;186&#34;&gt;
+  
+      
+      
+  
+      
+      
   
       
       
@@ -4213,6 +7709,12 @@
   
       
       
+  
+      
+      
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/line-clova-skill-tutorial/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/186/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -5086,6 +8588,12 @@
 
 
 &lt;section class=&#34;link&#34; id=&#34;158&#34;&gt;
+  
+      
+      
+  
+      
+      
   
       
       
@@ -7496,6 +11004,12 @@
       
       
   
+      
+      
+  
+      
+      
+  
 &lt;/section&gt;
 
 
@@ -7739,6 +11253,8 @@ def wife_status_handler(clova_request):
 &lt;p&gt;&lt;code&gt;clova_request.slot_value(&amp;quot;status&amp;quot;)&lt;/code&gt;にスロット情報が入っているので、あとはif文で判定して喋らせる内容を変更していきます。&lt;/p&gt;
 
 &lt;p&gt;最後の&lt;code&gt;response = clova.response([message_japanese])&lt;/code&gt;を呼ぶことでClovaが喋ってくれます。&lt;/p&gt;
+
+&lt;p&gt;ここまでをまとめたコードは&lt;a href=&#34;https://gist.github.com/n0bisuke/3755c3faaf1ad0fe621af8eaffb9b63f&#34;&gt;こちら&lt;/a&gt;です。&lt;/p&gt;
 
 &lt;h2 id=&#34;実機テスト&#34;&gt;実機テスト&lt;/h2&gt;
 
@@ -8296,6 +11812,12 @@ blockquote &gt; p {
 
 
 &lt;section class=&#34;link&#34; id=&#34;055&#34;&gt;
+  
+      
+      
+  
+      
+      
   
       
       
@@ -10381,6 +13903,12 @@ blockquote &gt; p {
   
       
       
+  
+      
+      
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/mabeee-summer-horror-comic/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/026/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -10740,6 +14268,12 @@ blockquote &gt; p {
 
 
 &lt;section class=&#34;link&#34; id=&#34;184&#34;&gt;
+  
+      
+      
+  
+      
+      
   
       
       
@@ -12691,6 +16225,12 @@ blockquote &gt; p {
   
       
       
+  
+      
+      
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/akihabara-guide-for-beginners/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/091/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -13182,6 +16722,12 @@ blockquote &gt; p {
 
 
 &lt;section class=&#34;link&#34; id=&#34;208&#34;&gt;
+  
+      
+      
+  
+      
+      
   
       
       
@@ -15031,6 +18577,12 @@ blockquote &gt; p {
   
       
       
+  
+      
+      
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/office-new-door-notification/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/133/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -15630,6 +19182,12 @@ blockquote &gt; p {
 
 
 &lt;section class=&#34;link&#34; id=&#34;155&#34;&gt;
+  
+      
+      
+  
+      
+      
   
       
       
@@ -17327,6 +20885,12 @@ blockquote &gt; p {
   
       
       
+  
+      
+      
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/no-more-sales-intercom/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/188/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -18070,6 +21634,12 @@ blockquote &gt; p {
 
 
 &lt;section class=&#34;link&#34; id=&#34;183&#34;&gt;
+  
+      
+      
+  
+      
+      
   
       
       
@@ -20018,6 +23588,12 @@ blockquote &gt; p {
   
       
       
+  
+      
+      
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/gyaruden-hadeike-display-cap/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/094/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -20512,6 +24088,12 @@ blockquote &gt; p {
 
 
 &lt;section class=&#34;link&#34; id=&#34;126&#34;&gt;
+  
+      
+      
+  
+      
+      
   
       
       
@@ -21732,6 +25314,12 @@ blockquote &gt; p {
 
 
 &lt;section class=&#34;link&#34; id=&#34;201&#34;&gt;
+  
+      
+      
+  
+      
+      
   
       
       
@@ -23649,6 +27237,12 @@ blockquote &gt; p {
   
       
       
+  
+      
+      
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/pokio-esp-keikyu-chien/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/099/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -24176,6 +27770,12 @@ blockquote &gt; p {
 
 
 &lt;section class=&#34;link&#34; id=&#34;172&#34;&gt;
+  
+      
+      
+  
+      
+      
   
       
       
@@ -25897,6 +29497,12 @@ blockquote &gt; p {
   
       
       
+  
+      
+      
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/m5stack-toilet-smell-map/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/177/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -26616,6 +30222,12 @@ blockquote &gt; p {
 
 
 &lt;section class=&#34;link&#34; id=&#34;195&#34;&gt;
+  
+      
+      
+  
+      
+      
   
       
       
@@ -27836,6 +31448,12 @@ blockquote &gt; p {
 
 
 &lt;section class=&#34;link&#34; id=&#34;144&#34;&gt;
+  
+      
+      
+  
+      
+      
   
       
       
@@ -30767,6 +34385,12 @@ blockquote {
   
       
       
+  
+      
+      
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/internet-of-things-books/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/199/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -32118,6 +35742,12 @@ blockquote {
   
       
       
+  
+      
+      
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/arduino-use-rfid-reader/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/162/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -32807,6 +36437,12 @@ blockquote {
 
 
 &lt;section class=&#34;link&#34; id=&#34;183&#34;&gt;
+  
+      
+      
+  
+      
+      
   
       
       
@@ -34564,6 +38200,12 @@ blockquote {
   
       
       
+  
+      
+      
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/microbit-getting-started-pokio/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/165/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -35257,6 +38899,12 @@ blockquote {
 
 
 &lt;section class=&#34;link&#34; id=&#34;190&#34;&gt;
+  
+      
+      
+  
+      
+      
   
       
       
@@ -36483,6 +40131,12 @@ blockquote {
 
 
 &lt;section class=&#34;link&#34; id=&#34;188&#34;&gt;
+  
+      
+      
+  
+      
+      
   
       
       
@@ -38684,6 +42338,12 @@ blockquote {
   
       
       
+  
+      
+      
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/akihabara-guide-for-beginners/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/091/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -39266,6 +42926,12 @@ blockquote {
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;187&#34;&gt;
+  
+      
+      
+  
+      
+      
   
       
       
@@ -40952,6 +44618,12 @@ blockquote {
   
       
       
+  
+      
+      
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/stepper-motor-nefrybt-control/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/189/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -41777,6 +45449,12 @@ void loop() {
 
 
 &lt;section class=&#34;link&#34; id=&#34;187&#34;&gt;
+  
+      
+      
+  
+      
+      
   
       
       
@@ -44122,6 +47800,12 @@ void loop() {
   
       
       
+  
+      
+      
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/control-solenoid-nefrybt-nodered/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/214/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -44960,6 +48644,12 @@ void loop() {
 
 
 &lt;section class=&#34;link&#34; id=&#34;214&#34;&gt;
+  
+      
+      
+  
+      
+      
   
       
       
@@ -46773,6 +50463,12 @@ void loop() {
   
       
       
+  
+      
+      
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/clova-cek-nodejs-tutorial/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/195/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -47561,6 +51257,12 @@ void loop() {
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;195&#34;&gt;
+  
+      
+      
+  
+      
+      
   
       
       
@@ -49096,659 +52798,6 @@ IMPORTANT NOTES:
 &lt;p&gt;Web Appsの最近っぽい情報がなかったのでまとめてみました。&lt;/p&gt;
 
 &lt;p&gt;備忘録ですが他の誰かの参考にもなれば幸いです！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>IoT開発・電子工作を始めたい初心者向け！おすすめ書籍6選</title>
-      <link>https://dotstud.io/blog/internet-of-things-books/</link>
-      <pubDate>Tue, 21 Aug 2018 10:18:24 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/internet-of-things-books/</guid>
-      
-      <description>
-
-&lt;p&gt;みなさんこんにちは、テクニカルエディターの&lt;a href=&#34;https://dotstud.io/members/kiki/&#34;&gt;きき&lt;/a&gt;です。&lt;/p&gt;
-
-&lt;p&gt;dotstudioでアルバイトを始めてから、スマートトイでわいわい遊んだり、IoT開発ボードでおおおお！と感動してみたり、少しずつIoTに触れる機会が増えてきた気がします。&lt;/p&gt;
-
-&lt;p&gt;ですが、IoTに関する基礎知識が全然ないのです。なんなら電子工作の基礎知識もありません。これはいかん。勉強しなければ……。&lt;/p&gt;
-
-&lt;p&gt;ちなみに、dotsstudioの先輩方はどうやって勉強したんだろう……気になる……。&lt;/p&gt;
-
-&lt;p&gt;ということで、今回は先輩方に&lt;strong&gt;「初心者におすすめのIoT書籍」&lt;/strong&gt;を教えていただきました！&lt;u&gt;今年の夏はIoTに燃える夏にするぞっ！&lt;/u&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;初心者-of-初心者向け書籍&#34;&gt;初心者 of 初心者向け書籍&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;いきなりIoTではありませんが、IoT開発に不可欠な電子工作の基本を学ぶことができる書籍&lt;/strong&gt;も紹介します。&lt;u&gt;「IoTってなに？電子工作ってはじめに何を準備すればいいの？」&lt;/u&gt;といった右も左も分からない初心者向けの書籍です。&lt;/p&gt;
-
-&lt;h3 id=&#34;わかる-電子工作の基本100&#34;&gt;わかる！電子工作の基本100&lt;/h3&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/199/1.png&#34; alt=&#34;1&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;【書籍名】
-&lt;a href=&#34;https://www.amazon.co.jp/%E3%82%8F%E3%81%8B%E3%82%8B-%E9%9B%BB%E5%AD%90%E5%B7%A5%E4%BD%9C%E3%81%AE%E5%9F%BA%E6%9C%AC100-%E9%81%A0%E8%97%A4-%E6%95%8F%E5%A4%AB/dp/4798027979&#34;&gt;わかる！電子工作の基本100&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;【著者】
-遠藤敏夫&lt;/p&gt;
-
-&lt;p&gt;【定価】
-2,200円（税別）&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;電子工作の全般にわたる基本知識&lt;/strong&gt;がまとめられています。工作を始めるにあたって必要な工具や部品、回路図の見方や電気の基本・電気回路の基本が丁寧に説明されています。用語の意味についてもしっかり説明されているのが分かりやすい……。&lt;/p&gt;
-
-&lt;p&gt;私のように&lt;u&gt;「高校では物理習っていません、回路図とかあんまり覚えていないです」&lt;/u&gt;みたいなド文系が勉強し直す良い機会ですね！（中学卒業以降、電流・電圧という言葉を使っていない人です）&lt;/p&gt;
-
-&lt;p&gt;最終章ではマイコンボードについても詳しく説明されています。かなり内容の詰まった一冊です。&lt;/p&gt;
-
-&lt;h3 id=&#34;make-electronics-作ってわかる電気と電子回路の基礎&#34;&gt;Make: Electronics 作ってわかる電気と電子回路の基礎&lt;/h3&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/199/2.png&#34; alt=&#34;2&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;【書籍名】
-&lt;a href=&#34;https://www.amazon.co.jp/s/ref=nb_sb_ss_i_6_4?__mk_ja_JP=%E3%82%AB%E3%82%BF%E3%82%AB%E3%83%8A&amp;amp;url=search-alias%3Dstripbooks&amp;amp;field-keywords=make+electronics&amp;amp;sprefix=Make%2Cstripbooks%2C231&amp;amp;crid=T6GPFW3Y2SRX&#34;&gt;Make: Electronics 作ってわかる電気と電子回路の基礎 &lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;【著者】
-Charles Platt　翻訳：鴨澤眞夫&lt;/p&gt;
-
-&lt;p&gt;【定価】
-3,000円（税別）&lt;/p&gt;
-
-&lt;p&gt;本の帯紙には、&lt;strong&gt;「感電して、部品を吹っ飛ばして、自分の手で回路を組んで、『体で覚える』エレクトロ二クス」&lt;/strong&gt;と書いてあります。まずは組み立ててから何が起こるのかその目で確かめて勉強しろ、みたいな感じですね。&lt;/p&gt;
-
-&lt;p&gt;くわえて&lt;strong&gt;「ぜひ焼き切ったりぶち壊したりしてほしい。それは部品や素材の限界を知る方法であるから」&lt;/strong&gt;とも書いてあります、なかなかにマッスルな方針です。&lt;/p&gt;
-
-&lt;p&gt;パラパラと読んでみると、写真や絵が多く盛り込まれているので、読んでいて飽きないです。組み立てや理論の説明部分だけでなく、道具ができた背景の話もコラムで載っていて面白いです。&lt;/p&gt;
-
-&lt;p&gt;&lt;u&gt;「タイマーが誕生した背景には、ハンス・カーメンチントという発明家がいて〜〜〜」&lt;/u&gt;とか豆知識を披露してみたいものです（ミーハー）。&lt;/p&gt;
-
-&lt;h2 id=&#34;マイコンボード別初心者向け書籍&#34;&gt;マイコンボード別初心者向け書籍&lt;/h2&gt;
-
-&lt;p&gt;次に、マイコンボードごとにおすすめの書籍を紹介していきます。&lt;/p&gt;
-
-&lt;h3 id=&#34;センサーでなんでもできる-おもしろまじめ電子工作&#34;&gt;センサーでなんでもできる おもしろまじめ電子工作&lt;/h3&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/199/3.png&#34; alt=&#34;3&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;【書籍名】
-&lt;a href=&#34;https://www.amazon.co.jp/%E3%82%BB%E3%83%B3%E3%82%B5%E3%83%BC%E3%81%A7%E3%81%AA%E3%82%93%E3%81%A7%E3%82%82%E3%81%A7%E3%81%8D%E3%82%8B-%E3%81%8A%E3%82%82%E3%81%97%E3%82%8D%E3%81%BE%E3%81%98%E3%82%81%E9%9B%BB%E5%AD%90%E5%B7%A5%E4%BD%9C-%E8%94%B5%E4%B8%8B-%E3%81%BE%E3%81%95%E3%82%86%E3%81%8D/dp/4798046604&#34;&gt;センサーでなんでもできる おもしろまじめ電子工作&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;【著者】
-蔵下まさゆき&lt;/p&gt;
-
-&lt;p&gt;【定価】
-2,800円（税別）&lt;/p&gt;
-
-&lt;p&gt;まずタイトルが気になりすぎる本ですね。帯紙には、&lt;strong&gt;「無駄に技術を使ったおもしろ電子工作」&lt;/strong&gt;と書いてあります。無駄に気になりすぎる……。&lt;/p&gt;
-
-&lt;p&gt;こちらの本では簡単に電子工作を始めるためのおすすめマイコンボードでArduinoを紹介しているので、&lt;strong&gt;Arduinoを使った作品&lt;/strong&gt;が紹介されています。&lt;/p&gt;
-
-&lt;p&gt;また、電子部品の紹介では、スイッチやサーボモーター、光センサーだけでなく、温湿度センサーや加速度センサー、圧力センサーなど全部で11種類の電子部品の使い方が紹介されています。種類が豊富で作りたいものの発想が膨らみますね。&lt;/p&gt;
-
-&lt;p&gt;普段の生活の中での&lt;u&gt;「こういうものあったらいいのにな」という発想をかたちにできるようにしよう！&lt;/u&gt;という思いから作られている本なので、初心者でも楽しく読むことができます。&lt;/p&gt;
-
-&lt;h3 id=&#34;aruduinoをはじめよう&#34;&gt;Aruduinoをはじめよう&lt;/h3&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/199/4.png&#34; alt=&#34;4&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;【書籍名】
-&lt;a href=&#34;https://www.amazon.co.jp/Arduino%E3%82%92%E3%81%AF%E3%81%98%E3%82%81%E3%82%88%E3%81%86-%E7%AC%AC3%E7%89%88-Make-Massimo-Banzi/dp/487311733X/ref=sr_1_1?ie=UTF8&amp;amp;qid=1533800582&amp;amp;sr=8-1&amp;amp;keywords=arduino+%E3%82%92%E3%81%AF%E3%81%98%E3%82%81%E3%82%88%E3%81%86&#34;&gt;Aruduinoをはじめよう&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;【著者】
-Massimo Banzi　翻訳：船田巧&lt;/p&gt;
-
-&lt;p&gt;【定価】
-2,000円（税別）&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Arduino&lt;/strong&gt;を使いたい初心者向けの本です。&lt;/p&gt;
-
-&lt;p&gt;Arduinoの流儀からセットアップ方法、スケッチ入門や高度な入力・出力方法、トラブルシューティングまで説明されています。&lt;/p&gt;
-
-&lt;p&gt;また、日本語版の付録として&lt;strong&gt;Arduino公式リファレンス&lt;/strong&gt;が載っているので、辞書代わりに長く役立つ本です（ちなみにオフィスにあるのは第2版でしたが、最新版は第3版です）。&lt;/p&gt;
-
-&lt;p&gt;&lt;u&gt;しゃちょーののびすけさんは学生時代にこの本を購入してArduinoを初めたそうです。エモい。&lt;/u&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;micro-bitではじめるプログラミング-親子で学べるプログラミングとエレクトロニクス&#34;&gt;micro:bitではじめるプログラミング ―親子で学べるプログラミングとエレクトロニクス&lt;/h3&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/199/5.png&#34; alt=&#34;5&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;【書籍名】
-&lt;a href=&#34;https://www.amazon.co.jp/micro-bit%E3%81%A7%E3%81%AF%E3%81%98%E3%82%81%E3%82%8B%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0-%E2%80%95%E8%A6%AA%E5%AD%90%E3%81%A7%E5%AD%A6%E3%81%B9%E3%82%8B%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0%E3%81%A8%E3%82%A8%E3%83%AC%E3%82%AF%E3%83%88%E3%83%AD%E3%83%8B%E3%82%AF%E3%82%B9-Make-PROJECTS/dp/4873118131/ref=sr_1_1?s=books&amp;amp;ie=UTF8&amp;amp;qid=1533806917&amp;amp;sr=1-1&amp;amp;keywords=micro%3Abit+%E3%81%A7%E3%81%AF%E3%81%98%E3%82%81%E3%82%8B&#34;&gt;micro:bitではじめるプログラミング ―親子で学べるプログラミングとエレクトロニクス &lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;【著者】
-スイッチエデュケーション編集部&lt;/p&gt;
-
-&lt;p&gt;【定価】
-2,000円（税別）&lt;/p&gt;
-
-&lt;p&gt;micro:bitとは、&lt;strong&gt;誰でも利用できるように使いやすくデザインされた教育用マイコンボード&lt;/strong&gt;のこと。イギリスで開発され、11~12歳の小学生に無償で配布されているほどです。子どもでも使いやすい仕様になっているので、プログラミングの知識がなくても簡単に始めることができます。&lt;/p&gt;
-
-&lt;p&gt;そんなmicro:bitを手軽に使えるようにすることを目的とした本なので、説明もかなり丁寧に書かれています。基本知識だけでなく、具体的に作品紹介と作り方がのっているので、すぐにIoT開発体験をすることができます。&lt;/p&gt;
-
-&lt;h2 id=&#34;番外編-webエンジニアで電子工作初心者向け書籍&#34;&gt;【番外編】Webエンジニアで電子工作初心者向け書籍&lt;/h2&gt;
-
-&lt;h3 id=&#34;javascriptではじめるiot-いろはの-い-raspberry-piで楽々試作&#34;&gt;JavaScriptではじめるIoT いろはの“い&amp;rdquo; Raspberry Piで楽々試作&lt;/h3&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/199/6.png&#34; alt=&#34;6&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;【書籍名】
-&lt;a href=&#34;https://www.amazon.co.jp/JavaScript%E3%81%A7%E3%81%AF%E3%81%98%E3%82%81%E3%82%8BIoT-%E3%81%84%E3%82%8D%E3%81%AF%E3%81%AE%E2%80%9C%E3%81%84-Raspberry-Pi%E3%81%A7%E6%A5%BD%E3%80%85%E8%A9%A6%E4%BD%9C-%E5%B2%A9%E6%B0%B8%E7%BE%A9%E5%BC%98/dp/4865940065/ref=sr_1_fkmr1_2?s=books&amp;amp;ie=UTF8&amp;amp;qid=1533801412&amp;amp;sr=1-2-fkmr1&amp;amp;keywords=javascript%E3%81%A7%E5%A7%8B%E3%82%81%E3%82%8BIoT&#34;&gt;JavaScriptではじめるIoT いろはの“い&amp;rdquo; Raspberry Piで楽々試作&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;【著者】
-岩永義弘&lt;/p&gt;
-
-&lt;p&gt;【定価】
-1,800円（税別）&lt;/p&gt;
-
-&lt;p&gt;番外編ですが、Webエンジニアにおすすめの書籍。&lt;strong&gt;JavaScript&lt;/strong&gt;ではじめることができる&lt;strong&gt;Rasberry Pi&lt;/strong&gt;の本です。&lt;/p&gt;
-
-&lt;p&gt;ハードウェアを制御する原理からRasberry Piのセットアップ、JavaScriptでのプログラミングの書き方が説明されています。Node.jsに関する基礎知識も丁寧に載っています。&lt;/p&gt;
-
-&lt;p&gt;最近では、簡単に開発体験ができるように、Webエンジニア向けのJavaScriptで動くマイコンボードに注目が集まっています。気になっている方はぜひ読んでみてください。&lt;/p&gt;
-
-&lt;h2 id=&#34;終わりに&#34;&gt;終わりに&lt;/h2&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/199/7.png&#34; alt=&#34;7&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;いかがでしょうか？&lt;/p&gt;
-
-&lt;p&gt;どのマイコンボードを使いたいのか、プログラミングの知識があるのかどうかでもおすすめの書籍は変わってきます。&lt;/p&gt;
-
-&lt;p&gt;まずは初心者 of 初心者の本からパラパラと読みつつ、具体的に使い方を参考にしながら実践を繰り返していくのがいいのではないでしょうか。&lt;/p&gt;
-
-&lt;p&gt;私もIoT・電子工作の知識を増やして、ものづくりの機会を増やせる2018年にできるように頑張りまーす！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>LINE BOOT AWARDSイベント情報まとめ【随時更新】</title>
-      <link>https://dotstud.io/blog/linebootawards-2018-events-list/</link>
-      <pubDate>Mon, 20 Aug 2018 11:32:45 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/linebootawards-2018-events-list/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
-
-&lt;p&gt;この記事では、のびすけが運営に関わっているLINE BOOT AWARDSの過去のイベントをまとめていきます。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;イベント情報&lt;/li&gt;
-&lt;li&gt;写真アルバム&lt;/li&gt;
-&lt;li&gt;Togetter&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;をスクレイピングして半自動更新していきます。&lt;/p&gt;
-
-&lt;p&gt;今後開催のイベントは&lt;a href=&#34;https://linedev.connpass.com/&#34;&gt;こちら&lt;/a&gt;をご覧ください！&lt;/p&gt;
-
-&lt;h2 id=&#34;岩手開催-滝沢市-lineハッカソン-connpass&#34;&gt;【岩手開催！】滝沢市×LINEハッカソン - connpass&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;日程: 2018/07/21(土)&lt;/li&gt;
-&lt;li&gt;URL: &lt;a href=&#34;https://linedev.connpass.com/event/92475/&#34;&gt;https://linedev.connpass.com/event/92475/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;会場: ビッグルーフ滝沢&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://connpass-tokyo.s3.amazonaws.com/thumbs/87/7a/877aef3cb6f159db76fe0aaa6bdef5e1.png&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;写真アルバム
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://photos.app.goo.gl/RN7CqHnKEJMyytrTA&#34;&gt;#linebootawards 2018 滝沢市ハッカソン - Google Photos&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://lh3.googleusercontent.com/RXLNpVA_znQTjGBRrLZyk-crVtgk1M-MSSVLKzoseDTalQv81QrJJvuEgCzsCGMrZGt6E_lE8z0SIhHau8091mc4j012BpMdVKeMHqtoqOS4b_0qMz32Kjrhb5jQETdUzpouHvnhOCM=w600-h315-p-k&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;岩手県滝沢市 x LINEハッカソンのツイートまとめです。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;ツイート
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://togetter.com/li/1249929&#34;&gt;初開催！ 岩手県滝沢市 x LINEハッカソンツイートまとめ #linebootawards - Togetter&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://pimg.togetter.com/a6cccf5afa1b0d53455fb8393c88e65335348e52/68747470733a2f2f7062732e7477696d672e636f6d2f6d656469612f446976642d75465538414132586a762e6a70673a6c61726765?w=1200&amp;h=630&amp;t=c&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;その他
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://dotstud.io/blog/takizawa-line-hack-2018/&#34;&gt;LINE BOOT AWARDS関連イベント第１号！岩手県滝沢市主催ハッカソン開催レポート！  | dotstudio&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/191/00_eyecatch.png&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;line-boot-awards-2018-キックオフパーティー-connpass&#34;&gt;「LINE BOOT AWARDS 2018 」キックオフパーティー - connpass&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;日程: 2018/07/24(火)&lt;/li&gt;
-&lt;li&gt;URL: &lt;a href=&#34;https://linedev.connpass.com/event/93622/&#34;&gt;https://linedev.connpass.com/event/93622/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;会場: LINE株式会社&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://connpass-tokyo.s3.amazonaws.com/thumbs/df/f4/dff4c936c608d527c30c87c446768cfb.png&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;LINE BOOT AWARDSのキックオフパーティです。色々な関係各社やコミュニティの方が参加してくれて同窓会みたいでした笑&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;ツイート
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://togetter.com/li/1250162&#34;&gt;優勝賞金1000万！ 関係者が集い士気が高まる #linebootawards キックオフパーティツイートまとめ！ #clova_cek - Togetter&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://pimg.togetter.com/2b7d225098a0c95fa2aa8ced69e38eb789d5e7db/68747470733a2f2f696e7374616772616d2e636f6d2f702f426c7044555142427130422f6d656469612f3f73697a653d6c?w=1200&amp;h=630&amp;t=c&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;line-boot-awards公式夏期講習-messaging-api-アップデートハンズオン-connpass&#34;&gt;LINE BOOT AWARDS公式夏期講習 ～Messaging API アップデートハンズオン～ - connpass&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;日程: 2018/07/28(土)&lt;/li&gt;
-&lt;li&gt;URL: &lt;a href=&#34;https://linedev.connpass.com/event/93870/&#34;&gt;https://linedev.connpass.com/event/93870/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;会場: レバレジーズ株式会社&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://connpass-tokyo.s3.amazonaws.com/thumbs/df/f4/dff4c936c608d527c30c87c446768cfb.png&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;写真アルバム
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://photos.google.com/share/AF1QipPOgZx29CNkzY_khQKlMFvYAlI_WFJK06blWNGBWMCrK7QazrL5YgovqALtbztU8A?hl=ja&amp;amp;key=Q2ljMWxmN2hWMVFoTzNEQVdrUl9Kdkw2QV9aalNB&#34;&gt;2018/7/28 公式LINEBOT夏期講習 #linebootawards - Google フォト&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://lh3.googleusercontent.com/xINlk6jeCvidSiJ9Bo9xeYsmXt-ptytldq4VUizwiA-FAg6-AKWityh0qexMSm9IFdkapVT28gj06VSqwW_V7NNG_0g2QNuL7YqTDx_g_L7IoQPniS_CgIlCSGGSC2r4VVJxBKVP7JA=w600-h315-p-k&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;LINE BOOT AWARDS公式企画のハンズオンです！ Messaging APIの新機能などが盛りだくさんでした。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;ツイート
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://togetter.com/li/1251245&#34;&gt;悪天候の中でも盛り上がった！「LINE BOOT AWARDS公式夏期講習」ツイートまとめ #linebootawards - Togetter&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://pimg.togetter.com/585cc36e8614abf7cac0743ecd644213db392e32/68747470733a2f2f696e7374616772616d2e636f6d2f702f426c7839633772684b32692f6d656469612f3f73697a653d6c?w=1200&amp;h=630&amp;t=c&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;福岡開催-line-boot-awards-2018キックオフ-cekハンズオン-connpass&#34;&gt;【福岡開催】LINE BOOT AWARDS 2018キックオフ＆CEKハンズオン - connpass&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;日程: 2018/08/06(月)&lt;/li&gt;
-&lt;li&gt;URL: &lt;a href=&#34;https://linedev.connpass.com/event/95482/&#34;&gt;https://linedev.connpass.com/event/95482/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;会場: LINE Fukuoka株式会社&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://connpass-tokyo.s3.amazonaws.com/thumbs/04/b0/04b0d294e7b923d0917032cf69872df7.png&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;clovaスキル-駅すぱあとwebサービス開発体験-初心者向けハンズオン-connpass&#34;&gt;Clovaスキル×駅すぱあとWebサービス開発体験！初心者向けハンズオン - connpass&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;日程: 2018/08/06(月)&lt;/li&gt;
-&lt;li&gt;URL: &lt;a href=&#34;https://linedev.connpass.com/event/96539/&#34;&gt;https://linedev.connpass.com/event/96539/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;会場: 株式会社ヴァル研究所&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://connpass-tokyo.s3.amazonaws.com/thumbs/3c/f6/3cf66f7bfe6b6db73b3a44d380a1b6c3.png&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;写真アルバム
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://photos.google.com/share/AF1QipO0uRPBam4i2SO87GPIhTHaFDcnuoN8Pz1qj64nFKhH_4mhGtZbIkRaeiam31r5DQ?hl=ja&amp;amp;key=SVhmNXEyemI1aXNPdDFhUzE3RzdieUJlNlp2Q1ZR&#34;&gt;20180806_ヴァル研 x LINE BOOT AWARDSハンズオン - Google フォト&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://lh3.googleusercontent.com/9F6OvEyweS9VnCH2RX3SP_HDJil2lrw3r-7HurypOhKZIgePZcPuZHZVbcY_Tw92lImYw9Vdhy3Kyd9y2MsvvF8NT38pHnZ992cw2RDi7Sw7_sSsOjJrQOUDX6MY7YPvwSR5UcIaaQw=w600-h315-p-k&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;駅すぱあとでおなじみヴァル研究所さんでClovaのハンズオンが開催されました！&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;ツイート
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://togetter.com/li/1254352&#34;&gt;ヴァル研開催！ 山手線ゲームClovaハンズオンツイートまとめ #linebootawards #駅すぱあとWebサービス - Togetter&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://pimg.togetter.com/3ace64fdcff56b7722bdd0d31a27a4baea6a7d15/68747470733a2f2f696e7374616772616d2e636f6d2f702f426d4a49636b356869544d2f6d656469612f3f73697a653d6c?w=1200&amp;h=630&amp;t=c&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;ハンズオン-line-clova-ibm-watsonでaiを学ぶ-connpass&#34;&gt;[ハンズオン] LINE Clova×IBM WatsonでAIを学ぶ - connpass&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;日程: 2018/08/17(金)&lt;/li&gt;
-&lt;li&gt;URL: &lt;a href=&#34;https://linedev.connpass.com/event/96271/&#34;&gt;https://linedev.connpass.com/event/96271/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;会場: カサレアル泉岳寺トレーニングセンター&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://connpass-tokyo.s3.amazonaws.com/thumbs/5c/36/5c36fc6a8913e6a4463dbcd101f2b5ef.png&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;ツイート
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://twitter.com/KyokoNishito/status/1030396895301054464&#34;&gt;Kyoko Nishitoさんのツイート: &amp;quot;本日はLINEの立花さんと合同で行っています。#linebootawards #CallForCode #IBMCloud #Watson… &amp;quot;&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://pbs.twimg.com/media/Dky0gzDU8AAqmcC.jpg:large&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;その他
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://takesso-tech.hatenablog.com/entry/2018/08/18/000043&#34;&gt;行ってきた: [ハンズオン] LINE Clova×IBM WatsonでAIを学ぶ - TaKesso&amp;#39;s Tech Blog&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://cdn.blog.st-hatena.com/images/theme/og-image-1500.png&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;広島開催-clova-extensions-kit-夏期講習-connpass&#34;&gt;【広島開催】Clova Extensions Kit 夏期講習++！ - connpass&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;日程: 2018/08/18(土)&lt;/li&gt;
-&lt;li&gt;URL: &lt;a href=&#34;https://linedev.connpass.com/event/95846/&#34;&gt;https://linedev.connpass.com/event/95846/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;会場: イノベーション・ハブ・ひろしまCamps&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://connpass-tokyo.s3.amazonaws.com/thumbs/43/67/4367abe83069813755d5676060258593.png&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;その他
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://twitter.com/m_ando_japan/status/1030724811113164802&#34;&gt;みっちゃん/安藤 光昭さんのツイート: &amp;quot;#linebootawards に向けて、ハンズオン実施中！&amp;#10;1000万目指して頑張る。 #HMCN… &amp;quot;&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://pbs.twimg.com/media/Dk3er2XV4AAweid.jpg:large&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;clovaスキル初心者向けハンズオン-with-レッドインパルス-connpass&#34;&gt;Clovaスキル初心者向けハンズオン with レッドインパルス - connpass&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;日程: 2018/08/19(日)&lt;/li&gt;
-&lt;li&gt;URL: &lt;a href=&#34;https://linedev.connpass.com/event/97021/&#34;&gt;https://linedev.connpass.com/event/97021/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;会場: 電気通信大学 西11号館 5階会議室&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://connpass-tokyo.s3.amazonaws.com/thumbs/b5/1b/b51b6e6ab5ddd9173850826da89ce90a.png&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;その他
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://twitter.com/stachibana/status/1031040370572910593&#34;&gt;tachibanaさんのツイート: &amp;quot;今日はレッドインパルスさんと一緒にCEKハンズオンです！ #Clova_CEK #linebootawards #iot_hack… &amp;quot;&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://pbs.twimg.com/media/Dk79v3PUYAUWVVD.jpg:large&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;増枠-8-21-東京-スマートスピーカーハンズオン-もくもく会-line-clovaスキル開発-connpass&#34;&gt;【増枠：8/21 東京】スマートスピーカーハンズオン＆もくもく会 〜LINE Clovaスキル開発〜 - connpass&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;日程: 2018/08/21(火)&lt;/li&gt;
-&lt;li&gt;URL: &lt;a href=&#34;https://kotodama.connpass.com/event/97272/&#34;&gt;https://kotodama.connpass.com/event/97272/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;会場: コンフォート新宿&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://connpass-tokyo.s3.amazonaws.com/thumbs/62/24/622495383389b9345f3ebf053a144c6f.png&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;8-25-26-line-boot-awards-2018-ハッカソン東京-vol-01-connpass&#34;&gt;【8/25-26】LINE BOOT AWARDS 2018 ハッカソン東京 vol.01 - connpass&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;日程: 2018/08/25(土)&lt;/li&gt;
-&lt;li&gt;URL: &lt;a href=&#34;https://linedev.connpass.com/event/94831/&#34;&gt;https://linedev.connpass.com/event/94831/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;会場: LINE株式会社&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://connpass-tokyo.s3.amazonaws.com/thumbs/58/3e/583ebd480e49ad1023b5d4d54c44768e.png&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;写真アルバム
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://photos.google.com/u/0/share/AF1QipOwPbWd5YOnAyG-Et2ZGdp_Xqa2QO8U9oVmidkMlJOojiOWwUcG87J9m0HRcs_eWA?hl=ja&amp;amp;key=aUItR1oxUVVIR3N2N3pIOUtsRUVfSmJ3cFlQN1l3&#34;&gt;LINE BOOT AWARDS 2018ハッカソン東京vol.01 - Google フォト&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://lh3.googleusercontent.com/OQoj4ikDLHkr_SrvFpe6N692kwpBVuTBkoShRTQdzuV97QB82V-u_Nx5GhRYbcYlSCSH483EhAiL4BCm23zneumYqhFftwqJpv8UQlh_HkOgnexpAcK_5ctw8ukYfsyBHopZbqiO1g=w600-h315-p-k&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;まとめました。 更新日:8月26日19時37分&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;ツイート
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://togetter.com/li/1260541&#34;&gt;【8/25-26】LINE BOOT AWARDS 2018 ハッカソン東京 vol.01 #linebootawards - Togetter&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://pimg.togetter.com/0184c4d5a0d4e8dd3488471008a411423e695242/68747470733a2f2f7062732e7477696d672e636f6d2f6d656469612f446c614539472d5538414176536b652e6a70673a6c61726765?w=1200&amp;h=630&amp;t=c&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;その他
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://dotstud.io/blog/line-award-hackathon-tokyo/&#34;&gt;【優勝賞金1000万】LINE BOOT AWARDSの勢いが止まらない！斬新アイデアが飛び出した東京ハッカソンの様子をレポート #linebootawards | dotstudio&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/216/00_eyecatch.png&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;line-api-ハンズオン-line-bot-clovaスキル-新潟-connpass&#34;&gt;LINE API ハンズオン(LINE bot,Clovaスキル)@新潟 - connpass&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;日程: 2018/08/25(土)&lt;/li&gt;
-&lt;li&gt;URL: &lt;a href=&#34;https://linedev.connpass.com/event/97300/&#34;&gt;https://linedev.connpass.com/event/97300/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;会場: Prototype Cafe&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://connpass-tokyo.s3.amazonaws.com/thumbs/4e/dd/4edde3256464ad0e79174f4352472354.png&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;福井開催-仁愛大学-ふくい産業支援センター-line-boot-awardsハンズオン-福井-connpass&#34;&gt;【福井開催！】仁愛大学×ふくい産業支援センター×LINE BOOT AWARDSハンズオン＠福井 - connpass&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;日程: 2018/08/28(火)&lt;/li&gt;
-&lt;li&gt;URL: &lt;a href=&#34;https://linedev.connpass.com/event/96803/&#34;&gt;https://linedev.connpass.com/event/96803/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;会場: 仁愛大学駅前サテライト&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://connpass-tokyo.s3.amazonaws.com/thumbs/b8/c3/b8c3cfb92cbeda88b8f6255b12c0e07c.png&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;写真アルバム
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://photos.app.goo.gl/Ag4sxYAoV4X3HFjx6&#34;&gt;2018/8/28 #linebootawards 福井ハンズオン！ - Google Photos&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://lh3.googleusercontent.com/yUMh_0Lkg2TkzQpxwF1kUgzxeuHa5LWsoYKlX_0TZ-wc1kQD8tIHCYkzgzjHWnEgoLVwOdey_yUfSLuQiv1roPL-GGV5KLT4QeXeUkW5dD223VyzzoXI_cUIz41Q-R0DnX8r49ccxxk=w600-h315-p-k&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;福井 仁愛大学サテライトで実施！古民家をリノベーションしたおしゃれな雰囲気でした&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;ツイート
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://togetter.com/li/1261401&#34;&gt;福井開催！ LINE BOT &amp;amp; Clovaのダブルハンズオン！ ツイートまとめ #linebootawards - Togetter&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://pimg.togetter.com/ea20ab0a0058196aa82be0888d3617732548a331/68747470733a2f2f696e7374616772616d2e636f6d2f702f426e426736547868546e782f6d656469612f3f73697a653d6c?w=1200&amp;h=630&amp;t=c&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;その他
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://twitter.com/n0bisuke/status/1034632397763964928&#34;&gt;のびすけ / sugawaraさんのツイート: &amp;quot;コメント欄がすごい これが LINE API Expertsの若狭氏 #linebootawards #若狭… &amp;quot;&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://pbs.twimg.com/media/DlvAp61U0AISeiN.jpg:large&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;8-29-obniz-line-boot-awards-夏の終わりの駆け込みハンズオン-connpass&#34;&gt;【8/29】obniz×LINE BOOT AWARDS 夏の終わりの駆け込みハンズオン - connpass&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;日程: 2018/08/29(水)&lt;/li&gt;
-&lt;li&gt;URL: &lt;a href=&#34;https://linedev.connpass.com/event/96795/&#34;&gt;https://linedev.connpass.com/event/96795/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;会場: LINE株式会社&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://connpass-tokyo.s3.amazonaws.com/thumbs/ce/77/ce77ba2cfae2990aaa68fe0e3cdaf844.png&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;その他
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://object-storage.tyo1.conoha.io/v1/nc_35a49f4e51c74e35ad3493c52d37f63e/images/LINE%20x%20obniz%20%E3%83%8F%E3%83%B3%E3%82%BA%E3%82%AA%E3%83%B3.pdf&#34;&gt;undefined&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;undefined&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;iotハッカソン-business-connpass&#34;&gt;IoTハッカソン 〜business〜 - connpass&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;日程: 2018/09/01(土)&lt;/li&gt;
-&lt;li&gt;URL: &lt;a href=&#34;https://ueqareer.connpass.com/event/88839/&#34;&gt;https://ueqareer.connpass.com/event/88839/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;会場: フューチャーアーキテクト&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://connpass-tokyo.s3.amazonaws.com/thumbs/22/58/22588d05ca01b65ad83da4e996b74cd5.png&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;写真アルバム
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://photos.app.goo.gl/cyakZ2DfCaNiUJTr7&#34;&gt;IoTハッカソン 〜business〜 - Google Photos&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://lh3.googleusercontent.com/uiaCC-wbSJSkykfAG33VsiifVQLDu-EDx5JwwD7Yf43sHapGRjQ5IEcIAoyh_3GqwbHhWzMhV-y4GKjT9-uaMt-JX9BQbNWsbx3IOu98v0NUNk8fLO7lDO0sGFLp-Uo_D8a6Pkha7_o=w600-h315-p-k&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ほぼ一人しかツイートしてないけどまとめてみたよ〜&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;ツイート
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://togetter.com/li/1264473&#34;&gt;Clova祭りなレッドインパルスハッカソン #iot_hack #linebootawards - Togetter&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://pimg.togetter.com/d4f998dc5deb4ecb6da6dd492d4228ec82b8a6f2/68747470733a2f2f696e7374616772616d2e636f6d2f702f426e4c75594e5242544e592f6d656469612f3f73697a653d6c?w=1200&amp;h=630&amp;t=c&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;その他
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://twitter.com/LINE_DEV/status/1035785934686453762&#34;&gt;LINE_DEVさんのツイート: &amp;quot;本日の関連イベント④、東京の大崎ではレッドインパルスさん主催で学生エンジニア限定のIoTハッカソンが明日まで開催中。5チームもClova使用いただき、Clovaハッカソンっぽくなってるというありがたい状況に。そのまま学生賞＆グランプリ等狙って頂けると！！！#iot_hack #linebootawards #Clova_CEK… https://t.co/5YnFgve199&amp;quot;&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://pbs.twimg.com/media/Dl_ZPmSVsAAL2XV.jpg:large&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;9-3-札幌-line-boot-awards-clova-スキルハンズオン-connpass&#34;&gt;【9/3@札幌】LINE BOOT AWARDS - Clova スキルハンズオン - connpass&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;日程: 2018/09/03(月)&lt;/li&gt;
-&lt;li&gt;URL: &lt;a href=&#34;https://linedev.connpass.com/event/96793/&#34;&gt;https://linedev.connpass.com/event/96793/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;会場: 札幌カフェ 5F会議室・研修室&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://connpass-tokyo.s3.amazonaws.com/thumbs/73/f6/73f68d632e030e542e05f38b58c0e5b5.png&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;写真アルバム
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://photos.app.goo.gl/ndq9P8vxQdGWu1YM8&#34;&gt;&lt;sup&gt;9&lt;/sup&gt;&amp;frasl;&lt;sub&gt;3&lt;/sub&gt; LINE BOOT AWARDS 札幌ハンズオン - Google Photos&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://lh3.googleusercontent.com/XsXpSEcyuKj6YVeiWxg8st-PbsiSn5mg47E6S7jvscU75RfVGDFrKoDWn8cQEh2GWuBiwwTTHrxtPT5a9R3Rs-iDH2diZeJ3kWg4u8Q6OBtvletP3OH29kaOY25WsMcTVGcB6CsxNOI=w600-h315-p-k&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Java Doさん協力のもと札幌でLINE Clovaのスキル開発ハンズオン開催です！1Fのカフェの名前がまさかのCloverだった&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;ツイート
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://togetter.com/li/1263476&#34;&gt;参加者がほぼエンジニアで熱量を感じた札幌開催Clovaスキルハンズオン！ with Java Do #linebootawards - Togetter&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&#34;http://pimg.togetter.com/6194fbaf22487bf1f305c3f7a391a9eac2a7e322/68747470733a2f2f696e7374616772616d2e636f6d2f702f426e5138414258687756672f6d656469612f3f73697a653d6c?w=1200&amp;h=630&amp;t=c&#34; width=&#34;400px&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;まだまだ開催していくLINE BOOT AWARDS関連イベント、要チェックですね。
-盛り上げて行きましょう〜 :)&lt;/p&gt;
 </description>
     </item>
     
