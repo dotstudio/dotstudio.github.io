@@ -7,3226 +7,8 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2018 dotstudio inc.</copyright>
-    <lastBuildDate>Fri, 21 Sep 2018 11:59:14 +0900</lastBuildDate>
+    <lastBuildDate>Sat, 15 Sep 2018 10:56:31 +0900</lastBuildDate>
     <atom:link href="/categories/try/" rel="self" type="application/rss+xml" />
-    
-    <item>
-      <title>【ハンズオン資料】Clovaでセンサー連携やってみよう！Nefry BTで温湿度をチェック</title>
-      <link>https://dotstud.io/blog/nefrybt-clova-handson-awards/</link>
-      <pubDate>Fri, 21 Sep 2018 11:59:14 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/nefrybt-clova-handson-awards/</guid>
-      
-      <description>
-
-&lt;p&gt;この記事は9/21の&lt;a href=&#34;https://linedev.connpass.com/event/101177/&#34;&gt;センサデータをClova連携！LINE BOOT AWARDS×NefryBTハンズオン&lt;/a&gt;向け資料です。&lt;strong&gt;記事を読んで試せる内容&lt;/strong&gt;になっているので、参加されていない方もぜひ試してみてください！&lt;/p&gt;
-
-&lt;section class=&#34;caution&#34;&gt;
-&lt;p&gt;■ハンズオンの進行について&lt;/p&gt;
-
-ハンズオンはこのページに沿って進めます。進められる方は、どんどん進めていきましょう！リンクは別タブや別ウィンドウで開くのがオススメです。
-&lt;/section&gt;
-
-&lt;section class=&#34;caution&#34;&gt;
-&lt;p&gt;■Nefry BTドキュメントについて&lt;/p&gt;
-諸々リニューアルしたばかりのため、WIP状態の部分が多いです。ご了承ください（わかりづらい部分ぜひ教えてください）。近日中にアップデートします。
-&lt;/section&gt;
-
-&lt;h2 id=&#34;今回やってみること&#34;&gt;今回やってみること&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;Clovaから遠隔の場所の温度・湿度を確認できる仕組み&lt;/strong&gt;を、Clova、Nefry BT、Groveセンサ、RunKitを使って実装してみます。温湿度チェック以外にも、不在時の開閉検知や異常検知などに転用できる仕組みになっています！&lt;/p&gt;
-
-&lt;h3 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h3&gt;
-
-&lt;h4 id=&#34;nefry-bt-ディスプレイ&#34;&gt;■Nefry BT＆ディスプレイ&lt;/h4&gt;
-
-&lt;p&gt;Nefry BTは「ESP-WROOM-32」というWi-Fi・BLE通信モジュールを搭載した、Arduinoと同じように開発できるマイコンボードです。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/215/nefry.png&#34; alt=&#34;nefry&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/grove/&#34;&gt;Grove&lt;/a&gt;という刺すだけで配線できるモジュール対応のコネクタを搭載していて、&lt;strong&gt;ハードウェアをあまり意識せず&lt;/strong&gt; に開発できます。&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;grove温湿度センサ&#34;&gt;■Grove温湿度センサ&lt;/h4&gt;
-
-&lt;p&gt;刺すだけで配線できる&lt;a href=&#34;https://dotstud.io/docs/grove/&#34;&gt;Grove&lt;/a&gt;の、温湿度センサです。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/222/grove.png&#34; alt=&#34;grove&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;clova-friends-clova-friends-mini&#34;&gt;■Clova Friends / Clova Friends mini&lt;/h4&gt;
-
-&lt;p&gt;LINE株式会社が提供するスマートスピーカです。スキルを作るところまではデバイスがなくてもできます。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/222/friends.png&#34; alt=&#34;friends&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;かわいい。&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;arduino-ide&#34;&gt;■Arduino IDE&lt;/h4&gt;
-
-&lt;p&gt;開発（プログラムの書き込み）には&lt;a href=&#34;https://www.arduino.cc/en/Main/Software&#34;&gt;Arduino IDE&lt;/a&gt;というフリーソフトウェアを利用します。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/arduinoide-setup/&#34;&gt;こちら&lt;/a&gt;の手順を見ながらご自身のPCにインストールしてください。&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;lineアカウント&#34;&gt;■LINEアカウント&lt;/h4&gt;
-
-&lt;p&gt;Clovaスキルを開発するために、LINEアカウントが必要です。&lt;a href=&#34;https://developers.line.me/console/&#34;&gt;こちら&lt;/a&gt;からログインできるか試しておいてください。&lt;/p&gt;
-
-&lt;section class=&#34;caution&#34;&gt;
-PCから設定する際にメールアドレスでのログインが必要になります。あらかじめスマートフォンアプリでメールアドレスを設定しておいてください。
-&lt;/section&gt;
-
-&lt;h2 id=&#34;事前準備&#34;&gt;事前準備&lt;/h2&gt;
-
-&lt;h3 id=&#34;開発環境-arduino-ide-にボードを追加&#34;&gt;開発環境（Arduino IDE）にボードを追加&lt;/h3&gt;
-
-&lt;p&gt;Nefty BTの開発にはフリーソフトウェアの&lt;a href=&#34;https://www.arduino.cc/en/Main/Software&#34;&gt;Arduino IDE&lt;/a&gt;を利用します。インストールがまだの方は「&lt;a href=&#34;https://dotstud.io/docs/arduinoide-setup/&#34;&gt;Arduino IDEのインストール&lt;/a&gt;」を見ながら進めてください。&lt;/p&gt;
-
-&lt;p&gt;Arduino IDEには、Nefry BTのボード情報の追加が必要です。「&lt;a href=&#34;https://dotstud.io/docs/nefrybt-setup-arduino-ide/&#34;&gt;環境構築（Arduino IDE）&lt;/a&gt;」を見ながら追加してください。&lt;/p&gt;
-
-&lt;section class=&#34;caution&#34;&gt;
-&lt;p&gt;■PCにUSB接続できない方&lt;/p&gt;
-セキュリティやポートの問題でPCにUSB接続できない方は、&lt;a href=&#34;https://dotstud.io/docs/nefrybt-program-zip/&#34;&gt;Wi-Fi経由でプログラムの書き込み&lt;/a&gt;が可能です。給電はコンセントやモバイルバッテリーから直接行ってください。
-&lt;/section&gt;
-
-&lt;h2 id=&#34;はじめてのプログラムを書き込んでみる&#34;&gt;はじめてのプログラムを書き込んでみる&lt;/h2&gt;
-
-&lt;p&gt;まずはNefry BTに簡単なプログラムを書き込んでみましょう。Nefry BTは、最初から下記の機能が搭載されています。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;内蔵フルカラーLED&lt;/li&gt;
-&lt;li&gt;スイッチ（SW/RST）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;最初のプログラムとして、Lチカをやってみます。LEDチカチカの略で、Webでいう”Hello, World!”です。&lt;/p&gt;
-
-&lt;h3 id=&#34;nefry-btを起動&#34;&gt;Nefry BTを起動&lt;/h3&gt;
-
-&lt;p&gt;さっそくNefry BTを起動してみましょう！&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/222/on.png&#34; alt=&#34;on&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;PCやコンセント、モバイルバッテリーなどに接続し、給電します。緑色のLEDが点滅したあと、ランダムに光ります。&lt;/p&gt;
-
-&lt;p&gt;電源を切るときは、給電をやめます。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/222/off.png&#34; alt=&#34;off&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;マイコンボードは基本的に、給電によって電源のON/OFFを制御します。再起動時には最後に書き込んだプログラムが実行されます。&lt;/p&gt;
-
-&lt;h3 id=&#34;arduino-ideでプログラムを書く&#34;&gt;Arduino IDEでプログラムを書く&lt;/h3&gt;
-
-&lt;p&gt;Arduino IDEを立ち上げ、メニューから&lt;strong&gt;&lt;code&gt;ファイル &amp;gt; 新規ファイル&lt;/code&gt;&lt;/strong&gt; を選択します。下記のような画面が開きます。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/215/ide.png&#34; alt=&#34;ide&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;エディタ部分に、下記のプログラムをコピーして貼り付けましょう。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
-
-void setup() {
-}
-
-void loop() {
-  Nefry.setLed(0, 0, 255); //色合いをRGBで指定
-  Nefry.ndelay(1000); //1秒待つ
-  Nefry.setLed(0, 0, 0); //LEDをオフにする
-  Nefry.ndelay(1000); //1秒待つ
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;下記でプログラムの内容を解説しています。&lt;/p&gt;
-
-&lt;section class=&#34;caution&#34;&gt;
-&lt;p&gt;■PCにUSB接続できない方&lt;/p&gt;
-セキュリティやポートの問題でPCにUSB接続できない方は、&lt;a href=&#34;https://dotstud.io/docs/nefrybt-program-zip/&#34;&gt;Wi-Fi経由でプログラムのアップロード&lt;/a&gt;が可能です。その場合、下記の書き込み手順は不要です。給電はコンセントやモバイルバッテリーから行ってください。
-&lt;/section&gt;
-
-&lt;h3 id=&#34;ボードを選択&#34;&gt;ボードを選択&lt;/h3&gt;
-
-&lt;p&gt;メニューの&lt;strong&gt;&lt;code&gt;ツール &amp;gt; ボード &amp;gt; Nefry BT R2 / R3&lt;/code&gt;&lt;/strong&gt; を選択します。この際、ボードは使っているリビジョンに合わせて選択してください。（参照：&lt;a href=&#34;https://dotstud.io/docs/nefrybt-setup-revision/&#34;&gt;リビジョンを確認&lt;/a&gt;）&lt;/p&gt;
-
-&lt;p&gt;2018年4月以降販売しているNefry BT、ハンズオンで貸し出しているNefry BTは全てR3です。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/215/select_board.png&#34; alt=&#34;select_board&#34;&gt;
-
-&lt;/center&gt;
-
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/215/select_board2.png&#34; alt=&#34;select_board2&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;h3 id=&#34;シリアルポートを選択&#34;&gt;シリアルポートを選択&lt;/h3&gt;
-
-&lt;p&gt;Nefry BTをPCのUSBポートにさします。プログラムはこのポートを介して、シリアル通信でNefry BTに流し込まれます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefrybt/power_supply.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Macの場合は、メニューの&lt;strong&gt;&lt;code&gt;ツール &amp;gt; シリアルポート &amp;gt; /dev/cu.usbserial-xxxxxx&lt;/code&gt;&lt;/strong&gt; を選択します。環境によっては&lt;strong&gt;&lt;code&gt;/dev/tty.usbserial-xxxxxx&lt;/code&gt;&lt;/strong&gt; などの場合もあります。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/215/select_port.png&#34; alt=&#34;select_port&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;Windowsの場合は、&lt;strong&gt;&lt;code&gt;ツール &amp;gt; シリアルポート &amp;gt; /dev/COM-XX&lt;/code&gt;&lt;/strong&gt; を選択します。&lt;/p&gt;
-
-&lt;p&gt;&lt;font size=&#34;2&#34;&gt;
-※Nefry BTを抜き差しすると、シリアルポートの選択が解除される場合があります。適宜確認しましょう。
-&lt;/font&gt;&lt;/p&gt;
-
-&lt;section class=&#34;caution&#34;&gt;
-&lt;p&gt;■シリアルポートが選択できない方&lt;/p&gt;
-USBドライバのインストールが必要な場合があります。&lt;a href=&#34;&#34;&gt;こちら&lt;/a&gt;を参照して、USBを認識させるためのドライバをインストールしてください。また、Arduino IDEの再起動やUSBの抜き差しで認識する場合があります。
-&lt;/section&gt;
-
-&lt;h3 id=&#34;名前をつけて保存&#34;&gt;名前をつけて保存&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;code&gt;ファイル&amp;gt;名前をつけて保存&lt;/code&gt;&lt;/strong&gt; を選択して保存します。「NefryLedBlink」など、後からみてわかりやすい名前がオススメです。&lt;/p&gt;
-
-&lt;h3 id=&#34;プログラムを書き込む&#34;&gt;プログラムを書き込む&lt;/h3&gt;
-
-&lt;p&gt;「✔️」を押してプログラムをコンパイルします。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/222/compile.png&#34; alt=&#34;compile&#34;&gt;
-
-&lt;/center&gt;
-
-この手順は省略しても大丈夫ですが、シンタックス（文法）チェックをしてくれるので実施するのがオススメです。&lt;/p&gt;
-
-&lt;p&gt;左上の「→」ボタンを押してNefry BTにプログラムを書き込みます。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/222/write.png&#34; alt=&#34;write&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-&lt;p&gt;ESP32モジュールの特性上、書き込みに1分ほどかかります。エラーが出てしまうときは、「&lt;a href=&#34;https://dotstud.io/docs/nefrybt-error-handling-2/&#34;&gt;コンパイルは成功するのに書き込みが失敗する&lt;/a&gt;」を参照してください。&lt;/p&gt;
-
-&lt;h3 id=&#34;動作を確認&#34;&gt;動作を確認&lt;/h3&gt;
-
-&lt;p&gt;起動したら、「青いLEDが1秒ごとに光る」ことを確認しましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://gyazo.com/801e9ff4982f3326e6f1c3a133fd8de3&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/801e9ff4982f3326e6f1c3a133fd8de3.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;プログラムの解説&#34;&gt;プログラムの解説&lt;/h3&gt;
-
-&lt;p&gt;プログラムの要所を説明していきます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;冒頭でライブラリを読み込んでいます。Nefry BTのライブラリでできることは「&lt;a href=&#34;https://dotstud.io/docs/nefrybt-liblary/&#34;&gt;Nefryのライブラリ&lt;/a&gt;」を参照してください。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;void setup() {
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;起動時に処理される部分です。今回はなにもしません。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;void loop() {
-  Nefry.setLed(0, 0, 255); //色合いをRGBで指定
-  Nefry.ndelay(1000); //1秒待つ
-  Nefry.setLed(0, 0, 0); //LEDをオフにする
-  Nefry.ndelay(1000); //1秒待つ
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;起動時に繰り返し実行する部分です。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;Nefry.setLed()&lt;/code&gt;という関数で、光らせる色合いをRGBの順で指定します。始めにR=0, G=0, B=255を渡しているので、青く光ります。&lt;/p&gt;
-
-&lt;p&gt;続いて&lt;code&gt;Nefry.ndelay()&lt;/code&gt;という関数で次の処理まで指定した時間待ちます。Arduinoでは時間はミリ秒で指定するので、1000は1秒です。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;Nefry.setLed()&lt;/code&gt;に0, 0, 0を渡すことで、LEDはオフになります。オンとオフのあと1秒ずつ待つことで、点滅を表現しています。&lt;/p&gt;
-
-&lt;h2 id=&#34;オフラインで温湿度センサを試す&#34;&gt;オフラインで温湿度センサを試す&lt;/h2&gt;
-
-&lt;p&gt;次は、配線してセンサのデータを取得してみます。まずは&lt;strong&gt;インターネットに繋がらない電子工作&lt;/strong&gt;、です。&lt;/p&gt;
-
-&lt;p&gt;エラーの切り分け（どこでエラーが起こっているか）を特定するために、自分で開発するときもステップバイステップでできているか確認しつつ進めるのがオススメです。&lt;/p&gt;
-
-&lt;h3 id=&#34;grove-温湿度センサを接続&#34;&gt;Grove 温湿度センサを接続&lt;/h3&gt;
-
-&lt;p&gt;Groveは刺すだけで配線できるのでGNDや信号線などの確認は必要ありませんが、デジタル・アナログ・I2Cなどの通信方法はGroveモジュールによって違います。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/222/wiki.png&#34; alt=&#34;wiki&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;読み取り方式は製造元・SeeedStudioの&lt;a href=&#34;http://wiki.seeedstudio.com/Grove-TemperatureAndHumidity_Sensor/&#34;&gt;Wikiページ&lt;/a&gt;などを見て確認しましょう。&lt;/p&gt;
-
-&lt;p&gt;今回は「A0」というソケットに差し込みます。少し硬いですが、カチッと言うまで押し込めます。&lt;strong&gt;配線作業は常に電源オフの状態&lt;/strong&gt; で行います。&lt;/p&gt;
-
-&lt;h3 id=&#34;温湿度センサを扱うライブラリを読み込む&#34;&gt;温湿度センサを扱うライブラリを読み込む&lt;/h3&gt;
-
-&lt;p&gt;リンク先のページの緑のボタン「Clone or Download」から「ダウンロード」を選択します（2つのページから両方ダウンロードしてください）。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/adafruit/DHT-sensor-library&#34;&gt;https://github.com/adafruit/DHT-sensor-library&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/adafruit/Adafruit_Sensor&#34;&gt;https://github.com/adafruit/Adafruit_Sensor&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Arduino IDEの「スケッチ &amp;gt; ライブラリをインクルード &amp;gt; .zip形式のライブラリをインストール」から、ダウンロードされたZIPファイルを選択して完了です。&lt;/p&gt;
-
-&lt;section class=&#34;caution&#34;&gt;
-&lt;p&gt;■ライブラリとは&lt;/p&gt;
-センサや外部サービスを使うために、あらかじめプログラムを書きパッケージ化したものです。既に誰かが作ってくれているものを取り込んだり、自作したりできます。
-&lt;/section&gt;
-
-&lt;h3 id=&#34;プログラムを書き込む-1&#34;&gt;プログラムを書き込む&lt;/h3&gt;
-
-&lt;pre&gt;&lt;code&gt;#include &amp;quot;DHT.h&amp;quot;
-
-#define DHTPIN A0
-#define DHTTYPE DHT11
-
-DHT dht(DHTPIN, DHTTYPE);
-
-void setup() {
-  Serial.begin(9600);
-  Serial.println(&amp;quot;温度・湿度をチェック&amp;quot;);
-
-  dht.begin();
-}
-
-void loop() {
-  delay(2000);
-
-  float h = dht.readHumidity();
-  float t = dht.readTemperature();
-
-  if (isnan(h) || isnan(t)) {
-    Serial.println(&amp;quot;読み取りに失敗しました…&amp;quot;);
-    return;
-  }
-
-  Serial.print(&amp;quot;湿度: &amp;quot;);
-  Serial.print(h);
-  Serial.print(&amp;quot; %\t&amp;quot;);
-  Serial.print(&amp;quot;温度: &amp;quot;);
-  Serial.print(t);
-  Serial.println(&amp;quot; *C &amp;quot;);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;書き込み手順は、上記の「&lt;a href=&#34;#はじめてのプログラムを書き込んでみる&#34;&gt;はじめてのプログラムを書き込んでみる&lt;/a&gt;」を参照してくださいね。&lt;/p&gt;
-
-&lt;h3 id=&#34;動作を確認-1&#34;&gt;動作を確認&lt;/h3&gt;
-
-&lt;p&gt;メニューの&lt;strong&gt;&lt;code&gt;ツール&amp;gt;シリアルモニタ&lt;/code&gt;&lt;/strong&gt; を選択して開きます。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/215/serial_monitor.png&#34; alt=&#34;serial_monitor&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-&lt;p&gt;右下のbps設定を「9600bps」に変更します。
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/222/bps.png&#34; alt=&#34;bps&#34;&gt;
-
-&lt;/center&gt;
-&lt;/p&gt;
-
-&lt;p&gt;2秒ごとに、シリアルモニタに温度と湿度が表示されて行きます。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://gyazo.com/8f0016c6724057c1bb758286fb78dfc2&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/8f0016c6724057c1bb758286fb78dfc2.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;あまり動きがないですが、息を吹きかけると湿度が上がることを確認できます。&lt;/p&gt;
-
-&lt;h2 id=&#34;温度のデータをfirebaseに送信する&#34;&gt;温度のデータをfirebaseに送信する&lt;/h2&gt;
-
-&lt;p&gt;この温度データをClovaと連携できるように、クラウドサービスを使ってWeb上にロギングします。&lt;/p&gt;
-
-&lt;p&gt;今回はGoogleが提供する&lt;a href=&#34;https://firebase.google.com/?hl=ja&#34;&gt;&lt;strong&gt;Firebase&lt;/strong&gt;&lt;/a&gt;を利用します。FirebaseはBaaSと呼ばれるバックエンドを提供してくれるサービスで、データベースや認証部分などの機能をサーバ側のコードを書かずに実装できます。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/222/firebase.png&#34; alt=&#34;firebase&#34;&gt;
-
-&lt;/center&gt;
-
-&lt;center&gt;
-&lt;a href=&#34;https://firebase.google.com/?hl=ja&#34;&gt;公式サイト&lt;/a&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;AndroidやiOS、WebやUnityなど各言語向けにSDKが出ており、簡単に機能を自分のアプリに組み込むことができます。機械学習や認証機能などさまざまなサービスが提供されています。&lt;/p&gt;
-
-&lt;p&gt;Nefry BTのFirebaseライブラリでできる機能は、「&lt;strong&gt;Realtime　Database&lt;/strong&gt;」の読み書きです。（参照：&lt;a href=&#34;https://dotstud.io/docs/nefrybt-service-firebase/&#34;&gt;Firebaseライブラリ&lt;/a&gt;）&lt;/p&gt;
-
-&lt;p&gt;まずはNefry BTから読み書きするために、Firebaseの準備をしていきます。&lt;/p&gt;
-
-&lt;h3 id=&#34;firebaseにデータベースを作成&#34;&gt;Firebaseにデータベースを作成&lt;/h3&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/222/fb1.png&#34; alt=&#34;fb1&#34;&gt;
-
-&lt;/center&gt;
-
-&lt;a href=&#34;https://firebase.google.com/?hl=ja&#34;&gt;公式サイト&lt;/a&gt;の右上の「コンソールへ移動」を選択し、移動します。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/222/fb2.png&#34; alt=&#34;fb2&#34;&gt;
-
-&lt;/center&gt;
-
-「プロジェクトを追加」を選択して新規プロジェクトを作成します。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/222/fb3.png&#34; alt=&#34;fb3&#34;&gt;
-
-&lt;/center&gt;
-
-任意のプロジェクト名・地域・ロケーションを選択し、規約を確認・同意して「プロジェクトを作成」で作成します。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/222/fb4.png&#34; alt=&#34;fb4&#34;&gt;
-
-&lt;/center&gt;
-
-作成後に移動したページから、「Datebase」を選択します。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://gyazo.com/fa657148cb81616f54b1db41712486eb&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/fa657148cb81616f54b1db41712486eb.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;
-移動先のページから「Realtime Datebase」を探し、「データベースを作成」をクリックします。&lt;/p&gt;
-
-&lt;p&gt;
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/222/fb5.png&#34; alt=&#34;fb5&#34;&gt;
-
-&lt;/center&gt;
-
-セキュリティルールはとりあえず「テストモードで開始」を選択します。実稼働する際には、適したセキュリティルールを選択してください。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/222/fb6.png&#34; alt=&#34;fb6&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;準備が完了すると、次のような画面が表示されます。赤枠の&lt;strong&gt;&lt;code&gt;https://projectname-XXXX.com/&lt;/code&gt;&lt;/strong&gt; というURLを、後ほどNefry BTに設定するのでコピーしておきます。&lt;/p&gt;
-
-&lt;h3 id=&#34;firebaseにデータを送信&#34;&gt;Firebaseにデータを送信&lt;/h3&gt;
-
-&lt;p&gt;Nefry BTに、作成したデータベースに値を送信するプログラムを書き込みます。下記のプログラムのうち、&lt;strong&gt;2点編集してから&lt;/strong&gt; 書き込んでください。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;利用するWi-FiのSSID・パスワード&lt;/li&gt;
-&lt;li&gt;Firebaseで取得したURL（&lt;code&gt;https://&lt;/code&gt;と末尾の&lt;code&gt;/&lt;/code&gt;は除く）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;pre&gt;&lt;code&gt;#include &amp;quot;DHT.h&amp;quot;
-#include &amp;lt;NefryFireBase.h&amp;gt;
-#include &amp;lt;NefryDisplay.h&amp;gt;
-
-#define DHTPIN A0
-#define DHTTYPE DHT11
-
-DHT dht(DHTPIN, DHTTYPE);
-NefryFireBase firebase;
-
-void setup() {
-  Nefry.addWiFi(&amp;quot;SSID&amp;quot;,&amp;quot;PASSWORD&amp;quot;); // Wi-FiのSSID、パスワード
-  Nefry.saveWiFi();
-  dht.begin();
-  firebase.begin(&amp;quot;nefryfirebase-XXXX.com&amp;quot;); // Firebaseで取得したURL（https://と末尾の/は不要）
-}
-
-void loop() {
-  float t = dht.readTemperature();
-
-  if (isnan(t)) {
-    NefryDisplay.print(&amp;quot;error!&amp;quot;);
-    return;
-  }
-
-  DataElement elem = DataElement();
-  elem.setValue(&amp;quot;temp&amp;quot;, t);
-  firebase.send(&amp;quot;NefryTemp&amp;quot;, &amp;amp;elem);
-
-  delay(1000*10);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;データが送信されていることを確認&#34;&gt;データが送信されていることを確認&lt;/h3&gt;
-
-&lt;p&gt;Firebaseのページに戻り、データが受信できていることを確認します。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/222/fb7.png&#34; alt=&#34;fb7&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;これでClovaでデータを扱う準備ができました！&lt;/p&gt;
-
-&lt;p&gt;現状ではFirebaseのURLを知っている誰でもデータを書き込めてしまいますが、シークレットキーによる認証をかけることもできます。詳細は「&lt;a href=&#34;https://dotstud.io/docs/nefrybt-service-firebase/&#34;&gt;Firebaseライブラリ&lt;/a&gt;」を参照してください。&lt;/p&gt;
-
-&lt;h2 id=&#34;clovaスキルを作成する&#34;&gt;Clovaスキルを作成する&lt;/h2&gt;
-
-&lt;p&gt;リンク先の記事を参照し、プロバイダなどを登録してスキルを作成します。（発話モデルの編集ができるようになるところまで）&lt;/p&gt;
-
-
-
-&lt;section class=&#34;link&#34; id=&#34;195&#34;&gt;
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-          &lt;div class=&#34;link_content&#34;&gt;
-          &lt;a href=&#34;https://dotstud.io/blog/clova-cek-nodejs-tutorial/&#34;&gt;&lt;/a&gt;
-          &lt;img src=&#34;https://dotstud.io/img/blog/195/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
-          &lt;/div&gt;
-          &lt;div class=&#34;link_content&#34;&gt;
-            &lt;div class=&#34;link_detail&#34;&gt;
-              &lt;div class=&#34;link_title&#34;&gt;
-                Clova CEKでのスキル開発の始め方〜Node.jsで開発スタート編〜
-              &lt;/div&gt;
-              &lt;div class=&#34;link_date&#34;&gt;
-                
-                2018-08-03
-              &lt;/div&gt;
-              &lt;div class=&#34;link_desc&#34;&gt;
-                Clova CEKのNode.jsチュートリアルです。カレースキルを作ります。
-              &lt;/div&gt;
-            &lt;/div&gt;
-          &lt;/div&gt;
-        &lt;/section&gt;
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-&lt;/section&gt;
-
-
-&lt;h3 id=&#34;発話モデルを編集&#34;&gt;発話モデルを編集&lt;/h3&gt;
-
-&lt;p&gt;「カスタムインテント」で「GetDataIntent」といった名前をつけてインテントを作成します。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://gyazo.com/6a414047b2f4063462dd23979b94188c&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/6a414047b2f4063462dd23979b94188c.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;サンプル発話を作成します。部屋の温度を意図するような問いかけをたくさん登録しておくと、認識精度があがります。&lt;/p&gt;
-
-
-
-
-
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/222/intent.png&#34; alt=&#34;intent&#34;&gt;
-
-&lt;/center&gt;
-
-
-&lt;p&gt;下記記事を参考に、↓のNode.jsプログラムを動かして検証してみます。&lt;/p&gt;
-
-
-
-&lt;section class=&#34;link&#34; id=&#34;195&#34;&gt;
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-          &lt;div class=&#34;link_content&#34;&gt;
-          &lt;a href=&#34;https://dotstud.io/blog/clova-cek-nodejs-tutorial/&#34;&gt;&lt;/a&gt;
-          &lt;img src=&#34;https://dotstud.io/img/blog/195/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
-          &lt;/div&gt;
-          &lt;div class=&#34;link_content&#34;&gt;
-            &lt;div class=&#34;link_detail&#34;&gt;
-              &lt;div class=&#34;link_title&#34;&gt;
-                Clova CEKでのスキル開発の始め方〜Node.jsで開発スタート編〜
-              &lt;/div&gt;
-              &lt;div class=&#34;link_date&#34;&gt;
-                
-                2018-08-03
-              &lt;/div&gt;
-              &lt;div class=&#34;link_desc&#34;&gt;
-                Clova CEKのNode.jsチュートリアルです。カレースキルを作ります。
-              &lt;/div&gt;
-            &lt;/div&gt;
-          &lt;/div&gt;
-        &lt;/section&gt;
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-&lt;/section&gt;
-
-
-&lt;pre&gt;&lt;code&gt;const clova = require(&#39;@line/clova-cek-sdk-nodejs&#39;);
-const express = require(&#39;express&#39;);
-
-const extensionId = &#39;XXX&#39;; // Clovaで設定したExtention ID
-const template = &#39;「部屋の温度を教えて」と聞いてください。&#39;;
-
-const clovaSkillHandler = clova.Client
-    .configureSkill()
-
-    //起動時に喋る
-    .onLaunchRequest(responseHelper =&amp;gt; {
-        responseHelper.setSimpleSpeech({
-            lang: &#39;ja&#39;,
-            type: &#39;PlainText&#39;,
-            value: &#39;部屋の温度をチェックします。&#39;,
-        });
-    })
-
-    //ユーザーからの発話が来たら反応する箇所
-    .onIntentRequest(async responseHelper =&amp;gt; {
-        const intent = responseHelper.getIntentName();
-        const sessionId = responseHelper.getSessionId();
-
-        console.log(&#39;Intent:&#39; + intent);
-
-        if (intent === &#39;GetDataIntent&#39;) {
-            let speech = {
-                lang: &#39;ja&#39;,
-                type: &#39;PlainText&#39;,
-                value: &#39;現在の温度は28度です&#39;
-            };
-            responseHelper.setSimpleSpeech(speech);
-            responseHelper.setSimpleSpeech(speech, true);
-        }
-    })
-
-    //終了時
-    .onSessionEndedRequest(responseHelper =&amp;gt; {
-        const sessionId = responseHelper.getSessionId();
-    })
-    .handle();
-
-
-const app = new express();
-const port = process.env.PORT || 3000;
-
-//リクエストの検証を行う場合。環境変数APPLICATION_ID(値はClova Developer Center上で入力したExtension ID)が必須
-const clovaMiddleware = clova.Middleware({applicationId: extensionId});
-app.post(&#39;/clova&#39;, clovaMiddleware, clovaSkillHandler);
-
-app.listen(port, () =&amp;gt; console.log(`Server running on ${port}`));
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;とりあえず&lt;strong&gt;必ず「28度です」と返してくれるスキル&lt;/strong&gt;が完成します。&lt;/p&gt;
-
-&lt;h2 id=&#34;firebaseとclovaスキルを連携する&#34;&gt;firebaseとClovaスキルを連携する&lt;/h2&gt;
-
-&lt;p&gt;休憩時間に追加します〜！&lt;/p&gt;
-
-&lt;h2 id=&#34;関連情報&#34;&gt;関連情報&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://dotstud.io/shop/nefry-bt-set/&#34;&gt;Nefr BTの購入&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Nefry BTはこちらから購入できます（送料無料）。その他にも千石電商、ツクモ、若松通商、共立電子などの実店舗やECサイトで購入できます。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://dotstud.io/docs/nefrybt/&#34;&gt;Nefry BTドキュメント&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Nefry BTでは、IFTTTを使ったWebサービスとの連携や、その他のクラウドサービスとの連携も簡単です。ディスプレイを使ったイラスト描画や、100以上あるGroveモジュールの活用なども、ぜひ試してみてください。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://www.facebook.com/groups/nefry&#34;&gt;Nefryユーザーグループ（FB）&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Nefryユーザ同士が交流するページです。質問を投稿して解決した事例もたくさんありますので、困った際などはぜひお気軽にご利用ください。開発者もよく登場します。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://nefry.connpass.com/event/97692/&#34;&gt;Nefry User Meetup!&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Nefryユーザによる開催イベントです。ハンズオンやLT会、もくもく会などを実施しています。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://dotstudio.connpass.com/&#34;&gt;dotstudioイベント&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;dotstudioによる開催イベントです。Nefry BT以外の題材を扱うことも多いです。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;style&gt;
-.caution {
-    border: 1px solid #BFBFBF;
-    padding: 1em 2em;
-    margin: 2em 0;
-    color: #474747;
-    background: whitesmoke;/*背景色*/
-    border-left: double 7px #0B0B61;/*左線*/
-    font-size: 90%;
-}
-
-.caution &gt; p {
-    font-weight: bold;
-    margin: 0 0 10px 0;
-    padding: 0;
-}
-
-blockquote {
-    font-size:80%;
-}
-
-.accbox {
-    margin: 2em 0;
-    padding: 0;
-    max-width: 710px;
-}
-
-
-.accbox label {
-    display: block;
-    margin: 1.5px 0;
-    padding : 11px 12px;
-    color :#ffffff;
-    font-weight: bold;
-    background :#2f2f2f;
-    cursor :pointer;
-    transition: all 0.5s;
-}
-
-.accbox label:hover {
-    background :#A4A4A4;
-}
-
-.accbox input {
-    display: none;
-}
-
-.accbox .accshow {
-    height: 0;
-    padding: 0;
-    overflow: hidden;
-    opacity: 0;
-    transition: 0.8s;
-}
-
-.cssacc:checked + .accshow {
-    height: auto;
-    padding: 5px;
-    background: #eaeaea;
-    opacity: 1;
-}
-&lt;/style&gt;
-</description>
-    </item>
     
     <item>
       <title>Clova CEKでのスキル開発の始め方〜Pythonで開発スタート編〜</title>
@@ -3250,9 +32,6 @@ blockquote {
 
 
 &lt;section class=&#34;link&#34; id=&#34;195&#34;&gt;
-  
-      
-      
   
       
       
@@ -4973,9 +1752,6 @@ blockquote {
   
       
       
-  
-      
-      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/clova-ifttt-nefrybt-arduino/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/185/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -5710,9 +2486,6 @@ blockquote {
 
 
 &lt;section class=&#34;link&#34; id=&#34;186&#34;&gt;
-  
-      
-      
   
       
       
@@ -7464,9 +4237,6 @@ blockquote {
   
       
       
-  
-      
-      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/line-clova-skill-tutorial/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/186/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -8340,9 +5110,6 @@ blockquote {
 
 
 &lt;section class=&#34;link&#34; id=&#34;158&#34;&gt;
-  
-      
-      
   
       
       
@@ -10765,9 +7532,6 @@ blockquote {
       
       
   
-      
-      
-  
 &lt;/section&gt;
 
 
@@ -11242,9 +8006,6 @@ remote: App container will begin restart within 10 seconds.
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;187&#34;&gt;
-  
-      
-      
   
       
       
@@ -12943,9 +9704,6 @@ remote: App container will begin restart within 10 seconds.
   
       
       
-  
-      
-      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/stepper-motor-nefrybt-control/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/189/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -13771,9 +10529,6 @@ void loop() {
 
 
 &lt;section class=&#34;link&#34; id=&#34;187&#34;&gt;
-  
-      
-      
   
       
       
@@ -16023,9 +12778,6 @@ void loop() {
   
       
       
-  
-      
-      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/clova-cek-nodejs-tutorial/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/195/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -16814,9 +13566,6 @@ void loop() {
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;195&#34;&gt;
-  
-      
-      
   
       
       
@@ -20156,9 +16905,6 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
   
       
       
-  
-      
-      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/led-eyelash-gadget-report/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/126/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -20745,9 +17491,6 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
 
 
 &lt;section class=&#34;link&#34; id=&#34;185&#34;&gt;
-  
-      
-      
   
       
       
@@ -22460,9 +19203,6 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
   
       
       
-  
-      
-      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/line-clova-skill-tutorial/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/186/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -23225,9 +19965,6 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
 
 
 &lt;section class=&#34;link&#34; id=&#34;186&#34;&gt;
-  
-      
-      
   
       
       
@@ -25184,9 +21921,6 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
   
       
       
-  
-      
-      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nodejs-install-use-nodebrew/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/136/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -25798,9 +22532,6 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;158&#34;&gt;
-  
-      
-      
   
       
       
@@ -28223,9 +24954,6 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
       
       
   
-      
-      
-  
 &lt;/section&gt;
 &lt;/p&gt;
 
@@ -28580,9 +25308,6 @@ Intent:CurreySearchIntent
 
 
 &lt;section class=&#34;link&#34; id=&#34;192&#34;&gt;
-  
-      
-      
   
       
       
@@ -31018,9 +27743,6 @@ obnizのディスプレイ上でも「&lt;strong&gt;Hello World&lt;/strong&gt;�
   
       
       
-  
-      
-      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nefry-servo-handson-takudooon/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/187/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -32949,9 +29671,6 @@ void loop()
   
       
       
-  
-      
-      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nodejs-amazon-alexa-skill/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/144/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -33655,9 +30374,6 @@ this.emit(&#39;:tell&#39;, speechOut);
 
 
 &lt;section class=&#34;link&#34; id=&#34;180&#34;&gt;
-  
-      
-      
   
       
       
@@ -35457,9 +32173,6 @@ this.emit(&#39;:tell&#39;, speechOut);
   
       
       
-  
-      
-      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nodejs-alexa-skill-mp3/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/163/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -36257,6 +32970,1633 @@ exports.handler = function(event, context, callback) {
 &lt;p&gt;また一部重複する機能もあるので、可読性や統一性を考えながら実装していくのがよさそうです。&lt;/p&gt;
 
 &lt;p&gt;使いどころを抑えて、Alexaの自然な発話を目指していきましょう！&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>営業撃退！？押した人が誰かわかる「インターホン・改」を作ってみた</title>
+      <link>https://dotstud.io/blog/no-more-sales-intercom/</link>
+      <pubDate>Tue, 17 Jul 2018 10:00:00 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/no-more-sales-intercom/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、&lt;a href=&#34;https://dotstud.io/members/tomato&#34;&gt;佐々木さん&lt;/a&gt;です。一度はとまとというあだ名を授かりましたが、いろいろ審議ののちあだ名を得られず佐々木さんになりました。&lt;/p&gt;
+
+&lt;p&gt;ところでdotstudioには、オフィスハックの大先輩・&lt;a href=&#34;https://dotstud.io/members/ukok&#34;&gt;うこ&lt;/a&gt;さんが作ったインターホンがあります。&lt;/p&gt;
+
+
+
+&lt;section class=&#34;link&#34; id=&#34;133&#34;&gt;
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+          &lt;div class=&#34;link_content&#34;&gt;
+          &lt;a href=&#34;https://dotstud.io/blog/office-new-door-notification/&#34;&gt;&lt;/a&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/133/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
+          &lt;/div&gt;
+          &lt;div class=&#34;link_content&#34;&gt;
+            &lt;div class=&#34;link_detail&#34;&gt;
+              &lt;div class=&#34;link_title&#34;&gt;
+                オフィス移転したらインターホンがなかったのでRaspbeerry Piでカメラ付きインターホン作ってみた
+              &lt;/div&gt;
+              &lt;div class=&#34;link_date&#34;&gt;
+                
+                2017-11-20
+              &lt;/div&gt;
+              &lt;div class=&#34;link_desc&#34;&gt;
+                インターホンがなければラズパイで作ればいいじゃない。Raspberry PiとGroveセンサでカメラ付きインターホンを自作しました。
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+&lt;/section&gt;
+
+
+&lt;p&gt;今回はこのインターホンを改良して、&lt;strong&gt;しつこい訪問営業を撃退できるインターホン&lt;/strong&gt;を作ってみます。&lt;/p&gt;
+
+&lt;h2 id=&#34;無茶振りは突然に&#34;&gt;無茶振りは突然に&lt;/h2&gt;
+
+&lt;p&gt;&lt;center&gt;〜ある日の夕方、dotstudioオフィスにて〜&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/188/1.png&#34; alt=&#34;1&#34;&gt;
+
+&lt;/center&gt;
+
+&lt;center&gt;（ぽんっ）&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/188/2.png&#34; alt=&#34;2&#34;&gt;
+
+&lt;/center&gt;
+
+&lt;center&gt;（あっ、dotstudioしゃちょーの&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;さんだ！）&lt;/center&gt;&lt;/p&gt;
+
+&lt;div class=&#34;parent&#34;&gt;
+    &lt;div class=&#34;dialogue&#34;&gt;
+        &lt;div class=&#34;image_n&#34;&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/188/nobi.png&#34; /&gt;
+          &lt;section class=&#34;name&#34;&gt;のびすけ&lt;/section&gt;
+        &lt;/div&gt;
+        &lt;div class=&#34;text&#34;&gt;
+            佐々木さん、電子工作得意だよね？営業の訪問が多くて困ってるんだけど、&lt;b&gt;営業を撃退できるインターホン作れない？&lt;/b&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;parent&#34;&gt;
+    &lt;div class=&#34;dialogue&#34;&gt;
+        &lt;div class=&#34;image_s&#34;&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/188/sasaki.png&#34; /&gt;
+          &lt;section class=&#34;name&#34;&gt;佐々木さん&lt;/section&gt;
+        &lt;/div&gt;
+        &lt;div class=&#34;text&#34;&gt;
+            （無茶振りだ……）
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;parent&#34;&gt;
+    &lt;div class=&#34;dialogue&#34;&gt;
+        &lt;div class=&#34;image_n&#34;&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/188/nobi.png&#34; /&gt;
+          &lt;section class=&#34;name&#34;&gt;のびすけ&lt;/section&gt;
+        &lt;/div&gt;
+        &lt;div class=&#34;text&#34;&gt;
+            じゃあ1週間後までによろしく！
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;parent&#34;&gt;
+    &lt;div class=&#34;dialogue&#34;&gt;
+        &lt;div class=&#34;image_s&#34;&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/188/sasaki.png&#34; /&gt;
+          &lt;section class=&#34;name&#34;&gt;佐々木さん&lt;/section&gt;
+        &lt;/div&gt;
+        &lt;div class=&#34;text&#34;&gt;
+            （かなり無茶振りだ……）
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;ということで時間がないのでさっそく作りましょう！&lt;/p&gt;
+
+&lt;h2 id=&#34;インターホン改の製作イメージ&#34;&gt;インターホン改の製作イメージ&lt;/h2&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/188/architecture.png&#34; alt=&#34;architecture&#34;&gt;
+
+&lt;/center&gt;
+
+来客がどんな用件か見分けるために、&lt;strong&gt;最初からボタンを複数用意し、それぞれ音を変えて判別する&lt;/strong&gt;ようにしてみました。&lt;/p&gt;
+
+&lt;p&gt;また前回はBluetooth接続のスピーカーを利用していましたが、通信が切れやすい問題があったので今回は&lt;strong&gt;有線でスピーカーを繋ぎます&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;ボタンとなるセンサは扉の外側に、インターホンの本体となるRaspberry Piは扉の内側に設置します。&lt;/p&gt;
+
+&lt;h2 id=&#34;使ったもの&#34;&gt;使ったもの&lt;/h2&gt;
+
+&lt;h3 id=&#34;raspberry-pi-3-model-b&#34;&gt;Raspberry Pi 3 Model B&lt;/h3&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/188/raspi.png&#34; alt=&#34;raspi&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;前回に引き続き、ボードはRaspberry Pi（通称ラズパイ）を使います。ラズパイには&lt;strong&gt;スピーカーのコネクタを直接刺すことができる&lt;/strong&gt;ので便利ですね！&lt;/p&gt;
+
+&lt;h3 id=&#34;タッチセンサ&#34;&gt;タッチセンサ&lt;/h3&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/188/touch.png&#34; alt=&#34;touch&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;タッチセンサは、今回安く大量に調達した&lt;a href=&#34;https://www.amazon.co.jp/HiLetgo%C2%AE-10%E5%80%8B%E3%82%BB%E3%83%83%E3%83%88-TTP223-%E9%9D%99%E9%9B%BB%E5%AE%B9%E9%87%8F%E5%BC%8F%E3%82%BF%E3%83%83%E3%83%81%E3%82%B9%E3%82%A4%E3%83%83%E3%83%81-%E3%83%87%E3%82%B8%E3%82%BF%E3%83%AB%E3%82%BF%E3%83%83%E3%83%81%E3%82%BB%E3%83%B3%E3%82%B5%E3%83%BC%E3%83%A2%E3%82%B8%E3%83%A5%E3%83%BC%E3%83%AB/dp/B010RYGET4/ref=sr_1_63?m=A1XEAMF1H64GNM&amp;amp;s=merchant-items&amp;amp;ie=UTF8&amp;amp;qid=1531481468&amp;amp;sr=1-63&#34;&gt;中国製のタッチセンサ&lt;/a&gt;を使います（&lt;a href=&#34;https://www.amazon.co.jp/s/ref=sr_pg_3?me=A1XEAMF1H64GNM&amp;amp;rh=i%3Amerchant-items&amp;amp;page=3&amp;amp;ie=UTF8&amp;amp;qid=1531481449&#34;&gt;HiLetgo JP&lt;/a&gt;というストア、安く大量購入できて面白いです）。&lt;/p&gt;
+
+&lt;h3 id=&#34;適当なスピーカー&#34;&gt;適当なスピーカー&lt;/h3&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/188/speaker.png&#34; alt=&#34;speaker&#34;&gt;
+
+&lt;/center&gt;
+
+インターホンの音を鳴らすため、適当なスピーカーを用意します。&lt;/p&gt;
+
+&lt;p&gt;このスピーカーはあきばお〜さんで&lt;strong&gt;なんと300円&lt;/strong&gt;でした！（普通に使えてます！）&lt;/p&gt;
+
+&lt;h3 id=&#34;その他&#34;&gt;その他&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ダンボール（加工が楽なので採用しました。）&lt;/li&gt;
+&lt;li&gt;音源（それぞれのボタン向けに音源を用意します。それっぽいと雰囲気が出ます。）&lt;/li&gt;
+&lt;li&gt;配線用のジャンパ&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;作っていく&#34;&gt;作っていく&lt;/h2&gt;
+
+&lt;h3 id=&#34;配線&#34;&gt;配線&lt;/h3&gt;
+
+&lt;p&gt;下図のようにラズパイとセンサを接続していきます。図のスイッチはタッチセンサに置き換えて見てください。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/188/circuit.png&#34; alt=&#34;circuit&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;それぞれ繋いでいるGPIOは下記です。&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;center&#34;&gt;役割&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;GPIO&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;電源&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;3.3V&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;GND&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;GND&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;タッチセンサ&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;23&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;タッチセンサ&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;24&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;タッチセンサ&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;25&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;ul&gt;
+&lt;li&gt;タッチセンサのGNDは、それぞれラズパイのGNDに接続します。&lt;/li&gt;
+&lt;li&gt;タッチセンサのVccをラズパイの3.3Vに接続します。&lt;/li&gt;
+&lt;li&gt;タッチセンサのinputをラズパイの23、24、25にそれぞれ繋ぎます。&lt;/li&gt;
+&lt;li&gt;最後にスピーカーをイヤホンの部分に繋ぎます。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;以上で回路は完成です。&lt;/p&gt;
+
+&lt;h3 id=&#34;プログラム&#34;&gt;プログラム&lt;/h3&gt;
+
+&lt;p&gt;ラズパイ上で動かすプログラムはこんな感じです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;#!/usr/bin/python
+
+import RPi.GPIO as GPIO
+import subprocess
+from time import sleep
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(23, GPIO.IN)
+GPIO.setup(24, GPIO.IN)
+GPIO.setup(25, GPIO.IN)
+
+while True:
+    if GPIO.input(23) == GPIO.HIGH:
+        # center
+        # hoge.mp3　ここには好きな音源を入れてください
+        subprocess.call(&amp;quot;mpg321 -q /home/pi/hometools/sounds/hoge.mp3&amp;quot;, shell = True)
+    elif GPIO.input(24) == GPIO.HIGH:
+        # right
+        # fuga.mp3　ここには好きな音源を入れてください
+        subprocess.call(&amp;quot;mpg321 -q /home/pi/hometools/sounds/fuga.mp3&amp;quot;, shell = True)
+    elif GPIO.input(25) == GPIO.HIGH:
+        # left
+        # piyo.mp3　ここには好きな音源を入れてください
+        subprocess.call(&amp;quot;mpg321 -g 20 /home/pi/hometools/sounds/piyo.mp3&amp;quot;, shell = True)
+    else:
+        sleep(0.01)
+
+GPIO.cleanup()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;外装&#34;&gt;外装&lt;/h3&gt;
+
+&lt;p&gt;こんな感じでダンボールを加工して、用途に合わせた表示を作ります（1番右は前回使ったGroveのタッチセンサを流用）。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/188/gawa.png&#34; alt=&#34;gawa&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;試してみる&#34;&gt;試してみる&lt;/h2&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/unn1wIqbkKI&#34; frameborder=&#34;0&#34; allow=&#34;autoplay; encrypted-media&#34; allowfullscreen&gt;&lt;/iframe&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;タッチしたセンサによって3種の音を流すことができました！これで完成です！&lt;/p&gt;
+
+&lt;h2 id=&#34;のびすけさんにご報告&#34;&gt;のびすけさんにご報告&lt;/h2&gt;
+
+&lt;div class=&#34;parent&#34;&gt;
+    &lt;div class=&#34;dialogue&#34;&gt;
+        &lt;div class=&#34;image_s&#34;&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/188/sasaki.png&#34; /&gt;
+          &lt;section class=&#34;name&#34;&gt;佐々木さん&lt;/section&gt;
+        &lt;/div&gt;
+        &lt;div class=&#34;text&#34;&gt;
+            のびすけさん、インターホン完成しました！
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;parent&#34;&gt;
+    &lt;div class=&#34;dialogue&#34;&gt;
+        &lt;div class=&#34;image_n&#34;&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/188/nobi.png&#34; /&gt;
+          &lt;section class=&#34;name&#34;&gt;のびすけ&lt;/section&gt;
+        &lt;/div&gt;
+        &lt;div class=&#34;text&#34;&gt;
+            おうおう。
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;center&gt;
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/188/3.png&#34; alt=&#34;3&#34;&gt;
+
+&lt;/center&gt;
+
+&lt;font size=&#34;4&#34;&gt;「じゃーん！こちらです！」&lt;/font&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;div class=&#34;parent&#34;&gt;
+    &lt;div class=&#34;dialogue&#34;&gt;
+        &lt;div class=&#34;image_n&#34;&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/188/nobi.png&#34; /&gt;
+          &lt;section class=&#34;name&#34;&gt;のびすけ&lt;/section&gt;
+        &lt;/div&gt;
+        &lt;div class=&#34;text&#34;&gt;
+            見た目が……ださい……。
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;center&gt;
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/188/4.png&#34; alt=&#34;4&#34;&gt;
+
+&lt;/center&gt;
+
+「まず左右のpadding違うし！上下のpaddingも違うし！そもそも字汚いしあれやこれやくどくどくど………」
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/188/5.png&#34; alt=&#34;5&#34;&gt;
+
+&lt;/center&gt;
+
+「はい……。すいません……。」
+&lt;/center&gt;
+&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;一流のオフィスハッカーになる道のりはまだまだ遠そうです……。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;
+&lt;center&gt;
+〜Fin〜
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;style&gt;
+.dialogue {
+    padding: 10px;
+    display: table;
+}
+
+.image_n, .image_s {
+    width: 75px;
+    height: 75px;
+    margin-right: 10px;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.image_n img {
+    border-radius: 50%;
+    border: 2px solid blue;
+}
+
+.image_s img {
+    border-radius: 50%;
+    border: 2px solid green;
+}
+
+.name {
+    font-weight: bold;
+    text-align: center;
+}
+
+.text {
+    display: table-cell;
+    padding: 0;
+    vertical-align: middle;
+    padding-left: 20px;
+}
+&lt;/style&gt;
 </description>
     </item>
     
