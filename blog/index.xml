@@ -7,8 +7,287 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2018 dotstudio inc.</copyright>
-    <lastBuildDate>Tue, 25 Sep 2018 05:46:01 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 27 Sep 2018 12:34:10 +0900</lastBuildDate>
     <atom:link href="/blog/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>気分はセレブ！手を叩くとディナーを出してくれるデバイスを作ろう</title>
+      <link>https://dotstud.io/blog/device-of-celebrity-dinner/</link>
+      <pubDate>Thu, 27 Sep 2018 12:34:10 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/device-of-celebrity-dinner/</guid>
+      
+      <description>
+
+&lt;h2 id=&#34;憧れのシーンを実現したい&#34;&gt;憧れのシーンを実現したい&lt;/h2&gt;
+
+&lt;p&gt;こんにちは、〜〜です。&lt;/p&gt;
+
+&lt;p&gt;いきなりですが、&lt;u&gt;高級なレストランで指パッチンや手を叩いて合図するとウェイターがディナーを出してくれるシーン&lt;/u&gt;を見たことありませんか？&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/a7be6476-4059-9a5e-b3d6-9aeaff37db85.png&#34; alt=&#34;image&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;どこで見たかわからないけどなんとなく想像できる人も多いと思います。&lt;/p&gt;
+
+&lt;p&gt;&lt;font size=&#34;4&#34;&gt;&lt;strong&gt;で、私はそのシーンをめっちゃ再現したいわけです。&lt;/strong&gt;&lt;/font&gt;&lt;/p&gt;
+
+&lt;p&gt;何も言わずとも合図を送るだけで自分の好みを把握したウェイターがスッとディナーを出してくれる&amp;hellip;そんなセレブ気分を味わいたい…………！
+しかし、高級レストランに行くお金もなければ、行けたとしても恥ずかしくてそんなことやる勇気も出ないので自宅で再現してみましょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;設計&#34;&gt;設計&lt;/h2&gt;
+
+&lt;p&gt;先ほどのイメージ画像通り「合図するとディナーを出してくれる」のが完成イメージですが、より具体的な実現方法を考えてみます。&lt;/p&gt;
+
+&lt;p&gt;考えた結果、&lt;u&gt;手を叩いたことをセンサーで認識して、「&lt;strong&gt;Amazon Dash Button&lt;/strong&gt;」を押すことでディナーをネット注文することにしました。&lt;/u&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/0af2d3f4-e6a0-9053-7048-c3968bef281e.jpeg&#34; alt=&#34;概要図&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;準備するもの&#34;&gt;準備するもの&lt;/h2&gt;
+
+&lt;h3 id=&#34;準備するものリスト&#34;&gt;準備するものリスト&lt;/h3&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;left&#34;&gt;名前&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;個数&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;Amazon Dash Button　&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;Arduino Uno&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;a href=&#34;http://www.aitendo.com/product/4070&#34;&gt;拍手制御スイッチ [AKIT-107]&lt;/a&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;a href=&#34;http://www.aitendo.com/product/3277&#34;&gt;トランジスタ（S8050）&lt;/a&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;デジタル・マイクロサーボ SG90&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;ジャンパー線（オス）&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;最低6本&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;太い輪ゴム&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;半田付けセット&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;手を叩くことを認識するセンサー部分は、aitendo様に「&lt;strong&gt;拍手制御スイッチ&lt;/strong&gt;」というまんま目的に合った素敵キットがあったので注文しました。&lt;/p&gt;
+
+&lt;h2 id=&#34;拍手制御スイッチを組み立てる&#34;&gt;拍手制御スイッチを組み立てる&lt;/h2&gt;
+
+&lt;h3 id=&#34;半田付けする&#34;&gt;半田付けする&lt;/h3&gt;
+
+&lt;p&gt;&lt;font color=&#34;Red&#34;, font size=&#34;3&#34;&gt;&lt;strong&gt;はやく半田付けをしたい人も、このセクションの【注意点!!】を読んでから半田付けをはじめてください。&lt;/strong&gt;&lt;/font&gt;&lt;/p&gt;
+
+&lt;p&gt;拍手制御スイッチは自分で部品を半田付けするキットで届くので組み立てていきましょう。&lt;/p&gt;
+
+&lt;p&gt;半田付けの基本については村田製作所様のこちらのページが参考になります。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.murata.com/ja-jp/campaign/ads/japan/elekids/ele/craft/knack/soldering&#34;&gt;電子工作のコツ/はんだ付け | 村田製作所 - Murata&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;さて、今回用意した半田付けセットはこちら。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/8f09c0ef-4ad5-ef26-4aed-b5a74f2b4fd3.jpeg&#34; alt=&#34;はんだセット&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;はんだは&lt;strong&gt;線径0.6mm&lt;/strong&gt;のもの、半田ごては温度を&lt;strong&gt;350度&lt;/strong&gt;に設定したものを用意しました。
+洗濯バサミみたいな道具はヒートシンクといい、半田ごての熱から熱に弱い部品を守るものですが今回は使いませんでした。&lt;/p&gt;
+
+&lt;p&gt;どの部品を基板のどこにつけるかなのですが、aitendo様のWebページに&lt;a href=&#34;http://www.aitendo.com/product/4070&#34;&gt;部品リストと回路図&lt;/a&gt;が載っているのでこれを見ながら組み立てて行くしかありません……。&lt;/p&gt;
+
+&lt;p&gt;&lt;font size=&#34;4&#34;&gt;&lt;strong&gt;これが滅茶苦茶大変です。&lt;/strong&gt;&lt;/font&gt;&lt;/p&gt;
+
+&lt;p&gt;オススメのやり方は最初に部品リストの順番通りに部品を並べてから半田付けを始めることです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/7ff3ab54-423f-7402-cad2-c53d798258f9.jpeg&#34; alt=&#34;部品並べ&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;抵抗などは下記のページで抵抗値を入力して5本色帯カラーコードに変換しながら照らし合わせると間違いづらいです。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.desmots.net/hitme/audio/iroobi.php&#34;&gt;抵抗 - カラーコード（4本・5本色帯）変換 - 計算ツール&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;font-color-red-注意点-font&#34;&gt;&lt;font color=&#34;red&#34;&gt;注意点!!&lt;/font&gt;&lt;/h3&gt;
+
+&lt;p&gt;さて、いよいよ半田付け・・・&lt;strong&gt;と、ちょっと待ってください!!&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;部品を整理したら&lt;font color=&#34;Red&#34;&gt;&lt;strong&gt;&lt;u&gt;Q4の場所につけるトランジスタ（S9014）をトランジスタ（S8050）に差し替えてください。&lt;/u&gt;&lt;/strong&gt;&lt;/font&gt;
+組み立ててから気づいたのですが、ここの部品をすり替えないと組み上がった後正常に動作しません。（予備に2つ基板を買って試しましたがどちらも同じ結果でした）&lt;/p&gt;
+
+&lt;p&gt;部品を差し替えたら今度こそ半田付けをします。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;電解コンデンサ、LED、ダイオード&lt;/strong&gt;は取り付け向きが決まっているので注意しましょう。
+電解コンデンサ、LEDは2本ある足の長い方が+側。ダイオードは黒く模様がついている方向を基板の模様と合わせてください。&lt;/p&gt;
+
+&lt;p&gt;無事、組み終わったものがこちらです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/7d0c5023-7edd-ee18-68de-ce8716f791c5.jpeg&#34; alt=&#34;センサ完成&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;試してみる&#34;&gt;試してみる&lt;/h3&gt;
+
+&lt;p&gt;図のような簡単な回路を組んで、ちゃんと動くか試して見ましょう。
+拍手スイッチの&lt;strong&gt;Power（入力電圧）は5Vではなく3.3V&lt;/strong&gt;であることに注意してください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/ff0c1050-c860-4a07-46e8-7ef7e59306d4.png&#34; alt=&#34;AKIT_TEST.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;font size=&#34;2&#34;&gt;&lt;u&gt;今回Fritzing用に拍手制御スイッチ（AKIT-107）のカスタムパーツを作りましたので&lt;a href=&#34;https://github.com/TakedaHiromasa/Fritzing/blob/master/aitendo_AKIT-107.fzpz&#34;&gt;こちら&lt;/a&gt;からDLできます。
+よかったらどうぞ。&lt;/u&gt;&lt;/font&gt;&lt;/p&gt;
+
+&lt;p&gt;回路を組んだらセンサの上で手を叩いて見ます。手を叩くたびにLEDが点灯・消灯すれば成功です！&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/50c1369b-9a73-538a-d7da-c8730fc0f0d0.gif&#34; alt=&#34;Claptest.gif&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;u&gt;（これが楽しくて、30分ぐらいセンサーの上で手を叩いてました。）&lt;/u&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;サーボの原点合わせ&#34;&gt;サーボの原点合わせ&lt;/h2&gt;
+
+&lt;p&gt;今回用意した「デジタル・マイクロサーボ SG90」は「Amazon Dash Button」を押すのに使います。まずはサーボの原点合わせを行いましょう。&lt;/p&gt;
+
+&lt;p&gt;今回使用するSG90は0~180°まで回るのですが、買った初期状態ではどこを向いているのかわからないので原点として初めに&lt;strong&gt;90°&lt;/strong&gt;に位置合わせを行います。&lt;/p&gt;
+
+&lt;p&gt;まず以下のようにサーボとArduinoを繋ぎましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/7de1f622-c738-1667-9575-601c877556e3.png&#34; alt=&#34;sarvo.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;そして以下のプログラムを書き込んで実行します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;#include &amp;lt;Servo.h&amp;gt;
+
+Servo myservo;
+
+void setup() {
+  myservo.attach( 10 );
+}
+
+void loop() {
+  myservo.write( 90 );
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これでサーボの原点が決まったので、付属のホーンを以下のように真上を向くようにつけます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/a66bca6c-f673-4f92-adea-23871a836489.jpeg&#34; alt=&#34;DSC_0577.JPG&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;全体の配線&#34;&gt;全体の配線&lt;/h3&gt;
+
+&lt;p&gt;いよいよ全体の配線！
+以下のように配線します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/16a09bda-31dc-1e91-ec16-cdaa9535296b.png&#34; alt=&#34;全体&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;「サーボ」と「Amazon Dash Button」は輪ゴムで合体させました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/aa85d4a4-ac2d-4800-dcfe-f248b70bbe7c.png&#34; alt=&#34;Screenshot_2018-09-17-00-05-37.png&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;プログラム&#34;&gt;プログラム&lt;/h3&gt;
+
+&lt;p&gt;以下のプログラムを書き込みます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;#include &amp;lt;Servo.h&amp;gt;
+
+Servo myservo;
+volatile int flag = 0;
+
+void interruptsw()
+{
+  flag = 1;
+}
+
+void setup() {
+  myservo.attach( 10 );
+  attachInterrupt(0, interruptsw, CHANGE);
+}
+
+void loop() {
+    if(flag == 1){
+      myservo.write( 45 );
+      delay(500);
+      flag = 0;
+    }else{
+      myservo.write( 90 );
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;今回のプログラムのポイントは&lt;strong&gt;割り込み処理&lt;/strong&gt;と&lt;strong&gt;volatile&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;h3 id=&#34;割り込み処理&#34;&gt;割り込み処理&lt;/h3&gt;
+
+&lt;p&gt;割り込み処理とは簡単に言えば、&lt;strong&gt;「イベントが起こった時に、コンピュータがどんな処理をしていようと無理やり別の処理を割り込ませる」&lt;/strong&gt;というもの。&lt;/p&gt;
+
+&lt;p&gt;今回のプログラムの場合&lt;strong&gt;attachInterrupt(0, interruptsw, CHANGE);&lt;/strong&gt;で、&lt;strong&gt;どのピンのどんなイベントを監視するか指定&lt;/strong&gt;しています。指定の仕方は、&lt;strong&gt;attachInterrupt([監視するピン], [割り込ませる処理], [反応するイベントの種類]);&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;Arduino Unoでは監視するピンは&lt;strong&gt;0か１&lt;/strong&gt;しか指定できなく、それぞれ&lt;strong&gt;pin2, pin3&lt;/strong&gt;に対応しています。&lt;/p&gt;
+
+&lt;p&gt;今回のプログラムの&lt;strong&gt;attachInterrupt(0, interruptsw, CHANGE);&lt;/strong&gt;とは&lt;strong&gt;「&lt;font color=&#34;Red&#34;&gt;2pin&lt;/font&gt;の信号が&lt;font color=&#34;Red&#34;&gt;CHANGE&lt;/font&gt;（変化するたび）&lt;font color=&#34;Red&#34;&gt;interruptsw&lt;/font&gt;を実行してね」&lt;/strong&gt;という指定をしていることになります。&lt;/p&gt;
+
+&lt;h3 id=&#34;volatile&#34;&gt;volatile&lt;/h3&gt;
+
+&lt;p&gt;volatileとは&lt;strong&gt;「この変数に関係する部分は消さないで！」&lt;/strong&gt;という指定。&lt;/p&gt;
+
+&lt;p&gt;どういうことかというと、プログラムをよく見てもらうと&lt;u&gt;volatileをつけているflagという変数はloop()の中で、何の計算にも使われていません（足すとか引くとか）。&lt;/u&gt;loop()の中では、&lt;strong&gt;if(flag == 1)&lt;/strong&gt;の部分でフラグが１になることを待っていますが、コンピュータはかしこい？ので、&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;flagはloop()の中で計算に使ってない&lt;/strong&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;↓&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;計算に使ってないならflagの値が増えたり減ったりすることは一生ないんじゃね？&lt;/strong&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;↓&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;じゃあ「flag == 1」になることはありえんね、無駄なんでif文消しまーす&lt;/strong&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;↓&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;俺優秀☆&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;という具合に&lt;strong&gt;最悪の場合勝手にif文を消します&lt;/strong&gt;。
+私たちからすれば「そこは割り込みが起こった時に1が代入されるんだけど・・・」と思いますがコンピュータは知ったこっちゃありません。ということで、計算には使ってないけど割り込みなどで確実に値が変化する変数については&lt;strong&gt;volatile&lt;/strong&gt;をつけて消されないようにしてあげます。&lt;/p&gt;
+
+&lt;h2 id=&#34;実際に使ってみる&#34;&gt;実際に使ってみる&lt;/h2&gt;
+
+&lt;p&gt;さて、難しい話はこれぐらいにして早速完成したデバイスを使ってみましょう！&lt;/p&gt;
+
+&lt;p&gt;より雰囲気を出すために&lt;u&gt;フリー素材のおじさまウェイターの画像をA3用紙4枚刷りで印刷し、そこにデバイスを貼り付けました。&lt;/u&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/f505fed2-0763-3db7-4e7c-6e9df474b17e.jpeg&#34; alt=&#34;DSC_0571.JPG&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;font size =&#34;4&#34;&gt;いざ起動・・・・！！！&lt;/font&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/XlFNMBB7lt4&#34; frameborder=&#34;0&#34; allow=&#34;autoplay; encrypted-media&#34; allowfullscreen&gt;&lt;/iframe&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;font size =&#34;4&#34;&gt;&lt;strong&gt;無事、手を叩いただけでディナーが届きました！！！！！&lt;/strong&gt;&lt;/font&gt;&lt;/p&gt;
+
+&lt;p&gt;「シーチキン」の「Amazon Dash Button」を使ったのでシーチキンが届きました。今回使った拍手センサは使い方も簡単なので、他にも音で動くデバイスを作ってみると面白いと思います！&lt;/p&gt;
+
+&lt;p&gt;それでは、みなさん良きセレブライフをー！&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>人柱覚悟でさっそくmacOS Mojaveにしてみました。</title>
@@ -26,6 +305,9 @@
 
 
 &lt;section class=&#34;link&#34; id=&#34;022&#34;&gt;
+  
+      
+      
   
       
       
@@ -1953,6 +2235,9 @@
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/clova-cek-python-tutorial/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/220/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -2974,6 +3259,9 @@
 
 
 &lt;section class=&#34;link&#34; id=&#34;195&#34;&gt;
+  
+      
+      
   
       
       
@@ -4697,6 +4985,9 @@
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/clova-ifttt-nefrybt-arduino/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/185/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -5434,6 +5725,9 @@
 
 
 &lt;section class=&#34;link&#34; id=&#34;186&#34;&gt;
+  
+      
+      
   
       
       
@@ -6702,6 +6996,9 @@
 
 
 &lt;section class=&#34;link&#34; id=&#34;186&#34;&gt;
+  
+      
+      
   
       
       
@@ -8628,6 +8925,9 @@
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/how-to-use-cli/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/158/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -9291,6 +9591,9 @@
 
 
 &lt;section class=&#34;link&#34; id=&#34;161&#34;&gt;
+  
+      
+      
   
       
       
@@ -12077,6 +12380,9 @@ blockquote &gt; p {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/internet-of-things-cooking/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/055/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -13394,6 +13700,9 @@ blockquote &gt; p {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/mabeee-summer-horror-comic/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/026/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -13756,6 +14065,9 @@ blockquote &gt; p {
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;184&#34;&gt;
+  
+      
+      
   
       
       
@@ -15722,6 +16034,9 @@ blockquote &gt; p {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/akihabara-guide-for-beginners/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/091/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -16216,6 +16531,9 @@ blockquote &gt; p {
 
 
 &lt;section class=&#34;link&#34; id=&#34;208&#34;&gt;
+  
+      
+      
   
       
       
@@ -18080,6 +18398,9 @@ blockquote &gt; p {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/office-new-door-notification/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/133/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -18682,6 +19003,9 @@ blockquote &gt; p {
 
 
 &lt;section class=&#34;link&#34; id=&#34;155&#34;&gt;
+  
+      
+      
   
       
       
@@ -20394,6 +20718,9 @@ blockquote &gt; p {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/no-more-sales-intercom/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/188/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -21140,6 +21467,9 @@ blockquote &gt; p {
 
 
 &lt;section class=&#34;link&#34; id=&#34;183&#34;&gt;
+  
+      
+      
   
       
       
@@ -23103,6 +23433,9 @@ blockquote &gt; p {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/gyaruden-hadeike-display-cap/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/094/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -23600,6 +23933,9 @@ blockquote &gt; p {
 
 
 &lt;section class=&#34;link&#34; id=&#34;126&#34;&gt;
+  
+      
+      
   
       
       
@@ -24829,6 +25165,9 @@ blockquote &gt; p {
 
 
 &lt;section class=&#34;link&#34; id=&#34;201&#34;&gt;
+  
+      
+      
   
       
       
@@ -26761,6 +27100,9 @@ blockquote &gt; p {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/pokio-esp-keikyu-chien/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/099/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -27288,9 +27630,12 @@ blockquote &gt; p {
 
 &lt;p&gt;&lt;strong&gt;京急を愛し京急に愛されたポキオ氏による遅延お知らせガジェット&lt;/strong&gt;です。余談ですが、私は高校時代に電車通学で毎日遅延されて毎日遅刻していたので、あの時このガジェットがあったら担任の先生の机に設置したかったですね（違う）。&lt;/p&gt;
 
-
+&lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;172&#34;&gt;
+  
+      
+      
   
       
       
@@ -28513,13 +28858,16 @@ blockquote &gt; p {
       
   
 &lt;/section&gt;
-
+&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;へっぽこまるこさんによるサムネイルのあんぱんは、MakerFaireTokyo2018で出展した伝説のリアルアンパンマン&lt;/strong&gt;です。これ、本当にすごくてやばいんですよ。しかもこれだけじゃないんですよ。もうとにかく今すぐに読んでください……!！！&lt;/p&gt;
 
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;177&#34;&gt;
+  
+      
+      
   
       
       
@@ -30208,6 +30556,9 @@ blockquote &gt; p {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/clova-cek-nodejs-tutorial/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/195/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -30978,6 +31329,9 @@ blockquote &gt; p {
 
 
 &lt;section class=&#34;link&#34; id=&#34;144&#34;&gt;
+  
+      
+      
   
       
       
@@ -33924,6 +34278,9 @@ blockquote {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/internet-of-things-books/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/199/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -35284,6 +35641,9 @@ blockquote {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/arduino-use-rfid-reader/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/162/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -35976,6 +36336,9 @@ blockquote {
 
 
 &lt;section class=&#34;link&#34; id=&#34;183&#34;&gt;
+  
+      
+      
   
       
       
@@ -37748,6 +38111,9 @@ blockquote {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/microbit-getting-started-pokio/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/165/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -38444,6 +38810,9 @@ blockquote {
 
 
 &lt;section class=&#34;link&#34; id=&#34;190&#34;&gt;
+  
+      
+      
   
       
       
@@ -39679,6 +40048,9 @@ blockquote {
 
 
 &lt;section class=&#34;link&#34; id=&#34;188&#34;&gt;
+  
+      
+      
   
       
       
@@ -41895,6 +42267,9 @@ blockquote {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/akihabara-guide-for-beginners/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/091/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -42480,6 +42855,9 @@ blockquote {
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;187&#34;&gt;
+  
+      
+      
   
       
       
@@ -44181,6 +44559,9 @@ blockquote {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/stepper-motor-nefrybt-control/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/189/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -45009,6 +45390,9 @@ void loop() {
 
 
 &lt;section class=&#34;link&#34; id=&#34;187&#34;&gt;
+  
+      
+      
   
       
       
@@ -47369,6 +47753,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/control-solenoid-nefrybt-nodered/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/214/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -48210,6 +48597,9 @@ void loop() {
 
 
 &lt;section class=&#34;link&#34; id=&#34;214&#34;&gt;
+  
+      
+      
   
       
       
@@ -50038,6 +50428,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/clova-cek-nodejs-tutorial/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/195/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -50829,6 +51222,9 @@ void loop() {
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;195&#34;&gt;
+  
+      
+      
   
       
       
@@ -52106,273 +52502,6 @@ responseHelper.setSpeechList(SpeechList);
 &lt;p&gt;細かい仕様が気になる人は&lt;a href=&#34;https://clova-developers.line.me/guide/#/CEK/Guides/Build_Custom_Extension.md#DirectClientToPlayAudio&#34;&gt;ドキュメントのこの辺&lt;/a&gt;をご参照ください！&lt;/p&gt;
 
 &lt;p&gt;ではでは、引き続きハッカソンがんばりましょ！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Azure WebAppsでカスタムドメイン&#43;SSL対応するメモ</title>
-      <link>https://dotstud.io/blog/webapps-custom-domain-ssl/</link>
-      <pubDate>Tue, 21 Aug 2018 15:51:00 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/webapps-custom-domain-ssl/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
-
-&lt;p&gt;うちの会社では&lt;strong&gt;Azure&lt;/strong&gt;をよく使ってます。僕個人だとAzureのPaaSサービスの&lt;strong&gt;WebApps&lt;/strong&gt;（Heroku的なやつです）をよく使うのですが、カスタムドメインでの運用とSSL対応で詰まったので手順を紹介していきます。&lt;/p&gt;
-
-&lt;p&gt;この手のサービスはUIがガンガン変わるので、2018年8月版って感じですね。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;ちなみに今日は甲子園決勝で大阪桐蔭高校VS秋田県立金足農業高校の試合を見ながら記事を書いてます。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;金足頑張れ〜！&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;「さすがに見るでしょ」と言いながら甲子園観戦し始める東北出身のしゃちょー &lt;a href=&#34;https://twitter.com/hashtag/%E3%82%B9%E3%82%BF%E3%82%B8%E3%82%AA%E6%97%A5%E8%AA%8C?src=hash&amp;amp;ref_src=twsrc%5Etfw&#34;&gt;#スタジオ日誌&lt;/a&gt; &lt;a href=&#34;https://twitter.com/hashtag/dotstudio?src=hash&amp;amp;ref_src=twsrc%5Etfw&#34;&gt;#dotstudio&lt;/a&gt; &lt;a href=&#34;https://t.co/hg89N055o2&#34;&gt;pic.twitter.com/hg89N055o2&lt;/a&gt;&lt;/p&gt; ドットスタジオ (@dotstud_io) &lt;a href=&#34;https://twitter.com/dotstud_io/status/1031780753850265600?ref_src=twsrc%5Etfw&#34;&gt;2018年8月21日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;azure-web-apps&#34;&gt;Azure Web Apps&lt;/h2&gt;
-
-&lt;p&gt;Web Appsでは有料プラン以上でカスタムドメインを使える模様です。&lt;/p&gt;
-
-&lt;p&gt;通常はWeb Appsにアプリケーションをデプロイすると&lt;code&gt;https://xxxxxxx.azurewebsites.net/&lt;/code&gt; といったURLが付与されます。&lt;/p&gt;
-
-&lt;p&gt;デフォルトでSSL使えるし結構便利です。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/3500760306fa71fc507d80ecfa376c1d.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;web-appsでカスタムドメイン&#34;&gt;Web Appsでカスタムドメイン&lt;/h2&gt;
-
-&lt;h3 id=&#34;web-apps側の設定&#34;&gt;Web Apps側の設定&lt;/h3&gt;
-
-&lt;p&gt;&lt;code&gt;カスタムドメイン&lt;/code&gt;のメニューを選択します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;今回利用する&lt;code&gt;graspin.studio&lt;/code&gt;というドメインを入力して検証します。&lt;/p&gt;
-
-&lt;p&gt;ホスト名レコードタイプの選択はAレコードとCNAMEがありますが、今回はAレコードにします。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;下の方に&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;ホスト名の利用可否&lt;/li&gt;
-&lt;li&gt;ドメイン所有権&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;の情報がありますが、たぶんこの時点でドメイン所有権の欄が×になってると思います。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;TXTとAレコードをドメイン事業者の管理画面で設定していきます。&lt;/p&gt;
-
-&lt;p&gt;設定する値はAタイプにIPアドレス、TXTタイプにWebAppsのドメインです。
-この画面を開いたままで次のドメイン事業者のサイトにいきましょう。&lt;/p&gt;
-
-&lt;h3 id=&#34;お名前-com側での設定&#34;&gt;お名前.com側での設定&lt;/h3&gt;
-
-&lt;p&gt;むーむードメインやValueドメインなど色々なサイトがありますが、今回僕は&lt;a href=&#34;https://www.onamae.com/&#34;&gt;お名前.com&lt;/a&gt;を利用してドメインを取得したのでお名前.comでの設定を紹介します。&lt;/p&gt;
-
-&lt;p&gt;Azureの管理画面で表示されたIPアドレスをAタイプに、WebAppsのドメインをTXTタイプに設定して保存します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;浸透するまで少し時間がかかるので10分程度待ちます。（場合によってはもっとかかる時もあります）&lt;/p&gt;
-
-&lt;h3 id=&#34;web-apps側で再度確認&#34;&gt;Web Apps側で再度確認&lt;/h3&gt;
-
-&lt;p&gt;もう一度Web Apps側で検証ボタンを押すと認証が成功していることがわかります。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;ホスト名の追加&lt;/code&gt;ボタンがアクティブになるので、追加しましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;追加されました。&lt;/p&gt;
-
-&lt;p&gt;これで&lt;code&gt;http://graspin.studio&lt;/code&gt;でアクセスできるようになりました。&lt;/p&gt;
-
-&lt;p&gt;Web Apps のカスタムドメイン設定は完了です。&lt;/p&gt;
-
-&lt;h2 id=&#34;let-s-encryptでssl対応する&#34;&gt;Let&amp;rsquo;s EncryptでSSL対応する&lt;/h2&gt;
-
-&lt;p&gt;カスタムドメインではSSL対応の設定をしないとHTTPSは使えないので、無料SSLサーバ証明書のLet&amp;rsquo;s Encryptを利用して設定してみます。&lt;/p&gt;
-
-&lt;p&gt;手元の環境はmacOS High Sierraです。&lt;/p&gt;
-
-&lt;h3 id=&#34;certbotインストール&#34;&gt;certbotインストール&lt;/h3&gt;
-
-&lt;p&gt;certbotというコマンドで証明書を作るのですが、&lt;/p&gt;
-
-&lt;p&gt;通常手順だと最初からmacOSだと厳しいみたいなエラーを言われました。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;WARNING: certbot-auto support for this macOS is DEPRECATED!
-Please visit certbot.eff.org to learn how to download a version of
-Certbot that is packaged for your system. While an existing version
-of certbot-auto may work currently, we have stopped supporting updating
-system packages for your system. Please switch to a packaged version
-as soon as possible.
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://certbot.eff.org/lets-encrypt/osx-other&#34;&gt;https://certbot.eff.org/lets-encrypt/osx-other&lt;/a&gt; をみるとbrewで入れて欲しいらしいです。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;brew  install certbot
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;証明書pemファイルの作成&#34;&gt;証明書pemファイルの作成&lt;/h3&gt;
-
-&lt;p&gt;色々と調べたのですが、&lt;a href=&#34;https://blog.shibayan.jp/entry/20151111/1447172124&#34;&gt;しばやんさんの記事&lt;/a&gt;が分かりやすかったです。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;sudo certbot certonly -a manual -d 利用するドメイン --server https://acme-v01.api.letsencrypt.org/directory --agree-dev-preview&lt;/code&gt;という形でコマンドをmacから実行します。今回は&lt;code&gt;graspin.studio&lt;/code&gt;を利用するので以下の内容になります。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;sudo certbot certonly -a manual -d graspin.studio --server https://acme-v01.api.letsencrypt.org/directory --agree-dev-preview
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;コマンドを実行すると対話式のターミナルでYesとかAgreeとかの入力を求められますが適宜入力して進めます。&lt;/p&gt;
-
-&lt;p&gt;以下のような表示が出て来ます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-Create a file containing just this data:
-
-JQwu2TQUGdwCz5yApVx2SL5WpQOi5L2dwogABs6N6IU.XWM53woMKdjZiJrQHxBvqVcPSSUQPf1wfTUxo2e6d-g
-
-And make it available on your web server at this URL:
-
-http://graspin.studio/.well-known/acme-challenge/JQwu2TQUGdwCz5yApVx2SL5WpQOi5L2dwogABs6N6IU
-
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-Press Enter to Continue
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;ここで一度作業を止めましょう。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;これはドメインを所持してるか確認するためのフローで、&lt;code&gt;Let&#39;s Encrypt&lt;/code&gt;側から指定したエンドポイントに指定したレスポンスがあるようなサーバーを作ってね、という確認フローです。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;http://graspin.studio/.well-known/acme-challenge/JQwu2TQUGdwCz5yApVx2SL5WpQOi5L2dwogABs6N6IU&lt;/code&gt;というエンドポイントを用意して、&lt;code&gt;JQwu2TQUGdwCz5yApVx2SL5WpQOi5L2dwogABs6N6IU.XWM53woMKdjZiJrQHxBvqVcPSSUQPf1wfTUxo2e6d-g&lt;/code&gt;という表示がされるようにしてね、という意味です。&lt;/p&gt;
-
-&lt;p&gt;ちなみにこの文字列たちは毎回変わるので適宜読み変えます。&lt;/p&gt;
-
-&lt;p&gt;Node.js/Expressでサーバーを立ててましたが、以下のように設定しました。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
-
-const express = require(&#39;express&#39;);
-const app = express();
-const PORT = process.env.PORT || 3000;
-const bodyParser = require(&#39;body-parser&#39;);
-app.use(bodyParser());
-app.use(express.static(__dirname+&#39;/src/public&#39;));
-
-//ここが今回の設定箇所
-app.get(&#39;/.well-known/acme-challenge/JQwu2TQUGdwCz5yApVx2SL5WpQOi5L2dwogABs6N6IU&#39;, (req,res)=&amp;gt;{
-    res.send(`JQwu2TQUGdwCz5yApVx2SL5WpQOi5L2dwogABs6N6IU.XWM53woMKdjZiJrQHxBvqVcPSSUQPf1wfTUxo2e6d-g`);
-});
-
-app.listen(PORT);
-console.log(`listening on *: ${PORT}`);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Web Appsにデプロイしなおして、サーバーを更新します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/7.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;アクセスするとこのような感じで指定された文字列が表示されるようにします。
-設定が完了したら、ターミナルの&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;Press Enter to Continue
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;で止めていた入力を再開し、Enterを押しましょう。&lt;/p&gt;
-
-&lt;p&gt;すると認証が始まり、問題なければ以下のように&lt;code&gt;Congratulations!&lt;/code&gt;と表示されます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;Waiting for verification...
-Cleaning up challenges
-Use of --agree-dev-preview is deprecated.
-
-IMPORTANT NOTES:
- - Congratulations! Your certificate and chain have been saved at:
-   /etc/letsencrypt/live/graspin.studio/fullchain.pem
-   Your key file has been saved at:
-   /etc/letsencrypt/live/graspin.studio/privkey.pem
-   Your cert will expire on 2018-11-18. To obtain a new or tweaked
-   version of this certificate in the future, simply run certbot
-   again. To non-interactively renew *all* of your certificates, run
-   &amp;quot;certbot renew&amp;quot;
- - If you like Certbot, please consider supporting our work by:
-
-   Donating to ISRG / Let&#39;s Encrypt:   https://letsencrypt.org/donate
-   Donating to EFF:                    https://eff.org/donate-le
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;デフォルトで以下の場所にpemファイルが作成されます。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;/etc/letsencrypt/live/ドメイン名/fullchain.pem&lt;/li&gt;
-&lt;li&gt;/etc/letsencrypt/live/ドメイン名/privkey.pem&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;pemファイルからpfxファイルを作成&#34;&gt;pemファイルからpfxファイルを作成&lt;/h3&gt;
-
-&lt;p&gt;Web Appsではpfxファイルを読み込ませてSSLの設定をします。&lt;/p&gt;
-
-&lt;p&gt;pemファイルのあるディレクトリで以下を実行します。(この手順なくても良いかも)&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;mv privkey.pem privkey.key
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;privkey.pem&lt;/code&gt;を&lt;code&gt;privkey.key&lt;/code&gt;ファイルにリネームしました。&lt;/p&gt;
-
-&lt;p&gt;以下で&lt;code&gt;pfx&lt;/code&gt;ファイルを作成します。パスワード設定を求められるので適当なものを設定します。設定しないとWebApps側で認識できないので設定しましょう。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;openssl pkcs12 -export -in fullchain.pem -inkey privkey.key -out sample.pfx
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Permissionなどのエラーが出る場合は&lt;code&gt;sudo&lt;/code&gt;実行しましょう。&lt;/p&gt;
-
-&lt;h3 id=&#34;web-appsで設定&#34;&gt;Web Appsで設定&lt;/h3&gt;
-
-&lt;p&gt;SSL設定メニューの&lt;code&gt;証明書アップロード&lt;/code&gt;からpfxファイルをアップロードします。このとき先ほどのパスワードの入力します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/8.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;あとはバインディング追加からホスト名を選択し、証明書を選択すればOKです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/9.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;確認&#34;&gt;確認&lt;/h3&gt;
-
-&lt;p&gt;浸透するまでに時間がかかるのですが、少ししたら&lt;code&gt;https://graspin.studio&lt;/code&gt;にアクセスできるようになってました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/7b48e9f2c1c4a91e2a543359f8ebe5c6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;おまけ&#34;&gt;おまけ&lt;/h2&gt;
-
-&lt;p&gt;追加で設定した内容です。簡単！&lt;/p&gt;
-
-&lt;h3 id=&#34;httpにアクセスがあってもhttpsにリダイレクトさせる&#34;&gt;HTTPにアクセスがあってもHTTPSにリダイレクトさせる&lt;/h3&gt;
-
-&lt;p&gt;SSL設定の&lt;code&gt;HTTPSのみ&lt;/code&gt;をオンにするだけです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;http2対応&#34;&gt;HTTP2対応&lt;/h3&gt;
-
-&lt;p&gt;アプリケーション設定の&lt;code&gt;HTTPバージョン&lt;/code&gt;を&lt;code&gt;2.0&lt;/code&gt;にするだけです。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;Web Appsの最近っぽい情報がなかったのでまとめてみました。&lt;/p&gt;
-
-&lt;p&gt;備忘録ですが他の誰かの参考にもなれば幸いです！&lt;/p&gt;
 </description>
     </item>
     

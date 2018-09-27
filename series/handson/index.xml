@@ -7,8 +7,287 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2018 dotstudio inc.</copyright>
-    <lastBuildDate>Thu, 30 Aug 2018 09:40:24 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 27 Sep 2018 12:34:10 +0900</lastBuildDate>
     <atom:link href="/series/handson/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>気分はセレブ！手を叩くとディナーを出してくれるデバイスを作ろう</title>
+      <link>https://dotstud.io/blog/device-of-celebrity-dinner/</link>
+      <pubDate>Thu, 27 Sep 2018 12:34:10 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/device-of-celebrity-dinner/</guid>
+      
+      <description>
+
+&lt;h2 id=&#34;憧れのシーンを実現したい&#34;&gt;憧れのシーンを実現したい&lt;/h2&gt;
+
+&lt;p&gt;こんにちは、〜〜です。&lt;/p&gt;
+
+&lt;p&gt;いきなりですが、&lt;u&gt;高級なレストランで指パッチンや手を叩いて合図するとウェイターがディナーを出してくれるシーン&lt;/u&gt;を見たことありませんか？&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/a7be6476-4059-9a5e-b3d6-9aeaff37db85.png&#34; alt=&#34;image&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;どこで見たかわからないけどなんとなく想像できる人も多いと思います。&lt;/p&gt;
+
+&lt;p&gt;&lt;font size=&#34;4&#34;&gt;&lt;strong&gt;で、私はそのシーンをめっちゃ再現したいわけです。&lt;/strong&gt;&lt;/font&gt;&lt;/p&gt;
+
+&lt;p&gt;何も言わずとも合図を送るだけで自分の好みを把握したウェイターがスッとディナーを出してくれる&amp;hellip;そんなセレブ気分を味わいたい…………！
+しかし、高級レストランに行くお金もなければ、行けたとしても恥ずかしくてそんなことやる勇気も出ないので自宅で再現してみましょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;設計&#34;&gt;設計&lt;/h2&gt;
+
+&lt;p&gt;先ほどのイメージ画像通り「合図するとディナーを出してくれる」のが完成イメージですが、より具体的な実現方法を考えてみます。&lt;/p&gt;
+
+&lt;p&gt;考えた結果、&lt;u&gt;手を叩いたことをセンサーで認識して、「&lt;strong&gt;Amazon Dash Button&lt;/strong&gt;」を押すことでディナーをネット注文することにしました。&lt;/u&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/0af2d3f4-e6a0-9053-7048-c3968bef281e.jpeg&#34; alt=&#34;概要図&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;準備するもの&#34;&gt;準備するもの&lt;/h2&gt;
+
+&lt;h3 id=&#34;準備するものリスト&#34;&gt;準備するものリスト&lt;/h3&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;left&#34;&gt;名前&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;個数&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;Amazon Dash Button　&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;Arduino Uno&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;a href=&#34;http://www.aitendo.com/product/4070&#34;&gt;拍手制御スイッチ [AKIT-107]&lt;/a&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;a href=&#34;http://www.aitendo.com/product/3277&#34;&gt;トランジスタ（S8050）&lt;/a&gt;&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;デジタル・マイクロサーボ SG90&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;ジャンパー線（オス）&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;最低6本&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;太い輪ゴム&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;半田付けセット&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;手を叩くことを認識するセンサー部分は、aitendo様に「&lt;strong&gt;拍手制御スイッチ&lt;/strong&gt;」というまんま目的に合った素敵キットがあったので注文しました。&lt;/p&gt;
+
+&lt;h2 id=&#34;拍手制御スイッチを組み立てる&#34;&gt;拍手制御スイッチを組み立てる&lt;/h2&gt;
+
+&lt;h3 id=&#34;半田付けする&#34;&gt;半田付けする&lt;/h3&gt;
+
+&lt;p&gt;&lt;font color=&#34;Red&#34;, font size=&#34;3&#34;&gt;&lt;strong&gt;はやく半田付けをしたい人も、このセクションの【注意点!!】を読んでから半田付けをはじめてください。&lt;/strong&gt;&lt;/font&gt;&lt;/p&gt;
+
+&lt;p&gt;拍手制御スイッチは自分で部品を半田付けするキットで届くので組み立てていきましょう。&lt;/p&gt;
+
+&lt;p&gt;半田付けの基本については村田製作所様のこちらのページが参考になります。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.murata.com/ja-jp/campaign/ads/japan/elekids/ele/craft/knack/soldering&#34;&gt;電子工作のコツ/はんだ付け | 村田製作所 - Murata&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;さて、今回用意した半田付けセットはこちら。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/8f09c0ef-4ad5-ef26-4aed-b5a74f2b4fd3.jpeg&#34; alt=&#34;はんだセット&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;はんだは&lt;strong&gt;線径0.6mm&lt;/strong&gt;のもの、半田ごては温度を&lt;strong&gt;350度&lt;/strong&gt;に設定したものを用意しました。
+洗濯バサミみたいな道具はヒートシンクといい、半田ごての熱から熱に弱い部品を守るものですが今回は使いませんでした。&lt;/p&gt;
+
+&lt;p&gt;どの部品を基板のどこにつけるかなのですが、aitendo様のWebページに&lt;a href=&#34;http://www.aitendo.com/product/4070&#34;&gt;部品リストと回路図&lt;/a&gt;が載っているのでこれを見ながら組み立てて行くしかありません……。&lt;/p&gt;
+
+&lt;p&gt;&lt;font size=&#34;4&#34;&gt;&lt;strong&gt;これが滅茶苦茶大変です。&lt;/strong&gt;&lt;/font&gt;&lt;/p&gt;
+
+&lt;p&gt;オススメのやり方は最初に部品リストの順番通りに部品を並べてから半田付けを始めることです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/7ff3ab54-423f-7402-cad2-c53d798258f9.jpeg&#34; alt=&#34;部品並べ&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;抵抗などは下記のページで抵抗値を入力して5本色帯カラーコードに変換しながら照らし合わせると間違いづらいです。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.desmots.net/hitme/audio/iroobi.php&#34;&gt;抵抗 - カラーコード（4本・5本色帯）変換 - 計算ツール&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;font-color-red-注意点-font&#34;&gt;&lt;font color=&#34;red&#34;&gt;注意点!!&lt;/font&gt;&lt;/h3&gt;
+
+&lt;p&gt;さて、いよいよ半田付け・・・&lt;strong&gt;と、ちょっと待ってください!!&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;部品を整理したら&lt;font color=&#34;Red&#34;&gt;&lt;strong&gt;&lt;u&gt;Q4の場所につけるトランジスタ（S9014）をトランジスタ（S8050）に差し替えてください。&lt;/u&gt;&lt;/strong&gt;&lt;/font&gt;
+組み立ててから気づいたのですが、ここの部品をすり替えないと組み上がった後正常に動作しません。（予備に2つ基板を買って試しましたがどちらも同じ結果でした）&lt;/p&gt;
+
+&lt;p&gt;部品を差し替えたら今度こそ半田付けをします。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;電解コンデンサ、LED、ダイオード&lt;/strong&gt;は取り付け向きが決まっているので注意しましょう。
+電解コンデンサ、LEDは2本ある足の長い方が+側。ダイオードは黒く模様がついている方向を基板の模様と合わせてください。&lt;/p&gt;
+
+&lt;p&gt;無事、組み終わったものがこちらです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/7d0c5023-7edd-ee18-68de-ce8716f791c5.jpeg&#34; alt=&#34;センサ完成&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;試してみる&#34;&gt;試してみる&lt;/h3&gt;
+
+&lt;p&gt;図のような簡単な回路を組んで、ちゃんと動くか試して見ましょう。
+拍手スイッチの&lt;strong&gt;Power（入力電圧）は5Vではなく3.3V&lt;/strong&gt;であることに注意してください。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/ff0c1050-c860-4a07-46e8-7ef7e59306d4.png&#34; alt=&#34;AKIT_TEST.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;font size=&#34;2&#34;&gt;&lt;u&gt;今回Fritzing用に拍手制御スイッチ（AKIT-107）のカスタムパーツを作りましたので&lt;a href=&#34;https://github.com/TakedaHiromasa/Fritzing/blob/master/aitendo_AKIT-107.fzpz&#34;&gt;こちら&lt;/a&gt;からDLできます。
+よかったらどうぞ。&lt;/u&gt;&lt;/font&gt;&lt;/p&gt;
+
+&lt;p&gt;回路を組んだらセンサの上で手を叩いて見ます。手を叩くたびにLEDが点灯・消灯すれば成功です！&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/50c1369b-9a73-538a-d7da-c8730fc0f0d0.gif&#34; alt=&#34;Claptest.gif&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;u&gt;（これが楽しくて、30分ぐらいセンサーの上で手を叩いてました。）&lt;/u&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;サーボの原点合わせ&#34;&gt;サーボの原点合わせ&lt;/h2&gt;
+
+&lt;p&gt;今回用意した「デジタル・マイクロサーボ SG90」は「Amazon Dash Button」を押すのに使います。まずはサーボの原点合わせを行いましょう。&lt;/p&gt;
+
+&lt;p&gt;今回使用するSG90は0~180°まで回るのですが、買った初期状態ではどこを向いているのかわからないので原点として初めに&lt;strong&gt;90°&lt;/strong&gt;に位置合わせを行います。&lt;/p&gt;
+
+&lt;p&gt;まず以下のようにサーボとArduinoを繋ぎましょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/7de1f622-c738-1667-9575-601c877556e3.png&#34; alt=&#34;sarvo.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;そして以下のプログラムを書き込んで実行します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;#include &amp;lt;Servo.h&amp;gt;
+
+Servo myservo;
+
+void setup() {
+  myservo.attach( 10 );
+}
+
+void loop() {
+  myservo.write( 90 );
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;これでサーボの原点が決まったので、付属のホーンを以下のように真上を向くようにつけます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/a66bca6c-f673-4f92-adea-23871a836489.jpeg&#34; alt=&#34;DSC_0577.JPG&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;全体の配線&#34;&gt;全体の配線&lt;/h3&gt;
+
+&lt;p&gt;いよいよ全体の配線！
+以下のように配線します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/16a09bda-31dc-1e91-ec16-cdaa9535296b.png&#34; alt=&#34;全体&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;「サーボ」と「Amazon Dash Button」は輪ゴムで合体させました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/aa85d4a4-ac2d-4800-dcfe-f248b70bbe7c.png&#34; alt=&#34;Screenshot_2018-09-17-00-05-37.png&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;プログラム&#34;&gt;プログラム&lt;/h3&gt;
+
+&lt;p&gt;以下のプログラムを書き込みます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;#include &amp;lt;Servo.h&amp;gt;
+
+Servo myservo;
+volatile int flag = 0;
+
+void interruptsw()
+{
+  flag = 1;
+}
+
+void setup() {
+  myservo.attach( 10 );
+  attachInterrupt(0, interruptsw, CHANGE);
+}
+
+void loop() {
+    if(flag == 1){
+      myservo.write( 45 );
+      delay(500);
+      flag = 0;
+    }else{
+      myservo.write( 90 );
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;今回のプログラムのポイントは&lt;strong&gt;割り込み処理&lt;/strong&gt;と&lt;strong&gt;volatile&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;h3 id=&#34;割り込み処理&#34;&gt;割り込み処理&lt;/h3&gt;
+
+&lt;p&gt;割り込み処理とは簡単に言えば、&lt;strong&gt;「イベントが起こった時に、コンピュータがどんな処理をしていようと無理やり別の処理を割り込ませる」&lt;/strong&gt;というもの。&lt;/p&gt;
+
+&lt;p&gt;今回のプログラムの場合&lt;strong&gt;attachInterrupt(0, interruptsw, CHANGE);&lt;/strong&gt;で、&lt;strong&gt;どのピンのどんなイベントを監視するか指定&lt;/strong&gt;しています。指定の仕方は、&lt;strong&gt;attachInterrupt([監視するピン], [割り込ませる処理], [反応するイベントの種類]);&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;Arduino Unoでは監視するピンは&lt;strong&gt;0か１&lt;/strong&gt;しか指定できなく、それぞれ&lt;strong&gt;pin2, pin3&lt;/strong&gt;に対応しています。&lt;/p&gt;
+
+&lt;p&gt;今回のプログラムの&lt;strong&gt;attachInterrupt(0, interruptsw, CHANGE);&lt;/strong&gt;とは&lt;strong&gt;「&lt;font color=&#34;Red&#34;&gt;2pin&lt;/font&gt;の信号が&lt;font color=&#34;Red&#34;&gt;CHANGE&lt;/font&gt;（変化するたび）&lt;font color=&#34;Red&#34;&gt;interruptsw&lt;/font&gt;を実行してね」&lt;/strong&gt;という指定をしていることになります。&lt;/p&gt;
+
+&lt;h3 id=&#34;volatile&#34;&gt;volatile&lt;/h3&gt;
+
+&lt;p&gt;volatileとは&lt;strong&gt;「この変数に関係する部分は消さないで！」&lt;/strong&gt;という指定。&lt;/p&gt;
+
+&lt;p&gt;どういうことかというと、プログラムをよく見てもらうと&lt;u&gt;volatileをつけているflagという変数はloop()の中で、何の計算にも使われていません（足すとか引くとか）。&lt;/u&gt;loop()の中では、&lt;strong&gt;if(flag == 1)&lt;/strong&gt;の部分でフラグが１になることを待っていますが、コンピュータはかしこい？ので、&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;flagはloop()の中で計算に使ってない&lt;/strong&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;↓&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;計算に使ってないならflagの値が増えたり減ったりすることは一生ないんじゃね？&lt;/strong&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;↓&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;じゃあ「flag == 1」になることはありえんね、無駄なんでif文消しまーす&lt;/strong&gt;&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;↓&lt;br&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;俺優秀☆&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;という具合に&lt;strong&gt;最悪の場合勝手にif文を消します&lt;/strong&gt;。
+私たちからすれば「そこは割り込みが起こった時に1が代入されるんだけど・・・」と思いますがコンピュータは知ったこっちゃありません。ということで、計算には使ってないけど割り込みなどで確実に値が変化する変数については&lt;strong&gt;volatile&lt;/strong&gt;をつけて消されないようにしてあげます。&lt;/p&gt;
+
+&lt;h2 id=&#34;実際に使ってみる&#34;&gt;実際に使ってみる&lt;/h2&gt;
+
+&lt;p&gt;さて、難しい話はこれぐらいにして早速完成したデバイスを使ってみましょう！&lt;/p&gt;
+
+&lt;p&gt;より雰囲気を出すために&lt;u&gt;フリー素材のおじさまウェイターの画像をA3用紙4枚刷りで印刷し、そこにデバイスを貼り付けました。&lt;/u&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/f505fed2-0763-3db7-4e7c-6e9df474b17e.jpeg&#34; alt=&#34;DSC_0571.JPG&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;font size =&#34;4&#34;&gt;いざ起動・・・・！！！&lt;/font&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/XlFNMBB7lt4&#34; frameborder=&#34;0&#34; allow=&#34;autoplay; encrypted-media&#34; allowfullscreen&gt;&lt;/iframe&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;font size =&#34;4&#34;&gt;&lt;strong&gt;無事、手を叩いただけでディナーが届きました！！！！！&lt;/strong&gt;&lt;/font&gt;&lt;/p&gt;
+
+&lt;p&gt;「シーチキン」の「Amazon Dash Button」を使ったのでシーチキンが届きました。今回使った拍手センサは使い方も簡単なので、他にも音で動くデバイスを作ってみると面白いと思います！&lt;/p&gt;
+
+&lt;p&gt;それでは、みなさん良きセレブライフをー！&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>【ハンズオン資料】Nefry BTと人感センサで防犯LINE BOTを作ってみよう</title>
@@ -3722,6 +4001,9 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/mongoose-os-nefry-blink/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/145/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -6761,144 +7043,6 @@ void loop(){
 &lt;p&gt;2017年2月23日開催の &lt;a href=&#34;https://dotstudio.connpass.com/event/49147/&#34;&gt;今度こそ挫折しない！知識ゼロからの電子工作ハンズオン&lt;/a&gt;イベントに来てくださっている方で、チュートリアルを早く終わってしまった方もぜひやってみてください！&lt;/p&gt;
 
 &lt;p&gt;それではまた！お疲れ様でした！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>littleBits Arduinoモジュールでより細かく値を入出力して状況を伝えよう</title>
-      <link>https://dotstud.io/blog/littlebits-arduino-analog-number/</link>
-      <pubDate>Thu, 15 Dec 2016 10:00:00 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/littlebits-arduino-analog-number/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、dotstudioライターの田中正吾です。電子回路のパーツを磁石でパチパチとつなげるだけで電子工作ができる「littleBits」の連載をLIGブログでおこなっています。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/235644&#34;&gt;littleBitsのArduinoモジュールで簡単にプログラミングをはじめてみよう&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/259378&#34;&gt;ArduinoモジュールでLチカしてみた（Windows・Mac）&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/268909&#34;&gt;ArduinoモジュールでON・OFFの入力値を取得してみよう&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/280761&#34;&gt;Arduinoモジュールで入出力の連携をしてみよう&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/295334&#34;&gt;シリアルモニタとNode.jsでlittleBits Arduinoモジュールを動かしてみよう&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://liginc.co.jp/315934&#34;&gt;littleBitsのボタンを押すとIFTTT経由でLINEにメッセージが飛ぶ仕組みを作ってみよう&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;本記事では、これでの連載とは少し視点を変えて、 &lt;strong&gt;littleBits Arduinoモジュールでより細かく値を入出力するアナログ入出力&lt;/strong&gt; をご紹介します。では、さっそく始めていきましょう！&lt;/p&gt;
-
-&lt;h2 id=&#34;より細かく状況を伝えるアナログ値&#34;&gt;より細かく状況を伝えるアナログ値&lt;/h2&gt;
-
-&lt;p&gt;いままで、ボタンを押すと何かが起こるON/OFFの反応で説明していましたが、実は&lt;a href=&#34;http://jp.littlebits.com/kits/arduino-coding-kit/&#34;&gt;ARDUINO CODING KIT&lt;/a&gt;には、より細かく状況を伝えるアナログ値を扱う入出力モジュールがあります。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;たとえば、DIMMERモジュール（真ん中にあるダイヤル状のツマミのモジュール）は、ツマミを回すことで電気の流れが0～100%と変わります。またBAR GRAPHモジュール（右）は流れる電気によって光るLEDの数が変わります。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;つまみを回しきったとき。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;半分ぐらいまでひねったとき。電流50%のときですね。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ON/OFFではセンサーが「反応した」「反応していない」という2つの情報しか伝えられませんでした。しかし、このように電流の量によって度合いを伝えることができると、たとえば光センサーモジュールを使ったときに明るさを「暗い」「やや暗い」「やや明るい」「とても明るい」といったように、より細かく伝えることができます。&lt;/p&gt;
-
-&lt;h2 id=&#34;アナログ値をarduinoモジュールで計測してみる&#34;&gt;アナログ値をArduinoモジュールで計測してみる&lt;/h2&gt;
-
-&lt;p&gt;それでは早速アナログ値をArduinoモジュールで計測してみましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;DIMMERモジュールをArduinoモジュールの入力2番目のA0に取り付けます。&lt;/p&gt;
-
-&lt;p&gt;Arduinoモジュールでアナログ値を計測するには &lt;code&gt;analogRead&lt;/code&gt; 関数を使います。Arduinoモジュールで計測できるアナログ値は0%は0として、100%は1023として計測できます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;void setup() {
-  Serial.begin(9600);
-}
-
-void loop() {
-  int sensorValue = analogRead(A0);
-  if(sensorValue&amp;gt;0){
-    Serial.println(sensorValue);
-  }
-  delay(1);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;このコードを書き込んで、シリアルモニタで数値を見てみます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;DIMMERをひねると値が変わります。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;シリアルプロッタのほうがよりわかりやすいですね。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/08.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/09.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;dimmerモジュールのツマミにあわせて点滅を変えてみる&#34;&gt;DIMMERモジュールのツマミにあわせて点滅を変えてみる&lt;/h2&gt;
-
-&lt;p&gt;DIMMERモジュールのツマミの度合いが取れるようになったので、ツマミに合わせてBARGRAPHモジュールの点滅の仕方を変えてみましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;このように、さきほどのDIMMERモジュールとArduinoモジュールをつないだものに、BAR GRAPHモジュールも加えます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;void setup() {
-  Serial.begin(9600);
-  pinMode(5,OUTPUT);
-}
-
-void loop() {
-  int sensorValue = analogRead(A0);
-  if(sensorValue&amp;gt;0){
-    Serial.println(sensorValue);
-    digitalWrite(5,HIGH);
-    delay(sensorValue);
-    digitalWrite(5,LOW);
-  }
-  delay(sensorValue);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;このように書いたコードをArduinoモジュールに書き込みます。&lt;/p&gt;
-
-&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/PircFP-OsQY&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
-
-&lt;p&gt;DIMMERモジュールのつまみに対応して、点滅の仕方が変わるようになりました。&lt;/p&gt;
-
-&lt;h2 id=&#34;さらにサーボに変えてみる&#34;&gt;さらにサーボに変えてみる&lt;/h2&gt;
-
-&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/FVonwS3pb-E&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://jp.littlebits.com/kits/arduino-coding-kit/&#34;&gt;ARDUINO CODING KIT&lt;/a&gt;のサーボに変えてみました。LEDよりもわかりやすくなりますね。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;サーボに顔をつけてみます。&lt;/p&gt;
-
-&lt;iframe width=&#34;715&#34; height=&#34;402&#34; src=&#34;https://www.youtube.com/embed/coAm51UmCo0&#34; frameborder=&#34;0&#34; allowfullscreen&gt;&lt;/iframe&gt;
-
-&lt;p&gt;ツマミに合わせて顔がビクビクするものに早変わりします！　&lt;a href=&#34;https://liginc.co.jp/280761&#34;&gt;磁石で電子工作できる「littleBits」のArduinoモジュールで、入出力の連携をしてみよう&lt;/a&gt;で試した「三三七拍子するパンダ」はまだ動物らしい動きに見えましたが、この顔ネタはなかなかに気持ち悪いです。夢に出そう。&lt;/p&gt;
-
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-
-&lt;p&gt;今回はlittleBits Arduinoモジュールで &lt;strong&gt;より細かく値を入出力するアナログ入出力&lt;/strong&gt; をお伝えしました。ネタはひとつなのに、モジュールを付け替えるだけで光から動力へと変化します。工作物によって伝わる印象も変わるのがlittleBitsの面白いところです。&lt;/p&gt;
-
-&lt;p&gt;そして、アナログ値を扱うとON/OFFよりも細かく状況を伝えることができたり、動きにもアクセントを持たせるたりすることができます。&lt;/p&gt;
-
-&lt;p&gt;みなさんも、ぜひいろいろなことを試してみてはいかがでしょうか。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/060/12.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;littleBitsのハックには、LIGブログの&lt;a href=&#34;https://liginc.co.jp/series/littlebits&#34;&gt;littleBitsではじめるArduino&lt;/a&gt;連載、ならびに拙著『&lt;a href=&#34;http://www.1ft-seabass.jp/memo/2016/10/11/littlebits-book-release/?utm_content=bufferec8bb&amp;amp;utm_medium=social&amp;amp;utm_source=twitter.com&amp;amp;utm_campaign=buffer&#34;&gt;「littleBits」ではじめる電子工作&lt;/a&gt;』もぜひご参照ください。&lt;/p&gt;
 </description>
     </item>
     
