@@ -7,8 +7,339 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2018 dotstudio inc.</copyright>
-    <lastBuildDate>Tue, 09 Oct 2018 11:50:42 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 31 Oct 2018 10:07:13 +0900</lastBuildDate>
     <atom:link href="/blog/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>加速度センサとマイコン内蔵LEDで魔法の杖を作ってみた！</title>
+      <link>https://dotstud.io/blog/halloween-gadget-witch-stick/</link>
+      <pubDate>Wed, 31 Oct 2018 10:07:13 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/halloween-gadget-witch-stick/</guid>
+      
+      <description>
+
+&lt;p&gt;みなさんこんにちは。トボリです。&lt;/p&gt;
+
+&lt;p&gt;私は電子工作が大好きで、いろいろいじったり、&lt;a href=&#34;http://toboli.hatenablog.com/&#34;&gt;ブログ&lt;/a&gt;を書いたりして暮らしています。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;ところで、みなさん魔法は好きですか？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;電子工作と魔法ってかなり相性いいと思うんですよ。勝手に光る、勝手に動く、勝手にしゃべる……とか！&lt;/p&gt;
+
+&lt;p&gt;気づけばもう10月31日。そう、本日はハロウィンです！電子工作を愛し、電子工作に愛された者として、このイベントで魔法っぽいものを作りたい！！&lt;/p&gt;
+
+&lt;p&gt;魔法といえば、そう、杖ですよね！！&lt;/p&gt;
+
+&lt;p&gt;ということで、今回はみんなが一度は憧れたであろう、&lt;strong&gt;『魔法の杖』&lt;/strong&gt; を作ってみました！&lt;/p&gt;
+
+&lt;h2 id=&#34;振ると光る杖-を作ることにした&#34;&gt;「振ると光る杖」を作ることにした&lt;/h2&gt;
+
+&lt;p&gt;『魔法の杖』っていうからには、できるだけかっこいいことがしたい！
+トボリも想像力だけは無駄に豊かなので、うきうきいろんな機能をイメージしました。&lt;/p&gt;
+
+&lt;p&gt;家電を操作したり、一振りでカーテン開けられたりできたらいいなあ～！何か浮かせられたらもっとおもしろいかも……。&lt;/p&gt;
+
+&lt;p&gt;しかし。&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 200%&#34;&gt;時間と技術力は限られている！！&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;今のトボリの技術力でハロウィンまでに作れそうなものといえば、「振ると光る」杖です。&lt;/p&gt;
+
+&lt;p&gt;想像よりだいぶスケールが小さくなりましたが、どんなにささやかな物でもまずは作ることが大事！
+と自分に言い聞かせ、とにかく作ってみることにしました！&lt;/p&gt;
+
+&lt;h2 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h2&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/228/parts.png&#34; alt=&#34;parts&#34;&gt;
+
+&lt;/center&gt;
+
+電子工作初心者の味方、Arduinoを使って作ろうと思います！&lt;/p&gt;
+
+&lt;p&gt;また、なぜミニブレッドボードを使用するかというと……これを見てください！
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/228/breadboard.png&#34; alt=&#34;breadboard&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;p&gt;たまたま買った電池ボックスとミニブレッドボードのサイズがほぼ同じ！&lt;/p&gt;
+
+&lt;p&gt;これを見た瞬間、絶対に使おう！と固く決意したのです。
+（本当はユニバーサル基板に半田付けしてたんですが、完成間近にピンヘッダの取り付けミスが発覚し、安心安全のブレッドボードでやり直したという経緯があります。つらい。）&lt;/p&gt;
+
+&lt;h2 id=&#34;魔法の杖を作る&#34;&gt;魔法の杖を作る&lt;/h2&gt;
+
+&lt;p&gt;魔法の杖は、下記の3ステップで作って行きます！&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;プログラムを書く&lt;/li&gt;
+&lt;li&gt;ブレッドボードに回路を作る&lt;/li&gt;
+&lt;li&gt;見た目をそれっぽく造形する&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;プログラムを書く&#34;&gt;プログラムを書く&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/arduinoide-setup/&#34;&gt;Arduino IDE&lt;/a&gt;を使ってプログラムを書いていきます。&lt;/p&gt;
+
+&lt;p&gt;加速度センサのサンプルプログラムと、フルカラーLEDのサンプルプログラムをただ合体しただけのお手軽コードです！&lt;/p&gt;
+
+&lt;div class=&#34;accbox&#34;&gt;
+    &lt;label for=&#34;label1&#34;&gt;クリックしてコードを表示&lt;/labe&gt;
+    &lt;input type=&#34;checkbox&#34; id=&#34;label1&#34; class=&#34;cssacc&#34; /&gt;
+    &lt;div class=&#34;accshow&#34;&gt;
+      &lt;pre&gt;
+      &lt;code class=&#34;hljs hljs-line-numbers&#34;&gt;
+      #include &amp;lt;Wire.h&amp;gt;
+      #include &amp;lt;SparkFun_MMA8452Q.h&amp;gt;
+      #include &amp;lt;Adafruit_NeoPixel.h&amp;gt;
+      #define PIN 2
+
+      Adafruit_NeoPixel pixels = Adafruit_NeoPixel(1, PIN, NEO_GRB + NEO_KHZ800);
+
+      MMA8452Q accel;
+
+      void setup() {
+        Serial.begin(9600);
+        Serial.println(&#34;MMA8452Q Test Code!&#34;);
+
+        pixels.begin();
+        pixels.show();
+
+        accel.init();
+      }
+
+      void loop() {
+        if(accel.available()) {
+          accel.read();
+          printCalculatedAccels();
+          printOrientation();
+
+          Serial.println();
+        }
+      }
+
+      void printOrientation() {
+        byte pl = accel.readPL();
+        switch (pl) {
+          case PORTRAIT_U:
+            Serial.print(&#34;Portrait Up&#34;);
+            break;
+          case PORTRAIT_D:
+            Serial.print(&#34;Portrait Down&#34;);
+            break;
+          case LANDSCAPE_R:
+            Serial.print(&#34;Landscape Right&#34;);
+            rainbow(20);
+            break;
+          case LANDSCAPE_L:
+            Serial.print(&#34;Landscape Left&#34;);
+            rainbow(20);
+            break;
+          case LOCKOUT:
+            Serial.print(&#34;Flat&#34;);
+            pixels.show();
+            break;
+        }
+      }
+
+      void rainbow(uint8_t wait) {
+        uint16_t i, j;
+
+        for(j=0; j&amp;lt;256; j++) {
+          for(i=0; i&amp;lt;pixels.numPixels(); i++) {
+            pixels.setPixelColor(i, Wheel((i+j) &amp; 255));
+          }
+          pixels.show();
+          delay(wait);
+        }
+      }
+
+       uint32_t Wheel(byte WheelPos) {
+         WheelPos = 255 - WheelPos;
+         if(WheelPos &amp;lt; 85) {
+           return pixels.Color(255 - WheelPos * 3, 0, WheelPos * 3);
+         }
+         if(WheelPos &amp;lt; 170) {
+           WheelPos -= 85;
+           return pixels.Color(0, WheelPos * 3, 255 - WheelPos * 3);
+         }
+         WheelPos -= 170;
+         return pixels.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
+       }
+      &lt;/code&gt;
+      &lt;/pre&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&#34;ブレッドボードに回路を作る&#34;&gt;ブレッドボードに回路を作る&lt;/h3&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/228/fritzing.png&#34; alt=&#34;fritzing&#34;&gt;
+
+&lt;/center&gt;
+
+まずはブレッドボードに配線していきます！配線図はこんな感じ。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/228/circuit.png&#34; alt=&#34;circuit&#34;&gt;
+
+&lt;/center&gt;
+
+実際に配線したものがこちらです！
+LEDの部分だけ基板から離れてしまうので、後で半田付けをします。&lt;/p&gt;
+
+&lt;p&gt;みなさん半田付けって好きですか？トボリは電子工作作業の中で半田付けが一番好きです！
+半田の香りは下手なアロマより癒される気がします。&lt;/p&gt;
+
+&lt;h3 id=&#34;見た目をそれっぽく造形する&#34;&gt;見た目をそれっぽく造形する&lt;/h3&gt;
+
+&lt;p&gt;杖はそれっぽい形になればなんでもいいので、3Dプリンタを使える方は使ってもいいし、お好きなやり方で大丈夫です！今回は、粘土をこねて作ってみたので、参考までに材料と作り方も載せておきます！&lt;/p&gt;
+
+&lt;h4 id=&#34;用意するもの-1&#34;&gt;■ 用意するもの&lt;/h4&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/228/stick1.png&#34; alt=&#34;stick1&#34;&gt;
+
+&lt;/center&gt;
+
+石粉粘土・トイレットペーパーの芯・市販のスティックを用意します。これらは全て百均で買うことができました！いい時代ですね！&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/228/stick2.png&#34; alt=&#34;stick2&#34;&gt;
+
+&lt;/center&gt;
+
+この市販のスティックを分解し、筒状の棒だけ取り出します。&lt;/p&gt;
+
+&lt;h4 id=&#34;杖の形に造形する&#34;&gt;■ 杖の形に造形する&lt;/h4&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/228/stick3.png&#34; alt=&#34;stick3&#34;&gt;
+
+&lt;/center&gt;
+
+市販の棒とトイレットペーパーの芯をくっつけます。トイレットペーパーの芯の先に切れ込みを入れて、画像のように内側に折り込みます。トイレットペーパーの芯に棒を差し込んで、テープで固定します。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/228/stick4.png&#34; alt=&#34;stick4&#34;&gt;
+
+&lt;/center&gt;
+
+中に基板を入れ、筒の中にLEDのワイヤーを通してから、LEDを半田付けします。&lt;/p&gt;
+
+&lt;p&gt;動作チェックをして問題なさそうだったら、どんどん土台に石粉粘土を貼り付けていきます！少しずつ貼り付けて、時々手でなでて滑らかにしていきます。&lt;/p&gt;
+
+&lt;p&gt;乾いたら、カッターで傷をつけ、茶色と黒のアクリル絵の具をインスピレーションに従っていい感じに塗ります。&lt;/p&gt;
+
+&lt;h4 id=&#34;完成&#34;&gt;■ 完成！&lt;/h4&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/228/stick5.png&#34; alt=&#34;stick5&#34;&gt;
+
+&lt;/center&gt;
+
+できた～～～！！！
+どう見ても、魔法の杖！！少なくとも自分にとっては手塩にかけた最愛の杖！！&lt;/p&gt;
+
+&lt;h2 id=&#34;魔法を発動する&#34;&gt;魔法を発動する&lt;/h2&gt;
+
+&lt;p&gt;さっそく魔法を発動していきましょう！
+左右に杖を振ると……虹色の光が出ます！やった～～！魔法っぽい！
+&lt;img src=&#34;https://dotstud.io/img/blog/228/demo.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;次こそはもっとうまく作りたい-それが電子工作沼&#34;&gt;次こそはもっとうまく作りたい……それが電子工作沼&lt;/h2&gt;
+
+&lt;p&gt;LEDとセンサーひとつですが、結構楽しいものができました！&lt;/p&gt;
+
+&lt;p&gt;でも、やっぱり本当はこうしたい……もっとかっこいい機能搭載したい……という欲望はとめどなく溢れ、「次こそもっといいものを！」という気持ちになります。&lt;/p&gt;
+
+&lt;p&gt;もうこうなったらズブズブですよね。&lt;b&gt;電子工作沼&lt;/b&gt;に。このハロウィンは今自分が作れる楽しいものを作りまくって、一緒に電子工作沼で溺れましょう！&lt;/p&gt;
+
+&lt;p&gt;ではでは、トボリでした！&lt;/p&gt;
+
+&lt;style&gt;
+.accbox {
+    margin: 2em 0;
+    padding: 0;
+    max-width: 710px;
+}
+
+
+.accbox label {
+    display: block;
+    margin: 1.5px 0;
+    padding : 11px 12px;
+    color :#ffffff;
+    font-weight: bold;
+    background :#2f2f2f;
+    cursor :pointer;
+    transition: all 0.5s;
+}
+
+.accbox label:hover {
+    background :#A4A4A4;
+}
+
+.accbox input {
+    display: none;
+}
+
+.accbox .accshow {
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: 0.8s;
+}
+
+.cssacc:checked + .accshow {
+    height: auto;
+    padding: 5px;
+    background: #eaeaea;
+    opacity: 1;
+}
+&lt;/style&gt;
+</description>
+    </item>
     
     <item>
       <title>macOS MojaveとiOSの連携カメラが使えない時のトラブルシューティング</title>
@@ -26,6 +357,9 @@
 
 
 &lt;section class=&#34;link&#34; id=&#34;224&#34;&gt;
+  
+      
+      
   
       
       
@@ -435,6 +769,9 @@
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -2999,6 +3336,12 @@ void loop() {
       
       
   
+      
+      
+  
+      
+      
+  
 &lt;/section&gt;
 
 
@@ -3714,6 +4057,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/clova-cek-python-tutorial/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/220/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -3733,6 +4079,9 @@ void loop() {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -5203,6 +5552,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/clova-cek-nodejs-tutorial/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/195/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -5222,6 +5574,9 @@ void loop() {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -6476,6 +6831,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/clova-ifttt-nefrybt-arduino/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/185/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -6495,6 +6853,9 @@ void loop() {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -7708,6 +8069,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/line-clova-skill-tutorial/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/186/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -7727,6 +8091,9 @@ void loop() {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -8985,6 +9352,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/line-clova-skill-tutorial/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/186/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -9004,6 +9374,9 @@ void loop() {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -10434,6 +10807,9 @@ void loop() {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/how-to-use-cli/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/158/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -11091,12 +11467,21 @@ void loop() {
       
       
   
+      
+      
+  
 &lt;/section&gt;
 
 
 
 
 &lt;section class=&#34;link&#34; id=&#34;161&#34;&gt;
+  
+      
+      
+  
+      
+      
   
       
       
@@ -13901,6 +14286,9 @@ blockquote &gt; p {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/internet-of-things-cooking/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/055/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -13920,6 +14308,9 @@ blockquote &gt; p {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -15227,6 +15618,9 @@ blockquote &gt; p {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/mabeee-summer-horror-comic/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/026/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -15581,6 +15975,9 @@ blockquote &gt; p {
       
       
   
+      
+      
+  
 &lt;/section&gt;
 &lt;/p&gt;
 
@@ -15589,6 +15986,9 @@ blockquote &gt; p {
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;184&#34;&gt;
+  
+      
+      
   
       
       
@@ -16819,6 +17219,9 @@ blockquote &gt; p {
       
       
   
+      
+      
+  
 &lt;/section&gt;
 &lt;/p&gt;
 
@@ -16826,9 +17229,12 @@ blockquote &gt; p {
 
 &lt;h3 id=&#34;初心者必見シリーズ&#34;&gt;初心者必見シリーズ&lt;/h3&gt;
 
-
+&lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;091&#34;&gt;
+  
+      
+      
   
       
       
@@ -18059,14 +18465,20 @@ blockquote &gt; p {
       
       
   
+      
+      
+  
 &lt;/section&gt;
-
+&lt;/p&gt;
 
 &lt;p&gt;秋葉原の電気街を知りたいならまずこの記事を読もう！&lt;strong&gt;電子工作を購入する際の暗黙ルールやアキバのおすすめのお店&lt;/strong&gt;を紹介しています。&lt;/p&gt;
 
 
 
 &lt;section class=&#34;link&#34; id=&#34;208&#34;&gt;
+  
+      
+      
   
       
       
@@ -18503,6 +18915,9 @@ blockquote &gt; p {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -19949,6 +20364,9 @@ blockquote &gt; p {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/office-new-door-notification/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/133/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -20543,6 +20961,9 @@ blockquote &gt; p {
       
       
   
+      
+      
+  
 &lt;/section&gt;
 &lt;/p&gt;
 
@@ -20551,6 +20972,9 @@ blockquote &gt; p {
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;155&#34;&gt;
+  
+      
+      
   
       
       
@@ -21781,6 +22205,9 @@ blockquote &gt; p {
       
       
   
+      
+      
+  
 &lt;/section&gt;
 &lt;/p&gt;
 
@@ -21789,6 +22216,9 @@ blockquote &gt; p {
 
 
 &lt;section class=&#34;link&#34; id=&#34;188&#34;&gt;
+  
+      
+      
   
       
       
@@ -22300,6 +22730,9 @@ blockquote &gt; p {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -23534,6 +23967,9 @@ blockquote &gt; p {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/keyboard-kintai-system-diy/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/183/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -23553,6 +23989,9 @@ blockquote &gt; p {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -25008,6 +25447,9 @@ blockquote &gt; p {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/gyaruden-hadeike-display-cap/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/094/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -25497,6 +25939,9 @@ blockquote &gt; p {
       
       
   
+      
+      
+  
 &lt;/section&gt;
 &lt;/p&gt;
 
@@ -25505,6 +25950,9 @@ blockquote &gt; p {
 
 
 &lt;section class=&#34;link&#34; id=&#34;126&#34;&gt;
+  
+      
+      
   
       
       
@@ -26735,14 +27183,20 @@ blockquote &gt; p {
       
       
   
+      
+      
+  
 &lt;/section&gt;
 
 
 &lt;p&gt;物理的に目立ちたくてたまらない人たちに捧げたい。&lt;strong&gt;周囲が暗ければ暗いほど大活躍間違いなしの光るつけまつげ&lt;/strong&gt;です。ピカピカのちゃんとく先生がいます。&lt;/p&gt;
 
-
+&lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;201&#34;&gt;
+  
+      
+      
   
       
       
@@ -27973,8 +28427,11 @@ blockquote &gt; p {
       
       
   
+      
+      
+  
 &lt;/section&gt;
-
+&lt;/p&gt;
 
 &lt;p&gt;目元を光らせてから、11ヶ月後。ちゃんとく先生、パワーアップして帰ってきました。光るのはまつげだけではありません。&lt;strong&gt;改札や自販機と共に光狂う非接触発光LEDネイル&lt;/strong&gt;です。&lt;/p&gt;
 
@@ -27985,6 +28442,9 @@ blockquote &gt; p {
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;099&#34;&gt;
+  
+      
+      
   
       
       
@@ -29215,6 +29675,9 @@ blockquote &gt; p {
       
       
   
+      
+      
+  
 &lt;/section&gt;
 &lt;/p&gt;
 
@@ -29223,6 +29686,9 @@ blockquote &gt; p {
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;172&#34;&gt;
+  
+      
+      
   
       
       
@@ -30453,6 +30919,9 @@ blockquote &gt; p {
       
       
   
+      
+      
+  
 &lt;/section&gt;
 &lt;/p&gt;
 
@@ -30461,6 +30930,9 @@ blockquote &gt; p {
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;177&#34;&gt;
+  
+      
+      
   
       
       
@@ -31691,6 +32163,9 @@ blockquote &gt; p {
       
       
   
+      
+      
+  
 &lt;/section&gt;
 &lt;/p&gt;
 
@@ -31699,6 +32174,9 @@ blockquote &gt; p {
 &lt;p&gt;
 
 &lt;section class=&#34;link&#34; id=&#34;195&#34;&gt;
+  
+      
+      
   
       
       
@@ -32186,6 +32664,9 @@ blockquote &gt; p {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -33528,6 +34009,9 @@ blockquote &gt; p {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/nodejs-amazon-alexa-skill/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/144/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -33547,6 +34031,9 @@ blockquote &gt; p {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -35901,6 +36388,9 @@ blockquote {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/internet-of-things-books/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/199/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -35920,6 +36410,9 @@ blockquote {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -37270,6 +37763,9 @@ blockquote {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/arduino-use-rfid-reader/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/162/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -37289,6 +37785,9 @@ blockquote {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -38469,6 +38968,9 @@ blockquote {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/keyboard-kintai-system-diy/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/183/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -38488,6 +38990,9 @@ blockquote {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -39752,6 +40257,9 @@ blockquote {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/microbit-getting-started-pokio/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/165/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -39771,6 +40279,9 @@ blockquote {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -40922,6 +41433,9 @@ blockquote {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/obniz-tell-be-hungry/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/190/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -40941,6 +41455,9 @@ blockquote {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -42184,6 +42701,9 @@ blockquote {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/no-more-sales-intercom/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/188/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -42203,6 +42723,9 @@ blockquote {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -43926,6 +44449,9 @@ blockquote {
   
       
       
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/akihabara-guide-for-beginners/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/091/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -43945,6 +44471,9 @@ blockquote {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
       
   
       
@@ -44488,4345 +45017,6 @@ blockquote {
 &lt;p&gt;とくにハンズオンや授業をやる際には重宝するテクニックだと思います。&lt;/p&gt;
 
 &lt;p&gt;それでは！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>【ソレノイド詳細解説】IoTの力でスマホを振るとソレノイドがシュコシュコ動く仕組みを作ってみる</title>
-      <link>https://dotstud.io/blog/control-solenoid-nefrybt-nodered/</link>
-      <pubDate>Tue, 28 Aug 2018 14:55:44 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/control-solenoid-nefrybt-nodered/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、&lt;a href=&#34;https://dotstud.io/members/takudooon/&#34;&gt;たくろーどん&lt;/a&gt;です。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://dotstud.io/series/driving/&#34;&gt;これまでの記事&lt;/a&gt;では、電子工作に使えそうな駆動部品を紹介してきました。サーボモータ、ステッピングモータときたら……次に使ってみたいのは&lt;strong&gt;ソレノイド&lt;/strong&gt;ですよね！&lt;/p&gt;
-
-&lt;p&gt;ということで、ソレノイドをNefry BTで使えるようにしていきたいと思います。&lt;/p&gt;
-
-&lt;p&gt;そして、最終的には&lt;strong&gt;スマートフォンをシェイクするとソレノイドをシュコシュコ動かせる&lt;/strong&gt;ようにしてみたいと思います。&lt;/p&gt;
-
-&lt;p&gt;
-
-&lt;section class=&#34;link&#34; id=&#34;187&#34;&gt;
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-          &lt;div class=&#34;link_content&#34;&gt;
-          &lt;a href=&#34;https://dotstud.io/blog/nefry-servo-handson-takudooon/&#34;&gt;&lt;/a&gt;
-          &lt;img src=&#34;https://dotstud.io/img/blog/187/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
-          &lt;/div&gt;
-          &lt;div class=&#34;link_content&#34;&gt;
-            &lt;div class=&#34;link_detail&#34;&gt;
-              &lt;div class=&#34;link_title&#34;&gt;
-                PWM制御をマスターしよう！Node-REDでサーボモータを遠隔制御する方法＆初ハンズオンレポート
-              &lt;/div&gt;
-              &lt;div class=&#34;link_date&#34;&gt;
-                
-                2018-07-12
-              &lt;/div&gt;
-              &lt;div class=&#34;link_desc&#34;&gt;
-                PWM制御でサーボモータを操作してモノ作りの幅を広げましょう！Node-REDを使ったハンズオンの内容を紹介します。
-              &lt;/div&gt;
-            &lt;/div&gt;
-          &lt;/div&gt;
-        &lt;/section&gt;
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-&lt;/section&gt;
-
-&lt;br /&gt;
-
-
-&lt;section class=&#34;link&#34; id=&#34;189&#34;&gt;
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-          &lt;div class=&#34;link_content&#34;&gt;
-          &lt;a href=&#34;https://dotstud.io/blog/stepper-motor-nefrybt-control/&#34;&gt;&lt;/a&gt;
-          &lt;img src=&#34;https://dotstud.io/img/blog/189/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
-          &lt;/div&gt;
-          &lt;div class=&#34;link_content&#34;&gt;
-            &lt;div class=&#34;link_detail&#34;&gt;
-              &lt;div class=&#34;link_title&#34;&gt;
-                【詳細解説】ステッピングモータの仕組みを理解しよう！解説とNefry BTでステッピングモータを使う方法
-              &lt;/div&gt;
-              &lt;div class=&#34;link_date&#34;&gt;
-                
-                2018-07-23
-              &lt;/div&gt;
-              &lt;div class=&#34;link_desc&#34;&gt;
-                モータの世界は奥が深いです。今回はロボットアームや3Dプリンタのステージ制御に利用される「ステッピングモータ」について詳細に解説します。
-              &lt;/div&gt;
-            &lt;/div&gt;
-          &lt;/div&gt;
-        &lt;/section&gt;
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-&lt;/section&gt;
-&lt;/p&gt;
-
-&lt;h2 id=&#34;ソレノイドのしくみ&#34;&gt;ソレノイドのしくみ&lt;/h2&gt;
-
-&lt;p&gt;ソレノイドとは&lt;u&gt;&lt;strong&gt;銅線（コイル）に電流を流すことにより磁界を発生させ、磁性体の可動鉄芯を吸い寄せる（吸引）電気部品&lt;/strong&gt;&lt;/u&gt;のことです。電流を流している間は常に吸い寄せられていますが、電流を切ると吸引力はなくなります。&lt;/p&gt;
-
-&lt;p&gt;下記に、その仕組みを簡単に示しました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/212276/2854b315-e58b-63f0-cd49-87d761625053.png&#34; alt=&#34;仕組み.png&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;また、この動作を応用して&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;プル（吸引）ソレノイド&lt;/li&gt;
-&lt;li&gt;プッシュ（押し）ソレノイド：プッシュバーを装着した「吸引=押し」動作&lt;/li&gt;
-&lt;li&gt;自己保持ソレノイド：永久磁石を組込むことによりそれぞれの動作を保持&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;といった種類があります。&lt;/p&gt;
-
-&lt;h2 id=&#34;ソレノイドを使ってみる&#34;&gt;ソレノイドを使ってみる&lt;/h2&gt;
-
-&lt;p&gt;まずは簡単な例として、Nefry BTについているスイッチを押すとソレノイドが動くようにしてみます。&lt;/p&gt;
-
-&lt;h3 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gI-02414/&#34;&gt;NchパワーMOSFET 2SK2232&lt;/a&gt;：スイッチングのために使用(FETはトランジスタと違って電圧でトリガーとなる)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gP-10761/&#34;&gt;ソレノイド 5V ZHO-0420S-05A4.5A プッシュ型&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;整流ダイオード：逆起電力(ソレノイドへの電力供給停止後、ソレノイドの棒が元に戻るときに発生する起電力)を防止するため(マイコンの破壊を防止する)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;回路&#34;&gt;回路&lt;/h3&gt;
-
-&lt;p&gt;※&lt;strong&gt;ソレノイドに極性(+、-)はありません&lt;/strong&gt;！なので、安心して配線しましょう！&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/212276/255b91a2-7e2b-b5c9-6168-4cb604a35da2.png&#34; alt=&#34;回路図.png&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;プログラム&#34;&gt;プログラム&lt;/h3&gt;
-
-&lt;p&gt;「&lt;a href=&#34;https://dotstud.io/docs/nefrybt-arduino-ide-setup/&#34;&gt;NefryBTの環境構築&lt;/a&gt;」を参考に、Nefry BTに下記のプログラムを書き込みます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;#include&amp;lt;Nefry.h&amp;gt;
-
-void setup() {
-  Serial.print(115200);
-  pinMode(D4, OUTPUT);
-}
-
-//FET:電圧閾値0.8～2.0V　今回使っているトランジスタの場合は！
-void loop() {
-  digitalWrite(D4,LOW);
-  if(Nefry.readSW()){
-  digitalWrite(D4,HIGH);
-  }
-}
-
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;動かしてみると&#34;&gt;動かしてみると&lt;/h3&gt;
-
-&lt;p&gt;Nefry BTのスイッチを押すと、シュコシュコします。&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://gyazo.com/25c5ea02c0fc0e3ab327f3aff4719f28&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/25c5ea02c0fc0e3ab327f3aff4719f28.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;iotでソレノイドをシュコシュコする&#34;&gt;IoTでソレノイドをシュコシュコする&lt;/h2&gt;
-
-&lt;p&gt;それでは、スマートフォンをシェイクするとソレノイドをシュコシュコ動かせるようにしていきたいと思います。ここでは、スマートフォンの加速度を利用します（スマートフォンの加速度の利用する方法は&lt;a href=&#34;https://qiita.com/minwinmin/items/af1d8ba68d0ec3f52fa9&#34;&gt;こちら&lt;/a&gt;に少しまとめてあります）。&lt;/p&gt;
-
-&lt;h3 id=&#34;node-redのフローを作る&#34;&gt;Node-Redのフローを作る&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://nodered.org/&#34;&gt;Node-RED&lt;/a&gt;で下記のようなフローを作成します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img width=&#34;929&#34; alt=&#34;node-redのフロー.png&#34; src=&#34;https://qiita-image-store.s3.amazonaws.com/0/212276/29ef7cc8-9340-c1b2-4c82-0deac26eccc9.png&#34;&gt;&lt;/p&gt;
-
-&lt;p&gt;Node-REDの詳細は前回の記事をご覧ください。&lt;/p&gt;
-
-
-
-&lt;section class=&#34;link&#34; id=&#34;187&#34;&gt;
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-          &lt;div class=&#34;link_content&#34;&gt;
-          &lt;a href=&#34;https://dotstud.io/blog/nefry-servo-handson-takudooon/&#34;&gt;&lt;/a&gt;
-          &lt;img src=&#34;https://dotstud.io/img/blog/187/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
-          &lt;/div&gt;
-          &lt;div class=&#34;link_content&#34;&gt;
-            &lt;div class=&#34;link_detail&#34;&gt;
-              &lt;div class=&#34;link_title&#34;&gt;
-                PWM制御をマスターしよう！Node-REDでサーボモータを遠隔制御する方法＆初ハンズオンレポート
-              &lt;/div&gt;
-              &lt;div class=&#34;link_date&#34;&gt;
-                
-                2018-07-12
-              &lt;/div&gt;
-              &lt;div class=&#34;link_desc&#34;&gt;
-                PWM制御でサーボモータを操作してモノ作りの幅を広げましょう！Node-REDを使ったハンズオンの内容を紹介します。
-              &lt;/div&gt;
-            &lt;/div&gt;
-          &lt;/div&gt;
-        &lt;/section&gt;
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-      
-      
-  
-&lt;/section&gt;
-
-
-&lt;div class=&#34;accbox&#34;&gt;
-    &lt;label for=&#34;label1&#34;&gt;クリックしてコードを表示&lt;/labe&gt;
-    &lt;input type=&#34;checkbox&#34; id=&#34;label1&#34; class=&#34;cssacc&#34; /&gt;
-    &lt;div class=&#34;accshow&#34;&gt;
-      &lt;pre&gt;
-      &lt;code class=&#34;hljs hljs-line-numbers&#34;&gt;
-      [
-          {
-              &#34;id&#34;: &#34;2c912723.4f0338&#34;,
-              &#34;type&#34;: &#34;http in&#34;,
-              &#34;z&#34;: &#34;57519a9b.8fba94&#34;,
-              &#34;name&#34;: &#34;&#34;,
-              &#34;url&#34;: &#34;sensor4&#34;,
-              &#34;method&#34;: &#34;get&#34;,
-              &#34;upload&#34;: false,
-              &#34;swaggerDoc&#34;: &#34;&#34;,
-              &#34;x&#34;: 70,
-              &#34;y&#34;: 100,
-              &#34;wires&#34;: [
-                  [
-                      &#34;94c3393a.020d68&#34;
-                  ]
-              ]
-          },
-          {
-              &#34;id&#34;: &#34;94c3393a.020d68&#34;,
-              &#34;type&#34;: &#34;template&#34;,
-              &#34;z&#34;: &#34;57519a9b.8fba94&#34;,
-              &#34;name&#34;: &#34;HTML&#34;,
-              &#34;field&#34;: &#34;payload&#34;,
-              &#34;fieldType&#34;: &#34;msg&#34;,
-              &#34;format&#34;: &#34;html&#34;,
-              &#34;syntax&#34;: &#34;mustache&#34;,
-              &#34;template&#34;: &#34;&amp;lt;!DOCTYPE html&amp;gt;\n&amp;lt;html lang=\&#34;ja\&#34;&amp;gt;\n&amp;lt;head&amp;gt;\n&amp;lt;meta charset=\&#34;utf-8\&#34;&amp;gt;\n&amp;lt;meta name=\&#34;viewport\&#34; content=\&#34;width=device-width,initial-scale=1\&#34;&amp;gt;\n&amp;lt;title&amp;gt;加速度検出&amp;lt;/title&amp;gt;\n&amp;lt;/head&amp;gt;\n \n&amp;lt;body&amp;gt;\n&amp;lt;div id=\&#34;datatxt\&#34;&amp;gt;データの表示&amp;lt;/div&amp;gt; \n \n&amp;lt;script&amp;gt;\n    var encrypted = \&#34;{{{req.connection.encrypted}}}\&#34;;\n    if (encrypted === \&#34;true\&#34;) {\n        var wsUri = \&#34;wss://{{{req.hostname}}}:{{{req.connection.localPort}}}/accl1\&#34;;\n    }\n    else {\n        var wsUri = \&#34;ws://{{{req.hostname}}}:{{{req.connection.localPort}}}/accl1\&#34;;\n    }\n    var ws = new WebSocket(wsUri);\n\n    var accx = null;\n    var accy = null;\n    var accz = null;\n\n    function sendMessage() {\n        // 画面書き換え\n        var txt = \&#34;wsUri:\&#34; + wsUri + \&#34;&amp;lt;br&amp;gt;\&#34;;\n        txt += \&#34;x:\&#34; + accx + \&#34;&amp;lt;br&amp;gt;\&#34;;\n        txt += \&#34;y:\&#34; + accy + \&#34;&amp;lt;br&amp;gt;\&#34;;\n        txt += \&#34;z:\&#34; + accz + \&#34;&amp;lt;br&amp;gt;\&#34;;\n\n        var datatxt = document.getElementById(\&#34;datatxt\&#34;);\n        datatxt.innerHTML = txt;\n\n        // WebSocket送信\n        var payload = {\n            &#39;accx&#39;: accx,\n            &#39;accy&#39;: accy,\n            &#39;accz&#39;: accz,\n        };\n        ws.send(JSON.stringify(payload));\n    }\n\n    function handleMotionEvent(evt) {\n        //加速度\n        accx = evt.acceleration.x;\n        accy = evt.acceleration.y;\n        accz = evt.acceleration.z;\n    }\n\n    window.addEventListener(\&#34;devicemotion\&#34;, handleMotionEvent, true); //情報変更ごとにイベント発生\n    window.setInterval(sendMessage, 500); // 500msごとにイベント発生\n\n&amp;lt;/script&amp;gt;\n&amp;lt;/body&amp;gt;\n&amp;lt;/html&amp;gt;&#34;,
-              &#34;output&#34;: &#34;str&#34;,
-              &#34;x&#34;: 317.00000762939453,
-              &#34;y&#34;: 100.00000286102295,
-              &#34;wires&#34;: [
-                  [
-                      &#34;c9b732b9.d5df9&#34;
-                  ]
-              ]
-          },
-          {
-              &#34;id&#34;: &#34;c9b732b9.d5df9&#34;,
-              &#34;type&#34;: &#34;http response&#34;,
-              &#34;z&#34;: &#34;57519a9b.8fba94&#34;,
-              &#34;name&#34;: &#34;&#34;,
-              &#34;statusCode&#34;: &#34;&#34;,
-              &#34;headers&#34;: {},
-              &#34;x&#34;: 541.0000152587891,
-              &#34;y&#34;: 100.00000190734863,
-              &#34;wires&#34;: []
-          },
-          {
-              &#34;id&#34;: &#34;af4fa6f9.139f88&#34;,
-              &#34;type&#34;: &#34;websocket in&#34;,
-              &#34;z&#34;: &#34;57519a9b.8fba94&#34;,
-              &#34;name&#34;: &#34;&#34;,
-              &#34;server&#34;: &#34;250c9625.e420aa&#34;,
-              &#34;client&#34;: &#34;&#34;,
-              &#34;x&#34;: 60,
-              &#34;y&#34;: 220,
-              &#34;wires&#34;: [
-                  [
-                      &#34;1c16e58e.096d5a&#34;
-                  ]
-              ]
-          },
-          {
-              &#34;id&#34;: &#34;1c16e58e.096d5a&#34;,
-              &#34;type&#34;: &#34;json&#34;,
-              &#34;z&#34;: &#34;57519a9b.8fba94&#34;,
-              &#34;name&#34;: &#34;加速度をjson形式に変換&#34;,
-              &#34;property&#34;: &#34;payload&#34;,
-              &#34;action&#34;: &#34;&#34;,
-              &#34;pretty&#34;: false,
-              &#34;x&#34;: 310,
-              &#34;y&#34;: 320,
-              &#34;wires&#34;: [
-                  [
-                      &#34;b50a0d6c.0c67a&#34;,
-                      &#34;10eecadd.b9fbe5&#34;,
-                      &#34;1c843637.566a8a&#34;
-                  ]
-              ]
-          },
-          {
-              &#34;id&#34;: &#34;b50a0d6c.0c67a&#34;,
-              &#34;type&#34;: &#34;switch&#34;,
-              &#34;z&#34;: &#34;57519a9b.8fba94&#34;,
-              &#34;name&#34;: &#34;加速度判定&#34;,
-              &#34;property&#34;: &#34;payload.accz&#34;,
-              &#34;propertyType&#34;: &#34;msg&#34;,
-              &#34;rules&#34;: [
-                  {
-                      &#34;t&#34;: &#34;gt&#34;,
-                      &#34;v&#34;: &#34;10&#34;,
-                      &#34;vt&#34;: &#34;num&#34;
-                  },
-                  {
-                      &#34;t&#34;: &#34;btwn&#34;,
-                      &#34;v&#34;: &#34;6&#34;,
-                      &#34;vt&#34;: &#34;num&#34;,
-                      &#34;v2&#34;: &#34;10&#34;,
-                      &#34;v2t&#34;: &#34;num&#34;
-                  },
-                  {
-                      &#34;t&#34;: &#34;lte&#34;,
-                      &#34;v&#34;: &#34;5&#34;,
-                      &#34;vt&#34;: &#34;num&#34;
-                  }
-              ],
-              &#34;checkall&#34;: &#34;true&#34;,
-              &#34;repair&#34;: false,
-              &#34;outputs&#34;: 3,
-              &#34;x&#34;: 533.0000152587891,
-              &#34;y&#34;: 312.0000088214874,
-              &#34;wires&#34;: [
-                  [
-                      &#34;326dd035.413f1&#34;
-                  ],
-                  [
-                      &#34;dddabb62.392ea8&#34;
-                  ],
-                  [
-                      &#34;7c53f99b.cba9e8&#34;
-                  ]
-              ]
-          },
-          {
-              &#34;id&#34;: &#34;ec7a3c72.a1361&#34;,
-              &#34;type&#34;: &#34;debug&#34;,
-              &#34;z&#34;: &#34;57519a9b.8fba94&#34;,
-              &#34;name&#34;: &#34;&#34;,
-              &#34;active&#34;: true,
-              &#34;tosidebar&#34;: true,
-              &#34;console&#34;: false,
-              &#34;tostatus&#34;: false,
-              &#34;complete&#34;: &#34;payload&#34;,
-              &#34;x&#34;: 1110,
-              &#34;y&#34;: 320,
-              &#34;wires&#34;: []
-          },
-          {
-              &#34;id&#34;: &#34;d1c70b54.eb01d8&#34;,
-              &#34;type&#34;: &#34;comment&#34;,
-              &#34;z&#34;: &#34;57519a9b.8fba94&#34;,
-              &#34;name&#34;: &#34;加速度を出力&#34;,
-              &#34;info&#34;: &#34;&#34;,
-              &#34;x&#34;: 70,
-              &#34;y&#34;: 60,
-              &#34;wires&#34;: []
-          },
-          {
-              &#34;id&#34;: &#34;10eecadd.b9fbe5&#34;,
-              &#34;type&#34;: &#34;mqtt out&#34;,
-              &#34;z&#34;: &#34;57519a9b.8fba94&#34;,
-              &#34;name&#34;: &#34;/NefryBT/SOLE&#34;,
-              &#34;topic&#34;: &#34;/NefryBT/SOLE&#34;,
-              &#34;qos&#34;: &#34;&#34;,
-              &#34;retain&#34;: &#34;&#34;,
-              &#34;broker&#34;: &#34;f9299578.86bcb8&#34;,
-              &#34;x&#34;: 470.0000915527344,
-              &#34;y&#34;: 530.0000152587891,
-              &#34;wires&#34;: []
-          },
-          {
-              &#34;id&#34;: &#34;1c843637.566a8a&#34;,
-              &#34;type&#34;: &#34;debug&#34;,
-              &#34;z&#34;: &#34;57519a9b.8fba94&#34;,
-              &#34;name&#34;: &#34;&#34;,
-              &#34;active&#34;: false,
-              &#34;tosidebar&#34;: true,
-              &#34;console&#34;: false,
-              &#34;tostatus&#34;: false,
-              &#34;complete&#34;: &#34;payload&#34;,
-              &#34;x&#34;: 311.00004959106445,
-              &#34;y&#34;: 583.0000152587891,
-              &#34;wires&#34;: []
-          },
-          {
-              &#34;id&#34;: &#34;326dd035.413f1&#34;,
-              &#34;type&#34;: &#34;change&#34;,
-              &#34;z&#34;: &#34;57519a9b.8fba94&#34;,
-              &#34;name&#34;: &#34;accz &amp;gt; 10 のときの文字列「large」&#34;,
-              &#34;rules&#34;: [
-                  {
-                      &#34;t&#34;: &#34;set&#34;,
-                      &#34;p&#34;: &#34;payload&#34;,
-                      &#34;pt&#34;: &#34;msg&#34;,
-                      &#34;to&#34;: &#34;large&#34;,
-                      &#34;tot&#34;: &#34;str&#34;
-                  }
-              ],
-              &#34;action&#34;: &#34;&#34;,
-              &#34;property&#34;: &#34;&#34;,
-              &#34;from&#34;: &#34;&#34;,
-              &#34;to&#34;: &#34;&#34;,
-              &#34;reg&#34;: false,
-              &#34;x&#34;: 818.000020980835,
-              &#34;y&#34;: 274.00000762939453,
-              &#34;wires&#34;: [
-                  [
-                      &#34;ec7a3c72.a1361&#34;
-                  ]
-              ]
-          },
-          {
-              &#34;id&#34;: &#34;dddabb62.392ea8&#34;,
-              &#34;type&#34;: &#34;change&#34;,
-              &#34;z&#34;: &#34;57519a9b.8fba94&#34;,
-              &#34;name&#34;: &#34;accz:6~10 のときの文字列「medium」&#34;,
-              &#34;rules&#34;: [
-                  {
-                      &#34;t&#34;: &#34;set&#34;,
-                      &#34;p&#34;: &#34;payload&#34;,
-                      &#34;pt&#34;: &#34;msg&#34;,
-                      &#34;to&#34;: &#34;medium&#34;,
-                      &#34;tot&#34;: &#34;str&#34;
-                  }
-              ],
-              &#34;action&#34;: &#34;&#34;,
-              &#34;property&#34;: &#34;&#34;,
-              &#34;from&#34;: &#34;&#34;,
-              &#34;to&#34;: &#34;&#34;,
-              &#34;reg&#34;: false,
-              &#34;x&#34;: 840,
-              &#34;y&#34;: 320,
-              &#34;wires&#34;: [
-                  [
-                      &#34;ec7a3c72.a1361&#34;
-                  ]
-              ]
-          },
-          {
-              &#34;id&#34;: &#34;7c53f99b.cba9e8&#34;,
-              &#34;type&#34;: &#34;change&#34;,
-              &#34;z&#34;: &#34;57519a9b.8fba94&#34;,
-              &#34;name&#34;: &#34;accz &amp;lt;= 5 のときの文字列「small」&#34;,
-              &#34;rules&#34;: [
-                  {
-                      &#34;t&#34;: &#34;set&#34;,
-                      &#34;p&#34;: &#34;payload&#34;,
-                      &#34;pt&#34;: &#34;msg&#34;,
-                      &#34;to&#34;: &#34;small&#34;,
-                      &#34;tot&#34;: &#34;str&#34;
-                  }
-              ],
-              &#34;action&#34;: &#34;&#34;,
-              &#34;property&#34;: &#34;&#34;,
-              &#34;from&#34;: &#34;&#34;,
-              &#34;to&#34;: &#34;&#34;,
-              &#34;reg&#34;: false,
-              &#34;x&#34;: 820,
-              &#34;y&#34;: 360,
-              &#34;wires&#34;: [
-                  [
-                      &#34;ec7a3c72.a1361&#34;
-                  ]
-              ]
-          },
-          {
-              &#34;id&#34;: &#34;53d3ea65.523574&#34;,
-              &#34;type&#34;: &#34;comment&#34;,
-              &#34;z&#34;: &#34;57519a9b.8fba94&#34;,
-              &#34;name&#34;: &#34;加速度を受信して橋渡し&#34;,
-              &#34;info&#34;: &#34;&#34;,
-              &#34;x&#34;: 110,
-              &#34;y&#34;: 180,
-              &#34;wires&#34;: []
-          },
-          {
-              &#34;id&#34;: &#34;422cdf71.4a17e&#34;,
-              &#34;type&#34;: &#34;comment&#34;,
-              &#34;z&#34;: &#34;57519a9b.8fba94&#34;,
-              &#34;name&#34;: &#34;MQTTで加速度をjson形式で送信&#34;,
-              &#34;info&#34;: &#34;&#34;,
-              &#34;x&#34;: 520.0000152587891,
-              &#34;y&#34;: 490.00001430511475,
-              &#34;wires&#34;: []
-          },
-          {
-              &#34;id&#34;: &#34;d24b4e1f.58b25&#34;,
-              &#34;type&#34;: &#34;comment&#34;,
-              &#34;z&#34;: &#34;57519a9b.8fba94&#34;,
-              &#34;name&#34;: &#34;デバック画面に加速度の具合を表示させる部分&#34;,
-              &#34;info&#34;: &#34;&#34;,
-              &#34;x&#34;: 641.0000152587891,
-              &#34;y&#34;: 226.00000667572021,
-              &#34;wires&#34;: []
-          },
-          {
-              &#34;id&#34;: &#34;250c9625.e420aa&#34;,
-              &#34;type&#34;: &#34;websocket-listener&#34;,
-              &#34;z&#34;: &#34;&#34;,
-              &#34;path&#34;: &#34;/accl1&#34;,
-              &#34;wholemsg&#34;: &#34;false&#34;
-          },
-          {
-              &#34;id&#34;: &#34;f9299578.86bcb8&#34;,
-              &#34;type&#34;: &#34;mqtt-broker&#34;,
-              &#34;z&#34;: &#34;&#34;,
-              &#34;name&#34;: &#34;&#34;,
-              &#34;broker&#34;: &#34;http://test.mosquitto.org/&#34;,
-              &#34;port&#34;: &#34;1883&#34;,
-              &#34;clientid&#34;: &#34;&#34;,
-              &#34;usetls&#34;: false,
-              &#34;compatmode&#34;: true,
-              &#34;keepalive&#34;: &#34;60&#34;,
-              &#34;cleansession&#34;: true,
-              &#34;birthTopic&#34;: &#34;&#34;,
-              &#34;birthQos&#34;: &#34;0&#34;,
-              &#34;birthPayload&#34;: &#34;&#34;,
-              &#34;closeTopic&#34;: &#34;&#34;,
-              &#34;closeQos&#34;: &#34;0&#34;,
-              &#34;closePayload&#34;: &#34;&#34;,
-              &#34;willTopic&#34;: &#34;&#34;,
-              &#34;willQos&#34;: &#34;0&#34;,
-              &#34;willPayload&#34;: &#34;&#34;
-          }
-      ]
-      &lt;/code&gt;
-      &lt;/pre&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&#34;nefry-btにプログラムを書き込む&#34;&gt;Nefry BTにプログラムを書き込む&lt;/h3&gt;
-
-&lt;p&gt;Nefry BTに書き込むプログラムはこちらです。&lt;/p&gt;
-
-&lt;div class=&#34;accbox&#34;&gt;
-    &lt;label for=&#34;label2&#34;&gt;クリックしてコードを表示&lt;/labe&gt;
-    &lt;input type=&#34;checkbox&#34; id=&#34;label2&#34; class=&#34;cssacc&#34; /&gt;
-    &lt;div class=&#34;accshow&#34;&gt;
-      &lt;pre&gt;
-      &lt;code class=&#34;language-c++ hljs cpp&#34;&gt;
-      #include &amp;lt;Nefry.h&amp;gt;
-      #include &amp;lt;WiFiClient.h&amp;gt;
-      #include &amp;lt;PubSubClient.h&amp;gt;
-      #include &amp;lt;ArduinoJson.h&amp;gt;
-
-      IPAddress endpoint;
-      const int port = 1883;
-
-      const char *pubTopic;
-      const char *subTopic;
-      const char *deviceName;
-      const char *mqtt_server = &#34;test.mosquitto.org&#34;;
-
-      WiFiClient httpsClient;
-      PubSubClient mqttClient(httpsClient);
-
-
-
-      void setup() {
-        ////ソレノイドのピン設定/////////////////////////////////
-        pinMode(D4, OUTPUT);
-
-        //// NefryBT設定 ////////////////////////////////////////
-
-        // NefryBT
-        subTopic = &#34;/NefryBT/SOLE&#34;;
-        deviceName = &#34;NefryBT_SOLE&#34;;  // 複数台で利用する場合は必ずかぶらないように変更する
-
-        Serial.begin(115200);
-
-        mqttClient.setServer(mqtt_server, port);
-        mqttClient.setCallback(mqttCallback);
-
-        connectMQTT();
-      }
-
-      void connectMQTT() {
-          Serial.println(&#34;connectMQTT&#34;);
-          Serial.println(deviceName);
-          while (!mqttClient.connected()) {
-            Serial.print(&#34;.&#34;);
-              if (mqttClient.connect(deviceName)) {
-                  Serial.println(&#34;Connected.&#34;);
-                  int qos = 0;
-                  mqttClient.subscribe(subTopic, qos);
-                  Serial.println(&#34;Subscribed.&#34;);
-              } else {
-                  Serial.print(&#34;Failed. Error state=&#34;);
-                  Serial.print(mqttClient.state());
-                  // Wait 5 seconds before retrying
-                  delay(5000);
-              }
-          }
-      }
-
-      char pubMessage[128];
-
-      void mqttCallback (char* topic, byte* payload, unsigned int length) {
-
-          String str = &#34;&#34;;
-          Serial.print(&#34;Received. topic=&#34;);
-          Serial.println(topic);
-          for (int i = 0; i &lt; length; i++) {
-              Serial.print((char)payload[i]);
-              str += (char)payload[i];
-          }
-          Serial.print(&#34;\n&#34;);
-
-          StaticJsonBuffer&lt;200&gt; jsonBuffer;
-
-          JsonObject&amp; root = jsonBuffer.parseObject(str);
-
-          // パースが成功かどうか判断
-          if (!root.success()) {
-            Serial.println(&#34;parseObject() failed&#34;);
-            return;
-          }
-         //z軸方向の加速度を取り出している
-          const char* message = root[&#34;message&#34;];
-          int accz = root[&#34;accz&#34;];
-
-          Serial.print(&#34;accz = &#34;);
-          Serial.println(accz);
-
-         //加速度に応じてソレノイドのシュコシュコ速度が変化
-          if(accz &gt;= 10 || accz &lt;= -10){
-             Serial.println(&#34;シュコシュコシュコ&#34;);
-             digitalWrite(D4,LOW);
-             delay(50);
-             digitalWrite(D4,HIGH);
-             delay(50);
-          }else if(10 &gt; accz &gt;= 6 || -10 &lt; accz &lt;= 6){
-             Serial.println(&#34;シュコシュコ&#34;);
-             digitalWrite(D4,LOW);
-             delay(200);
-             digitalWrite(D4,HIGH);
-             delay(200);
-          }else{
-             Serial.println(&#34;シュコ&#34;);
-             digitalWrite(D4,LOW);
-             delay(500);
-             digitalWrite(D4,HIGH);
-             delay(500);    
-          }
-
-          delay(100);
-
-      }
-
-      void mqttLoop() {
-          if (!mqttClient.connected()) {
-              connectMQTT();
-          }
-          mqttClient.loop();
-      }
-
-      void loop() {
-        mqttLoop();
-       }
-      &lt;/code&gt;
-      &lt;/pre&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&#34;動かしてみると-1&#34;&gt;動かしてみると&lt;/h3&gt;
-
-&lt;p&gt;シリアルモニタを見てみると、スマートフォンの加速度の変化に応じて値が表示されます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/212276/7fb2accc-5f35-bc31-7366-04d7e0c2de99.gif&#34; alt=&#34;ソレノイド＿シュコシュコ事案.gif&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;下記のようにスマートフォンをシェイクすると、ソレノイドの挙動が変化してます（音をよく聞くと、ソレノイドが早く動いたり遅く動いたりしているのがわかります)。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;ソレノイド探求です。&lt;br&gt;スマホの加速度に応じてソレノイドのシュコシュコ具合が変化します。&lt;br&gt; &lt;a href=&#34;https://t.co/6qugBugDOU&#34;&gt;https://t.co/6qugBugDOU&lt;/a&gt; &lt;a href=&#34;https://twitter.com/YouTube?ref_src=twsrc%5Etfw&#34;&gt;@YouTube&lt;/a&gt;さんから&lt;/p&gt; たくろーどん (@takudooon) &lt;a href=&#34;https://twitter.com/takudooon/status/1027809093992378369?ref_src=twsrc%5Etfw&#34;&gt;2018年8月10日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;p&gt;無事、&lt;strong&gt;スマートフォンをシェイクするとソレノイドをシュコシュコ動かすデバイス&lt;/strong&gt;ができました！&lt;/p&gt;
-
-&lt;h2 id=&#34;ソレノイドを使った機構の例&#34;&gt;ソレノイドを使った機構の例&lt;/h2&gt;
-
-&lt;p&gt;ソレノイドはシンプルな動作をしますが、何かをつくるときの機構として使うことができます。動画ではソレノイドを上下させることでクラッピーに拍手させています。工夫次第では面白い機構が作れるでしょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;center&gt;
-&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;ソレノイドを用いた機構 &lt;a href=&#34;https://t.co/Y3KeMOUg1z&#34;&gt;https://t.co/Y3KeMOUg1z&lt;/a&gt; &lt;a href=&#34;https://twitter.com/YouTube?ref_src=twsrc%5Etfw&#34;&gt;@YouTube&lt;/a&gt;さんから&lt;/p&gt; たくろーどん (@takudooon) &lt;a href=&#34;https://twitter.com/takudooon/status/1027545863197843456?ref_src=twsrc%5Etfw&#34;&gt;2018年8月9日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
-&lt;/center&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-
-&lt;p&gt;発想は自分次第です。
-ソレノイドを使って面白いデバイスをつくってみてください！&lt;/p&gt;
-
-&lt;h2 id=&#34;参考&#34;&gt;参考&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://www.takaha.co.jp/technological/action.html&#34;&gt;ソレノイドの動作説明&lt;/a&gt;: ソレノイドの製造・販売で有名なタカハ機工株式会社より&lt;/p&gt;
-
-&lt;style&gt;
-.accbox {
-    margin: 2em 0;
-    padding: 0;
-    max-width: 710px;
-}
-
-
-.accbox label {
-    display: block;
-    margin: 1.5px 0;
-    padding : 11px 12px;
-    color :#ffffff;
-    font-weight: bold;
-    background :#2f2f2f;
-    cursor :pointer;
-    transition: all 0.5s;
-}
-
-.accbox label:hover {
-    background :#A4A4A4;
-}
-
-.accbox input {
-    display: none;
-}
-
-.accbox .accshow {
-    height: 0;
-    padding: 0;
-    overflow: hidden;
-    opacity: 0;
-    transition: 0.8s;
-}
-
-.cssacc:checked + .accshow {
-    height: auto;
-    padding: 5px;
-    background: #eaeaea;
-    opacity: 1;
-}
-&lt;/style&gt;
 </description>
     </item>
     
