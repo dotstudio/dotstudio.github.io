@@ -7,8 +7,2807 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
     <copyright>© 2018 dotstudio inc.</copyright>
-    <lastBuildDate>Thu, 27 Sep 2018 12:34:10 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 13 Dec 2018 05:17:31 +0900</lastBuildDate>
     <atom:link href="/series/handson/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>【ハンズオン資料】GR-LYCHEEとOpenCVで画像認識やってみよう</title>
+      <link>https://dotstud.io/blog/gr-lychee-opencv-handson/</link>
+      <pubDate>Thu, 13 Dec 2018 05:17:31 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/gr-lychee-opencv-handson/</guid>
+      
+      <description>
+
+&lt;p&gt;この記事は12/07の&lt;a href=&#34;https://ai-iot-bol-fukui.connpass.com/event/109573/&#34;&gt;AI×IoT ハンズオン with IoTLT&amp;amp;ふくもく会 in 福井&lt;/a&gt;向け資料です。記事を読んで試せる内容になっているので、終了後や参加されていない方もぜひ試してみてください！&lt;/p&gt;
+
+&lt;section class=&#34;caution&#34;&gt;
+&lt;p&gt;■ハンズオンの進行について&lt;/p&gt;
+ハンズオンはこのページに沿って進めます。進められる方は、どんどん進めていきましょう！リンクは別タブや別ウィンドウで開くのがオススメです。
+&lt;/section&gt;
+
+&lt;p&gt;この記事はがじぇっとるねさすさんの「&lt;a href=&#34;http://gadget.renesas.com/ja/product/e-ai/mnist_tutorial.html&#34;&gt;e-AIトランスレータ チュートリアル GRボードで実行してみよう！&lt;/a&gt;」を参考に作成しています。&lt;/p&gt;
+
+&lt;h2 id=&#34;今回やってみること&#34;&gt;今回やってみること&lt;/h2&gt;
+
+&lt;p&gt;PythonとTensorflow、数字認識のデータライブラリMNISTを使い、数字認識する学習モデルを作成します。&lt;strong&gt;Pythonなしでもコピペで試せる内容&lt;/strong&gt;になっています。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/233/result.gif&#34; alt=&#34;demo&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h3&gt;
+
+&lt;h4 id=&#34;マイコンボード-gr-lychee&#34;&gt;■マイコンボード「GR-LYCHEE」&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/714caa81da618bf491f460087f27d3cb.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;がじぇっとるねさす（通称がじぇるね）が提供している高性能マイコンボードです。電子工作でよく使われるArduino UNOとピンが互換になっていて、Wi-Fi・BLE通信モジュール「ESP32」を搭載しています。&lt;/p&gt;
+
+&lt;p&gt;わりと手軽にIoTプロトタイピングを試せる高性能マイコンボード、な立ち位置です。（ちゃんとく所感）&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;購入: &lt;a href=&#34;http://akizukidenshi.com/catalog/g/gM-12850/&#34;&gt;秋月電子&lt;/a&gt;（¥10,580）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;section class=&#34;caution&#34;&gt;
+&lt;p&gt;■実行するGRボードについて&lt;/p&gt;
+他のGRシリーズのボードでも今回のプログラムを試すことができますが、GR-KURUMI、GR-COTTON、GR-ADZUKIはROM容量不足で実行できないようです。
+&lt;/section&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;usbケーブル-microb&#34;&gt;■USBケーブル（microB）&lt;/h4&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/usb.png&#34; alt=&#34;usb&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;PCとGR-LYCHEEの通信（プログラムの書き込み、カメラ映像の出力など）には、Android端末などに使われているmicroBタイプのUSBケーブルを使います。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;購入: &lt;a href=&#34;http://akizukidenshi.com/catalog/g/gC-09312/&#34;&gt;秋月電子&lt;/a&gt;（¥100）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;section class=&#34;caution&#34;&gt;
+&lt;p&gt;■USBケーブルについて&lt;/p&gt;
+ご自身で用意する場合、&lt;b&gt;シリアル通信ができるタイプ&lt;/b&gt;のものか確認してください。安価なものだと一方向の給電専用タイプのものが多いです。
+&lt;/section&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;事前準備&#34;&gt;事前準備&lt;/h2&gt;
+
+&lt;h3 id=&#34;displayapp-をインストール&#34;&gt;「DisplayApp」をインストール&lt;/h3&gt;
+
+&lt;p&gt;GR-LYCHEEのカメラで映している映像を確認するために利用します。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://gadget.renesas.com/ja/product/lychee.html#displayapp&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/5cf7140ebfb5221592c1ca7f6aa7f839.png&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;がじぇるね公式ページの&lt;a href=&#34;http://gadget.renesas.com/ja/product/lychee.html#displayapp&#34;&gt;こちら&lt;/a&gt;からご自身のOSに合ったものをダウンロードし、ZIPファイルを展開します。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;macosの方&#34;&gt;■MacOSの方&lt;/h4&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/app.png&#34; alt=&#34;app&#34;&gt;
+
+&lt;/center&gt;
+
+ZIPファイルを展開し、Macの方は「アプリケーション」に移動させます。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;windowsの方&#34;&gt;■Windowsの方&lt;/h4&gt;
+
+&lt;p&gt;展開したファイル内の「〜.exe」をダブルクリックで実行します。インストーラが起動するので、手順通り進めます。&lt;/p&gt;
+
+&lt;h2 id=&#34;はじめてのプログラムを書き込んでみる&#34;&gt;はじめてのプログラムを書き込んでみる&lt;/h2&gt;
+
+&lt;p&gt;最初のプログラムとして、Lチカをやってみます。LEDチカチカの略で、入門向けのプログラムとして汎用的に紹介されています。&lt;/p&gt;
+
+&lt;p&gt;簡単なプログラムを書き込むことで、ボードが正常に動くか試す際に利用することも多いです。WebでいうHello, worldです。&lt;/p&gt;
+
+&lt;h3 id=&#34;webコンパイラの準備&#34;&gt;Webコンパイラの準備&lt;/h3&gt;
+
+&lt;p&gt;GRシリーズでは「Webコンパイラ」という、ブラウザ上で利用できるコンパイラが利用できます。面倒な環境構築が不要なので楽チンですね。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://gadget.renesas.com/ja/&#34;&gt;がじぇるねのページ&lt;/a&gt;から、「ログイン」または「ゲストログイン」をクリックし移動します。
+&lt;img src=&#34;https://i.gyazo.com/bcf47b506593c244633350381c30422f.png&#34; alt=&#34;compiler&#34; /&gt;&lt;/p&gt;
+
+&lt;section class=&#34;caution&#34;&gt;
+&lt;p&gt;■ログインボタンが見つからない！という方&lt;/p&gt;
+ブラウザを横に広げてみてください。ひょこっとボタンが出てきます。
+&lt;/section&gt;
+
+&lt;p&gt;プロジェクト作成画面になるので、「LYCHEE」でフィルターをかけてみます。
+&lt;img src=&#34;https://i.gyazo.com/9fbdd84ff53037965a358bc646d3923c.png&#34; alt=&#34;create project&#34; /&gt;
+「GR-LYCHEE_mbed…」と「GR-LYCHEE_Sketch…」という2タイプあるので、&lt;strong&gt;Sketchの方を選択&lt;/strong&gt;します（mbed OSのプログラムを利用したいときは前者を選びましょう）。&lt;/p&gt;
+
+&lt;h3 id=&#34;プログラム&#34;&gt;プログラム&lt;/h3&gt;
+
+&lt;p&gt;メニュー左側の「〜.cpp」という拡張子のファイルがメインのプログラムファイルになります。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/edit_cpp.png&#34; alt=&#34;edit_cpp&#34;&gt;
+
+&lt;/center&gt;
+
+「〜.cpp」をダブルクリックすると、中央に編集画面が表示されます。&lt;/p&gt;
+
+&lt;p&gt;表示されたサンプルコードを&lt;strong&gt;一旦全て消してから&lt;/strong&gt;、下記のプログラムを貼り付けます。&lt;/p&gt;
+
+&lt;div class=&#34;accbox&#34;&gt;
+    &lt;label for=&#34;label1&#34;&gt;クリックしてコードを表示&lt;/labe&gt;
+    &lt;input type=&#34;checkbox&#34; id=&#34;label1&#34; class=&#34;cssacc&#34; /&gt;
+    &lt;div class=&#34;accshow&#34;&gt;
+      &lt;pre&gt;
+      &lt;code class=&#34;hljs hljs-cpp&#34;&gt;
+      /* GR-LYCHEE Sketch Template V1.04 */
+      #include &amp;lt;Arduino.h&amp;gt;
+
+      #define INTERVAL 50
+
+      void setup()
+      {
+        Serial.begin(9600);
+        pinMode(LED_RED,    OUTPUT);
+        pinMode(LED_ORANGE, OUTPUT);
+        pinMode(LED_YELLOW, OUTPUT);
+        pinMode(LED_GREEN,  OUTPUT);
+        pinMode(USER_BUTTON0, INPUT);
+      }
+
+      void loop()
+      {
+          while(digitalRead(USER_BUTTON0) == 0){
+              digitalWrite(LED_GREEN, 1);
+              delay(INTERVAL);
+              digitalWrite(LED_GREEN, 0);
+              delay(INTERVAL);
+            Serial.println(&#34;I&#39;m LYCHEE!&#34;);
+          }
+          digitalWrite(LED_RED, 1);
+          delay(INTERVAL);
+          digitalWrite(LED_RED, 0);
+          digitalWrite(LED_ORANGE, 1);
+          delay(INTERVAL);
+          digitalWrite(LED_ORANGE, 0);
+          digitalWrite(LED_YELLOW, 1);
+          delay(INTERVAL);
+          digitalWrite(LED_YELLOW, 0);
+      }
+      &lt;/code&gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/build.png&#34; alt=&#34;build&#34;&gt;
+
+&lt;/center&gt;
+
+貼り付けたら、右側の「ビルド実行」ボタンをクリックし、記述したプログラムをコンパイルします。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/compiled.png&#34; alt=&#34;compiled&#34;&gt;
+
+&lt;/center&gt;
+
+コンパイルが完了すると、「コンパイルが完了しました」というメッセージと実行ログが表示されるので、「&lt;strong&gt;閉じる&lt;/strong&gt;」ボタンで完了します。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/download_bin.png&#34; alt=&#34;download_bin&#34;&gt;
+
+&lt;/center&gt;
+
+「〜.bin」というファイルが作成されているので、右クリックしダウンロードします。&lt;/p&gt;
+
+&lt;section class=&#34;caution&#34;&gt;
+&lt;p&gt;■コンパイルについて&lt;/p&gt;
+プログラムを、&lt;b&gt;機械が実行可能な機械語に変換すること&lt;/b&gt;です。プログラムは人間に理解しやすい形、機械語は機械が理解しやすい形に最適化されています。
+&lt;/section&gt;
+
+&lt;h3 id=&#34;pcとgr-lycheeを接続&#34;&gt;PCとGR-LYCHEEを接続&lt;/h3&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/connect.png&#34; alt=&#34;connect&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;GR-LYCHEEとPCをUSBケーブルで接続しましょう。GR-LYCHEEのUSBソケットは&lt;strong&gt;真ん中の方&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/recog.png&#34; alt=&#34;recog&#34;&gt;
+
+&lt;/center&gt;
+
+PCに「MBED」という名前で認識されます。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;デバイスが認識されない-windows&#34;&gt;■デバイスが認識されない（Windows）&lt;/h4&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/usb_driver.png&#34; alt=&#34;usb_driver&#34;&gt;
+
+&lt;/center&gt;
+
+&lt;a href=&#34;https://os.mbed.com/docs/latest/tutorials/windows-serial-driver.html&#34;&gt;こちら&lt;/a&gt;のページから「Arm Mbed Windows serial port driver」をクリックし、インストールしてください。&lt;/p&gt;
+
+&lt;section class=&#34;caution&#34;&gt;
+&lt;p&gt;■USBドライバについて&lt;/p&gt;
+PCに、USBで接続した機器を認識・通信させるためのツールです。
+&lt;/section&gt;
+
+&lt;h3 id=&#34;プログラムを書き込み&#34;&gt;プログラムを書き込み&lt;/h3&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/drop.png&#34; alt=&#34;drop&#34;&gt;
+
+&lt;/center&gt;
+
+ダウンロードした「〜.bin」ファイルを「MBED」にドラッグ＆ドロップでコピーします。コピー後、ファイルはMBEDフォルダ内には表示されません。&lt;/p&gt;
+
+&lt;h3 id=&#34;再起動して実行&#34;&gt;再起動して実行&lt;/h3&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/reset.png&#34; alt=&#34;reset&#34;&gt;
+
+&lt;/center&gt;
+
+リセットボタンを押し、GR-LYCHEEを再起動させます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/233/blink.gif&#34; alt=&#34;blink&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Lチカプログラムが実行されました！&lt;/p&gt;
+
+&lt;h2 id=&#34;gr-lycheeカメラの映像をdisplayappに表示&#34;&gt;GR-LYCHEEカメラの映像をdisplayAppに表示&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/233/display.gif&#34; alt=&#34;display&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;GR-LYCHEEにカメラを取り付けて、PC上で映る映像を確認してみましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;カメラの取り付け&#34;&gt;カメラの取り付け&lt;/h3&gt;
+
+&lt;h4 id=&#34;カメラ本体&#34;&gt;■カメラ本体&lt;/h4&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/camera.png&#34; alt=&#34;camera&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;ol&gt;
+&lt;li&gt;カメラ本体のソケット部を持ち上げます&lt;/li&gt;
+&lt;li&gt;フレキシブルケーブルの無地面を上に、ソケットに差し込みます&lt;/li&gt;
+&lt;li&gt;ソケット部を元に戻します&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;gr-lychee&#34;&gt;■GR-LYCHEE&lt;/h4&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/camera2.png&#34; alt=&#34;camera2&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;ol&gt;
+&lt;li&gt;GR-LYCHEE背面のソケット部を上にずらします&lt;/li&gt;
+&lt;li&gt;フレキシブルケーブルの文字面を上に、ソケットに差し込みます&lt;/li&gt;
+&lt;li&gt;ソケット部を下に戻します&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;プログラム-1&#34;&gt;プログラム&lt;/h3&gt;
+
+&lt;p&gt;Webコンパイラでプログラムを下記に置き換え、先ほど同様書き込みます。&lt;/p&gt;
+
+&lt;div class=&#34;accbox&#34;&gt;
+    &lt;label for=&#34;label2&#34;&gt;クリックしてコードを表示&lt;/labe&gt;
+    &lt;input type=&#34;checkbox&#34; id=&#34;label2&#34; class=&#34;cssacc&#34; /&gt;
+    &lt;div class=&#34;accshow&#34;&gt;
+      &lt;pre&gt;
+      &lt;code class=&#34;hljs hljs-cpp&#34;&gt;
+      // Sample for GR-PEACH, GR-LYCHEE
+      // Required hardware: Camera, USB
+      // Public Domain
+
+      #include &amp;lt;Arduino.h&amp;gt;
+      #include &amp;lt;Camera.h&amp;gt;
+      #include &#34;DisplayApp.h&#34;
+
+      #define LOOP_WAITTIME 17 // 17ms for 60 fps of camera spec.
+      Camera camera(640, 480);
+      static DisplayApp display_app;
+
+      void setup() {
+        Serial.begin(9600);
+        Serial.println(&#34;start&#34;);
+
+        camera.begin();
+      }
+
+      void loop() {
+        static unsigned long last_time = millis();
+        while ((millis() - last_time) &lt; LOOP_WAITTIME);
+        last_time = millis();
+
+        display_app.SendJpeg(camera.getJpegAdr(), (int)camera.createJpeg());
+        delay(1);
+      }
+      &lt;/code&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&#34;usbを付け替えて実行&#34;&gt;USBを付け替えて実行&lt;/h3&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/connect2.png&#34; alt=&#34;connect2&#34;&gt;
+
+&lt;/center&gt;
+
+書き込んだら、GR-LYCHEE側のUSBソケットを外側に付け替えます。（通信用）&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/port.png&#34; alt=&#34;port&#34;&gt;
+
+&lt;/center&gt;
+
+DisplayAppでシリアルポートを選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/233/display.gif&#34; alt=&#34;display&#34; /&gt;
+カメラの画像がDisplayAppに表示されます。高画質！&lt;/p&gt;
+
+&lt;h2 id=&#34;数字認識の学習モデルを作ろう&#34;&gt;数字認識の学習モデルを作ろう&lt;/h2&gt;
+
+&lt;p&gt;MNISTとTensorflowを使って学習モデルを作り、カメラに映った数字を判定するプログラムを作成してみます。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Python+Tensorflowをインストールせず試してみたい&lt;/strong&gt;、という方は、「&lt;a href=&#34;#完成コード&#34;&gt;完成コード&lt;/a&gt;」の章から進めてください。&lt;/p&gt;
+
+&lt;h3 id=&#34;作業用ディレクトリを作成&#34;&gt;作業用ディレクトリを作成&lt;/h3&gt;
+
+&lt;p&gt;今回のプログラムを試すディレクトリ（フォルダ）を作ります。&lt;/p&gt;
+
+&lt;p&gt;プログラムを実行する上では&lt;strong&gt;今どこで作業しているか&lt;/strong&gt;というのが重要です。最初のうちはわかりづらいので、意識するようにしましょう。&lt;/p&gt;
+
+&lt;p&gt;コマンドラインに不慣れである方は、下記記事を参照してみてください。&lt;/p&gt;
+
+
+
+&lt;section class=&#34;link&#34; id=&#34;158&#34;&gt;
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+          &lt;div class=&#34;link_content&#34;&gt;
+          &lt;a href=&#34;https://dotstud.io/blog/how-to-use-cli/&#34;&gt;&lt;/a&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/158/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
+          &lt;/div&gt;
+          &lt;div class=&#34;link_content&#34;&gt;
+            &lt;div class=&#34;link_detail&#34;&gt;
+              &lt;div class=&#34;link_title&#34;&gt;
+                【Mac向け】「黒い画面」の苦手意識を克服しよう！コマンドラインインタフェースの基本操作
+              &lt;/div&gt;
+              &lt;div class=&#34;link_date&#34;&gt;
+                
+                2018-04-09
+              &lt;/div&gt;
+              &lt;div class=&#34;link_desc&#34;&gt;
+                Macユーザ向けコマンドラインインタフェースの使い方！実は難しくない「黒い画面」の操作方法を覚えていきましょう。
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+&lt;/section&gt;
+
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;windowsの方-1&#34;&gt;■Windowsの方&lt;/h4&gt;
+
+&lt;ol&gt;
+&lt;li&gt;デスクトップで右クリックし、&lt;code&gt;gr-tutorial&lt;/code&gt;というファイルを作成&lt;/li&gt;
+&lt;li&gt;Windowsメニューから「コマンドラインプロンプト」を検索し開く（「cmd」で候補にでてきます）&lt;/li&gt;
+&lt;li&gt;下記コマンドを1行ずつ実行（&lt;code&gt;$&lt;/code&gt;は不要。コマンドラインであることを表しています）&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code&gt;$ cd Desktop
+$ cd gr-tutorial
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;cd&lt;/code&gt;はディレクトリを移動するコマンドです。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;macの方&#34;&gt;■Macの方&lt;/h4&gt;
+
+&lt;ol&gt;
+&lt;li&gt;「ターミナル」を起動（⌘+スペースで「ターミナル」を検索すると便利）&lt;/li&gt;
+&lt;li&gt;下記コマンドを1行ずつ順に打ち込む（&lt;code&gt;$&lt;/code&gt;は不要。コマンドラインであることを表しています）&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code&gt;$ cd ~/Desktop
+$ mkdir gr-tutorial
+$ cd gr-tutorial
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;デスクトップに「gr-tutorial」というフォルダができているかと思います（右クリックで作成してもOKです）。&lt;code&gt;cd&lt;/code&gt;コマンドは移動するコマンド、&lt;code&gt;mkdir&lt;/code&gt;コマンドはディレクトリを作成するコマンドです。&lt;/p&gt;
+
+&lt;h3 id=&#34;python-tensorflow環境構築&#34;&gt;Python＆Tensorflow環境構築&lt;/h3&gt;
+
+&lt;p&gt;今回はご自身の環境に、以下の内容を用意し進めます。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Python実行環境&lt;/li&gt;
+&lt;li&gt;Tensorflow&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;環境構築はおそらく&lt;strong&gt;このハンズオンで1番大変なところ&lt;/strong&gt;です。乗り越えたらサクッと試せるようになるので頑張りましょう！&lt;/p&gt;
+
+&lt;p&gt;PCの状態に合わせて場合分けしましたので、ご自身に合う部分を読んでください。&lt;/p&gt;
+
+&lt;h3 id=&#34;まずは現在の環境を確認する&#34;&gt;まずは現在の環境を確認する&lt;/h3&gt;
+
+&lt;p&gt;下記コマンドを試して、PythonとTensorFlowがインストールされているか確認しましょう。コマンドは&lt;code&gt;$&lt;/code&gt;マークの後ろの部分です。（↓の場合は&lt;code&gt;python -V&lt;/code&gt;と打ち込む）&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ python -V
+Python X.X.X
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Pythonのバージョンが表示されればOKです。「command not found」や「実行する〜〜が見つかりません」などと表示された方は、インストールされていない（または正しくインストールできていない）のでPythonの環境構築手順を進めます。&lt;/p&gt;
+
+&lt;p&gt;インストールされていなかった方は、「&lt;a href=&#34;#Pythonをインストール&#34;&gt;Pythonをインストール&lt;/a&gt;」へ進んでください。&lt;/p&gt;
+
+&lt;section class=&#34;caution&#34;&gt;
+&lt;p&gt;■Pythonのバージョンについて&lt;/p&gt;
+Pythonのバージョンは2系、3系どちらでも実行可能ですが、Python3.7系ではTensorflowがうまく実行できないようです。
+&lt;/section&gt;
+
+&lt;p&gt;続いて、Tensorflowモジュールがインストールされているかの確認です。&lt;code&gt;pip list&lt;/code&gt;と打ち込んでみましょう。（表示されるものは一例）&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ pip list
+Package                Version
+---------------------- ---------
+absl-py                0.6.1
+bleach                 1.5.0
+html5lib               0.9999999
+Markdown               3.0.1
+nose                   1.3.7
+numpy                  1.15.3
+pip                    18.1
+protobuf               3.6.1
+setuptools             39.0.1
+six                    1.11.0
+tensorflow             1.5.0
+…
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;一覧に&lt;code&gt;tensorflow&lt;/code&gt;とあればOKです。バージョンが古い場合は、下記コマンドで更新をしておきましょう（最新は1.5系です）。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Python2系の場合&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;$ pip install --upgrade tensorflow
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Python3系の場合&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;$ pip3 install --upgrade tensorflow
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;PythonがインストールされているがTensorflowはインストールされていない場合は、「&lt;a href=&#34;#tensorflowをインストール&#34;&gt;Tensorflowをインストール&lt;/a&gt;」へ進んでください。&lt;/p&gt;
+
+&lt;p&gt;どちらもインストールされていた場合は、「&lt;a href=&#34;#MNISTで学習モデルを作成&#34;&gt;MNISTで学習モデルを作成&lt;/a&gt;」へ進みます。&lt;/p&gt;
+
+&lt;h3 id=&#34;pythonをインストール&#34;&gt;Pythonをインストール&lt;/h3&gt;
+
+&lt;h4 id=&#34;windowsの方-2&#34;&gt;■Windowsの方&lt;/h4&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/install_python.png&#34; alt=&#34;install_python&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;&lt;a href=&#34;https://www.python.org/downloads/windows/&#34;&gt;Pythonの公式ページ&lt;/a&gt;へ移動し、インストールしたいPythonのバージョンをクリックします。（Tensorflowがうまく動かないので&lt;strong&gt;Python3.7系は避けてください&lt;/strong&gt;。3.6.xがオススメです。）&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/select_version.png&#34; alt=&#34;select_version&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;移動先のページ下部のリストから、「Windows x86-64 web-based installer」をダウンロードします。32bit版の場合は「Windows x86 web-based installer」を選択してください。&lt;/p&gt;
+
+&lt;p&gt;ダウンロードされたパッケージを実行し、「&lt;strong&gt;Add Python xxx to PATH&lt;/strong&gt;」をチェックしてインストールを実行します。&lt;/p&gt;
+
+&lt;p&gt;完了したら、コマンドプロンプトで&lt;code&gt;python -V&lt;/code&gt;を打ち、任意のバージョンが表示されるか確認します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ python -V
+Python X.X.X
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;表示されない方はコマンドプロンプトを再起動して試してみてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;macの方-1&#34;&gt;■Macの方&lt;/h4&gt;
+
+&lt;p&gt;デフォルトでPython2系がインストールされているはずですが、何かのタイミングで消してしまった可能性があります。&lt;/p&gt;
+
+&lt;p&gt;ターミナルで下記コマンドを実行し、Homebrewがインストールされているか確認します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ brew -v
+Homebrew x.x.x
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;インストールされていない場合は下記コマンドを実行します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ /usr/bin/ruby -e &amp;quot;$(curl -fsSLhttps://raw.githubusercontent.com/Homebrew/install/master/install)&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;続いてHomebrewでpyenvをインストールします。pyenvはPythonのバージョン管理を行うツールです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ brew install pyenv
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;インストールされたら下記コマンドで確認します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ pyenv -v
+pyenv x.x.x
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;pyenvでPythonをインストールします。バージョンは任意のものでよいですが、Tensorflowがうまく動かないので&lt;strong&gt;3.7系は避けてください&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ pyenv install 3.6.7
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;完了したら、選択したバージョンを設定します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ pyenv global 3.6.7
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ターミナルで下記コマンドを実行し、バージョンが表示されるか確認してみてください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ python -V
+Python 3.6.7
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;tensorflowをインストール&#34;&gt;TensorFlowをインストール&lt;/h3&gt;
+
+&lt;p&gt;コマンドラインで下記コマンドを実行します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ pip install tensorflow
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;だらだらと実行文が表示され、最後の行に &lt;code&gt;Successfully installed tensorflow-X.X.X&lt;/code&gt;などと表示されればOKです。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;pip list&lt;/code&gt;というコマンドを打って、インストールされたか確認してみます。（表示されるものは一例）&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ pip list
+Package                Version
+---------------------- ---------
+absl-py                0.6.1
+bleach                 1.5.0
+html5lib               0.9999999
+Markdown               3.0.1
+nose                   1.3.7
+numpy                  1.15.3
+pip                    18.1
+protobuf               3.6.1
+setuptools             39.0.1
+six                    1.11.0
+tensorflow             1.5.0
+…
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;一覧に、&lt;code&gt;tensorflow&lt;/code&gt;とあればOKです。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;実行したらエラーが出た&#34;&gt;■実行したらエラーが出た&lt;/h4&gt;
+
+&lt;p&gt;長い実行文が表示されたあと、最後の一行が下記のようなエラー文になることがあります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Could not install packages due to an EnvironmentError: [Errno 13] Permission denied: &#39;/Library/Python/2.7/site-packages/tensorflow-1.11.0.dist-info&#39; Consider using the --user option or check the permissions.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;下記コマンドを再度実行します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ sudo pip install tensorflow
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;パスワードを求められるので、PCのユーザのパスワードを入力します。（入力したパスワードは表示されません）&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;エラーが出てインストールが実行されない①&#34;&gt;■エラーが出てインストールが実行されない①&lt;/h4&gt;
+
+&lt;p&gt;&lt;code&gt;pip install tensorflow&lt;/code&gt;を実行すると、&lt;code&gt;command not found&lt;/code&gt;といったエラーが出る場合があります。以下のコマンドを実行し、pipをインストールします。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ python -m ensurepip
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;エラーが出てインストールが実行されない②&#34;&gt;■エラーが出てインストールが実行されない②&lt;/h4&gt;
+
+&lt;p&gt;&lt;code&gt;pip install tensorflow&lt;/code&gt;を実行すると、下記のようなエラーが出る場合があります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Could not find a version that satisfies the requirement tensorflow (from versions: )
+No matching distribution found for tensorflow
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;以下のコマンドを再度実行しましょう。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Python2系&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;$ pip install --upgrade https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-1.11.0-py2-none-any.wh
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Python3系&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;$ python3 -m pip install --upgrade https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-1.5.0-py3-none-any.whl
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;インストールしたのにlistに表示されない&#34;&gt;■インストールしたのにlistに表示されない&lt;/h4&gt;
+
+&lt;p&gt;主にMacで、Python環境がPC上に複数あり、意図する場所にインストールできていない可能性があります。&lt;/p&gt;
+
+&lt;p&gt;主に下記の記事を参考にしてみてください。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;参考: &lt;a href=&#34;https://qiita.com/ta_ta_ta_miya/items/e24394c6b0022405a126&#34;&gt;pyenvでPythonがSystemバージョンから切り替わらない時の対処&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;参考: &lt;a href=&#34;https://qiita.com/mckyhrs/items/94a2db3506287df0420e&#34;&gt;pythonのバージョンが切り替わらない&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;mnistで学習モデルを作成&#34;&gt;MNISTで学習モデルを作成&lt;/h3&gt;
+
+&lt;p&gt;画像認識向けに、大量の画像を自分で収集し学習用に加工するのはとても大変です。&lt;/p&gt;
+
+&lt;p&gt;MNIST（Mixed National Institute of Standards and Technology database）は、手書き数字画像60,000枚とテスト画像10,000枚を集めたデータセットです。&lt;/p&gt;
+
+&lt;p&gt;手軽に入手でき簡単に扱えるので、AI入門のサンプルデータとしてオススメです。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;mnist用pythonコードを作成&#34;&gt;■MNIST用Pythonコードを作成&lt;/h4&gt;
+
+&lt;p&gt;作成した作業用ディレクトリに、コマンドか右クリックなどで&lt;code&gt;mnist_softmax_for_e-ai.py&lt;/code&gt;というファイルを作成します。&lt;/p&gt;
+
+&lt;p&gt;プログラム向けのエディタでファイルを開き、下記のプログラムを貼り付けます。&lt;/p&gt;
+
+&lt;div class=&#34;accbox&#34;&gt;
+    &lt;label for=&#34;label3&#34;&gt;クリックしてコードを表示&lt;/labe&gt;
+    &lt;input type=&#34;checkbox&#34; id=&#34;label3&#34; class=&#34;cssacc&#34; /&gt;
+    &lt;div class=&#34;accshow&#34;&gt;
+      &lt;pre&gt;
+      &lt;code class=&#34;hljs python&#34;&gt;
+      # Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+      #
+      # Licensed under the Apache License, Version 2.0 (the &#34;License&#34;);
+      # you may not use this file except in compliance with the License.
+      # You may obtain a copy of the License at
+      #
+      #     http://www.apache.org/licenses/LICENSE-2.0
+      #
+      # Unless required by applicable law or agreed to in writing, software
+      # distributed under the License is distributed on an &#34;AS IS&#34; BASIS,
+      # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+      # See the License for the specific language governing permissions and
+      # limitations under the License.
+      # ==============================================================================
+
+      &#34;&#34;&#34;A very simple MNIST classifier.
+
+      See extensive documentation at
+      https://www.tensorflow.org/get_started/mnist/beginners
+      &#34;&#34;&#34;
+      from __future__ import absolute_import
+      from __future__ import division
+      from __future__ import print_function
+
+      import argparse
+      import sys
+
+      from tensorflow.examples.tutorials.mnist import input_data
+
+      import tensorflow as tf
+
+      FLAGS = None
+
+
+      def main(_):
+        # Import data
+        mnist = input_data.read_data_sets(FLAGS.data_dir, one_hot=True)
+
+        # Create the model
+        x = tf.placeholder(tf.float32, [None, 784])
+
+        #Add Renesas 2 --------- ----------
+        # change
+        #  x_ = tf.placeholder(tf.float32, [None, 784])
+        #  x = tf.reshape(x_, [-1])
+        # --------- ----------
+
+        W = tf.Variable(tf.zeros([784, 10]))
+        b = tf.Variable(tf.zeros([10]))
+        y = tf.matmul(x, W) + b
+
+        # Define loss and optimizer
+        y_ = tf.placeholder(tf.float32, [None, 10])
+
+        # The raw formulation of cross-entropy,
+        #
+        #   tf.reduce_mean(-tf.reduce_sum(y_ * tf.log(tf.nn.softmax(y)),
+        #                                 reduction_indices=[1]))
+        #
+        # can be numerically unstable.
+        #
+        # So here we use tf.nn.softmax_cross_entropy_with_logits on the raw
+        # outputs of &#39;y&#39;, and then average across the batch.
+        cross_entropy = tf.reduce_mean(
+            tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y))
+        train_step = tf.train.GradientDescentOptimizer(0.5).minimize(cross_entropy)
+
+        sess = tf.InteractiveSession()
+        tf.global_variables_initializer().run()
+        # Train
+        for _ in range(1000):
+          batch_xs, batch_ys = mnist.train.next_batch(100)
+          sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys})
+
+        # Test trained model
+        correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))
+        accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+        print(sess.run(accuracy, feed_dict={x: mnist.test.images,
+                                            y_: mnist.test.labels}))
+
+        #Add Renesas 1 --------- ----------
+        import os
+        #Save Learned AI
+        out_dir = &#34;./tf_LearnedModel&#34;
+        if os.path.isdir(out_dir) is False:
+            os.makedirs(out_dir)
+        saver = tf.train.Saver()
+        saver.save(sess, out_dir+&#34;/tf_LearnedModel&#34;)
+        # --------- ----------
+
+      if __name__ == &#39;__main__&#39;:
+        parser = argparse.ArgumentParser()
+        parser.add_argument(&#39;--data_dir&#39;, type=str, default=&#39;/tmp/tensorflow/mnist/input_data&#39;,
+                            help=&#39;Directory for storing input data&#39;)
+        FLAGS, unparsed = parser.parse_known_args()
+        tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
+      &lt;/code&gt;
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;今回はがじぇるねさんの&lt;a href=&#34;http://gadget.renesas.com/ja/product/e-ai/mnist_tutorial.html#%E6%A9%9F%E6%A2%B0%E5%AD%A6%E7%BF%92%E3%81%AE%E5%AE%9F%E8%A1%8C&#34;&gt;チュートリアルのサンプルコード&lt;/a&gt;をお借りしました！&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;tensorflowで実行&#34;&gt;■Tensorflowで実行&lt;/h4&gt;
+
+&lt;p&gt;下記コマンドで学習モデルを作成します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ python mnist_softmax_for_e-ai.py
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;pythonコマンドはPythonで書かれたプログラムを実行するコマンドです。ファイルの中のプログラムが実行され、学習モデルが作成されます。&lt;/p&gt;
+
+&lt;p&gt;Windowsの方は&lt;code&gt;dir&lt;/code&gt;、Macの方は&lt;code&gt;ls&lt;/code&gt;というコマンドを実行し、「tf_LearnedModel」というフォルダが作成されたことを確認してください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ ls
+mnist_softmax_for_e-ai.py
+tf_LearnedModel/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Windowsは&lt;code&gt;dir tf_LearnedModel&lt;/code&gt;、Macは&lt;code&gt;ls tf_LearnedModel&lt;/code&gt;のコマンドを実行すると、4つのファイルが入っていることがわかります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ ls tf_LearnedModel
+checkpoint
+tf_LearnedModel.data-00000-of-00001
+tf_LearnedModel.index
+tf_LearnedModel.meta
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;学習モデルをgrボードで扱う&#34;&gt;学習モデルをGRボードで扱う&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/045295f6fe6ebda3cbed3d0150650c27.png&#34; alt=&#34;Image from Gyazo&#34; /&gt;
+Webコンパイラを開き、右側のリストから「e-AI Translator」をクリックします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/1ae615bd6f71338dab09647185d3bcb5.png&#34; alt=&#34;Image from Gyazo&#34; /&gt;
+アップロードボタンを押し、先ほど作成された「tf_LearnedModel」を選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/2d54b87b9a6c9852f31c1afb14132614.png&#34; alt=&#34;Image from Gyazo&#34; /&gt;
+その他はデフォルト選択のまま、「トランスレート」をクリックします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/27fe23312950242e2eee4ff2e6e7ee79.png&#34; alt=&#34;Image from Gyazo&#34; /&gt;
+表示されたプログラムを全て選択してコピーします。&lt;/p&gt;
+
+&lt;h2 id=&#34;完成コード&#34;&gt;完成コード&lt;/h2&gt;
+
+&lt;p&gt;上記で生成されたプログラムに、displayAppに表示させるためのコードを加えたプログラムです。USBケーブルは真ん中に接続し、GR-LYCHEEに書き込みましょう。&lt;/p&gt;
+
+&lt;div class=&#34;accbox&#34;&gt;
+    &lt;label for=&#34;label4&#34;&gt;クリックしてコードを表示&lt;/labe&gt;
+    &lt;input type=&#34;checkbox&#34; id=&#34;label4&#34; class=&#34;cssacc&#34; /&gt;
+    &lt;div class=&#34;accshow&#34;&gt;
+      &lt;pre&gt;
+      &lt;code class=&#34;hljs hljs-cpp&#34;&gt;
+      #include &amp;lt;Arduino.h&amp;gt;
+      #include &amp;lt;Camera.h&amp;gt;
+      #include &amp;lt;opencv.hpp&amp;gt;
+      #include &amp;lt;DisplayApp.h&amp;gt;
+
+      #ifdef __cplusplus
+      extern &#34;C&#34; {
+      #endif
+      #include &#34;eAI_translated/Typedef.h&#34;
+      #include &#34;eAI_translated/input_image_0.h&#34;
+      #include &#34;eAI_translated/layer_graph.h&#34;
+      TPrecision* dnn_compute(TPrecision* input_img);
+      #ifdef __cplusplus
+      }
+      #endif
+
+      // To monitor realtime on PC, you need DisplayApp on following site.
+      // Connect USB0(not for mbed interface) to your PC
+      // os.mbed.com/.../
+
+      using namespace cv;
+
+      #define IMAGE_HW 320
+      #define IMAGE_VW 240
+      #define INPUT_HEIGHT 28
+      #define INPUT_WIDTH 28
+
+      Camera camera(IMAGE_HW, IMAGE_VW);
+      DisplayApp display_app;
+      void paste(cv::Mat dst, cv::Mat src, int x, int y, int width, int height) {
+       cv::Mat resized_img;
+       cv::resize(src, resized_img, cv::Size(width, height));
+
+       if (x &gt;= dst.cols || y &gt;= dst.rows) return;
+       int w = (x &gt;= 0) ? std::min(dst.cols - x, resized_img.cols) : std::min(std::max(resized_img.cols + x, 0), dst.cols);
+       int h = (y &gt;= 0) ? std::min(dst.rows - y, resized_img.rows) : std::min(std::max(resized_img.rows + y, 0), dst.rows);
+       int u = (x &gt;= 0) ? 0 : std::min(-x, resized_img.cols - 1);
+       int v = (y &gt;= 0) ? 0 : std::min(-y, resized_img.rows - 1);
+       int px = std::max(x, 0);
+       int py = std::max(y, 0);
+
+       cv::Mat roi_dst = dst(cv::Rect(px, py, w, h));
+       cv::Mat roi_resized = resized_img(cv::Rect(u, v, w, h));
+       roi_resized.copyTo(roi_dst);
+      }
+
+      int max_array(TPrecision* array, int length){
+       int i;
+       float max = array[0];
+       int index = 0;
+
+       for(i = 0; i &lt; length; i++){
+       if(array[i] &gt; max){
+       max = array[i];
+       index = i;
+       }
+       }
+       return index;
+      }
+
+      void setup() {
+       Serial.begin(9600);
+       camera.begin();
+      }
+
+      void loop() {
+       Scalar red(0, 0, 255), green(0, 255, 0), blue(255, 0, 0);
+       Scalar yellow = red + green;
+       Scalar white = Scalar::all(255);
+       Scalar black = Scalar::all(0);
+       Scalar pink = Scalar(154, 51, 255);
+
+       Mat img_raw(IMAGE_VW, IMAGE_HW, CV_8UC2, camera.getImageAdr());
+
+       Mat pic, gray;
+       cvtColor(img_raw, pic, COLOR_YUV2BGR_YUYV); //covert YUV to RGB
+       cvtColor(img_raw, gray, COLOR_YUV2GRAY_YUYV); //covert from YUV to GRAY
+
+       Mat roi(gray, Rect(80, 0, 240, 240));
+       threshold(roi, roi, 90, 255, THRESH_BINARY);
+       resize(roi, roi, Size(INPUT_WIDTH, INPUT_HEIGHT));
+       for(int i = 0; i &lt; 784; i++){
+       data_in[i] = 1 - (float)roi.data[i] / 255;
+       }
+
+       TPrecision *prediction;
+       TPrecision *input_img;
+       TsInt i;
+
+       input_img = data_in;
+       prediction = (TPrecision*) (intptr_t) dnn_compute( input_img);
+
+       // Drawing
+       rectangle(pic, Rect(0, 0, 80, 240), white, FILLED);
+       rectangle(pic, Rect(80, 0, 240, 240), red, 2);
+
+       Mat roi2;
+       cvtColor(roi, roi2, COLOR_GRAY2BGR);
+       paste(pic, roi2, 5, 5, roi2.rows, roi2.cols);
+       rectangle(pic, Rect(4, 4, 30, 30), red, 1);
+
+       int max_index = max_array(prediction, 10);
+       for(i = 0;i &lt; 10;i++){
+       Serial.print(i); Serial.print(&#34;:&#34;);
+       Serial.println(prediction[i]);
+       stringstream ss;
+       ss &lt;&lt; i;
+       if(max_index == i){
+       putText(pic, ss.str(), Point(0, 20 * i + 50), FONT_HERSHEY_SCRIPT_SIMPLEX, 0.5, pink, 1);
+       rectangle(pic, Rect(20, 20 * i + 40, prediction[i] * 80, 10), pink, FILLED);
+       } else {
+       putText(pic, ss.str(), Point(0, 20 * i + 50), FONT_HERSHEY_SCRIPT_SIMPLEX, 0.5, black, 1);
+       rectangle(pic, Rect(20, 20 * i + 40, prediction[i] * 80, 10), blue, FILLED);
+       }
+       }
+
+       size_t jpegSize = camera.createJpeg(320, 240, pic.data,
+       Camera::FORMAT_RGB888);
+       display_app.SendJpeg(camera.getJpegAdr(), jpegSize);
+       delay(10);
+
+      }
+      &lt;/code&gt;
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;これまでの手順と同様、書き込んでみましょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;手書き数字の認識を試してみる&#34;&gt;手書き数字の認識を試してみる&lt;/h2&gt;
+
+&lt;p&gt;USBケーブルを外側につけかえ、試してみます。&lt;/p&gt;
+
+&lt;h3 id=&#34;displayappで表示&#34;&gt;displayAppで表示&lt;/h3&gt;
+
+&lt;p&gt;紙に書く文字は、マッキーペンなどで太くハッキリと書いてみてください。&lt;/p&gt;
+
+&lt;p&gt;カメラに数字を映すと……&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/233/result.gif&#34; alt=&#34;demo&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;数字を推論してくれます。お疲れ様でした！&lt;/p&gt;
+
+&lt;h3 id=&#34;シリアルモニタで表示&#34;&gt;シリアルモニタで表示&lt;/h3&gt;
+
+&lt;p&gt;GR-LYCHEEで実行されている内容を、シリアル通信を介してPCで確認してみます。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;macの方-2&#34;&gt;■Macの方&lt;/h4&gt;
+
+&lt;p&gt;下記コマンドを実行し、USB接続されている場所を調べます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ ls /dev/tty.usb*
+/dev/tty.usbmodem~~~
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;接続されている場所をコピーし、下記コマンドで接続します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ screen /dev/tty.usbmodem~~~~ 9600
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;windowsの方-3&#34;&gt;■Windowsの方&lt;/h4&gt;
+
+&lt;p&gt;「TeraTerm」というシリアル通信対応のソフトをダウンロード＆インストールします。「Arduino IDE」がインストールされている方は、そちらでも確認できます。&lt;/p&gt;
+
+&lt;p&gt;下記リンクを参考に、TeraTermを起動しシリアル接続します。&lt;/p&gt;
+
+&lt;p&gt;参考: &lt;a href=&#34;https://www.j-oosk.com/teraterm/serial/346/&#34;&gt;Tera Termでシリアル接続を行う手順&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;参考情報&#34;&gt;参考情報&lt;/h2&gt;
+
+&lt;p&gt;がじぇるねさんのページでは、その他のGR-LYCHEEチュートリアルも紹介されています。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://gadget.renesas.com/ja/product/lychee_sp/4.html&#34;&gt;Webカメラにしてみよう!&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://gadget.renesas.com/ja/product/lychee_sp/5.html&#34;&gt;Bluetoothでスマホとつなげよう!&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://gadget.renesas.com/ja/product/lychee_sp/8.html&#34;&gt;OpenCTの応用 輪郭検出、HSV色空間&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;ぜひ試してみてください！&lt;/p&gt;
+
+&lt;style&gt;
+.caution {
+    border: 1px solid #BFBFBF;
+    padding: 1em 2em;
+    margin: 2em 0;
+    color: #474747;
+    background: whitesmoke;/*背景色*/
+    border-left: double 7px #0B0B61;/*左線*/
+    font-size: 90%;
+}
+
+.caution &gt; p {
+    font-weight: bold;
+    margin: 0 0 10px 0;
+    padding: 0;
+}
+
+blockquote {
+    font-size:80%;
+}
+
+.accbox {
+    margin: 2em 0;
+    padding: 0;
+    max-width: 710px;
+}
+
+
+.accbox label {
+    display: block;
+    margin: 1.5px 0;
+    padding : 11px 12px;
+    color :#ffffff;
+    font-weight: bold;
+    background :#2f2f2f;
+    cursor :pointer;
+    transition: all 0.5s;
+}
+
+.accbox label:hover {
+    background :#A4A4A4;
+}
+
+.accbox input {
+    display: none;
+}
+
+.accbox .accshow {
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: 0.8s;
+}
+
+.cssacc:checked + .accshow {
+    height: auto;
+    padding: 5px;
+    background: #eaeaea;
+    opacity: 1;
+}
+&lt;/style&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>加速度センサとマイコン内蔵LEDで魔法の杖を作ってみた！</title>
+      <link>https://dotstud.io/blog/halloween-gadget-witch-stick/</link>
+      <pubDate>Wed, 31 Oct 2018 10:07:13 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/halloween-gadget-witch-stick/</guid>
+      
+      <description>
+
+&lt;p&gt;みなさんこんにちは。トボリです。&lt;/p&gt;
+
+&lt;p&gt;私は電子工作が大好きで、いろいろいじったり、&lt;a href=&#34;http://toboli.hatenablog.com/&#34;&gt;ブログ&lt;/a&gt;を書いたりして暮らしています。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;ところで、みなさん魔法は好きですか？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;電子工作と魔法ってかなり相性いいと思うんですよ。勝手に光る、勝手に動く、勝手にしゃべる……とか！&lt;/p&gt;
+
+&lt;p&gt;気づけばもう10月31日。そう、本日はハロウィンです！電子工作を愛し、電子工作に愛された者として、このイベントで魔法っぽいものを作りたい！！&lt;/p&gt;
+
+&lt;p&gt;魔法といえば、そう、杖ですよね！！&lt;/p&gt;
+
+&lt;p&gt;ということで、今回はみんなが一度は憧れたであろう、&lt;strong&gt;『魔法の杖』&lt;/strong&gt; を作ってみました！&lt;/p&gt;
+
+&lt;h2 id=&#34;振ると光る杖-を作ることにした&#34;&gt;「振ると光る杖」を作ることにした&lt;/h2&gt;
+
+&lt;p&gt;『魔法の杖』っていうからには、できるだけかっこいいことがしたい！
+トボリも想像力だけは無駄に豊かなので、うきうきいろんな機能をイメージしました。&lt;/p&gt;
+
+&lt;p&gt;家電を操作したり、一振りでカーテン開けられたりできたらいいなあ～！何か浮かせられたらもっとおもしろいかも……。&lt;/p&gt;
+
+&lt;p&gt;しかし。&lt;/p&gt;
+
+&lt;p&gt;&lt;span style=&#34;font-size: 200%&#34;&gt;時間と技術力は限られている！！&lt;/span&gt;&lt;/p&gt;
+
+&lt;p&gt;今のトボリの技術力でハロウィンまでに作れそうなものといえば、「振ると光る」杖です。&lt;/p&gt;
+
+&lt;p&gt;想像よりだいぶスケールが小さくなりましたが、どんなにささやかな物でもまずは作ることが大事！
+と自分に言い聞かせ、とにかく作ってみることにしました！&lt;/p&gt;
+
+&lt;h2 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h2&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/228/parts.png&#34; alt=&#34;parts&#34;&gt;
+
+&lt;/center&gt;
+
+電子工作初心者の味方、Arduinoを使って作ろうと思います！&lt;/p&gt;
+
+&lt;p&gt;また、なぜミニブレッドボードを使用するかというと……これを見てください！
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/228/breadboard.png&#34; alt=&#34;breadboard&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;p&gt;たまたま買った電池ボックスとミニブレッドボードのサイズがほぼ同じ！&lt;/p&gt;
+
+&lt;p&gt;これを見た瞬間、絶対に使おう！と固く決意したのです。
+（本当はユニバーサル基板に半田付けしてたんですが、完成間近にピンヘッダの取り付けミスが発覚し、安心安全のブレッドボードでやり直したという経緯があります。つらい。）&lt;/p&gt;
+
+&lt;h2 id=&#34;魔法の杖を作る&#34;&gt;魔法の杖を作る&lt;/h2&gt;
+
+&lt;p&gt;魔法の杖は、下記の3ステップで作って行きます！&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;プログラムを書く&lt;/li&gt;
+&lt;li&gt;ブレッドボードに回路を作る&lt;/li&gt;
+&lt;li&gt;見た目をそれっぽく造形する&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;プログラムを書く&#34;&gt;プログラムを書く&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/arduinoide-setup/&#34;&gt;Arduino IDE&lt;/a&gt;を使ってプログラムを書いていきます。&lt;/p&gt;
+
+&lt;p&gt;加速度センサのサンプルプログラムと、フルカラーLEDのサンプルプログラムをただ合体しただけのお手軽コードです！&lt;/p&gt;
+
+&lt;div class=&#34;accbox&#34;&gt;
+    &lt;label for=&#34;label1&#34;&gt;クリックしてコードを表示&lt;/labe&gt;
+    &lt;input type=&#34;checkbox&#34; id=&#34;label1&#34; class=&#34;cssacc&#34; /&gt;
+    &lt;div class=&#34;accshow&#34;&gt;
+      &lt;pre&gt;
+      &lt;code class=&#34;hljs hljs-line-numbers&#34;&gt;
+      #include &amp;lt;Wire.h&amp;gt;
+      #include &amp;lt;SparkFun_MMA8452Q.h&amp;gt;
+      #include &amp;lt;Adafruit_NeoPixel.h&amp;gt;
+      #define PIN 2
+
+      Adafruit_NeoPixel pixels = Adafruit_NeoPixel(1, PIN, NEO_GRB + NEO_KHZ800);
+
+      MMA8452Q accel;
+
+      void setup() {
+        Serial.begin(9600);
+        Serial.println(&#34;MMA8452Q Test Code!&#34;);
+
+        pixels.begin();
+        pixels.show();
+
+        accel.init();
+      }
+
+      void loop() {
+        if(accel.available()) {
+          accel.read();
+          printCalculatedAccels();
+          printOrientation();
+
+          Serial.println();
+        }
+      }
+
+      void printOrientation() {
+        byte pl = accel.readPL();
+        switch (pl) {
+          case PORTRAIT_U:
+            Serial.print(&#34;Portrait Up&#34;);
+            break;
+          case PORTRAIT_D:
+            Serial.print(&#34;Portrait Down&#34;);
+            break;
+          case LANDSCAPE_R:
+            Serial.print(&#34;Landscape Right&#34;);
+            rainbow(20);
+            break;
+          case LANDSCAPE_L:
+            Serial.print(&#34;Landscape Left&#34;);
+            rainbow(20);
+            break;
+          case LOCKOUT:
+            Serial.print(&#34;Flat&#34;);
+            pixels.show();
+            break;
+        }
+      }
+
+      void rainbow(uint8_t wait) {
+        uint16_t i, j;
+
+        for(j=0; j&amp;lt;256; j++) {
+          for(i=0; i&amp;lt;pixels.numPixels(); i++) {
+            pixels.setPixelColor(i, Wheel((i+j) &amp; 255));
+          }
+          pixels.show();
+          delay(wait);
+        }
+      }
+
+       uint32_t Wheel(byte WheelPos) {
+         WheelPos = 255 - WheelPos;
+         if(WheelPos &amp;lt; 85) {
+           return pixels.Color(255 - WheelPos * 3, 0, WheelPos * 3);
+         }
+         if(WheelPos &amp;lt; 170) {
+           WheelPos -= 85;
+           return pixels.Color(0, WheelPos * 3, 255 - WheelPos * 3);
+         }
+         WheelPos -= 170;
+         return pixels.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
+       }
+      &lt;/code&gt;
+      &lt;/pre&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&#34;ブレッドボードに回路を作る&#34;&gt;ブレッドボードに回路を作る&lt;/h3&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/228/fritzing.png&#34; alt=&#34;fritzing&#34;&gt;
+
+&lt;/center&gt;
+
+まずはブレッドボードに配線していきます！配線図はこんな感じ。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/228/circuit.png&#34; alt=&#34;circuit&#34;&gt;
+
+&lt;/center&gt;
+
+実際に配線したものがこちらです！
+LEDの部分だけ基板から離れてしまうので、後で半田付けをします。&lt;/p&gt;
+
+&lt;p&gt;みなさん半田付けって好きですか？トボリは電子工作作業の中で半田付けが一番好きです！
+半田の香りは下手なアロマより癒される気がします。&lt;/p&gt;
+
+&lt;h3 id=&#34;見た目をそれっぽく造形する&#34;&gt;見た目をそれっぽく造形する&lt;/h3&gt;
+
+&lt;p&gt;杖はそれっぽい形になればなんでもいいので、3Dプリンタを使える方は使ってもいいし、お好きなやり方で大丈夫です！今回は、粘土をこねて作ってみたので、参考までに材料と作り方も載せておきます！&lt;/p&gt;
+
+&lt;h4 id=&#34;用意するもの-1&#34;&gt;■ 用意するもの&lt;/h4&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/228/stick1.png&#34; alt=&#34;stick1&#34;&gt;
+
+&lt;/center&gt;
+
+石粉粘土・トイレットペーパーの芯・市販のスティックを用意します。これらは全て百均で買うことができました！いい時代ですね！&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/228/stick2.png&#34; alt=&#34;stick2&#34;&gt;
+
+&lt;/center&gt;
+
+この市販のスティックを分解し、筒状の棒だけ取り出します。&lt;/p&gt;
+
+&lt;h4 id=&#34;杖の形に造形する&#34;&gt;■ 杖の形に造形する&lt;/h4&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/228/stick3.png&#34; alt=&#34;stick3&#34;&gt;
+
+&lt;/center&gt;
+
+市販の棒とトイレットペーパーの芯をくっつけます。トイレットペーパーの芯の先に切れ込みを入れて、画像のように内側に折り込みます。トイレットペーパーの芯に棒を差し込んで、テープで固定します。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/228/stick4.png&#34; alt=&#34;stick4&#34;&gt;
+
+&lt;/center&gt;
+
+中に基板を入れ、筒の中にLEDのワイヤーを通してから、LEDを半田付けします。&lt;/p&gt;
+
+&lt;p&gt;動作チェックをして問題なさそうだったら、どんどん土台に石粉粘土を貼り付けていきます！少しずつ貼り付けて、時々手でなでて滑らかにしていきます。&lt;/p&gt;
+
+&lt;p&gt;乾いたら、カッターで傷をつけ、茶色と黒のアクリル絵の具をインスピレーションに従っていい感じに塗ります。&lt;/p&gt;
+
+&lt;h4 id=&#34;完成&#34;&gt;■ 完成！&lt;/h4&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/228/stick5.png&#34; alt=&#34;stick5&#34;&gt;
+
+&lt;/center&gt;
+
+できた～～～！！！
+どう見ても、魔法の杖！！少なくとも自分にとっては手塩にかけた最愛の杖！！&lt;/p&gt;
+
+&lt;h2 id=&#34;魔法を発動する&#34;&gt;魔法を発動する&lt;/h2&gt;
+
+&lt;p&gt;さっそく魔法を発動していきましょう！
+左右に杖を振ると……虹色の光が出ます！やった～～！魔法っぽい！
+&lt;img src=&#34;https://dotstud.io/img/blog/228/demo.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;次こそはもっとうまく作りたい-それが電子工作沼&#34;&gt;次こそはもっとうまく作りたい……それが電子工作沼&lt;/h2&gt;
+
+&lt;p&gt;LEDとセンサーひとつですが、結構楽しいものができました！&lt;/p&gt;
+
+&lt;p&gt;でも、やっぱり本当はこうしたい……もっとかっこいい機能搭載したい……という欲望はとめどなく溢れ、「次こそもっといいものを！」という気持ちになります。&lt;/p&gt;
+
+&lt;p&gt;もうこうなったらズブズブですよね。&lt;b&gt;電子工作沼&lt;/b&gt;に。このハロウィンは今自分が作れる楽しいものを作りまくって、一緒に電子工作沼で溺れましょう！&lt;/p&gt;
+
+&lt;p&gt;ではでは、トボリでした！&lt;/p&gt;
+
+&lt;style&gt;
+.accbox {
+    margin: 2em 0;
+    padding: 0;
+    max-width: 710px;
+}
+
+
+.accbox label {
+    display: block;
+    margin: 1.5px 0;
+    padding : 11px 12px;
+    color :#ffffff;
+    font-weight: bold;
+    background :#2f2f2f;
+    cursor :pointer;
+    transition: all 0.5s;
+}
+
+.accbox label:hover {
+    background :#A4A4A4;
+}
+
+.accbox input {
+    display: none;
+}
+
+.accbox .accshow {
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: 0.8s;
+}
+
+.cssacc:checked + .accshow {
+    height: auto;
+    padding: 5px;
+    background: #eaeaea;
+    opacity: 1;
+}
+&lt;/style&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>【あのバズマイコンを最速？レポート】極小マイコンのトリリオンノード・エンジンを使ってみた！</title>
+      <link>https://dotstud.io/blog/trillion-node-engine-sugoi/</link>
+      <pubDate>Fri, 05 Oct 2018 02:39:17 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/trillion-node-engine-sugoi/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、宇宙エンジニアのたくろーどんです。&lt;/p&gt;
+
+&lt;p&gt;夏休みなので「何かハッカソンに出てみたい！モノづくりしたい！」と思いつつ、&lt;a href=&#34;http://www.mcpc-jp.org/&#34;&gt;MCPC（モバイルコンピューティング推進コンソーシアム）&lt;/a&gt;が主催する&lt;strong&gt;第1回ナノコン応用ハッカソン&lt;/strong&gt;に参加しました。&lt;/p&gt;
+
+&lt;p&gt;なんとこのハッカソンで&lt;strong&gt;これから流行りそうな凄い開発ボード&lt;/strong&gt;に出会ったので、紹介します。その名も&lt;u&gt;&lt;strong&gt;トリリオンノード・エンジン&lt;/strong&gt;&lt;/u&gt;です。&lt;/p&gt;
+
+&lt;h2 id=&#34;トリリオンノード-エンジン-のここが凄い&#34;&gt;「トリリオンノード・エンジン」のここが凄い！&lt;/h2&gt;
+
+&lt;h3 id=&#34;小さい&#34;&gt;小さい！&lt;/h3&gt;
+
+&lt;p&gt;特筆すべきポイントは、&lt;strong&gt;トリリオンノード・エンジンの小ささ&lt;/strong&gt;でしょう。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/212276/d8655c77-c996-4684-adb8-61f8799cbce4.jpeg&#34; alt=&#34;P_20180831_162041_vHDR_On.jpg&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;そうです、写真でわかるように&lt;strong&gt;本当に小さい&lt;/strong&gt;です。
+決して、手が大きいわけではありません。&lt;/p&gt;
+
+&lt;h3 id=&#34;拡張性が高い&#34;&gt;拡張性が高い！&lt;/h3&gt;
+
+&lt;p&gt;ハッカソンの際は、写真のようにキットが渡されました。
+&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/212276/ab86e180-f0c0-afdd-c320-baa25fa92140.jpeg&#34; alt=&#34;P_20180831_100142_vHDR_On.jpg&#34; /&gt;
+トリリオンノード・エンジンは、&lt;strong&gt;リーフ&lt;/strong&gt;というパーツで構成され、そのリーフの1つ1つに&lt;strong&gt;センサモジュールやBLE（Bluetooth）、Wi-Fi&lt;/strong&gt;といった機能を持っています。それを&lt;u&gt;&lt;strong&gt;重ねていくことで簡単に機能を拡張することができる&lt;/strong&gt;&lt;/u&gt;仕組みです。&lt;/p&gt;
+
+&lt;p&gt;プログラムは&lt;strong&gt;Arduino IDE&lt;/strong&gt;で書きます。これは、Arduinoを触ったことがある人にやさしいですね。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/212276/0c71d1f5-486a-a6c7-d408-1aafa14afcdf.jpeg&#34; alt=&#34;P_20180831_100406_vHDR_On.jpg&#34; /&gt;
+評価用キットなので、すべてのリーフが入っているわけではありません。今後は、もっとリーフが増えるようです。例えば、&lt;strong&gt;Groveセンサ用のリーフ&lt;/strong&gt;も予定されているそうです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/212276/725d14ea-0149-83c4-87bd-cdade631bf64.jpeg&#34; alt=&#34;P_20181001_002408_vHDR_On.jpg&#34; /&gt;
+Arduinoシールドのリーフもあります。プロトタイプをつくる際に役立ちますね。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/212276/6bd3b78b-ca6c-7bce-83bd-cb8a76319c44.jpeg&#34; alt=&#34;P_20181001_002538_vHDR_On.jpg&#34; /&gt;
+「29TH Leaf」というリーフを使えば基板に直接実装できます。これもArduino互換リーフの一つです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/212276/371ec114-1346-7596-1d0e-f2c12fa5d0e1.jpeg&#34; alt=&#34;P_20181001_002505_vHDR_On.jpg&#34; /&gt;
+電源はUSB給電だけなく、&lt;strong&gt;専用のリーフで単3電池やボタン電池駆動&lt;/strong&gt;させることができます。実装には一手間かかるので、専用のリーフがあるのはとてもありがたいですね。&lt;/p&gt;
+
+&lt;p&gt;例えば&lt;strong&gt;ウェアラブルなものをつくりたい&lt;/strong&gt;と思ったときに、必要な電圧にもよりますが電源回路を実装する必要がなくなります。&lt;/p&gt;
+
+&lt;p&gt;重ねるだけでなく、横方向につなげるリーフもあります。発想の幅が広がりますね。&lt;/p&gt;
+
+&lt;h2 id=&#34;試してみた&#34;&gt;試してみた&lt;/h2&gt;
+
+&lt;p&gt;加速度センサとLEDテープを組み合わせてLチカさせてみました。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/212276/44f0d940-e547-66b5-bc20-020f64550d0d.gif&#34; alt=&#34;84472b66eb294f495cb1060bfda8c512.gif&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;ハッカソンでは、犬につけてコミュニケーションを加速させることを目的としたウェアラブルデバイスを考えました（完成には程遠かったですが……）。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/212276/973f6f0e-7487-ba0d-2aef-e2f245826ef9.jpeg&#34; alt=&#34;42142867_568541853564424_1201723650328231936_n.jpg&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;このサイズだから出来ることを考えてみると、様々なところに応用できそう&lt;/strong&gt;ですね。&lt;/p&gt;
+
+&lt;h2 id=&#34;そして平成最後の夏-twitterでバズった&#34;&gt;そして平成最後の夏、Twitterでバズった&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;「トリリオンノード・エンジンが凄い！」といったことをつぶやいてみたら、バズりました&lt;/strong&gt;。
+小型で使いやすそうなマイコンに対する関心の高さがうかがえます。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;今日つかったマイコン、やばやばなほど小さいんだけど、BLEも照度センサ、加速度センサ、温度センサ、スタックしていけばwifiモジュールもつくし、ボタン電池で駆動できて、Arduinoで開発できる。拡張も自由自在。スタックするだけでなく、横につなげてウェアラブルも可能。凄すぎるん😳😳😳 &lt;a href=&#34;https://t.co/DGqssgNkCF&#34;&gt;pic.twitter.com/DGqssgNkCF&lt;/a&gt;&lt;/p&gt; たくろーどん (@takudooon) &lt;a href=&#34;https://twitter.com/takudooon/status/1035474814696222722?ref_src=twsrc%5Etfw&#34;&gt;2018年8月31日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;そしてバズったら&lt;strong&gt;「トリリオンノード・エンジンの普及に貢献した」としてハッカソンで特別賞を貰いました&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/212276/aa12c34d-e3f2-a9df-92b8-f4eccb6befb9.jpeg&#34; alt=&#34;IMG_20181001_011537_066.jpg&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;人生、何が起こるかわからないですね。&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;まだまだドキュメントの整備や使用例はこれからのようです。
+来年から販売予定だそうなので、目が離せませんね！&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>気分はセレブ！手を叩くとディナーを出してくれるデバイスを作ろう</title>
@@ -4004,6 +6803,24 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
   
       
       
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
           &lt;div class=&#34;link_content&#34;&gt;
           &lt;a href=&#34;https://dotstud.io/blog/mongoose-os-nefry-blink/&#34;&gt;&lt;/a&gt;
           &lt;img src=&#34;https://dotstud.io/img/blog/145/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
@@ -4023,6 +6840,12 @@ void dump_byte_array(byte *buffer, byte bufferSize) {
             &lt;/div&gt;
           &lt;/div&gt;
         &lt;/section&gt;
+      
+  
+      
+      
+  
+      
       
   
       
@@ -5776,1273 +8599,6 @@ LED Barは&amp;hellip;レベル9まで光っています！&lt;strong&gt;外に�
 &lt;p&gt;また、「IFTTT」で取得する値は0〜16ですが、現状は10以上の場合もLED Barは10までの表示です。これ以上細かい表示をする場合はプログラムを組んでみましょう。そちらの方も是非挑戦してみてください。&lt;/p&gt;
 
 &lt;p&gt;最後まで読んで頂きありがとうございました。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>「Wio Node」で半田付けなしの電子工作！温度計作りでIoTはじめの一歩</title>
-      <link>https://dotstud.io/blog/seeed-wionode-hands-on/</link>
-      <pubDate>Fri, 21 Apr 2017 22:18:36 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/seeed-wionode-hands-on/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、バックエンドエンジニアのちゃんとく（&lt;a href=&#34;https://twitter.com/tokutoku393&#34;&gt;@tokutoku393&lt;/a&gt;）です。&lt;/p&gt;
-
-&lt;p&gt;今回は、難しいプログラミングや半田付けなしで簡単に試せる「Wio Node」を使って温度表示計を作ってみます！この記事は「&lt;strong&gt;&lt;a href=&#34;https://dotstudio.connpass.com/event/53388/&#34;&gt;WioNodeで始めよう！挫折しないIoT入門ハンズオン
-&lt;/a&gt;&lt;/strong&gt;」の資料にもなっています。&lt;/p&gt;
-
-&lt;p&gt;かなり長いですが、詳細な手順を載せていますので根気よく頑張りましょう！&lt;/p&gt;
-
-&lt;h2 id=&#34;wio-nodeとは&#34;&gt;Wio Nodeとは&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/01_wio_node.png&#34; alt=&#34;&#34; /&gt;
-今回使うWio Nodeは、中国のSeeed Studio社が開発した&lt;strong&gt;Wi-Fiモジュール初期搭載のIoTデバイス&lt;/strong&gt;です。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Grove規格のモジュールをそのまま挿せるコネクタを搭載&lt;/strong&gt;していて、はんだづけなしで動かすことができます。モジュールのセットアップも&lt;strong&gt;公式のスマートフォンアプリから行うことができ&lt;/strong&gt;、電子工作初心者でも簡単に試せます。&lt;/p&gt;
-
-&lt;h2 id=&#34;動かしてみる&#34;&gt;動かしてみる&lt;/h2&gt;
-
-&lt;p&gt;早速Wio Nodeを動かしてみましょう。今回は、温度センサと7セグメントディスプレイを使って簡易温度計を作ってみます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/02_map.png&#34; alt=&#34;&#34; /&gt;
-Wio Nodeに接続したモジュール同士は一見つながっているように見えますが、&lt;strong&gt;内部で連携する仕組みはありません&lt;/strong&gt;。それぞれWi-Fiを使ってAPIからインプットやアウトプットを制御します。&lt;/p&gt;
-
-&lt;p&gt;以下の手順で作っていきます。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Wio Nodeのセットアップ&lt;/li&gt;
-&lt;li&gt;Wio Nodeにモジュールを接続する&lt;/li&gt;
-&lt;li&gt;アプリからAPIを試す&lt;/li&gt;
-&lt;li&gt;Node.jsでプログラムを書く&lt;/li&gt;
-&lt;li&gt;試してみる&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h4 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h4&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Wio Node -&amp;gt; &lt;a href=&#34;https://dotstud.io/shop/wionode-social-remote-control/&#34;&gt;購入ページ&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Micro USBケーブル&lt;/li&gt;
-&lt;li&gt;Grove 温度センサ（型番: SEEED-101020015）&lt;/li&gt;
-&lt;li&gt;Grove 7セグメントディスプレイ（型番: SEEED-104030003）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;類似のセンサがたくさんありますので、型番をよくご確認ください。&lt;/strong&gt;（Wio Nodeに対応していない場合があります。）&lt;/p&gt;
-
-&lt;h4 id=&#34;筆者の環境&#34;&gt;筆者の環境&lt;/h4&gt;
-
-&lt;ul&gt;
-&lt;li&gt;MacBook Pro（Retina 13-inch、Early 2015）&lt;/li&gt;
-&lt;li&gt;OS X El Capitan（v10.11.6）&lt;/li&gt;
-&lt;li&gt;iOS10.31&lt;/li&gt;
-&lt;li&gt;Node.js v7.9.0&lt;/li&gt;
-&lt;li&gt;npm 4.5.0&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;wio-nodeのセットアップ&#34;&gt;Wio Nodeのセットアップ&lt;/h3&gt;
-
-&lt;p&gt;まずはWio Nodeの初期設定から進めていきます。&lt;/p&gt;
-
-&lt;p&gt;Wio Nodeは&lt;strong&gt;モバイルバッテリ・PCなどからUSBケーブルで電源を供給しましょう&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;開発用アプリのインストール&#34;&gt;開発用アプリのインストール&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/02_wio_app.png&#34; alt=&#34;&#34; /&gt;
-Wio Nodeの開発には、公式からリリースされている「Wio Link」というアプリ（Androidの場合は「Wio」）を利用します。執筆時はiOS版は1.5.2、Android版は2.3.6がリリースされています。今回はiOS版を使っての紹介です。&lt;/p&gt;
-
-&lt;p&gt;iOS: &lt;a href=&#34;https://itunes.apple.com/jp/app/wio-link/id1054893491?mt=8&#34;&gt;https://itunes.apple.com/jp/app/wio-link/id1054893491?mt=8&lt;/a&gt;&lt;br /&gt;
-Android: &lt;a href=&#34;https://play.google.com/store/apps/details?id=cc.seeed.iot.ap&amp;amp;hl=ja&#34;&gt;https://play.google.com/store/apps/details?id=cc.seeed.iot.ap&amp;amp;hl=ja&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;アプリとwio-nodeの設定&#34;&gt;アプリとWio Nodeの設定&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/03_acount.png&#34; alt=&#34;&#34; /&gt;
-アプリを開いたらまずはアカウントを作成しましょう。「SIGN UP」からメールアドレスとパスワードを設定し「Register」で登録します。ServerLocationはデフォルトのGlobalにしておきます。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;GmailやFacebookのアカウントを使った登録もできますが、他サービスとの連携でうまくいかないことがあるので非推奨です&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/04_add_device.png&#34; alt=&#34;&#34; /&gt;
-アカウントが作成されたらAdd Your First Deviceをタップし、Wio Nodeを選択します。&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;wi-fi設定&#34;&gt;Wi-Fi設定&lt;/h4&gt;
-
-&lt;p&gt;続いてWi-Fi設定をします。&lt;strong&gt;手順が少しややこしいので注意してください&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;まずは簡単にWio Nodeがインターネットに繋がる仕組みを整理してみます。
-&lt;img src=&#34;https://dotstud.io/img/blog/095/05_internet.png&#34; alt=&#34;&#34; /&gt;
-デバイスがインターネットに繋がるためには、&lt;strong&gt;インターネットに繋がる媒介（=アクセスポイント）&lt;/strong&gt;が必要です。私たちは普段ルータやポケットWi-Fi（モバイルルータ）を媒介にしていますね。&lt;/p&gt;
-
-&lt;p&gt;Wio Nodeも同様に、インターネットに繋がるために&lt;strong&gt;アクセスポイントが必要&lt;/strong&gt;です。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/06_wifi_setup.png&#34; alt=&#34;&#34; /&gt;
-Wio Nodeに&lt;strong&gt;アクセスポイントの情報を教える必要がある&lt;/strong&gt;ので、アドホックモードでWio Nodeとスマートフォンを同じ回線に繋いだ状態にします。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;スマートフォンからWio Nodeにアクセスポイント情報を教えてあげる&lt;/strong&gt;と、その後は&lt;strong&gt;Wio Node自身がアクセスポイントに繋がります&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;接続手順が複雑になりますが、この仕組みを押さえておきましょう！&lt;/p&gt;
-
-&lt;p&gt;アクセスポイントやWAN/LANについてよくわからない方は&lt;a href=&#34;https://dotstud.io/docs/network&#34;&gt;ドキュメント&lt;/a&gt;を参照してください。&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;wi-fi設定手順&#34;&gt;Wi-Fi設定手順&lt;/h4&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/06_func.png&#34; alt=&#34;&#34; /&gt;
-まずは画面の指示にしたがってFuncボタン（写真親指側）を4秒以上長押しすると、青いランプがゆらゆらと光ります。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/07_wio_network.png&#34; alt=&#34;&#34; /&gt;
-iOSのWi-Fi選択画面から、「Wio_XXXX」というSSIDを選択します。（Androidはアプリ内での選択です。）アドホックモードで&lt;strong&gt;Wio Nodeとスマートフォンが繋がっている状態&lt;/strong&gt;です。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/08_wifi_list.png&#34; alt=&#34;&#34; /&gt;
-アプリに戻ると、続いてWi-Fiの接続を促されます。ネットワークリストから、部屋や会場のWi-Fi（利用するWi-Fi）を選択してパスワードを入力しましょう。&lt;strong&gt;アクセスポイント情報を教えてあげた状態&lt;/strong&gt;です。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/09_device_connect.png&#34; alt=&#34;&#34; /&gt;
-Wio Nodeがインターネットに繋がり、登録が完了しました。デバイスに名前をつけておきます。（Android端末で認識がうまくいかない場合、&lt;strong&gt;機内モードにして試す&lt;/strong&gt;と解消することがあるようです。）&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;アプリからでは失敗する場合は、&lt;a href=&#34;https://dotstud.io/docs/wionode-wiosetup&#34;&gt;こちら&lt;/a&gt;を参考にWio-Setupというツールを試してみてください&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;以上でWio Nodeのセットアップは完了です。同じデバイスとアクセスポイントを使う場合は、以後起動するだけで接続されるようになります！&lt;/p&gt;
-
-&lt;h3 id=&#34;wio-nodeにモジュールを接続する&#34;&gt;Wio Nodeにモジュールを接続する&lt;/h3&gt;
-
-&lt;p&gt;アプリから、接続するモジュールを登録します。
-&lt;img src=&#34;https://dotstud.io/img/blog/095/10_display_connect.png&#34; alt=&#34;&#34; /&gt;
-「PORT0」（左側）をタップして、下の「OUTPUT」から「4-Digit Display」を選択しましょう。&lt;strong&gt;似たようなモジュールがたくさんありますので、よく確認してください&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/11_temperature_connect.png&#34; alt=&#34;&#34; /&gt;
-続いて温度センサを登録します。「PORT1」（右側）をタップして、「INPUT」から「Temperature Sensor」を選択します。&lt;/p&gt;
-
-&lt;p&gt;アプリ画面を参考に、Wio Nodeにモジュールを接続します。
-&lt;img src=&#34;https://dotstud.io/img/blog/095/12_module_connect.png&#34; alt=&#34;&#34; /&gt;
-「PORT0」に7セグメントディスプレイ、「PORT1」に温度センサを接続しましょう。&lt;/p&gt;
-
-&lt;p&gt;接続できたら、アプリ画面下部の「Update Firmware」をタップしましょう。読み込みのあと、「View API」というAPIサンプルページが表示されるようになります。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Updateが失敗する場合はモジュールの接続が左右間違っていないか今一度確認してください&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;アプリからapiを試す&#34;&gt;アプリからAPIを試す&lt;/h3&gt;
-
-&lt;p&gt;「View API」のページでは、手軽にモジュールを操作するAPIを試すことができます。正しく接続できているか、試してみましょう。
-&lt;img src=&#34;https://dotstud.io/img/blog/095/13_display_api.png&#34; alt=&#34;&#34; /&gt;
-まずは7セグメントディスプレイの「display_point」というAPIを試してみます。説明部分には、「&lt;strong&gt;POSTメソッドで1を送ると&amp;rdquo;:&amp;ldquo;が表示される&lt;/strong&gt;」とありますね。「Test Request」から1を送ってみます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/14_display_demo.png&#34; alt=&#34;&#34; /&gt;
-7セグメントディスプレイに&amp;rdquo;:&amp;ldquo;が表示されました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/15_temp_api.png&#34; alt=&#34;&#34; /&gt;
-続いて温度センサのAPIを試します。温度の取得には値は必要ないので、そのままGETメソッドでRequestします。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/16_temp_demo.png&#34; alt=&#34;&#34; /&gt;
-現在の温度が返ってきました。（かなり暑いですね（笑））&lt;/p&gt;
-
-&lt;p&gt;挙動が確認できたら、2つのモジュールを連携させるプログラムを書いていきましょう！&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;memo-getメソッドとpostメソッド&#34;&gt;memo: GETメソッドとPOSTメソッド&lt;/h4&gt;
-
-&lt;p&gt;HTTPリクエストにはいくつかのメソッド（送信方法）があります。GET、POSTの他にもPUTメソッド、DELETEメソッドなどがあり、最近主流の「RESTful API」という考え方では&lt;strong&gt;操作する内容によってメソッドを使い分ける&lt;/strong&gt;ことになっています。&lt;/p&gt;
-
-&lt;p&gt;今回はメソッド名だけわかればプログラミング可能ですが、詳しく知りたい方は調べてみてください！&lt;/p&gt;
-
-&lt;h3 id=&#34;node-jsでプログラムを書く&#34;&gt;Node.jsでプログラムを書く&lt;/h3&gt;
-
-&lt;p&gt;センサの値を取得して、室温をディスプレイに表示するプログラムを書いていきましょう。プログラムはAPIを叩ければよいので、今回は&lt;strong&gt;Node.js&lt;/strong&gt;で作成します。&lt;/p&gt;
-
-&lt;p&gt;プログラムの仕組みを理解するために、以下の手順で説明します。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Node.jsのインストール&lt;/li&gt;
-&lt;li&gt;プロジェクトの作成&lt;/li&gt;
-&lt;li&gt;温度情報を取得する&lt;/li&gt;
-&lt;li&gt;温度情報を表示したい文字列に変換する&lt;/li&gt;
-&lt;li&gt;ディスプレイに温度を表示する&lt;/li&gt;
-&lt;li&gt;3秒ごとに更新する&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;memo-コマンドラインの使い方&#34;&gt;memo: コマンドラインの使い方&lt;/h4&gt;
-
-&lt;p&gt;Node.jsの実行やファイル操作はコマンドラインで行います。Macには「ターミナル」、Windowsには「コマンドプロンプト」というアプリケーションが最初から入っているので、立ち上げて使いましょう。&lt;/p&gt;
-
-&lt;p&gt;初めてコマンドを使う方は、「ターミナル コマンド」などで検索すると基本的な使い方がわかりますよ！&lt;/p&gt;
-
-&lt;p&gt;筆者はiTerm2というクライアントアプリにzshというシェルを入れています。（画面がちょっと違うくらいだと思ってください。）&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;1-node-jsのインストール&#34;&gt;1. Node.jsのインストール&lt;/h4&gt;
-
-&lt;p&gt;まずはNode.jsのインストールから始めます。また&lt;code&gt;async/await&lt;/code&gt;という機能を使っているので、&lt;strong&gt;v7.6.0以上が必要&lt;/strong&gt;です。最新版をインストール済みの方は次項の「プロジェクトの作成」から始めてください。&lt;/p&gt;
-
-&lt;p&gt;Node.jsのインストールには、簡単にバージョン管理ができる「&lt;strong&gt;nvm&lt;/strong&gt;」や「&lt;strong&gt;nodebrew&lt;/strong&gt;」を使うのが便利です。nodebrewを使ったインストール方法は下記を参照してください。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://dotstud.io/blog/setup-new-mac-app/#node-js%E7%92%B0%E5%A2%83%E6%95%B4%E5%82%99&#34;&gt;僕がMacを買い換えてすぐにいれるツール&amp;amp;すぐにする初期設定&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;インストールが完了したら、Node.jsが正しく動くか確認してみましょう。
-&lt;img src=&#34;https://dotstud.io/img/blog/095/17_node_v.png&#34; alt=&#34;&#34; /&gt;
-コマンドラインで&lt;code&gt;node -v&lt;/code&gt;を叩くとバージョンが出るようになったでしょうか？（v7.6.0以上ですよ！）&lt;/p&gt;
-
-&lt;p&gt;Node.jsの環境構築はとても簡単なので、ウェブ開発が初めての方にもオススメです！&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;memo-コーディング無しで動かしてみる&#34;&gt;memo: コーディング無しで動かしてみる&lt;/h4&gt;
-
-&lt;p&gt;サクッと試したい方は、githubの&lt;a href=&#34;https://github.com/dotstudio/wionode_handson&#34;&gt;完成プログラム&lt;/a&gt;をご覧ください。READMEの手順を進めるとコーディングなしで動かせます。&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;2-プロジェクトの作成&#34;&gt;2. プロジェクトの作成&lt;/h4&gt;
-
-&lt;p&gt;今回のWio Nodeのプログラムを置くプロジェクトを作成しましょう。&lt;/p&gt;
-
-&lt;p&gt;適当なディレクトリに移動します。（私は&lt;code&gt;/Users/ユーザ名/workspace&lt;/code&gt;という作業ディレクトリを用意しています。参考まで。）
-&lt;img src=&#34;https://dotstud.io/img/blog/095/18_mkdir.png&#34; alt=&#34;&#34; /&gt;
-&lt;code&gt;mkdir ディレクトリ名&lt;/code&gt;で新しいディレクトリを作成できます。&lt;code&gt;wio_temperature&lt;/code&gt;というディレクトリを作ってみました。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/095/19_cd.png&#34; alt=&#34;&#34; /&gt;
-&lt;code&gt;cd ディレクトリ名&lt;/code&gt;で作成したディレクトリの下に移動します。&lt;/p&gt;
-
-&lt;p&gt;Node.jsでは「npm」でモジュールを管理できます。&lt;code&gt;npm init -y&lt;/code&gt;を実行しましょう。&lt;code&gt;-y&lt;/code&gt;オプションで名前等をデフォルト値で作成してくれます。
-&lt;img src=&#34;https://dotstud.io/img/blog/095/20_npm_init.png&#34; alt=&#34;&#34; /&gt;
-プロジェクト名やライブラリなどを管理する「&lt;strong&gt;package.json&lt;/strong&gt;」が作成されました。&lt;/p&gt;
-
-&lt;p&gt;今回使用する「&lt;strong&gt;axios&lt;/strong&gt;」ライブラリをインストールします。&lt;code&gt;npm install axios --save&lt;/code&gt;を実行しましょう。&lt;code&gt;--save&lt;/code&gt;オプションをつけることでpackage.jsonに記載されます。
-&lt;img src=&#34;https://dotstud.io/img/blog/095/21_npm_install.png&#34; alt=&#34;&#34; /&gt;
-axiosがインストールされ、package.jsonに追加されました。&lt;/p&gt;
-
-&lt;p&gt;続いてプログラムを記述するファイルを作成します。&lt;code&gt;touch ファイル名&lt;/code&gt;でファイルが作成されます。（Windowsの場合はコマンドがないのでフォルダから作成してください。）
-&lt;img src=&#34;https://dotstud.io/img/blog/095/22_touch.png&#34; alt=&#34;&#34; /&gt;
-app.jsというファイルを作成しました。（&lt;code&gt;ls&lt;/code&gt;コマンドでカレントディレクトリのファイルが見れます。Windowsは&lt;code&gt;dir&lt;/code&gt;。）&lt;/p&gt;
-
-&lt;p&gt;以上でプロジェクトの作成は完了です。ファイルにプログラムを書いていきましょう！&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;memo-ファイルの編集とエディタについて&#34;&gt;memo: ファイルの編集とエディタについて&lt;/h4&gt;
-
-&lt;p&gt;コマンドラインからでもファイルの編集はできますが、&lt;strong&gt;インデントやコードの補完が効かず作業しづらい&lt;/strong&gt;ので、テキストエディタを使うのがオススメです。&lt;/p&gt;
-
-&lt;p&gt;下記記事ではVisual Studio Codeのインストール方法を紹介しています。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://dotstud.io/blog/setup-new-mac-app/#visual-studio-code&#34;&gt;僕がMacを買い換えてすぐにいれるツール&amp;amp;すぐにする初期設定&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;3-温度情報を取得する&#34;&gt;3. 温度情報を取得する&lt;/h4&gt;
-
-&lt;p&gt;まずは温度を取得するプログラムを書いていきます。&lt;code&gt;BASE_URL&lt;/code&gt;はドメインが違う場合があるので、アプリから確認して自身のものに置き換えてください。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
-
-const axios = require(&#39;axios&#39;);
-const TOKEN = process.argv[2] || &#39;&#39;;
-const BASE_PATH = `https://us.wio.seeed.io/v1/node`; // 自身のものをアプリで確認
-
-/**
- * 温度取得
- */
- const getTemp = () =&amp;gt; {
-     const ENDPOINT = `/GroveTempA0/temp`;
-     const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${TOKEN}`;
-     axios.request({method: &#39;get&#39;, baseURL: BASE_URL})
-     .then((resp) =&amp;gt; console.log(resp));
- }
-
-getTemp();
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;axiosに温度取得APIのURLとオプションを渡し、返ってきた値を出力しています。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;const ACCESS_TOKEN = process.argv[2] || &#39;&#39;;&lt;/code&gt;の部分は、コマンドライン引数（実行時に渡す値）を取得しています。tokenなどの人に知られたくない値は、ファイルに直接書かないのがベターです。&lt;/p&gt;
-
-&lt;p&gt;それでは正しく動くか試してみましょう。&lt;code&gt;node app.js &amp;lt;自分のtoken&amp;gt;&lt;/code&gt;というコマンドで実行します。&lt;/p&gt;
-
-&lt;p&gt;ご自身のtokenは&lt;strong&gt;アプリのView API画面から確認してください&lt;/strong&gt;。&lt;code&gt;?access_token=&lt;/code&gt;の後の文字列がtokenです。
-&lt;img src=&#34;https://dotstud.io/img/blog/095/23_temp_test.png&#34; alt=&#34;&#34; /&gt;
-温度センサの情報が返ってきたでしょうか？&lt;/p&gt;
-
-&lt;p&gt;1番下に温度情報がありますね。この情報を使ってディスプレイに表示する文字列を作っていきます。&lt;/p&gt;
-
-&lt;p&gt;エラーが出てしまった人は、「Node.js &amp;lt;エラーメッセージ&amp;gt;」で検索すると答えが見つかりやすいです。&lt;/p&gt;
-
-&lt;p&gt;&lt;br&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;4-温度情報を表示したい文字列に変換する&#34;&gt;4. 温度情報を表示したい文字列に変換する&lt;/h4&gt;
-
-&lt;p&gt;取得した温度情報を、ディスプレイに表示する文字列に作り変えるfunctionを作りましょう。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;/**
- * 取得した温度情報を表示する文字列に変換
- *
- * @param {number} temp
- * @return {string}
- */
-const temp2digit = (temp) =&amp;gt; {
-  let temp_str = `${temp}`;
-  temp_str = temp_str.replace(&#39;.&#39;, &#39;&#39;);
-  if (temp_str.length &amp;gt;= 4) {
-    temp_str = temp_str.substr(0, tempstr.length-1);
-  }
-  return `${temp_str}C`;
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;temp2digit()の引数には、先ほど受け取った情報の温度部分だけを渡します。&lt;/p&gt;
-
-&lt;p&gt;数値を文字列に変換し、不要な&amp;rsquo;.&amp;lsquo;を取り除き、3桁にして、温度計らしく&amp;rsquo;C&amp;rsquo;を付けて返します。&lt;/p&gt;
-
-&lt;p&gt;これを先ほど作ったgetTemp()と一緒に実行するようにしてみましょう。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
-
-const axios = require(&#39;axios&#39;);
-const TOKEN = process.argv[2] || &#39;&#39;;
-const BASE_PATH = `https://us.wio.seeed.io/v1/node`; // 自身のものをアプリで確認
-
-/**
- * 温度取得
- */
- const getTemp = () =&amp;gt; {
-     const ENDPOINT = `/GroveTempA0/temp`;
-     const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${TOKEN}`;
-     return axios.request({method: &#39;get&#39;, baseURL: BASE_URL}); // ここでは実行しない
- }
-
-/**
- * 温度情報を文字列変換+Cを追加
- * @param {number} temp
- * @return {string}
- */
-const temp2digit = (temp) =&amp;gt;{
-    let temp_str = `${temp}`;
-    temp_str = temp_str.replace(&#39;.&#39;,&#39;&#39;);
-    if(temp_str.length &amp;gt;= 4){
-        temp_str = temp_str.substr(0,temp_str.length-1);
-    }
-    return `${temp_str}C`;
-}
-
-async function main(){ // async/awaitを使う
-   const res = await getTemp();
-   const temp = res.data.temperature;
-   const text = temp2digit(temp);
-   console.log(text);
-}
-
-main();
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;ここではasync/awaitを使っています。awaitで指定したタスクの実行を待ってレスポンスを受け取り、asyncを付けたメソッドを一つのタスクとして処理するような機能です。Node.jsではv7.6.0から導入されました。&lt;/p&gt;
-
-&lt;p&gt;実行を待たせるため、getTemp()では、APIの結果ではなくメソッドを返すだけに変更します。&lt;/p&gt;
-
-&lt;p&gt;getTemp()で受け取ったobjectの子要素には&lt;code&gt;.&lt;/code&gt;でアクセスします。先ほどのレスポンスのdataの中のtemperatureが欲しいので&lt;code&gt;res.data.temperature&lt;/code&gt;となります。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;node app.js &amp;lt;自分のtoken&amp;gt;&lt;/code&gt;で実行してみます。
-&lt;img src=&#34;https://dotstud.io/img/blog/095/24_temp2digit.png&#34; alt=&#34;&#34; /&gt;
-温度計の文字列ができました！&lt;/p&gt;
-
-&lt;p&gt;次はいよいよこの文字列をディスプレイに表示させます。&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;5-ディスプレイに温度を表示する&#34;&gt;5. ディスプレイに温度を表示する&lt;/h4&gt;
-
-&lt;p&gt;取得した温度の値を使って、ディスプレイに表示するAPIを叩きます。温度の区切りを表すため、最初に試した&amp;rsquo;:&amp;lsquo;を表示するAPIも使ってみましょう。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;/**
- * ディスプレイに値を表示
- *
- * @param {number} start_pos
- * @param {strng} chars
- */
-const fourDigit = (start_pos, chars) =&amp;gt; {
-  const ENDPOINT = `/Grove4DigitUART0/display_digits/${start_pos}/${chars}`;
-  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
-  return axios.request({method: &#39;POST&#39;, baseURL: BASE_URL})
-}
-
-/**
- * : を表示/非表示
- * @param {number} display 0|1
- */
-const fourDigitPoint = (display) =&amp;gt; {
-  const ENDPOINT = `/Grove4DigitUART0/display_point/${display}`;
-  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
-  return axios.request({method: &#39;POST&#39;, baseURL: BASE_URL});
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;fourDigit()のstart_posにはディスプレイ表示の開始位置、charsには表示する文字を渡します。（詳しくはAPIの説明を読んでみてください）&lt;/p&gt;
-
-&lt;p&gt;fourDigitPoint()には表示するかどうかの0/1を渡すようになっています。&lt;/p&gt;
-
-&lt;p&gt;これまで作ったfunctionと繋げてみます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
-
-const axios = require(&#39;axios&#39;);
-const BASE_PATH = &#39;https://us.wio.seeed.io/v1/node&#39;; // 自身のものをアプリで確認
-const ACCESS_TOKEN = process.argv[2] || &#39;&#39;;
-
-/**
- * 温度を取得
- */
-const getTemp = () =&amp;gt; {
-  const ENDPOINT = `/GroveTempA0/temp`;
-  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
-  return axios.request({method: &#39;GET&#39;, baseURL: BASE_URL});
-}
-
-/**
- * 取得した温度情報を表示する文字列に変換
- *
- * @param {number} temp
- * @return {string}
- */
-const temp2digit = (temp) =&amp;gt; {
-  let temp_str = `${temp}`;
-  temp_str = temp_str.replace(&#39;.&#39;, &#39;&#39;);
-  if (temp_str.length &amp;gt;= 4) {
-    temp_str = temp_str.substr(0, tempstr.length-1);
-  }
-  return `${temp_str}C`;
-}
-
-/**
- * ディスプレイに値を表示
- *
- * @param {number} start_pos
- * @param {strng} chars
- */
-const fourDigit = (start_pos, chars) =&amp;gt; {
-  const ENDPOINT = `/Grove4DigitUART0/display_digits/${start_pos}/${chars}`;
-  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
-  return axios.request({method: &#39;POST&#39;, baseURL: BASE_URL});
-}
-
-/**
- * : を表示/非表示
- * @param {number} display 0|1
- */
-const fourDigitPoint = (display) =&amp;gt; {
-  const ENDPOINT = `/Grove4DigitUART0/display_point/${display}`;
-  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
-  return axios.request({method: &#39;POST&#39;, baseURL: BASE_URL});
-}
-
-async function main() =&amp;gt; {
-  let res = getTemp();
-  const temp = res.data.temperature;
-  const text = temp2digit(temp);
-  console.log(text);
-  res = await fourDigit(0, text);
-  res = await fourDigitPoint(1);
-}
-
-main();
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;こちらも試してみましょう。&lt;code&gt;node app.js &amp;lt;自分のtoken&amp;gt;&lt;/code&gt;で実行です。
-&lt;img src=&#34;https://dotstud.io/img/blog/095/25_comp_demo.png&#34; alt=&#34;&#34; /&gt;
-温度がディスプレイに表示されました！&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;6-3秒ごとに更新する&#34;&gt;6. 3秒ごとに更新する&lt;/h4&gt;
-
-&lt;p&gt;今のままではコマンドを実行した時しか処理が走りません。3秒ごとに実行するようプログラムを変えてみます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;const INTERVAL = 3000;
-
-/**
- * 繰り返し実行する
- */
-setInterval(() =&amp;gt; {
-  main()
-  .catch((e) =&amp;gt; {
-    if (e.response) console.log(e.response);
-  })
-}, INTERVAL);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;update()の実行部分をsetInterval()関数で繰り返すようにします。setInterval()の第二引数にミリ秒で数値を渡すと、その間隔ごとに実行されます。あとから変更しやすいよう、定数で宣言しておきましょう。&lt;/p&gt;
-
-&lt;p&gt;catch()はエラーが発生するとエラーレスポンスを受け取ります。&lt;/p&gt;
-
-&lt;p&gt;完成させたコードはこちら。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
-
-const axios = require(&#39;axios&#39;);
-const BASE_PATH = &#39;https://us.wio.seeed.io/v1/node&#39;; // 自身のものをアプリで確認
-const ACCESS_TOKEN = process.argv[2] || &#39;&#39;;
-const INTERVAL = 3000;
-
-/**
- * 温度を取得
- *
- * @return {object}
- */
-const getTemp = () =&amp;gt; {
-  const ENDPOINT = `/GroveTempA0/temp`;
-  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
-  return axios.request({method: &#39;GET&#39;, baseURL: BASE_URL});
-}
-
-/**
- * 取得した温度情報を表示する文字列に変換
- *
- * @param {number} temp
- * @return {string}
- */
-const tempToDigit = (temp) =&amp;gt; {
-  let temp_str = `${temp}`;
-  temp_str = temp_str.replace(&#39;.&#39;, &#39;&#39;);
-  if (temp_str.length &amp;gt;= 4) {
-    temp_str = temp_str.substr(0, temp_str.length-1);
-  }
-  return `${temp_str}C`;
-}
-
-/**
- * ディスプレイに値を表示
- *
- * @param {number} start_pos
- * @param {strng} chars
- * @return {object}
- */
-const fourDigit = (start_pos, chars) =&amp;gt; {
-  const ENDPOINT = `/Grove4DigitUART0/display_digits/${start_pos}/${chars}`;
-  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
-  return axios.request({method: &#39;POST&#39;, baseURL: BASE_URL})
-}
-
-/**
- * : を表示/非表示
- * @param {number} display 0|1
- * @return {object}
- */
-const fourDigitPoint = (display) =&amp;gt; {
-  const ENDPOINT = `/Grove4DigitUART0/display_point/${display}`;
-  const BASE_URL = `${BASE_PATH}${ENDPOINT}?access_token=${ACCESS_TOKEN}`;
-  return axios.request({method: &#39;POST&#39;, baseURL: BASE_URL});
-}
-
-/**
- * メインの処理（同期）
- */
-async function main() {
-  let res = await getTemp();
-  const temp = res.data.temperature;
-  const text = tempToDigit(temp);
-  console.log(text);
-  res = await fourDigit(0, text);
-  res = await fourDigitPoint(1);
-}
-
-/**
- * 繰り返し実行する
- */
-setInterval(() =&amp;gt; {
-  main()
-  .catch((e) =&amp;gt; {
-    if (e.response) console.log(e.response);
-  })
-}, INTERVAL);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;試してみる&#34;&gt;試してみる&lt;/h3&gt;
-
-&lt;p&gt;完成コードを試してみます。ドキドキ。&lt;code&gt;node app.js &amp;lt;自分のtoken&amp;gt;&lt;/code&gt;で実行です。
-&lt;img src=&#34;https://dotstud.io/img/blog/095/25_comp_demo.png&#34; alt=&#34;&#34; /&gt;
-現在の室温が表示されます。&lt;/p&gt;
-
-&lt;p&gt;3秒ごとに更新されるので、変化を試すため温度センサを手で温めてみます。
-&lt;img src=&#34;https://dotstud.io/img/blog/095/26_warmer.png&#34; alt=&#34;&#34; /&gt;
-少し温度が上がりました。処理を止めたい場合は&lt;code&gt;controll+c&lt;/code&gt;で終了します。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;これでプログラムは完成です！やったー！！&lt;/strong&gt; お疲れ様でした！&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&#34;補足-完成の一歩先へ&#34;&gt;補足: 完成の一歩先へ！&lt;/h4&gt;
-
-&lt;p&gt;「簡単であっという間だった」というあなた！&lt;strong&gt;このガジェットを使ってできることはまだまだあります！&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;例1: Azure Web AppsなどのPaaSを使って常時稼働できるようにする&lt;/li&gt;
-&lt;li&gt;例2: 温度情報をAmbientなどのウェブサービスを使ってグラフ化してみる&lt;/li&gt;
-&lt;li&gt;例3: 一定の温度をトリガーにTwitterやSlackへ通知を送ってみる&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;上記はほんの一例です。Wio Node対応モジュールもたくさんありますので、ここまでの知見を使って試してみましょう！&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;いかがだったでしょうか？簡単と言いつつ、コマンドでの作業やウェブ開発の経験がない人には詰まる部分が多かったかもしれません。でも、これで&lt;strong&gt;InternetとThingsの連携ができるようになりました！&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;IoTの世界には、まだまだたくさんの楽しいデバイスやアイディアが待っています。&lt;strong&gt;作っても使っても楽しい電子工作をやっていきましょう！&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;最後まで読んでくださりありがとうございました！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>話題のWebBluetoothでGenuino101をブラウザからリモートコントロールしてみよう</title>
-      <link>https://dotstud.io/blog/web-bluetooth-remote-blink/</link>
-      <pubDate>Thu, 09 Mar 2017 18:00:00 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/web-bluetooth-remote-blink/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、dotstudioの&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
-
-&lt;p&gt;最近WebBluetoothがChromeでデフォルトで利用できるようになったと知って、今回試してみたのでまとめてみました。&lt;/p&gt;
-
-&lt;h2 id=&#34;webbluetoothとは&#34;&gt;WebBluetoothとは&lt;/h2&gt;
-
-&lt;p&gt;WebブラウザのAPIでBluetoothが使えるようになるAPIです。正確にはBLE（Bluetooth Low Energy）というBluetooth4.0の機能を使えます。&lt;/p&gt;
-
-&lt;p&gt;通常、BLEはデバイス間を接続して通信させる規格ですが、その性質上、サーバーサイドかつ低レイヤーなプログラミング言語や周辺知識を持っていないと取り扱うことが難しかったです。&lt;/p&gt;
-
-&lt;p&gt;これまでにもNode.jsでは、&lt;a href=&#34;https://github.com/sandeepmistry/noble&#34;&gt;noble&lt;/a&gt;というBLEを扱えるモジュールや類似モジュールが存在しましたが、Node.jsはサーバーサイド言語なためホストマシンが必要でした。&lt;/p&gt;
-
-&lt;p&gt;WebBluetoothはブラウザのJavaScriptからBLEを扱うことができるブラウザAPIです。&lt;/p&gt;
-
-&lt;h3 id=&#34;何が嬉しいの&#34;&gt;何が嬉しいの？&lt;/h3&gt;
-
-&lt;p&gt;WebBluetoothを使えることは、何が利点になるのでしょうか。&lt;/p&gt;
-
-&lt;p&gt;大枠で捉えると、Webとデバイスの連携がしやすくなったことが挙げられます。&lt;/p&gt;
-
-&lt;p&gt;Webブラウザ上のJavaScriptで開発が出来るため、 &lt;strong&gt;通常のWebサイトの機能にデバイスとの連携する機能を追加することができる&lt;/strong&gt;ようになります。&lt;/p&gt;
-
-&lt;p&gt;現行のIoTデバイスはデータを取得するために付属の専用スマホアプリなどをインストールしてBLE通信をする必要があります。これは（スマートフォンの場合）スマホアプリの開発言語のJavaやSwiftからのみBLEを扱うことが出来たからです。&lt;/p&gt;
-
-&lt;p&gt;WebBluetoothが広まれば、デバイスと連携するスマートフォンアプリケーション（以下、スマホアプリ）を開発しなくてもいい時代が来るかもしれません。Webとデバイスの連携が格段にしやすくなるので、Webの表現は圧倒的に広がるなと感じています。&lt;/p&gt;
-
-&lt;p&gt;僕自身は2015年の終わりにWebBluetoothを知り、当時アツくなって発表などをしていました。&lt;/p&gt;
-
-&lt;script async class=&#34;speakerdeck-embed&#34; data-id=&#34;0e2b2871b9d04aab980c1274a383f1cd&#34; data-ratio=&#34;1.33333333333333&#34; src=&#34;//speakerdeck.com/assets/embed.js&#34;&gt;&lt;/script&gt;
-
-&lt;p&gt;WebBluetoothの詳細については&lt;a href=&#34;https://www.w3.org/community/web-bluetooth/&#34;&gt;W3Cのページ&lt;/a&gt;などをご確認ください。&lt;/p&gt;
-
-&lt;h2 id=&#34;webbluetoothとgenuino101でリモートlチカをしてみよう&#34;&gt;WebBluetoothとGenuino101でリモートLチカをしてみよう&lt;/h2&gt;
-
-&lt;p&gt;それでは実際にWebBluetoothを使ってみまししょう。&lt;/p&gt;
-
-&lt;p&gt;今回はGenuino101というBluetooth搭載のArduino互換ボードを利用してみます。&lt;/p&gt;
-
-&lt;h3 id=&#34;作るもの&#34;&gt;作るもの&lt;/h3&gt;
-
-&lt;p&gt;Androidのブラウザ（Google Chrome）からGenuino101に繋げたLEDをリモートで制御してみます。&lt;/p&gt;
-
-&lt;p&gt;&lt;blockquote class=&#34;instagram-media&#34; data-instgrm-captioned data-instgrm-version=&#34;7&#34; style=&#34; background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);&#34;&gt;&lt;div style=&#34;padding:8px;&#34;&gt; &lt;div style=&#34; background:#F8F8F8; line-height:0; margin-top:40px; padding:28.194444444444443% 0; text-align:center; width:100%;&#34;&gt; &lt;div style=&#34; background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;&#34;&gt;&lt;/div&gt;&lt;/div&gt; &lt;p style=&#34; margin:8px 0 0 0; padding:0 4px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/BRMD2E3AxN_/&#34; style=&#34; color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;&#34; target=&#34;_blank&#34;&gt;WebBluetoothがAndroid通常版Chromeでも使えるようになったのでリモートLチカ。 ブラウザでBluetooth使える感動噛みしめてる&lt;/a&gt;&lt;/p&gt; &lt;p style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;&#34;&gt;n0bisukeさん(@n0bisuke)がシェアした投稿 - &lt;time style=&#34; font-family:Arial,sans-serif; font-size:14px; line-height:17px;&#34; datetime=&#34;2017-03-03T19:54:26+00:00&#34;&gt;2017  3月 3 11:54午前 PST&lt;/time&gt;&lt;/p&gt;&lt;/div&gt;&lt;/blockquote&gt;
-&lt;script async defer src=&#34;//platform.instagram.com/en_US/embeds.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
-
-&lt;ul id=&#34;env&#34;&gt;
-    &lt;li&gt;Macbook Pro Early 2016&lt;/li&gt;
-    &lt;li&gt;macOS Sierra v10.12.2&lt;/li&gt;
-    &lt;li&gt;Arduino IDE v1.8.1&lt;/li&gt;
-    &lt;li&gt;Android 6.0.1&lt;/li&gt;
-    &lt;li&gt;Chrome 56&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;genuino101側&#34;&gt;Genuino101側&lt;/h3&gt;
-
-&lt;p&gt;Genuino101側のソースコードはサンプルにあるものをそのまま使います。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;/*
- * Copyright (c) 2016 Intel Corporation.  All rights reserved.
- * See the bottom of this file for the license terms.
- */
-
-#include &amp;lt;CurieBLE.h&amp;gt;
-
-BLEPeripheral blePeripheral;  // BLE Peripheral Device (the board you&#39;re programming)
-BLEService ledService(&amp;quot;19B10000-E8F2-537E-4F6C-D104768A1214&amp;quot;); // BLE LED Service
-
-// BLE LED Switch Characteristic - custom 128-bit UUID, read and writable by central
-BLEUnsignedCharCharacteristic switchCharacteristic(&amp;quot;19B10001-E8F2-537E-4F6C-D104768A1214&amp;quot;, BLERead | BLEWrite);
-
-const int ledPin = 13; // pin to use for the LED
-
-void setup() {
-  Serial.begin(9600);
-
-  // set LED pin to output mode
-  pinMode(ledPin, OUTPUT);
-
-  // set advertised local name and service UUID:
-  blePeripheral.setLocalName(&amp;quot;LED&amp;quot;);
-  blePeripheral.setAdvertisedServiceUuid(ledService.uuid());
-
-  // add service and characteristic:
-  blePeripheral.addAttribute(ledService);
-  blePeripheral.addAttribute(switchCharacteristic);
-
-  // set the initial value for the characeristic:
-  switchCharacteristic.setValue(0);
-
-  // begin advertising BLE service:
-  blePeripheral.begin();
-
-  Serial.println(&amp;quot;BLE LED Peripheral&amp;quot;);
-}
-
-void loop() {
-  // listen for BLE peripherals to connect:
-  BLECentral central = blePeripheral.central();
-
-  // if a central is connected to peripheral:
-  if (central) {
-    Serial.print(&amp;quot;Connected to central: &amp;quot;);
-    // print the central&#39;s MAC address:
-    Serial.println(central.address());
-
-    // while the central is still connected to peripheral:
-    while (central.connected()) {
-      // if the remote device wrote to the characteristic,
-      // use the value to control the LED:
-      if (switchCharacteristic.written()) {
-        if (switchCharacteristic.value()) {   // any value other than 0
-          Serial.println(&amp;quot;LED on&amp;quot;);
-          digitalWrite(ledPin, HIGH);         // will turn the LED on
-        } else {                              // a 0 value
-          Serial.println(F(&amp;quot;LED off&amp;quot;));
-          digitalWrite(ledPin, LOW);          // will turn the LED off
-        }
-      }
-    }
-
-    // when the central disconnects, print it out:
-    Serial.print(F(&amp;quot;Disconnected from central: &amp;quot;));
-    Serial.println(central.address());
-  }
-}
-
-/*
-   Copyright (c) 2016 Intel Corporation.  All rights reserved.
-
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public
-   License as published by the Free Software Foundation; either
-   version 2.1 of the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Lesser General Public License for more details.
-
-   You should have received a copy of the GNU Lesser General Public
-   License along with this library; if not, write to the Free Software
-   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-*/
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;このコードをArduino IDEでGenuino101に書き込めばBLEのペリフェラル（デバイス側）として起動してくれます。&lt;/p&gt;
-
-&lt;p&gt;ソースコードの22行目の&lt;code&gt;blePeripheral.setLocalName(&amp;quot;LED&amp;quot;);&lt;/code&gt;でLEDと指定していますが、この文字列がBLEデバイスの表示名となります。&lt;/p&gt;
-
-&lt;p&gt;Macからは&lt;a href=&#34;https://itunes.apple.com/jp/app/lightblue/id639944780?mt=12&#34;&gt;LightBlue&lt;/a&gt;などのアプリで確認することができます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/afc225feba5b36b39547e701171b8070.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;ブラウザ側&#34;&gt;ブラウザ側&lt;/h3&gt;
-
-&lt;p&gt;ソースコードは&lt;a href=&#34;https://github.com/n0bisuke/webbluetooth_sample/tree/gh-pages/remote_blink&#34;&gt;こちら&lt;/a&gt;にあげています。&lt;/p&gt;
-
-&lt;p&gt;BLEはペリフェラル（デバイス）のUUID → ServiceのUUID → CharacteristicのUUIDという感じで接続していきます。&lt;/p&gt;
-
-&lt;p&gt;Characteristicがデバイスの個別の機能だとしたら、Serviceは機能群というイメージで捉えると分かりやすいかもしれません。&lt;/p&gt;
-
-&lt;p&gt;詳しくは&lt;a href=&#34;http://codezine.jp/article/detail/9287&#34;&gt;CodeZineさんの記事など&lt;/a&gt;をご参照ください。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
-
-const UUID = &#39;19b10000-e8f2-537e-4f6c-d104768a1214&#39;;
-const SERVICE_UUID = &#39;19b10001-e8f2-537e-4f6c-d104768a1214&#39;;
-let g_characteristic = {};
-const $light = document.querySelector(&#39;#light&#39;);
-const $bulb = document.querySelector(&#39;.bulb&#39;);
-
-//接続後にon/off切り替え
-const ledToggel = () =&amp;gt; {
-  g_characteristic.readValue()
-  .then((val) =&amp;gt; {
-    let led_state = val.getUint8(0); //値読み取り
-    led_state = led_state ? 0 : 1;
-    g_characteristic.writeValue(new Uint8Array([led_state]));
-    toggelClass(led_state);
-  })
-}
-
-const main = () =&amp;gt; {
-  return navigator.bluetooth.requestDevice({acceptAllDevices:true, optionalServices:[UUID]})
-  .then(device =&amp;gt; {
-    console.log(device);
-    console.log(&#39;&amp;gt; Name:             &#39; + device.name);
-    console.log(&#39;&amp;gt; Id:               &#39; + device.id);
-    console.log(&#39;&amp;gt; Connected:        &#39; + device.gatt.connected);
-    console.log(&#39;--デバイスに接続中です...--&#39;);
-    return device.gatt.connect();
-  })
-  .then(server =&amp;gt; {
-      console.log(&#39;Getting ___ Service...&#39;);
-      return server.getPrimaryService(UUID);
-  })
-  .then(service =&amp;gt; {
-      console.log(&#39;Getting ____ Characteristic...&#39;);
-      return service.getCharacteristic(SERVICE_UUID);
-    })
-  .then(characteristic =&amp;gt; {
-      g_characteristic = characteristic;
-      $light.removeEventListener(&#39;click&#39;,main);
-      $light.addEventListener(&#39;click&#39;,ledToggel);
-      return characteristic;
-    })
-  .catch(error =&amp;gt; {
-    console.log(&#39;Argh! &#39; + error);
-  });
-}
-
-/**
- * domのclass付け替え(表示切り替え)
- */
-function toggelClass(led_state){
-  if(led_state){
-    addClass(&#39;#ff0000&#39;);
-  }else{
-    removeClass();
-  }
-}
-
-function removeClass(){
-    $bulb.style.background = &#39;#bbb&#39;;
-    $bulb.style.boxShadow = &#39;&#39;;
-    $bulb.classList.remove(&amp;quot;light_up&amp;quot;);
-}
-
-function addClass(color){
-    $bulb.style.background = color;
-    $bulb.style.boxShadow = `0 -10px 100px ${color}`;
-    $bulb.classList.add(&amp;quot;light_up&amp;quot;);
-}
-
-$light.addEventListener(&#39;click&#39;, main);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;21行目の&lt;code&gt;navigator.bluetooth.requestDevice()&lt;/code&gt;で周辺のデバイスを検索し、28行目の&lt;code&gt;device.gatt.connect()&lt;/code&gt;でデバイスに接続します。&lt;/p&gt;
-
-&lt;p&gt;32行目の&lt;code&gt;server.getPrimaryService()&lt;/code&gt;でServiceに接続し、36行目の&lt;code&gt;service.getCharacteristic()&lt;/code&gt;でCharacteristic（機能）にアクセスできます。&lt;/p&gt;
-
-&lt;p&gt;そこで接続が確立するとボタンを押すたびに10行目の&lt;code&gt;ledToggel()&lt;/code&gt;が呼ばれ、&lt;code&gt;.readValue()&lt;/code&gt;で値読みとり、&lt;code&gt;.writeValue()&lt;/code&gt;で値の書き込みができるようになります。&lt;/p&gt;
-
-&lt;p&gt;これらのコードは&lt;a href=&#34;https://n0bisuke.github.io/webbluetooth_sample/remote_blink/index.html&#34;&gt;GitHub Pagesで動作するようにホスティングしてある&lt;/a&gt;ので実際の動作確認もできます。&lt;/p&gt;
-
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-
-&lt;p&gt;いかがでしたか。&lt;/p&gt;
-
-&lt;p&gt;WebBluetoothを使うことで&lt;strong&gt;ブラウザからBluetoothを使ってデバイスを制御する&lt;/strong&gt;ことができました。&lt;/p&gt;
-
-&lt;p&gt;今後、この技術が普及することでWebブラウザとデバイスの距離がさらになくなっていくかもしれません。&lt;/p&gt;
-
-&lt;p&gt;是非みなさんも試してみて、この可能性を実感してみて下さい。&lt;/p&gt;
-
-&lt;p&gt;それでは。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>ハードウェア知識ゼロでも大丈夫。「Gravity」で始める電子工作入門</title>
-      <link>https://dotstud.io/blog/dfrobot-gravity-hands-on/</link>
-      <pubDate>Tue, 21 Feb 2017 10:00:50 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/dfrobot-gravity-hands-on/</guid>
-      
-      <description>
-
-&lt;p&gt;こんにちは、ちゃちゃまるです。&lt;/p&gt;
-
-&lt;p&gt;先日CodeZineさんで紹介した &lt;a href=&#34;http://codezine.jp/article/detail/9982&#34;&gt;ハードウェアの知識ゼロでもボードにセンサーをつなげられる「Gravity」シリーズ&lt;/a&gt; について、さらに詳しく使い方を説明していきたいと思います！&lt;/p&gt;
-
-&lt;p&gt;※この記事は主に初心者の方・他のマイコンボードを使ってはみたが挫折してしまった方向けです。&lt;/p&gt;
-
-&lt;h2 id=&#34;gravity-のおさらい&#34;&gt;「Gravity」のおさらい&lt;/h2&gt;
-
-&lt;p&gt;「&lt;strong&gt;Gravity&lt;/strong&gt;」とは中国・上海のハードウェア系企業であるDFRobotが作ったコネクタの規格、またそのコネクタを搭載したセンサー等を指します。&lt;/p&gt;
-
-&lt;p&gt;簡単に言うと、開発ボードとコントローラー（ボタンなど）やセンサー（音センサーなど）を統一された規格でつなぐことができるシリーズです。つなぐ部分やコネクタ自体が色分けされているので、&lt;strong&gt;直感的に配線ができ、簡単に自分の思う通りのものができます&lt;/strong&gt;。&lt;/p&gt;
-
-&lt;p&gt;本記事では&lt;a href=&#34;https://www.dfrobot.com/product-1454.html&#34;&gt;Gravity: Stater Kit for Arduino&lt;/a&gt;を題材にしています。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/photo.png&#34; alt=&#34;Gravityシリーズ&#34; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;開発環境を整える&#34;&gt;開発環境を整える&lt;/h2&gt;
-
-&lt;p&gt;Gravityのコントローラーやセンサーを使うには、PCにIDE（書き込み用アプリケーション）を用意し、PCとマイコンボードをつなげる必要があります。まずは開発環境から整えていきましょう！&lt;/p&gt;
-
-&lt;ul id=&#34;env&#34;&gt;
-    &lt;li&gt;Macbook Air Early 2014&lt;/li&gt;
-    &lt;li&gt;OS X El Capitan v10.11.6&lt;/li&gt;
-    &lt;li&gt;Arduino IDE v1.6.12&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;arduino-ideをインストール&#34;&gt;Arduino IDEをインストール&lt;/h3&gt;
-
-&lt;p&gt;&lt;a href=&#34;https://www.arduino.cc/en/Main/Software&#34;&gt;Arduino - Software&lt;/a&gt;から「Arduino IDE」をダウンロードしてインストールします。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/01.png&#34; alt=&#34;Download the Arduino IDE&#34; /&gt;
-「Download the Arduino IDE」からお使いのOSを選択してください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/02.png&#34; alt=&#34;JUST DOWNLOAD&#34; /&gt;
-Arduino IDEはドネーションウェア（ユーザーが任意の利用料を開発者に寄付するライセンス形態のソフトウェア）なので、寄付金額を選択する画面に移動します。今回はグレーで書かれている「JUST DOWNLOAD」をクリックしてダウンロードを開始します。&lt;/p&gt;
-
-&lt;h3 id=&#34;arduino-ideを起動&#34;&gt;Arduino IDEを起動&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/03.png&#34; alt=&#34;IDE初回起動画面&#34; /&gt;
-Arduino IDEをダウンロード後初回起動すると、上のような画面がでてきます。このテキストエリアにコードを書いていきます。&lt;/p&gt;
-
-&lt;p&gt;OSの言語を日本語以外に設定している場合、メニューバーの「Arduino」内の「Preferences」からArduino IDEの言語設定を変更できます。反映するにはOKを押した後アプリの再起動が必要です。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/04.png&#34; alt=&#34;IDE画面説明&#34; /&gt;
-基本的なArduino IDEの流れとしては、まずエディア部分にコードを書き、検証ボタンでコードを検証、その後「マイコンボードに書き込む」ボタンでマイコンにプログラムを送ります。エラーやメッセージなどはコンパイラ画面に出力されます。&lt;/p&gt;
-
-&lt;h3 id=&#34;pcとマイコンボードをつなげる&#34;&gt;PCとマイコンボードをつなげる&lt;/h3&gt;
-
-&lt;p&gt;PCとマイコンボードをつないで、PCからArduino IDE経由でプログラムを書き込めるようにします。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/05.png&#34; alt=&#34;ボードを選択&#34; /&gt;
-USBでDFRduinoとPCをつないだら、「ツール」から「Arduino/Genuino UNO」を選択するだけです。DFRduinoはArduinoと全く同じ（下で詳しく解説します）なので、これでボードと接続できました。&lt;/p&gt;
-
-&lt;h2 id=&#34;マイコンボードにプログラムを書き込む&#34;&gt;マイコンボードにプログラムを書き込む&lt;/h2&gt;
-
-&lt;p&gt;Arduino IDEではプログラムを書いたファイルのことを「スケッチ」と呼ぶのですが、実はアプリにいくつものスケッチサンプルが内蔵されています。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/06.png&#34; alt=&#34;&#34; /&gt;
-上の「スケッチ例」を見るとかなりの量があります。今回は「01.Basics」内の「Blink」というスケッチを呼び出してみましょう。「Blink」をクリックすると自動的にプログラムが書かれたウィンドウが出てきます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/07.png&#34; alt=&#34;Blinkサンプル&#34; /&gt;
-たくさんの文字が書かれていますが、実際のプログラムは色がついている部分です（&lt;code&gt;/* */&lt;/code&gt; で囲まれている部分や&lt;code&gt;//&lt;/code&gt;と行の先頭にあるのはコメントなので、実際の挙動には関係しません）。ここに書く言語はC言語ベースの&lt;strong&gt;Arduino言語&lt;/strong&gt;です。C言語自体の記述方法（&lt;code&gt;if&lt;/code&gt;文や&lt;code&gt;for&lt;/code&gt;文など）はここでは解説しませんので、他のサイトを参考にしてください。&lt;/p&gt;
-
-&lt;p&gt;さて、ここで本来なら「検証」ボタンを使ってプログラムに間違いがないかチェックするのですが、今回はサンプルスケッチを使っているのでエラーは出ません。一応画面左上の「検証」（チェックマークのボタン）を押してみましょう。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/08.png&#34; alt=&#34;コンパイル完了&#34; /&gt;
-「コンパイルが完了しました。」と同時に色々出てきました。このような画面が出たらとりあえず「プログラムの検証は成功した」と認識していれば大丈夫です。ちなみに「コンパイル」とは、人間が理解できるプログラミング言語からコンピュータが理解できる機械語へとプログラムを変換することを指します。&lt;/p&gt;
-
-&lt;p&gt;コンパイルが完了したので、いよいよマイコンボードに書き込みましょう。「検証」の隣にある「マイコンボードに書き込む」（矢印マークのボタン）をクリックします。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/09.png&#34; alt=&#34;ボード上のLED&#34; /&gt;
-DFRduino UNOは上の赤で囲った部分がLEDとなっていて、さきほどのスケッチを書き込むとここが周期的に光ったり消えたりします。&lt;/p&gt;
-
-&lt;p&gt;マイコンボードに書き込んだプログラムは、Arduino IDEで新しいスケッチを書き込まない限り動き続けます。LEDのチカチカを止めたいときは「ファイル」から「新規ファイル」を開いて、空のスケッチを書き込みます。&lt;/p&gt;
-
-&lt;h3 id=&#34;シールドを取り付ける&#34;&gt;シールドを取り付ける&lt;/h3&gt;
-
-&lt;p&gt;「シールド」とは、マイコンボードの機能を拡張させるアドオンボードのことを指します。今回使うマイコンボードの「DFRduino UNO R3」はArduino互換（Arduinoと全く同じ動きをするもので、作っている会社・団体が違うだけ）なので、まだこのままではGravityシリーズのセンサーやコントローラーを使うことはできません。そこで、このボードに重ねる形でGravity用シールド「I/O Sensor Expansion Shield v7.1」を乗せます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/10.png&#34; alt=&#34;シールドを重ねた写真&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;このI/O Sensor Expansion Shield v7.1を詳しく見てみると、ピン（金属の出っ張っている部分）が「黒・赤・緑」や「黒・赤・青」に色分けされています。&lt;strong&gt;これがまさに、知識ゼロでもGravityで遊ぶことができる理由&lt;/strong&gt;です（後ほど配線をする際にこの色分けの恩恵を受けます）。この後のチュートリアルでは常にシールドをマイコンボードに乗せた状態で使います。&lt;/p&gt;
-
-&lt;h2 id=&#34;プログラムの実行&#34;&gt;プログラムの実行&lt;/h2&gt;
-
-&lt;p&gt;いよいよプログラムを実際に書いて実行していきましょう！&lt;/p&gt;
-
-&lt;h3 id=&#34;デジタル信号を取得する&#34;&gt;デジタル信号を取得する&lt;/h3&gt;
-
-&lt;p&gt;何かのデータを取得する際、センサーから送られてくる信号には「デジタル」と「アナログ」の二種類があります。デジタル信号は値が「0」もしくは「1」で、アナログ信号の場合は値が「0」から「1023」の1024段階で、センサーから送られています。信号を取得するモジュールのことを&lt;strong&gt;インプットデバイス&lt;/strong&gt;と呼びます。&lt;/p&gt;
-
-&lt;p&gt;使うパーツ：&lt;br /&gt;
-- DFRduino UNO + I/O Sensor Expansion Shield v7.1&lt;br /&gt;
-- Digital Push Button Module（以下ボタン）&lt;/p&gt;
-
-&lt;h4 id=&#34;実行編&#34;&gt;実行編&lt;/h4&gt;
-
-&lt;p&gt;では手始めに、&lt;strong&gt;ボタンが押されているかどうかを確認する&lt;/strong&gt;プログラムを動かしてみましょう！&lt;/p&gt;
-
-&lt;p&gt;まずは配線をします。ボタンに付属のコネクタを指し、もう片方をシールドのD側2番ピン（以下図参照）に、コネクタとピンの色が合うように挿してください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/11.png&#34; alt=&#34;回路図-ボタン&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;ボタンに付属している「黒・赤・緑」のコネクタは、デジタル信号を送るときに使います。今回はボタンが押されているか押されていないか、の2パターンの値が送られてきます。センサーやコントローラーの基盤の上に「D」や「A」と書かれていますが、これらもそれぞれデジタルかアナログかを示しています。&lt;/p&gt;
-
-&lt;p&gt;次に、D側2番ピンにつながっているボタンが押されているかどうかを検知するプログラムをArduino IDEのエディタ部分に書きます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;void setup() {
-	Serial.begin(9600);
-	pinMode(2, INPUT);
-}
-
-void loop() {
-	int buttonState = digitalRead(2);
-	Serial.println(buttonState);
-	delay(1);  
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;「検証」と「ボードに書き込み」ボタンの列の右端の「シリアルモニタ」ボタン（虫眼鏡のアイコン）をクリックします。ここに&lt;code&gt;Serial.println()&lt;/code&gt;の括弧内の値が表示されるようになります。&lt;/p&gt;
-
-&lt;!--![シリアルモニタスクショ](/img/blog/087/12.png)--&gt;
-
-&lt;h4 id=&#34;プログラム解説編&#34;&gt;プログラム解説編&lt;/h4&gt;
-
-&lt;p&gt;Arduino IDEで作成するプログラムは大きく&lt;code&gt;void setup()&lt;/code&gt;と&lt;code&gt;void loop()&lt;/code&gt;の2つに分けることができます。&lt;code&gt;setup()&lt;/code&gt;に続く中括弧（&lt;code&gt;{}&lt;/code&gt;）の中は一度だけ実行され、&lt;code&gt;loop()&lt;/code&gt;内のコードは繰り返し実行されます。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;Serial.begin(9600);&lt;/code&gt;はシリアル通信の際データの転送速度を9600で指定しています。これはシリアルモニタを使用するのに必要です。おまじない的なものと解釈してもらって大丈夫です（笑）&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;pinMode()&lt;/code&gt;はどのピンを使ってどのようにデータを使うかを示しています。括弧内の一つ目にはピン番号を、二つ目には&lt;code&gt;INPUT&lt;/code&gt;（データを取得する）もしくは&lt;code&gt;OUTPUT&lt;/code&gt;（データを送信する）を指定します。今回の場合、&lt;strong&gt;D側2番ピン&lt;/strong&gt;からデータ（ボタンが押されたかどうか）を&lt;strong&gt;取得&lt;/strong&gt;したいので、&lt;code&gt;pinMode(2, INPUT);&lt;/code&gt;となります。ちなみにD側2番ピンの場合&lt;code&gt;2&lt;/code&gt;、A側2番ピンの場合&lt;code&gt;A2&lt;/code&gt;と書きます。&lt;/p&gt;
-
-&lt;p&gt;以上が&lt;code&gt;setup()&lt;/code&gt;になります。次は&lt;code&gt;loop()&lt;/code&gt;内を見ていきます。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;digitalRead()&lt;/code&gt;を使うと、括弧内で指定したピンの値を読み取ることができます。今回は2番ピンを読み取りたいので&lt;code&gt;digitalRead(2)&lt;/code&gt;ですね。この値を&lt;code&gt;buttonState&lt;/code&gt;に入れておきます。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;Serial.println()&lt;/code&gt;は括弧内の値をシリアルモニタに映します。&lt;code&gt;Serial.println(buttonState);&lt;/code&gt;の場合、&lt;code&gt;buttonState&lt;/code&gt;、つまりボタンが押されているかどうかを&lt;code&gt;0&lt;/code&gt;または&lt;code&gt;1&lt;/code&gt;でシリアルモニタに表示します。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;delay()&lt;/code&gt;は括弧内の時間実行を遅らせます。時間の単位はミリ秒（1000分の1秒）です。&lt;code&gt;delay(1);&lt;/code&gt;を&lt;code&gt;loop()&lt;/code&gt;の最後に書くことによって、このプログラムを1ミリ秒ごとに実行するよう指定できます。&lt;/p&gt;
-
-&lt;h3 id=&#34;アナログ信号を取得する&#34;&gt;アナログ信号を取得する&lt;/h3&gt;
-
-&lt;p&gt;次はアナログ信号（0から1023までの値）を取得して、シリアルモニタで表示させてみましょう！こちらも先程と同様、センサーをインプットデバイスとして使います。&lt;/p&gt;
-
-&lt;p&gt;使うパーツ：&lt;br /&gt;
-- DFRduino UNO + I/O Sensor Expansion Shield v7.1&lt;br /&gt;
-- Analog Rotation Sensor（以下回転センサー）&lt;/p&gt;
-
-&lt;h4 id=&#34;実行編-1&#34;&gt;実行編&lt;/h4&gt;
-
-&lt;p&gt;付属しているアナログ用（黒・赤・青）のコネクタで回転センサーとシールドのA側0番ピンをつなげます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/13.png&#34; alt=&#34;回路図-回転&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;次に以下のプログラムをエディタにコピーします。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;void setup() {
-  Serial.begin(9600);
-}
-void loop() {
-  int sensorValue = analogRead(A0);
-  Serial.println(sensorValue);
-  delay(1);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;作成したスケッチを検証後ボードに送信します。シリアルモニタを開いて回転センサーのツマミを回すと、0から1023の値が回転角度に合わせて表示されると思います。&lt;/p&gt;
-
-&lt;!--![シリアルモニタスクショ](/img/blog/087/14.png)--&gt;
-
-&lt;h4 id=&#34;プログラム解説編-1&#34;&gt;プログラム解説編&lt;/h4&gt;
-
-&lt;p&gt;前回は&lt;code&gt;digitalRead()&lt;/code&gt;を使いましたが、今回はアナログの値を取得したいので&lt;code&gt;analogRead()&lt;/code&gt;を使います。括弧内にはピン番号を入れます。&lt;/p&gt;
-
-&lt;p&gt;記事がとんでもなく長くなってしまうので、既出のコードは解説しません。分からない方はお手数ですが上に戻って確認してください m(._.)m&lt;/p&gt;
-
-&lt;h3 id=&#34;ledをチカチカさせる&#34;&gt;LEDをチカチカさせる&lt;/h3&gt;
-
-&lt;p&gt;LEDを周期的にチカチカ光らせてみます。今回はピンにつないだものから値を取得するのではなく、値をピンにつないだものに送信します。このようなモジュールを&lt;strong&gt;アウトプットデバイス&lt;/strong&gt;と呼びます。&lt;/p&gt;
-
-&lt;p&gt;使うパーツ：&lt;br /&gt;
-- DFRduino UNO + I/O Sensor Expansion Shield v7.1&lt;br /&gt;
-- Digital Piranha LED-R（以下赤LED）&lt;/p&gt;
-
-&lt;h4 id=&#34;実行編-2&#34;&gt;実行編&lt;/h4&gt;
-
-&lt;p&gt;赤LEDをシールドのD側13番につなげてください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/15.png&#34; alt=&#34;回路図-LED&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;プログラムは以下の通り。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;int ledPin = 13;
-void setup() {
-  pinMode(ledPin, OUTPUT);
-}
-void loop() {
-  digitalWrite(ledPin, HIGH);
-  delay(1000);
-  digitalWrite(ledPin, LOW);
-  delay(1000);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;検証→ボードに書き込みで、LEDが1秒周期でチカチカし始めます。&lt;/p&gt;
-
-&lt;h4 id=&#34;プログラム解説編-2&#34;&gt;プログラム解説編&lt;/h4&gt;
-
-&lt;p&gt;&lt;code&gt;digitalWrite()&lt;/code&gt;は、括弧内の一つ目に指定したピンに&lt;code&gt;HIGH&lt;/code&gt;もしくは&lt;code&gt;LOW&lt;/code&gt;の値を送ることができます。&lt;code&gt;HIGH&lt;/code&gt;は「1」、&lt;code&gt;LOW&lt;/code&gt;は「0」となります。&lt;/p&gt;
-
-&lt;p&gt;また、プログラム内で13番ピンの情報を何回か使うので、最初に&lt;code&gt;int ledPin = 13;&lt;/code&gt;と変数に入れておいてあげると、後々ピンの番号を変更したいときに便利です。&lt;/p&gt;
-
-&lt;h3 id=&#34;人感ライトを作る&#34;&gt;人感ライトを作る&lt;/h3&gt;
-
-&lt;p&gt;ここの辺りから電子工作っぽい感じになりますよ！次はインプットデバイスとアウトプットデバイスを同時に使い、&lt;strong&gt;一つのモジュールから値を取得して、その値を別のモジュールに送る&lt;/strong&gt;ような仕組みを作ってみます！&lt;/p&gt;
-
-&lt;p&gt;使うパーツ：&lt;br /&gt;
-- DFRduino UNO + I/O Sensor Expansion Shield v7.1&lt;br /&gt;
-- PIR Sensor（以下人感センサー）→インプットデバイス&lt;br /&gt;
-- Digital Piranha LED-R（以下赤LED）→アウトプットデバイス&lt;/p&gt;
-
-&lt;h4 id=&#34;実行編-3&#34;&gt;実行編&lt;/h4&gt;
-
-&lt;p&gt;人感センサーで動きを確認したら、赤LEDを点灯します。どちらもデジタルで良さそう（動いている・動いていない、点灯している・点灯していない、のそれぞれ2つの状態しかない）なので、人感センサーをD側2番ピンに、赤LEDをD側13番ピンにつなげます。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/16.png&#34; alt=&#34;回路図-人感LED&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;プログラムは以下の通り。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;int sensorPin = 2;
-int ledPin =  13;
-int sensorState = 0;
-void setup() {
-  pinMode(ledPin, OUTPUT);
-  pinMode(sensorPin, INPUT);
-}
-
-void loop() {
-  sensorState = digitalRead(sensorPin);
-  if (sensorState == HIGH) {
-    digitalWrite(ledPin, HIGH);
-} else {
-    digitalWrite(ledPin, LOW);
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;検証→ボードに書き込んでみましょう。人感センサーに向かって動いたり手を振ったりするとLEDが付くはずです。&lt;/p&gt;
-
-&lt;h4 id=&#34;プログラム解説編-3&#34;&gt;プログラム解説編&lt;/h4&gt;
-
-&lt;p&gt;今回は変数を3つ作りました。ピン番号などは変数で管理すると、可読性も上がりピンの変更などもしやすいのでオススメです。最後に宣言した&lt;code&gt;sensorState&lt;/code&gt;は、人感センサーで読み取った値が入ります。&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;digitalRead()&lt;/code&gt;で読み取った値は&lt;code&gt;HIGH&lt;/code&gt;または&lt;code&gt;LOW&lt;/code&gt;でかえってきます。なので&lt;code&gt;sensorState == HIGH&lt;/code&gt;や&lt;code&gt;sensorState == LOW&lt;/code&gt;としてあげると、&lt;code&gt;HIGH&lt;/code&gt;のとき、&lt;code&gt;LOW&lt;/code&gt;のとき、と条件によって別々の挙動を指定することができます。&lt;/p&gt;
-
-&lt;p&gt;まとめると、&lt;code&gt;digitalRead()&lt;/code&gt;で人感センサーからの値によって、赤LEDに&lt;code&gt;digitalWrite()&lt;/code&gt;でオンオフを指定しています。&lt;/p&gt;
-
-&lt;h3 id=&#34;音でledをつける&#34;&gt;音でLEDをつける&lt;/h3&gt;
-
-&lt;p&gt;だんだん慣れてきましたか？今度は音センサーを使って、一定の音量を超えたらLEDが光る仕組みを作りましょう！&lt;/p&gt;
-
-&lt;p&gt;使うパーツ：&lt;br /&gt;
-- DFRduino UNO + I/O Sensor Expansion Shield v7.1&lt;br /&gt;
-- Analog Sound Sensor（以下音センサー）→インプットデバイス&lt;br /&gt;
-- Digital Piranha LED-R（以下赤LED）→アウトプットデバイス&lt;/p&gt;
-
-&lt;h4 id=&#34;実行編-4&#34;&gt;実行編&lt;/h4&gt;
-
-&lt;p&gt;音センサーの基盤上に「A」と書かれているので、シールドのA側0番ピンに指します。赤LEDはいままで通りD側なので、D側13番に指します。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/17.png&#34; alt=&#34;回路図-音LED&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;いままではD側何番、A側何番、と指定してきましたが、実はD側・A側さえ合っていれば基本何番でも大丈夫です。いくつものモジュールを近いピン番号にくっつけすぎるとごちゃごちゃするので、適当に間隔を空けて配線すると楽ですよ。&lt;/p&gt;
-
-&lt;p&gt;まずは以下のコードをエディタに入力してみてください。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;int soundPin = A0;
-int ledPin = 13;
-
-void setup() {
-	pinMode(ledPin, OUTPUT);
-	Serial.begin(9600);
-}
-void loop(){
-	int soundState = analogRead(soundPin);
-	Serial.println(soundState);
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;このプログラムを検証して実行すると、音センサーが返したアナログの値がシリアルモニタに出てきます。今回は音が「ある一定以上の音量になった場合」LEDを光らせたいので、その「ある一定」を見つける必要があります。周りの環境によって返ってくる音量の値が変わるので、自分がこれ以上音が鳴ったら光らせたい！という値を見つけてください。&lt;/p&gt;
-
-&lt;p&gt;「ある一定」の数値が決まったらそれを反映させつつ以下のプログラムにします。先程まで使っていたコードは先頭に&lt;code&gt;//&lt;/code&gt;をつけることで無視することができます。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;int soundPin = A0;
-int ledPin = 13;
-
-void setup() {
-	pinMode(ledPin, OUTPUT);
-	// Serial.begin(9600);
-}
-void loop(){
-	int soundState = analogRead(soundPin);
-	// Serial.println(soundState);
-	if (soundState &amp;gt; 「ある一定」の数値) {
-		digitalWrite(ledPin, HIGH);
-		delay(10000);
-	} else {
-		digitalWrite(ledPin, LOW);
-	}
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;もう一度検証→ボードに書き込むと、周りの音が一定ラインを超えるとLEDが光るようになります！&lt;/p&gt;
-
-&lt;h3 id=&#34;ledをゆっくりと点灯させる&#34;&gt;LEDをゆっくりと点灯させる&lt;/h3&gt;
-
-&lt;p&gt;序盤にLEDを点灯させるのをすでにやりましたが、今度は&lt;strong&gt;ゆっくりと&lt;/strong&gt;点灯させます。勘の良い方は「LEDにアナログの値を書き込めないのではないか」と気づくと思います。ゆっくり点灯ということはおそらく&lt;code&gt;analogWrite()&lt;/code&gt;を使うことは予想できますが、LEDはいままで&lt;code&gt;digitalWrite();&lt;/code&gt;で値を送っていたのでできないのではないか、と。&lt;/p&gt;
-
-&lt;p&gt;そこで&lt;strong&gt;PWN&lt;/strong&gt;（Pulse Width Modulation・パルス幅変調）を使います。ググってみると何やら難しい話が出てきますが、簡単に言うと&lt;strong&gt;デジタル信号で擬似的にアナログデータを送る&lt;/strong&gt;ことができます。&lt;/p&gt;
-
-&lt;p&gt;PWMに対応しているピンは、今回のシールド上ではD側のアスタリスク（&lt;code&gt;*&lt;/code&gt;）が付いている3番、5番、6番、9番、10番、11番です。&lt;/p&gt;
-
-&lt;p&gt;使うパーツ：&lt;br /&gt;
-- DFRduino UNO + I/O Sensor Expansion Shield v7.1&lt;br /&gt;
-- Digital Piranha LED-R（以下赤LED）→アウトプットデバイス&lt;/p&gt;
-
-&lt;h4 id=&#34;実行編-5&#34;&gt;実行編&lt;/h4&gt;
-
-&lt;p&gt;赤LEDをシールドのD側10番につなげます。PWM対応なのを確認してください。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/087/18.png&#34; alt=&#34;回路図-LEDPWM&#34; /&gt;&lt;/p&gt;
-
-&lt;p&gt;プログラムは以下の通り。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;int ledPin = 10;
-
-void setup() {
-	pinMode(ledPin,OUTPUT);
-}
-void loop(){
-	for (int value = 0 ; value &amp;lt; 255; value++) {
-		analogWrite(ledPin, value);
-		delay(5); }
-  for (int value = 255; value &amp;gt;0; value--){
- 		analogWrite(ledPin, value);
-	delay(5); }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;検証→ボードに書き込みで、ゆっくりLEDがついて、ゆっくりLEDが消えるようになります。プログラム自体はシンプルなので、解説は割愛します。&lt;/p&gt;
-
-&lt;h2 id=&#34;お疲れ様でした&#34;&gt;お疲れ様でした！&lt;/h2&gt;
-
-&lt;p&gt;ここまでかなり長い道のりでしたね！この記事を書くのにも結構時間かかりました（笑）&lt;/p&gt;
-
-&lt;p&gt;この記事を通して、インプットデバイスから値を取得して、アウトプットデバイスに値を渡す、という処理をできるようになりました。これさえできるようになれば、後は好きなモジュールを使って作りたいものを作るだけです！&lt;/p&gt;
-
-&lt;p&gt;この記事で学んだことだけでできるプロジェクトの一例として、&lt;strong&gt;流れている音楽の大きさを赤・青・緑のLEDで表す&lt;/strong&gt;なんてのはどうでしょうか。音センサーから値を取ってきて、いくつ以上の値で緑LEDを光らせて、いくつ以上で青を、いくつ以上で赤を…… と指定すればできそうですね！PWMを使うことで、さらに細かく音の大きさが表わせそうです。&lt;/p&gt;
-
-&lt;p&gt;2017年2月23日開催の &lt;a href=&#34;https://dotstudio.connpass.com/event/49147/&#34;&gt;今度こそ挫折しない！知識ゼロからの電子工作ハンズオン&lt;/a&gt;イベントに来てくださっている方で、チュートリアルを早く終わってしまった方もぜひやってみてください！&lt;/p&gt;
-
-&lt;p&gt;それではまた！お疲れ様でした！&lt;/p&gt;
 </description>
     </item>
     

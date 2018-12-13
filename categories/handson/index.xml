@@ -1,0 +1,2397 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Handson on dotstudio（ドットスタジオ）</title>
+    <link>https://dotstud.io/categories/handson/</link>
+    <description>Recent content in Handson on dotstudio（ドットスタジオ）</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>© 2018 dotstudio inc.</copyright>
+    <lastBuildDate>Thu, 13 Dec 2018 05:17:31 +0900</lastBuildDate>
+    <atom:link href="/categories/handson/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>【ハンズオン資料】GR-LYCHEEとOpenCVで画像認識やってみよう</title>
+      <link>https://dotstud.io/blog/gr-lychee-opencv-handson/</link>
+      <pubDate>Thu, 13 Dec 2018 05:17:31 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/gr-lychee-opencv-handson/</guid>
+      
+      <description>
+
+&lt;p&gt;この記事は12/07の&lt;a href=&#34;https://ai-iot-bol-fukui.connpass.com/event/109573/&#34;&gt;AI×IoT ハンズオン with IoTLT&amp;amp;ふくもく会 in 福井&lt;/a&gt;向け資料です。記事を読んで試せる内容になっているので、終了後や参加されていない方もぜひ試してみてください！&lt;/p&gt;
+
+&lt;section class=&#34;caution&#34;&gt;
+&lt;p&gt;■ハンズオンの進行について&lt;/p&gt;
+ハンズオンはこのページに沿って進めます。進められる方は、どんどん進めていきましょう！リンクは別タブや別ウィンドウで開くのがオススメです。
+&lt;/section&gt;
+
+&lt;p&gt;この記事はがじぇっとるねさすさんの「&lt;a href=&#34;http://gadget.renesas.com/ja/product/e-ai/mnist_tutorial.html&#34;&gt;e-AIトランスレータ チュートリアル GRボードで実行してみよう！&lt;/a&gt;」を参考に作成しています。&lt;/p&gt;
+
+&lt;h2 id=&#34;今回やってみること&#34;&gt;今回やってみること&lt;/h2&gt;
+
+&lt;p&gt;PythonとTensorflow、数字認識のデータライブラリMNISTを使い、数字認識する学習モデルを作成します。&lt;strong&gt;Pythonなしでもコピペで試せる内容&lt;/strong&gt;になっています。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/233/result.gif&#34; alt=&#34;demo&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h3&gt;
+
+&lt;h4 id=&#34;マイコンボード-gr-lychee&#34;&gt;■マイコンボード「GR-LYCHEE」&lt;/h4&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/714caa81da618bf491f460087f27d3cb.jpg&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;がじぇっとるねさす（通称がじぇるね）が提供している高性能マイコンボードです。電子工作でよく使われるArduino UNOとピンが互換になっていて、Wi-Fi・BLE通信モジュール「ESP32」を搭載しています。&lt;/p&gt;
+
+&lt;p&gt;わりと手軽にIoTプロトタイピングを試せる高性能マイコンボード、な立ち位置です。（ちゃんとく所感）&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;購入: &lt;a href=&#34;http://akizukidenshi.com/catalog/g/gM-12850/&#34;&gt;秋月電子&lt;/a&gt;（¥10,580）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;section class=&#34;caution&#34;&gt;
+&lt;p&gt;■実行するGRボードについて&lt;/p&gt;
+他のGRシリーズのボードでも今回のプログラムを試すことができますが、GR-KURUMI、GR-COTTON、GR-ADZUKIはROM容量不足で実行できないようです。
+&lt;/section&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;usbケーブル-microb&#34;&gt;■USBケーブル（microB）&lt;/h4&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/usb.png&#34; alt=&#34;usb&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;PCとGR-LYCHEEの通信（プログラムの書き込み、カメラ映像の出力など）には、Android端末などに使われているmicroBタイプのUSBケーブルを使います。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;購入: &lt;a href=&#34;http://akizukidenshi.com/catalog/g/gC-09312/&#34;&gt;秋月電子&lt;/a&gt;（¥100）&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;section class=&#34;caution&#34;&gt;
+&lt;p&gt;■USBケーブルについて&lt;/p&gt;
+ご自身で用意する場合、&lt;b&gt;シリアル通信ができるタイプ&lt;/b&gt;のものか確認してください。安価なものだと一方向の給電専用タイプのものが多いです。
+&lt;/section&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;事前準備&#34;&gt;事前準備&lt;/h2&gt;
+
+&lt;h3 id=&#34;displayapp-をインストール&#34;&gt;「DisplayApp」をインストール&lt;/h3&gt;
+
+&lt;p&gt;GR-LYCHEEのカメラで映している映像を確認するために利用します。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://gadget.renesas.com/ja/product/lychee.html#displayapp&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/5cf7140ebfb5221592c1ca7f6aa7f839.png&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;がじぇるね公式ページの&lt;a href=&#34;http://gadget.renesas.com/ja/product/lychee.html#displayapp&#34;&gt;こちら&lt;/a&gt;からご自身のOSに合ったものをダウンロードし、ZIPファイルを展開します。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;macosの方&#34;&gt;■MacOSの方&lt;/h4&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/app.png&#34; alt=&#34;app&#34;&gt;
+
+&lt;/center&gt;
+
+ZIPファイルを展開し、Macの方は「アプリケーション」に移動させます。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;windowsの方&#34;&gt;■Windowsの方&lt;/h4&gt;
+
+&lt;p&gt;展開したファイル内の「〜.exe」をダブルクリックで実行します。インストーラが起動するので、手順通り進めます。&lt;/p&gt;
+
+&lt;h2 id=&#34;はじめてのプログラムを書き込んでみる&#34;&gt;はじめてのプログラムを書き込んでみる&lt;/h2&gt;
+
+&lt;p&gt;最初のプログラムとして、Lチカをやってみます。LEDチカチカの略で、入門向けのプログラムとして汎用的に紹介されています。&lt;/p&gt;
+
+&lt;p&gt;簡単なプログラムを書き込むことで、ボードが正常に動くか試す際に利用することも多いです。WebでいうHello, worldです。&lt;/p&gt;
+
+&lt;h3 id=&#34;webコンパイラの準備&#34;&gt;Webコンパイラの準備&lt;/h3&gt;
+
+&lt;p&gt;GRシリーズでは「Webコンパイラ」という、ブラウザ上で利用できるコンパイラが利用できます。面倒な環境構築が不要なので楽チンですね。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://gadget.renesas.com/ja/&#34;&gt;がじぇるねのページ&lt;/a&gt;から、「ログイン」または「ゲストログイン」をクリックし移動します。
+&lt;img src=&#34;https://i.gyazo.com/bcf47b506593c244633350381c30422f.png&#34; alt=&#34;compiler&#34; /&gt;&lt;/p&gt;
+
+&lt;section class=&#34;caution&#34;&gt;
+&lt;p&gt;■ログインボタンが見つからない！という方&lt;/p&gt;
+ブラウザを横に広げてみてください。ひょこっとボタンが出てきます。
+&lt;/section&gt;
+
+&lt;p&gt;プロジェクト作成画面になるので、「LYCHEE」でフィルターをかけてみます。
+&lt;img src=&#34;https://i.gyazo.com/9fbdd84ff53037965a358bc646d3923c.png&#34; alt=&#34;create project&#34; /&gt;
+「GR-LYCHEE_mbed…」と「GR-LYCHEE_Sketch…」という2タイプあるので、&lt;strong&gt;Sketchの方を選択&lt;/strong&gt;します（mbed OSのプログラムを利用したいときは前者を選びましょう）。&lt;/p&gt;
+
+&lt;h3 id=&#34;プログラム&#34;&gt;プログラム&lt;/h3&gt;
+
+&lt;p&gt;メニュー左側の「〜.cpp」という拡張子のファイルがメインのプログラムファイルになります。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/edit_cpp.png&#34; alt=&#34;edit_cpp&#34;&gt;
+
+&lt;/center&gt;
+
+「〜.cpp」をダブルクリックすると、中央に編集画面が表示されます。&lt;/p&gt;
+
+&lt;p&gt;表示されたサンプルコードを&lt;strong&gt;一旦全て消してから&lt;/strong&gt;、下記のプログラムを貼り付けます。&lt;/p&gt;
+
+&lt;div class=&#34;accbox&#34;&gt;
+    &lt;label for=&#34;label1&#34;&gt;クリックしてコードを表示&lt;/labe&gt;
+    &lt;input type=&#34;checkbox&#34; id=&#34;label1&#34; class=&#34;cssacc&#34; /&gt;
+    &lt;div class=&#34;accshow&#34;&gt;
+      &lt;pre&gt;
+      &lt;code class=&#34;hljs hljs-cpp&#34;&gt;
+      /* GR-LYCHEE Sketch Template V1.04 */
+      #include &amp;lt;Arduino.h&amp;gt;
+
+      #define INTERVAL 50
+
+      void setup()
+      {
+        Serial.begin(9600);
+        pinMode(LED_RED,    OUTPUT);
+        pinMode(LED_ORANGE, OUTPUT);
+        pinMode(LED_YELLOW, OUTPUT);
+        pinMode(LED_GREEN,  OUTPUT);
+        pinMode(USER_BUTTON0, INPUT);
+      }
+
+      void loop()
+      {
+          while(digitalRead(USER_BUTTON0) == 0){
+              digitalWrite(LED_GREEN, 1);
+              delay(INTERVAL);
+              digitalWrite(LED_GREEN, 0);
+              delay(INTERVAL);
+            Serial.println(&#34;I&#39;m LYCHEE!&#34;);
+          }
+          digitalWrite(LED_RED, 1);
+          delay(INTERVAL);
+          digitalWrite(LED_RED, 0);
+          digitalWrite(LED_ORANGE, 1);
+          delay(INTERVAL);
+          digitalWrite(LED_ORANGE, 0);
+          digitalWrite(LED_YELLOW, 1);
+          delay(INTERVAL);
+          digitalWrite(LED_YELLOW, 0);
+      }
+      &lt;/code&gt;
+      &lt;/pre&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/build.png&#34; alt=&#34;build&#34;&gt;
+
+&lt;/center&gt;
+
+貼り付けたら、右側の「ビルド実行」ボタンをクリックし、記述したプログラムをコンパイルします。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/compiled.png&#34; alt=&#34;compiled&#34;&gt;
+
+&lt;/center&gt;
+
+コンパイルが完了すると、「コンパイルが完了しました」というメッセージと実行ログが表示されるので、「&lt;strong&gt;閉じる&lt;/strong&gt;」ボタンで完了します。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/download_bin.png&#34; alt=&#34;download_bin&#34;&gt;
+
+&lt;/center&gt;
+
+「〜.bin」というファイルが作成されているので、右クリックしダウンロードします。&lt;/p&gt;
+
+&lt;section class=&#34;caution&#34;&gt;
+&lt;p&gt;■コンパイルについて&lt;/p&gt;
+プログラムを、&lt;b&gt;機械が実行可能な機械語に変換すること&lt;/b&gt;です。プログラムは人間に理解しやすい形、機械語は機械が理解しやすい形に最適化されています。
+&lt;/section&gt;
+
+&lt;h3 id=&#34;pcとgr-lycheeを接続&#34;&gt;PCとGR-LYCHEEを接続&lt;/h3&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/connect.png&#34; alt=&#34;connect&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;GR-LYCHEEとPCをUSBケーブルで接続しましょう。GR-LYCHEEのUSBソケットは&lt;strong&gt;真ん中の方&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/recog.png&#34; alt=&#34;recog&#34;&gt;
+
+&lt;/center&gt;
+
+PCに「MBED」という名前で認識されます。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;デバイスが認識されない-windows&#34;&gt;■デバイスが認識されない（Windows）&lt;/h4&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/usb_driver.png&#34; alt=&#34;usb_driver&#34;&gt;
+
+&lt;/center&gt;
+
+&lt;a href=&#34;https://os.mbed.com/docs/latest/tutorials/windows-serial-driver.html&#34;&gt;こちら&lt;/a&gt;のページから「Arm Mbed Windows serial port driver」をクリックし、インストールしてください。&lt;/p&gt;
+
+&lt;section class=&#34;caution&#34;&gt;
+&lt;p&gt;■USBドライバについて&lt;/p&gt;
+PCに、USBで接続した機器を認識・通信させるためのツールです。
+&lt;/section&gt;
+
+&lt;h3 id=&#34;プログラムを書き込み&#34;&gt;プログラムを書き込み&lt;/h3&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/drop.png&#34; alt=&#34;drop&#34;&gt;
+
+&lt;/center&gt;
+
+ダウンロードした「〜.bin」ファイルを「MBED」にドラッグ＆ドロップでコピーします。コピー後、ファイルはMBEDフォルダ内には表示されません。&lt;/p&gt;
+
+&lt;h3 id=&#34;再起動して実行&#34;&gt;再起動して実行&lt;/h3&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/reset.png&#34; alt=&#34;reset&#34;&gt;
+
+&lt;/center&gt;
+
+リセットボタンを押し、GR-LYCHEEを再起動させます。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/233/blink.gif&#34; alt=&#34;blink&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Lチカプログラムが実行されました！&lt;/p&gt;
+
+&lt;h2 id=&#34;gr-lycheeカメラの映像をdisplayappに表示&#34;&gt;GR-LYCHEEカメラの映像をdisplayAppに表示&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/233/display.gif&#34; alt=&#34;display&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;GR-LYCHEEにカメラを取り付けて、PC上で映る映像を確認してみましょう。&lt;/p&gt;
+
+&lt;h3 id=&#34;カメラの取り付け&#34;&gt;カメラの取り付け&lt;/h3&gt;
+
+&lt;h4 id=&#34;カメラ本体&#34;&gt;■カメラ本体&lt;/h4&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/camera.png&#34; alt=&#34;camera&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;ol&gt;
+&lt;li&gt;カメラ本体のソケット部を持ち上げます&lt;/li&gt;
+&lt;li&gt;フレキシブルケーブルの無地面を上に、ソケットに差し込みます&lt;/li&gt;
+&lt;li&gt;ソケット部を元に戻します&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;gr-lychee&#34;&gt;■GR-LYCHEE&lt;/h4&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/camera2.png&#34; alt=&#34;camera2&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;ol&gt;
+&lt;li&gt;GR-LYCHEE背面のソケット部を上にずらします&lt;/li&gt;
+&lt;li&gt;フレキシブルケーブルの文字面を上に、ソケットに差し込みます&lt;/li&gt;
+&lt;li&gt;ソケット部を下に戻します&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;プログラム-1&#34;&gt;プログラム&lt;/h3&gt;
+
+&lt;p&gt;Webコンパイラでプログラムを下記に置き換え、先ほど同様書き込みます。&lt;/p&gt;
+
+&lt;div class=&#34;accbox&#34;&gt;
+    &lt;label for=&#34;label2&#34;&gt;クリックしてコードを表示&lt;/labe&gt;
+    &lt;input type=&#34;checkbox&#34; id=&#34;label2&#34; class=&#34;cssacc&#34; /&gt;
+    &lt;div class=&#34;accshow&#34;&gt;
+      &lt;pre&gt;
+      &lt;code class=&#34;hljs hljs-cpp&#34;&gt;
+      // Sample for GR-PEACH, GR-LYCHEE
+      // Required hardware: Camera, USB
+      // Public Domain
+
+      #include &amp;lt;Arduino.h&amp;gt;
+      #include &amp;lt;Camera.h&amp;gt;
+      #include &#34;DisplayApp.h&#34;
+
+      #define LOOP_WAITTIME 17 // 17ms for 60 fps of camera spec.
+      Camera camera(640, 480);
+      static DisplayApp display_app;
+
+      void setup() {
+        Serial.begin(9600);
+        Serial.println(&#34;start&#34;);
+
+        camera.begin();
+      }
+
+      void loop() {
+        static unsigned long last_time = millis();
+        while ((millis() - last_time) &lt; LOOP_WAITTIME);
+        last_time = millis();
+
+        display_app.SendJpeg(camera.getJpegAdr(), (int)camera.createJpeg());
+        delay(1);
+      }
+      &lt;/code&gt;
+      &lt;/pre&gt;
+      &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&#34;usbを付け替えて実行&#34;&gt;USBを付け替えて実行&lt;/h3&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/connect2.png&#34; alt=&#34;connect2&#34;&gt;
+
+&lt;/center&gt;
+
+書き込んだら、GR-LYCHEE側のUSBソケットを外側に付け替えます。（通信用）&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/port.png&#34; alt=&#34;port&#34;&gt;
+
+&lt;/center&gt;
+
+DisplayAppでシリアルポートを選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/233/display.gif&#34; alt=&#34;display&#34; /&gt;
+カメラの画像がDisplayAppに表示されます。高画質！&lt;/p&gt;
+
+&lt;h2 id=&#34;数字認識の学習モデルを作ろう&#34;&gt;数字認識の学習モデルを作ろう&lt;/h2&gt;
+
+&lt;p&gt;MNISTとTensorflowを使って学習モデルを作り、カメラに映った数字を判定するプログラムを作成してみます。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Python+Tensorflowをインストールせず試してみたい&lt;/strong&gt;、という方は、「&lt;a href=&#34;#完成コード&#34;&gt;完成コード&lt;/a&gt;」の章から進めてください。&lt;/p&gt;
+
+&lt;h3 id=&#34;作業用ディレクトリを作成&#34;&gt;作業用ディレクトリを作成&lt;/h3&gt;
+
+&lt;p&gt;今回のプログラムを試すディレクトリ（フォルダ）を作ります。&lt;/p&gt;
+
+&lt;p&gt;プログラムを実行する上では&lt;strong&gt;今どこで作業しているか&lt;/strong&gt;というのが重要です。最初のうちはわかりづらいので、意識するようにしましょう。&lt;/p&gt;
+
+&lt;p&gt;コマンドラインに不慣れである方は、下記記事を参照してみてください。&lt;/p&gt;
+
+
+
+&lt;section class=&#34;link&#34; id=&#34;158&#34;&gt;
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+          &lt;div class=&#34;link_content&#34;&gt;
+          &lt;a href=&#34;https://dotstud.io/blog/how-to-use-cli/&#34;&gt;&lt;/a&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/158/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
+          &lt;/div&gt;
+          &lt;div class=&#34;link_content&#34;&gt;
+            &lt;div class=&#34;link_detail&#34;&gt;
+              &lt;div class=&#34;link_title&#34;&gt;
+                【Mac向け】「黒い画面」の苦手意識を克服しよう！コマンドラインインタフェースの基本操作
+              &lt;/div&gt;
+              &lt;div class=&#34;link_date&#34;&gt;
+                
+                2018-04-09
+              &lt;/div&gt;
+              &lt;div class=&#34;link_desc&#34;&gt;
+                Macユーザ向けコマンドラインインタフェースの使い方！実は難しくない「黒い画面」の操作方法を覚えていきましょう。
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+&lt;/section&gt;
+
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;windowsの方-1&#34;&gt;■Windowsの方&lt;/h4&gt;
+
+&lt;ol&gt;
+&lt;li&gt;デスクトップで右クリックし、&lt;code&gt;gr-tutorial&lt;/code&gt;というファイルを作成&lt;/li&gt;
+&lt;li&gt;Windowsメニューから「コマンドラインプロンプト」を検索し開く（「cmd」で候補にでてきます）&lt;/li&gt;
+&lt;li&gt;下記コマンドを1行ずつ実行（&lt;code&gt;$&lt;/code&gt;は不要。コマンドラインであることを表しています）&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code&gt;$ cd Desktop
+$ cd gr-tutorial
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;cd&lt;/code&gt;はディレクトリを移動するコマンドです。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;macの方&#34;&gt;■Macの方&lt;/h4&gt;
+
+&lt;ol&gt;
+&lt;li&gt;「ターミナル」を起動（⌘+スペースで「ターミナル」を検索すると便利）&lt;/li&gt;
+&lt;li&gt;下記コマンドを1行ずつ順に打ち込む（&lt;code&gt;$&lt;/code&gt;は不要。コマンドラインであることを表しています）&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code&gt;$ cd ~/Desktop
+$ mkdir gr-tutorial
+$ cd gr-tutorial
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;デスクトップに「gr-tutorial」というフォルダができているかと思います（右クリックで作成してもOKです）。&lt;code&gt;cd&lt;/code&gt;コマンドは移動するコマンド、&lt;code&gt;mkdir&lt;/code&gt;コマンドはディレクトリを作成するコマンドです。&lt;/p&gt;
+
+&lt;h3 id=&#34;python-tensorflow環境構築&#34;&gt;Python＆Tensorflow環境構築&lt;/h3&gt;
+
+&lt;p&gt;今回はご自身の環境に、以下の内容を用意し進めます。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Python実行環境&lt;/li&gt;
+&lt;li&gt;Tensorflow&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;環境構築はおそらく&lt;strong&gt;このハンズオンで1番大変なところ&lt;/strong&gt;です。乗り越えたらサクッと試せるようになるので頑張りましょう！&lt;/p&gt;
+
+&lt;p&gt;PCの状態に合わせて場合分けしましたので、ご自身に合う部分を読んでください。&lt;/p&gt;
+
+&lt;h3 id=&#34;まずは現在の環境を確認する&#34;&gt;まずは現在の環境を確認する&lt;/h3&gt;
+
+&lt;p&gt;下記コマンドを試して、PythonとTensorFlowがインストールされているか確認しましょう。コマンドは&lt;code&gt;$&lt;/code&gt;マークの後ろの部分です。（↓の場合は&lt;code&gt;python -V&lt;/code&gt;と打ち込む）&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ python -V
+Python X.X.X
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Pythonのバージョンが表示されればOKです。「command not found」や「実行する〜〜が見つかりません」などと表示された方は、インストールされていない（または正しくインストールできていない）のでPythonの環境構築手順を進めます。&lt;/p&gt;
+
+&lt;p&gt;インストールされていなかった方は、「&lt;a href=&#34;#Pythonをインストール&#34;&gt;Pythonをインストール&lt;/a&gt;」へ進んでください。&lt;/p&gt;
+
+&lt;section class=&#34;caution&#34;&gt;
+&lt;p&gt;■Pythonのバージョンについて&lt;/p&gt;
+Pythonのバージョンは2系、3系どちらでも実行可能ですが、Python3.7系ではTensorflowがうまく実行できないようです。
+&lt;/section&gt;
+
+&lt;p&gt;続いて、Tensorflowモジュールがインストールされているかの確認です。&lt;code&gt;pip list&lt;/code&gt;と打ち込んでみましょう。（表示されるものは一例）&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ pip list
+Package                Version
+---------------------- ---------
+absl-py                0.6.1
+bleach                 1.5.0
+html5lib               0.9999999
+Markdown               3.0.1
+nose                   1.3.7
+numpy                  1.15.3
+pip                    18.1
+protobuf               3.6.1
+setuptools             39.0.1
+six                    1.11.0
+tensorflow             1.5.0
+…
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;一覧に&lt;code&gt;tensorflow&lt;/code&gt;とあればOKです。バージョンが古い場合は、下記コマンドで更新をしておきましょう（最新は1.5系です）。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Python2系の場合&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;$ pip install --upgrade tensorflow
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Python3系の場合&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;$ pip3 install --upgrade tensorflow
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;PythonがインストールされているがTensorflowはインストールされていない場合は、「&lt;a href=&#34;#tensorflowをインストール&#34;&gt;Tensorflowをインストール&lt;/a&gt;」へ進んでください。&lt;/p&gt;
+
+&lt;p&gt;どちらもインストールされていた場合は、「&lt;a href=&#34;#MNISTで学習モデルを作成&#34;&gt;MNISTで学習モデルを作成&lt;/a&gt;」へ進みます。&lt;/p&gt;
+
+&lt;h3 id=&#34;pythonをインストール&#34;&gt;Pythonをインストール&lt;/h3&gt;
+
+&lt;h4 id=&#34;windowsの方-2&#34;&gt;■Windowsの方&lt;/h4&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/install_python.png&#34; alt=&#34;install_python&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;&lt;a href=&#34;https://www.python.org/downloads/windows/&#34;&gt;Pythonの公式ページ&lt;/a&gt;へ移動し、インストールしたいPythonのバージョンをクリックします。（Tensorflowがうまく動かないので&lt;strong&gt;Python3.7系は避けてください&lt;/strong&gt;。3.6.xがオススメです。）&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/233/select_version.png&#34; alt=&#34;select_version&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;移動先のページ下部のリストから、「Windows x86-64 web-based installer」をダウンロードします。32bit版の場合は「Windows x86 web-based installer」を選択してください。&lt;/p&gt;
+
+&lt;p&gt;ダウンロードされたパッケージを実行し、「&lt;strong&gt;Add Python xxx to PATH&lt;/strong&gt;」をチェックしてインストールを実行します。&lt;/p&gt;
+
+&lt;p&gt;完了したら、コマンドプロンプトで&lt;code&gt;python -V&lt;/code&gt;を打ち、任意のバージョンが表示されるか確認します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ python -V
+Python X.X.X
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;表示されない方はコマンドプロンプトを再起動して試してみてください。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;macの方-1&#34;&gt;■Macの方&lt;/h4&gt;
+
+&lt;p&gt;デフォルトでPython2系がインストールされているはずですが、何かのタイミングで消してしまった可能性があります。&lt;/p&gt;
+
+&lt;p&gt;ターミナルで下記コマンドを実行し、Homebrewがインストールされているか確認します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ brew -v
+Homebrew x.x.x
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;インストールされていない場合は下記コマンドを実行します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ /usr/bin/ruby -e &amp;quot;$(curl -fsSLhttps://raw.githubusercontent.com/Homebrew/install/master/install)&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;続いてHomebrewでpyenvをインストールします。pyenvはPythonのバージョン管理を行うツールです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ brew install pyenv
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;インストールされたら下記コマンドで確認します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ pyenv -v
+pyenv x.x.x
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;pyenvでPythonをインストールします。バージョンは任意のものでよいですが、Tensorflowがうまく動かないので&lt;strong&gt;3.7系は避けてください&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ pyenv install 3.6.7
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;完了したら、選択したバージョンを設定します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ pyenv global 3.6.7
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;ターミナルで下記コマンドを実行し、バージョンが表示されるか確認してみてください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ python -V
+Python 3.6.7
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;tensorflowをインストール&#34;&gt;TensorFlowをインストール&lt;/h3&gt;
+
+&lt;p&gt;コマンドラインで下記コマンドを実行します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ pip install tensorflow
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;だらだらと実行文が表示され、最後の行に &lt;code&gt;Successfully installed tensorflow-X.X.X&lt;/code&gt;などと表示されればOKです。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;pip list&lt;/code&gt;というコマンドを打って、インストールされたか確認してみます。（表示されるものは一例）&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ pip list
+Package                Version
+---------------------- ---------
+absl-py                0.6.1
+bleach                 1.5.0
+html5lib               0.9999999
+Markdown               3.0.1
+nose                   1.3.7
+numpy                  1.15.3
+pip                    18.1
+protobuf               3.6.1
+setuptools             39.0.1
+six                    1.11.0
+tensorflow             1.5.0
+…
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;一覧に、&lt;code&gt;tensorflow&lt;/code&gt;とあればOKです。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;実行したらエラーが出た&#34;&gt;■実行したらエラーが出た&lt;/h4&gt;
+
+&lt;p&gt;長い実行文が表示されたあと、最後の一行が下記のようなエラー文になることがあります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Could not install packages due to an EnvironmentError: [Errno 13] Permission denied: &#39;/Library/Python/2.7/site-packages/tensorflow-1.11.0.dist-info&#39; Consider using the --user option or check the permissions.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;下記コマンドを再度実行します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ sudo pip install tensorflow
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;パスワードを求められるので、PCのユーザのパスワードを入力します。（入力したパスワードは表示されません）&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;エラーが出てインストールが実行されない①&#34;&gt;■エラーが出てインストールが実行されない①&lt;/h4&gt;
+
+&lt;p&gt;&lt;code&gt;pip install tensorflow&lt;/code&gt;を実行すると、&lt;code&gt;command not found&lt;/code&gt;といったエラーが出る場合があります。以下のコマンドを実行し、pipをインストールします。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ python -m ensurepip
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;エラーが出てインストールが実行されない②&#34;&gt;■エラーが出てインストールが実行されない②&lt;/h4&gt;
+
+&lt;p&gt;&lt;code&gt;pip install tensorflow&lt;/code&gt;を実行すると、下記のようなエラーが出る場合があります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Could not find a version that satisfies the requirement tensorflow (from versions: )
+No matching distribution found for tensorflow
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;以下のコマンドを再度実行しましょう。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Python2系&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;$ pip install --upgrade https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-1.11.0-py2-none-any.wh
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Python3系&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;$ python3 -m pip install --upgrade https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-1.5.0-py3-none-any.whl
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;インストールしたのにlistに表示されない&#34;&gt;■インストールしたのにlistに表示されない&lt;/h4&gt;
+
+&lt;p&gt;主にMacで、Python環境がPC上に複数あり、意図する場所にインストールできていない可能性があります。&lt;/p&gt;
+
+&lt;p&gt;主に下記の記事を参考にしてみてください。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;参考: &lt;a href=&#34;https://qiita.com/ta_ta_ta_miya/items/e24394c6b0022405a126&#34;&gt;pyenvでPythonがSystemバージョンから切り替わらない時の対処&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;参考: &lt;a href=&#34;https://qiita.com/mckyhrs/items/94a2db3506287df0420e&#34;&gt;pythonのバージョンが切り替わらない&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;mnistで学習モデルを作成&#34;&gt;MNISTで学習モデルを作成&lt;/h3&gt;
+
+&lt;p&gt;画像認識向けに、大量の画像を自分で収集し学習用に加工するのはとても大変です。&lt;/p&gt;
+
+&lt;p&gt;MNIST（Mixed National Institute of Standards and Technology database）は、手書き数字画像60,000枚とテスト画像10,000枚を集めたデータセットです。&lt;/p&gt;
+
+&lt;p&gt;手軽に入手でき簡単に扱えるので、AI入門のサンプルデータとしてオススメです。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;mnist用pythonコードを作成&#34;&gt;■MNIST用Pythonコードを作成&lt;/h4&gt;
+
+&lt;p&gt;作成した作業用ディレクトリに、コマンドか右クリックなどで&lt;code&gt;mnist_softmax_for_e-ai.py&lt;/code&gt;というファイルを作成します。&lt;/p&gt;
+
+&lt;p&gt;プログラム向けのエディタでファイルを開き、下記のプログラムを貼り付けます。&lt;/p&gt;
+
+&lt;div class=&#34;accbox&#34;&gt;
+    &lt;label for=&#34;label3&#34;&gt;クリックしてコードを表示&lt;/labe&gt;
+    &lt;input type=&#34;checkbox&#34; id=&#34;label3&#34; class=&#34;cssacc&#34; /&gt;
+    &lt;div class=&#34;accshow&#34;&gt;
+      &lt;pre&gt;
+      &lt;code class=&#34;hljs python&#34;&gt;
+      # Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+      #
+      # Licensed under the Apache License, Version 2.0 (the &#34;License&#34;);
+      # you may not use this file except in compliance with the License.
+      # You may obtain a copy of the License at
+      #
+      #     http://www.apache.org/licenses/LICENSE-2.0
+      #
+      # Unless required by applicable law or agreed to in writing, software
+      # distributed under the License is distributed on an &#34;AS IS&#34; BASIS,
+      # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+      # See the License for the specific language governing permissions and
+      # limitations under the License.
+      # ==============================================================================
+
+      &#34;&#34;&#34;A very simple MNIST classifier.
+
+      See extensive documentation at
+      https://www.tensorflow.org/get_started/mnist/beginners
+      &#34;&#34;&#34;
+      from __future__ import absolute_import
+      from __future__ import division
+      from __future__ import print_function
+
+      import argparse
+      import sys
+
+      from tensorflow.examples.tutorials.mnist import input_data
+
+      import tensorflow as tf
+
+      FLAGS = None
+
+
+      def main(_):
+        # Import data
+        mnist = input_data.read_data_sets(FLAGS.data_dir, one_hot=True)
+
+        # Create the model
+        x = tf.placeholder(tf.float32, [None, 784])
+
+        #Add Renesas 2 --------- ----------
+        # change
+        #  x_ = tf.placeholder(tf.float32, [None, 784])
+        #  x = tf.reshape(x_, [-1])
+        # --------- ----------
+
+        W = tf.Variable(tf.zeros([784, 10]))
+        b = tf.Variable(tf.zeros([10]))
+        y = tf.matmul(x, W) + b
+
+        # Define loss and optimizer
+        y_ = tf.placeholder(tf.float32, [None, 10])
+
+        # The raw formulation of cross-entropy,
+        #
+        #   tf.reduce_mean(-tf.reduce_sum(y_ * tf.log(tf.nn.softmax(y)),
+        #                                 reduction_indices=[1]))
+        #
+        # can be numerically unstable.
+        #
+        # So here we use tf.nn.softmax_cross_entropy_with_logits on the raw
+        # outputs of &#39;y&#39;, and then average across the batch.
+        cross_entropy = tf.reduce_mean(
+            tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y))
+        train_step = tf.train.GradientDescentOptimizer(0.5).minimize(cross_entropy)
+
+        sess = tf.InteractiveSession()
+        tf.global_variables_initializer().run()
+        # Train
+        for _ in range(1000):
+          batch_xs, batch_ys = mnist.train.next_batch(100)
+          sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys})
+
+        # Test trained model
+        correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))
+        accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+        print(sess.run(accuracy, feed_dict={x: mnist.test.images,
+                                            y_: mnist.test.labels}))
+
+        #Add Renesas 1 --------- ----------
+        import os
+        #Save Learned AI
+        out_dir = &#34;./tf_LearnedModel&#34;
+        if os.path.isdir(out_dir) is False:
+            os.makedirs(out_dir)
+        saver = tf.train.Saver()
+        saver.save(sess, out_dir+&#34;/tf_LearnedModel&#34;)
+        # --------- ----------
+
+      if __name__ == &#39;__main__&#39;:
+        parser = argparse.ArgumentParser()
+        parser.add_argument(&#39;--data_dir&#39;, type=str, default=&#39;/tmp/tensorflow/mnist/input_data&#39;,
+                            help=&#39;Directory for storing input data&#39;)
+        FLAGS, unparsed = parser.parse_known_args()
+        tf.app.run(main=main, argv=[sys.argv[0]] + unparsed)
+      &lt;/code&gt;
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;今回はがじぇるねさんの&lt;a href=&#34;http://gadget.renesas.com/ja/product/e-ai/mnist_tutorial.html#%E6%A9%9F%E6%A2%B0%E5%AD%A6%E7%BF%92%E3%81%AE%E5%AE%9F%E8%A1%8C&#34;&gt;チュートリアルのサンプルコード&lt;/a&gt;をお借りしました！&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;tensorflowで実行&#34;&gt;■Tensorflowで実行&lt;/h4&gt;
+
+&lt;p&gt;下記コマンドで学習モデルを作成します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ python mnist_softmax_for_e-ai.py
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;pythonコマンドはPythonで書かれたプログラムを実行するコマンドです。ファイルの中のプログラムが実行され、学習モデルが作成されます。&lt;/p&gt;
+
+&lt;p&gt;Windowsの方は&lt;code&gt;dir&lt;/code&gt;、Macの方は&lt;code&gt;ls&lt;/code&gt;というコマンドを実行し、「tf_LearnedModel」というフォルダが作成されたことを確認してください。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ ls
+mnist_softmax_for_e-ai.py
+tf_LearnedModel/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Windowsは&lt;code&gt;dir tf_LearnedModel&lt;/code&gt;、Macは&lt;code&gt;ls tf_LearnedModel&lt;/code&gt;のコマンドを実行すると、4つのファイルが入っていることがわかります。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ ls tf_LearnedModel
+checkpoint
+tf_LearnedModel.data-00000-of-00001
+tf_LearnedModel.index
+tf_LearnedModel.meta
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;学習モデルをgrボードで扱う&#34;&gt;学習モデルをGRボードで扱う&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/045295f6fe6ebda3cbed3d0150650c27.png&#34; alt=&#34;Image from Gyazo&#34; /&gt;
+Webコンパイラを開き、右側のリストから「e-AI Translator」をクリックします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/1ae615bd6f71338dab09647185d3bcb5.png&#34; alt=&#34;Image from Gyazo&#34; /&gt;
+アップロードボタンを押し、先ほど作成された「tf_LearnedModel」を選択します。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/2d54b87b9a6c9852f31c1afb14132614.png&#34; alt=&#34;Image from Gyazo&#34; /&gt;
+その他はデフォルト選択のまま、「トランスレート」をクリックします。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/27fe23312950242e2eee4ff2e6e7ee79.png&#34; alt=&#34;Image from Gyazo&#34; /&gt;
+表示されたプログラムを全て選択してコピーします。&lt;/p&gt;
+
+&lt;h2 id=&#34;完成コード&#34;&gt;完成コード&lt;/h2&gt;
+
+&lt;p&gt;上記で生成されたプログラムに、displayAppに表示させるためのコードを加えたプログラムです。USBケーブルは真ん中に接続し、GR-LYCHEEに書き込みましょう。&lt;/p&gt;
+
+&lt;div class=&#34;accbox&#34;&gt;
+    &lt;label for=&#34;label4&#34;&gt;クリックしてコードを表示&lt;/labe&gt;
+    &lt;input type=&#34;checkbox&#34; id=&#34;label4&#34; class=&#34;cssacc&#34; /&gt;
+    &lt;div class=&#34;accshow&#34;&gt;
+      &lt;pre&gt;
+      &lt;code class=&#34;hljs hljs-cpp&#34;&gt;
+      #include &amp;lt;Arduino.h&amp;gt;
+      #include &amp;lt;Camera.h&amp;gt;
+      #include &amp;lt;opencv.hpp&amp;gt;
+      #include &amp;lt;DisplayApp.h&amp;gt;
+
+      #ifdef __cplusplus
+      extern &#34;C&#34; {
+      #endif
+      #include &#34;eAI_translated/Typedef.h&#34;
+      #include &#34;eAI_translated/input_image_0.h&#34;
+      #include &#34;eAI_translated/layer_graph.h&#34;
+      TPrecision* dnn_compute(TPrecision* input_img);
+      #ifdef __cplusplus
+      }
+      #endif
+
+      // To monitor realtime on PC, you need DisplayApp on following site.
+      // Connect USB0(not for mbed interface) to your PC
+      // os.mbed.com/.../
+
+      using namespace cv;
+
+      #define IMAGE_HW 320
+      #define IMAGE_VW 240
+      #define INPUT_HEIGHT 28
+      #define INPUT_WIDTH 28
+
+      Camera camera(IMAGE_HW, IMAGE_VW);
+      DisplayApp display_app;
+      void paste(cv::Mat dst, cv::Mat src, int x, int y, int width, int height) {
+       cv::Mat resized_img;
+       cv::resize(src, resized_img, cv::Size(width, height));
+
+       if (x &gt;= dst.cols || y &gt;= dst.rows) return;
+       int w = (x &gt;= 0) ? std::min(dst.cols - x, resized_img.cols) : std::min(std::max(resized_img.cols + x, 0), dst.cols);
+       int h = (y &gt;= 0) ? std::min(dst.rows - y, resized_img.rows) : std::min(std::max(resized_img.rows + y, 0), dst.rows);
+       int u = (x &gt;= 0) ? 0 : std::min(-x, resized_img.cols - 1);
+       int v = (y &gt;= 0) ? 0 : std::min(-y, resized_img.rows - 1);
+       int px = std::max(x, 0);
+       int py = std::max(y, 0);
+
+       cv::Mat roi_dst = dst(cv::Rect(px, py, w, h));
+       cv::Mat roi_resized = resized_img(cv::Rect(u, v, w, h));
+       roi_resized.copyTo(roi_dst);
+      }
+
+      int max_array(TPrecision* array, int length){
+       int i;
+       float max = array[0];
+       int index = 0;
+
+       for(i = 0; i &lt; length; i++){
+       if(array[i] &gt; max){
+       max = array[i];
+       index = i;
+       }
+       }
+       return index;
+      }
+
+      void setup() {
+       Serial.begin(9600);
+       camera.begin();
+      }
+
+      void loop() {
+       Scalar red(0, 0, 255), green(0, 255, 0), blue(255, 0, 0);
+       Scalar yellow = red + green;
+       Scalar white = Scalar::all(255);
+       Scalar black = Scalar::all(0);
+       Scalar pink = Scalar(154, 51, 255);
+
+       Mat img_raw(IMAGE_VW, IMAGE_HW, CV_8UC2, camera.getImageAdr());
+
+       Mat pic, gray;
+       cvtColor(img_raw, pic, COLOR_YUV2BGR_YUYV); //covert YUV to RGB
+       cvtColor(img_raw, gray, COLOR_YUV2GRAY_YUYV); //covert from YUV to GRAY
+
+       Mat roi(gray, Rect(80, 0, 240, 240));
+       threshold(roi, roi, 90, 255, THRESH_BINARY);
+       resize(roi, roi, Size(INPUT_WIDTH, INPUT_HEIGHT));
+       for(int i = 0; i &lt; 784; i++){
+       data_in[i] = 1 - (float)roi.data[i] / 255;
+       }
+
+       TPrecision *prediction;
+       TPrecision *input_img;
+       TsInt i;
+
+       input_img = data_in;
+       prediction = (TPrecision*) (intptr_t) dnn_compute( input_img);
+
+       // Drawing
+       rectangle(pic, Rect(0, 0, 80, 240), white, FILLED);
+       rectangle(pic, Rect(80, 0, 240, 240), red, 2);
+
+       Mat roi2;
+       cvtColor(roi, roi2, COLOR_GRAY2BGR);
+       paste(pic, roi2, 5, 5, roi2.rows, roi2.cols);
+       rectangle(pic, Rect(4, 4, 30, 30), red, 1);
+
+       int max_index = max_array(prediction, 10);
+       for(i = 0;i &lt; 10;i++){
+       Serial.print(i); Serial.print(&#34;:&#34;);
+       Serial.println(prediction[i]);
+       stringstream ss;
+       ss &lt;&lt; i;
+       if(max_index == i){
+       putText(pic, ss.str(), Point(0, 20 * i + 50), FONT_HERSHEY_SCRIPT_SIMPLEX, 0.5, pink, 1);
+       rectangle(pic, Rect(20, 20 * i + 40, prediction[i] * 80, 10), pink, FILLED);
+       } else {
+       putText(pic, ss.str(), Point(0, 20 * i + 50), FONT_HERSHEY_SCRIPT_SIMPLEX, 0.5, black, 1);
+       rectangle(pic, Rect(20, 20 * i + 40, prediction[i] * 80, 10), blue, FILLED);
+       }
+       }
+
+       size_t jpegSize = camera.createJpeg(320, 240, pic.data,
+       Camera::FORMAT_RGB888);
+       display_app.SendJpeg(camera.getJpegAdr(), jpegSize);
+       delay(10);
+
+      }
+      &lt;/code&gt;
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;これまでの手順と同様、書き込んでみましょう。&lt;/p&gt;
+
+&lt;h2 id=&#34;手書き数字の認識を試してみる&#34;&gt;手書き数字の認識を試してみる&lt;/h2&gt;
+
+&lt;p&gt;USBケーブルを外側につけかえ、試してみます。&lt;/p&gt;
+
+&lt;h3 id=&#34;displayappで表示&#34;&gt;displayAppで表示&lt;/h3&gt;
+
+&lt;p&gt;紙に書く文字は、マッキーペンなどで太くハッキリと書いてみてください。&lt;/p&gt;
+
+&lt;p&gt;カメラに数字を映すと……&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/233/result.gif&#34; alt=&#34;demo&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;数字を推論してくれます。お疲れ様でした！&lt;/p&gt;
+
+&lt;h3 id=&#34;シリアルモニタで表示&#34;&gt;シリアルモニタで表示&lt;/h3&gt;
+
+&lt;p&gt;GR-LYCHEEで実行されている内容を、シリアル通信を介してPCで確認してみます。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;macの方-2&#34;&gt;■Macの方&lt;/h4&gt;
+
+&lt;p&gt;下記コマンドを実行し、USB接続されている場所を調べます。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ ls /dev/tty.usb*
+/dev/tty.usbmodem~~~
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;接続されている場所をコピーし、下記コマンドで接続します。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ screen /dev/tty.usbmodem~~~~ 9600
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h4 id=&#34;windowsの方-3&#34;&gt;■Windowsの方&lt;/h4&gt;
+
+&lt;p&gt;「TeraTerm」というシリアル通信対応のソフトをダウンロード＆インストールします。「Arduino IDE」がインストールされている方は、そちらでも確認できます。&lt;/p&gt;
+
+&lt;p&gt;下記リンクを参考に、TeraTermを起動しシリアル接続します。&lt;/p&gt;
+
+&lt;p&gt;参考: &lt;a href=&#34;https://www.j-oosk.com/teraterm/serial/346/&#34;&gt;Tera Termでシリアル接続を行う手順&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;参考情報&#34;&gt;参考情報&lt;/h2&gt;
+
+&lt;p&gt;がじぇるねさんのページでは、その他のGR-LYCHEEチュートリアルも紹介されています。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://gadget.renesas.com/ja/product/lychee_sp/4.html&#34;&gt;Webカメラにしてみよう!&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://gadget.renesas.com/ja/product/lychee_sp/5.html&#34;&gt;Bluetoothでスマホとつなげよう!&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://gadget.renesas.com/ja/product/lychee_sp/8.html&#34;&gt;OpenCTの応用 輪郭検出、HSV色空間&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;ぜひ試してみてください！&lt;/p&gt;
+
+&lt;style&gt;
+.caution {
+    border: 1px solid #BFBFBF;
+    padding: 1em 2em;
+    margin: 2em 0;
+    color: #474747;
+    background: whitesmoke;/*背景色*/
+    border-left: double 7px #0B0B61;/*左線*/
+    font-size: 90%;
+}
+
+.caution &gt; p {
+    font-weight: bold;
+    margin: 0 0 10px 0;
+    padding: 0;
+}
+
+blockquote {
+    font-size:80%;
+}
+
+.accbox {
+    margin: 2em 0;
+    padding: 0;
+    max-width: 710px;
+}
+
+
+.accbox label {
+    display: block;
+    margin: 1.5px 0;
+    padding : 11px 12px;
+    color :#ffffff;
+    font-weight: bold;
+    background :#2f2f2f;
+    cursor :pointer;
+    transition: all 0.5s;
+}
+
+.accbox label:hover {
+    background :#A4A4A4;
+}
+
+.accbox input {
+    display: none;
+}
+
+.accbox .accshow {
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: 0.8s;
+}
+
+.cssacc:checked + .accshow {
+    height: auto;
+    padding: 5px;
+    background: #eaeaea;
+    opacity: 1;
+}
+&lt;/style&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
