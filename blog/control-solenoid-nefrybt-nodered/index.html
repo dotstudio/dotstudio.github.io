@@ -1,0 +1,6637 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
+  <meta charset="utf-8">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+    
+
+    
+    
+      
+      
+      
+      
+
+      
+      
+      
+      
+        
+      
+      
+
+      
+      
+    
+
+    
+    
+
+    
+    
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="電子工作で扱える駆動部品の幅を増やしてみましょう。今回は、バネの力でシュコシュコと動くソレノイドの使い方を紹介します。">
+    <meta name="author" content="dotstudio Inc.">
+    <meta content="https://dotstud.io/img/blog/214/00_eyecatch.png">
+
+    <meta itemprop="name" content="【ソレノイド詳細解説】IoTの力でスマホを振るとソレノイドがシュコシュコ動く仕組みを作ってみる | dotstudio"/>
+    <meta itemprop="image" content="https://dotstud.io/img/blog/214/00_eyecatch.png"/>
+    
+    <meta property="og:title" content="【ソレノイド詳細解説】IoTの力でスマホを振るとソレノイドがシュコシュコ動く仕組みを作ってみる | dotstudio" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://dotstud.io/blog/control-solenoid-nefrybt-nodered/" />
+    <meta property="og:site_name" content="dotstudio（ドットスタジオ）" />
+    <meta property="og:image" content="https://dotstud.io/img/blog/214/00_eyecatch.png" />
+    <meta property="og:image:secure_url" content="https://dotstud.io/img/blog/214/00_eyecatch.png" />
+    <meta property="og:description" content="電子工作で扱える駆動部品の幅を増やしてみましょう。今回は、バネの力でシュコシュコと動くソレノイドの使い方を紹介します。" />
+    <meta property="article:author" content="https://www.facebook.com/dotstud10/" />
+    <meta property="fb:app_id" content="296336307370435" />
+    <meta property="fb:pages" content="1013196712108753" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image:src" content="https://dotstud.io/img/blog/214/00_eyecatch.png">
+    <meta name="twitter:site" content="@dotstud_io" />
+    <meta name="twitter:url" content="https://dotstud.io/blog/control-solenoid-nefrybt-nodered/">
+    <meta name="twitter:description" content="電子工作で扱える駆動部品の幅を増やしてみましょう。今回は、バネの力でシュコシュコと動くソレノイドの使い方を紹介します。">
+    <meta name="twitter:title" content="【ソレノイド詳細解説】IoTの力でスマホを振るとソレノイドがシュコシュコ動く仕組みを作ってみる | dotstudio">
+    <meta name="twitter:creator" content="@dotstud_io" />
+
+    
+    <meta name="google-site-verification" content="oW2fcSG1fFnkDoRCGFJ0IGGebtBr8FjV2twoFMd7Skc" />
+    <title>【ソレノイド詳細解説】IoTの力でスマホを振るとソレノイドがシュコシュコ動く仕組みを作ってみる | dotstudio</title>
+    
+
+    <link rel="stylesheet" href="/css/loader.css">
+    
+    <link rel="stylesheet" href='/css/master.css'>
+    <link rel="stylesheet" href="/css/icon-font.css">
+    
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+
+    <link rel="shortcut icon" type="image/png" href="/img/resources/favicon.png"/>
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="preload" as="style" onload="this.rel='stylesheet'">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel="preload" as="style" onload="this.rel='stylesheet'">
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel="preload" as="style" onload="this.rel='stylesheet'">
+    
+    <link href="/css/lib/hljs.css" rel="preload" as="style" onload="this.rel='stylesheet'">
+    
+
+    
+    
+    
+
+    
+    
+
+    
+    
+    
+    
+
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-K5TRM9Q');</script>
+    
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-5922216421588455",
+        enable_page_level_ads: true
+      });
+    </script>
+</head>
+
+<body>
+  
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K5TRM9Q"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  
+
+  
+  <div id="fb-root"></div>
+  <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v2.8";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));</script>
+
+  
+
+  <header>
+    <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<symbol id="icon-arrow-right" viewBox="0 0 32 32">
+<title>arrow-right</title>
+<path class="path1" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M5.143 5.143l10.349 10.349"></path>
+<path class="path2" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M5.143 26.857l10.349-10.349"></path>
+<path class="path3" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M16.571 26.857l10.349-10.349"></path>
+<path class="path4" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M16.571 5.143l10.349 10.349"></path>
+</symbol>
+<symbol id="icon-hamburger" viewBox="0 0 60 32">
+<title>hamburger</title>
+<path class="path1" fill="none" stroke="#808080" stroke-width="7.1111" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M3.556 3.556h53.333"></path>
+<path class="path2" fill="none" stroke="#808080" stroke-width="7.1111" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M3.556 28.444h53.333"></path>
+</symbol>
+<symbol id="icon-logo-mark" viewBox="0 0 32 32">
+<title>logo-mark</title>
+<path class="path1" d="M19.731 28.8h-19.731v-19.699h19.731zM1.53 27.302h16.672v-16.672h-16.672z"></path>
+<path class="path2" d="M32 22.899h-19.731v-19.699h19.731zM13.798 21.37h16.672v-16.672h-16.672z"></path>
+</symbol>
+<symbol id="icon-social-facebook" viewBox="0 0 32 32">
+<title>social-facebook</title>
+<path class="path1" d="M30.1 0.12h-28.46c-0.974 0.011-1.76 0.804-1.76 1.78 0 0 0 0 0 0v28.46c0 0.983 0.797 1.78 1.78 1.78h15.32v-12.4h-4.16v-4.82h4.16v-3.58c-0.020-0.179-0.031-0.386-0.031-0.596 0-3.203 2.597-5.8 5.8-5.8 0.152 0 0.302 0.006 0.45 0.017-0.016-0.001-0.013-0.001-0.009-0.001 1.3 0 2.582 0.073 3.844 0.214l-0.155 4.286h-2.54c-2 0-2.36 0.96-2.36 2.36v3.1h4.76l-0.62 4.8h-4.12v12.4h8.12c0.983 0 1.78-0.797 1.78-1.78v-28.44c0-0.983-0.797-1.78-1.78-1.78z"></path>
+</symbol>
+<symbol id="icon-social-github" viewBox="0 0 32 32">
+<title>social-github</title>
+<path class="path1" d="M16 0.4c-0.001 0-0.002 0-0.004 0-8.837 0-16 7.163-16 16 0 7.028 4.531 12.997 10.831 15.147 0.913 0.173 1.213-0.307 1.213-0.747s-0.040-1.38-0.040-2.8c-4.44 1.060-5.38-2-5.38-2-0.308-0.987-0.937-1.798-1.763-2.33-1.477-1.010 0.103-0.99 0.103-0.99 1.055 0.144 1.941 0.76 2.451 1.624 0.607 1.039 1.701 1.715 2.953 1.715 0.6 0 1.164-0.155 1.653-0.428 0.062-0.836 0.437-1.58 1.002-2.13-3.559-0.401-7.279-1.781-7.279-8.001-0.001-0.032-0.001-0.069-0.001-0.106 0-1.621 0.624-3.096 1.645-4.198-0.181-0.526-0.283-1.135-0.283-1.769 0-0.85 0.184-1.657 0.514-2.383s1.325-0.404 4.385 1.676c1.199-0.341 2.577-0.537 4-0.537s2.801 0.196 4.107 0.562c2.953-2.026 4.293-1.666 4.293-1.666 0.31 0.683 0.49 1.481 0.49 2.321 0 0.688-0.121 1.348-0.343 1.959 1.030 1.058 1.654 2.533 1.654 4.154 0 0.037-0 0.075-0.001 0.112 0 6.134-3.74 7.494-7.3 7.894 0.685 0.69 1.108 1.641 1.108 2.69 0 0.088-0.003 0.175-0.009 0.261 0.001 2.128 0.001 3.848 0.001 4.368s0.28 0.92 1.1 0.78c6.413-2.183 10.944-8.152 10.944-15.18 0-8.837-7.163-16-16-16-0.015 0-0.031 0-0.046 0z"></path>
+</symbol>
+<symbol id="icon-social-twitter" viewBox="0 0 32 32">
+<title>social-twitter</title>
+<path class="path1" d="M10 29c0.036 0 0.078 0 0.12 0 10.25 0 18.56-8.31 18.56-18.56 0-0.042-0-0.085-0-0.127 0-0.274 0-0.554 0-0.834 1.312-0.959 2.414-2.113 3.289-3.431-1.070 0.454-2.347 0.82-3.686 0.984 1.293-0.819 2.312-2.084 2.804-3.587-1.184 0.679-2.577 1.234-4.062 1.539-1.286-1.244-2.976-2.027-4.849-2.027-3.634 0-6.58 2.946-6.58 6.58 0 0.518 0.060 1.022 0.173 1.506-5.473-0.309-10.286-2.887-13.523-6.813-0.587 0.917-0.919 2.059-0.919 3.278 0 2.258 1.137 4.25 2.871 5.435-1.063-0.025-2.070-0.325-2.95-0.822l0.032 0.017c-0 0.027-0.001 0.058-0.001 0.090 0 3.163 2.239 5.803 5.218 6.423-0.479 0.156-1.078 0.242-1.696 0.242-0.432 0-0.854-0.042-1.263-0.121 0.908 2.637 3.319 4.512 6.175 4.567-2.208 1.746-5.039 2.8-8.116 2.8-0.013 0-0.027-0-0.040-0-0.566-0.018-1.104-0.068-1.633-0.149 2.897 1.868 6.353 2.984 10.068 3.009z"></path>
+</symbol>
+</defs>
+</svg>
+
+    <div class="header">
+  <span class="logo"><a href="/"><svg id="icon-logo" width="100%"><use xlink:href="#icon-logo-mark"></svg></a></span>
+
+  <div class="menu">
+    <input type="checkbox" id="menu-toggle">
+      <label for="menu-toggle" class='label-toggle'>
+        <svg class="icon-hamburger"><use xlink:href="#icon-hamburger"></svg>
+      </label>
+    </input>
+    <ul>
+      <li class="menu-item"><a href="/blog">Blog</a></li>
+      <li class="menu-item"><a href="/docs">Docs</a></li>
+      <li class="menu-item"><a href="/shop">Shop</a></li>
+      <li class="menu-item"><a href="/members">Members</a></li>
+      <li class="menu-item"><a href="/service">Service</a></li>
+      <li class="menu-item"><a href="/about">About</a></li>
+      
+    </ul>
+  </div>
+
+</div>
+
+  </header>
+
+
+
+
+ 
+ 
+
+
+	
+		
+	
+
+
+
+
+<ul class="categories">
+	
+	<li><a href="/categories/try/" class="selected">
+		やってみるIoT
+	</a></li>
+	
+	<li><a href="/categories/learn/" class="">
+		IoTを知ろう
+	</a></li>
+	
+	<li><a href="/categories/event/" class="">
+		イベントレポート
+	</a></li>
+	
+	<li><a href="/categories/tips/" class="">
+		Tips
+	</a></li>
+	
+</ul>
+
+
+
+
+  
+    
+  
+
+  
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+<article class="blog-single">
+  <div class="date">2018.08.28</div>
+
+  <img class="blog-single--eyecatch" src="/img/blog/214/00_eyecatch.png" alt="" width="710px">
+
+  <h1 class="blog-single--title">【ソレノイド詳細解説】IoTの力でスマホを振るとソレノイドがシュコシュコ動く仕組みを作ってみる</h1>
+
+  <div class="blog-single--information">
+    <a class="author" href="/members/takudooon">
+      <img src="/img/members/takudooon/author.png" alt="" class="author--avatar">
+      <p class="author--name">たくろーどん</p>
+    </a>
+
+    
+    <a class="series" href="/series/driving">
+        駆動部品いろいろ
+    </a>
+    
+
+  </div>
+
+  <div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = 'https://connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v3.1&appId=172686636611828&autoLogAppEvents=1';
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+  <div class="share">
+    <a href="https://twitter.com/share" class="twitter-share-button" data-size="large" data-show-count="true" data-hashtags="dotstudio">Tweet</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    &nbsp;
+
+    <div class="fb-share-button" data-href="https://dotstud.io/blog/control-solenoid-nefrybt-nodered/" data-layout="button_count" data-size="large" data-mobile-iframe="true"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdotstud.io%2Fblog%2Fmftokyo-2018-chantoku-report%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">シェア</a></div>
+
+    &nbsp;
+
+    <a href="https://dotstud.io/blog/control-solenoid-nefrybt-nodered/" class="hatena-bookmark-button" data-hatena-bookmark-layout="basic-counter" data-hatena-bookmark-height="30" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+    &nbsp;
+
+    <div class="line-it-button" data-lang="ja" data-type="share-c" data-url="https://dotstud.io/blog/control-solenoid-nefrybt-nodered/" style="display: none;"></div>
+    <script src="https://d.line-scdn.net/r/web/social-plugin/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+
+  </div>
+
+
+  <div class="blog-single--content markdown">
+
+<p>こんにちは、<a href="/members/takudooon/">たくろーどん</a>です。</p>
+
+<p><a href="/series/driving/">これまでの記事</a>では、電子工作に使えそうな駆動部品を紹介してきました。サーボモータ、ステッピングモータときたら……次に使ってみたいのは<strong>ソレノイド</strong>ですよね！</p>
+
+<p>ということで、ソレノイドをNefry BTで使えるようにしていきたいと思います。</p>
+
+<p>そして、最終的には<strong>スマートフォンをシェイクするとソレノイドをシュコシュコ動かせる</strong>ようにしてみたいと思います。</p>
+
+<p>
+
+<section class="link" id="187">
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+          <div class="link_content">
+          <a href="https://dotstud.io/blog/nefry-servo-handson-takudooon/"></a>
+          <img src="/img/blog/187/00_thumbnail.png" alt="サムネイル">
+          </div>
+          <div class="link_content">
+            <div class="link_detail">
+              <div class="link_title">
+                PWM制御をマスターしよう！Node-REDでサーボモータを遠隔制御する方法＆初ハンズオンレポート
+              </div>
+              <div class="link_date">
+                
+                2018-07-12
+              </div>
+              <div class="link_desc">
+                PWM制御でサーボモータを操作してモノ作りの幅を広げましょう！Node-REDを使ったハンズオンの内容を紹介します。
+              </div>
+            </div>
+          </div>
+        </section>
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+</section>
+
+<br />
+
+
+<section class="link" id="189">
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+          <div class="link_content">
+          <a href="https://dotstud.io/blog/stepper-motor-nefrybt-control/"></a>
+          <img src="/img/blog/189/00_thumbnail.png" alt="サムネイル">
+          </div>
+          <div class="link_content">
+            <div class="link_detail">
+              <div class="link_title">
+                【詳細解説】ステッピングモータの仕組みを理解しよう！解説とNefry BTでステッピングモータを使う方法
+              </div>
+              <div class="link_date">
+                
+                2018-07-23
+              </div>
+              <div class="link_desc">
+                モータの世界は奥が深いです。今回はロボットアームや3Dプリンタのステージ制御に利用される「ステッピングモータ」について詳細に解説します。
+              </div>
+            </div>
+          </div>
+        </section>
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+</section>
+</p>
+
+<h2 id="ソレノイドのしくみ">ソレノイドのしくみ</h2>
+
+<p>ソレノイドとは<u><strong>銅線（コイル）に電流を流すことにより磁界を発生させ、磁性体の可動鉄芯を吸い寄せる（吸引）電気部品</strong></u>のことです。電流を流している間は常に吸い寄せられていますが、電流を切ると吸引力はなくなります。</p>
+
+<p>下記に、その仕組みを簡単に示しました。</p>
+
+<p><img src="https://qiita-image-store.s3.amazonaws.com/0/212276/2854b315-e58b-63f0-cd49-87d761625053.png" alt="仕組み.png" /></p>
+
+<p>また、この動作を応用して</p>
+
+<ul>
+<li>プル（吸引）ソレノイド</li>
+<li>プッシュ（押し）ソレノイド：プッシュバーを装着した「吸引=押し」動作</li>
+<li>自己保持ソレノイド：永久磁石を組込むことによりそれぞれの動作を保持</li>
+</ul>
+
+<p>といった種類があります。</p>
+
+<h2 id="ソレノイドを使ってみる">ソレノイドを使ってみる</h2>
+
+<p>まずは簡単な例として、Nefry BTについているスイッチを押すとソレノイドが動くようにしてみます。</p>
+
+<h3 id="用意するもの">用意するもの</h3>
+
+<ul>
+<li><a href="http://akizukidenshi.com/catalog/g/gI-02414/">NchパワーMOSFET 2SK2232</a>：スイッチングのために使用(FETはトランジスタと違って電圧でトリガーとなる)</li>
+<li><a href="http://akizukidenshi.com/catalog/g/gP-10761/">ソレノイド 5V ZHO-0420S-05A4.5A プッシュ型</a></li>
+<li>整流ダイオード：逆起電力(ソレノイドへの電力供給停止後、ソレノイドの棒が元に戻るときに発生する起電力)を防止するため(マイコンの破壊を防止する)</li>
+</ul>
+
+<h3 id="回路">回路</h3>
+
+<p>※<strong>ソレノイドに極性(+、-)はありません</strong>！なので、安心して配線しましょう！</p>
+
+<p><img src="https://qiita-image-store.s3.amazonaws.com/0/212276/255b91a2-7e2b-b5c9-6168-4cb604a35da2.png" alt="回路図.png" /></p>
+
+<h3 id="プログラム">プログラム</h3>
+
+<p>「<a href="/docs/nefrybt-arduino-ide-setup/">NefryBTの環境構築</a>」を参考に、Nefry BTに下記のプログラムを書き込みます。</p>
+
+<pre><code class="language-c++">#include&lt;Nefry.h&gt;
+
+void setup() {
+  Serial.print(115200);
+  pinMode(D4, OUTPUT);
+}
+
+//FET:電圧閾値0.8～2.0V　今回使っているトランジスタの場合は！
+void loop() {
+  digitalWrite(D4,LOW);
+  if(Nefry.readSW()){
+  digitalWrite(D4,HIGH);
+  }
+}
+
+</code></pre>
+
+<h3 id="動かしてみると">動かしてみると</h3>
+
+<p>Nefry BTのスイッチを押すと、シュコシュコします。</p>
+
+<p><a href="https://gyazo.com/25c5ea02c0fc0e3ab327f3aff4719f28"><img src="https://i.gyazo.com/25c5ea02c0fc0e3ab327f3aff4719f28.gif" alt="Image from Gyazo" /></a></p>
+
+<h2 id="iotでソレノイドをシュコシュコする">IoTでソレノイドをシュコシュコする</h2>
+
+<p>それでは、スマートフォンをシェイクするとソレノイドをシュコシュコ動かせるようにしていきたいと思います。ここでは、スマートフォンの加速度を利用します（スマートフォンの加速度の利用する方法は<a href="https://qiita.com/minwinmin/items/af1d8ba68d0ec3f52fa9">こちら</a>に少しまとめてあります）。</p>
+
+<h3 id="node-redのフローを作る">Node-Redのフローを作る</h3>
+
+<p><a href="https://nodered.org/">Node-RED</a>で下記のようなフローを作成します。</p>
+
+<p><img width="929" alt="node-redのフロー.png" src="https://qiita-image-store.s3.amazonaws.com/0/212276/29ef7cc8-9340-c1b2-4c82-0deac26eccc9.png"></p>
+
+<p>Node-REDの詳細は前回の記事をご覧ください。</p>
+
+
+
+<section class="link" id="187">
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+          <div class="link_content">
+          <a href="https://dotstud.io/blog/nefry-servo-handson-takudooon/"></a>
+          <img src="/img/blog/187/00_thumbnail.png" alt="サムネイル">
+          </div>
+          <div class="link_content">
+            <div class="link_detail">
+              <div class="link_title">
+                PWM制御をマスターしよう！Node-REDでサーボモータを遠隔制御する方法＆初ハンズオンレポート
+              </div>
+              <div class="link_date">
+                
+                2018-07-12
+              </div>
+              <div class="link_desc">
+                PWM制御でサーボモータを操作してモノ作りの幅を広げましょう！Node-REDを使ったハンズオンの内容を紹介します。
+              </div>
+            </div>
+          </div>
+        </section>
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+</section>
+
+
+<div class="accbox">
+    <label for="label1">クリックしてコードを表示</labe>
+    <input type="checkbox" id="label1" class="cssacc" />
+    <div class="accshow">
+      <pre>
+      <code class="hljs hljs-line-numbers">
+      [
+          {
+              "id": "2c912723.4f0338",
+              "type": "http in",
+              "z": "57519a9b.8fba94",
+              "name": "",
+              "url": "sensor4",
+              "method": "get",
+              "upload": false,
+              "swaggerDoc": "",
+              "x": 70,
+              "y": 100,
+              "wires": [
+                  [
+                      "94c3393a.020d68"
+                  ]
+              ]
+          },
+          {
+              "id": "94c3393a.020d68",
+              "type": "template",
+              "z": "57519a9b.8fba94",
+              "name": "HTML",
+              "field": "payload",
+              "fieldType": "msg",
+              "format": "html",
+              "syntax": "mustache",
+              "template": "&lt;!DOCTYPE html&gt;\n&lt;html lang=\"ja\"&gt;\n&lt;head&gt;\n&lt;meta charset=\"utf-8\"&gt;\n&lt;meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"&gt;\n&lt;title&gt;加速度検出&lt;/title&gt;\n&lt;/head&gt;\n \n&lt;body&gt;\n&lt;div id=\"datatxt\"&gt;データの表示&lt;/div&gt; \n \n&lt;script&gt;\n    var encrypted = \"{{{req.connection.encrypted}}}\";\n    if (encrypted === \"true\") {\n        var wsUri = \"wss://{{{req.hostname}}}:{{{req.connection.localPort}}}/accl1\";\n    }\n    else {\n        var wsUri = \"ws://{{{req.hostname}}}:{{{req.connection.localPort}}}/accl1\";\n    }\n    var ws = new WebSocket(wsUri);\n\n    var accx = null;\n    var accy = null;\n    var accz = null;\n\n    function sendMessage() {\n        // 画面書き換え\n        var txt = \"wsUri:\" + wsUri + \"&lt;br&gt;\";\n        txt += \"x:\" + accx + \"&lt;br&gt;\";\n        txt += \"y:\" + accy + \"&lt;br&gt;\";\n        txt += \"z:\" + accz + \"&lt;br&gt;\";\n\n        var datatxt = document.getElementById(\"datatxt\");\n        datatxt.innerHTML = txt;\n\n        // WebSocket送信\n        var payload = {\n            'accx': accx,\n            'accy': accy,\n            'accz': accz,\n        };\n        ws.send(JSON.stringify(payload));\n    }\n\n    function handleMotionEvent(evt) {\n        //加速度\n        accx = evt.acceleration.x;\n        accy = evt.acceleration.y;\n        accz = evt.acceleration.z;\n    }\n\n    window.addEventListener(\"devicemotion\", handleMotionEvent, true); //情報変更ごとにイベント発生\n    window.setInterval(sendMessage, 500); // 500msごとにイベント発生\n\n&lt;/script&gt;\n&lt;/body&gt;\n&lt;/html&gt;",
+              "output": "str",
+              "x": 317.00000762939453,
+              "y": 100.00000286102295,
+              "wires": [
+                  [
+                      "c9b732b9.d5df9"
+                  ]
+              ]
+          },
+          {
+              "id": "c9b732b9.d5df9",
+              "type": "http response",
+              "z": "57519a9b.8fba94",
+              "name": "",
+              "statusCode": "",
+              "headers": {},
+              "x": 541.0000152587891,
+              "y": 100.00000190734863,
+              "wires": []
+          },
+          {
+              "id": "af4fa6f9.139f88",
+              "type": "websocket in",
+              "z": "57519a9b.8fba94",
+              "name": "",
+              "server": "250c9625.e420aa",
+              "client": "",
+              "x": 60,
+              "y": 220,
+              "wires": [
+                  [
+                      "1c16e58e.096d5a"
+                  ]
+              ]
+          },
+          {
+              "id": "1c16e58e.096d5a",
+              "type": "json",
+              "z": "57519a9b.8fba94",
+              "name": "加速度をjson形式に変換",
+              "property": "payload",
+              "action": "",
+              "pretty": false,
+              "x": 310,
+              "y": 320,
+              "wires": [
+                  [
+                      "b50a0d6c.0c67a",
+                      "10eecadd.b9fbe5",
+                      "1c843637.566a8a"
+                  ]
+              ]
+          },
+          {
+              "id": "b50a0d6c.0c67a",
+              "type": "switch",
+              "z": "57519a9b.8fba94",
+              "name": "加速度判定",
+              "property": "payload.accz",
+              "propertyType": "msg",
+              "rules": [
+                  {
+                      "t": "gt",
+                      "v": "10",
+                      "vt": "num"
+                  },
+                  {
+                      "t": "btwn",
+                      "v": "6",
+                      "vt": "num",
+                      "v2": "10",
+                      "v2t": "num"
+                  },
+                  {
+                      "t": "lte",
+                      "v": "5",
+                      "vt": "num"
+                  }
+              ],
+              "checkall": "true",
+              "repair": false,
+              "outputs": 3,
+              "x": 533.0000152587891,
+              "y": 312.0000088214874,
+              "wires": [
+                  [
+                      "326dd035.413f1"
+                  ],
+                  [
+                      "dddabb62.392ea8"
+                  ],
+                  [
+                      "7c53f99b.cba9e8"
+                  ]
+              ]
+          },
+          {
+              "id": "ec7a3c72.a1361",
+              "type": "debug",
+              "z": "57519a9b.8fba94",
+              "name": "",
+              "active": true,
+              "tosidebar": true,
+              "console": false,
+              "tostatus": false,
+              "complete": "payload",
+              "x": 1110,
+              "y": 320,
+              "wires": []
+          },
+          {
+              "id": "d1c70b54.eb01d8",
+              "type": "comment",
+              "z": "57519a9b.8fba94",
+              "name": "加速度を出力",
+              "info": "",
+              "x": 70,
+              "y": 60,
+              "wires": []
+          },
+          {
+              "id": "10eecadd.b9fbe5",
+              "type": "mqtt out",
+              "z": "57519a9b.8fba94",
+              "name": "/NefryBT/SOLE",
+              "topic": "/NefryBT/SOLE",
+              "qos": "",
+              "retain": "",
+              "broker": "f9299578.86bcb8",
+              "x": 470.0000915527344,
+              "y": 530.0000152587891,
+              "wires": []
+          },
+          {
+              "id": "1c843637.566a8a",
+              "type": "debug",
+              "z": "57519a9b.8fba94",
+              "name": "",
+              "active": false,
+              "tosidebar": true,
+              "console": false,
+              "tostatus": false,
+              "complete": "payload",
+              "x": 311.00004959106445,
+              "y": 583.0000152587891,
+              "wires": []
+          },
+          {
+              "id": "326dd035.413f1",
+              "type": "change",
+              "z": "57519a9b.8fba94",
+              "name": "accz &gt; 10 のときの文字列「large」",
+              "rules": [
+                  {
+                      "t": "set",
+                      "p": "payload",
+                      "pt": "msg",
+                      "to": "large",
+                      "tot": "str"
+                  }
+              ],
+              "action": "",
+              "property": "",
+              "from": "",
+              "to": "",
+              "reg": false,
+              "x": 818.000020980835,
+              "y": 274.00000762939453,
+              "wires": [
+                  [
+                      "ec7a3c72.a1361"
+                  ]
+              ]
+          },
+          {
+              "id": "dddabb62.392ea8",
+              "type": "change",
+              "z": "57519a9b.8fba94",
+              "name": "accz:6~10 のときの文字列「medium」",
+              "rules": [
+                  {
+                      "t": "set",
+                      "p": "payload",
+                      "pt": "msg",
+                      "to": "medium",
+                      "tot": "str"
+                  }
+              ],
+              "action": "",
+              "property": "",
+              "from": "",
+              "to": "",
+              "reg": false,
+              "x": 840,
+              "y": 320,
+              "wires": [
+                  [
+                      "ec7a3c72.a1361"
+                  ]
+              ]
+          },
+          {
+              "id": "7c53f99b.cba9e8",
+              "type": "change",
+              "z": "57519a9b.8fba94",
+              "name": "accz &lt;= 5 のときの文字列「small」",
+              "rules": [
+                  {
+                      "t": "set",
+                      "p": "payload",
+                      "pt": "msg",
+                      "to": "small",
+                      "tot": "str"
+                  }
+              ],
+              "action": "",
+              "property": "",
+              "from": "",
+              "to": "",
+              "reg": false,
+              "x": 820,
+              "y": 360,
+              "wires": [
+                  [
+                      "ec7a3c72.a1361"
+                  ]
+              ]
+          },
+          {
+              "id": "53d3ea65.523574",
+              "type": "comment",
+              "z": "57519a9b.8fba94",
+              "name": "加速度を受信して橋渡し",
+              "info": "",
+              "x": 110,
+              "y": 180,
+              "wires": []
+          },
+          {
+              "id": "422cdf71.4a17e",
+              "type": "comment",
+              "z": "57519a9b.8fba94",
+              "name": "MQTTで加速度をjson形式で送信",
+              "info": "",
+              "x": 520.0000152587891,
+              "y": 490.00001430511475,
+              "wires": []
+          },
+          {
+              "id": "d24b4e1f.58b25",
+              "type": "comment",
+              "z": "57519a9b.8fba94",
+              "name": "デバック画面に加速度の具合を表示させる部分",
+              "info": "",
+              "x": 641.0000152587891,
+              "y": 226.00000667572021,
+              "wires": []
+          },
+          {
+              "id": "250c9625.e420aa",
+              "type": "websocket-listener",
+              "z": "",
+              "path": "/accl1",
+              "wholemsg": "false"
+          },
+          {
+              "id": "f9299578.86bcb8",
+              "type": "mqtt-broker",
+              "z": "",
+              "name": "",
+              "broker": "http://test.mosquitto.org/",
+              "port": "1883",
+              "clientid": "",
+              "usetls": false,
+              "compatmode": true,
+              "keepalive": "60",
+              "cleansession": true,
+              "birthTopic": "",
+              "birthQos": "0",
+              "birthPayload": "",
+              "closeTopic": "",
+              "closeQos": "0",
+              "closePayload": "",
+              "willTopic": "",
+              "willQos": "0",
+              "willPayload": ""
+          }
+      ]
+      </code>
+      </pre>
+    </div>
+</div>
+
+<h3 id="nefry-btにプログラムを書き込む">Nefry BTにプログラムを書き込む</h3>
+
+<p>Nefry BTに書き込むプログラムはこちらです。</p>
+
+<div class="accbox">
+    <label for="label2">クリックしてコードを表示</labe>
+    <input type="checkbox" id="label2" class="cssacc" />
+    <div class="accshow">
+      <pre>
+      <code class="language-c++ hljs cpp">
+      #include &lt;Nefry.h&gt;
+      #include &lt;WiFiClient.h&gt;
+      #include &lt;PubSubClient.h&gt;
+      #include &lt;ArduinoJson.h&gt;
+
+      IPAddress endpoint;
+      const int port = 1883;
+
+      const char *pubTopic;
+      const char *subTopic;
+      const char *deviceName;
+      const char *mqtt_server = "test.mosquitto.org";
+
+      WiFiClient httpsClient;
+      PubSubClient mqttClient(httpsClient);
+
+
+
+      void setup() {
+        ////ソレノイドのピン設定/////////////////////////////////
+        pinMode(D4, OUTPUT);
+
+        //// NefryBT設定 ////////////////////////////////////////
+
+        // NefryBT
+        subTopic = "/NefryBT/SOLE";
+        deviceName = "NefryBT_SOLE";  // 複数台で利用する場合は必ずかぶらないように変更する
+
+        Serial.begin(115200);
+
+        mqttClient.setServer(mqtt_server, port);
+        mqttClient.setCallback(mqttCallback);
+
+        connectMQTT();
+      }
+
+      void connectMQTT() {
+          Serial.println("connectMQTT");
+          Serial.println(deviceName);
+          while (!mqttClient.connected()) {
+            Serial.print(".");
+              if (mqttClient.connect(deviceName)) {
+                  Serial.println("Connected.");
+                  int qos = 0;
+                  mqttClient.subscribe(subTopic, qos);
+                  Serial.println("Subscribed.");
+              } else {
+                  Serial.print("Failed. Error state=");
+                  Serial.print(mqttClient.state());
+                  // Wait 5 seconds before retrying
+                  delay(5000);
+              }
+          }
+      }
+
+      char pubMessage[128];
+
+      void mqttCallback (char* topic, byte* payload, unsigned int length) {
+
+          String str = "";
+          Serial.print("Received. topic=");
+          Serial.println(topic);
+          for (int i = 0; i < length; i++) {
+              Serial.print((char)payload[i]);
+              str += (char)payload[i];
+          }
+          Serial.print("\n");
+
+          StaticJsonBuffer<200> jsonBuffer;
+
+          JsonObject& root = jsonBuffer.parseObject(str);
+
+          // パースが成功かどうか判断
+          if (!root.success()) {
+            Serial.println("parseObject() failed");
+            return;
+          }
+         //z軸方向の加速度を取り出している
+          const char* message = root["message"];
+          int accz = root["accz"];
+
+          Serial.print("accz = ");
+          Serial.println(accz);
+
+         //加速度に応じてソレノイドのシュコシュコ速度が変化
+          if(accz >= 10 || accz <= -10){
+             Serial.println("シュコシュコシュコ");
+             digitalWrite(D4,LOW);
+             delay(50);
+             digitalWrite(D4,HIGH);
+             delay(50);
+          }else if(10 > accz >= 6 || -10 < accz <= 6){
+             Serial.println("シュコシュコ");
+             digitalWrite(D4,LOW);
+             delay(200);
+             digitalWrite(D4,HIGH);
+             delay(200);
+          }else{
+             Serial.println("シュコ");
+             digitalWrite(D4,LOW);
+             delay(500);
+             digitalWrite(D4,HIGH);
+             delay(500);    
+          }
+
+          delay(100);
+
+      }
+
+      void mqttLoop() {
+          if (!mqttClient.connected()) {
+              connectMQTT();
+          }
+          mqttClient.loop();
+      }
+
+      void loop() {
+        mqttLoop();
+       }
+      </code>
+      </pre>
+    </div>
+</div>
+
+<h3 id="動かしてみると-1">動かしてみると</h3>
+
+<p>シリアルモニタを見てみると、スマートフォンの加速度の変化に応じて値が表示されます。</p>
+
+<p><img src="https://qiita-image-store.s3.amazonaws.com/0/212276/7fb2accc-5f35-bc31-7366-04d7e0c2de99.gif" alt="ソレノイド＿シュコシュコ事案.gif" /></p>
+
+<p>下記のようにスマートフォンをシェイクすると、ソレノイドの挙動が変化してます（音をよく聞くと、ソレノイドが早く動いたり遅く動いたりしているのがわかります)。</p>
+
+<p><center>
+<blockquote class="twitter-tweet" data-lang="ja"><p lang="ja" dir="ltr">ソレノイド探求です。<br>スマホの加速度に応じてソレノイドのシュコシュコ具合が変化します。<br> <a href="https://t.co/6qugBugDOU">https://t.co/6qugBugDOU</a> <a href="https://twitter.com/YouTube?ref_src=twsrc%5Etfw">@YouTube</a>さんから</p>&mdash; たくろーどん (@takudooon) <a href="https://twitter.com/takudooon/status/1027809093992378369?ref_src=twsrc%5Etfw">2018年8月10日</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</center></p>
+
+<p>無事、<strong>スマートフォンをシェイクするとソレノイドをシュコシュコ動かすデバイス</strong>ができました！</p>
+
+<h2 id="ソレノイドを使った機構の例">ソレノイドを使った機構の例</h2>
+
+<p>ソレノイドはシンプルな動作をしますが、何かをつくるときの機構として使うことができます。動画ではソレノイドを上下させることでクラッピーに拍手させています。工夫次第では面白い機構が作れるでしょう。</p>
+
+<p><center>
+<blockquote class="twitter-tweet" data-lang="ja"><p lang="ja" dir="ltr">ソレノイドを用いた機構 <a href="https://t.co/Y3KeMOUg1z">https://t.co/Y3KeMOUg1z</a> <a href="https://twitter.com/YouTube?ref_src=twsrc%5Etfw">@YouTube</a>さんから</p>&mdash; たくろーどん (@takudooon) <a href="https://twitter.com/takudooon/status/1027545863197843456?ref_src=twsrc%5Etfw">2018年8月9日</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</center></p>
+
+<h2 id="おわりに">おわりに</h2>
+
+<p>発想は自分次第です。
+ソレノイドを使って面白いデバイスをつくってみてください！</p>
+
+<h2 id="参考">参考</h2>
+
+<p><a href="http://www.takaha.co.jp/technological/action.html">ソレノイドの動作説明</a>: ソレノイドの製造・販売で有名なタカハ機工株式会社より</p>
+
+<style>
+.accbox {
+    margin: 2em 0;
+    padding: 0;
+    max-width: 710px;
+}
+
+
+.accbox label {
+    display: block;
+    margin: 1.5px 0;
+    padding : 11px 12px;
+    color :#ffffff;
+    font-weight: bold;
+    background :#2f2f2f;
+    cursor :pointer;
+    transition: all 0.5s;
+}
+
+.accbox label:hover {
+    background :#A4A4A4;
+}
+
+.accbox input {
+    display: none;
+}
+
+.accbox .accshow {
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: 0.8s;
+}
+
+.cssacc:checked + .accshow {
+    height: auto;
+    padding: 5px;
+    background: #eaeaea;
+    opacity: 1;
+}
+</style>
+</div>
+
+    <div class="share-foot">
+    <a href="https://twitter.com/share" class="twitter-share-button" data-size="large" data-show-count="true" data-hashtags="dotstudio">Tweet</a>
+
+    &nbsp;
+
+    <div class="fb-share-button" data-href="https://dotstud.io/blog/control-solenoid-nefrybt-nodered/" data-layout="button_count" data-size="large" data-mobile-iframe="true"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdotstud.io%2Fblog%2Fmftokyo-2018-chantoku-report%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">シェア</a></div>
+
+    &nbsp;
+
+    <a href="https://dotstud.io/blog/control-solenoid-nefrybt-nodered/" class="hatena-bookmark-button" data-hatena-bookmark-layout="basic-counter" data-hatena-bookmark-height="30" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a>
+
+    &nbsp;
+
+    <div class="line-it-button" data-lang="ja" data-type="share-c" data-url="https://dotstud.io/blog/control-solenoid-nefrybt-nodered/" style="display: none;"></div>
+
+  </div>
+
+
+
+
+    
+    
+    
+    <nav class="related">
+      <h2 class="">関連記事</h2>
+      <ul class="cards-related">
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/handson-nefry-ma-kanazawa/">
+                <img class="card-related--thumbnail" src="/img/blog/229/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">【ハンズオン資料】NefryBTでハジメテノIoT開発やってみよう！</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/nefrybt-handson-pir-linebot/">
+                <img class="card-related--thumbnail" src="/img/blog/215/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">【ハンズオン資料】Nefry BTと人感センサで防犯LINE BOTを作ってみよう</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/stepper-motor-nefrybt-control/">
+                <img class="card-related--thumbnail" src="/img/blog/189/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">【詳細解説】ステッピングモータの仕組みを理解しよう！解説とNefry BTでステッピングモータを使う方法</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/nefry-servo-handson-takudooon/">
+                <img class="card-related--thumbnail" src="/img/blog/187/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">PWM制御をマスターしよう！Node-REDでサーボモータを遠隔制御する方法＆初ハンズオンレポート</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/clova-ifttt-nefrybt-arduino/">
+                <img class="card-related--thumbnail" src="/img/blog/185/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">ClovaとNefryBT（ESP32）を連携させてみよう</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/keyboard-kintai-system-diy/">
+                <img class="card-related--thumbnail" src="/img/blog/183/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">NefryBTとキーボードで作る簡易勤怠管理システム</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/nefrybt-motor-watering-system/">
+                <img class="card-related--thumbnail" src="/img/blog/148/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">自動水やり装置を作ろう！Nefry BTとGroveモジュールでズボラのための電子工作</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/mongoose-os-nefry-blink/">
+                <img class="card-related--thumbnail" src="/img/blog/145/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">JavaScriptで開発できる！Mongoose OSでNefry BTをLチカしよう</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/nefrybt-ble-bluetooth-peripheral/">
+                <img class="card-related--thumbnail" src="/img/blog/143/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">Nefry BT（ESP32）からBLEでNode.jsにデータを送ってみよう</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/nefry-bt-connect-mqtt/">
+                <img class="card-related--thumbnail" src="/img/blog/141/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">Nefry BT（ESP32）でMQTTを使ってみよう Subscribe編</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/nefrybt-pepper-monitoring-system/">
+                <img class="card-related--thumbnail" src="/img/blog/127/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">Node.jsとNefry BTで監視システムを作ろう！ for Pepper #iotlt</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/nefry-ifttt-push-line/">
+                <img class="card-related--thumbnail" src="/img/blog/100/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">Nefry BTとIFTTTでスイッチを押したらLINEを送る仕組みを作ってみよう</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+        </ul>
+      </nav>
+
+
+
+</article>
+
+<footer class="footer">
+  <p class="footer-info">
+    <a class="footer-info--item" href="/about">会社概要</a>
+    <a class="footer-info--item" href="/members">メンバー</a>
+    <a class="footer-info--item" href="/recruit">採用情報</a>
+    <a class="footer-info--item" href="/legal#tos">利用規約</a>
+    <a class="footer-info--item" href="/legal#sct">特定商取引</a>
+    <a class="footer-info--item" href="/legal#pp">プライバシーポリシー</a>
+  </p>
+  <p class="footer-cr">© 2018 dotstudio inc.</p>
+</footer>
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+
+
+
+
+
+<script src="/js/app.js"></script>
+
+
+<script src="/js/lib/hljs.js"></script>
+<script src="/js/lib/hljs-numbers.js"></script>
+<script>
+  hljs.initHighlightingOnLoad();
+  hljs.initLineNumbersOnLoad();
+</script>
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-78080011-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+

@@ -1,0 +1,2692 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
+  <meta charset="utf-8">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+    
+
+    
+    
+      
+      
+      
+      
+
+      
+      
+      
+      
+        
+      
+      
+
+      
+      
+    
+
+    
+    
+
+    
+    
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="MilkcocoaとNefryを使ってWeb上のお絵かきシステムとリアルなLEDの色を同期させてみます！">
+    <meta name="author" content="dotstudio Inc.">
+    <meta content="https://dotstud.io/img/blog/023/00_eyecatch.png">
+
+    <meta itemprop="name" content="MilkcocoaとNefryでIoT体験！リモートでカラーLチカをしてみよう！ | dotstudio"/>
+    <meta itemprop="image" content="https://dotstud.io/img/blog/023/00_eyecatch.png"/>
+    
+    <meta property="og:title" content="MilkcocoaとNefryでIoT体験！リモートでカラーLチカをしてみよう！ | dotstudio" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://dotstud.io/blog/milkcocoa-nefry-iot-handson/" />
+    <meta property="og:site_name" content="dotstudio（ドットスタジオ）" />
+    <meta property="og:image" content="https://dotstud.io/img/blog/023/00_eyecatch.png" />
+    <meta property="og:image:secure_url" content="https://dotstud.io/img/blog/023/00_eyecatch.png" />
+    <meta property="og:description" content="MilkcocoaとNefryを使ってWeb上のお絵かきシステムとリアルなLEDの色を同期させてみます！" />
+    <meta property="article:author" content="https://www.facebook.com/dotstud10/" />
+    <meta property="fb:app_id" content="296336307370435" />
+    <meta property="fb:pages" content="1013196712108753" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image:src" content="https://dotstud.io/img/blog/023/00_eyecatch.png">
+    <meta name="twitter:site" content="@dotstud_io" />
+    <meta name="twitter:url" content="https://dotstud.io/blog/milkcocoa-nefry-iot-handson/">
+    <meta name="twitter:description" content="MilkcocoaとNefryを使ってWeb上のお絵かきシステムとリアルなLEDの色を同期させてみます！">
+    <meta name="twitter:title" content="MilkcocoaとNefryでIoT体験！リモートでカラーLチカをしてみよう！ | dotstudio">
+    <meta name="twitter:creator" content="@dotstud_io" />
+
+    
+    <meta name="google-site-verification" content="oW2fcSG1fFnkDoRCGFJ0IGGebtBr8FjV2twoFMd7Skc" />
+    <title>MilkcocoaとNefryでIoT体験！リモートでカラーLチカをしてみよう！ | dotstudio</title>
+    
+
+    <link rel="stylesheet" href="/css/loader.css">
+    
+    <link rel="stylesheet" href='/css/master.css'>
+    <link rel="stylesheet" href="/css/icon-font.css">
+    
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+
+    <link rel="shortcut icon" type="image/png" href="/img/resources/favicon.png"/>
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="preload" as="style" onload="this.rel='stylesheet'">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel="preload" as="style" onload="this.rel='stylesheet'">
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel="preload" as="style" onload="this.rel='stylesheet'">
+    
+    <link href="/css/lib/hljs.css" rel="preload" as="style" onload="this.rel='stylesheet'">
+    
+
+    
+    
+    
+
+    
+    
+
+    
+    
+    
+    
+
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-K5TRM9Q');</script>
+    
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-5922216421588455",
+        enable_page_level_ads: true
+      });
+    </script>
+</head>
+
+<body>
+  
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K5TRM9Q"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  
+
+  
+  <div id="fb-root"></div>
+  <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v2.8";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));</script>
+
+  
+
+  <header>
+    <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<symbol id="icon-arrow-right" viewBox="0 0 32 32">
+<title>arrow-right</title>
+<path class="path1" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M5.143 5.143l10.349 10.349"></path>
+<path class="path2" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M5.143 26.857l10.349-10.349"></path>
+<path class="path3" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M16.571 26.857l10.349-10.349"></path>
+<path class="path4" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M16.571 5.143l10.349 10.349"></path>
+</symbol>
+<symbol id="icon-hamburger" viewBox="0 0 60 32">
+<title>hamburger</title>
+<path class="path1" fill="none" stroke="#808080" stroke-width="7.1111" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M3.556 3.556h53.333"></path>
+<path class="path2" fill="none" stroke="#808080" stroke-width="7.1111" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M3.556 28.444h53.333"></path>
+</symbol>
+<symbol id="icon-logo-mark" viewBox="0 0 32 32">
+<title>logo-mark</title>
+<path class="path1" d="M19.731 28.8h-19.731v-19.699h19.731zM1.53 27.302h16.672v-16.672h-16.672z"></path>
+<path class="path2" d="M32 22.899h-19.731v-19.699h19.731zM13.798 21.37h16.672v-16.672h-16.672z"></path>
+</symbol>
+<symbol id="icon-social-facebook" viewBox="0 0 32 32">
+<title>social-facebook</title>
+<path class="path1" d="M30.1 0.12h-28.46c-0.974 0.011-1.76 0.804-1.76 1.78 0 0 0 0 0 0v28.46c0 0.983 0.797 1.78 1.78 1.78h15.32v-12.4h-4.16v-4.82h4.16v-3.58c-0.020-0.179-0.031-0.386-0.031-0.596 0-3.203 2.597-5.8 5.8-5.8 0.152 0 0.302 0.006 0.45 0.017-0.016-0.001-0.013-0.001-0.009-0.001 1.3 0 2.582 0.073 3.844 0.214l-0.155 4.286h-2.54c-2 0-2.36 0.96-2.36 2.36v3.1h4.76l-0.62 4.8h-4.12v12.4h8.12c0.983 0 1.78-0.797 1.78-1.78v-28.44c0-0.983-0.797-1.78-1.78-1.78z"></path>
+</symbol>
+<symbol id="icon-social-github" viewBox="0 0 32 32">
+<title>social-github</title>
+<path class="path1" d="M16 0.4c-0.001 0-0.002 0-0.004 0-8.837 0-16 7.163-16 16 0 7.028 4.531 12.997 10.831 15.147 0.913 0.173 1.213-0.307 1.213-0.747s-0.040-1.38-0.040-2.8c-4.44 1.060-5.38-2-5.38-2-0.308-0.987-0.937-1.798-1.763-2.33-1.477-1.010 0.103-0.99 0.103-0.99 1.055 0.144 1.941 0.76 2.451 1.624 0.607 1.039 1.701 1.715 2.953 1.715 0.6 0 1.164-0.155 1.653-0.428 0.062-0.836 0.437-1.58 1.002-2.13-3.559-0.401-7.279-1.781-7.279-8.001-0.001-0.032-0.001-0.069-0.001-0.106 0-1.621 0.624-3.096 1.645-4.198-0.181-0.526-0.283-1.135-0.283-1.769 0-0.85 0.184-1.657 0.514-2.383s1.325-0.404 4.385 1.676c1.199-0.341 2.577-0.537 4-0.537s2.801 0.196 4.107 0.562c2.953-2.026 4.293-1.666 4.293-1.666 0.31 0.683 0.49 1.481 0.49 2.321 0 0.688-0.121 1.348-0.343 1.959 1.030 1.058 1.654 2.533 1.654 4.154 0 0.037-0 0.075-0.001 0.112 0 6.134-3.74 7.494-7.3 7.894 0.685 0.69 1.108 1.641 1.108 2.69 0 0.088-0.003 0.175-0.009 0.261 0.001 2.128 0.001 3.848 0.001 4.368s0.28 0.92 1.1 0.78c6.413-2.183 10.944-8.152 10.944-15.18 0-8.837-7.163-16-16-16-0.015 0-0.031 0-0.046 0z"></path>
+</symbol>
+<symbol id="icon-social-twitter" viewBox="0 0 32 32">
+<title>social-twitter</title>
+<path class="path1" d="M10 29c0.036 0 0.078 0 0.12 0 10.25 0 18.56-8.31 18.56-18.56 0-0.042-0-0.085-0-0.127 0-0.274 0-0.554 0-0.834 1.312-0.959 2.414-2.113 3.289-3.431-1.070 0.454-2.347 0.82-3.686 0.984 1.293-0.819 2.312-2.084 2.804-3.587-1.184 0.679-2.577 1.234-4.062 1.539-1.286-1.244-2.976-2.027-4.849-2.027-3.634 0-6.58 2.946-6.58 6.58 0 0.518 0.060 1.022 0.173 1.506-5.473-0.309-10.286-2.887-13.523-6.813-0.587 0.917-0.919 2.059-0.919 3.278 0 2.258 1.137 4.25 2.871 5.435-1.063-0.025-2.070-0.325-2.95-0.822l0.032 0.017c-0 0.027-0.001 0.058-0.001 0.090 0 3.163 2.239 5.803 5.218 6.423-0.479 0.156-1.078 0.242-1.696 0.242-0.432 0-0.854-0.042-1.263-0.121 0.908 2.637 3.319 4.512 6.175 4.567-2.208 1.746-5.039 2.8-8.116 2.8-0.013 0-0.027-0-0.040-0-0.566-0.018-1.104-0.068-1.633-0.149 2.897 1.868 6.353 2.984 10.068 3.009z"></path>
+</symbol>
+</defs>
+</svg>
+
+    <div class="header">
+  <span class="logo"><a href="/"><svg id="icon-logo" width="100%"><use xlink:href="#icon-logo-mark"></svg></a></span>
+
+  <div class="menu">
+    <input type="checkbox" id="menu-toggle">
+      <label for="menu-toggle" class='label-toggle'>
+        <svg class="icon-hamburger"><use xlink:href="#icon-hamburger"></svg>
+      </label>
+    </input>
+    <ul>
+      <li class="menu-item"><a href="/blog">Blog</a></li>
+      <li class="menu-item"><a href="/docs">Docs</a></li>
+      <li class="menu-item"><a href="/shop">Shop</a></li>
+      <li class="menu-item"><a href="/members">Members</a></li>
+      <li class="menu-item"><a href="/service">Service</a></li>
+      <li class="menu-item"><a href="/about">About</a></li>
+      
+    </ul>
+  </div>
+
+</div>
+
+  </header>
+
+
+
+
+ 
+ 
+
+
+	
+		
+	
+		
+	
+
+
+
+
+<ul class="categories">
+	
+	<li><a href="/categories/try/" class="selected">
+		やってみるIoT
+	</a></li>
+	
+	<li><a href="/categories/learn/" class="">
+		IoTを知ろう
+	</a></li>
+	
+	<li><a href="/categories/event/" class="">
+		イベントレポート
+	</a></li>
+	
+	<li><a href="/categories/tips/" class="">
+		Tips
+	</a></li>
+	
+</ul>
+
+
+
+
+  
+    
+  
+
+  
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+
+<article class="blog-single">
+  <div class="date">2016.09.27</div>
+
+  <img class="blog-single--eyecatch" src="/img/blog/023/00_eyecatch.png" alt="" width="710px">
+
+  <h1 class="blog-single--title">MilkcocoaとNefryでIoT体験！リモートでカラーLチカをしてみよう！</h1>
+
+  <div class="blog-single--information">
+    <a class="author" href="/members/n0bisuke">
+      <img src="/img/members/n0bisuke/author.png" alt="" class="author--avatar">
+      <p class="author--name">のびすけ</p>
+    </a>
+
+    
+    <a class="series" href="/series/milkcocoa">
+        Milkcocoa
+    </a>
+    
+
+  </div>
+
+  <div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = 'https://connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v3.1&appId=172686636611828&autoLogAppEvents=1';
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+  <div class="share">
+    <a href="https://twitter.com/share" class="twitter-share-button" data-size="large" data-show-count="true" data-hashtags="dotstudio">Tweet</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    &nbsp;
+
+    <div class="fb-share-button" data-href="https://dotstud.io/blog/milkcocoa-nefry-iot-handson/" data-layout="button_count" data-size="large" data-mobile-iframe="true"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdotstud.io%2Fblog%2Fmftokyo-2018-chantoku-report%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">シェア</a></div>
+
+    &nbsp;
+
+    <a href="https://dotstud.io/blog/milkcocoa-nefry-iot-handson/" class="hatena-bookmark-button" data-hatena-bookmark-layout="basic-counter" data-hatena-bookmark-height="30" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+    &nbsp;
+
+    <div class="line-it-button" data-lang="ja" data-type="share-c" data-url="https://dotstud.io/blog/milkcocoa-nefry-iot-handson/" style="display: none;"></div>
+    <script src="https://d.line-scdn.net/r/web/social-plugin/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+
+  </div>
+
+
+  <div class="blog-single--content markdown">
+
+<p><img src="/img/blog/023/caution.png" alt="" /></p>
+
+<p>こんにちは、dotstudio代表の<a href="https://dotstud.io/members/n0bisuke">のびすけ</a>です。</p>
+
+<p>IoTな開発をしようとしても、Webやネットワーク、デバイスの知識などが必要になり、始めるまでですでに大変だという場合が多いと思います。</p>
+
+<p>そんな方でも、ネットワークに接続しやすく初心者にも易しいデバイスである「Nefry」と、サーバーやネットワーク側の知識がなくてもデバイスやWebを連携できるサービス「Milkcocoa」を使うことで、手軽にIoT開発の入り口に立てます。</p>
+
+<p>ということで今日はMilkcocoaとNefryを使い、<strong>Web上のドット絵の色とリアルなLEDを連携させてみましょう</strong>！（ちなみに、この記事は<a href="http://mlkcca.connpass.com/event/40292/">IoT初心者向けハンズオン！ Milkcocoa Meetup vol 13 #mlkcca</a>のハンズオン資料にもなっています）</p>
+
+<h2 id="今回やること-ledの色をブラウザ上から変える">今回やること「LEDの色をブラウザ上から変える」</h2>
+
+<p><center>
+<blockquote class="instagram-media" data-instgrm-captioned data-instgrm-version="7" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px); text-align:center;"><div style="padding:8px;"> <div style=" background:#F8F8F8; line-height:0; margin-top:40px; padding:28.1944444444% 0; text-align:center; width:100%;"> <div style=" background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;"></div></div> <p style=" margin:8px 0 0 0; padding:0 4px;"> <a href="https://www.instagram.com/p/BKyHEcljEZS/" style=" color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;" target="_blank">#Nefry と #mlkcca のサンプル強化</a></p> <p style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;">n0bisukeさん(@n0bisuke)が投稿した動画 - <time style=" font-family:Arial,sans-serif; font-size:14px; line-height:17px;" datetime="2016-09-25T14:53:59+00:00">2016 9月 25 7:53午前 PDT</time></p></div></blockquote> <script async defer src="//platform.instagram.com/en_US/embeds.js"></script>
+</center></p>
+
+<p>今回作るものはこちら。<strong>Milkcocoaのドット絵で色を塗ると、NefryのLEDの色（&amp;作成したWebサイト上のLED）が変わる</strong> という仕組みです！　次の4ステップを通して開発していきます。</p>
+
+<p><img src="/img/blog/023/03.png" alt="" /></p>
+
+<ul>
+<li>STEP1：自前のWebサイトを作る</li>
+<li>STEP2：ドット絵とWebサイトをMilkcocoa経由で繋げる</li>
+<li>STEP3：NefryでLチカする</li>
+<li>STEP4：ドット絵と自前のWebサイトとNefryを繋げてLチカする</li>
+</ul>
+
+<p>今回はこれにチャレンジしてみましょう。</p>
+
+<h2 id="今回使うもの-開発環境">今回使うもの&amp;開発環境</h2>
+
+<h3 id="milkcocoa">Milkcocoa</h3>
+
+<p><img src="/img/blog/023/01.png" alt="" />
+URL：<a href="https://mlkcca.com/">https://mlkcca.com/</a></p>
+
+<p>WebとWebや、Webとモバイルアプリなどをリアルタイムに繋げるリアルタイム通信ができるIoTのバックエンドサービスです。IoTデバイス間を繋げるハブになってくれます。</p>
+
+<p>余談ですが、僕がエバンジェリストをしています。</p>
+
+<h3 id="nefry">Nefry</h3>
+
+<p><img src="/img/blog/023/02.png" alt="" />
+URL：<a href="https://dotstud.io/projects/nefry-connect-internet/">https://dotstud.io/projects/nefry-connect-internet/</a></p>
+
+<p>ESP8266をベースとしたArduino互換の開発ボードです。Wi-Fiの接続が簡単で、Milkcocoaとの連携もしやすいので、Web界隈の人に易しくIoTの入門におすすめです。青い基盤がversion1で、赤い基盤がversion2になります。</p>
+
+<p>名古屋のメイカーである<a href="https://twitter.com/wamisnet">わみさん</a>が制作していてdotstudioで販売しています。CodeZineの記事（<a href="http://codezine.jp/article/detail/9653">Arduino IDEで開発できるFRISKサイズのIoTデバイス「Nefry」</a>）に概要説明がありますので参照してください。</p>
+
+<h3 id="筆者の環境">筆者の環境</h3>
+
+<p>僕の環境はこんな感じです。<a href="https://dotstud.io/blog/macos-sierra-update-process/">macOS Sierraにしたばかり</a>ですが、今回の開発には問題はありませんでした。</p>
+
+<ul>
+<li>MacBook Pro（Retina 13-inch、 Early2015）</li>
+<li>macOS Sierra / v10.12 ←アップデートしたばかりです（笑）</li>
+<li>Arduino IDE v1.16.11</li>
+<li>Nefry v2</li>
+</ul>
+
+<h3 id="事前確認">事前確認</h3>
+
+<p>開発にあたり必要なものがいくつかあります。問題のない方は「実際に作ってみよう」まで読み飛ばして下さい。</p>
+
+<h4 id="wi-fi環境はありますか">Wi-Fi環境はありますか?</h4>
+
+<p>Nefryの開発にはWi-Fiが必須になります。スマートフォンのテザリングなどでも問題ないです。</p>
+
+<h4 id="gitコマンドは使えますか">gitコマンドは使えますか？</h4>
+
+<p><img src="/img/blog/023/04.png" alt="" /></p>
+
+<p>Macの場合はターミナルでgitコマンドを打つとインストールを促されます。Mac以外の方でGitが使えない場合は<a href="https://git-scm.com/">公式サイト</a>などの手順をもとにインストールしてください。</p>
+
+<h4 id="webサーバーを立ち上げられますか">Webサーバーを立ち上げられますか？</h4>
+
+<p>ブラウザからlocalhostにアクセスできる状態にできればOKです。
+XAMPや<a href="https://www.npmjs.com/package/koko">koko</a>など他の方法でも大丈夫です。
+<a href="http://qiita.com/higuma/items/b23ca9d96dac49999ab9">開発用ローカルサーバを立ち上げる方法</a>が参考になります。</p>
+
+<p>今回はPythonのSimpleHTTPServerを使ってみます。Macの人なら特に何も設定してなくても使えるので便利です。</p>
+
+<pre><code>python -m SimpleHTTPServer
+</code></pre>
+
+<p>サーバーの終了はCtrl+Cです。</p>
+
+<h4 id="milkcocoaのアカウント-appidはありますか-無料">Milkcocoaのアカウント &amp; AppIDはありますか？ (無料)</h4>
+
+<p>アカウント登録がまだの場合は<a href="https://mlkcca.com/">公式サイト</a>から、アカウント登録&amp;アプリ作成をしてAppIDを取得しましょう。</p>
+
+<h4 id="nefryが手元にありますか">Nefryが手元にありますか？</h4>
+
+<p>持っていない場合は<a href="https://dotstud.io/projects/nefry-connect-internet/">こちら</a>から購入できます。</p>
+
+<h4 id="arduino-ideはインストールされてますか">Arduino IDEはインストールされてますか？</h4>
+
+<p>こちらも持っていない場合は<a href="https://www.arduino.cc/en/Main/Software">公式サイト</a>からDL&amp;インストールしてください。</p>
+
+<h2 id="実際に作ってみよう">実際に作ってみよう</h2>
+
+<p>ここから実際に作っていきましょう。
+ソースコードのリポジトリは以下になります。</p>
+
+<p><a href="https://github.com/n0bisuke/milkcocoa-nefry-handson">https://github.com/n0bisuke/milkcocoa-nefry-handson</a></p>
+
+<p>ちなみにフロント部分で利用しているWeb LEDはDenny Kuさんの<a href="http://codepen.io/abalone0204/pen/RWgeJY">Pure CSS Led Bulb</a>をフォークして作っています。</p>
+
+<h3 id="step1-利用するwebサイト-web-led-を手元で立ち上げてみる">STEP1：利用するWebサイト（Web LED）を手元で立ち上げてみる</h3>
+
+<p><img src="/img/blog/023/05.png" alt="" /></p>
+
+<p>git cloneしてソースコードをDLしましょう。このリポジトリにはSTEP1~4までの完成ソースコードがSTEP毎にブランチを分けて置いてあります。
+途中で分からなくなったら各ブランチに移動して確認してみましょう。</p>
+
+<pre><code>git clone https://github.com/n0bisuke/milkcocoa-nefry-handson
+cd milkcocoa-nefry-handson
+</code></pre>
+
+<p>step1ブランチにチェックアウトします。</p>
+
+<pre><code>git checkout step1
+</code></pre>
+
+<p>チェックアウトしたらサーバーを起動させてみましょう。</p>
+
+<pre><code>python -m SimpleHTTPServer
+</code></pre>
+
+<p><a href="http://localhost:8000">http://localhost:8000</a> にブラウザでアクセスすると↑のGIFのような状態になると思います。</p>
+
+<p>POWERボタンを押すとLEDが光ります。この記事ではこのサイトをWeb LEDと呼んでいきます。</p>
+
+<h3 id="step2-ドット絵とweb-ledを繋げてみよう">STEP2：ドット絵とWeb LEDを繋げてみよう</h3>
+
+<h4 id="milkcocoa-sdkを読み込む">Milkcocoa SDKを読み込む</h4>
+
+<p>milkcocoa-nefry-handsonディレクトリの中には</p>
+
+<ul>
+<li>app.js</li>
+<li>index.html</li>
+<li>readme.md</li>
+<li>style.css</li>
+</ul>
+
+<p>の4つのファイルがあります。まずはindex.htmlを編集します。</p>
+
+<ul>
+<li>index.html</li>
+</ul>
+
+<pre><code>&lt;script src=&quot;https://cdn.mlkcca.com/v0.6.0/milkcocoa.js&quot;&gt;&lt;/script&gt;
+</code></pre>
+
+<p>この行をapp.jsの読み込み直前に記述しましょう。</p>
+
+<h4 id="milkcocoaのコードを追記">Milkcocoaのコードを追記</h4>
+
+<p>app.jsの末尾に追記しましょう。</p>
+
+<ul>
+<li>app.js</li>
+</ul>
+
+<pre><code>const milkcocoa = new MilkCocoa(`dogi9jz8c16.mlkcca.com`);
+const dot_ds = milkcocoa.dataStore('dots');
+</code></pre>
+
+<p><strong>dogi9jz8c16</strong> の部分がドット絵のApp ID、<strong>dots</strong> がドット絵のデータストア名になります。</p>
+
+<p>また以下を追記します。</p>
+
+<pre><code>let flag = 0;
+dot_ds.on('push',(pushed) =&gt; {
+	//ドット絵に色が塗られると実行される部分
+    addClass(pushed.value.color);
+    flag = 1;
+});
+
+setInterval(()=&gt;{
+    removeClass();
+    flag = 0;
+},5000);
+</code></pre>
+
+<p><code>.on</code>メソッドで<code>pushイベント</code>を監視しています。ドット絵に色が塗られると、onメソッドのコールバック関数が発火してaddClass関数が実行されます。（ここの行数でいうと4行目）</p>
+
+<p>ドット絵では塗られた色のカラーコードが送られて来るので色の情報をaddClass関数に渡しています。</p>
+
+<h4 id="step2の確認">STEP2の確認</h4>
+
+<p><img src="/img/blog/023/06.png" alt="" /></p>
+
+<p>STEP1と同様に <a href="http://localhost:8000">http://localhost:8000</a> にブラウザでアクセスして動作を確認しましょう。同時に <a href="https://mlkcca.com/sample.html">https://mlkcca.com/sample.html</a> も開いてドット絵で色を塗るとLEDの色が変わることを確認してください。</p>
+
+<p>ここまでの完成ソースコードは<a href="https://github.com/n0bisuke/milkcocoa-nefry-handson/tree/step2">STEP2ブランチ</a>にまとめてあります。</p>
+
+<h3 id="step3-nefryでlチカしてみよう">STEP3：NefryでLチカしてみよう</h3>
+
+<p>いよいよNefryを触ります。Nefryの関連リンクもあるので参考にしましょう。</p>
+
+<ul>
+<li><a href="https://codezine.jp/article/detail/9653">Arduino IDEで開発できるFRISKサイズのIoTデバイス「Nefry」</a></li>
+<li><a href="http://qiita.com/wamisnet/items/d07c3c22e2bf5ab628ef">Nefryの情報まとめ</a></li>
+</ul>
+
+<h4 id="arduino-ideにnefryのボードマネージャを追加する">Arduino IDEにNefryのボードマネージャを追加する</h4>
+
+<p>Arduino IDEでNefryの開発ができるのですが、いくつかの設定が必要になります。Arduino IDEのメニューの <strong>環境設定 &gt; 追加のボードマネージャのURL</strong> のフォームに以下をURLを貼り付けてOKを押しましょう。</p>
+
+<pre><code>http://wamisnet.github.io/package_nefry_index.json
+</code></pre>
+
+<p><img src="/img/blog/023/07.png" alt="" /></p>
+
+<p>次にArduino IDEの <strong>ツール &gt; ボード &gt;ボードマネージャ</strong> からNefryを検索します。</p>
+
+<p><img src="/img/blog/023/08.png" alt="" /></p>
+
+<p>Nefryの項目が出てくるのでインストールしましょう。</p>
+
+<p><img src="/img/blog/023/09.png" alt="" /></p>
+
+<h4 id="コードの準備">コードの準備</h4>
+
+<p>それではいよいよLチカです。ハローワールドですね。Nefryには最初からフルカラーLEDがついているのでカラフルなLチカが試せます。</p>
+
+<p>以下がLチカのサンプルコードです。 <strong>新規ファイル</strong> から新規のスケッチファイルを作成し、コードをとりあえずコピペしてみましょう。</p>
+
+<pre><code>#include &lt;Nefry.h&gt;
+//フルカラーLED　ランダムにカラーが変わります。
+void setup() {
+  Nefry.println(&quot;フルカラーLED!&quot;);
+  randomSeed(analogRead(A0));
+}
+int red,green,blue;
+void loop() {
+  red=random(255);//random関数は0-255の数値をランダムに返します。
+  green=random(255);
+  blue=random(255);
+  Nefry.setLed(red,green,blue);//LEDがランダムに点灯します。
+  String color=&quot;Red:&quot;;color+=red;
+  color+=&quot; Green:&quot;;color+=green;
+  color+=&quot; Blue:&quot;;color+=blue;
+  Nefry.println(color);//Nefry consoleで色を表示
+  Nefry.ndelay(1000);//1秒待つ
+}
+</code></pre>
+
+<p>Arduino開発をしたことがある人は、<strong>これを書いたら書き込みたくなりますが一旦待ちましょう。</strong> Nefryではこのコードを直接書き込むのではなく、一旦 <strong>.bin</strong> 形式にコンパイルしてからWebブラウザ経由で書き込みます。</p>
+
+<h4 id="ソースコードを-bin形式にコンパイル">ソースコードを.bin形式にコンパイル</h4>
+
+<p>まずはメニューの<strong>ツール &gt; ボード</strong>から<strong>Nefry</strong>を選択しましょう。この時、赤い基盤のNefryの場合は<strong>Nefry V2</strong>を選択してください。</p>
+
+<p><img src="/img/blog/023/10.png" alt="" /></p>
+
+<p>次にメニューの <strong>スケッチ &gt; コンパイルしたバイナリを出力</strong> を選択します。</p>
+
+<p><img src="/img/blog/023/11.png" alt="" /></p>
+
+<p>コンパイルが開始され、プログラム的なエラーがあればここで表示されます。</p>
+
+<p><img src="/img/blog/023/12.png" alt="" /></p>
+
+<p>特にエラーが出なければ<strong>arduino.bin</strong>というファイルがスケッチファイル（.ino）と同じディレクトリ内にできます。</p>
+
+<h4 id="nefryとpcをwi-fi経由で接続してプログラムを書き込む">NefryとPCをWi-Fi経由で接続してプログラムを書き込む</h4>
+
+<p>ここからはNefryとの接続ですので <strong>Nefryの電源をつけましょう。</strong> NefryとPCの接続はWi-Fi経由で行います。そのためNefryはWi-Fi環境さえあれば <strong>PCと物理的に接続しなくとも開発ができる</strong> デバイスです。</p>
+
+<p>ちなみにNefryは <strong>PCに直挿しもできますが、USBで給電しているだけ</strong> です。</p>
+
+<p><img src="/img/blog/023/13.png" alt="" /></p>
+
+<p>まずはPCでWi-FiのSSIDを探します。Nefryが起動していると、<strong>Nefry_xxxx</strong> というアクセスポイントが表示されるはずなので探して接続しましょう。</p>
+
+<p>ちなみに、この&rdquo;NefryのWi-Fi&rdquo;に接続している段階ではWebサイトなどは見れないのでこのページを開いたまま進めることをオススメします。</p>
+
+<p><img src="/img/blog/023/14.png" alt="" /></p>
+
+<p>接続できたらブラウザで <a href="http://192.168.4.1">http://192.168.4.1</a> にアクセスします。「Hello from Nefry!」と表示されるのNefryの管理画面が表示されます。</p>
+
+<p>メニューの <strong>Upload Sketch</strong> を選択すると、アップローダが表示されるので先ほどの <strong>arduino.bin</strong> をアップロードします。</p>
+
+<p><img src="/img/blog/023/15.png" alt="" /></p>
+
+<p>これで先ほどのLチカプログラムがNefryに書き込まれます。</p>
+
+<h4 id="lチカ完成">Lチカ完成</h4>
+
+<p>プログラムの書き込みなどで数秒掛かるので少し待ちます。すると……</p>
+
+<p><img src="/img/blog/023/16.png" alt="" /></p>
+
+<p>ランダムな色でLEDがチカチカしたかと思います。うまくいきましたか？</p>
+
+<p>ここまでできたら一安心です。ソースコードの<code>Nefry.ndelay(1000);</code>の1000の数値を変えて、同じ手順でNefryに書き込んでチカチカする間隔が変わることを試してみましょう。</p>
+
+<p>ここまでの完成ソースコードは<a href="https://github.com/n0bisuke/milkcocoa-nefry-handson/tree/step3">STEP3ブランチ</a>にまとめてあります。</p>
+
+<h3 id="step4-nefryとmilkcocoaを繋げる">STEP4：NefryとMilkcocoaを繋げる</h3>
+
+<p>それでは本題であるMilkcocoaとNefryを繋げてみます。</p>
+
+<h4 id="nefryをネットワークに繋げる">Nefryをネットワークに繋げる</h4>
+
+<p>先ほどはNefryをホストにしてPCから直接Nefryに接続しました。</p>
+
+<p>この状態だとローカルLAN接続しかできず、インターネットの世界にNefryを繋げることができません。
+今度はNefry自体をネットワークに接続しましょう。作業している部屋などで、普段使っているWi-FiにNefryを接続します。</p>
+
+<p><strong>Nefry_xxxx</strong> という&rdquo;NefryのWi-Fi&rdquo;に接続されていることを確認してください。また <a href="http://192.168.4.1">http://192.168.4.1</a> にアクセスし、メニューの <strong>Setup WiFi</strong> を選択すると近くのSSIDとPASSを入力する画面が表示されます。</p>
+
+<p><img src="/img/blog/023/17.png" alt="" /></p>
+
+<p>SSID（近くにあればプルダウンで選択できます）とパスワードを入力して、セーブしましょう。ポップアップで確認がでるのでOKを選択してください。SSIDが出てこない場合はリロードしてください。</p>
+
+<p><img src="/img/blog/023/18.png" alt="" /></p>
+
+<p>これでNefryがネットワークに繋がりました。</p>
+
+<h4 id="nefryのip-adressを調べる">NefryのIP Adressを調べる</h4>
+
+<p>Nefryがネットワークに繋がるとリスタートがかかってWi-Fi接続が途切れる場合があります。一度　<strong>Nefry_xxxx</strong>　という&rdquo;NefryのWi-Fi&rdquo;に繋がっているか確認してください。</p>
+
+<p><img src="/img/blog/023/19.png" alt="" /></p>
+
+<p><a href="http://192.168.4.1">http://192.168.4.1</a> にアクセスしましょう。 <strong>IP Address</strong>　の項目にNefryのIPアドレスが表示されています。表示されない場合はNefryを再起動して再度試してみましょう。</p>
+
+<p><img src="/img/blog/023/20.png" alt="" /></p>
+
+<p>これでNefryのIPが　<strong>192.168.43.56</strong>　ということが分かりました。人によって変わるので各自の値で置き換えて見てください。IPアドレスが分かったらWi-Fiを繋ぎなおしましょう。</p>
+
+<p><img src="/img/blog/023/21.png" alt="" /></p>
+
+<p>繋ぎなおしてから <a href="http://192.168.43.56/">http://192.168.43.56/</a> にアクセスすると先ほどと同様のメニュー画面になります。</p>
+
+<p><img src="/img/blog/023/22.png" alt="" /></p>
+
+<p>&ldquo;NefryのWi-Fi&rdquo;でアクセスしてた際の 192.168.4.1 ではないIPでもNefryにアクセスできたことがわかります。</p>
+
+<p>これでPCとNefryの両方がネットワークに接続することができました。(僕の場合はu-sen-lan)</p>
+
+<p>&ldquo;NefryのWi-Fi&rdquo;に繋いだままだとサイトを見に行けなかったですが、これでWebサイトなどを通常に見ることができます。</p>
+
+<h4 id="milkcocoaのkeyを取得してnefryに設定">MilkcocoaのKeyを取得してNefryに設定</h4>
+
+<p>PCが通常のネットワークに繋がったので、Milkcocoaのウェブサイトを見にいきましょう。</p>
+
+<p><a href="https://mlkcca.com/edit/">Milkcocoaの管理画面</a>から <strong>認証 &gt; 新しいAPI KeyとAPI Secretのペアを生成する</strong> を選択しAPI KeyとAPI Secretを作ります。</p>
+
+<p><img src="/img/blog/023/23.png" alt="" /></p>
+
+<ul>
+<li>App ID</li>
+<li>API Key</li>
+<li>API Secret</li>
+</ul>
+
+<p>この三つの値を後ほど使います。</p>
+
+<h4 id="コーディング">コーディング</h4>
+
+<ul>
+<li>app.jsの変更</li>
+</ul>
+
+<p><strong>app.js</strong> に変更と追記をしていきます。</p>
+
+<p>主に今回の変更は、ドット絵のデータとNefryに流すデータを繋げるための変更です。</p>
+
+<pre><code>・
+・(省略)
+・
+//ドット絵側のアプリ&amp;データストア
+let milkcocoa = new MilkCocoa(`dogi9jz8c16.mlkcca.com`);
+const dot_ds = milkcocoa.dataStore('dots');
+//Nefry側のアプリ&amp;データストア
+milkcocoa = new MilkCocoa(`your-app-id.mlkcca.com`);
+const nefry_ds = milkcocoa.dataStore('nefry');
+
+let flag = 0, red = 0, green = 0, blue = 0;
+dot_ds.on('push',(pushed) =&gt; {
+    //ドット絵から送られてくるカラーコードをRGBに変換
+    let color = pushed.value.color;
+    red = parseInt(color.substr(1,2), 16);
+    green = parseInt(color.substr(3,2), 16);
+    blue = parseInt(color.substr(5,2), 16);
+
+    addClass(color);
+    flag = 1;
+
+    //ドット絵から受け取ったデータをNefryに流す
+    nefry_ds.send({r:red,g:green,b:blue},(err,pushed) =&gt; {
+        console.log(pushed);
+    });
+});
+・
+・(省略)
+・
+</code></pre>
+
+<p>変数 <strong>nefry_ds</strong> としてNefry側のデータストアを新たに読み込みます。<strong>dot_ds.on()</strong> の中では<strong>pushed.value.color</strong>にカラーコード（#ce071bのような値）が送られてくるので、RGB（206,7,27のような値）に変換して、<strong>nefry_ds.send()</strong> でNefry側に送信しています。</p>
+
+<ul>
+<li>Nefry側</li>
+</ul>
+
+<p>Milkcocoaからのデータを受け取り、LEDを光らせるコードにしましょう。</p>
+
+<p>以下のスケッチを作成し、STEP3の時と同様に <strong>arduino.bin</strong> にコンパイルして出力します。先ほどの手順と同様にNefryのメニューから <strong>Upload Sketch</strong> を選択してアップロードしましょう。</p>
+
+<pre><code>#include &lt;Nefry.h&gt;
+#include &lt;Nefry_Milkcocoa.h&gt;
+
+Nefry_Milkcocoa *milkcocoa;
+
+char *datastore;
+int red,green,blue;
+void onsend(DataElement *elem) {//MilkcocoaのOn関数と同一
+    //データストアにデータが届いたときに呼び出される
+    red = elem-&gt;getInt(&quot;r&quot;);
+    green = elem-&gt;getInt(&quot;g&quot;);
+    blue = elem-&gt;getInt(&quot;b&quot;);
+    Nefry.setLed(red,green,blue);//LEDがランダムに点灯します。
+    String color=&quot;Red:&quot;;color+=red;color+=&quot; Green:&quot;;color+=green;color+=&quot; Blue:&quot;;color+=blue;
+    Nefry.println(color);//Nefry consoleで色を表示
+}
+
+void setup() {
+  milkcocoa-&gt;print();//Setup ModuleページにAPPIDの表示をする
+  milkcocoa = Nefry_Milkcocoa::begin();//milkcocoaと接続に必要になる処理をします。
+  datastore = Nefry.getConfStr(3);//Setup Moduleページに入力されたデータストア名を保存します。
+  Nefry.println( milkcocoa-&gt;on( datastore, &quot;send&quot;, onsend) ? &quot;Milkcocoa onSend OK&quot; : &quot;Milkcocoa onSend NG&quot; );//on関数を有効にします。
+}
+
+void loop() {
+  Nefry.println( milkcocoa-&gt;loop(10000)? &quot;Milkcocoa Connect OK&quot; : &quot;Milkcocoa Connect NG&quot; );//10秒以内にMilkcocoaに接続できればokと表示されます。
+}
+</code></pre>
+
+<p><strong>setup()</strong> 内ではMilkcocoaに接続するための準備をしています。 <strong>milkcocoa-&gt;on( datastore, &ldquo;send&rdquo;, onsend)</strong> の部分でsendイベントの監視が有効になります。<strong>onsend()</strong> 内がsendイベントが送られてきたときに呼び出されます。</p>
+
+<p>先ほどのapp.js側では <strong>{r:red,g:green,b:blue}</strong> という形でRGBの値を送っていましたが、Nefry側では <strong>elem-&gt;getInt(&ldquo;r&rdquo;)</strong> とすることでrの値を取得できます。取得した値を <strong>Nefry.setLed()</strong> に渡してあげることでLEDの色を変えられます。</p>
+
+<h4 id="nefryにmilkcocoaのkeyを設定していく">NefryにMilkcocoaのKeyを設定していく</h4>
+
+<p>最後にNefryのメニュー（この時点で僕の場合は <a href="http://192.168.43.56/">http://192.168.43.56/</a> ）から <strong>Setup Module</strong> のメニューから、取得した以下の値を入力し保存します。</p>
+
+<blockquote>
+<p>先に上記コードをNefryに書き込まないとこのAPI Keyなどの項目が表示されませんので気をつけましょう。</p>
+</blockquote>
+
+<p><img src="/img/blog/023/24.png" alt="" /></p>
+
+<p>また、DataStoreの値は任意ですが今回は <strong>nefry</strong> にします。</p>
+
+<h4 id="試してみる">試してみる</h4>
+
+<p>ここまでが終わるとカラーLEDの色をドット絵に同期させることができます。</p>
+
+<p><img src="/img/blog/023/25.png" alt="" /></p>
+
+<p>以下の状態にしてドット絵を操作してみましょう。</p>
+
+<ul>
+<li>ブラウザで <a href="http://localhost:8000">http://localhost:8000</a> にアクセス（写真のMac画面の右側）</li>
+<li>同時に<a href="https://mlkcca.com/sample.html">ドット絵</a>にアクセス（写真のMac画面の左側）</li>
+<li>Nefryの電源を起動させておく（写真右側）</li>
+</ul>
+
+<p>前述したとおり、NefryはPCに直挿しでも大丈夫ですが、給電のみをおこなっているため別電源で起動しても問題ないです。写真（動画）ではスタンドアロン感を出すために、あえてPCでなくモバイルバッテリーに挿しています。</p>
+
+<p><a href="https://www.instagram.com/p/BKyHEcljEZS/">最初に載せた結果</a>のようになっていれば成功です！</p>
+
+<p>ここまでの完成ソースコードは<a href="https://github.com/n0bisuke/milkcocoa-nefry-handson/tree/step4">STEP4ブランチ</a>にまとめてあります。</p>
+
+<p>お疲れ様でした。</p>
+
+<h2 id="ハンズオンの様子など">ハンズオンの様子など</h2>
+
+<p>当日は<a href="https://akiba.dmm-make.com/">DMM.make AKIBA</a>の会場をお借りして開催しました。
+<a href="http://togetter.com/li/1029940">MilkcocoaとNefryをつなげたハンズオン! Milkcocoa Meetup vol13 #mlkcca</a>にもまとめましたが概ねSTEP4までを1.5時間くらいで完成させられていたのでハンズオンとしてはかなりよかったと思います。</p>
+
+<p><center>
+<blockquote class="twitter-tweet" data-lang="ja"><p lang="ja" dir="ltr">Nefry祭り始まるよ！😆 <a href="https://twitter.com/hashtag/mlkcca?src=hash">#mlkcca</a> <a href="https://t.co/ZrCMdMAy3R">pic.twitter.com/ZrCMdMAy3R</a></p>&mdash; えむにわ(クオリティの低いツイート) (@m2wasabi) <a href="https://twitter.com/m2wasabi/status/780717318955339776">2016年9月27日</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+</center></p>
+
+<p>当日はNefry開発者の<a href="http://twitter.com/wamisnet">わみさん</a>、Milkcocoaの<a href="http://twitter.com/bakuonboogie">川野くん</a>も参戦してくれて、かなり豪華な布陣になりました。</p>
+
+<p>ちなみに、ハンズオンだと会場がNefry名のSSIDに溢れかえってしまい、自分のNefryがどれかが分からない問題があります。
+Nefryが発信するWiFiのSSIDはNefry_xxxxという形式になりますが、設定画面から名前を変更できるので、今回はあらかじめ名前を変更して配ることで対応しました。</p>
+
+<p>今回のハンズオンで使った<a href="https://github.com/n0bisuke/milkcocoa-nefry-handson">ソースコード</a>はGitHubにおいてありますのでどなたでも自由に使ってください。</p>
+
+<p>無断でも大丈夫ですが使うときに<a href="http://twitter.com/n0bisuke">@n0bisuke</a>に声かけてくれるとうれしかったりします笑</p>
+
+<h2 id="まとめ">まとめ</h2>
+
+<p>NefryとMilkcocoaを使って、リアルタイムにWebとモノを繋げるIoTな体験ができたと思います。</p>
+
+<p>IoTな開発をやろうとした際に、開発環境の構築とネットワークへの接続が課題になるケースが多いです。
+RaspberryPiやArduinoは「電子工作初心者向け」だと世間では言われていますが、RaspberryPiはOS書き込みなど初期設定の内容が重く、Arduinoはネットワーク接続に課題があるように感じています。</p>
+
+<p>またWebと接続しようとした際に必要となる知識がすごく多く、知識の深さに加えて幅広さも求められます。Nefry+Milkcocoaはその課題を解決するデバイス&amp;サービスだと思います。「ちょっとIoT入門してみたい」という欲求を満たしやすいです。</p>
+
+<p>ぜひ、みなさんもNefryとMilkcocoaを使ってIoTに入門してみて下さい。</p>
+
+<p>それでは :)</p>
+</div>
+
+    <div class="share-foot">
+    <a href="https://twitter.com/share" class="twitter-share-button" data-size="large" data-show-count="true" data-hashtags="dotstudio">Tweet</a>
+
+    &nbsp;
+
+    <div class="fb-share-button" data-href="https://dotstud.io/blog/milkcocoa-nefry-iot-handson/" data-layout="button_count" data-size="large" data-mobile-iframe="true"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdotstud.io%2Fblog%2Fmftokyo-2018-chantoku-report%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">シェア</a></div>
+
+    &nbsp;
+
+    <a href="https://dotstud.io/blog/milkcocoa-nefry-iot-handson/" class="hatena-bookmark-button" data-hatena-bookmark-layout="basic-counter" data-hatena-bookmark-height="30" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a>
+
+    &nbsp;
+
+    <div class="line-it-button" data-lang="ja" data-type="share-c" data-url="https://dotstud.io/blog/milkcocoa-nefry-iot-handson/" style="display: none;"></div>
+
+  </div>
+
+
+
+
+    
+    
+    
+    <nav class="related">
+      <h2 class="">関連記事</h2>
+      <ul class="cards-related">
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/nefry-data-show-graphically/">
+                <img class="card-related--thumbnail" src="/img/blog/092/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">Nefryで取得したセンサーデータをAmbientで簡単にグラフ化しよう！</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/nefry-rest-api-tutorial/">
+                <img class="card-related--thumbnail" src="/img/blog/059/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">URLを入れるだけ！REST APIでNefryを簡単に制御してみよう！</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/nefry-enenglish-how-to/">
+                <img class="card-related--thumbnail" src="/img/blog/047/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">How to set up your Nefry for the first time</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/milkcocoa-grcotton-realtime-temperature/">
+                <img class="card-related--thumbnail" src="/img/blog/010/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">GR-COTTONで見た目も可愛く電子工作！部屋の温度をブラウザからチェックしてみよう</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/cocoabit-littlebits-milkcocoa-nefry/">
+                <img class="card-related--thumbnail" src="/img/blog/016/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">電子回路を簡単に学べるlittleBitsをインターネットに繋げよう！「CocoaBit」を開発中</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/milkcocoa-battle-lightning-talk/">
+                <img class="card-related--thumbnail" src="/img/blog/005/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">JS1行でリアルタイム通信ができる「milkcocoa」のLT大会で登壇してきた！</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+        </ul>
+      </nav>
+
+
+
+</article>
+
+<footer class="footer">
+  <p class="footer-info">
+    <a class="footer-info--item" href="/about">会社概要</a>
+    <a class="footer-info--item" href="/members">メンバー</a>
+    <a class="footer-info--item" href="/recruit">採用情報</a>
+    <a class="footer-info--item" href="/legal#tos">利用規約</a>
+    <a class="footer-info--item" href="/legal#sct">特定商取引</a>
+    <a class="footer-info--item" href="/legal#pp">プライバシーポリシー</a>
+  </p>
+  <p class="footer-cr">© 2018 dotstudio inc.</p>
+</footer>
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+
+
+
+
+
+<script src="/js/app.js"></script>
+
+
+<script src="/js/lib/hljs.js"></script>
+<script src="/js/lib/hljs-numbers.js"></script>
+<script>
+  hljs.initHighlightingOnLoad();
+  hljs.initLineNumbersOnLoad();
+</script>
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-78080011-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+

@@ -1,0 +1,2041 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Obniz on dotstudio（ドットスタジオ）</title>
+    <link>https://dotstud.io/series/obniz/</link>
+    <description>Recent content in Obniz on dotstudio（ドットスタジオ）</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <copyright>© 2018 dotstudio inc.</copyright>
+    <lastBuildDate>Wed, 01 Aug 2018 10:32:26 +0900</lastBuildDate>
+    <atom:link href="/series/obniz/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>お腹がなる前にobniz!電子工作初心者がおペコ伝達デバイスをつくってみた</title>
+      <link>https://dotstud.io/blog/obniz-tell-be-hungry/</link>
+      <pubDate>Wed, 01 Aug 2018 10:32:26 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/obniz-tell-be-hungry/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、&lt;a href=&#34;https://dotstud.io/members/kiki/&#34;&gt;きき&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;遅めの育ち盛りなのか、お腹がすくのがとても早い今日この頃。お昼が近づいてくると、お腹がぐ〜ぐ〜なってしまうことが多々あります。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/190/opeko.png&#34; alt=&#34;opeko&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;&lt;center&gt;
+&lt;font size=&#34;4&#34;&gt;これ聞こえてる。隣の席のちゃんとくさんに絶対聞こえてる。&lt;/font&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;
+&lt;br /&gt;
+本当に恥ずかしいんですよね、だって女の子だもん。とはいえ、生理現象なので誰もぐ〜ぐ〜を止めることはできません。&lt;/p&gt;
+
+&lt;p&gt;ならば仕方ない、言われる前に言っちゃえ！お腹が鳴る前に「私、お腹が空きましたよ」ということを伝える「&lt;strong&gt;おペコ伝達デバイス&lt;/strong&gt;」を作っちゃいましょう！&lt;/p&gt;
+
+&lt;p&gt;&lt;font size=&#34;2&#34;&gt;※おペコ…お腹がペコペコの意。&lt;/font&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;obnizでおペコ伝達デバイスを作る&#34;&gt;obnizでおペコ伝達デバイスを作る&lt;/h2&gt;
+
+&lt;h3 id=&#34;iot開発ボード-obniz-って&#34;&gt;IoT開発ボード「obniz」って？&lt;/h3&gt;
+
+&lt;p&gt;今回は、JavaScriptで初心者も簡単に開発できる「&lt;strong&gt;&lt;a href=&#34;https://obniz.io/&#34;&gt;obniz&lt;/a&gt;（おぶないず）&lt;/strong&gt;」を使っておペコ伝達デバイスを作ります！&lt;/p&gt;
+
+&lt;p&gt;obnizは、&lt;strong&gt;Wi-Fiに繋げるだけでどこからでも操作することができるIoT開発ボード&lt;/strong&gt;
+です。&lt;/p&gt;
+
+&lt;p&gt;&lt;center&gt;
+&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/263775/0e90dfcd-4c30-0ab2-b4e2-307f6d3877ca.png&#34; alt=&#34;&#34; /&gt;
+&lt;/center&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Wi-Fi以外のセットアップ不要&lt;/strong&gt;でオンライン上ですぐに開発することができ、&lt;strong&gt;JavaScriptやブロックプログラミング&lt;/strong&gt;で開発できるためプログラミング初心者でも気軽に使い始めることができます。&lt;/p&gt;
+
+&lt;p&gt;また&lt;strong&gt;すべてのI/Oが電圧の切り替えやUART変換に対応&lt;/strong&gt;、&lt;strong&gt;モータドライバ搭載&lt;/strong&gt;で、難しいGPIOを意識することなくハードウェアを利用できます。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;サーバレス機能を用いた他サービスとの連携&lt;/strong&gt;や、&lt;strong&gt;obnizクラウドによるAPI操作機能&lt;/strong&gt;もあり、あると便利な&lt;strong&gt;Bluetooth（BLE）&lt;/strong&gt;や&lt;strong&gt;OLEDディスプレイ&lt;/strong&gt;も搭載です。&lt;/p&gt;
+
+&lt;p&gt;紹介したい機能が多すぎて太字だらけになっちゃいました。もう&lt;u&gt;&lt;strong&gt;欲しい機能全部盛り&lt;/strong&gt;&lt;/u&gt;って感じですね！&lt;/p&gt;
+
+
+
+&lt;section class=&#34;link&#34; id=&#34;192&#34;&gt;
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+          &lt;div class=&#34;link_content&#34;&gt;
+          &lt;a href=&#34;https://dotstud.io/blog/obniz-hello-world-iot/&#34;&gt;&lt;/a&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/192/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
+          &lt;/div&gt;
+          &lt;div class=&#34;link_content&#34;&gt;
+            &lt;div class=&#34;link_detail&#34;&gt;
+              &lt;div class=&#34;link_title&#34;&gt;
+                JavaScriptで動くIoT開発ボード「obniz」って？使い方を説明！
+              &lt;/div&gt;
+              &lt;div class=&#34;link_date&#34;&gt;
+                
+                2018-07-25
+              &lt;/div&gt;
+              &lt;div class=&#34;link_desc&#34;&gt;
+                話題の開発ボード「obniz」でLチカ！簡単なAPI制御やGPIO操作で今すぐIoT開発できちゃうのでは？
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/section&gt;
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+      
+      
+  
+&lt;/section&gt;
+
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/obniz-hello-world-iot/&#34;&gt;前回の記事&lt;/a&gt;では、obnizデビュー！ということで、セットアップ方法やブロックプログラミングでLチカを試してみました。&lt;/p&gt;
+
+&lt;p&gt;今回はJavaScriptでコードを書いて、Lチカやサーボモーターを動かしてみたいと思います。&lt;/p&gt;
+
+&lt;h3 id=&#34;おペコを伝える方法&#34;&gt;おペコを伝える方法&lt;/h3&gt;
+
+&lt;p&gt;おペコの伝達は以下の2パターンで試してみたいと思います。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;めっちゃ光ってobnizのディスプレイにメッセージを表示させる&lt;/li&gt;
+&lt;li&gt;Twitterで「#お腹すいたなぁ」とツイートすると旗を振って鈴を鳴らす&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;それではお腹がなってしまう前に作らねば〜！&lt;/p&gt;
+
+&lt;h3 id=&#34;今回使用する電子部品たち&#34;&gt;今回使用する電子部品たち&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ジャンパワイヤ ×3&lt;/li&gt;
+&lt;li&gt;サーボモーター ×1&lt;/li&gt;
+&lt;li&gt;内部抵抗が付いているLED （赤 ×1、紫 ×1）&lt;/li&gt;
+&lt;li&gt;旗用の画用紙や鈴など&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;LEDは、obniz公式サイトに「&lt;strong&gt;内部抵抗があるものを使用してください&lt;/strong&gt;」との旨が記載されているので、要注意です。&lt;/p&gt;
+
+&lt;h2 id=&#34;おペコ伝達①-めっちゃ光ってobnizのディスプレイにメッセージが表示される&#34;&gt;おペコ伝達①: めっちゃ光ってobnizのディスプレイにメッセージが表示される&lt;/h2&gt;
+
+&lt;p&gt;専用の&lt;a href=&#34;http://obniz.io/program&#34;&gt;オンラインエディタ&lt;/a&gt;を開き、以下のコードを書きました。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;!-- HTML Example --&amp;gt;
+&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;
+  &amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;width=device-width, initial-scale=1&amp;quot;&amp;gt;
+  &amp;lt;script src=&amp;quot;https://obniz.io/js/jquery-3.2.1.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+  &amp;lt;script src=&amp;quot;https://unpkg.com/obniz@latest/obniz.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+
+&amp;lt;div id=&amp;quot;obniz-debug&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+
+&amp;lt;script&amp;gt;
+    var obniz = new Obniz(&amp;quot;XXXX-XXXX&amp;quot;); // 固有のobniz ID
+
+     obniz.onconnect = function(){
+      obniz.display.clear();
+      obniz.display.print(&amp;quot;ちゃんとくさん&amp;quot;);
+	},4000;
+
+      setInterval(function(){
+        obniz.display.print(&amp;quot;あなたの脳内に&amp;quot;);
+    }, 6000);
+
+   setInterval(function(){
+        obniz.display.print(&amp;quot;呼びかけています&amp;quot;);
+    }, 7000);
+
+   setInterval(function(){
+        obniz.display.print(&amp;quot;お腹が空きました&amp;quot;);
+    }, 8000);
+
+
+    setInterval(function () {
+    var led1 = obniz.wired(&amp;quot;LED&amp;quot;, {anode:4, cathode:5});
+    var led2 = obniz.wired(&amp;quot;LED&amp;quot;, {anode:6, cathode:7});
+    led1.on();
+    led2.off();
+    },1000);
+
+  setInterval(function () {
+    var led1 = obniz.wired(&amp;quot;LED&amp;quot;, {anode:4, cathode:5});
+    var led2 = obniz.wired(&amp;quot;LED&amp;quot;, {anode:6, cathode:7});
+    led1.off()
+    led2.on();
+    },2000);
+
+&amp;lt;/script&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;保存＆開く&lt;/strong&gt;ボタンを押すと……&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/190/2.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;赤と紫のLEDの眩しいことよ……！&lt;/p&gt;
+
+&lt;p&gt;内部抵抗のないLEDを使ってしまうと流れる電流の大きさに耐えられず、LEDが壊れてしまい危険な状態に。obnizでは、自動的に停止して警告音を鳴らしてくれる「&lt;strong&gt;過電流保護機能&lt;/strong&gt;」が起動します。間違えてしまってもなんとかしてくれるので、初心者に優しいですね。&lt;/p&gt;
+
+&lt;p&gt;（公式サイトをちゃんと読まずに内部抵抗のないLEDを使用し、画面上に現れる多数の「&lt;strong&gt;warning&lt;/strong&gt;」と、若干の焦げた匂いに内心ビビりまくったことは内緒ですよ……）&lt;/p&gt;
+
+&lt;h2 id=&#34;おペコ伝達②-twitterで-お腹すいたなぁ-とツイートすると旗を振って鈴を鳴らす&#34;&gt;おペコ伝達②: Twitterで「#お腹すいたなぁ」とツイートすると旗を振って鈴を鳴らす&lt;/h2&gt;
+
+&lt;p&gt;次は、&lt;a href=&#34;https://obniz.io/explore/1&#34;&gt;公式サイトの作品一覧ページ&lt;/a&gt;を参考にして、&lt;strong&gt;目で見てわかるだけでなく、音でも空腹を伝えられるようにします。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;手順は以下の通りです。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Twitter API Keyを取得する&lt;/li&gt;
+&lt;li&gt;Node.jsでサーバモーターを動かす&lt;/li&gt;
+&lt;li&gt;いい感じの旗を作る&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;twitter-api-keyを取得する&#34;&gt;Twitter API Keyを取得する&lt;/h3&gt;
+
+&lt;p&gt;私ははじめての取得だったので手順を載せますが、&lt;strong&gt;そんなんもう知っとるわ&lt;/strong&gt;という方は読み飛ばしちゃってください。&lt;/p&gt;
+
+&lt;p&gt;ちなみに、Twitterの設定であらかじめ電話番号の登録をする必要があります。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/190/3.png&#34; alt=&#34;3&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;&lt;a href=&#34;https://apps.twitter.com/&#34;&gt;Twitter Application Management&lt;/a&gt;を開き、右上の「&lt;strong&gt;Create New App&lt;/strong&gt;」ボタンを押します。&lt;/p&gt;
+
+&lt;p&gt;なんで3個も作ってるのかという理由は後ほど説明します。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/190/4.png&#34; alt=&#34;4&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;ol&gt;
+&lt;li&gt;必須の3箇所に記入&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Developer Agreement&lt;/strong&gt;のチェックボックスを押す&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Create your Twitter application&lt;/strong&gt;を押す&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;これでアプリケーションの作成ができました。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/190/5.png&#34; alt=&#34;5&#34;&gt;
+
+&lt;/center&gt;
+
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/190/6.png&#34; alt=&#34;6&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;&lt;strong&gt;Your Access Token&lt;/strong&gt;は、&lt;strong&gt;Create my access token&lt;/strong&gt;を押すと発行されます。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/190/7.png&#34; alt=&#34;7&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;すんなりと取得することができましたね。&lt;/p&gt;
+
+&lt;h3 id=&#34;node-jsでサーバモーターを動かす&#34;&gt;Node.jsでサーバモーターを動かす&lt;/h3&gt;
+
+&lt;p&gt;参考にしたコードをみると、記入する部分が３箇所あることがわかります。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/190/8.png&#34; alt=&#34;8&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;①数字8桁のobniz固有ID
+②取得した4種類のAPI Key
+③反応してほしい言葉&lt;/p&gt;
+
+&lt;p&gt;をそれぞれ入力します。&lt;/p&gt;
+
+&lt;p&gt;Node.jsでサーバーを立ち上げ、コードを書き込みましょう。&lt;/p&gt;
+
+&lt;p&gt;実際のコードはこちらです。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;// Nodejs
+
+var Obniz = require(&#39;obniz&#39;);
+var Twitter = require(&#39;twitter&#39;);
+
+var obniz = new Obniz(&amp;quot;0000-0000&amp;quot;);
+
+var servo;
+obniz.onconnect = function(){
+  servo = obniz.wired(&amp;quot;ServoMotor&amp;quot;, {signal:0,vcc:1, gnd:2});
+  servo.angle(10);
+  }
+
+
+var client = new Twitter({
+    consumer_key: &#39;ConsumerKey&#39;,
+    consumer_secret: &#39;Secret&#39;,
+    access_token_key: &#39;TokenKey&#39;,
+    access_token_secret: &#39;TokenSeacret&#39;
+  });
+
+var stream = client.stream(&#39;statuses/filter&#39;, {track: &#39;#お腹すいたなぁ&#39;});
+stream.on(&#39;data&#39;, function(event) {
+  if (event) {
+    var count = 0;
+    var angles = [75,45,75,45,75,45,75]
+    var timer = setInterval(function(){
+      count++;
+      servo.angle(angles[count]);
+      if (count &amp;gt;= 6){
+        clearInterval(timer);
+      }
+    }, 500);
+  }
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;③は「&lt;strong&gt;#お腹すいたなぁ&lt;/strong&gt;」にしました。「お腹すいた」「ご飯食べたい」ではなく、「すいたなぁ」と語尾を弱くすることで「&lt;strong&gt;すみません、私もうお腹空きすぎて力が入らんのです……&lt;/strong&gt;」といった申し訳なさと弱々しい感情の表現にこだわりました。&lt;/p&gt;
+
+&lt;p&gt;サーボモーターの配線は、以下の通りに繋いでください。
+・茶色：GND→2
+・赤：電源［＋］→1
+・オレンジ：制御信号→0&lt;/p&gt;
+
+&lt;p&gt;文字を変えてみたり、角度を調節してみたり……を繰り返しすぎると、Twitterから「&lt;strong&gt;あなた短時間で何回も起動しすぎよ&lt;/strong&gt;」というエラーが表示されます。エラーが解除されるまで15分ほど待たなければいけないので、待たなくていいように3つのTwitter API Keyを取得して交互に使用しました。&lt;/p&gt;
+
+&lt;p&gt;起動するとこんな感じです。
+&lt;img src=&#34;https://dotstud.io/img/blog/190/9.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;はじめてサーボモーター動かせたよ〜！楽しいよ〜！&lt;/p&gt;
+
+&lt;h3 id=&#34;いい感じの旗を作る&#34;&gt;いい感じの旗を作る&lt;/h3&gt;
+
+&lt;p&gt;久しぶりのプチ図画工作、付箋をチョキチョキ。&lt;/p&gt;
+
+&lt;p&gt;小学４年生で所属していた「図工クラブ」での経験が発揮された瞬間です。旗は2パターン作ってみました。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/190/10.png&#34; alt=&#34;10&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;不器用な私史上、かなりいい方です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/190/11.gif&#34; alt=&#34;&#34; /&gt;
+事後報告バージョン&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/190/12.gif&#34; alt=&#34;&#34; /&gt;
+事前報告バージョン&lt;/p&gt;
+
+&lt;p&gt;なんだか旗の振り方が少し不器用ですが、作り手に似たということにしてこのまま進みます。&lt;/p&gt;
+
+&lt;h2 id=&#34;お腹が鳴りそうになってきた&#34;&gt;お腹が鳴りそうになってきた&lt;/h2&gt;
+
+&lt;p&gt;それではobnizをこっそりちゃんとくさんのデスクに仕込みます。&lt;/p&gt;
+
+&lt;h3 id=&#34;①ledライトとディスプレイ表示で視覚に訴えるスタイル&#34;&gt;①LEDライトとディスプレイ表示で視覚に訴えるスタイル&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/190/13.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;div class=&#34;parent&#34;&gt;
+    &lt;div class=&#34;dialogue&#34;&gt;
+        &lt;div class=&#34;img image_w&#34;&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/190/obniz1.png&#34; /&gt;
+          &lt;section class=&#34;name&#34;&gt;obniz&lt;/section&gt;
+        &lt;/div&gt;
+        &lt;div class=&#34;text&#34;&gt;
+            （……ちゃんとくさん……きこえますか……ききです……今……あなたの脳内に……直接……呼びかけています……お腹が空きました……）
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;parent&#34;&gt;
+    &lt;div class=&#34;dialogue&#34;&gt;
+        &lt;div class=&#34;img image_c&#34;&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/190/chantoku.png&#34; /&gt;
+          &lt;section class=&#34;name&#34;&gt;ちゃんとく&lt;/section&gt;
+        &lt;/div&gt;
+        &lt;div class=&#34;text&#34;&gt;
+            「目がやられた」
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&#34;②旗と鈴の音で視覚のみならず聴覚にも訴えるスタイル&#34;&gt;②旗と鈴の音で視覚のみならず聴覚にも訴えるスタイル&lt;/h3&gt;
+
+&lt;p&gt;鈴はピンクのお守りについている鈴しかありませんでした。予想以上にキュートな仕上がりです。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/190/14.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+
+&lt;div class=&#34;parent&#34;&gt;
+    &lt;div class=&#34;dialogue&#34;&gt;
+        &lt;div class=&#34;img image_w&#34;&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/190/obniz2.png&#34; /&gt;
+          &lt;section class=&#34;name&#34;&gt;obniz&lt;/section&gt;
+        &lt;/div&gt;
+        &lt;div class=&#34;text&#34;&gt;
+            「きき、おペコです…！（ブンブン）」
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;parent&#34;&gt;
+    &lt;div class=&#34;dialogue&#34;&gt;
+        &lt;div class=&#34;img image_c&#34;&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/190/chantoku.png&#34; /&gt;
+          &lt;section class=&#34;name&#34;&gt;ちゃんとく&lt;/section&gt;
+        &lt;/div&gt;
+        &lt;div class=&#34;text&#34;&gt;
+            「驚いた」
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;思ったより激しめに旗が動く&lt;/strong&gt;ので、こちらの方が空腹感はより伝わると思います。微かな驚きとともにおペコを伝えることができました。&lt;/p&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;div class=&#34;parent&#34;&gt;
+    &lt;div class=&#34;dialogue&#34;&gt;
+        &lt;div class=&#34;img image_c&#34;&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/190/chantoku.png&#34; /&gt;
+          &lt;section class=&#34;name&#34;&gt;ちゃんとく&lt;/section&gt;
+        &lt;/div&gt;
+        &lt;div class=&#34;text&#34;&gt;
+            「そろそろお昼にしようか！」
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&#34;parent&#34;&gt;
+    &lt;div class=&#34;dialogue&#34;&gt;
+        &lt;div class=&#34;img image_c&#34;&gt;
+          &lt;img src=&#34;https://dotstud.io/img/blog/190/opeko2.png&#34; /&gt;
+          &lt;section class=&#34;name&#34;&gt;きき&lt;/section&gt;
+        &lt;/div&gt;
+        &lt;div class=&#34;text&#34;&gt;
+            「やっっっった〜〜〜〜！！！（歓喜）」
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+
+&lt;p&gt;いかがでしたでしょうか？&lt;/p&gt;
+
+&lt;p&gt;obnizを使えば、&lt;strong&gt;お腹がぐ〜ぐ〜なって恥ずかしい思いをすることもないし、お昼のタイミングを早めることもできます&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;みなさんも会社の上司のデスクや、学校の気になるあの子の机に仕込みまくり、日々のおペコ問題を解消していきましょう！&lt;/p&gt;
+
+&lt;p&gt;ではでは、私はランチタイムに入ることにします〜！&lt;/p&gt;
+
+&lt;style&gt;
+.dialogue {
+    padding: 10px;
+    display: table;
+}
+
+.img {
+    margin-right: 10px;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.img img {
+    margin-left: 10px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+.image_n img {
+    border: 2px solid blue;
+}
+
+.image_c img {
+    border: 2px solid pink;
+}
+
+.image_w img {
+    border-radius: 50%;
+    border: 2px solid green;
+}
+
+.image_t img {
+    border-radius: 50%;
+    border: 2px solid red;
+}
+
+.image_s img {
+    border-radius: 50%;
+    border: 2px solid brown;
+}
+.name {
+    font-weight: bold;
+    text-align: center;
+    margin-left: 10px;
+}
+
+.text {
+    display: table-cell;
+    padding: 0;
+    vertical-align: middle;
+    padding-left: 20px;
+}
+&lt;/style&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>JavaScriptで動くIoT開発ボード「obniz」って？使い方を説明！</title>
+      <link>https://dotstud.io/blog/obniz-hello-world-iot/</link>
+      <pubDate>Wed, 25 Jul 2018 10:00:24 +0900</pubDate>
+      
+      <guid>https://dotstud.io/blog/obniz-hello-world-iot/</guid>
+      
+      <description>
+
+&lt;p&gt;こんにちは、テクニカルエディターの&lt;a href=&#34;https://dotstud.io/members/kiki&#34;&gt;きき&lt;/a&gt;です。&lt;/p&gt;
+
+&lt;p&gt;突然ですが、「&lt;strong&gt;IoTってなんだか難しそう。でも、気になる。&lt;/strong&gt;」という方へ。IoT体験、やってみたいですよね？ネットを通してモーターを動かしたり、LEDをチカチカさせたりしてみたいですよね？ね？&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;そんなあなたに読んでほしい！&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;初心者でも簡単にIoTプログラミングができるぞ、と噂の開発ボード「&lt;strong&gt;obniz&lt;/strong&gt;」をババンと紹介します！&lt;/p&gt;
+
+&lt;h2 id=&#34;obnizとは&#34;&gt;obnizとは？&lt;/h2&gt;
+
+&lt;p&gt;「&lt;a href=&#34;https://obniz.io/&#34;&gt;&lt;strong&gt;obniz&lt;/strong&gt;（オブナイズ）&lt;/a&gt;」は、&lt;strong&gt;Wi-Fiに繋げるだけでどこからでも操作することができるIoT開発ボード&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/263775/0e90dfcd-4c30-0ab2-b4e2-307f6d3877ca.png&#34; alt=&#34;スクリーンショット 2018-07-11 14.44.18.png&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;2018年5月18日からCambrianRoboticsが開発・販売しているボードで、価格は&lt;strong&gt;5,980円（税込）&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;クラウドファンディングサイト&lt;a href=&#34;https://www.kickstarter.com/projects/cambrianrobotics/obniz-api-managed-io?ref=card&#34;&gt;&lt;strong&gt;kickstarter&lt;/strong&gt;&lt;/a&gt;では100万円以上の資金を集め、販売後には売り切れ続出と話題になっていましたね！&lt;/p&gt;
+
+&lt;p&gt;日本だけでなく海外にも販売経路を伸ばし、&lt;strong&gt;海外MakerFaire出展&lt;/strong&gt;や&lt;strong&gt;ハンズオン開催&lt;/strong&gt;など取り組んでいるようです。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://amzn.to/2KnvxXV&#34;&gt;Amazon購入リンク&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;ざっくり特徴紹介&#34;&gt;ざっくり特徴紹介&lt;/h3&gt;
+
+&lt;p&gt;obnizの特徴・機能は多岐にわたるのですが、ざっくりと下記が挙げられます。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;オンラインエディタの利用で環境構築なし&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;JavaScript&lt;/strong&gt;や&lt;strong&gt;ブロックプログラミング&lt;/strong&gt;で開発可能&lt;/li&gt;
+&lt;li&gt;obnizに繋いだモーターやセンサーなどを&lt;strong&gt;ブラウザから制御可能&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;HTMLでのUI連携や、Node.jsで他サービスと回路の連携&lt;/strong&gt;が可能&lt;/li&gt;
+&lt;li&gt;全てのピンでUARTのアサイン可能&lt;/li&gt;
+&lt;li&gt;全てのピンで1A・ドライバ搭載（&lt;strong&gt;モータを直挿し可能&lt;/strong&gt;）&lt;/li&gt;
+&lt;li&gt;電流が大きくなると自動的に停止して警告音を鳴らしてくれる「&lt;strong&gt;過電流保護機能&lt;/strong&gt;」搭載&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;OLEDディスプレイ&lt;/strong&gt;、&lt;strong&gt;Wi-Fi機能&lt;/strong&gt;、&lt;strong&gt;BLE機能&lt;/strong&gt;搭載&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;obnizクラウド&lt;/strong&gt;でAPIから制御可能&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;サーバレス&lt;/strong&gt;でwebhook連携も簡単&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;いかに多機能かわかっていただけたでしょうか……！初心者が使いやすいだけでなく、高性能でもあるようです。&lt;/p&gt;
+
+&lt;p&gt;ざっと公式サイトを読んだだけでも良いことだらけなobniz、早速使ってみましょう〜！&lt;/p&gt;
+
+&lt;h2 id=&#34;obnizを触ってみよう&#34;&gt;obnizを触ってみよう&lt;/h2&gt;
+
+&lt;h3 id=&#34;開封の儀&#34;&gt;開封の儀&lt;/h3&gt;
+
+&lt;p&gt;しゃちょーののびすけさんに「&lt;strong&gt;obnizを貸してください&lt;/strong&gt;」と伝えたら、「&lt;strong&gt;攻めるね〜！！&lt;/strong&gt;」と茶化されたので、なんとなく緊張してしまいますね。&lt;/p&gt;
+
+&lt;p&gt;パッケージはこのような感じです。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/192/2.png&#34; alt=&#34;2&#34;&gt;
+
+&lt;/center&gt;
+
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/192/3.png&#34; alt=&#34;3&#34;&gt;
+
+&lt;/center&gt;
+
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/192/4.png&#34; alt=&#34;4&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;差し色のブルーが可愛いいいい！&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/toy-drone-tello-using/&#34;&gt;前回の記事&lt;/a&gt;では、トイドローン「Tello」で終始遊び倒す内容だったので、きき史上初めての開発ボード。初めてのおつかいならぬ、&lt;strong&gt;初めてのかいふう&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;ジャジャン！！&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/192/1.png&#34; alt=&#34;1&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;obnize本体サイズは&lt;strong&gt;74.5×36.3mm&lt;/strong&gt;なので、私の想像に比べるとなんだか小さかったです。&lt;/p&gt;
+
+&lt;h3 id=&#34;wi-fi設定&#34;&gt;Wi-Fi設定&lt;/h3&gt;
+
+&lt;p&gt;まずはじめに、ケーブルとobnizをつなぎます。&lt;/p&gt;
+
+&lt;p&gt;待って！なんか可愛い子出てきた〜！これは何かの動物なのでしょうか？妖精か何かなのでしょうか？&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/192/8.png&#34; alt=&#34;8&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;「&lt;strong&gt;Switch this!&lt;/strong&gt;」と言われるがままに左上のボタンを押します。&lt;/p&gt;
+
+&lt;p&gt;押すとWi-Fiの設定が始まるので、ディスプレイ上で選択して繋げます。左上のボタンは左右のフリックと押し込みで選択・決定ができるようになっているんですね。&lt;/p&gt;
+
+&lt;h3 id=&#34;オンラインエディタを開く&#34;&gt;オンラインエディタを開く&lt;/h3&gt;
+
+&lt;p&gt;Wi-Fi設定が終わると、QRコードと8桁の番号が表示されます。この番号がobniz idという識別番号になっているようです。（&lt;strong&gt;どこからでも操作できちゃう&lt;/strong&gt;ので、公開しない方が良さそうですね！）&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/192/5.png&#34; alt=&#34;5&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;QRコードをスマートフォンで読みこむとオンラインエディタが開き、このような画面が出てきます。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/192/9.png&#34; alt=&#34;9&#34;&gt;
+
+&lt;/center&gt;
+
+ここにobnizのディスプレイで表示されている8桁のobniz idを入力します。&lt;/p&gt;
+
+&lt;p&gt;obnizはクラウド上のAPIを利用して操作できるので、ソフトウェアやアプリをインストールする必要はありません。&lt;/p&gt;
+
+&lt;p&gt;すごく簡単ですよね？これで準備はばっちりです！&lt;/p&gt;
+
+&lt;h2 id=&#34;obnizのプログラミングをしてみよう&#34;&gt;obnizのプログラミングをしてみよう&lt;/h2&gt;
+
+&lt;h3 id=&#34;始めてすぐさまhello-world&#34;&gt;始めてすぐさまHello World&lt;/h3&gt;
+
+&lt;p&gt;オンラインエディタには、すでに以下のようなコードが書かれています。
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/192/10.png&#34; alt=&#34;10&#34;&gt;
+
+&lt;/center&gt;
+&lt;/p&gt;
+
+&lt;p&gt;&lt;font size=&#34;2&#34;&gt;
+※スマートフォンから操作しづらいなあって時は、PCから&lt;a href=&#34;http://obniz.io/program&#34;&gt;オンラインエディタ&lt;/a&gt;を開いてobniz idを入力しましょう。
+&lt;/font&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;obniz.display.print(&amp;quot;Hello World!&amp;quot;)&lt;/code&gt;とあるように、obnizのディスプレイ上に「Hell World」を表示するコードですね。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;&amp;quot;OBNIZ_ID_HERE&amp;quot;&lt;/code&gt;&lt;/strong&gt;のところにも、obniz idを入力しましょう。&lt;/p&gt;
+
+&lt;p&gt;右上の保存＆開くボタンを押すと……&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/192/11.png&#34; alt=&#34;11&#34;&gt;
+
+&lt;/center&gt;
+
+obnizのディスプレイ上でも「&lt;strong&gt;Hello World&lt;/strong&gt;」が表示されました〜！&lt;/p&gt;
+
+&lt;p&gt;私、何もしていないのにHello Worldされている……！&lt;/p&gt;
+
+&lt;h3 id=&#34;ブロックプログラミングでlチカデビュー&#34;&gt;ブロックプログラミングでLチカデビュー&lt;/h3&gt;
+
+&lt;p&gt;obnizを動かすことができた感動と「私何もしていないぞ」感の間で葛藤しているので、その次に簡単な&lt;strong&gt;ブロックプログラミング&lt;/strong&gt;をしてみます。&lt;/p&gt;
+
+&lt;p&gt;ホームページの色合いがふんわりとしていてデザインが可愛らしいので、初心者女子大生もビビることなく進めることができるのもオススメポイントです。&lt;/p&gt;
+
+&lt;p&gt;公式サイトから、&lt;a href=&#34;https://obniz.io/makecode/&#34;&gt;ブロックプログラミング専用エディタ&lt;/a&gt;を開きます。&lt;/p&gt;
+
+&lt;p&gt;はじめに、&lt;strong&gt;My Project&lt;/strong&gt;を選択します。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/192/12.png&#34; alt=&#34;12&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;お久しぶりです、と言わんばかりに再度こちらの画面が表示されるので、obniz idを入力します。&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/192/13.png&#34; alt=&#34;13&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;入力すると、ブロックプログラミングの操作画面に変わります。&lt;/p&gt;
+
+&lt;p&gt;こりゃまた可愛すぎるのでは……！？&lt;/p&gt;
+
+
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/192/6.png&#34; alt=&#34;6&#34;&gt;
+
+&lt;/center&gt;
+
+
+&lt;p&gt;こちらもobnizのディスプレイ上に「Hell World」を表示するコードです。簡単に文字を表示させたり、LEDを光らせたり、モーターを動かすこともできます。メニューバーがたくさんあるのでいろんなことを試せますね。&lt;/p&gt;
+
+&lt;p&gt;この時点で「IoTは何から始めればいいのか分からない……」と泣き言を呟いていたあの頃の私が嘘のようにハイテンションです。胸熱なまま、Lチカに挑みます。&lt;/p&gt;
+
+&lt;p&gt;
+
+
+
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/192/7.png&#34; alt=&#34;7&#34;&gt;
+
+&lt;/center&gt;
+
+表示する文字を増やすことも、LEDの秒数も簡単に設定できます。&lt;/p&gt;
+
+&lt;p&gt;そして完成したのがこちら！&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://gyazo.com/5c7e715003a9594450230da781555281&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/5c7e715003a9594450230da781555281.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;font size=&#34;2&#34;&gt;※公式サイトにあるように、抵抗内蔵LEDを使用してください。&lt;/font&gt;&lt;/p&gt;
+
+&lt;p&gt;なんということでしょう。こんなにもすぐにLチカデビューできるなんて！&lt;/p&gt;
+
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+
+&lt;p&gt;この記事を読んでいる方はお気づきだと思うのですが、&lt;strong&gt;難しいことは何一つしていません&lt;/strong&gt;。そうであるのにもかかわらず、このわくわく感。IoT体験は、&lt;strong&gt;楽しいことだらけ&lt;/strong&gt;です。&lt;/p&gt;
+
+&lt;p&gt;今回はブロックプログラミングを行いましたが、次回はJavaScriptでサーボモータも使ってみたいと思います。&lt;/p&gt;
+
+&lt;p&gt;ホームページには実際の遊び方の説明や作品紹介ページが充実しているので、気軽に始めることができます。初心者の方もそうでない人も、obnizで様々な使い方を試してみてくださいね！&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

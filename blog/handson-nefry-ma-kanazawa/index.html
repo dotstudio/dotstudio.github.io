@@ -1,0 +1,3475 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
+  <meta charset="utf-8">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+
+    
+    
+
+    
+    
+      
+      
+      
+      
+
+      
+      
+      
+      
+        
+      
+      
+
+      
+      
+    
+
+    
+    
+
+    
+    
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Nefry BTを使った初心者向けハンズオン資料です！Groveの温湿度センサやその他のセンサを使ったWeb連携を紹介しています。">
+    <meta name="author" content="dotstudio Inc.">
+    <meta content="https://dotstud.io/img/blog/229/00_eyecatch.png">
+
+    <meta itemprop="name" content="【ハンズオン資料】NefryBTでハジメテノIoT開発やってみよう！ | dotstudio"/>
+    <meta itemprop="image" content="https://dotstud.io/img/blog/229/00_eyecatch.png"/>
+    
+    <meta property="og:title" content="【ハンズオン資料】NefryBTでハジメテノIoT開発やってみよう！ | dotstudio" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://dotstud.io/blog/handson-nefry-ma-kanazawa/" />
+    <meta property="og:site_name" content="dotstudio（ドットスタジオ）" />
+    <meta property="og:image" content="https://dotstud.io/img/blog/229/00_eyecatch.png" />
+    <meta property="og:image:secure_url" content="https://dotstud.io/img/blog/229/00_eyecatch.png" />
+    <meta property="og:description" content="Nefry BTを使った初心者向けハンズオン資料です！Groveの温湿度センサやその他のセンサを使ったWeb連携を紹介しています。" />
+    <meta property="article:author" content="https://www.facebook.com/dotstud10/" />
+    <meta property="fb:app_id" content="296336307370435" />
+    <meta property="fb:pages" content="1013196712108753" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image:src" content="https://dotstud.io/img/blog/229/00_eyecatch.png">
+    <meta name="twitter:site" content="@dotstud_io" />
+    <meta name="twitter:url" content="https://dotstud.io/blog/handson-nefry-ma-kanazawa/">
+    <meta name="twitter:description" content="Nefry BTを使った初心者向けハンズオン資料です！Groveの温湿度センサやその他のセンサを使ったWeb連携を紹介しています。">
+    <meta name="twitter:title" content="【ハンズオン資料】NefryBTでハジメテノIoT開発やってみよう！ | dotstudio">
+    <meta name="twitter:creator" content="@dotstud_io" />
+
+    
+    <meta name="google-site-verification" content="oW2fcSG1fFnkDoRCGFJ0IGGebtBr8FjV2twoFMd7Skc" />
+    <title>【ハンズオン資料】NefryBTでハジメテノIoT開発やってみよう！ | dotstudio</title>
+    
+
+    <link rel="stylesheet" href="/css/loader.css">
+    
+    <link rel="stylesheet" href='/css/master.css'>
+    <link rel="stylesheet" href="/css/icon-font.css">
+    
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+
+    <link rel="shortcut icon" type="image/png" href="/img/resources/favicon.png"/>
+    
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="preload" as="style" onload="this.rel='stylesheet'">
+    <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel="preload" as="style" onload="this.rel='stylesheet'">
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel="preload" as="style" onload="this.rel='stylesheet'">
+    
+    <link href="/css/lib/hljs.css" rel="preload" as="style" onload="this.rel='stylesheet'">
+    
+
+    
+    
+    
+
+    
+    
+
+    
+    
+    
+    
+
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-K5TRM9Q');</script>
+    
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-5922216421588455",
+        enable_page_level_ads: true
+      });
+    </script>
+</head>
+
+<body>
+  
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K5TRM9Q"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  
+
+  
+  <div id="fb-root"></div>
+  <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v2.8";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));</script>
+
+  
+
+  <header>
+    <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<defs>
+<symbol id="icon-arrow-right" viewBox="0 0 32 32">
+<title>arrow-right</title>
+<path class="path1" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M5.143 5.143l10.349 10.349"></path>
+<path class="path2" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M5.143 26.857l10.349-10.349"></path>
+<path class="path3" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M16.571 26.857l10.349-10.349"></path>
+<path class="path4" fill="none" stroke="#000" stroke-width="4.5714" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M16.571 5.143l10.349 10.349"></path>
+</symbol>
+<symbol id="icon-hamburger" viewBox="0 0 60 32">
+<title>hamburger</title>
+<path class="path1" fill="none" stroke="#808080" stroke-width="7.1111" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M3.556 3.556h53.333"></path>
+<path class="path2" fill="none" stroke="#808080" stroke-width="7.1111" stroke-miterlimit="4" stroke-linecap="square" stroke-linejoin="miter" d="M3.556 28.444h53.333"></path>
+</symbol>
+<symbol id="icon-logo-mark" viewBox="0 0 32 32">
+<title>logo-mark</title>
+<path class="path1" d="M19.731 28.8h-19.731v-19.699h19.731zM1.53 27.302h16.672v-16.672h-16.672z"></path>
+<path class="path2" d="M32 22.899h-19.731v-19.699h19.731zM13.798 21.37h16.672v-16.672h-16.672z"></path>
+</symbol>
+<symbol id="icon-social-facebook" viewBox="0 0 32 32">
+<title>social-facebook</title>
+<path class="path1" d="M30.1 0.12h-28.46c-0.974 0.011-1.76 0.804-1.76 1.78 0 0 0 0 0 0v28.46c0 0.983 0.797 1.78 1.78 1.78h15.32v-12.4h-4.16v-4.82h4.16v-3.58c-0.020-0.179-0.031-0.386-0.031-0.596 0-3.203 2.597-5.8 5.8-5.8 0.152 0 0.302 0.006 0.45 0.017-0.016-0.001-0.013-0.001-0.009-0.001 1.3 0 2.582 0.073 3.844 0.214l-0.155 4.286h-2.54c-2 0-2.36 0.96-2.36 2.36v3.1h4.76l-0.62 4.8h-4.12v12.4h8.12c0.983 0 1.78-0.797 1.78-1.78v-28.44c0-0.983-0.797-1.78-1.78-1.78z"></path>
+</symbol>
+<symbol id="icon-social-github" viewBox="0 0 32 32">
+<title>social-github</title>
+<path class="path1" d="M16 0.4c-0.001 0-0.002 0-0.004 0-8.837 0-16 7.163-16 16 0 7.028 4.531 12.997 10.831 15.147 0.913 0.173 1.213-0.307 1.213-0.747s-0.040-1.38-0.040-2.8c-4.44 1.060-5.38-2-5.38-2-0.308-0.987-0.937-1.798-1.763-2.33-1.477-1.010 0.103-0.99 0.103-0.99 1.055 0.144 1.941 0.76 2.451 1.624 0.607 1.039 1.701 1.715 2.953 1.715 0.6 0 1.164-0.155 1.653-0.428 0.062-0.836 0.437-1.58 1.002-2.13-3.559-0.401-7.279-1.781-7.279-8.001-0.001-0.032-0.001-0.069-0.001-0.106 0-1.621 0.624-3.096 1.645-4.198-0.181-0.526-0.283-1.135-0.283-1.769 0-0.85 0.184-1.657 0.514-2.383s1.325-0.404 4.385 1.676c1.199-0.341 2.577-0.537 4-0.537s2.801 0.196 4.107 0.562c2.953-2.026 4.293-1.666 4.293-1.666 0.31 0.683 0.49 1.481 0.49 2.321 0 0.688-0.121 1.348-0.343 1.959 1.030 1.058 1.654 2.533 1.654 4.154 0 0.037-0 0.075-0.001 0.112 0 6.134-3.74 7.494-7.3 7.894 0.685 0.69 1.108 1.641 1.108 2.69 0 0.088-0.003 0.175-0.009 0.261 0.001 2.128 0.001 3.848 0.001 4.368s0.28 0.92 1.1 0.78c6.413-2.183 10.944-8.152 10.944-15.18 0-8.837-7.163-16-16-16-0.015 0-0.031 0-0.046 0z"></path>
+</symbol>
+<symbol id="icon-social-twitter" viewBox="0 0 32 32">
+<title>social-twitter</title>
+<path class="path1" d="M10 29c0.036 0 0.078 0 0.12 0 10.25 0 18.56-8.31 18.56-18.56 0-0.042-0-0.085-0-0.127 0-0.274 0-0.554 0-0.834 1.312-0.959 2.414-2.113 3.289-3.431-1.070 0.454-2.347 0.82-3.686 0.984 1.293-0.819 2.312-2.084 2.804-3.587-1.184 0.679-2.577 1.234-4.062 1.539-1.286-1.244-2.976-2.027-4.849-2.027-3.634 0-6.58 2.946-6.58 6.58 0 0.518 0.060 1.022 0.173 1.506-5.473-0.309-10.286-2.887-13.523-6.813-0.587 0.917-0.919 2.059-0.919 3.278 0 2.258 1.137 4.25 2.871 5.435-1.063-0.025-2.070-0.325-2.95-0.822l0.032 0.017c-0 0.027-0.001 0.058-0.001 0.090 0 3.163 2.239 5.803 5.218 6.423-0.479 0.156-1.078 0.242-1.696 0.242-0.432 0-0.854-0.042-1.263-0.121 0.908 2.637 3.319 4.512 6.175 4.567-2.208 1.746-5.039 2.8-8.116 2.8-0.013 0-0.027-0-0.040-0-0.566-0.018-1.104-0.068-1.633-0.149 2.897 1.868 6.353 2.984 10.068 3.009z"></path>
+</symbol>
+</defs>
+</svg>
+
+    <div class="header">
+  <span class="logo"><a href="/"><svg id="icon-logo" width="100%"><use xlink:href="#icon-logo-mark"></svg></a></span>
+
+  <div class="menu">
+    <input type="checkbox" id="menu-toggle">
+      <label for="menu-toggle" class='label-toggle'>
+        <svg class="icon-hamburger"><use xlink:href="#icon-hamburger"></svg>
+      </label>
+    </input>
+    <ul>
+      <li class="menu-item"><a href="/blog">Blog</a></li>
+      <li class="menu-item"><a href="/docs">Docs</a></li>
+      <li class="menu-item"><a href="/shop">Shop</a></li>
+      <li class="menu-item"><a href="/members">Members</a></li>
+      <li class="menu-item"><a href="/service">Service</a></li>
+      <li class="menu-item"><a href="/about">About</a></li>
+      
+    </ul>
+  </div>
+
+</div>
+
+  </header>
+
+
+
+
+ 
+ 
+
+
+	
+		
+	
+
+
+
+
+<ul class="categories">
+	
+	<li><a href="/categories/try/" class="selected">
+		やってみるIoT
+	</a></li>
+	
+	<li><a href="/categories/learn/" class="">
+		IoTを知ろう
+	</a></li>
+	
+	<li><a href="/categories/event/" class="">
+		イベントレポート
+	</a></li>
+	
+	<li><a href="/categories/tips/" class="">
+		Tips
+	</a></li>
+	
+</ul>
+
+
+
+
+  
+    
+  
+
+
+
+  
+
+  
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+<article class="blog-single">
+  <div class="date">2018.11.01</div>
+
+  <img class="blog-single--eyecatch" src="/img/blog/229/00_eyecatch.png" alt="" width="710px">
+
+  <h1 class="blog-single--title">【ハンズオン資料】NefryBTでハジメテノIoT開発やってみよう！</h1>
+
+  <div class="blog-single--information">
+    <a class="author" href="/members/chantoku">
+      <img src="/img/members/chantoku/author.png" alt="" class="author--avatar">
+      <p class="author--name">ちゃんとく</p>
+    </a>
+
+    
+    <a class="series" href="/series/nefrybt">
+        Nefry BT
+    </a>
+    
+
+  </div>
+
+  <div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = 'https://connect.facebook.net/ja_JP/sdk.js#xfbml=1&version=v3.1&appId=172686636611828&autoLogAppEvents=1';
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+  <div class="share">
+    <a href="https://twitter.com/share" class="twitter-share-button" data-size="large" data-show-count="true" data-hashtags="dotstudio">Tweet</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+    &nbsp;
+
+    <div class="fb-share-button" data-href="https://dotstud.io/blog/handson-nefry-ma-kanazawa/" data-layout="button_count" data-size="large" data-mobile-iframe="true"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdotstud.io%2Fblog%2Fmftokyo-2018-chantoku-report%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">シェア</a></div>
+
+    &nbsp;
+
+    <a href="https://dotstud.io/blog/handson-nefry-ma-kanazawa/" class="hatena-bookmark-button" data-hatena-bookmark-layout="basic-counter" data-hatena-bookmark-height="30" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="https://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+    &nbsp;
+
+    <div class="line-it-button" data-lang="ja" data-type="share-c" data-url="https://dotstud.io/blog/handson-nefry-ma-kanazawa/" style="display: none;"></div>
+    <script src="https://d.line-scdn.net/r/web/social-plugin/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+
+  </div>
+
+
+  <div class="blog-single--content markdown">
+
+<p>この記事は11/1の<a href="https://mashupawards.connpass.com/event/103791/">ハジメテノIoTハンズオン</a>向け資料です。記事を読んで試せる内容になっているので、終了後や参加されていない方もぜひ試してみてください！</p>
+
+<section class="caution">
+<p>■ハンズオンの進行について</p>
+ハンズオンはこのページに沿って進めます。進められる方は、どんどん進めていきましょう！リンクは別タブや別ウィンドウで開くのがオススメです。
+</section>
+
+<section class="caution">
+<p>■Nefry BTドキュメントについて</p>
+
+<a href="https://dotstud.io/docs/nefrybt/">Nefry BTドキュメント</a>: NefryBTの使い方に関するドキュメントページです。基本の動作や、調べ方、質問できる場所なども案内しています。
+</section>
+
+<h2 id="今回やってみること">今回やってみること</h2>
+
+<p><strong>湿度が高くなると自分のLINEに通知がくる仕組み</strong>を、Nefry BT、温湿度センサ、IFTTTというWebサービスを使って作ってみます。室内の状態が異常になったときに通知する仕組みのようなイメージです。</p>
+
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/229/architecture.png" alt="architecture">
+
+</center>
+
+
+<h3 id="用意するもの">用意するもの</h3>
+
+<h4 id="nefry-bt-ディスプレイ">■Nefry BT＆ディスプレイ</h4>
+
+<p>Nefry BTは「ESP-WROOM-32」というWi-Fi・BLE通信モジュールを搭載した、Arduinoと同じように開発できるマイコンボードです。
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/215/nefry.png" alt="nefry">
+
+</center>
+</p>
+
+<p><a href="/docs/grove/">Grove</a>という刺すだけで配線できるモジュール対応のコネクタを搭載していて、<strong>ハードウェアをあまり意識せず</strong>に開発できます。</p>
+
+<p><br /></p>
+
+<h4 id="grove-温湿度センサ">■Grove 温湿度センサ</h4>
+
+<p>刺すだけで配線できる<a href="/docs/grove/">Grove</a>シリーズの、温度と湿度を取得できるセンサです。
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/215/motion_sensor.png" alt="motion_sensor">
+
+</center>
+</p>
+
+<p>安価で扱いやすいセンサですが、高い精度や細かいデータの取得には向きません。プロトタイプ向きなセンサです。</p>
+
+<p><br /></p>
+
+<h4 id="arduino-ide">■Arduino IDE</h4>
+
+<p>開発（プログラムの書き込み）には<a href="https://www.arduino.cc/en/Main/Software">Arduino IDE</a>というフリーソフトウェアを利用します。</p>
+
+<p><a href="/docs/arduinoide-setup/">こちら</a>の手順を見ながらご自身のPCにインストールしてください。</p>
+
+<p><br /></p>
+
+<h4 id="arduino-ide-1">■Arduino IDE</h4>
+
+<p>開発（プログラムの書き込み）には<a href="https://www.arduino.cc/en/Main/Software">Arduino IDE</a>というフリーソフトウェアを利用します。</p>
+
+<p>まだインストールしていない方は、<a href="/docs/arduinoide-setup/">こちら</a>の手順を見ながら進めてください。</p>
+
+<p><br /></p>
+
+<h4 id="iftttアカウント">■IFTTTアカウント</h4>
+
+<p><a href="https://ifttt.com/">IFTTT</a>（いふと）は、モノとWebやWebサービス同士を簡単に連携できるサービスです。</p>
+
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/229/ifttt.png" alt="ifttt">
+
+</center>
+
+
+<p>他の人が作ったアプレット（連携レシピ）を使ったり、自分で新たに作成したりできます。Nefry BTでは、簡単にIFTTT連携できるツールを用意しています。</p>
+
+<p>ページトップの「<strong>Sign Up</strong>」からアカウントをご作成ください。</p>
+
+<h2 id="事前準備-セットアップ">事前準備（セットアップ）</h2>
+
+<h3 id="nefry-btのwi-fi設定">Nefry BTのWi-Fi設定</h3>
+
+<p>まずはNefry BTがインターネットにつながるよう、会場のWi-Fi情報をNefry BTに教えてあげます。スマホやPCを使う時と同じですね。</p>
+
+<p>Nefry BTとPCを直接通信させ（アドホックモード）、立ち上がるNefryポータル（設定ウィンドウ）からSSIDとパスワードを入力する手順です。</p>
+
+<section class="caution">
+<p>■Nefry BTが接続できるWi-Fi</p>
+Nefry BTが接続できるWi-Fiは2.5GHz帯のWi-Fiのみです。新しい5GHz帯は利用できません（ほとんどのIoT機器が同様）。接続後にブラウザで再度ログインの必要なWi-Fiも、利用できません。
+</section>
+
+<p><br /></p>
+
+<h4 id="ディスプレイを取り付け電源を入れる">■ディスプレイを取り付け電源を入れる</h4>
+
+<p>Nefry BTにディスプレイを取り付けます。4本の足をNefryの4本のピンソケットにさします。
+<img src="/img/docs/nefrybt/display2.png" alt="" /></p>
+
+<p>このような形でささります。
+<img src="/img/docs/nefrybt/display3.png" alt="" /></p>
+
+<p>Nefry BTに、PCやモバイルバッテリーなどから給電を開始します。ディスプレイに表示荒れる「NefryBT-XXXX」という部分が、<strong>ご自身のNefry BTが出す無線の名称</strong>になります。
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/215/nefry.png" alt="nefry">
+
+</center>
+</p>
+
+<p><br /></p>
+
+<h4 id="pcをnefry-btの無線に接続する">■PCをNefry BTの無線に接続する</h4>
+
+<p>PCのWi-Fi接続設定から、ディスプレイに表示されている「NefryBT-XXXX」という無線を選び接続します。
+<img src="/img/docs/nefrybt/nefry_wifi.png" alt="" />
+セットアップ中PCはインターネットに繋がらなくなるので、この説明ページは開いたまま進めるのがオススメです。</p>
+
+<p>ちなみにSSIDは自由に変更することができます。（参照：<a href="/docs/nefrybt-conv-change-ssid/">SSIDを変更する</a>）</p>
+
+<p><br /></p>
+
+<h4 id="nefryポータルで設定する">■Nefryポータルで設定する</h4>
+
+<p>Nefry BTのWi-Fiに接続すると、自動でNefryポータルのウィンドウが立ち上がります（立ち上がらない場合はブラウザで<a href="http://192.168.4.1">http://192.168.4.1</a> にアクセスします）。
+<img src="/img/docs/nefrybt/setup_page.png" alt="" /></p>
+
+<p>「お探しのページは…」と表示された場合は、「Move to main page」を洗濯してください。「Setup WiFi」をクリックし、利用するWi-FiのSSIDとパスワードを入力して「Save」で保存します。
+<img src="/img/docs/nefrybt/setup_wifi.png" alt="" />
+保存すると、Nefry BTは自動で再起動します。緑の点滅が終了し再起動が完了したら、Wi-Fiのセットアップは完了です。</p>
+
+<p>一度設定したら、同じWi-Fiを使っている間は起動するだけで接続されます。Wi-Fi情報は5つまで保存でき、消去もできます。</p>
+
+<h3 id="開発環境-arduino-ide-にボードを追加">開発環境（Arduino IDE）にボードを追加</h3>
+
+<p>Nefty BTの開発にはフリーソフトウェアの<a href="https://www.arduino.cc/en/Main/Software">Arduino IDE</a>を利用します。インストールがまだの方は「<a href="/docs/arduinoide-setup/">Arduino IDEのインストール</a>」を見ながら進めてください。</p>
+
+<p>Arduino IDEには、Nefry BTのボード情報の追加が必要です。「<a href="/docs/nefrybt-setup-arduino-ide/">環境構築（Arduino IDE）</a>」を見ながら追加してください。</p>
+
+<h2 id="はじめてのプログラムを書き込んでみる">はじめてのプログラムを書き込んでみる</h2>
+
+<p>まずはNefry BTに簡単なプログラムを書き込んでみましょう。Nefry BTは、最初から下記の機能が搭載されています。</p>
+
+<ul>
+<li>内蔵フルカラーLED</li>
+<li>スイッチ（SW/RST）</li>
+</ul>
+
+<h3 id="nefry-btを起動">Nefry BTを起動</h3>
+
+<p>一度Nefry BTを電源から外し、ディスプレイを外します（内蔵LEDが隠れてしまうため）。マイコンボードに配線する時は、<strong>常に電源OFFの状態で操作</strong>してください。</p>
+
+<p>
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/222/off.png" alt="off">
+
+</center>
+
+マイコンボードは基本的に、給電によって電源のON/OFFを制御します。再起動時には最後に書き込んだプログラムが実行されます。プログラムは書き込むたびに上書きされます。</p>
+
+<p>再度給電します。
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/222/on.png" alt="on">
+
+</center>
+</p>
+
+<p>緑色のLEDが点滅したあと、ランダムに光ります。</p>
+
+<h3 id="まずはlチカ">まずはLチカ</h3>
+
+<p>最初のプログラムとして、Lチカをやってみます。LEDチカチカの略で、入門向けのプログラムとして汎用的に紹介されています。</p>
+
+<p>簡単なプログラムを書き込むことで、ボードが正常に動くか試す際に利用することも多いです。</p>
+
+<p><br /></p>
+
+<h4 id="arduino-ideでプログラムを書く">■Arduino IDEでプログラムを書く</h4>
+
+<p>Arduino IDEを立ち上げ、メニューから<strong><code>ファイル &gt; 新規ファイル</code></strong>を選択します。下記のような画面が開きます。</p>
+
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/215/ide.png" alt="ide">
+
+</center>
+
+
+<p>エディタ部分に、下記のプログラムをコピーして貼り付けましょう（行番号までコピーしてしまわないようご注意ください）。</p>
+
+<pre><code>#include &lt;Nefry.h&gt;
+
+void setup() {
+}
+
+void loop() {
+  Nefry.setLed(0, 0, 255); //色合いをRGBで指定
+  Nefry.ndelay(1000); //1秒待つ
+  Nefry.setLed(0, 0, 0); //LEDをオフにする
+  Nefry.ndelay(1000); //1秒待つ
+}
+</code></pre>
+
+<p>下記でプログラムの内容を解説しています。</p>
+
+<p><br /></p>
+
+<h4 id="ボードを選択">■ボードを選択</h4>
+
+<p>メニューの<strong><code>ツール &gt; ボード &gt; Nefry BT R2 / R3</code></strong>を選択します。この際、ボードは使っているリビジョンに合わせて選択してください。（参照：<a href="/docs/nefrybt-setup-revision/">リビジョンを確認</a>）</p>
+
+<p>例えば、使っている基板がR3の場合は<strong><code>ツール &gt; ボード &gt; Nefry BT R2 / R3</code></strong>を選択します（ハンズオンでは全てR3を使用しています）。</p>
+
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/215/select_board.png" alt="select_board">
+
+</center>
+
+
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/215/select_board2.png" alt="select_board2">
+
+</center>
+
+
+<p><br /></p>
+
+<h4 id="シリアルポートを選択">■シリアルポートを選択</h4>
+
+<p>Nefry BTをPCのUSBポートにさします。プログラムはこのポートを介して、シリアル通信でNefry BTに流し込まれます。</p>
+
+<p><img src="/img/docs/nefrybt/power_supply.png" alt="" /></p>
+
+<p>Macの場合は、メニューの<strong><code>ツール &gt; シリアルポート &gt; /dev/cu.usbserial-xxxxxx</code></strong>を選択します。環境によっては<strong><code>/dev/tty.usbserial-xxxxxx</code></strong>などの場合もあります。</p>
+
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/215/select_port.png" alt="select_port">
+
+</center>
+
+
+<p>Windowsの場合は、<strong><code>ツール &gt; シリアルポート &gt; /dev/COM-XX</code></strong>を選択します。</p>
+
+<p><font size="2">
+※Nefry BTを抜き差しすると、シリアルポートの選択が解除される場合があります。適宜確認しましょう。
+</font></p>
+
+<section class="caution">
+<p>■シリアルポートが選択できない方</p>
+USBドライバのインストールが必要な場合があります。「<a href="/docs/nefrybt-error-faq/#arduino-ideでシリアルポートが見つからない-書き込めない">Arduino IDEでシリアルポートが見つからない・書き込めない</a>」を参照して、USBを認識させるためのドライバをインストールしてください。また、Arduino IDEの再起動やUSBの抜き差しで認識する場合があります。
+</section>
+
+<section class="caution">
+<p>■PCにUSB接続できない方</p>
+セキュリティやポートの問題でPCにUSB接続できない方は、<a href="/docs/nefrybt-program-zip/">Wi-Fi経由でプログラムのアップロード</a>が可能です。その場合、下記の書き込み手順は不要です。給電はコンセントやモバイルバッテリーから直接行ってください。
+</section>
+
+<p><br /></p>
+
+<h4 id="名前をつけて保存">■名前をつけて保存</h4>
+
+<p><strong><code>ファイル&gt;名前をつけて保存</code></strong>を選択して保存します。「NefryLedBlink」など、後からみてわかりやすい名前がオススメです。</p>
+
+<p><br /></p>
+
+<h4 id="プログラムを書き込む">■プログラムを書き込む</h4>
+
+<p>「✔️」を押してプログラムをコンパイルします。コンパイルとは、プログラムを機械が理解できる（人間には読みづらい）形式に変換することです。
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/229/compile.png" alt="compile">
+
+</center>
+
+この手順は省略しても大丈夫ですが、シンタックス（文法）チェックをしてくれるので実施するのがオススメです。</p>
+
+<p>左上の「→」ボタンを押してNefry BTにプログラムを書き込みます。
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/229/write.png" alt="write">
+
+</center>
+</p>
+
+<p>ESP32モジュールの特性上、書き込みに1分ほどかかります。エラーが出てしまうときは、「<a href="/docs/nefrybt-error-handling-2/">コンパイルは成功するのに書き込みが失敗する</a>」を参照してください。</p>
+
+<p>3分以上かかる場合、Nefry BTの不良の可能性があるので申し出てください。</p>
+
+<p><br /></p>
+
+<h4 id="動作を確認">■動作を確認</h4>
+
+<p>起動したら、「青いLEDが1秒ごとに光る」ことを確認しましょう。</p>
+
+<p><a href="https://gyazo.com/801e9ff4982f3326e6f1c3a133fd8de3"><img src="https://i.gyazo.com/801e9ff4982f3326e6f1c3a133fd8de3.gif" alt="Image from Gyazo" /></a></p>
+
+<p>LEDがチカチカしました！</p>
+
+<p><br /></p>
+
+<h4 id="プログラムの解説">■プログラムの解説</h4>
+
+<p>プログラムの要所を説明していきます。</p>
+
+<pre><code>#include &lt;Nefry.h&gt;
+</code></pre>
+
+<p>冒頭でライブラリを読み込んでいます。Nefry BTのライブラリでできることは「<a href="/docs/nefrybt-liblary/">Nefryのライブラリ</a>」を参照してください。</p>
+
+<pre><code>void setup() {
+}
+</code></pre>
+
+<p>起動時に処理される部分です。今回はなにもしません。</p>
+
+<pre><code>void loop() {
+  Nefry.setLed(0, 0, 255); //色合いをRGBで指定
+  Nefry.ndelay(1000); //1秒待つ
+  Nefry.setLed(0, 0, 0); //LEDをオフにする
+  Nefry.ndelay(1000); //1秒待つ
+}
+</code></pre>
+
+<p>起動時に繰り返し実行する部分です。<code>//</code>の後ろには任意のコメントを記入することができます。</p>
+
+<p><code>Nefry.setLed()</code>という関数で、光らせる色合いをRGBの順で指定します。始めにR=0, G=0, B=255を渡しているので、青く光ります。</p>
+
+<p>続いて<code>Nefry.ndelay()</code>という関数で次の処理まで指定した時間待ちます。Arduinoでは時間はミリ秒で指定するので、1000は1秒です。</p>
+
+<p><code>Nefry.setLed()</code>に0, 0, 0を渡すことで、LEDはオフになります。オンとオフのあと1秒ずつ待つことで、点滅を表現しています。</p>
+
+<p>このように、マイコンボードは<strong>①起動時に行う処理</strong>、<strong>②起動中に繰り返される処理</strong>をプログラムして扱います。意外と簡単ではないですか……？</p>
+
+<h3 id="スイッチを押したらlチカ">スイッチを押したらLチカ</h3>
+
+<h4 id="arduino-ideでプログラムを書く-1">■Arduino IDEでプログラムを書く</h4>
+
+<p>同様の手順で新規ファイルを作成し、下記のプログラムをNefry BTに書き込みます。おさらいがてら、やってみましょう。</p>
+
+<pre><code>#include &lt;Nefry.h&gt;
+
+void setup() {
+   // スイッチを有効化
+   Nefry.enableSW();
+}
+
+void loop() {
+    // スイッチが押されたら
+    if (Nefry.readSW()) {
+        Nefry.setLed(255, 0, 0); //色合いをRGBで指定
+        Nefry.ndelay(1000); //1秒待つ
+    }
+    // 青色に戻す
+    Nefry.setLed(0, 0, 255);
+}
+</code></pre>
+
+<p>下記でプログラムの内容を解説しています。</p>
+
+<p><br /></p>
+
+<h4 id="動作を確認-1">■動作を確認</h4>
+
+<p>スイッチ（RSTではない方）を押したら、LEDが赤く光ることを確認します。</p>
+
+<p><a href="https://gyazo.com/73185cad56d6374e6ad394eafbfef51d"><img src="https://i.gyazo.com/73185cad56d6374e6ad394eafbfef51d.gif" alt="Image from Gyazo" /></a></p>
+
+<p><br /></p>
+
+<h4 id="プログラムの解説-1">■プログラムの解説</h4>
+
+<p>プログラムの要所を説明します。</p>
+
+<pre><code>void setup() {
+   // スイッチを有効化
+   Nefry.enableSW();
+}
+</code></pre>
+
+<p>起動時の処理では、<code>Nefry.enableSW()</code>という関数でスイッチを有効化しています。マイコンボードでは、入力・出力に使うピンなどは<code>setup()</code>関数内で有効化します。</p>
+
+<pre><code>void loop() {
+    // スイッチが押されたら
+    if (Nefry.readSW()) {
+        Nefry.setLed(255, 0, 0);//色合いをRGBで指定
+        Nefry.ndelay(1000); //1秒待つ
+    }
+    // 青色に戻す
+    Nefry.setLed(0, 0, 255);
+}
+</code></pre>
+
+<p><code>if(){}</code>という条件式で、なにか動作させたいときの条件を決めます。<code>Nefry.readSW()</code>でスイッチが押されたことを取得し、スイッチが押されたら<code>{}</code>内を実行します。</p>
+
+<p><code>{}</code>内ではLEDを赤く光らせ、1秒間待つ処理をしています。1秒後はまた<code>void loop()</code>内を実行し、スイッチが押されているかどうか判定します。</p>
+
+<p>スイッチが押されている以外のときは、青色のLEDを光らせます。</p>
+
+<h2 id="オフラインでgroveセンサを試す">オフラインでGroveセンサを試す</h2>
+
+<p>次は、配線してセンサのデータを取得してみます。<strong>まずはインターネットに繋がらない電子工作</strong>、です。</p>
+
+<p>エラーの切り分け（どこでエラーが起こっているか）を特定するために、自分で開発するときもステップバイステップでできているか確認しつつ進めるのがオススメです。</p>
+
+<h3 id="grove-温湿度センサを接続">Grove 温湿度センサを接続</h3>
+
+<p>Groveは刺すだけで配線できるのでGNDや信号線などの確認は必要ありませんが、デジタル・アナログ・I2Cなどの通信方法はGroveモジュールによって違います。</p>
+
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/229/seeed_wiki.png" alt="seeed_wiki">
+
+</center>
+
+
+<p>通信方式は温湿度センサの製造元・SeeedStudioの<a href="http://wiki.seeedstudio.com/Grove-TemperatureAndHumidity_Sensor/">Wikiページ</a>を見て確認しましょう。</p>
+
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/229/connect.png" alt="connect">
+
+</center>
+
+
+<p>今回は「A0」というソケットに差し込みます。少し硬いですが、カチッと言うまで押し込めます。<strong>配線作業は常に電源オフの状態</strong> で行います。</p>
+
+<h3 id="温湿度センサを扱うライブラリを読み込む">温湿度センサを扱うライブラリを読み込む</h3>
+
+<p>温湿度センサを扱うためのライブラリ（※）を追加でダウンロードします。リンク先のページで「Clone or Download」から「Download ZIP」を選択します（2つのページから両方ダウンロードしてください）。</p>
+
+<ul>
+<li><a href="https://github.com/adafruit/DHT-sensor-library">https://github.com/adafruit/DHT-sensor-library</a></li>
+<li><a href="https://github.com/adafruit/Adafruit_Sensor">https://github.com/adafruit/Adafruit_Sensor</a></li>
+</ul>
+
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/229/download.png" alt="download">
+
+</center>
+
+
+<p>Arduino IDEの<strong><code>スケッチ &gt; ライブラリをインクルード &gt; .ZIP形式のライブラリをインストール</code></strong>から、ダウンロードされたZIPファイルを2つとも追加して完了です。</p>
+
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/229/library.png" alt="library">
+
+</center>
+
+
+<section class="caution">
+<p>■ライブラリとは</p>
+センサや外部サービスを使うために、あらかじめプログラムを書きパッケージ化したものです。既に誰かが作ってくれているものを取り込んだり、自作したりできます。
+</section>
+
+<h3 id="プログラムを書き込む-1">プログラムを書き込む</h3>
+
+<p>新規ファイルを作成し、下記のプログラムをNefry BTに書き込みます。書き込み手順は、上記の「<a href="#まずはLチカ">まずはLチカ</a>」を参照してくださいね。</p>
+
+<pre><code>#include &quot;DHT.h&quot;
+#include &lt;Nefry.h&gt;
+
+#define DHTPIN A0
+#define DHTTYPE DHT11
+
+DHT dht(DHTPIN, DHTTYPE);
+
+void setup() {
+  Nefry.println(&quot;温度・湿度をチェック&quot;);
+  dht.begin();
+}
+
+void loop() {
+  delay(2000);
+
+  float h = dht.readHumidity();
+  float t = dht.readTemperature();
+
+  if (isnan(h) || isnan(t)) {
+    Nefry.println(&quot;読み取りに失敗しました…&quot;);
+    return;
+  }
+
+  if (h &gt; 70) {
+    Nefry.println(&quot;すっごく湿度が高いよ！&quot;);
+  }
+
+  if (t &gt; 30) {
+    Nefry.println(&quot;すっごく部屋が暑いよ！&quot;);
+  }
+
+  Nefry.print(&quot;湿度: &quot;);
+  Nefry.print(h);
+  Nefry.print(&quot; %\t&quot;);
+  Nefry.print(&quot;温度: &quot;);
+  Nefry.print(t);
+  Nefry.println(&quot; *C &quot;);
+}
+</code></pre>
+
+<h3 id="動作を確認-2">動作を確認</h3>
+
+<p>メニューの<strong><code>ツール&gt;シリアルモニタ</code></strong> を選択して開きます。
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/215/serial_monitor.png" alt="serial_monitor">
+
+</center>
+</p>
+
+<p>右下のbps設定を「115200bps」に変更します。
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/215/bps.png" alt="bps">
+
+</center>
+</p>
+
+<p>2秒ごとに、シリアルモニタに温度と湿度が表示されて行きます。</p>
+
+<p><a href="https://gyazo.com/1d912b8d68ca7b63eb0c991c262d83f0"><img src="https://i.gyazo.com/1d912b8d68ca7b63eb0c991c262d83f0.gif" alt="Image from Gyazo" /></a></p>
+
+<p>あまり動きがないですが、息を吹きかけると湿度が上がることを確認できます。湿度や温度が上がるとアラートメッセージが出ることを確認できたでしょうか？</p>
+
+<p><br /></p>
+
+<h4 id="プログラムの解説-2">■プログラムの解説</h4>
+
+<p>プログラムの要所を解説します。</p>
+
+<pre><code>#include &quot;DHT.h&quot;
+#include &lt;Nefry.h&gt;
+</code></pre>
+
+<p>ライブラリの読み込み部分です。</p>
+
+<pre><code>#define DHTPIN A0
+#define DHTTYPE DHT11
+</code></pre>
+
+<p><code>#define</code>で、配線したピンの場所を定義しています。「DHTPIN」という名前の箱に「A0」という値を入れているイメージです。</p>
+
+<p>こうしておくことで、あとでピンの場所を変えても、ここの値だけ変更すればOKになります。DHTTYPEの値はWikiを参考に入れているだけなので、覚えなくて大丈夫です。</p>
+
+<pre><code>void setup()
+{
+    Nefry.println(&quot;温度・湿度をチェック&quot;);
+    dht.begin();
+}
+</code></pre>
+
+<p>setup関数内ではセンサの読み込みの開始と、シリアルモニタへの表示メッセージを指定しています。</p>
+
+<pre><code>void loop()
+{
+    delay(2000);
+
+    float h = dht.readHumidity();
+    float t = dht.readTemperature();
+
+    // 省略
+}
+</code></pre>
+
+<p>loop関数では、まず2秒ごとにループすることを指定しています。</p>
+
+<p><code>dht</code>関数で湿度と温度の値を読み取っていて、値を<code>h</code>と<code>t</code>という変数にそれぞれ入れています。</p>
+
+<pre><code>void loop()
+{
+    // 省略
+
+    if (h &gt; 70) {
+      Nefry.println(&quot;すっごく湿度が高いよ！&quot;);
+    }
+    if (t &gt; 30) {
+      Nefry.println(&quot;すっごく部屋が暑いよ！&quot;);
+    }
+}
+</code></pre>
+
+<p><code>if() {}</code> の条件式で、湿度が70を超えた時、温度が30を超えたときの処理をそれぞれ指定しています。</p>
+
+<pre><code>Nefry.print(&quot;湿度: &quot;);
+Nefry.print(h);
+Nefry.print(&quot; %\t&quot;);
+Nefry.print(&quot;温度: &quot;);
+Nefry.print(t);
+Nefry.println(&quot; *C &quot;);
+</code></pre>
+
+<p>それ以外のときは温度・湿度を表示させます。</p>
+
+<h2 id="webサービスと連携してみる">Webサービスと連携してみる</h2>
+
+<p>それでは、湿度が70％を超えたら自分のメールやチャットに通知がくるようにしてみましょう。</p>
+
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/229/ifttt_action.png" alt="ifttt_action">
+
+</center>
+
+
+<p><a href="https://ifttt.com/discover">IFTTT</a>で提供されているサービスであれば、LINE、メール、SMS、Twitter、Facebookなどなど、自由に通知先を設定することができます。この記事では、例としてLINEへの通知方法を紹介します。</p>
+
+<p>余裕のある方は好きな通知先を選択してみてください！</p>
+
+<h3 id="iftttにアプレットを作成">IFTTTにアプレットを作成</h3>
+
+<p>まずはIFTTTにアプレット（レシピ）を作成します。IFTTTのアカウントを持っていない場合はアカウント取得から進めてください。</p>
+
+<p>IFTTTのアプレットは「〇〇が起きたら△△する」というようにトリガー（〇〇）とアクション（△△）に分けられます。</p>
+
+<p>今回は自作のサービスを利用できる「Webhooks」という機能を使い、「Webhooksを受け取ったらLINEに通知する」というアプレットを作ってみます。</p>
+
+<p><br /></p>
+
+<h4 id="トリガーの作成">■トリガーの作成</h4>
+
+<p>IFTTTの<a href="https://ifttt.com/create">アプレット作成ページ</a>から「+this」部分をクリックし、トリガーの作成をします。</p>
+
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/229/1.png" alt="1">
+
+</center>
+
+
+<p>「Webhooks」を検索しましょう。</p>
+
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/229/2.png" alt="2">
+
+</center>
+
+
+<p>「Receive a web request」を選択します。</p>
+
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/229/3.png" alt="3">
+
+</center>
+
+
+<p>任意のイベント名をつけます。後ほどNefry BTにも登録するのでメモ帳などにコピーしておきましょう（大文字・小文字の区別があるのでコピー＆ペーストがオススメです）。</p>
+
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/229/4.png" alt="4">
+
+</center>
+
+
+<p><br /></p>
+
+<h4 id="アクションの作成">■アクションの作成</h4>
+
+<p>続いてアクションを作成します。「+that」から進めましょう。</p>
+
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/229/5.png" alt="5">
+
+</center>
+
+
+<p>Nefry BTからの送信を受け取ったら実行したいWebサービスを自由に選びます。今回はサンプルとしてLINEを連携してみますが、Twitter、Slack、Gmail、Googleカレンダー、Facebookなどなど、たぶん思いつく有名Webサービスはだいたいあります。</p>
+
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/229/6.png" alt="6">
+
+</center>
+
+
+<p>起こしたいアクションを選びます。LINEは「メッセージを送る」機能のみですが、サービスによってはさまざまなアクションが起こせます。</p>
+
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/229/7.png" alt="7">
+
+</center>
+
+
+<p>クリックすると、初回はアカウント認証を求められる気がします。LINEのログインメールアドレスがわからない、という方は、スマホのLINEアプリの設定から確認できます（<strong><code>友だちタブ &gt; 設定（歯車）ボタン &gt; アカウント&gt;メールアドレス・パスワード</code></strong>）。</p>
+
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/229/8.png" alt="8">
+
+</center>
+
+
+<p>メッセージを送るルーム、メッセージ内容を設定します。「1:1で〜」を選択すると自分個人宛てにメッセージが届きます。メッセージは「LINE Notify」というアカウントから送られる仕組みです。</p>
+
+<p>
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/229/9.png" alt="9">
+
+</center>
+
+通知先は自分個人の他に、グループも選択できます。</p>
+
+<p>メッセージを自由に作成します。Nefry BTから値を送信し受け取りたい場合は、「Add Ingredient」から<code>Value1</code>を選択します。下記のような場合は、NefryBT側のプログラムで1つ目の値に湿度を送るよう設定します。</p>
+
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/229/10.png" alt="10">
+
+</center>
+
+
+<p>このような感じで設定したら、「Create action」で作成します。
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/229/11.png" alt="11">
+
+</center>
+</p>
+
+<p>最終確認がされるので「Finish」で登録しましょう。
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/229/12.png" alt="12">
+
+</center>
+</p>
+
+<p><br /></p>
+
+<h4 id="webhooksのsecretkeyを取得">■WebhooksのSecretKeyを取得</h4>
+
+<p>Nefry BTとWebhooksと紐付けるための「Secret Key」を取得します。パスワードのようなものです。上部の検索欄からWebhooksを検索しましょう。
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/229/13.png" alt="13">
+
+</center>
+</p>
+
+<p>Webhooksのページに移動します（初回は認証画面が表示されるので「Connect」で開始しましょう）。
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/229/14.png" alt="14">
+
+</center>
+</p>
+
+<p>右上の「Setting」に移動します。
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/229/15.png" alt="15">
+
+</center>
+</p>
+
+<p>「URL」の末尾に自身のSecret Keyが記載されているのでコピーし、メモしておきます。このKeyは漏れると他人が自分にLINEを送れるようになってしまうので、<strong>Web上に公開しないよう注意</strong>してください。
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/229/16.png" alt="16">
+
+</center>
+</p>
+
+<h3 id="プログラムを書き込む-2">プログラムを書き込む</h3>
+
+<h4 id="プログラム">■プログラム</h4>
+
+<p>以下のプログラムをNefry BTに書き込みます。</p>
+
+<pre><code>#include &quot;DHT.h&quot;
+#include &lt;Nefry.h&gt;
+#include &lt;NefryIFTTT.h&gt;
+
+#define DHTPIN A0
+#define DHTTYPE DHT11
+
+String Event, SecretKey;
+DHT dht(DHTPIN, DHTTYPE);
+
+void setup() {
+  Nefry.println(&quot;温度・湿度をチェック&quot;);
+  Nefry.setStoreTitle(&quot;SecretKey&quot;, 0); //Nefry DataStoreのタイトルを指定
+  Nefry.setStoreTitle(&quot;Event&quot;, 1);
+  SecretKey = Nefry.getStoreStr(0);   //Nefry DataStoreからデータを取得
+  Event = Nefry.getStoreStr(1);       //Nefry DataStoreからデータを取得
+  dht.begin();
+}
+
+void loop() {
+  delay(2000);
+
+  float h = dht.readHumidity();
+  float t = dht.readTemperature();
+
+  if (isnan(h) || isnan(t)) {
+    Nefry.println(&quot;読み取りに失敗しました…&quot;);
+    return;
+  }
+  if (h &gt; 70) {
+    Nefry.println(&quot;すっごく湿度が高いよ！&quot;);
+    bool sendData = IFTTT.send(Event, SecretKey, (String)h);
+    if (!sendData) { //IFTTTにデータ送信が成功したかの判定
+      Nefry.setLed(255, 0, 0); //エラーの時、赤色点灯
+      delay(3000);
+    } else {
+      Nefry.setLed(0, 255, 0); //成功の時、緑色点灯
+      delay(3000);
+    }
+    Nefry.ndelay(1000 * 30);
+  }
+
+  Nefry.print(&quot;湿度: &quot;);
+  Nefry.print(h);
+  Nefry.print(&quot; %\t&quot;);
+  Nefry.print(&quot;温度: &quot;);
+  Nefry.print(t);
+  Nefry.println(&quot; *C &quot;);
+}
+</code></pre>
+
+<h3 id="nefry-btにiftttのアカウント情報を設定">Nefry BTにIFTTTのアカウント情報を設定</h3>
+
+<p>Nefry BTにディスプレイを取り付けてから起動し、表示されているIPアドレスにアクセスします（画像の場合は<code>http://192.168.4.1/</code>。人によって違います。 ）。
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/229/ip.png" alt="ip">
+
+</center>
+</p>
+
+<p>「Data Store」に移動します。
+<img src="/img/docs/nefrybt/ifttt_setup1.png" alt="" /></p>
+
+<p>先ほど取得したWebhooksの「Secret Key」と「Event Name」をそれぞれ入力し保存します。Event Nameは大文字・小文字の区別があります。</p>
+
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/229/console.png" alt="console">
+
+</center>
+
+
+<p>「Save」で保存するとNefry BTが再起動し、準備は完了です。</p>
+
+<p><br /></p>
+
+<h3 id="動作を確認-3">動作を確認</h3>
+
+<p>さっそく完成したものを動かしてみましょう。</p>
+
+<p>湿度の値が高くなると……</p>
+
+<p><a href="https://gyazo.com/bd6a5ae77bc93459b3c602d82fb00faa"><img src="https://i.gyazo.com/bd6a5ae77bc93459b3c602d82fb00faa.gif" alt="Image from Gyazo" /></a></p>
+
+<p>LINEに通知されました！</p>
+
+<p>お疲れ様でした〜！</p>
+
+<h3 id="プログラムの解説-3">プログラムの解説</h3>
+
+<p>要所を説明します。大事なところはちょっとだけです。</p>
+
+<pre><code>void setup() {
+  Nefry.setStoreTitle(&quot;SecretKey&quot;, 0); //Nefry DataStoreのタイトルを指定
+  Nefry.setStoreTitle(&quot;Event&quot;, 1);
+  SecretKey = Nefry.getStoreStr(0);   //Nefry DataStoreからデータを取得
+  Event = Nefry.getStoreStr(1);       //Nefry DataStoreからデータを取得
+}
+</code></pre>
+
+<p><code>Nefry.setStoreTitle({タイトル}, {チャンネル番号})</code>関数を使い、Nefry BTのDataStore機能に場所を作っています。この値はNefryポータル側から入力でき、変更があってもプログラムを書き換える必要はありません。</p>
+
+<p>また値を<code>getStoreStr({チャンネル番号})</code>で、ポータル側で設定した値を受け取っています。</p>
+
+<pre><code>void loop() {
+  // 省略
+  if (h &gt; 70) {
+    Nefry.println(&quot;すっごく湿度が高いよ！&quot;);
+    bool sendData = IFTTT.send(Event, SecretKey, (String)h);
+    if (!sendData) { //IFTTTにデータ送信が成功したかの判定
+      Nefry.setLed(255, 0, 0); //エラーの時、赤色点灯
+      delay(3000);
+    } else {
+      Nefry.setLed(0, 255, 0); //成功の時、緑色点灯
+      delay(3000);
+    }
+    Nefry.ndelay(1000 * 30);
+  }
+}
+</code></pre>
+
+<p>先ほど同様湿度が70%を超えたとき、という条件文を作っています。<code>IFTTT.send()</code>関数を使い、もし送れなかったときは赤いLEDを光らせるという処理をしています（<code>!</code>は<code>!==</code>と同義で、<code>FALSE</code>が返ったときに実行されます）。</p>
+
+<p>何度も連続して通知が来るとウザいので、一度送ったあとは30秒（1000ミリ秒×30）待ちます。場合によっては30分待つ、1日待つ、などに変更します。</p>
+
+<h2 id="応用-いろいろなセンサを試してみる">応用: いろいろなセンサを試してみる</h2>
+
+<p>刺すだけで配線できるGroveモジュールは100種類以上あり、いろいろなデータを手軽に扱うことができます。下記ではモジュールと利用例を紹介します。</p>
+
+<h3 id="磁気スイッチ">磁気スイッチ</h3>
+
+<p>
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/229/magnetic.png" alt="magnetic">
+
+</center>
+
+磁石がくっついているか否か、を検知するセンサです。ドアの開閉検知によく使われ、市販の開閉検知装置も磁気センサを使っていることが多いです。</p>
+
+<p>ドアが閉まっているときは磁石とセンサが接着、開いたときは離れるように設置することで開閉を検知できます。</p>
+
+<ul>
+<li>例: 開閉検知</li>
+<li>参考: <a href="http://www.atmarkit.co.jp/ait/articles/1806/26/news001.html">磁気スイッチを使ってポストの開閉をメールで通知</a></li>
+</ul>
+
+<h3 id="人感センサ">人感センサ</h3>
+
+<p>
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/229/pir.png" alt="pir">
+
+</center>
+
+人が近くにいることを検知するセンサです。防犯用の近づくと光るなどに使われます。</p>
+
+<ul>
+<li>例: 防犯灯</li>
+<li>参考: <a href="/blog/nefrybt-handson-pir-linebot/">Nefry BTと人感センサで防犯LINE BOTを作ってみよう</a></li>
+</ul>
+
+<h3 id="光センサ">光センサ</h3>
+
+<p>
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/229/luminance.png" alt="luminance">
+
+</center>
+
+照度（光の度合い）を検知します。暗くなったら明かりをつける仕組みや、異常のときに光るパトランプの近くに起き通知するなど、異常検知にも利用できます。</p>
+
+<ul>
+<li>例: 異常検知</li>
+<li>参考: <a href="https://qiita.com/n0bisuke/items/257126448cf4db482d43">NefryでGrove Luminance Sensor(照度センサ)を触るメモ</a></li>
+</ul>
+
+<h3 id="超音波距離センサ">超音波距離センサ</h3>
+
+<p>
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/229/wave.png" alt="wave">
+
+</center>
+
+センサからモノへの距離を測るセンサです。超音波をぶつけて跳ね返りを調べる仕組みです。</p>
+
+<ul>
+<li>参考: <a href="https://qiita.com/HiroyukiYasui/items/cf477e9ce83682513ab1">NefryBTでGroveセンサーをつなげる時の？について</a></li>
+</ul>
+
+<h3 id="サーボモータ">サーボモータ</h3>
+
+<p>
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/229/servo.png" alt="servo">
+
+</center>
+
+角度を指定して回転させることができるアクチュエータです。</p>
+
+<ul>
+<li>参考: <a href="https://poche-magique.com/2018/05/06/nefrybt_grove_servo/">[Nefry BTとGrove接続実験] サーボモータ</a></li>
+</ul>
+
+<h3 id="カメラ">カメラ</h3>
+
+
+
+
+
+<center style="color: #585858; font-size: 95%; padding-bottom: 10px;">
+<img src="/img/blog/229/camera.png" alt="camera">
+
+</center>
+
+
+<ul>
+<li>例: 機械学習で画像認識</li>
+<li><a href="/blog/nefrybt-pepper-monitoring-system/">Node.jsとNefry BTで監視システムを作ろう！ for Pepper #iotlt</a></li>
+</ul>
+
+<h2 id="関連情報">関連情報</h2>
+
+<ul>
+<li><strong><a href="/shop/nefry-bt-set/">Nefr BTの購入</a></strong></li>
+</ul>
+
+<blockquote>
+<p>Nefry BTはこちらから購入できます（送料無料）。その他にも千石電商、ツクモ、若松通商、共立電子などの実店舗やECサイトで購入できます。</p>
+</blockquote>
+
+<ul>
+<li><strong><a href="/docs/nefrybt/">Nefry BTドキュメント</a></strong></li>
+</ul>
+
+<blockquote>
+<p>Nefry BTでは、IFTTTを使ったWebサービスとの連携や、その他のクラウドサービスとの連携も簡単です。ディスプレイを使ったイラスト描画や、100以上あるGroveモジュールの活用なども、ぜひ試してみてください。</p>
+</blockquote>
+
+<ul>
+<li><strong><a href="https://www.facebook.com/groups/nefry">Nefryユーザーグループ（FB）</a></strong></li>
+</ul>
+
+<blockquote>
+<p>Nefryユーザ同士が交流するページです。質問を投稿して解決した事例もたくさんありますので、困った際などはぜひお気軽にご利用ください。開発者もよく登場します。</p>
+</blockquote>
+
+<ul>
+<li><strong><a href="https://nefry.connpass.com/event/97692/">Nefry User Meetup!</a></strong></li>
+</ul>
+
+<blockquote>
+<p>Nefryユーザによる開催イベントです。ハンズオンやLT会、もくもく会などを実施しています。</p>
+</blockquote>
+
+<ul>
+<li><strong><a href="https://dotstudio.connpass.com/">dotstudioイベント</a></strong></li>
+</ul>
+
+<blockquote>
+<p>dotstudioによる開催イベントです。Nefry BT以外の題材を扱うことも多いです。</p>
+</blockquote>
+
+<style>
+.caution {
+    border: 1px solid #BFBFBF;
+    padding: 1em 2em;
+    margin: 2em 0;
+    color: #474747;
+    background: whitesmoke;/*背景色*/
+    border-left: double 7px #0B0B61;/*左線*/
+    font-size: 90%;
+}
+
+.caution > p {
+    font-weight: bold;
+    margin: 0 0 10px 0;
+    padding: 0;
+}
+
+blockquote {
+    font-size:80%;
+}
+
+.accbox {
+    margin: 2em 0;
+    padding: 0;
+    max-width: 710px;
+}
+
+
+.accbox label {
+    display: block;
+    margin: 1.5px 0;
+    padding : 11px 12px;
+    color :#ffffff;
+    font-weight: bold;
+    background :#2f2f2f;
+    cursor :pointer;
+    transition: all 0.5s;
+}
+
+.accbox label:hover {
+    background :#A4A4A4;
+}
+
+.accbox input {
+    display: none;
+}
+
+.accbox .accshow {
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: 0.8s;
+}
+
+.cssacc:checked + .accshow {
+    height: auto;
+    padding: 5px;
+    background: #eaeaea;
+    opacity: 1;
+}
+</style>
+</div>
+
+    <div class="share-foot">
+    <a href="https://twitter.com/share" class="twitter-share-button" data-size="large" data-show-count="true" data-hashtags="dotstudio">Tweet</a>
+
+    &nbsp;
+
+    <div class="fb-share-button" data-href="https://dotstud.io/blog/handson-nefry-ma-kanazawa/" data-layout="button_count" data-size="large" data-mobile-iframe="true"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdotstud.io%2Fblog%2Fmftokyo-2018-chantoku-report%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">シェア</a></div>
+
+    &nbsp;
+
+    <a href="https://dotstud.io/blog/handson-nefry-ma-kanazawa/" class="hatena-bookmark-button" data-hatena-bookmark-layout="basic-counter" data-hatena-bookmark-height="30" title="このエントリーをはてなブックマークに追加"><img src="https://b.st-hatena.com/images/entry-button/button-only@2x.png" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a>
+
+    &nbsp;
+
+    <div class="line-it-button" data-lang="ja" data-type="share-c" data-url="https://dotstud.io/blog/handson-nefry-ma-kanazawa/" style="display: none;"></div>
+
+  </div>
+
+
+
+
+    
+    
+    
+    <nav class="related">
+      <h2 class="">関連記事</h2>
+      <ul class="cards-related">
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/nefrybt-handson-pir-linebot/">
+                <img class="card-related--thumbnail" src="/img/blog/215/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">【ハンズオン資料】Nefry BTと人感センサで防犯LINE BOTを作ってみよう</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/control-solenoid-nefrybt-nodered/">
+                <img class="card-related--thumbnail" src="/img/blog/214/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">【ソレノイド詳細解説】IoTの力でスマホを振るとソレノイドがシュコシュコ動く仕組みを作ってみる</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/stepper-motor-nefrybt-control/">
+                <img class="card-related--thumbnail" src="/img/blog/189/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">【詳細解説】ステッピングモータの仕組みを理解しよう！解説とNefry BTでステッピングモータを使う方法</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/nefry-servo-handson-takudooon/">
+                <img class="card-related--thumbnail" src="/img/blog/187/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">PWM制御をマスターしよう！Node-REDでサーボモータを遠隔制御する方法＆初ハンズオンレポート</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/clova-ifttt-nefrybt-arduino/">
+                <img class="card-related--thumbnail" src="/img/blog/185/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">ClovaとNefryBT（ESP32）を連携させてみよう</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/keyboard-kintai-system-diy/">
+                <img class="card-related--thumbnail" src="/img/blog/183/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">NefryBTとキーボードで作る簡易勤怠管理システム</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/nefrybt-motor-watering-system/">
+                <img class="card-related--thumbnail" src="/img/blog/148/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">自動水やり装置を作ろう！Nefry BTとGroveモジュールでズボラのための電子工作</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/mongoose-os-nefry-blink/">
+                <img class="card-related--thumbnail" src="/img/blog/145/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">JavaScriptで開発できる！Mongoose OSでNefry BTをLチカしよう</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/nefrybt-ble-bluetooth-peripheral/">
+                <img class="card-related--thumbnail" src="/img/blog/143/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">Nefry BT（ESP32）からBLEでNode.jsにデータを送ってみよう</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/nefry-bt-connect-mqtt/">
+                <img class="card-related--thumbnail" src="/img/blog/141/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">Nefry BT（ESP32）でMQTTを使ってみよう Subscribe編</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/nefrybt-pepper-monitoring-system/">
+                <img class="card-related--thumbnail" src="/img/blog/127/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">Node.jsとNefry BTで監視システムを作ろう！ for Pepper #iotlt</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+          <li class="js-items">
+            <article class="card-related">
+              <a class="" href="https://dotstud.io/blog/nefry-ifttt-push-line/">
+                <img class="card-related--thumbnail" src="/img/blog/100/00_thumbnail.png" alt="サムネイル">
+                <h3 class="card-related--title">Nefry BTとIFTTTでスイッチを押したらLINEを送る仕組みを作ってみよう</h3>
+              </a>
+              
+            </article>
+          </li>
+        
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+          
+          
+          
+        
+        </ul>
+      </nav>
+
+
+
+</article>
+
+<footer class="footer">
+  <p class="footer-info">
+    <a class="footer-info--item" href="/about">会社概要</a>
+    <a class="footer-info--item" href="/members">メンバー</a>
+    <a class="footer-info--item" href="/recruit">採用情報</a>
+    <a class="footer-info--item" href="/legal#tos">利用規約</a>
+    <a class="footer-info--item" href="/legal#sct">特定商取引</a>
+    <a class="footer-info--item" href="/legal#pp">プライバシーポリシー</a>
+  </p>
+  <p class="footer-cr">© 2018 dotstudio inc.</p>
+</footer>
+
+
+<script src="/js/jquery.min.js"></script>
+
+
+
+
+
+
+
+<script src="/js/app.js"></script>
+
+
+<script src="/js/lib/hljs.js"></script>
+<script src="/js/lib/hljs-numbers.js"></script>
+<script>
+  hljs.initHighlightingOnLoad();
+  hljs.initLineNumbersOnLoad();
+</script>
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-78080011-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+
