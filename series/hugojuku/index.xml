@@ -1,397 +1,223 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Hugojuku on dotstudio（ドットスタジオ）</title>
-    <link>https://dotstud.io/series/hugojuku/</link>
-    <description>Recent content in Hugojuku on dotstudio（ドットスタジオ）</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>ja</language>
-    <copyright>© 2018 dotstudio inc.</copyright>
-    <lastBuildDate>Wed, 12 Oct 2016 10:00:16 +0900</lastBuildDate>
-    <atom:link href="/series/hugojuku/" rel="self" type="application/rss+xml" />
-    
-    <item>
-      <title>本ブログにもページネーション機能が付きました！Hugoでページネーション機能を作ろう</title>
-      <link>https://dotstud.io/blog/hugo-howto-create-pagination/</link>
-      <pubDate>Wed, 12 Oct 2016 10:00:16 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/hugo-howto-create-pagination/</guid>
-      
-      <description>
-
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Hugojuku on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/hugojuku/</link><description>Recent content in Hugojuku on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Wed, 12 Oct 2016 10:00:16 +0900</lastBuildDate><atom:link href="/series/hugojuku/" rel="self" type="application/rss+xml"/><item><title>本ブログにもページネーション機能が付きました！Hugoでページネーション機能を作ろう</title><link>https://dotstud.io/blog/hugo-howto-create-pagination/</link><pubDate>Wed, 12 Oct 2016 10:00:16 +0900</pubDate><guid>https://dotstud.io/blog/hugo-howto-create-pagination/</guid><description>
 &lt;p&gt;こんにちは、 dotstudio代表の&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
-
 &lt;p&gt;このブログはページネーション機能が無かったのですが、そろそろコンテンツ数も増えてきたのでページネーション機能を実装しました。 888888&lt;/p&gt;
-
 &lt;p&gt;実際に作る方法を紹介します。&lt;/p&gt;
-
 &lt;h2 id=&#34;hugoでページネーション機能を作る&#34;&gt;Hugoでページネーション機能を作る&lt;/h2&gt;
-
 &lt;p&gt;今回はblogセクションにページネーションを実装します。&lt;/p&gt;
-
 &lt;p&gt;Hugoのページネーションで調べるとまずは&lt;a href=&#34;https://gohugo.io/extras/pagination/&#34;&gt;ドキュメントページのここ&lt;/a&gt;がヒットします。&lt;/p&gt;
-
 &lt;p&gt;もともとも&lt;code&gt;section/blog.html&lt;/code&gt;は以下のようなコードでした。&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;{{ partial &amp;quot;header.html&amp;quot; . }}
-    &amp;lt;!-- Main Content --&amp;gt;
-    &amp;lt;div id=&amp;quot;blog-card--container&amp;quot;&amp;gt;
-    {{ range first 12 (where .Data.Pages &amp;quot;Type&amp;quot; &amp;quot;blog&amp;quot;) }}
-      {{ .Render &amp;quot;summary&amp;quot;}}
-    {{ end }}
-    &amp;lt;/div&amp;gt;
+&amp;lt;!-- Main Content --&amp;gt;
+&amp;lt;div id=&amp;quot;blog-card--container&amp;quot;&amp;gt;
+{{ range first 12 (where .Data.Pages &amp;quot;Type&amp;quot; &amp;quot;blog&amp;quot;) }}
+{{ .Render &amp;quot;summary&amp;quot;}}
+{{ end }}
+&amp;lt;/div&amp;gt;
 {{ partial &amp;quot;footer.html&amp;quot; . }}
 &lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;ドキュメントページを参照しながら以下のように変更します。&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;{{ partial &amp;quot;header.html&amp;quot; . }}
-
-    {{ $paginator := .Paginate (where .Data.Pages &amp;quot;Type&amp;quot; &amp;quot;blog&amp;quot;) 12 }}
-    &amp;lt;!-- Main Content --&amp;gt;
-    &amp;lt;div id=&amp;quot;blog-card--container&amp;quot;&amp;gt;
-       {{ range $paginator.Pages }}
-            {{ .Render &amp;quot;summary&amp;quot; }}
-        {{ end }}
-    &amp;lt;/div&amp;gt;
-    
-    {{ template &amp;quot;_internal/pagination.html&amp;quot; . }}
-
+{{ $paginator := .Paginate (where .Data.Pages &amp;quot;Type&amp;quot; &amp;quot;blog&amp;quot;) 12 }}
+&amp;lt;!-- Main Content --&amp;gt;
+&amp;lt;div id=&amp;quot;blog-card--container&amp;quot;&amp;gt;
+{{ range $paginator.Pages }}
+{{ .Render &amp;quot;summary&amp;quot; }}
+{{ end }}
+&amp;lt;/div&amp;gt;
+{{ template &amp;quot;_internal/pagination.html&amp;quot; . }}
 {{ partial &amp;quot;footer.html&amp;quot; . }}
 &lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;これだけでページネーション機能はとりあえず完成です。&lt;/p&gt;
-
 &lt;p&gt;&lt;strong&gt;めちゃ簡単ですね！&lt;/strong&gt;&lt;/p&gt;
-
 &lt;p&gt;確認してみるとページの下の方に何かいる&amp;hellip;&amp;hellip;！&lt;/p&gt;
-
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/032/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
 &lt;p&gt;これがページネーションのメニューです。&lt;/p&gt;
-
 &lt;p&gt;勝手に生成されていてびっくりしますが、&lt;code&gt;{{ template &amp;quot;_internal/pagination.html&amp;quot; . }}&lt;/code&gt;の部分でこのメニューが生成されています。&lt;/p&gt;
-
 &lt;p&gt;だけどここから先で割と詰まりました苦笑&lt;/p&gt;
-
 &lt;h2 id=&#34;見た目とメニューの自由度を上げたい&#34;&gt;見た目とメニューの自由度を上げたい&lt;/h2&gt;
-
 &lt;p&gt;このままだとどこでHTMLが生成されているか不明です。&lt;code&gt;_internal/~~~.html&lt;/code&gt;はHugoの組み込みテンプレートになっていて、通常は変更することが出来ません。&lt;/p&gt;
-
 &lt;p&gt;&lt;a href=&#34;https://www.kakunaga.net/post/160517pagination/&#34;&gt;pagination の見た目&lt;/a&gt;の記事を見ると、&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;class=&amp;ldquo;pagination&amp;rdquo;&lt;/li&gt;
 &lt;li&gt;class=&amp;ldquo;active&amp;rdquo;&lt;/li&gt;
 &lt;/ul&gt;
-
 &lt;p&gt;が生成されているからCSSを指定すればいいみたいです。ただ、メニュー項目の自由度は無いので自分で定義してみたいと思います。&lt;/p&gt;
-
 &lt;p&gt;&lt;a href=&#34;https://github.com/spf13/hugo/blob/master/tpl/template_embedded.go#L116-L142&#34;&gt;Hugoのソース&lt;/a&gt;を覗き見ると対象箇所が分かります。&lt;/p&gt;
-
 &lt;p&gt;ここを元に&lt;code&gt;layouts/partials/paginator.html&lt;/code&gt;を作成します。以下ではコメントも入れておきました。&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;{{ $pag := $.Paginator }}
 {{ if gt $pag.TotalPages 1 }}
-    &amp;lt;ul class=&amp;quot;pagination&amp;quot;&amp;gt;
-        {{/*最初へ*/}}
-        {{ with $pag.First }}
-            &amp;lt;li&amp;gt;
-                &amp;lt;a href=&amp;quot;{{ .URL }}&amp;quot; aria-label=&amp;quot;First&amp;quot;&amp;gt;&amp;lt;span aria-hidden=&amp;quot;true&amp;quot;&amp;gt;最初へ&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
-            &amp;lt;/li&amp;gt;
-        {{ end }}
-
-        {{/*前ページ*/}}
-        &amp;lt;li{{ if not $pag.HasPrev }}class=&amp;quot;disabled&amp;quot;{{ end }}&amp;gt;
-            &amp;lt;a href=&amp;quot;{{ if $pag.HasPrev }}{{ $pag.Prev.URL }}{{ end }}&amp;quot; aria-label=&amp;quot;Previous&amp;quot;&amp;gt;
-                &amp;lt;span aria-hidden=&amp;quot;true&amp;quot;&amp;gt;前へ&amp;lt;/span&amp;gt;
-            &amp;lt;/a&amp;gt;
-        &amp;lt;/li&amp;gt;
-
-        {{/*番号*/}}
-        {{ range $pag.Pagers }}
-            &amp;lt;li{{ if eq . $pag }}class=&amp;quot;active&amp;quot;{{ end }}&amp;gt;
-                &amp;lt;a href=&amp;quot;{{ .URL }}&amp;quot;&amp;gt;{{ .PageNumber }}&amp;lt;/a&amp;gt;
-            &amp;lt;/li&amp;gt;
-        {{ end }}
-        
-        {{/*次ページ*/}}
-        &amp;lt;li{{ if not $pag.HasNext }}class=&amp;quot;disabled&amp;quot;{{ end }}&amp;gt;
-            &amp;lt;a href=&amp;quot;{{ if $pag.HasNext }}{{ $pag.Next.URL }}{{ end }}&amp;quot; aria-label=&amp;quot;Next&amp;quot;&amp;gt;
-                &amp;lt;span aria-hidden=&amp;quot;true&amp;quot;&amp;gt;次へ&amp;lt;/span&amp;gt;
-            &amp;lt;/a&amp;gt;
-        &amp;lt;/li&amp;gt;
-
-        {{/*最後へ*/}}
-        {{ with $pag.Last }}
-            &amp;lt;li&amp;gt;
-                &amp;lt;a href=&amp;quot;{{ .URL }}&amp;quot; aria-label=&amp;quot;Last&amp;quot;&amp;gt;&amp;lt;span aria-hidden=&amp;quot;true&amp;quot;&amp;gt;最後へ&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
-            &amp;lt;/li&amp;gt;
-        {{ end }}
-    &amp;lt;/ul&amp;gt;
+&amp;lt;ul class=&amp;quot;pagination&amp;quot;&amp;gt;
+{{/*最初へ*/}}
+{{ with $pag.First }}
+&amp;lt;li&amp;gt;
+&amp;lt;a href=&amp;quot;{{ .URL }}&amp;quot; aria-label=&amp;quot;First&amp;quot;&amp;gt;&amp;lt;span aria-hidden=&amp;quot;true&amp;quot;&amp;gt;最初へ&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+&amp;lt;/li&amp;gt;
+{{ end }}
+{{/*前ページ*/}}
+&amp;lt;li{{ if not $pag.HasPrev }}class=&amp;quot;disabled&amp;quot;{{ end }}&amp;gt;
+&amp;lt;a href=&amp;quot;{{ if $pag.HasPrev }}{{ $pag.Prev.URL }}{{ end }}&amp;quot; aria-label=&amp;quot;Previous&amp;quot;&amp;gt;
+&amp;lt;span aria-hidden=&amp;quot;true&amp;quot;&amp;gt;前へ&amp;lt;/span&amp;gt;
+&amp;lt;/a&amp;gt;
+&amp;lt;/li&amp;gt;
+{{/*番号*/}}
+{{ range $pag.Pagers }}
+&amp;lt;li{{ if eq . $pag }}class=&amp;quot;active&amp;quot;{{ end }}&amp;gt;
+&amp;lt;a href=&amp;quot;{{ .URL }}&amp;quot;&amp;gt;{{ .PageNumber }}&amp;lt;/a&amp;gt;
+&amp;lt;/li&amp;gt;
+{{ end }}
+{{/*次ページ*/}}
+&amp;lt;li{{ if not $pag.HasNext }}class=&amp;quot;disabled&amp;quot;{{ end }}&amp;gt;
+&amp;lt;a href=&amp;quot;{{ if $pag.HasNext }}{{ $pag.Next.URL }}{{ end }}&amp;quot; aria-label=&amp;quot;Next&amp;quot;&amp;gt;
+&amp;lt;span aria-hidden=&amp;quot;true&amp;quot;&amp;gt;次へ&amp;lt;/span&amp;gt;
+&amp;lt;/a&amp;gt;
+&amp;lt;/li&amp;gt;
+{{/*最後へ*/}}
+{{ with $pag.Last }}
+&amp;lt;li&amp;gt;
+&amp;lt;a href=&amp;quot;{{ .URL }}&amp;quot; aria-label=&amp;quot;Last&amp;quot;&amp;gt;&amp;lt;span aria-hidden=&amp;quot;true&amp;quot;&amp;gt;最後へ&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+&amp;lt;/li&amp;gt;
+{{ end }}
+&amp;lt;/ul&amp;gt;
 {{ end }}
 &lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;&lt;code&gt;section/blog.html&lt;/code&gt;を以下に修正します。
 &lt;code&gt;_internal&lt;/code&gt;で組み込みテンプレートを呼び出していた行を今作成した&lt;code&gt;paginator.html&lt;/code&gt;を呼び出すように変更です。&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;{{ partial &amp;quot;header.html&amp;quot; . }}
-
-    {{ $paginator := .Paginate (where .Data.Pages &amp;quot;Type&amp;quot; &amp;quot;blog&amp;quot;) 12 }}
-    &amp;lt;!-- Main Content --&amp;gt;
-    &amp;lt;div id=&amp;quot;blog-card--container&amp;quot;&amp;gt;
-       {{ range $paginator.Pages }}
-            {{ .Render &amp;quot;summary&amp;quot; }}
-        {{ end }}
-    &amp;lt;/div&amp;gt;
-    
-    {{ partial &amp;quot;paginator.html&amp;quot; . }}
-
+{{ $paginator := .Paginate (where .Data.Pages &amp;quot;Type&amp;quot; &amp;quot;blog&amp;quot;) 12 }}
+&amp;lt;!-- Main Content --&amp;gt;
+&amp;lt;div id=&amp;quot;blog-card--container&amp;quot;&amp;gt;
+{{ range $paginator.Pages }}
+{{ .Render &amp;quot;summary&amp;quot; }}
+{{ end }}
+&amp;lt;/div&amp;gt;
+{{ partial &amp;quot;paginator.html&amp;quot; . }}
 {{ partial &amp;quot;footer.html&amp;quot; . }}
 &lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;これで完成です。&lt;/p&gt;
-
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/032/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
 &lt;p&gt;ビルドするとこのような形になりました。&lt;/p&gt;
-
 &lt;p&gt;あとは&lt;a href=&#34;https://dotstud.io/members/chachmaru/&#34;&gt;ちゃちゃまる先生&lt;/a&gt;にCSSをあててもらえば終了です。&lt;/p&gt;
-
 &lt;h2 id=&#34;出来上がったものがこちらです&#34;&gt;出来上がったものがこちらです&lt;/h2&gt;
-
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/032/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
 &lt;p&gt;いい感じですね。&lt;/p&gt;
-
 &lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-
 &lt;p&gt;こちら(&lt;a href=&#34;http://wdkk.co.jp/note/2015/0915-hugo-pagination/&#34;&gt;Hugoでwebサイト構築(9) リストのページネーション(Pagination)&lt;/a&gt;)も参考にさせていただきました。&lt;/p&gt;
-
-&lt;p&gt;なかなか公式ドキュメントも調べづらいので参考になれば幸いです。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>デザイナーの僕がHugoを使ってポートフォリオサイトを作ってみる #2【制作:基本編】</title>
-      <link>https://dotstud.io/blog/hugo-for-designers-vol2/</link>
-      <pubDate>Thu, 06 Oct 2016 10:40:04 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/hugo-for-designers-vol2/</guid>
-      
-      <description>
-
+&lt;p&gt;なかなか公式ドキュメントも調べづらいので参考になれば幸いです。&lt;/p&gt;</description></item><item><title>デザイナーの僕がHugoを使ってポートフォリオサイトを作ってみる #2【制作:基本編】</title><link>https://dotstud.io/blog/hugo-for-designers-vol2/</link><pubDate>Thu, 06 Oct 2016 10:40:04 +0900</pubDate><guid>https://dotstud.io/blog/hugo-for-designers-vol2/</guid><description>
 &lt;p&gt;こんにちは、dotstudioのデザイナー・ちゃちゃまる（&lt;a href=&#34;https://twitter.com/chachmaru&#34;&gt;@chachmaru&lt;/a&gt;）です！&lt;/p&gt;
-
 &lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/hugo-for-designers-vol1/&#34;&gt;第一回目&lt;/a&gt;では&lt;br /&gt;
 - 動的サイトと静的サイトの違い&lt;br /&gt;
 - Hugoの使い方&lt;br /&gt;
 - Hugoディレクトリの中身&lt;br /&gt;
 を説明しました。&lt;/p&gt;
-
 &lt;p&gt;本連載の第二回目では、とりあえずトップページに記事を表示させ、ローカル環境でテストしてみるところまで進めていきたいと思います！なお、この記事ではHugoに直接関係のない部分（基本的なHTMLやCSSの記述など）の解説は省いていきますのでご了承ください。&lt;/p&gt;
-
 &lt;p&gt;また、僕自身も手探りのため、コードや理解に間違っている部分や改善すべき点など多数あると思います。お気づきの方は、こっそりGithub issueの方で報告していただけたら幸いです。&lt;/p&gt;
-
 &lt;p&gt;それでは早速やっていきましょう！&lt;/p&gt;
-
 &lt;h2 id=&#34;記事を作成する&#34;&gt;記事を作成する&lt;/h2&gt;
-
 &lt;p&gt;Hugoを使った操作は、基本前回と同じようにターミナル内で行います。&lt;code&gt;アプリケーション &amp;gt; ユーティリティ &amp;gt; ターミナル.app&lt;/code&gt;から起動して、前回生成したHugoディレクトリまで移動しましょう。&lt;/p&gt;
-
 &lt;h3 id=&#34;hugo-newコマンド&#34;&gt;hugo newコマンド&lt;/h3&gt;
-
 &lt;p&gt;前回は&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;$ hugo new site chachamaru
 &lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;というコマンドを使ってHugoディレクトリを生成しました。実はこの&lt;code&gt;hugo new&lt;/code&gt;コマンドの一部分を置き換えて&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;hugo new ジャンル/記事名（アルファベット）.md
 &lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;とすることで、かんたんに記事もつくることができるのです。&lt;/p&gt;
-
 &lt;p&gt;最後の拡張子&lt;code&gt;.md&lt;/code&gt;は、マークダウンのファイルであることを表しています。Hugoは記事をマークダウン方式で書くことができるので、最後に&lt;code&gt;.md&lt;/code&gt;をつけるようにしましょう。&lt;/p&gt;
-
 &lt;h3 id=&#34;ジャンルを決める&#34;&gt;ジャンルを決める&lt;/h3&gt;
-
 &lt;p&gt;さて、ここで記事にどんなジャンルが欲しいかを考えます。もちろん後から新しいジャンルを追加することもできるので、今は「Works」（作品）と「Announcements」（お知らせ）の2つにします。&lt;/p&gt;
-
 &lt;p&gt;この場合、&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;$ hugo new works/my-first-work.md
 &lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;と&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;$ hugo new announcements/my-new-website.md
 &lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;などとすれば二種類のジャンルが作成されます。&lt;/p&gt;
-
 &lt;h3 id=&#34;記事の場所&#34;&gt;記事の場所&lt;/h3&gt;
-
 &lt;p&gt;&lt;code&gt;hugo new&lt;/code&gt;コマンドでつくられた記事は&lt;code&gt;content&lt;/code&gt;ディレクトリ内にあります。ジャンルが指定されている場合、ジャンル名がサブディレクトリ名になります。&lt;/p&gt;
-
 &lt;p&gt;今回の場合、&lt;/p&gt;
-
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/029/01.png&#34; alt=&#34;ディレクトリ構成&#34; /&gt;&lt;/p&gt;
-
 &lt;p&gt;のような構成になっているはずです。&lt;/p&gt;
-
 &lt;p&gt;※&lt;code&gt;hugo new&lt;/code&gt;で生成したジャンル名や記事タイトルは、Finderなどからでも名称変更可能です。スペルミスなどをしてしまった場合は普段どおり名前を変更すれば大丈夫です。&lt;/p&gt;
-
 &lt;h3 id=&#34;フロントマター&#34;&gt;フロントマター&lt;/h3&gt;
-
 &lt;p&gt;作成した&lt;code&gt;my-first-work.md&lt;/code&gt;をテキストエディタで開いてみましょう。&lt;/p&gt;
-
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/029/02.png&#34; alt=&#34;マークダウンファイル&#34; /&gt;&lt;/p&gt;
-
 &lt;p&gt;開くと空のファイルではなく、&lt;code&gt;+++&lt;/code&gt;に囲まれて&lt;code&gt;date&lt;/code&gt;、&lt;code&gt;draft&lt;/code&gt;、&lt;code&gt;title&lt;/code&gt;の3つが書かれています。&lt;/p&gt;
-
 &lt;p&gt;&lt;code&gt;+++&lt;/code&gt;で囲まれている部分は、TOML（設定ファイルを記述する小さい言語）で書かれたこの&lt;code&gt;my-first-work.md&lt;/code&gt;の記事に関するデータであり、&lt;strong&gt;フロントマター&lt;/strong&gt;と呼びます。&lt;/p&gt;
-
 &lt;p&gt;&lt;code&gt;date&lt;/code&gt;には記事が作成された日にちと時間、&lt;code&gt;draft&lt;/code&gt;にはこの記事が下書き状態か否か、そして&lt;code&gt;title&lt;/code&gt;にはファイル名と同じ名前がデフォルトでつけられています。詳しくは後ほど。&lt;/p&gt;
-
 &lt;h3 id=&#34;記事を書く&#34;&gt;記事を書く&lt;/h3&gt;
-
 &lt;p&gt;本文は&lt;code&gt;+++&lt;/code&gt;で閉じた後の行に記述します。&lt;/p&gt;
-
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/029/03.png&#34; alt=&#34;マークダウンファイル&#34; /&gt;&lt;/p&gt;
-
 &lt;p&gt;このファイルの名前&lt;code&gt;my-first-work.md&lt;/code&gt;は、この記事のページのURL（例: chachmaru.github.io/works/my-first-work）になります（ファイル名とURLを別々に設定することも可能）。実際にウェブサイトに表示されるタイトルはフロントマターの&lt;code&gt;title&lt;/code&gt;で指定されたものなので、好きな文言に書き換えておきましょう。&lt;/p&gt;
-
 &lt;p&gt;これで一旦記事作成は終わりです。次はHTMLを書いていきます。&lt;/p&gt;
-
 &lt;h2 id=&#34;トップページに記事一覧を表示させる&#34;&gt;トップページに記事一覧を表示させる&lt;/h2&gt;
-
 &lt;h3 id=&#34;index-htmlをつくる&#34;&gt;index.htmlをつくる&lt;/h3&gt;
-
 &lt;p&gt;前回のおさらいで、HUGOでは&lt;code&gt;layouts&lt;/code&gt;内にHTMLファイルを置きます。&lt;code&gt;index.html&lt;/code&gt;を作り、とりあえず「hello world」などと入れ、保存しましょう。&lt;/p&gt;
-
 &lt;h3 id=&#34;ブラウザでテストしてみる&#34;&gt;ブラウザでテストしてみる&lt;/h3&gt;
-
 &lt;p&gt;いよいよHUGOをブラウザで表示させてみます。テスト用のサーバーをたてるのは非常にかんたんで、&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;$ hugo server
 &lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;とターミナルに入れるだけです。&lt;/p&gt;
-
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/029/04.png&#34; alt=&#34;ターミナルスクリーンショット&#34; /&gt;&lt;/p&gt;
-
 &lt;p&gt;Hugoはデフォルトで&lt;a href=&#34;localhost:1313&#34;&gt;localhost:1313&lt;/a&gt;にサーバーをたてるので、ブラウザでアクセスしてみましょう。&lt;/p&gt;
-
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/029/05.png&#34; alt=&#34;ブラウザ&#34; /&gt;&lt;/p&gt;
-
 &lt;p&gt;さきほど&lt;code&gt;index.html&lt;/code&gt;に入れた文字が表示されましたか？&lt;/p&gt;
-
 &lt;h3 id=&#34;コマンドにオプションをつける&#34;&gt;コマンドにオプションをつける&lt;/h3&gt;
-
 &lt;p&gt;&lt;code&gt;hugo server&lt;/code&gt;コマンドは、Hugoディレクトリ内のファイルを更新したあと一旦サーバーを停止させてもう一度起動しなければいけないので、非常にめんどうです。&lt;/p&gt;
-
 &lt;p&gt;そこで、一旦サーバーを停止して、次から&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;$ hugo server --watch --buildDrafts
 &lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;としてください。&lt;/p&gt;
-
 &lt;p&gt;2つのハイフンから始まる文字は&lt;code&gt;hugo server&lt;/code&gt;コマンドのオプションです。&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;&lt;code&gt;--watch&lt;/code&gt;&lt;br /&gt;
 Hugoディレクトリ内に変更があったとき自動でブラウザをリロードしてくれます。これでいちいちサーバーを再起動しなくても大丈夫です。&lt;/p&gt;&lt;/li&gt;
-
 &lt;li&gt;&lt;p&gt;&lt;code&gt;--buildDrafts&lt;/code&gt;&lt;br /&gt;
 フロントマターの&lt;code&gt;draft&lt;/code&gt;欄が&lt;code&gt;true&lt;/code&gt;になっている記事を、Hugoはデフォルトでテストサーバーに反映させません。本番には向いているのですが、今はテスト段階のため、このオプションをつけて下書き記事も反映させます。&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
-
 &lt;p&gt;これでずっと走らせておきながら開発ができます。&lt;/p&gt;
-
 &lt;h3 id=&#34;トップページに記事を表示させる&#34;&gt;トップページに記事を表示させる&lt;/h3&gt;
-
 &lt;p&gt;まずは以下を&lt;code&gt;index.html&lt;/code&gt;にコピペして保存してください。&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;&amp;lt;!DOCTYPE html&amp;gt;
-
 &amp;lt;html&amp;gt;
-  &amp;lt;body&amp;gt;
-
-      {{ range first 10 .Data.Pages }}
-        &amp;lt;div&amp;gt;
-          &amp;lt;a href=&amp;quot;#&amp;quot;&amp;gt;{{ .Title }}&amp;lt;/a&amp;gt;
-        &amp;lt;/div&amp;gt;
-      {{ end }}
-
-  &amp;lt;/body&amp;gt;
+&amp;lt;body&amp;gt;
+{{ range first 10 .Data.Pages }}
+&amp;lt;div&amp;gt;
+&amp;lt;a href=&amp;quot;#&amp;quot;&amp;gt;{{ .Title }}&amp;lt;/a&amp;gt;
+&amp;lt;/div&amp;gt;
+{{ end }}
+&amp;lt;/body&amp;gt;
 &amp;lt;/html&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;すると、ブラウザ側では&lt;br /&gt;
 &lt;img src=&#34;https://dotstud.io/img/blog/029/06.png&#34; alt=&#34;ブラウザ&#34; /&gt;&lt;br /&gt;
 のように、さきほど作成した&lt;code&gt;content&lt;/code&gt;ディレクトリ内の2つの記事タイトルが並べられていると思います！&lt;/p&gt;
-
 &lt;h2 id=&#34;goテンプレートを活用する&#34;&gt;Goテンプレートを活用する&lt;/h2&gt;
-
 &lt;p&gt;なぜ上記のようなコードだけで、こんなにもかんたんに記事一覧を表示させることができるのでしょうか。秘密は&lt;code&gt;{{ }}&lt;/code&gt;内のコードにあります。&lt;/p&gt;
-
 &lt;h3 id=&#34;hugoのテンプレートエンジン&#34;&gt;Hugoのテンプレートエンジン&lt;/h3&gt;
-
 &lt;p&gt;テンプレートエンジンとは、雛形（テンプレート）とデータを合成・出力することができるソフトウェアを指します。HugoはHTMLにかんたんなロジックを組みこむことができる軽量の「Go html/template」ライブラリを、テンプレートエンジンとして使用しています。&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;{{ range first 10 .Data.Pages}}
-
 {{ end }}
 &lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;は、全記事から最新の10記事分の、カッコ内に書かれたHTMLを用意しています。今回は全体で2つしか記事がないため、2つ分のみ用意されています。&lt;/p&gt;
-
 &lt;p&gt;また、&lt;code&gt;{{ .Title }}&lt;/code&gt;はその記事のタイトルを取得してくれます。つまり今回の場合、&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;&amp;lt;div&amp;gt;
-  &amp;lt;a href=&amp;quot;#&amp;quot;&amp;gt;ポートフォリオサイトを作りました。&amp;lt;/a&amp;gt;
+&amp;lt;a href=&amp;quot;#&amp;quot;&amp;gt;ポートフォリオサイトを作りました。&amp;lt;/a&amp;gt;
 &amp;lt;/div&amp;gt;
 &amp;lt;div&amp;gt;
-  &amp;lt;a href=&amp;quot;#&amp;quot;&amp;gt;初めての作品&amp;lt;/a&amp;gt;
-&amp;lt;/div&amp;gt;    
+&amp;lt;a href=&amp;quot;#&amp;quot;&amp;gt;初めての作品&amp;lt;/a&amp;gt;
+&amp;lt;/div&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;とテンプレートエンジンにより変換されます。&lt;/p&gt;
-
 &lt;h2 id=&#34;次回予告&#34;&gt;次回予告&lt;/h2&gt;
-
 &lt;p&gt;今回は自分が書いた記事の一覧をトップページに表示させることができました。しかし、現時点だとタイトルをクリックしても記事ページには飛べません。Hugoでポートフォリオサイトを作るには、もう少しこの&lt;code&gt;{{ }}&lt;/code&gt;をうまく活用する必要がありそうです。&lt;/p&gt;
-
 &lt;p&gt;次回は個別記事のページ作成や、ジャンル、タグなどの仕組みをつくっていきたいと思います。&lt;/p&gt;
-
-&lt;p&gt;それではまた次回お会いしましょう！&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>デザイナーの僕がHugoを使ってポートフォリオサイトを作ってみる #1【準備編】</title>
-      <link>https://dotstud.io/blog/hugo-for-designers-vol1/</link>
-      <pubDate>Wed, 21 Sep 2016 10:00:40 +0900</pubDate>
-      
-      <guid>https://dotstud.io/blog/hugo-for-designers-vol1/</guid>
-      
-      <description>
-
+&lt;p&gt;それではまた次回お会いしましょう！&lt;/p&gt;</description></item><item><title>デザイナーの僕がHugoを使ってポートフォリオサイトを作ってみる #1【準備編】</title><link>https://dotstud.io/blog/hugo-for-designers-vol1/</link><pubDate>Wed, 21 Sep 2016 10:00:40 +0900</pubDate><guid>https://dotstud.io/blog/hugo-for-designers-vol1/</guid><description>
 &lt;p&gt;こんにちは、dotstudioのデザイナー・&lt;a href=&#34;https://dotstud.io/members/chachmaru/&#34;&gt;ちゃちゃまる&lt;/a&gt;です。&lt;/p&gt;
-
 &lt;p&gt;僕はまだ自分のポートフォリオサイトを持っていません。TumblrやPortfolioboxなどのサービスを使って作ろうと色々試してみましたが、自分のほしい機能がなかったり料金がかかったりしてしまい、結局挫折していました。&lt;/p&gt;
-
 &lt;p&gt;そこで、重い腰を上げて、外部サービスに頼らず自分だけでポートフォリオサイトを作ってみようと思います。&lt;/p&gt;
-
 &lt;h2 id=&#34;本連載のミッション&#34;&gt;本連載のミッション&lt;/h2&gt;
-
 &lt;p&gt;とりあえず僕がイメージしているポートフォリオサイトを書き起こしてみます。&lt;/p&gt;
-
 &lt;p&gt;まず機能面でほしいのは&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;ブログのような投稿形式がいい（時系列に投稿を並べたい）&lt;/li&gt;
 &lt;li&gt;投稿をいくつかのジャンルにわけたい（作品、お知らせ、など）&lt;/li&gt;
@@ -400,172 +226,98 @@ Hugoディレクトリ内に変更があったとき自動でブラウザをリ�
 &lt;li&gt;コードはGithubで管理したい&lt;/li&gt;
 &lt;li&gt;Github Pages（&lt;a href=&#34;https://chachmaru.github.io&#34;&gt;https://chachmaru.github.io&lt;/a&gt;）で公開したい&lt;/li&gt;
 &lt;/ul&gt;
-
 &lt;p&gt;ぐらいです。ジャンルは増やす可能性もあるので、その増えたジャンルに対しても違うレイアウトが組めるような自由度もほしいですね。&lt;/p&gt;
-
 &lt;p&gt;次にデザイン面。あくまでも作品がメインであって欲しいので、サイドバーなどはつけず、シンプルなデザインにしてみます。&lt;/p&gt;
-
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/021/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
 &lt;p&gt;また、勉強のため、テンプレート等は使わず自分でコードを書きたいと思います。&lt;/p&gt;
-
 &lt;p&gt;それでは一からやっていきましょう。&lt;/p&gt;
-
 &lt;h2 id=&#34;動的サイトと静的サイト&#34;&gt;動的サイトと静的サイト&lt;/h2&gt;
-
 &lt;p&gt;ウェブサイトには実は「動的」と「静的」の二種類あることをご存知でしょうか？僕はなんとなく「JavaScriptを使ってアニメーションを施していれば動的、CSSだけなら静的なんじゃないかなー」と思っていたのですが、実は全く違いました。&lt;/p&gt;
-
 &lt;p&gt;「動的」と「静的」の大きな違いは、&lt;strong&gt;どのタイミングでHTMLが生成されるか&lt;/strong&gt;です。&lt;strong&gt;動的ウェブサイトでは、ページにアクセスがあったタイミング&lt;/strong&gt;でPHPやNode.jsなどのサーバーサイドのプログラムでHTML(場合によってはCSSやJavaScriptも)を生成します。例えば会員登録が必要なサイトの場合は会員情報などのデータを扱いますが、そういったデータベースを利用する必要がある場合は、ページにアクセスがあったタイミングでデータベースからデータを引っ張ってきて表示させています。一方、&lt;strong&gt;静的ウェブサイトの場合はユーザーがページにアクセスする前&lt;/strong&gt;の、管理者側がサーバーにファイルをアップロードするタイミングで既にHTMLが生成されています。ページアクセスより前にコンテンツ内容がHTMLに書かれていて、ブラウザがそのHTMLファイルを読み込んでいます。&lt;/p&gt;
-
 &lt;!-- 動的サイト：ページが表示されるタイミングでコンテンツが生成される
 動的サイト：もともとHTMLに書かれているコンテンツがそのまま表示される --&gt;
-
 &lt;p&gt;動的サイトではアクセスしたタイミングでデータを取ってきたり、HTML生成が行われるため静的サイトにくらべて時間がかかります。静的サイトの方がページの表示速度は早いです。しかし静的サイトでは、例えばユーザーログインなど、見る人によって異なるようなウェブサイトを構築することは難しいです。&lt;/p&gt;
-
 &lt;p&gt;今回のポートフォリオは画像をたくさん載せたいため表示速度はなるべく速い方がいいのと、個人のサイトなのでユーザーログインなどは特に考えないとすると、静的ウェブサイトがなんとなく良さそうだな、という感じですね。&lt;/p&gt;
-
 &lt;h2 id=&#34;静的サイトジェネレーター-hugo&#34;&gt;静的サイトジェネレーター Hugo&lt;/h2&gt;
-
 &lt;p&gt;静的サイトを作るといっても、全てのページのHTMLをベタ書きしていくのは効率が悪すぎます。ここで活躍するのが&lt;strong&gt;静的サイトジェネレーター&lt;/strong&gt;というもの。名前のとおり、自動的にHTMLを書き出してウェブサイトを作ってくれる便利なものです。&lt;/p&gt;
-
 &lt;p&gt;僕が使おうと思っている静的サイトジェネレーターは、最近話題らしい&lt;strong&gt;&lt;a href=&#34;http://gohugo.io/&#34;&gt;Hugo&lt;/a&gt;&lt;/strong&gt;です。Hugoの特徴はスピードと簡潔さで、僕のような初心者にもわかりやすそうですね。実はこのdotstudioのウェブサイトもHugoで出来ています。Hugoでは記事をマークダウン方式（詳しくは&lt;a href=&#34;http://www.markdown.jp/what-is-markdown/&#34;&gt;こちら&lt;/a&gt;）で書けるようになっているので、効率よく記事を書けるようになります。&lt;/p&gt;
-
 &lt;p&gt;僕の環境はこんな感じです。OSやバージョンによって動作が違う場合もありますのでご了承ください。&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;Mac OS X El Capitan (10.11.6)&lt;br /&gt;&lt;/li&gt;
 &lt;li&gt;Hugo Static Site Generator v0.16&lt;/li&gt;
 &lt;/ul&gt;
-
 &lt;h2 id=&#34;とりあえずhugoを使ってみる&#34;&gt;とりあえずHugoを使ってみる&lt;/h2&gt;
-
 &lt;p&gt;早速Hugoをインストールして使ってみましょう。イラストレーターやフォトショップなどのインストール手順とは少し違い、コマンドラインから実行します。&lt;/p&gt;
-
 &lt;ol&gt;
 &lt;li&gt;Homebrew（ソフトウェアのインストールを単純化してくれる管理システム）をインストール&lt;/li&gt;
 &lt;li&gt;Homebrewを使ってHugoをインストール&lt;/li&gt;
 &lt;li&gt;Hugoを使ってウェブサイトを生成する&lt;/li&gt;
 &lt;/ol&gt;
-
 &lt;p&gt;ちなみにHugoのインストールまでは代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;が書いた&lt;a href=&#34;https://dotstud.io/blog/setup-new-mac-app/&#34;&gt;僕がMacを買い換えてすぐにいれるツール&amp;amp;すぐにする初期設定【2016年9月版】&lt;/a&gt;にも載っています。&lt;/p&gt;
-
 &lt;h3 id=&#34;1-homebrewのインストール&#34;&gt;1. Homebrewのインストール&lt;/h3&gt;
-
 &lt;p&gt;HomebrewはmacOSのソフトウェアをインストール・管理してくれるものです。Hugo以外にも色々なものに使えると思うので、まだの方はぜひインストールをしてみてください。&lt;/p&gt;
-
 &lt;p&gt;ターミナル（アプリケーション＞ユーティリティ＞ターミナル.app）を開きます。そして&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;$ ruby -e &amp;quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&amp;quot;
 &lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;をコピペしてEnterを押すだけで完了です。&lt;/p&gt;
-
 &lt;p&gt;&lt;strong&gt;$マークはコマンドであることを示す文字なので、$マーク以降の文字からコピーしてください&lt;/strong&gt;。&lt;/p&gt;
-
 &lt;p&gt;ついでに&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;$ brew update
 &lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;も実行して、最新バージョンにアップデートしておきましょう。&lt;/p&gt;
-
 &lt;h3 id=&#34;2-hugoのインストール&#34;&gt;2. Hugoのインストール&lt;/h3&gt;
-
 &lt;p&gt;Homebrewでのインストールは基本&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;$ brew install xxxxx
 &lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;です。&lt;/p&gt;
-
 &lt;p&gt;Hugoの場合&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;$ brew install hugo
 &lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;で出来ます。簡単ですね！&lt;/p&gt;
-
 &lt;p&gt;きちんと作動しているかどうかは&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;$ hugo version
 &lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;を実行してみて、&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;Hugo Static Site Generator v0.16 BuildDate: 20xx-xx-xxTxx:xx:xx+09:00
 &lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;のような結果が返ってきたかどうかで確認できます。&lt;/p&gt;
-
 &lt;h3 id=&#34;3-ウェブサイトを生成&#34;&gt;3. ウェブサイトを生成&lt;/h3&gt;
-
 &lt;p&gt;ウェブサイトを構成するファイル（HTMLやCSSなど）が入る場所を選びます。僕の場合ホームディレクトリ（アプリケーション、ドキュメント、写真フォルダなどがある場所）に新しく「dev」などの名前をつけたディレクトリを作って、その中を開発用にしています。&lt;/p&gt;
-
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/021/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
 &lt;p&gt;ここからはターミナルでの作業が多くなるので、コマンドの意味が分からない場合は&lt;a href=&#34;#&#34;&gt;UNIXコマンド一覧&lt;/a&gt;などと照らしあわせながら進めてみてください。&lt;/p&gt;
-
 &lt;p&gt;さて、まずはさきほどの&lt;code&gt;dev&lt;/code&gt;ディレクトリ内にターミナルで移動します。&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;cd dev
 &lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;次に、Hugoの雛形を生成します。&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;hugo new site chachamaru
 &lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/021/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
 &lt;p&gt;このようになったら成功です！&lt;/p&gt;
-
 &lt;h2 id=&#34;hugoディレクトリ内を軽く説明&#34;&gt;Hugoディレクトリ内を軽く説明&lt;/h2&gt;
-
 &lt;p&gt;Finderからdevディレクトリ内を見てみましょう。ターミナルのいるディレクトリをFinderで開くには&lt;/p&gt;
-
 &lt;pre&gt;&lt;code&gt;$ open .
 &lt;/code&gt;&lt;/pre&gt;
-
 &lt;p&gt;と実行するのが便利です。&lt;/p&gt;
-
 &lt;p&gt;こんな感じになっていると思います。&lt;/p&gt;
-
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/021/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-
 &lt;p&gt;Hugo内のディレクトリ/ファイルを軽く説明していきます。実際に作業をするタイミングで更に詳しく解説するので、斜め読みで大丈夫です。&lt;/p&gt;
-
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;archetypes&lt;br /&gt;
 archetypesは「原型、典型」という意味で、各ジャンルの記事のベースをここに入れます。詳しくは後ほど。&lt;/p&gt;&lt;/li&gt;
-
 &lt;li&gt;&lt;p&gt;config.toml&lt;br /&gt;
 ウェブサイトの設定をするファイルです。&lt;code&gt;.toml&lt;/code&gt;はTOML（Tom&amp;rsquo;s Obvious, Minimal Language）ファイルの拡張子で、設定ファイルを記述する言語です。Tom Preston-Wernerさんが作った言語なので、「Tom’s」となってるんですね。そのまんまですね。&lt;/p&gt;&lt;/li&gt;
-
 &lt;li&gt;&lt;p&gt;content&lt;br /&gt;
 マークダウンで書いた記事を入れる場所です。ジャンルが複数ある場合、&lt;code&gt;content/ジャンル名/記事.md&lt;/code&gt;のようなディレクトリ構成になります。&lt;/p&gt;&lt;/li&gt;
-
 &lt;li&gt;&lt;p&gt;data&lt;br /&gt;
 様々なデータを管理しておく場所です。今回ポートフォリオサイトを作るにあたって必要は（今のところ）ないので、消してしまっても大丈夫です。&lt;/p&gt;&lt;/li&gt;
-
 &lt;li&gt;&lt;p&gt;layouts&lt;br /&gt;
 HTMLファイルを入れる場所です。&lt;code&gt;index.html&lt;/code&gt;や、各ジャンルの個別ページ、ヘッダーやフッターなどのパーツなども全てここに入れます。&lt;/p&gt;&lt;/li&gt;
-
 &lt;li&gt;&lt;p&gt;static&lt;br /&gt;
 「静的」という意味で、CSSや画像などを入れておく場所です。&lt;/p&gt;&lt;/li&gt;
-
 &lt;li&gt;&lt;p&gt;themes&lt;br /&gt;
 Hugoのテーマを入れておく場所です。ただし今回は全部自分でCSSを書きたいので、このディレクトリも使いません。&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
-
 &lt;h2 id=&#34;次回予告&#34;&gt;次回予告&lt;/h2&gt;
-
 &lt;p&gt;今回は「準備編」ということで、少し長め＆詳しめに書いてみました。初心者の僕でも分かるように書いているので、解説や参考用外部リンクを多めに入れていこうと思います。&lt;/p&gt;
-
 &lt;p&gt;次回は「制作編」。HTMLとCSSを書いて、記事を書いて、ローカルサーバーを立ち上げてみるまでをやっていきたいと思います。&lt;/p&gt;
-
-&lt;p&gt;それではまた！&lt;/p&gt;
-</description>
-    </item>
-    
-  </channel>
-</rss>
+&lt;p&gt;それではまた！&lt;/p&gt;</description></item></channel></rss>
