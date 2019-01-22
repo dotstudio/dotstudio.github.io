@@ -1,4 +1,151 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Hugojuku on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/hugojuku/</link><description>Recent content in Hugojuku on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Wed, 12 Oct 2016 10:00:16 +0900</lastBuildDate><atom:link href="/series/hugojuku/" rel="self" type="application/rss+xml"/><item><title>本ブログにもページネーション機能が付きました！Hugoでページネーション機能を作ろう</title><link>https://dotstud.io/blog/hugo-howto-create-pagination/</link><pubDate>Wed, 12 Oct 2016 10:00:16 +0900</pubDate><guid>https://dotstud.io/blog/hugo-howto-create-pagination/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Hugojuku on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/hugojuku/</link><description>Recent content in Hugojuku on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Tue, 22 Jan 2019 12:27:36 +0900</lastBuildDate><atom:link href="/series/hugojuku/" rel="self" type="application/rss+xml"/><item><title>Hugo&#43;GitHub Pagesで作ってるブログ運用をGitLabからCircle CI&#43;GitHubに切り替えました。</title><link>https://dotstud.io/blog/circleci-hugo-github-pages/</link><pubDate>Tue, 22 Jan 2019 12:27:36 +0900</pubDate><guid>https://dotstud.io/blog/circleci-hugo-github-pages/</guid><description>
+&lt;p&gt;こんにちは、代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
+&lt;p&gt;タイトル通り、dotstudioのブログの構成を変更したのでメモを残しておこうとおもいます。&lt;/p&gt;
+&lt;h2 id=&#34;今までの構成とデプロイの流れ&#34;&gt;今までの構成とデプロイの流れ&lt;/h2&gt;
+&lt;p&gt;基本は静的サイトジェネレーターの&lt;a href=&#34;https://gohugo.io/&#34;&gt;Hugo&lt;/a&gt;を利用しています。&lt;/p&gt;
+&lt;p&gt;基本はHugoで手元でビルドして&lt;a href=&#34;https://pages.github.com/&#34;&gt;GitHub Pages&lt;/a&gt;でデプロイするという流れです。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/8512cf9fd941dc733f9e6611f8863cd0.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;CIを特に利用しないでやってて大変さがありました。&lt;/p&gt;
+&lt;h2 id=&#34;gitlab-ciの限界があった&#34;&gt;GitLab CIの限界があった&lt;/h2&gt;
+&lt;p&gt;GitLabを内部では利用していたので、GitLab CIでビルドをいい感じにしようかとしていたらハマりました。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/a58d60565109438f7d9356a9e83bddae.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Running with gitlab-runner 11.7.0-rc1 (6e20bd76)
+on docker-auto-scale ed2dce3a
+Using Docker executor with image monachus/hugo ...
+Pulling docker image monachus/hugo ...
+Using docker image sha256:a76936cdfb56aa7587fb4839d92e1e5964a2a42f8f1034d46378c4d4e7705e1f for monachus/hugo ...
+Running on runner-ed2dce3a-project-10358631-concurrent-0 via runner-ed2dce3a-srm-1547609018-d23d2aef...
+Cloning repository...
+Cloning into &#39;/builds/n0bisuke/web&#39;...
+Checking out ca3fd857 as master...
+Updating/initializing submodules recursively...
+$ hugo
+Building sites …
+| JA
++------------------+------+
+Pages | 470
+Paginator pages | 14
+Non-page files | 0
+Static files | 2839
+Processed images | 0
+Aliases | 22
+Sitemaps | 1
+Cleaned | 0
+Total in 36971 ms
+Uploading artifacts...
+public: found 4092 matching files
+ERROR: Uploading artifacts to coordinator... too large archive id=146361688 responseStatus=413 Request Entity Too Large status=413 Request Entity Too Large token=ALM-jHM4
+FATAL: Too large
+ERROR: Job failed: exit code 1
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;Maximum artifacts size (MB)&lt;/code&gt;って設定があるみたいですが、&lt;a href=&#34;https://github.com/sameersbn/docker-gitlab/issues/1726&#34;&gt;413 Request Entity Too Large #1726&lt;/a&gt;などを見て調べていくと、どうやらサービス版の&lt;a href=&#34;https://gitlab.com&#34;&gt;GitLab.com&lt;/a&gt;ではCIのサーバー設定が出来ず、&lt;a href=&#34;https://gitlab.com/gitlab-org/gitlab-ce&#34;&gt;GitLab CE&lt;/a&gt;など自分のサーバーにインストールする方式じゃないと設定が出来なさそうでした。&lt;/p&gt;
+&lt;h2 id=&#34;circleciに乗り換えとgithubのプライベートリポジトリ無償化&#34;&gt;CircleCIに乗り換えとGitHubのプライベートリポジトリ無償化&lt;/h2&gt;
+&lt;p&gt;ということで&lt;a href=&#34;https://circleci.com/&#34;&gt;CircleCI&lt;/a&gt;に乗り換えしようと思ったんですけど、&lt;/p&gt;
+&lt;p&gt;ちなみに、有名どころで&lt;a href=&#34;https://travis-ci.org/&#34;&gt;Travis CI&lt;/a&gt;と一瞬悩みましたが&lt;strong&gt;大学の研究室の先輩の&lt;a href=&#34;https://twitter.com/ganezasan&#34;&gt;伊藤マネージャー(@ganezasan)&lt;/a&gt;がCircleCIに転職した&lt;/strong&gt;という話を先日聞いたのでCircleCIを選びました。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;code&gt;ちなみにマネージャーというアダ名だったのですが現職でマネージャーではないそうです（笑）&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;ツール選びで悩んだ時に、近くに聞ける人がいるのはすごく大事だと思ってます。&lt;/p&gt;
+&lt;h3 id=&#34;circleciはgitlabから叩けない&#34;&gt;CircleCIはGitLabから叩けない&lt;/h3&gt;
+&lt;p&gt;現時点(2019年1月)でCircleCIはGitHubとBitbucketからのみ叩ける模様です。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/6cb3b835660849ea4bf2a91c64477700.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;ちなみにこれは仲がいいので個人的に聞いてますが、みんなこれやっちゃうと彼をパンクさせてしまうので&lt;a href=&#34;https://support.circleci.com/hc/ja/requests/new&#34;&gt;問い合わせ&lt;/a&gt;から質問しましょうね。&lt;/p&gt;
+&lt;p&gt;内部でGitLabを使ってたのでぐぬぬって感じでしたが&amp;hellip;&amp;hellip;&lt;/p&gt;
+&lt;h3 id=&#34;githubプライベードリポジトリ無償化&#34;&gt;GitHubプライベードリポジトリ無償化&lt;/h3&gt;
+&lt;p&gt;GitLabを採用していた理由は無料でプライベートリポジトリが使えて高機能だったってところだったんですけど、 &lt;strong&gt;&lt;a href=&#34;https://gigazine.net/news/20190108-github-private-repositories/&#34;&gt;GitHubの無料ユーザーもプライベートリポジトリを無制限で使用可能に&lt;/a&gt;のニュース&lt;/strong&gt;がありましたよね。&lt;/p&gt;
+&lt;p&gt;リポジトリにアクセスできるメンバー数は3人までと少ないのですが、現状の編集フローを考えると全然問題なかったので &lt;strong&gt;内部で利用するリポジトリをGitHubのプライベードに切り替えてCircleCI利用をする方向に&lt;/strong&gt;しました。&lt;/p&gt;
+&lt;h2 id=&#34;circleciでhugoをビルドしてgithub-pagesにデプロイ&#34;&gt;CircleCIでHugoをビルドしてGitHub Pagesにデプロイ&lt;/h2&gt;
+&lt;p&gt;ということでこんな構成が出来ました。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/7697772135a0b0f9dfa4adbd1b040220.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;自動デプロイいいですね。楽しい。&lt;/p&gt;
+&lt;p&gt;参考までにデプロイ部分の&lt;code&gt;config.yml&lt;/code&gt;を載せておきます。&lt;/p&gt;
+&lt;p&gt;流れとしては&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;hugoが動くdocker imageで起動&lt;/li&gt;
+&lt;li&gt;内部用GitHubリポジトリにPushしたリポジトリにチェックアウト&lt;/li&gt;
+&lt;li&gt;publicフォルダを一旦削除&lt;/li&gt;
+&lt;li&gt;公開用GitHub PagesリポジトリをCloneしてpublicフォルダとして保存&lt;/li&gt;
+&lt;li&gt;hugoでビルド(&amp;ndash;minifyオプション付き)してpublicフォルダを更新&lt;/li&gt;
+&lt;li&gt;GitHub Pages用のCNAMEファイルを作成&lt;/li&gt;
+&lt;li&gt;Gitの設定をしてadd&amp;amp;commit&amp;amp;push&lt;/li&gt;
+&lt;li&gt;成功したらLINE Notifyに通知&lt;/li&gt;
+&lt;li&gt;失敗したらDiscordに通知&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;といった流れです。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;defaults: &amp;amp;defaults
+working_directory: ~/repo
+docker:
+- image: monachus/hugo
+version: 2.1
+jobs:
+deploy:
+&amp;lt;&amp;lt;: *defaults
+steps:
+- checkout
+- run: pwd
+- run: echo $USERNAME
+- run:
+name: Print the Current Time
+command: date
+- run:
+name: Hugo Version Check
+command: hugo version
+- run: rm -rf public
+- run:
+name: Git Clone
+command: git clone --depth 1 https://$TEAMNAME:$GITHUB_TOKEN@github.com/$TEAMNAME/$TEAMNAME.github.io.git public
+- run:
+name: Hugo Build
+command: hugo --minify
+- run: cd public &amp;amp;&amp;amp; touch CNAME &amp;amp;&amp;amp; echo &amp;quot;$DOMAIN&amp;quot; &amp;gt; CNAME
+- run: cd public &amp;amp;&amp;amp; pwd
+- run: cd public &amp;amp;&amp;amp; git config user.email &amp;quot;$EMAIL&amp;quot;
+- run: cd public &amp;amp;&amp;amp; git config user.name &amp;quot;$USERNAME&amp;quot;
+- run: cd public &amp;amp;&amp;amp; git add -A
+- run: cd public &amp;amp;&amp;amp; git commit -m &amp;quot;deploy from CI&amp;quot;
+- run: cd public &amp;amp;&amp;amp; git push origin master
+- run:
+name: Deploy Success Notification to DISCORD
+command: |
+curl -d &amp;quot;{\&amp;quot;content\&amp;quot;:\&amp;quot;デプロイが失敗しました。\&amp;quot;}&amp;quot; $DISCORD_URL -H &#39;Content-Type:application/json&#39;
+when: on_fail
+- run:
+name: Deploy Success Notification to LINE
+command: |
+curl -X POST -H &amp;quot;Authorization: Bearer $LINE_NOTIFY_TOKEN&amp;quot; -F &amp;quot;message=デプロイ成功&amp;quot; https://notify-api.line.me/api/notify
+workflows:
+version: 2.1
+build:
+jobs:
+- deploy:
+filters:
+branches:
+only: master
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;以下の記事が参考になりました。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://hori-ryota.com/blog/create-blog-with-hugo-and-circleci/&#34;&gt;HugoとCircleCIでGitHub PagesにBlogを公開してみた&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://dev.to/ardianta/deploy-hugo-from-gitlab-ci-to-github-pages-5aml&#34;&gt;Deploy Hugo from Gitlab CI to Github Pages&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/ganezasan/shumatsu.github.io/blob/master/.circleci/config.yml&#34;&gt;伊藤マネージャーのJekyllサンプル&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;また、workflowsの設定でmasterブランチにプッシュしたときだけdeployジョブが動くように出来るのでこれも利用しています。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;・
+・
+(省略)
+・
+・
+- deploy:
+filters:
+branches:
+only: master
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;色々なトークン周りはCircleCIの環境変数に詰め込みましょう。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/6525eeb67ec16f9340fb5eae83e26b83.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;ちなみに、GitHubのアクセストークンは&lt;a href=&#34;https://github.com/settings/tokens&#34;&gt;こちら&lt;/a&gt;から取得できます。&lt;/p&gt;
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;CircleCI導入することでかなり作業量減った感じがします。感謝。&lt;/p&gt;
+&lt;p&gt;そもそもがCI導入出来てなかったってのもあるとは思いますが（苦笑）それはまぁ生ぬるい目で見てやって下さい。&lt;/p&gt;
+&lt;p&gt;他にもブログの画像の最適化などのジョブも埋め込んだりとやれること色々と自動化進めています。&lt;/p&gt;</description></item><item><title>本ブログにもページネーション機能が付きました！Hugoでページネーション機能を作ろう</title><link>https://dotstud.io/blog/hugo-howto-create-pagination/</link><pubDate>Wed, 12 Oct 2016 10:00:16 +0900</pubDate><guid>https://dotstud.io/blog/hugo-howto-create-pagination/</guid><description>
 &lt;p&gt;こんにちは、 dotstudio代表の&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
 &lt;p&gt;このブログはページネーション機能が無かったのですが、そろそろコンテンツ数も増えてきたのでページネーション機能を実装しました。 888888&lt;/p&gt;
 &lt;p&gt;実際に作る方法を紹介します。&lt;/p&gt;
