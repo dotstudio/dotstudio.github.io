@@ -1,4 +1,238 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Handson on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/handson/</link><description>Recent content in Handson on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Thu, 13 Dec 2018 05:17:31 +0900</lastBuildDate><atom:link href="/series/handson/" rel="self" type="application/rss+xml"/><item><title>【ハンズオン資料】GR-LYCHEEとOpenCVで画像認識やってみよう</title><link>https://dotstud.io/blog/gr-lychee-opencv-handson/</link><pubDate>Thu, 13 Dec 2018 05:17:31 +0900</pubDate><guid>https://dotstud.io/blog/gr-lychee-opencv-handson/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Handson on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/handson/</link><description>Recent content in Handson on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Thu, 24 Jan 2019 00:51:35 +0900</lastBuildDate><atom:link href="/series/handson/" rel="self" type="application/rss+xml"/><item><title>Moddable SDKを使ってJavaScriptでIoT開発してみた</title><link>https://dotstud.io/blog/developed-iot-using-moddable/</link><pubDate>Thu, 24 Jan 2019 00:51:35 +0900</pubDate><guid>https://dotstud.io/blog/developed-iot-using-moddable/</guid><description>
+&lt;p&gt;どうも。&lt;a href=&#34;https://dotstud.io/members/horihiro&#34;&gt;ほりひろ&lt;/a&gt; です。
+dotstudioブログでは、初めましてですね。&lt;/p&gt;
+&lt;p&gt;JavaScript や IoT が好きな、でも実は半田付けも抵抗値の計算もろくにできないレベルの週末プログラマーです。
+普段は某クラウドベンダーのサポートエンジニアをしています。
+よろしくお願いします。&lt;/p&gt;
+&lt;p&gt;Twitterアカウントは&lt;a href=&#34;https://twitter.com/hori__hiro&#34;&gt;こちら&lt;/a&gt;です。&lt;/p&gt;
+&lt;p&gt;年末に自分の中で話題になっていた、&lt;u&gt;&lt;strong&gt;Moddable SDK&lt;/strong&gt;&lt;/u&gt;というものをようやく触ってみました。&lt;/p&gt;
+&lt;h2 id=&#34;moddable-sdk-xs&#34;&gt;Moddable SDK &amp;amp; XS&lt;/h2&gt;
+&lt;h3 id=&#34;moddable-sdk&#34;&gt;Moddable SDK&lt;/h3&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/237/1.png&#34; alt=&#34;1&#34;&gt;
+&lt;/center&gt;
+&lt;p&gt;Moddable SDK は、&lt;strong&gt;JavaScript コードを ESP32 や ESP8266 といったマイコン上で動作させるためのビルド環境やライブラリー群&lt;/strong&gt;のこと、、、だと思います。&lt;/p&gt;
+&lt;p&gt;これは Moddable 社から提供されていますが、&lt;u&gt;下記 GitHub リポジトリで公開されているので、無料で手に入れられます。&lt;/u&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/Moddable-OpenSource/moddable&#34;&gt;https://github.com/Moddable-OpenSource/moddable&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;xs&#34;&gt;XS&lt;/h3&gt;
+&lt;p&gt;XS は、&lt;strong&gt;Moddable SDK で生成される JavaScript ランタイム環境&lt;/strong&gt; （ドキュメントには &lt;strong&gt;virtual machine&lt;/strong&gt; と記載）で、なんと &lt;a href=&#34;https://github.com/Moddable-OpenSource/moddable#modern-software-development-for-microcontrollers&#34;&gt;ES2018 に 99% 以上準拠&lt;/a&gt;しているらしいです。すごいですね！&lt;/p&gt;
+&lt;p&gt;※一部準拠していない部分は、注意事項として&lt;strong&gt;&lt;a href=&#34;https://github.com/Moddable-OpenSource/moddable/blob/public/documentation/xs/XS%20Conformance.md#caveat&#34;&gt;こちら&lt;/a&gt;&lt;/strong&gt;に記載されています。&lt;/p&gt;
+&lt;p&gt;これは&lt;a href=&#34;http://www.moddable.com/XS7-TC-39.php&#34;&gt;公式ドキュメント&lt;/a&gt;にある画像です。「XS は一番小さい」って意味でしょうね。シャレてます。&lt;/p&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/237/2.png&#34; alt=&#34;2&#34;&gt;
+&lt;/center&gt;
+&lt;p&gt;ざっくりとした理解ですが、Moddable SDK のビルドツールで、自分が書いた JavaScript や C のソースコードと組み込みのクラスが含まれた XS を、一つのバイナリーにビルドし、マイコンに書き込んでいるようです。&lt;/p&gt;
+&lt;p&gt;これまで JavaScript でのマイコン制御というと、以前から ホスト PC とマイコンをシリアル接続し、ホストPC上の node.js と Johnny-Five を使ってマイコンを制御する方法があり、最近では obniz の制御をネットワークを介して JavaScript などから行う方法がありますが、いずれもマイコンの外に JavaScript の実行環境を用意する必要があります。&lt;/p&gt;
+&lt;p&gt;一方で、Moddable SDK では、&lt;u&gt;JavaScript 実行環境である XS がマイコン上で動作することができます。&lt;/u&gt;&lt;/p&gt;
+&lt;p&gt;この点は、&lt;strong&gt;これまでの実行環境とは大きく違うところですね！&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;開発環境の構築&#34;&gt;開発環境の構築&lt;/h2&gt;
+&lt;p&gt;基本的に、公式のリポジトリに記載された &lt;a href=&#34;https://github.com/Moddable-OpenSource/moddable/blob/public/documentation/Moddable%20SDK%20-%20Getting%20Started.md&#34;&gt;構築手順&lt;/a&gt;通りに実施することで、ビルド ツールなどの環境が構築できます。&lt;/p&gt;
+&lt;p&gt;構築手順は macOS/Linux/Windows の各プラットフォーム向けにまとまっており、それぞれが、下記の 3 つのパートに分かれて記載されています。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;mcconfig&lt;/code&gt; や &lt;code&gt;xsbug&lt;/code&gt; などの開発ツールのビルド&lt;/li&gt;
+&lt;li&gt;ESP8266 向けの開発環境の構築&lt;/li&gt;
+&lt;li&gt;ESP32 向けの開発環境の構築&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;いずれのプラットフォームでも 1. は必須ですが、2. と 3. は手持ちのボードに合わせて、どちらかを実施するだけでよいです。&lt;/p&gt;
+&lt;p&gt;私は Windows 用の環境構築をしましたが、Windows 向けの開発環境構築では、&lt;u&gt;&lt;strong&gt;Windows ネイティブのコマンドを使用することをお勧めします。&lt;/strong&gt;&lt;/u&gt;
+WSL から &lt;code&gt;git clone&lt;/code&gt; などをすると、&lt;a href=&#34;https://github.com/Moddable-OpenSource/moddable/issues/110&#34;&gt;&lt;strong&gt;開発ツールがビルドできない&lt;/strong&gt;&lt;/a&gt;ようで、これに丸一日ハマりました。&lt;/p&gt;
+&lt;p&gt;あと、ビルドツールの実行は、必ず&lt;code&gt;開発者コマンドプロンプト for VS2017&lt;/code&gt; を起動し、そのコマンドプロンプトの中でしましょう。&lt;/p&gt;
+&lt;h2 id=&#34;サンプル-コード&#34;&gt;サンプル コード&lt;/h2&gt;
+&lt;p&gt;マイコンのサンプルと言えば Lチカですが、手元に LED がなかったので、とりあえず ESP32 上での非同期実行を試してみます。&lt;/p&gt;
+&lt;h3 id=&#34;ファイルの用意&#34;&gt;ファイルの用意&lt;/h3&gt;
+&lt;p&gt;プロジェクト ディレクトリに下記のような構造で、ファイルを作ります。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;.
+├── esp
+│ ├── console.c
+│ └── console.js
+├── main.js
+└── manifest.json
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;main-js&#34;&gt;main.js&lt;/h3&gt;
+&lt;p&gt;1 秒おきに &lt;code&gt;1&lt;/code&gt; から &lt;code&gt;10&lt;/code&gt; の数字を、1.5 秒おきに &lt;code&gt;a&lt;/code&gt; から &lt;code&gt;z&lt;/code&gt; の文字を、シリアル コンソールに出力するプログラムです。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js:main.js&#34;&gt;import Timer from &#39;timer&#39;;
+import console from &amp;quot;console&amp;quot;;
+const a = &#39;a&#39;;
+const z = &#39;z&#39;;
+let c = a;
+let i = 0;
+Timer.repeat(() =&amp;gt; {
+console.log(`${String(Date.now()).padStart(15)}:${i}`);
+i = (i &amp;gt;= 10) ? 0 : i + 1;
+}, 1000);
+Timer.repeat(() =&amp;gt; {
+console.log(`${String(Date.now()).padStart(15)}:${c}`);
+c = (c &amp;gt;= z) ? a : String.fromCharCode(c.charCodeAt(0) + 1);
+}, 1500);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Web ブラウザーや node.js なら、定期的な処理を書くなら &lt;code&gt;setInterval&lt;/code&gt; を使うところだと思いますが、Moddable SDK / XS では、グローバルに &lt;code&gt;setInterval&lt;/code&gt; が定義されていません。&lt;/p&gt;
+&lt;p&gt;代わりに、&lt;code&gt;Timer&lt;/code&gt; オブジェクトの &lt;code&gt;repeat&lt;/code&gt; メソッドを使って、同じ処理が似たような感じで書くことができます。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js:browser&amp;amp;nodejs&#34;&gt;setInterval(() =&amp;gt; {
+:
+}, 1000);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js:XS&#34;&gt;import Timer from &#39;timer&#39;;
+Timer.repeat(() =&amp;gt; {
+:
+}, 1000);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;console-js-console-c&#34;&gt;console.js /console.c&lt;/h3&gt;
+&lt;p&gt;実は XS では &lt;code&gt;console&lt;/code&gt; オブジェクトもないので、とりあえず、下記の JS ファイルと C ファイルで、シリアルコンソールに 1 行出力できるメソッドを定義しておきます。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-c:esp/console.js&#34;&gt;class Console @ &amp;quot;xs_console_destructor&amp;quot; {
+constructor() {
+}
+static log() @ &amp;quot;xs_console_log&amp;quot;
+}
+Object.freeze(Console.prototype);
+export default Console;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;JS ファイルはタダのラッパーで、処理本体は C ファイルで定義しています。
+JS ファイル内で &lt;code&gt;@ ～&lt;/code&gt; と書くと、C ファイルで宣言した関数とバインディングされます。
+これは、XS 独自の実装のようです。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-c:esp/console.c&#34;&gt;#include &amp;quot;xsAll.h&amp;quot;
+#include &amp;quot;xs.h&amp;quot;
+void xs_console_destructor(void)
+{
+}
+void xs_console_log(xsMachine *the)
+{
+int argc = xsToInteger(xsArgc), i;
+for (i = 0; i &amp;lt; argc; i++) {
+char *str = xsToString(xsArg(i));
+do {
+uint8_t c = c_read8(str);
+if (!c) {
+ESP_putc(&#39;\n&#39;);
+break;
+}
+ESP_putc(c);
+str++;
+} while (1);
+}
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;manifest-json&#34;&gt;manifest.json&lt;/h3&gt;
+&lt;p&gt;最後は manifest ファイルです。
+正直言うと、ここはあまり把握できていません :sweat:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;include&lt;/code&gt; で Moddable SDK で用意されている manifest を、ベースの manifest として読み込み、全プラットフォーム共通のモジュールとして &lt;code&gt;main&lt;/code&gt;(.js) を、&lt;code&gt;esp32&lt;/code&gt; 向けには、&lt;code&gt;./esp/console&lt;/code&gt;(.js) をロードする設定を書いています。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-json:manifest.json&#34;&gt;{
+&amp;quot;include&amp;quot;: &amp;quot;$(MODDABLE)/examples/manifest_base.json&amp;quot;,
+&amp;quot;modules&amp;quot;: {
+&amp;quot;*&amp;quot;: [
+&amp;quot;./main&amp;quot;,
+]
+},
+&amp;quot;platforms&amp;quot;: {
+&amp;quot;esp32&amp;quot;: {
+&amp;quot;modules&amp;quot;: {
+&amp;quot;*&amp;quot;: [
+&amp;quot;./esp/console&amp;quot;,
+],
+}
+}
+},
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;上の &lt;code&gt;manifest.json&lt;/code&gt; では &lt;code&gt;Timer&lt;/code&gt; クラスをロードしていませんが、&lt;code&gt;main.js&lt;/code&gt; では問題なく import することができます。
+これは、Moddable SDK に含まれるベースの manifest でロード設定がされているためです。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-json:$(MODDABLE)/examples/manifest_base.json(抜粋)&#34;&gt;{
+:
+(略)
+:
+&amp;quot;platforms&amp;quot;: {
+:
+(略)
+:
+&amp;quot;esp32&amp;quot;: {
+&amp;quot;include&amp;quot;: &amp;quot;$(BUILD)/devices/esp32/manifest.json&amp;quot;
+},
+}
+:
+(略)
+:
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-json:$(BUILD)/devices/esp32/manifest.json(抜粋)&#34;&gt;{
+:
+(略)
+:
+&amp;quot;modules&amp;quot;: {
+&amp;quot;*&amp;quot;: [
+&amp;quot;$(MODULES)/base/time/*&amp;quot;,
+&amp;quot;$(MODULES)/base/time/esp/*&amp;quot;,
+&amp;quot;$(MODULES)/base/timer/*&amp;quot;,
+&amp;quot;$(MODULES)/base/timer/mc/*&amp;quot;,
+]
+},
+&amp;quot;preload&amp;quot;: [
+&amp;quot;time&amp;quot;,
+&amp;quot;timer&amp;quot;,
+],
+:
+(略)
+:
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;ちなみに manifest についてツイートしたところ、公式アカウントからも返事がありました。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;ドキュメントは定期的にメンテナンスされそうです。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;en&#34; dir=&#34;ltr&#34;&gt;The manifest documentation (&lt;a href=&#34;https://t.co/HTYtMXR33N&#34;&gt;https://t.co/HTYtMXR33N&lt;/a&gt;) is a good place to start, but we&amp;#39;ll put a document with more details together soon. If you have any specific questions, we&amp;#39;d be happy to answer those as well.&lt;/p&gt; Moddable (@moddabletech) &lt;a href=&#34;https://twitter.com/moddabletech/status/1086084032008413184?ref_src=twsrc%5Etfw&#34;&gt;2019年1月18日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+&lt;h2 id=&#34;実行してみる&#34;&gt;実行してみる&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;manifest.json&lt;/code&gt; があるディレクトリで、&lt;code&gt;mcconfig&lt;/code&gt; コマンドを実行します。
+大抵は、XS のビルドから始まるので、書き込みが完了するまでだいぶ時間がかかると思います。&lt;/p&gt;
+&lt;p&gt;書き込みが完了すると、シリアルモニターに自動的に接続し、&lt;code&gt;console.log&lt;/code&gt; の出力内容が表示されます。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;gt; mcconfig -m -p esp32
+rm: cannot remove &#39;/root/Projects/moddable/build/tmp/esp32/release/xsProj/sdkconfig&#39;: No such file or directory
+# Running GENCONFIG...
+fatal: Not a git repository (or any of the parent directories): .git
+including /root/esp32/esp-idf/components/bootloader/Makefile.projbuild...
+:
+(略)
+:
+MONITOR
+--- idf_monitor on /dev/ttyUSB0 115200 ---
+--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H ---
+ets Jun 8 2016 00:22:57
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0018,len:4
+load:0x3fff001c,len:636
+load:0x40078000,len:6192
+load:0x40080000,len:5152
+0x40080000: _iram_start at /root/esp32/esp-idf/components/freertos/xtensa_vectors.S:1685
+entry 0x40080264
+0x40080264: _Level5Vector at ??:?
+1010:1
+1510:a
+2010:2
+3010:3
+3011:b
+4010:4
+4510:c
+5010:5
+6010:6
+:
+(略)
+:
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;指定した時間間隔で、コールバック関数が実行されています！ :tada::tada::tada:
+ES2017 で入った &lt;code&gt;String.prototype.padStart&lt;/code&gt; も正常に動作しているようです。&lt;/p&gt;
+&lt;p&gt;なお、マイコンには時計がないので、&lt;code&gt;Date.now()&lt;/code&gt; は起動時からの時間を返します。&lt;/p&gt;
+&lt;h3 id=&#34;デバッグ実行&#34;&gt;デバッグ実行&lt;/h3&gt;
+&lt;p&gt;先ほど実行したコマンド &lt;code&gt;mcconfig -m -p esp32&lt;/code&gt; にデバッグ オプション &lt;code&gt;-d&lt;/code&gt; を追加すると、デバッグ ビルドを実行し、デバッグ ツールである &lt;code&gt;xsbug&lt;/code&gt; が自動で起動します。&lt;/p&gt;
+&lt;p&gt;この &lt;code&gt;xsbug&lt;/code&gt; は JavaScript コードにブレークポイントの設定や、ステップ実行、変数の内容などを表示することが
+でき、結構本格的なデバッグツールです。&lt;/p&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/237/3.png&#34; alt=&#34;3&#34;&gt;
+&lt;/center&gt;
+&lt;p&gt;今は独自の GUI ツールとして提供されているようですが、そのうち&lt;strong&gt;VSCode から拡張機能として利用できるようになると嬉しいですね。&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;いかがだったでしょうか。
+Moddable SDK を使うことで、JavaScript で書いたコードを、ESP8266/32 で動作させることができました。&lt;/p&gt;
+&lt;p&gt;&lt;u&gt;Web フロントエンドや node.js など、JavaScript を書くエンジニア人口は多いでしょうから、そういった方々も気軽にマイコン開発ができるようになりますね。&lt;/u&gt;&lt;/p&gt;
+&lt;p&gt;あとは、manifest ファイルに関するドキュメントの整備がすすんだり、もう少し簡単に環境構築ができれば、格段に開発しやすくなるのではないでしょうか。&lt;/p&gt;</description></item><item><title>【ハンズオン資料】GR-LYCHEEとOpenCVで画像認識やってみよう</title><link>https://dotstud.io/blog/gr-lychee-opencv-handson/</link><pubDate>Thu, 13 Dec 2018 05:17:31 +0900</pubDate><guid>https://dotstud.io/blog/gr-lychee-opencv-handson/</guid><description>
 &lt;p&gt;この記事は12/07の&lt;a href=&#34;https://ai-iot-bol-fukui.connpass.com/event/109573/&#34;&gt;AI×IoT ハンズオン with IoTLT&amp;amp;ふくもく会 in 福井&lt;/a&gt;向け資料です。記事を読んで試せる内容になっているので、終了後や参加されていない方もぜひ試してみてください！&lt;/p&gt;
 &lt;section class=&#34;caution&#34;&gt;
 &lt;p&gt;■ハンズオンの進行について&lt;/p&gt;
@@ -3762,168 +3996,4 @@ delay(10);
 最後は他社線からの振替輸送受託時に実行されるパリピ点滅。画像では少しわかりづらいですね……。&lt;/p&gt;
 &lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
 &lt;p&gt;今回は、京急が遅延していると光るガジェットをESPr® Developerをつかって作成しました。情報の取得方法はかなり力技でしたが、WEB上の情報を簡単に可視化できたことは良かったです。&lt;/p&gt;
-&lt;p&gt;実際にこのガジェットは、職場のデスクで稼働していて、いつも京急の運行情報を知らせてくれます。今後は他社線バージョンの作成を検討しています。&lt;/p&gt;</description></item><item><title>Wio NodeとIFTTTで簡単IoT！紫外線情報を取得してみよう</title><link>https://dotstud.io/blog/wionode-ifttt-uv-ornament/</link><pubDate>Tue, 06 Jun 2017 20:26:13 +0900</pubDate><guid>https://dotstud.io/blog/wionode-ifttt-uv-ornament/</guid><description>
-&lt;p&gt;こんにちは、dotstudioライターのゆっきん（&lt;a href=&#34;https://twitter.com/yukkin4649&#34;&gt;@yukkin4649&lt;/a&gt;）です。普段はシステムエンジニアをしています！&lt;/p&gt;
-&lt;p&gt;IoTLTでのびすけさんから「電子工作でかわいいもの作ってくれ」という無茶ぶりを受けたので（笑）、女子の天敵&lt;strong&gt;紫外線指数を光って知らせてくれるオーナメント&lt;/strong&gt;を作ってみます！&lt;/p&gt;
-&lt;p&gt;今回は「Wio Node」というスマホから設定できるデバイスと、ノンプログラミングでサービス連携ができる「IFTTT」というWebサービスを使います。初心者の私でも簡単にできたので是非挑戦してみてください。&lt;/p&gt;
-&lt;h2 id=&#34;wio-nodeとは&#34;&gt;Wio Nodeとは&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/wio.png&#34; alt=&#34;&#34; /&gt;
-「Wio Node」とはSeeed Studio社が開発したIoTデバイスで、Wi-Fiモジュールが初期搭載されています。対応のモジュールをさすだけで使え、スマートフォンで設定できるシンプルな設計が特徴です。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.seeedstudio.com/Wio-Node-p-2637.html&#34;&gt;公式サイト&lt;/a&gt;によると&lt;strong&gt;IoTアプリケーション構築までたったの５分&lt;/strong&gt;だそうです。如何に簡単にできるのかが伺えます。&lt;/p&gt;
-&lt;h2 id=&#34;iftttとは&#34;&gt;IFTTTとは&lt;/h2&gt;
-&lt;p&gt;「IFTTT」では多数あるWebサービス同士を連携させ、自分好みの連携機能を作成することが出来ます。例えば【&lt;strong&gt;Twitterでお気に入りしたツイートをEvernoteに保存する&lt;/strong&gt;】等があります。&lt;/p&gt;
-&lt;p&gt;他の人が作成した連携（ここではレシピと呼ぶ）も利用することができ、カスタマイズも可能。今回はこの「IFTTT」を使って紫外線取得サービスとWio Nodeを連携します。&lt;/p&gt;
-&lt;h2 id=&#34;準備&#34;&gt;準備&lt;/h2&gt;
-&lt;h3 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;① Wio Node本体（&lt;a href=&#34;https://dotstud.io/shop/wionode-social-remote-control/&#34;&gt;購入ページ&lt;/a&gt;）&lt;br /&gt;
-② Grove LED Bar v2.0（型番：SEEED-104020006）&lt;br /&gt;
-③給電用のMicro USBケーブル&lt;br /&gt;
-④ スマートフォン（iOSまたはAndroid端末）&lt;br /&gt;
-⑤ グリーンオーナメント SS（100円均一で購入）&lt;br /&gt;
-⑥ 紙&lt;br /&gt;
-⑦ テープ&lt;br /&gt;
-⑧ ペン&lt;br /&gt;&lt;/p&gt;
-&lt;h3 id=&#34;筆者の環境&#34;&gt;筆者の環境&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;MacBook Air 11-inch Early 2014&lt;/li&gt;
-&lt;li&gt;OS X El Capitan　v10.11.6&lt;/li&gt;
-&lt;li&gt;iPhone6（iOS 10.3.1）&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;作り方&#34;&gt;作り方&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/2.png&#34; alt=&#34;&#34; /&gt;
-ざっくりとした構成です。IFTTTを使って「Today&amp;rsquo;s weather report」からUV値を取得し、Wio NodeのLED Barで表示させます。&lt;/p&gt;
-&lt;p&gt;それでは早速作っていきましょう。&lt;/p&gt;
-&lt;h3 id=&#34;1-wio-nodeの設定&#34;&gt;1. Wio Nodeの設定&lt;/h3&gt;
-&lt;h4 id=&#34;インストールとセットアップ&#34;&gt;インストールとセットアップ&lt;/h4&gt;
-&lt;p&gt;ここではWio Node開発用アプリのインストールと設定をしていきます。Wio NodeはPC・モバイルバッテリー等からUSBケーブルで接続し給電しましょう。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/3.png&#34; alt=&#34;&#34; /&gt;
-App Store等でWio Nodeアプリを検索し、インストールします。iOSでは「Wio Link」、Androidでは「Wio」と言う名称です。&lt;/p&gt;
-&lt;p&gt;本記事ではiOSの「Wio Link」の画面で説明していきます。&lt;/p&gt;
-&lt;p&gt;iOS: &lt;a href=&#34;https://itunes.apple.com/jp/app/wio-link/id1054893491?mt=8&#34;&gt;https://itunes.apple.com/jp/app/wio-link/id1054893491?mt=8&lt;/a&gt;&lt;br /&gt;
-Android: &lt;a href=&#34;https://play.google.com/store/apps/details?id=cc.seeed.iot.ap&amp;amp;hl=ja&#34;&gt;https://play.google.com/store/apps/details?id=cc.seeed.iot.ap&amp;amp;hl=ja&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/4.png&#34; alt=&#34;&#34; /&gt;
-インストール後、アプリを立ち上げるとログイン画面が表示されるので〔SIGN UP〕のタブに切り替えてメールアドレスとパスワードを入力し〔SIGN UP〕のボタンを押下します。２回目以降は〔LOG IN〕タブから登録した情報を入力してログインして下さい。&lt;/p&gt;
-&lt;p&gt;※他のサービスと連携が上手くいかないこともあるのでGoogleアカウントやFacebookアカウントの連携によるユーザー登録は非推奨とします。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/5.png&#34; alt=&#34;&#34; /&gt;
-Device Listの画面が表示されたら、右上の〔+〕又は中央の〔Add Your First Device〕を押下します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/6.png&#34; alt=&#34;&#34; /&gt;
-デバイスの選択画面が表示されるので〔Wio Node〕を選択します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/7.png&#34; alt=&#34;&#34; /&gt;
-セットアップ画面の図と同様にWio Node本体のボタンを４秒程押下します。青いライトの光り方が変わることを確認後、次の手順に移ります。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/8.png&#34; alt=&#34;&#34; /&gt;
-iPhoneの〔設定〕アプリを起動します。〔Wi-Fi〕設定画面でWi-FiをONにし、〔Wio_XXXXXX〕を選択します。XXXXXXには割り当てられた文字列が入ります。（Android版はアプリの画面内で選択します。）&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/9.png&#34; alt=&#34;&#34; /&gt;
-Wio Nodeアプリに戻り、〔Goto wifi list〕を押下します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/10.png&#34; alt=&#34;&#34; /&gt;
-現在利用できる任意のWi-Fiを選択します。表示されない場合は右上の〔Refresh〕を押下して下さい。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/11.png&#34; alt=&#34;&#34; /&gt;
-選択したWi-Fiのパスワードを入力し、〔Join〕を押下します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/12.png&#34; alt=&#34;&#34; /&gt;
-この画面では、デバイスの名前をつけます。任意の名前を入力し、〔Start Wio-ing〕を押下します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/13.png&#34; alt=&#34;&#34; /&gt;
-Wio Nodeが認識され、モジュールの設定画面に移りました。最初のセットアップは以上です。&lt;/p&gt;
-&lt;p&gt;もしセットアップが上手くいかない場合は&lt;a href=&#34;https://dotstud.io/docs/wionode-wiosetup/&#34;&gt;こちら&lt;/a&gt;からセットアップしてみてください。&lt;/p&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;h4 id=&#34;モジュールの設定&#34;&gt;モジュールの設定&lt;/h4&gt;
-&lt;p&gt;続いて今回使うモジュールを設定していきます。
-&lt;img src=&#34;https://dotstud.io/img/blog/106/14.png&#34; alt=&#34;&#34; /&gt;
-次にLED Barを取り付けます。Wio Node本体を画面と同じ向きに見た時、左側（PORT0）にLED Barを接続します。アプリ画面では、〔UART〕タブの〔LED Bar〕を選択し、〔Update Firmware〕を押下します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/15.png&#34; alt=&#34;&#34; /&gt;
-〔OK〕を押下します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/16.png&#34; alt=&#34;&#34; /&gt;
-設定が完了すると〔View API〕というリンクが表示されます。&lt;/p&gt;
-&lt;p&gt;APIを試してみましょう。〔View API〕を押下します。&lt;/p&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;h4 id=&#34;apiを試してみる&#34;&gt;APIを試してみる&lt;/h4&gt;
-&lt;p&gt;View APIのページではあらかじめ用意されているAPIを使ってWio Nodeとモジュールの挙動を試すことができます。
-&lt;img src=&#34;https://dotstud.io/img/blog/106/17.png&#34; alt=&#34;&#34; /&gt;
-今回利用する〔level〕APIの〔Test Request〕に「10」と入力します。〔GET〕を押下します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/led.png&#34; alt=&#34;&#34; /&gt;
-LED Barが10個すべて光りました！数値を変えると光るBarの個数が変わります。&lt;/p&gt;
-&lt;p&gt;モジュールの設定は以上です。&lt;/p&gt;
-&lt;h3 id=&#34;2-iftttの設定&#34;&gt;2. IFTTTの設定&lt;/h3&gt;
-&lt;h4 id=&#34;インストールとセットアップ-1&#34;&gt;インストールとセットアップ&lt;/h4&gt;
-&lt;p&gt;次にIFTTT側の設定をしていきます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/18.png&#34; alt=&#34;&#34; /&gt;
-最初にIFTTTのアプリをダウンロードします。&lt;strong&gt;ブラウザから設定する場合はアプリのインストールは不要&lt;/strong&gt;です。ブラウザで「IFTTT」を検索してIFTTTの画面に遷移してください。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/19.png&#34; alt=&#34;&#34; /&gt;
-ダウンロード後、アプリを起動します。アカウントを持っていない場合は、〔Sign up〕を押下します。アカウントを既に取得している場合は、〔Sign in〕を押下してログインしてください。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/20.png&#34; alt=&#34;&#34; /&gt;
-アカウントを新規登録する場合はメールアドレスと任意のパスワードを入力し、〔Sign up〕を押下します。&lt;/p&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;h4 id=&#34;レシピを作成する&#34;&gt;レシピを作成する&lt;/h4&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/21.png&#34; alt=&#34;&#34; /&gt;
-それでは早速レシピを作ってみましょう。〔My Applets〕に移動し、右上の〔＋〕を押下します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/22.png&#34; alt=&#34;&#34; /&gt;
-IFTTTでは「if this then that」という構文を使って、サービスを連携させていきます。熊本弁で言うと「こぎゃん（こう）したら、あぎゃん（ああ）なる」みたいな感じです。&lt;/p&gt;
-&lt;p&gt;まずは「こうしたら」のトリガー部分を作っていきましょう。最初に〔this〕を押下します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/23.png&#34; alt=&#34;&#34; /&gt;
-IFTTTでは連携に利用できるWebサービスのことをチャンネルと言います。&lt;/p&gt;
-&lt;p&gt;トリガーとして利用できるチャンネルが表示されるので、「Wether Underground」チャンネルを検索し、選択します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/24.png&#34; alt=&#34;&#34; /&gt;
-「Wether Underground」で利用できるトリガーの一覧が表示されます。今回は〔Today&amp;rsquo;s weather report〕を使うので、選択してください。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/25.png&#34; alt=&#34;&#34; /&gt;
-「Today&amp;rsquo;s weather report」は今日の現在の天気情報を取得できます。この画面では取得する時間を設定します。好きな時間に設定してください。&lt;/p&gt;
-&lt;p&gt;私の場合は昼休みで外に出る時の時間を設定しました。&lt;/p&gt;
-&lt;p&gt;続いて「こうなる」の部分を作ります。
-&lt;img src=&#34;https://dotstud.io/img/blog/106/26.png&#34; alt=&#34;&#34; /&gt;
-「if this then that」の〔that〕を押下します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/27.png&#34; alt=&#34;&#34; /&gt;
-アクション（発動条件を満たした後の動作）として利用できるチャンネルが表示されます。〔Search services〕に「seeed」と入力して検索しましょう。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/28.png&#34; alt=&#34;&#34; /&gt;
-「Seeed」チャンネルを選択します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/29.png&#34; alt=&#34;&#34; /&gt;
-〔connect〕を押下します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/30.png&#34; alt=&#34;&#34; /&gt;
-アカウント設定画面が表示されます。ここにWio Nodeで設定したアカウント情報を入力し、〔Sign in〕を押下します。&lt;/p&gt;
-&lt;p&gt;Wio Node側でGoogleやFacebook連携でログインしていて上手く連携できない場合は、Wio Nodeのアプリからメールアドレスで登録しなおしましょう。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/31.png&#34; alt=&#34;&#34; /&gt;
-「Seeed」チャンネルで利用できるアクションの一覧が表示されます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/32.png&#34; alt=&#34;&#34; /&gt;
-一覧の下の方にある〔Drive any Grove〕を選択してください。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/33.png&#34; alt=&#34;&#34; /&gt;
-詳細設定をしていきます。functionを選択するプルダウンでは〔level（float level）〕を選択します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/34.png&#34; alt=&#34;&#34; /&gt;
-次にFirst Parameterを設定します。〔Add Ingredient〕を押下すると、設定できる候補が表示されます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/35.png&#34; alt=&#34;&#34; /&gt;
-今回取得するのはUV値なので〔UVindex〕を選択します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/36.png&#34; alt=&#34;&#34; /&gt;
-〔Next〕を押下します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/37.png&#34; alt=&#34;&#34; /&gt;
-タイトルが自動生成されるので、変更する場合は〔Edit title〕から編集します。最後に〔Finish〕を押下します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/38.png&#34; alt=&#34;&#34; /&gt;
-これでレシピは完成です！&lt;/p&gt;
-&lt;h3 id=&#34;3-オーナメント作り&#34;&gt;3. オーナメント作り&lt;/h3&gt;
-&lt;p&gt;最後に見せ方の部分である、オーナメント作りをしていきます。&lt;/p&gt;
-&lt;p&gt;では、グリーンオーナメントにWio Nodeを巻いていきます。この時、一度Wio NodeからUSBケーブルを抜いておくと良いでしょう。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/39.png&#34; alt=&#34;&#34; /&gt;
-購入したグリーンオーナメントにもよりますが、グリーンオーナメントの中の構成を把握してWio Nodeを取り付けるとコードが目立たないようになります。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/40.png&#34; alt=&#34;&#34; /&gt;
-今回の場合は、グリーンオーナメントの中心軸を避けたところにWio Nodeを設置し、コードを軸に這わせながら巻きつけていきます。巻きつけた後は、葉っぱでコードを隠します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/41.png&#34; alt=&#34;&#34; /&gt;
-LEDもコードがなるべく見えないように周りの葉っぱで隠します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/42.png&#34; alt=&#34;&#34; /&gt;
-次に目を用意します。自分の好きな目を書いてください。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/43.png&#34; alt=&#34;&#34; /&gt;
-目を作成したら、グリーンオーナメントに装着します。両面テープや養生テープを使うと、目の位置等を簡単に変えられます。目の位置によって表情が変わるので好きな位置に取り付けましょう。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/44.png&#34; alt=&#34;&#34; /&gt;
-最後にUSBケーブルと接続します。オーナメントによりますが、USBケーブルに色が移ることもあるので気をつけてください。&lt;/p&gt;
-&lt;p&gt;オーナメント作りはこれで完成です！&lt;/p&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;h4 id=&#34;カスタマイズ&#34;&gt;カスタマイズ&lt;/h4&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/45.png&#34; alt=&#34;&#34; /&gt;
-目だけでなく、ちょっとした花を付け加えるとより個性が出ます。色々試してみてください。&lt;/p&gt;
-&lt;h2 id=&#34;試してみる&#34;&gt;試してみる&lt;/h2&gt;
-&lt;p&gt;さて、一通り完成したので動作検証してみます。&lt;/p&gt;
-&lt;p&gt;IFTTTの〔My Applets〕で自分の作成したアプレットが確認できます。今回はテストなので時間を12時45分にしました。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/46.png&#34; alt=&#34;&#34; /&gt;
-実行されるとIFTTTから通知が来ます。確認してみると正常に動いているようです。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/47.png&#34; alt=&#34;&#34; /&gt;
-UVindexの値を確認すると「9」となっています。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/48.png&#34; alt=&#34;&#34; /&gt;
-LED Barは&amp;hellip;レベル9まで光っています！&lt;strong&gt;外に出る時は紫外線対策をしっかりしましょう！！&lt;/strong&gt;&lt;/p&gt;
-&lt;h2 id=&#34;最後に&#34;&gt;最後に&lt;/h2&gt;
-&lt;p&gt;今回は「Wio Node」と「IFTTT」を使ってノンプログラミングでUV（紫外線）のレベルをLED Barで表示させました。初心者の方でも簡単にできたのではないでしょうか。「IFTTT」で取得する値を変えたりアクションを変えたりするともっと色んなことができそうですね。&lt;/p&gt;
-&lt;p&gt;また、「IFTTT」で取得する値は0〜16ですが、現状は10以上の場合もLED Barは10までの表示です。これ以上細かい表示をする場合はプログラムを組んでみましょう。そちらの方も是非挑戦してみてください。&lt;/p&gt;
-&lt;p&gt;最後まで読んで頂きありがとうございました。&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;実際にこのガジェットは、職場のデスクで稼働していて、いつも京急の運行情報を知らせてくれます。今後は他社線バージョンの作成を検討しています。&lt;/p&gt;</description></item></channel></rss>
