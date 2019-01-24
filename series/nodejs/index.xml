@@ -1,4 +1,238 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Nodejs on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/nodejs/</link><description>Recent content in Nodejs on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Sun, 09 Sep 2018 04:58:49 +0900</lastBuildDate><atom:link href="/series/nodejs/" rel="self" type="application/rss+xml"/><item><title>無料で手軽！コマンド一つで静的サイトホスティングできるSurgeを試してみた。</title><link>https://dotstud.io/blog/static-site-hosting-surge/</link><pubDate>Sun, 09 Sep 2018 04:58:49 +0900</pubDate><guid>https://dotstud.io/blog/static-site-hosting-surge/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Nodejs on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/nodejs/</link><description>Recent content in Nodejs on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Thu, 24 Jan 2019 00:51:35 +0900</lastBuildDate><atom:link href="/series/nodejs/" rel="self" type="application/rss+xml"/><item><title>Moddable SDKを使ってJavaScriptでIoT開発してみた</title><link>https://dotstud.io/blog/developed-iot-using-moddable/</link><pubDate>Thu, 24 Jan 2019 00:51:35 +0900</pubDate><guid>https://dotstud.io/blog/developed-iot-using-moddable/</guid><description>
+&lt;p&gt;どうも。&lt;a href=&#34;https://dotstud.io/members/horihiro&#34;&gt;ほりひろ&lt;/a&gt; です。
+dotstudioブログでは、初めましてですね。&lt;/p&gt;
+&lt;p&gt;JavaScript や IoT が好きな、でも実は半田付けも抵抗値の計算もろくにできないレベルの週末プログラマーです。
+普段は某クラウドベンダーのサポートエンジニアをしています。
+よろしくお願いします。&lt;/p&gt;
+&lt;p&gt;Twitterアカウントは&lt;a href=&#34;https://twitter.com/hori__hiro&#34;&gt;こちら&lt;/a&gt;です。&lt;/p&gt;
+&lt;p&gt;年末に自分の中で話題になっていた、&lt;u&gt;&lt;strong&gt;Moddable SDK&lt;/strong&gt;&lt;/u&gt;というものをようやく触ってみました。&lt;/p&gt;
+&lt;h2 id=&#34;moddable-sdk-xs&#34;&gt;Moddable SDK &amp;amp; XS&lt;/h2&gt;
+&lt;h3 id=&#34;moddable-sdk&#34;&gt;Moddable SDK&lt;/h3&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/237/1.png&#34; alt=&#34;1&#34;&gt;
+&lt;/center&gt;
+&lt;p&gt;Moddable SDK は、&lt;strong&gt;JavaScript コードを ESP32 や ESP8266 といったマイコン上で動作させるためのビルド環境やライブラリー群&lt;/strong&gt;のこと、、、だと思います。&lt;/p&gt;
+&lt;p&gt;これは Moddable 社から提供されていますが、&lt;u&gt;下記 GitHub リポジトリで公開されているので、無料で手に入れられます。&lt;/u&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/Moddable-OpenSource/moddable&#34;&gt;https://github.com/Moddable-OpenSource/moddable&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;xs&#34;&gt;XS&lt;/h3&gt;
+&lt;p&gt;XS は、&lt;strong&gt;Moddable SDK で生成される JavaScript ランタイム環境&lt;/strong&gt; （ドキュメントには &lt;strong&gt;virtual machine&lt;/strong&gt; と記載）で、なんと &lt;a href=&#34;https://github.com/Moddable-OpenSource/moddable#modern-software-development-for-microcontrollers&#34;&gt;ES2018 に 99% 以上準拠&lt;/a&gt;しているらしいです。すごいですね！&lt;/p&gt;
+&lt;p&gt;※一部準拠していない部分は、注意事項として&lt;strong&gt;&lt;a href=&#34;https://github.com/Moddable-OpenSource/moddable/blob/public/documentation/xs/XS%20Conformance.md#caveat&#34;&gt;こちら&lt;/a&gt;&lt;/strong&gt;に記載されています。&lt;/p&gt;
+&lt;p&gt;これは&lt;a href=&#34;http://www.moddable.com/XS7-TC-39.php&#34;&gt;公式ドキュメント&lt;/a&gt;にある画像です。「XS は一番小さい」って意味でしょうね。シャレてます。&lt;/p&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/237/2.png&#34; alt=&#34;2&#34;&gt;
+&lt;/center&gt;
+&lt;p&gt;ざっくりとした理解ですが、Moddable SDK のビルドツールで、自分が書いた JavaScript や C のソースコードと組み込みのクラスが含まれた XS を、一つのバイナリーにビルドし、マイコンに書き込んでいるようです。&lt;/p&gt;
+&lt;p&gt;これまで JavaScript でのマイコン制御というと、以前から ホスト PC とマイコンをシリアル接続し、ホストPC上の Node.js と Johnny-Five を使ってマイコンを制御する方法があり、最近では obniz の制御をネットワークを介して JavaScript などから行う方法がありますが、いずれもマイコンの外に JavaScript の実行環境を用意する必要があります。&lt;/p&gt;
+&lt;p&gt;一方で、Moddable SDK では、&lt;u&gt;JavaScript 実行環境である XS がマイコン上で動作することができます。&lt;/u&gt;&lt;/p&gt;
+&lt;p&gt;この点は、&lt;strong&gt;これまでの実行環境とは大きく違うところですね！&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;開発環境の構築&#34;&gt;開発環境の構築&lt;/h2&gt;
+&lt;p&gt;基本的に、公式のリポジトリに記載された &lt;a href=&#34;https://github.com/Moddable-OpenSource/moddable/blob/public/documentation/Moddable%20SDK%20-%20Getting%20Started.md&#34;&gt;構築手順&lt;/a&gt;通りに実施することで、ビルド ツールなどの環境が構築できます。&lt;/p&gt;
+&lt;p&gt;構築手順は macOS/Linux/Windows の各プラットフォーム向けにまとまっており、それぞれが、下記の 3 つのパートに分かれて記載されています。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;mcconfig&lt;/code&gt; や &lt;code&gt;xsbug&lt;/code&gt; などの開発ツールのビルド&lt;/li&gt;
+&lt;li&gt;ESP8266 向けの開発環境の構築&lt;/li&gt;
+&lt;li&gt;ESP32 向けの開発環境の構築&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;いずれのプラットフォームでも 1. は必須ですが、2. と 3. は手持ちのボードに合わせて、どちらかを実施するだけでよいです。&lt;/p&gt;
+&lt;p&gt;私は Windows 用の環境構築をしましたが、Windows 向けの開発環境構築では、&lt;u&gt;&lt;strong&gt;Windows ネイティブのコマンドを使用することをお勧めします。&lt;/strong&gt;&lt;/u&gt;
+WSL から &lt;code&gt;git clone&lt;/code&gt; などをすると、&lt;a href=&#34;https://github.com/Moddable-OpenSource/moddable/issues/110&#34;&gt;&lt;strong&gt;開発ツールがビルドできない&lt;/strong&gt;&lt;/a&gt;ようで、これに丸一日ハマりました。&lt;/p&gt;
+&lt;p&gt;あと、ビルドツールの実行は、必ず&lt;code&gt;開発者コマンドプロンプト for VS2017&lt;/code&gt; を起動し、そのコマンドプロンプトの中でしましょう。&lt;/p&gt;
+&lt;h2 id=&#34;サンプル-コード&#34;&gt;サンプル コード&lt;/h2&gt;
+&lt;p&gt;マイコンのサンプルと言えば Lチカですが、手元に LED がなかったので、とりあえず ESP32 上での非同期実行を試してみます。&lt;/p&gt;
+&lt;h3 id=&#34;ファイルの用意&#34;&gt;ファイルの用意&lt;/h3&gt;
+&lt;p&gt;プロジェクト ディレクトリに下記のような構造で、ファイルを作ります。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;.
+├── esp
+│ ├── console.c
+│ └── console.js
+├── main.js
+└── manifest.json
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;main-js&#34;&gt;main.js&lt;/h3&gt;
+&lt;p&gt;1 秒おきに &lt;code&gt;1&lt;/code&gt; から &lt;code&gt;10&lt;/code&gt; の数字を、1.5 秒おきに &lt;code&gt;a&lt;/code&gt; から &lt;code&gt;z&lt;/code&gt; の文字を、シリアル コンソールに出力するプログラムです。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js:main.js&#34;&gt;import Timer from &#39;timer&#39;;
+import console from &amp;quot;console&amp;quot;;
+const a = &#39;a&#39;;
+const z = &#39;z&#39;;
+let c = a;
+let i = 0;
+Timer.repeat(() =&amp;gt; {
+console.log(`${String(Date.now()).padStart(15)}:${i}`);
+i = (i &amp;gt;= 10) ? 0 : i + 1;
+}, 1000);
+Timer.repeat(() =&amp;gt; {
+console.log(`${String(Date.now()).padStart(15)}:${c}`);
+c = (c &amp;gt;= z) ? a : String.fromCharCode(c.charCodeAt(0) + 1);
+}, 1500);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Web ブラウザーや Node.js なら、定期的な処理を書くなら &lt;code&gt;setInterval&lt;/code&gt; を使うところだと思いますが、Moddable SDK / XS では、グローバルに &lt;code&gt;setInterval&lt;/code&gt; が定義されていません。&lt;/p&gt;
+&lt;p&gt;代わりに、&lt;code&gt;Timer&lt;/code&gt; オブジェクトの &lt;code&gt;repeat&lt;/code&gt; メソッドを使って、同じ処理が似たような感じで書くことができます。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js:browser&amp;amp;nodejs&#34;&gt;setInterval(() =&amp;gt; {
+:
+}, 1000);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js:XS&#34;&gt;import Timer from &#39;timer&#39;;
+Timer.repeat(() =&amp;gt; {
+:
+}, 1000);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;console-js-console-c&#34;&gt;console.js /console.c&lt;/h3&gt;
+&lt;p&gt;実は XS では &lt;code&gt;console&lt;/code&gt; オブジェクトもないので、とりあえず、下記の JS ファイルと C ファイルで、シリアルコンソールに 1 行出力できるメソッドを定義しておきます。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-c:esp/console.js&#34;&gt;class Console @ &amp;quot;xs_console_destructor&amp;quot; {
+constructor() {
+}
+static log() @ &amp;quot;xs_console_log&amp;quot;
+}
+Object.freeze(Console.prototype);
+export default Console;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;JS ファイルはタダのラッパーで、処理本体は C ファイルで定義しています。
+JS ファイル内で &lt;code&gt;@ ～&lt;/code&gt; と書くと、C ファイルで宣言した関数とバインディングされます。
+これは、XS 独自の実装のようです。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-c:esp/console.c&#34;&gt;#include &amp;quot;xsAll.h&amp;quot;
+#include &amp;quot;xs.h&amp;quot;
+void xs_console_destructor(void)
+{
+}
+void xs_console_log(xsMachine *the)
+{
+int argc = xsToInteger(xsArgc), i;
+for (i = 0; i &amp;lt; argc; i++) {
+char *str = xsToString(xsArg(i));
+do {
+uint8_t c = c_read8(str);
+if (!c) {
+ESP_putc(&#39;\n&#39;);
+break;
+}
+ESP_putc(c);
+str++;
+} while (1);
+}
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;manifest-json&#34;&gt;manifest.json&lt;/h3&gt;
+&lt;p&gt;最後は manifest ファイルです。
+正直言うと、ここはあまり把握できていません :sweat:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;include&lt;/code&gt; で Moddable SDK で用意されている manifest を、ベースの manifest として読み込み、全プラットフォーム共通のモジュールとして &lt;code&gt;main&lt;/code&gt;(.js) を、&lt;code&gt;esp32&lt;/code&gt; 向けには、&lt;code&gt;./esp/console&lt;/code&gt;(.js) をロードする設定を書いています。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-json:manifest.json&#34;&gt;{
+&amp;quot;include&amp;quot;: &amp;quot;$(MODDABLE)/examples/manifest_base.json&amp;quot;,
+&amp;quot;modules&amp;quot;: {
+&amp;quot;*&amp;quot;: [
+&amp;quot;./main&amp;quot;,
+]
+},
+&amp;quot;platforms&amp;quot;: {
+&amp;quot;esp32&amp;quot;: {
+&amp;quot;modules&amp;quot;: {
+&amp;quot;*&amp;quot;: [
+&amp;quot;./esp/console&amp;quot;,
+],
+}
+}
+},
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;上の &lt;code&gt;manifest.json&lt;/code&gt; では &lt;code&gt;Timer&lt;/code&gt; クラスをロードしていませんが、&lt;code&gt;main.js&lt;/code&gt; では問題なく import することができます。
+これは、Moddable SDK に含まれるベースの manifest でロード設定がされているためです。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-json:$(MODDABLE)/examples/manifest_base.json(抜粋)&#34;&gt;{
+:
+(略)
+:
+&amp;quot;platforms&amp;quot;: {
+:
+(略)
+:
+&amp;quot;esp32&amp;quot;: {
+&amp;quot;include&amp;quot;: &amp;quot;$(BUILD)/devices/esp32/manifest.json&amp;quot;
+},
+}
+:
+(略)
+:
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-json:$(BUILD)/devices/esp32/manifest.json(抜粋)&#34;&gt;{
+:
+(略)
+:
+&amp;quot;modules&amp;quot;: {
+&amp;quot;*&amp;quot;: [
+&amp;quot;$(MODULES)/base/time/*&amp;quot;,
+&amp;quot;$(MODULES)/base/time/esp/*&amp;quot;,
+&amp;quot;$(MODULES)/base/timer/*&amp;quot;,
+&amp;quot;$(MODULES)/base/timer/mc/*&amp;quot;,
+]
+},
+&amp;quot;preload&amp;quot;: [
+&amp;quot;time&amp;quot;,
+&amp;quot;timer&amp;quot;,
+],
+:
+(略)
+:
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;ちなみに manifest についてツイートしたところ、公式アカウントからも返事がありました。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;ドキュメントは定期的にメンテナンスされそうです。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;en&#34; dir=&#34;ltr&#34;&gt;The manifest documentation (&lt;a href=&#34;https://t.co/HTYtMXR33N&#34;&gt;https://t.co/HTYtMXR33N&lt;/a&gt;) is a good place to start, but we&amp;#39;ll put a document with more details together soon. If you have any specific questions, we&amp;#39;d be happy to answer those as well.&lt;/p&gt; Moddable (@moddabletech) &lt;a href=&#34;https://twitter.com/moddabletech/status/1086084032008413184?ref_src=twsrc%5Etfw&#34;&gt;2019年1月18日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+&lt;h2 id=&#34;実行してみる&#34;&gt;実行してみる&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;manifest.json&lt;/code&gt; があるディレクトリで、&lt;code&gt;mcconfig&lt;/code&gt; コマンドを実行します。
+大抵は、XS のビルドから始まるので、書き込みが完了するまでだいぶ時間がかかると思います。&lt;/p&gt;
+&lt;p&gt;書き込みが完了すると、シリアルモニターに自動的に接続し、&lt;code&gt;console.log&lt;/code&gt; の出力内容が表示されます。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;gt; mcconfig -m -p esp32
+rm: cannot remove &#39;/root/Projects/moddable/build/tmp/esp32/release/xsProj/sdkconfig&#39;: No such file or directory
+# Running GENCONFIG...
+fatal: Not a git repository (or any of the parent directories): .git
+including /root/esp32/esp-idf/components/bootloader/Makefile.projbuild...
+:
+(略)
+:
+MONITOR
+--- idf_monitor on /dev/ttyUSB0 115200 ---
+--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H ---
+ets Jun 8 2016 00:22:57
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0018,len:4
+load:0x3fff001c,len:636
+load:0x40078000,len:6192
+load:0x40080000,len:5152
+0x40080000: _iram_start at /root/esp32/esp-idf/components/freertos/xtensa_vectors.S:1685
+entry 0x40080264
+0x40080264: _Level5Vector at ??:?
+1010:1
+1510:a
+2010:2
+3010:3
+3011:b
+4010:4
+4510:c
+5010:5
+6010:6
+:
+(略)
+:
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;指定した時間間隔で、コールバック関数が実行されています！ :tada::tada::tada:
+ES2017 で入った &lt;code&gt;String.prototype.padStart&lt;/code&gt; も正常に動作しているようです。&lt;/p&gt;
+&lt;p&gt;なお、マイコンには時計がないので、&lt;code&gt;Date.now()&lt;/code&gt; は起動時からの時間を返します。&lt;/p&gt;
+&lt;h3 id=&#34;デバッグ実行&#34;&gt;デバッグ実行&lt;/h3&gt;
+&lt;p&gt;先ほど実行したコマンド &lt;code&gt;mcconfig -m -p esp32&lt;/code&gt; にデバッグ オプション &lt;code&gt;-d&lt;/code&gt; を追加すると、デバッグ ビルドを実行し、デバッグ ツールである &lt;code&gt;xsbug&lt;/code&gt; が自動で起動します。&lt;/p&gt;
+&lt;p&gt;この &lt;code&gt;xsbug&lt;/code&gt; は JavaScript コードにブレークポイントの設定や、ステップ実行、変数の内容などを表示することが
+でき、結構本格的なデバッグツールです。&lt;/p&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/237/3.png&#34; alt=&#34;3&#34;&gt;
+&lt;/center&gt;
+&lt;p&gt;今は独自の GUI ツールとして提供されているようですが、そのうち&lt;strong&gt;VSCode から拡張機能として利用できるようになると嬉しいですね。&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;いかがだったでしょうか。
+Moddable SDK を使うことで、JavaScript で書いたコードを、ESP8266/32 で動作させることができました。&lt;/p&gt;
+&lt;p&gt;&lt;u&gt;Web フロントエンドや Node.js など、JavaScript を書くエンジニア人口は多いでしょうから、そういった方々も気軽にマイコン開発ができるようになりますね。&lt;/u&gt;&lt;/p&gt;
+&lt;p&gt;あとは、manifest ファイルに関するドキュメントの整備がすすんだり、もう少し簡単に環境構築ができれば、格段に開発しやすくなるのではないでしょうか。&lt;/p&gt;</description></item><item><title>無料で手軽！コマンド一つで静的サイトホスティングできるSurgeを試してみた。</title><link>https://dotstud.io/blog/static-site-hosting-surge/</link><pubDate>Sun, 09 Sep 2018 04:58:49 +0900</pubDate><guid>https://dotstud.io/blog/static-site-hosting-surge/</guid><description>
 &lt;p&gt;こんにちは、&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
 &lt;p&gt;最近VuePressを触っていて、簡単に静的サイトホスティングできるサービスを探していました。&lt;/p&gt;
 &lt;p&gt;そこで発見した&lt;strong&gt;Surge（サージ）というサービスがすごく簡単だった&lt;/strong&gt;ので紹介します。&lt;/p&gt;
@@ -1968,105 +2202,4 @@ Command.ioというサービスでおそらくVPSサービスです。なのでN
 &lt;p&gt;色々と調べててやはりHerokuが使い勝手や情報の調べやすさ的に圧倒的だなと感じました。&lt;/p&gt;
 &lt;p&gt;特にこだわりなどが無く、「通常利用で無料である程度試したい」くらいであればHerokuを使うのが良いかと思います。
 ちょっと気分を変えたいときや、何かの理由でHerokuが厳しいと感じた際の参考になれば幸いです。&lt;/p&gt;
-&lt;p&gt;それでは。&lt;/p&gt;</description></item><item><title>Node.jsでコマンドラインツール作るときに使いやすいreadline-sync</title><link>https://dotstud.io/blog/nodejs-npm-readline-sync/</link><pubDate>Wed, 05 Oct 2016 10:00:00 +0900</pubDate><guid>https://dotstud.io/blog/nodejs-npm-readline-sync/</guid><description>
-&lt;p&gt;こんにちは、代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke/&#34;&gt;のびすけ&lt;/a&gt;です。
-&lt;a href=&#34;https://dotstud.io/series/nodejs/&#34;&gt;Node.js Magazine&lt;/a&gt;という連載を作ったのでNode.js系のTipsを紹介していく予定です。&lt;/p&gt;
-&lt;p&gt;今日はNode.jsでコマンドラインツールを作る際に役立つreadline-syncというパッケージを紹介します。&lt;/p&gt;
-&lt;p&gt;実際にサンプルを動かして見ましょう。&lt;/p&gt;
-&lt;h2 id=&#34;執筆時点のマシンスペック&#34;&gt;執筆時点のマシンスペック&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;macOS Sierra (v10.12)&lt;/li&gt;
-&lt;li&gt;Node.js v6.6.0&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;何か不具合があったときに参照してください。&lt;/p&gt;
-&lt;h2 id=&#34;インストール&#34;&gt;インストール&lt;/h2&gt;
-&lt;p&gt;URL: &lt;a href=&#34;https://www.npmjs.com/package/readline-sync&#34;&gt;https://www.npmjs.com/package/readline-sync&lt;/a&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;npm i readline-sync
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&#34;サンプルを動かしてみる&#34;&gt;サンプルを動かしてみる&lt;/h2&gt;
-&lt;p&gt;まずは基本的なサンプルです。&lt;code&gt;.question()&lt;/code&gt;で質問して入力結果をそのまま変数に入れ込めます。このサンプルでいうと&lt;code&gt;userName&lt;/code&gt;と&lt;code&gt;favFood&lt;/code&gt;の変数に入力した値が入ります。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;//app.js
-const readlineSync = require(&#39;readline-sync&#39;);
-let userName = readlineSync.question(&#39;あなたの名前は? &#39;);
-console.log(`-&amp;gt;こんにちは ${userName}!`);
-let favFood = readlineSync.question(&#39;好きな食べ物は? &#39;, {hideEchoBack: true});
-console.log(`-&amp;gt;${userName}は${favFood}が好きなんだね!`);
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;code&gt;{hideEchoBack: true}&lt;/code&gt;というオプションをつけると入力時は&lt;code&gt;*&lt;/code&gt;で表示されます。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;実行&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/024/01_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;h2 id=&#34;選択肢を出して選ばせる&#34;&gt;選択肢を出して選ばせる&lt;/h2&gt;
-&lt;p&gt;選択肢を提示してユーザーに選ばせる方法もよく使われます。&lt;/p&gt;
-&lt;p&gt;keyInSelectメソッドを使います。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;//app.js
-const readlineSync = require(&#39;readline-sync&#39;);
-let animals = [&#39;のびすけ&#39;, &#39;うらら&#39;, &#39;ちゃちゃまる&#39;, &#39;うこ&#39;, &#39;ギャル電&#39;];
-let index = readlineSync.keyInSelect(animals, &#39;誰に連絡しますか?&#39;);
-console.log(`${animals[index]}に連絡します。`);
-&lt;/code&gt;&lt;/pre&gt;
-&lt;ul&gt;
-&lt;li&gt;実行してみる&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/024/02_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;人の名前を選択肢して、その人に連絡をする&lt;/strong&gt;みたいなインターフェイスを作って見ました。変数がanimalsなのは気にしません。&lt;/p&gt;
-&lt;h2 id=&#34;cliループでサブコマンドを作る&#34;&gt;CLIループでサブコマンドを作る&lt;/h2&gt;
-&lt;p&gt;コマンド終了のタイミングをユーザーに委ねたいときに使えます。&lt;/p&gt;
-&lt;p&gt;promptCLLoopメソッドで関数を引数に渡すと関数をループ実行してくれます。&lt;/p&gt;
-&lt;p&gt;このサンプルだと&lt;code&gt;bye&lt;/code&gt;というサブコマンドを入力すると終了します。&lt;/p&gt;
-&lt;p&gt;逆に言えば&lt;code&gt;bye&lt;/code&gt;を入力するまではずっとその他コマンドの入力を待ち受けます。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;//app.js
-const readlineSync = require(&#39;readline-sync&#39;);
-readlineSync.promptCLLoop({
-add: (target, into) =&amp;gt; {
-console.log(`${target}を${into}に追加します。`);
-// Do something...
-},
-remove: (target) =&amp;gt; {
-console.log(`${target}を削除します。`);
-// Do something...
-},
-bye: () =&amp;gt; { return true; }
-});
-console.log(&#39;終了します。&#39;);
-&lt;/code&gt;&lt;/pre&gt;
-&lt;ul&gt;
-&lt;li&gt;実行してみる&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/024/03_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;こんな感じで&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;&amp;gt; コマンド名 変数1 変数2 ...
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;という入力を受け付けて紐づけられている関数の引数として変数が渡されます。&lt;/p&gt;
-&lt;h2 id=&#34;キー入力で値を選んでもらう&#34;&gt;キー入力で値を選んでもらう&lt;/h2&gt;
-&lt;p&gt;この表現がいいのか分からないですけど、、、見ればわかります。&lt;/p&gt;
-&lt;p&gt;keyInメソッドでキー入力の待ち受けを実現しています。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;//app.js
-const readlineSync = require(&#39;readline-sync&#39;);
-const MAX = 60, MIN = 0;
-let value = 30, key;
-console.log(`\n\n${(new Array(20)).join(&#39; &#39;)}[Z] &amp;lt;- -&amp;gt; [X] 決定: [SPACE]\n`);
-while (true) {
-console.log(&#39;\x1B[1A\x1B[K|&#39; +
-(new Array(value + 1)).join(&#39;-&#39;) + &#39;O&#39; +
-(new Array(MAX - value + 1)).join(&#39;-&#39;) + &#39;| &#39; + value);
-key = readlineSync.keyIn(&#39;&#39;,
-{hideEchoBack: true, mask: &#39;&#39;, limit: &#39;zx &#39;});
-if (key === &#39;z&#39;) { if (value &amp;gt; MIN) { value--; } }
-else if (key === &#39;x&#39;) { if (value &amp;lt; MAX) { value++; } }
-else { break; }
-}
-console.log(`\nあなたが決めた値: ${value}`);
-&lt;/code&gt;&lt;/pre&gt;
-&lt;ul&gt;
-&lt;li&gt;実行してみる&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/024/04_image.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;zとxで値を調節してスペースで決定です。&lt;/p&gt;
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-&lt;p&gt;簡単でしたが以上になります。&lt;/p&gt;
-&lt;p&gt;いかがでしたでしょうか。
-非同期が基本になっているJavaScriptでコマンドラインからの入力受付を同期的にやる場合にはかなり使いやすいパッケージだと思います。&lt;/p&gt;
-&lt;p&gt;readline-syncでコマンドラインツールを作って見ましょう！&lt;/p&gt;
-&lt;p&gt;もっとこっちの方がオススメだよ！ってものがあれば是非&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;@n0bisuke&lt;/a&gt;に教えてください :)&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;それでは。&lt;/p&gt;</description></item></channel></rss>

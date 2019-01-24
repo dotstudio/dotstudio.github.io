@@ -22,7 +22,7 @@ dotstudioブログでは、初めましてですね。&lt;/p&gt;
 &lt;img src=&#34;https://dotstud.io/img/blog/237/2.png&#34; alt=&#34;2&#34;&gt;
 &lt;/center&gt;
 &lt;p&gt;ざっくりとした理解ですが、Moddable SDK のビルドツールで、自分が書いた JavaScript や C のソースコードと組み込みのクラスが含まれた XS を、一つのバイナリーにビルドし、マイコンに書き込んでいるようです。&lt;/p&gt;
-&lt;p&gt;これまで JavaScript でのマイコン制御というと、以前から ホスト PC とマイコンをシリアル接続し、ホストPC上の node.js と Johnny-Five を使ってマイコンを制御する方法があり、最近では obniz の制御をネットワークを介して JavaScript などから行う方法がありますが、いずれもマイコンの外に JavaScript の実行環境を用意する必要があります。&lt;/p&gt;
+&lt;p&gt;これまで JavaScript でのマイコン制御というと、以前から ホスト PC とマイコンをシリアル接続し、ホストPC上の Node.js と Johnny-Five を使ってマイコンを制御する方法があり、最近では obniz の制御をネットワークを介して JavaScript などから行う方法がありますが、いずれもマイコンの外に JavaScript の実行環境を用意する必要があります。&lt;/p&gt;
 &lt;p&gt;一方で、Moddable SDK では、&lt;u&gt;JavaScript 実行環境である XS がマイコン上で動作することができます。&lt;/u&gt;&lt;/p&gt;
 &lt;p&gt;この点は、&lt;strong&gt;これまでの実行環境とは大きく違うところですね！&lt;/strong&gt;&lt;/p&gt;
 &lt;h2 id=&#34;開発環境の構築&#34;&gt;開発環境の構築&lt;/h2&gt;
@@ -65,7 +65,7 @@ console.log(`${String(Date.now()).padStart(15)}:${c}`);
 c = (c &amp;gt;= z) ? a : String.fromCharCode(c.charCodeAt(0) + 1);
 }, 1500);
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Web ブラウザーや node.js なら、定期的な処理を書くなら &lt;code&gt;setInterval&lt;/code&gt; を使うところだと思いますが、Moddable SDK / XS では、グローバルに &lt;code&gt;setInterval&lt;/code&gt; が定義されていません。&lt;/p&gt;
+&lt;p&gt;Web ブラウザーや Node.js なら、定期的な処理を書くなら &lt;code&gt;setInterval&lt;/code&gt; を使うところだと思いますが、Moddable SDK / XS では、グローバルに &lt;code&gt;setInterval&lt;/code&gt; が定義されていません。&lt;/p&gt;
 &lt;p&gt;代わりに、&lt;code&gt;Timer&lt;/code&gt; オブジェクトの &lt;code&gt;repeat&lt;/code&gt; メソッドを使って、同じ処理が似たような感じで書くことができます。&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-js:browser&amp;amp;nodejs&#34;&gt;setInterval(() =&amp;gt; {
 :
@@ -231,7 +231,7 @@ ES2017 で入った &lt;code&gt;String.prototype.padStart&lt;/code&gt; も正常
 &lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
 &lt;p&gt;いかがだったでしょうか。
 Moddable SDK を使うことで、JavaScript で書いたコードを、ESP8266/32 で動作させることができました。&lt;/p&gt;
-&lt;p&gt;&lt;u&gt;Web フロントエンドや node.js など、JavaScript を書くエンジニア人口は多いでしょうから、そういった方々も気軽にマイコン開発ができるようになりますね。&lt;/u&gt;&lt;/p&gt;
+&lt;p&gt;&lt;u&gt;Web フロントエンドや Node.js など、JavaScript を書くエンジニア人口は多いでしょうから、そういった方々も気軽にマイコン開発ができるようになりますね。&lt;/u&gt;&lt;/p&gt;
 &lt;p&gt;あとは、manifest ファイルに関するドキュメントの整備がすすんだり、もう少し簡単に環境構築ができれば、格段に開発しやすくなるのではないでしょうか。&lt;/p&gt;</description></item><item><title>【ハンズオン資料】NefryBTでハジメテノIoT開発やってみよう！</title><link>https://dotstud.io/blog/handson-nefry-ma-kanazawa/</link><pubDate>Thu, 01 Nov 2018 10:07:13 +0900</pubDate><guid>https://dotstud.io/blog/handson-nefry-ma-kanazawa/</guid><description>
 &lt;p&gt;この記事は11/1の&lt;a href=&#34;https://mashupawards.connpass.com/event/103791/&#34;&gt;ハジメテノIoTハンズオン&lt;/a&gt;向け資料です。記事を読んで試せる内容になっているので、終了後や参加されていない方もぜひ試してみてください！&lt;/p&gt;
 &lt;section class=&#34;caution&#34;&gt;
