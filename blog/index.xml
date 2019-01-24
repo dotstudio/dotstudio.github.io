@@ -1,4 +1,238 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blogs on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/blog/</link><description>Recent content in Blogs on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Tue, 22 Jan 2019 12:27:36 +0900</lastBuildDate><atom:link href="/blog/" rel="self" type="application/rss+xml"/><item><title>Hugo&#43;GitHub Pagesで作ってるブログ運用をGitLabからCircle CI&#43;GitHubに切り替えました。</title><link>https://dotstud.io/blog/circleci-hugo-github-pages/</link><pubDate>Tue, 22 Jan 2019 12:27:36 +0900</pubDate><guid>https://dotstud.io/blog/circleci-hugo-github-pages/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blogs on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/blog/</link><description>Recent content in Blogs on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Thu, 24 Jan 2019 00:51:35 +0900</lastBuildDate><atom:link href="/blog/" rel="self" type="application/rss+xml"/><item><title>Moddable SDKを使ってJavaScriptでIoT開発してみた</title><link>https://dotstud.io/blog/developed-iot-using-moddable/</link><pubDate>Thu, 24 Jan 2019 00:51:35 +0900</pubDate><guid>https://dotstud.io/blog/developed-iot-using-moddable/</guid><description>
+&lt;p&gt;どうも。&lt;a href=&#34;https://dotstud.io/members/horihiro&#34;&gt;ほりひろ&lt;/a&gt; です。
+dotstudioブログでは、初めましてですね。&lt;/p&gt;
+&lt;p&gt;JavaScript や IoT が好きな、でも実は半田付けも抵抗値の計算もろくにできないレベルの週末プログラマーです。
+普段は某クラウドベンダーのサポートエンジニアをしています。
+よろしくお願いします。&lt;/p&gt;
+&lt;p&gt;Twitterアカウントは&lt;a href=&#34;https://twitter.com/hori__hiro&#34;&gt;こちら&lt;/a&gt;です。&lt;/p&gt;
+&lt;p&gt;年末に自分の中で話題になっていた、&lt;u&gt;&lt;strong&gt;Moddable SDK&lt;/strong&gt;&lt;/u&gt;というものをようやく触ってみました。&lt;/p&gt;
+&lt;h2 id=&#34;moddable-sdk-xs&#34;&gt;Moddable SDK &amp;amp; XS&lt;/h2&gt;
+&lt;h3 id=&#34;moddable-sdk&#34;&gt;Moddable SDK&lt;/h3&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/237/1.png&#34; alt=&#34;1&#34;&gt;
+&lt;/center&gt;
+&lt;p&gt;Moddable SDK は、&lt;strong&gt;JavaScript コードを ESP32 や ESP8266 といったマイコン上で動作させるためのビルド環境やライブラリー群&lt;/strong&gt;のこと、、、だと思います。&lt;/p&gt;
+&lt;p&gt;これは Moddable 社から提供されていますが、&lt;u&gt;下記 GitHub リポジトリで公開されているので、無料で手に入れられます。&lt;/u&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/Moddable-OpenSource/moddable&#34;&gt;https://github.com/Moddable-OpenSource/moddable&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;xs&#34;&gt;XS&lt;/h3&gt;
+&lt;p&gt;XS は、&lt;strong&gt;Moddable SDK で生成される JavaScript ランタイム環境&lt;/strong&gt; （ドキュメントには &lt;strong&gt;virtual machine&lt;/strong&gt; と記載）で、なんと &lt;a href=&#34;https://github.com/Moddable-OpenSource/moddable#modern-software-development-for-microcontrollers&#34;&gt;ES2018 に 99% 以上準拠&lt;/a&gt;しているらしいです。すごいですね！&lt;/p&gt;
+&lt;p&gt;※一部準拠していない部分は、注意事項として&lt;strong&gt;&lt;a href=&#34;https://github.com/Moddable-OpenSource/moddable/blob/public/documentation/xs/XS%20Conformance.md#caveat&#34;&gt;こちら&lt;/a&gt;&lt;/strong&gt;に記載されています。&lt;/p&gt;
+&lt;p&gt;これは&lt;a href=&#34;http://www.moddable.com/XS7-TC-39.php&#34;&gt;公式ドキュメント&lt;/a&gt;にある画像です。「XS は一番小さい」って意味でしょうね。シャレてます。&lt;/p&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/237/2.png&#34; alt=&#34;2&#34;&gt;
+&lt;/center&gt;
+&lt;p&gt;ざっくりとした理解ですが、Moddable SDK のビルドツールで、自分が書いた JavaScript や C のソースコードと組み込みのクラスが含まれた XS を、一つのバイナリーにビルドし、マイコンに書き込んでいるようです。&lt;/p&gt;
+&lt;p&gt;これまで JavaScript でのマイコン制御というと、以前から ホスト PC とマイコンをシリアル接続し、ホストPC上の node.js と Johnny-Five を使ってマイコンを制御する方法があり、最近では obniz の制御をネットワークを介して JavaScript などから行う方法がありますが、いずれもマイコンの外に JavaScript の実行環境を用意する必要があります。&lt;/p&gt;
+&lt;p&gt;一方で、Moddable SDK では、&lt;u&gt;JavaScript 実行環境である XS がマイコン上で動作することができます。&lt;/u&gt;&lt;/p&gt;
+&lt;p&gt;この点は、&lt;strong&gt;これまでの実行環境とは大きく違うところですね！&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;開発環境の構築&#34;&gt;開発環境の構築&lt;/h2&gt;
+&lt;p&gt;基本的に、公式のリポジトリに記載された &lt;a href=&#34;https://github.com/Moddable-OpenSource/moddable/blob/public/documentation/Moddable%20SDK%20-%20Getting%20Started.md&#34;&gt;構築手順&lt;/a&gt;通りに実施することで、ビルド ツールなどの環境が構築できます。&lt;/p&gt;
+&lt;p&gt;構築手順は macOS/Linux/Windows の各プラットフォーム向けにまとまっており、それぞれが、下記の 3 つのパートに分かれて記載されています。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;mcconfig&lt;/code&gt; や &lt;code&gt;xsbug&lt;/code&gt; などの開発ツールのビルド&lt;/li&gt;
+&lt;li&gt;ESP8266 向けの開発環境の構築&lt;/li&gt;
+&lt;li&gt;ESP32 向けの開発環境の構築&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;いずれのプラットフォームでも 1. は必須ですが、2. と 3. は手持ちのボードに合わせて、どちらかを実施するだけでよいです。&lt;/p&gt;
+&lt;p&gt;私は Windows 用の環境構築をしましたが、Windows 向けの開発環境構築では、&lt;u&gt;&lt;strong&gt;Windows ネイティブのコマンドを使用することをお勧めします。&lt;/strong&gt;&lt;/u&gt;
+WSL から &lt;code&gt;git clone&lt;/code&gt; などをすると、&lt;a href=&#34;https://github.com/Moddable-OpenSource/moddable/issues/110&#34;&gt;&lt;strong&gt;開発ツールがビルドできない&lt;/strong&gt;&lt;/a&gt;ようで、これに丸一日ハマりました。&lt;/p&gt;
+&lt;p&gt;あと、ビルドツールの実行は、必ず&lt;code&gt;開発者コマンドプロンプト for VS2017&lt;/code&gt; を起動し、そのコマンドプロンプトの中でしましょう。&lt;/p&gt;
+&lt;h2 id=&#34;サンプル-コード&#34;&gt;サンプル コード&lt;/h2&gt;
+&lt;p&gt;マイコンのサンプルと言えば Lチカですが、手元に LED がなかったので、とりあえず ESP32 上での非同期実行を試してみます。&lt;/p&gt;
+&lt;h3 id=&#34;ファイルの用意&#34;&gt;ファイルの用意&lt;/h3&gt;
+&lt;p&gt;プロジェクト ディレクトリに下記のような構造で、ファイルを作ります。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;.
+├── esp
+│ ├── console.c
+│ └── console.js
+├── main.js
+└── manifest.json
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;main-js&#34;&gt;main.js&lt;/h3&gt;
+&lt;p&gt;1 秒おきに &lt;code&gt;1&lt;/code&gt; から &lt;code&gt;10&lt;/code&gt; の数字を、1.5 秒おきに &lt;code&gt;a&lt;/code&gt; から &lt;code&gt;z&lt;/code&gt; の文字を、シリアル コンソールに出力するプログラムです。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js:main.js&#34;&gt;import Timer from &#39;timer&#39;;
+import console from &amp;quot;console&amp;quot;;
+const a = &#39;a&#39;;
+const z = &#39;z&#39;;
+let c = a;
+let i = 0;
+Timer.repeat(() =&amp;gt; {
+console.log(`${String(Date.now()).padStart(15)}:${i}`);
+i = (i &amp;gt;= 10) ? 0 : i + 1;
+}, 1000);
+Timer.repeat(() =&amp;gt; {
+console.log(`${String(Date.now()).padStart(15)}:${c}`);
+c = (c &amp;gt;= z) ? a : String.fromCharCode(c.charCodeAt(0) + 1);
+}, 1500);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Web ブラウザーや node.js なら、定期的な処理を書くなら &lt;code&gt;setInterval&lt;/code&gt; を使うところだと思いますが、Moddable SDK / XS では、グローバルに &lt;code&gt;setInterval&lt;/code&gt; が定義されていません。&lt;/p&gt;
+&lt;p&gt;代わりに、&lt;code&gt;Timer&lt;/code&gt; オブジェクトの &lt;code&gt;repeat&lt;/code&gt; メソッドを使って、同じ処理が似たような感じで書くことができます。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js:browser&amp;amp;nodejs&#34;&gt;setInterval(() =&amp;gt; {
+:
+}, 1000);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-js:XS&#34;&gt;import Timer from &#39;timer&#39;;
+Timer.repeat(() =&amp;gt; {
+:
+}, 1000);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;console-js-console-c&#34;&gt;console.js /console.c&lt;/h3&gt;
+&lt;p&gt;実は XS では &lt;code&gt;console&lt;/code&gt; オブジェクトもないので、とりあえず、下記の JS ファイルと C ファイルで、シリアルコンソールに 1 行出力できるメソッドを定義しておきます。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-c:esp/console.js&#34;&gt;class Console @ &amp;quot;xs_console_destructor&amp;quot; {
+constructor() {
+}
+static log() @ &amp;quot;xs_console_log&amp;quot;
+}
+Object.freeze(Console.prototype);
+export default Console;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;JS ファイルはタダのラッパーで、処理本体は C ファイルで定義しています。
+JS ファイル内で &lt;code&gt;@ ～&lt;/code&gt; と書くと、C ファイルで宣言した関数とバインディングされます。
+これは、XS 独自の実装のようです。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-c:esp/console.c&#34;&gt;#include &amp;quot;xsAll.h&amp;quot;
+#include &amp;quot;xs.h&amp;quot;
+void xs_console_destructor(void)
+{
+}
+void xs_console_log(xsMachine *the)
+{
+int argc = xsToInteger(xsArgc), i;
+for (i = 0; i &amp;lt; argc; i++) {
+char *str = xsToString(xsArg(i));
+do {
+uint8_t c = c_read8(str);
+if (!c) {
+ESP_putc(&#39;\n&#39;);
+break;
+}
+ESP_putc(c);
+str++;
+} while (1);
+}
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;manifest-json&#34;&gt;manifest.json&lt;/h3&gt;
+&lt;p&gt;最後は manifest ファイルです。
+正直言うと、ここはあまり把握できていません :sweat:&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;include&lt;/code&gt; で Moddable SDK で用意されている manifest を、ベースの manifest として読み込み、全プラットフォーム共通のモジュールとして &lt;code&gt;main&lt;/code&gt;(.js) を、&lt;code&gt;esp32&lt;/code&gt; 向けには、&lt;code&gt;./esp/console&lt;/code&gt;(.js) をロードする設定を書いています。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-json:manifest.json&#34;&gt;{
+&amp;quot;include&amp;quot;: &amp;quot;$(MODDABLE)/examples/manifest_base.json&amp;quot;,
+&amp;quot;modules&amp;quot;: {
+&amp;quot;*&amp;quot;: [
+&amp;quot;./main&amp;quot;,
+]
+},
+&amp;quot;platforms&amp;quot;: {
+&amp;quot;esp32&amp;quot;: {
+&amp;quot;modules&amp;quot;: {
+&amp;quot;*&amp;quot;: [
+&amp;quot;./esp/console&amp;quot;,
+],
+}
+}
+},
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;上の &lt;code&gt;manifest.json&lt;/code&gt; では &lt;code&gt;Timer&lt;/code&gt; クラスをロードしていませんが、&lt;code&gt;main.js&lt;/code&gt; では問題なく import することができます。
+これは、Moddable SDK に含まれるベースの manifest でロード設定がされているためです。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-json:$(MODDABLE)/examples/manifest_base.json(抜粋)&#34;&gt;{
+:
+(略)
+:
+&amp;quot;platforms&amp;quot;: {
+:
+(略)
+:
+&amp;quot;esp32&amp;quot;: {
+&amp;quot;include&amp;quot;: &amp;quot;$(BUILD)/devices/esp32/manifest.json&amp;quot;
+},
+}
+:
+(略)
+:
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-json:$(BUILD)/devices/esp32/manifest.json(抜粋)&#34;&gt;{
+:
+(略)
+:
+&amp;quot;modules&amp;quot;: {
+&amp;quot;*&amp;quot;: [
+&amp;quot;$(MODULES)/base/time/*&amp;quot;,
+&amp;quot;$(MODULES)/base/time/esp/*&amp;quot;,
+&amp;quot;$(MODULES)/base/timer/*&amp;quot;,
+&amp;quot;$(MODULES)/base/timer/mc/*&amp;quot;,
+]
+},
+&amp;quot;preload&amp;quot;: [
+&amp;quot;time&amp;quot;,
+&amp;quot;timer&amp;quot;,
+],
+:
+(略)
+:
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;ちなみに manifest についてツイートしたところ、公式アカウントからも返事がありました。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;ドキュメントは定期的にメンテナンスされそうです。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;en&#34; dir=&#34;ltr&#34;&gt;The manifest documentation (&lt;a href=&#34;https://t.co/HTYtMXR33N&#34;&gt;https://t.co/HTYtMXR33N&lt;/a&gt;) is a good place to start, but we&amp;#39;ll put a document with more details together soon. If you have any specific questions, we&amp;#39;d be happy to answer those as well.&lt;/p&gt; Moddable (@moddabletech) &lt;a href=&#34;https://twitter.com/moddabletech/status/1086084032008413184?ref_src=twsrc%5Etfw&#34;&gt;2019年1月18日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+&lt;h2 id=&#34;実行してみる&#34;&gt;実行してみる&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;manifest.json&lt;/code&gt; があるディレクトリで、&lt;code&gt;mcconfig&lt;/code&gt; コマンドを実行します。
+大抵は、XS のビルドから始まるので、書き込みが完了するまでだいぶ時間がかかると思います。&lt;/p&gt;
+&lt;p&gt;書き込みが完了すると、シリアルモニターに自動的に接続し、&lt;code&gt;console.log&lt;/code&gt; の出力内容が表示されます。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;gt; mcconfig -m -p esp32
+rm: cannot remove &#39;/root/Projects/moddable/build/tmp/esp32/release/xsProj/sdkconfig&#39;: No such file or directory
+# Running GENCONFIG...
+fatal: Not a git repository (or any of the parent directories): .git
+including /root/esp32/esp-idf/components/bootloader/Makefile.projbuild...
+:
+(略)
+:
+MONITOR
+--- idf_monitor on /dev/ttyUSB0 115200 ---
+--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H ---
+ets Jun 8 2016 00:22:57
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:2
+load:0x3fff0018,len:4
+load:0x3fff001c,len:636
+load:0x40078000,len:6192
+load:0x40080000,len:5152
+0x40080000: _iram_start at /root/esp32/esp-idf/components/freertos/xtensa_vectors.S:1685
+entry 0x40080264
+0x40080264: _Level5Vector at ??:?
+1010:1
+1510:a
+2010:2
+3010:3
+3011:b
+4010:4
+4510:c
+5010:5
+6010:6
+:
+(略)
+:
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;指定した時間間隔で、コールバック関数が実行されています！ :tada::tada::tada:
+ES2017 で入った &lt;code&gt;String.prototype.padStart&lt;/code&gt; も正常に動作しているようです。&lt;/p&gt;
+&lt;p&gt;なお、マイコンには時計がないので、&lt;code&gt;Date.now()&lt;/code&gt; は起動時からの時間を返します。&lt;/p&gt;
+&lt;h3 id=&#34;デバッグ実行&#34;&gt;デバッグ実行&lt;/h3&gt;
+&lt;p&gt;先ほど実行したコマンド &lt;code&gt;mcconfig -m -p esp32&lt;/code&gt; にデバッグ オプション &lt;code&gt;-d&lt;/code&gt; を追加すると、デバッグ ビルドを実行し、デバッグ ツールである &lt;code&gt;xsbug&lt;/code&gt; が自動で起動します。&lt;/p&gt;
+&lt;p&gt;この &lt;code&gt;xsbug&lt;/code&gt; は JavaScript コードにブレークポイントの設定や、ステップ実行、変数の内容などを表示することが
+でき、結構本格的なデバッグツールです。&lt;/p&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/237/3.png&#34; alt=&#34;3&#34;&gt;
+&lt;/center&gt;
+&lt;p&gt;今は独自の GUI ツールとして提供されているようですが、そのうち&lt;strong&gt;VSCode から拡張機能として利用できるようになると嬉しいですね。&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;いかがだったでしょうか。
+Moddable SDK を使うことで、JavaScript で書いたコードを、ESP8266/32 で動作させることができました。&lt;/p&gt;
+&lt;p&gt;&lt;u&gt;Web フロントエンドや node.js など、JavaScript を書くエンジニア人口は多いでしょうから、そういった方々も気軽にマイコン開発ができるようになりますね。&lt;/u&gt;&lt;/p&gt;
+&lt;p&gt;あとは、manifest ファイルに関するドキュメントの整備がすすんだり、もう少し簡単に環境構築ができれば、格段に開発しやすくなるのではないでしょうか。&lt;/p&gt;</description></item><item><title>Hugo&#43;GitHub Pagesで作ってるブログ運用をGitLabからCircle CI&#43;GitHubに切り替えました。</title><link>https://dotstud.io/blog/circleci-hugo-github-pages/</link><pubDate>Tue, 22 Jan 2019 12:27:36 +0900</pubDate><guid>https://dotstud.io/blog/circleci-hugo-github-pages/</guid><description>
 &lt;p&gt;こんにちは、代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
 &lt;p&gt;タイトル通り、dotstudioのブログの構成を変更したのでメモを残しておこうとおもいます。&lt;/p&gt;
 &lt;h2 id=&#34;今までの構成とデプロイの流れ&#34;&gt;今までの構成とデプロイの流れ&lt;/h2&gt;
@@ -3275,142 +3509,4 @@ index.html
 &lt;p&gt;コマンド一発で出来るので、サクッと作成したWebサイトを誰かにシェアしたり、
 ハンズオンや授業などでも使いやすいと思います。&lt;/p&gt;
 &lt;p&gt;僕も昨日知ったばかりですが今の所すごく良い印象です。&lt;/p&gt;
-&lt;p&gt;ぜひ使ってみてください。&lt;/p&gt;</description></item><item><title>【優勝賞金1000万】LINE BOOT AWARDSの勢いが止まらない！斬新アイデアが飛び出した東京ハッカソンの様子をレポート #linebootawards</title><link>https://dotstud.io/blog/line-award-hackathon-tokyo/</link><pubDate>Fri, 07 Sep 2018 02:54:08 +0900</pubDate><guid>https://dotstud.io/blog/line-award-hackathon-tokyo/</guid><description>
-&lt;p&gt;&lt;font size=&#34;4&#34;&gt;&lt;b&gt;1000万円が、獲りたいかー！！&lt;/b&gt;&lt;/font&gt;&lt;/p&gt;
-&lt;p&gt;&lt;br /&gt;
-はい。&lt;/p&gt;
-&lt;p&gt;みなさん、&lt;a href=&#34;https://www.line-community.me/awards/&#34;&gt;&lt;strong&gt;LINE BOOT AWARDS 2018&lt;/strong&gt;&lt;/a&gt;もう応募しましたか？優勝賞金1000万円、各部門賞50万円と、この機会を逃す手はありません！&lt;/p&gt;
-&lt;p&gt;……とはいえ、一人だとなかなかアイデア出しも実装も進まないことも多いですよね。&lt;/p&gt;
-&lt;p&gt;実はLINE BOOT AWARDSでは、&lt;strong&gt;LINE BOTやClovaスキル開発をブーストさせるハンズオン、ハッカソンイベントがたくさん開催&lt;/strong&gt;されているんです。&lt;/p&gt;
-&lt;p&gt;今回は8月25・26日に開催された&lt;a href=&#34;https://linedev.connpass.com/event/94831/&#34;&gt;&lt;strong&gt;LINE BOOT AWARDS 2018ハッカソン東京&lt;/strong&gt;&lt;/a&gt;の様子をレポートします。アイデアに悩んでいる方、ハッカソンに出るか迷っている方、ぜひ雰囲気を掴んで1000万円へ近く一歩を踏み出しましょう！&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://togetter.com/li/1260541&#34;&gt;当日のTweetまとめ（Togetter）&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://photos.google.com/u/0/share/AF1QipOwPbWd5YOnAyG-Et2ZGdp_Xqa2QO8U9oVmidkMlJOojiOWwUcG87J9m0HRcs_eWA?hl=ja&amp;amp;key=aUItR1oxUVVIR3N2N3pIOUtsRUVfSmJ3cFlQN1l3&#34;&gt;写真アルバム&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://linedev.connpass.com/event/94831/&#34;&gt;イベント概要ページ&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;line-boot-awardsとは&#34;&gt;LINE BOOT AWARDSとは？&lt;/h2&gt;
-&lt;p&gt;LINE株式会社が開催する、&lt;u&gt;&lt;strong&gt;優勝賞金1000万円のサービス開発コンテスト&lt;/strong&gt;&lt;/u&gt;です。&lt;/p&gt;
-&lt;p&gt;&lt;center&gt;
-&lt;a href=&#34;https://www.line-community.me/awards/&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/6521b303f9a9e01184154001a5f01de6.jpg&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;
-&lt;a href=&#34;https://www.line-community.me/awards/&#34;&gt;LINE BOOT AWARDS 2018公式サイト&lt;/a&gt;
-&lt;/center&gt;&lt;/p&gt;
-&lt;p&gt;LINE BOTやLINE Beaconを実装する「&lt;strong&gt;Messaging API&lt;/strong&gt;」、Clovaスキルを実装する「&lt;strong&gt;Clova Extensions Kit&lt;/strong&gt;」を利用したサービスを対象とし、&lt;u&gt;&lt;strong&gt;人と人、人とモノ・情報・サービスとの接点を豊かにするサービスの創出が期待できるサービスを決定するアワード&lt;/strong&gt;&lt;/u&gt;です。&lt;/p&gt;
-&lt;p&gt;優勝賞金1000万円に加えて、&lt;strong&gt;各賞金50万円の協賛テーマ賞、部門賞も豊富に用意&lt;/strong&gt;されています。&lt;/p&gt;
-&lt;p&gt;同様に賞金1000万円だった昨年の&lt;a href=&#34;https://botawards.line.me/ja/&#34;&gt;LINE BOT AWARDS&lt;/a&gt;も、大変な盛り上がりを見せていましたね！&lt;/p&gt;
-&lt;p&gt;LINE BOOT AWARDS関連イベントの情報はこちらから確認できます。地方での開催も多いので各地域の方も要チェック！&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://linedev.connpass.com/&#34;&gt;&lt;strong&gt;LINE BOOT AWARDS 2018 イベント募集ページ | connpass&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;協賛テーマ賞夏祭-で賞金がグッと近づくハッカソン&#34;&gt;「協賛テーマ賞夏祭」で賞金がグッと近づくハッカソン！&lt;/h2&gt;
-&lt;p&gt;今回のハッカソンは、&lt;strong&gt;4つの企業・団体による協賛テーマ&lt;/strong&gt;にフォーカス。LINE BOOT AWARDSでは協賛テーマ賞として&lt;strong&gt;賞金各50万円&lt;/strong&gt;が用意されています……！&lt;/p&gt;
-&lt;p&gt;4つの協賛テーマはこちら。（概要は&lt;a href=&#34;https://linedev.connpass.com/event/94831/&#34;&gt;イベントページ&lt;/a&gt;より抜粋）&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.line-community.me/awards/prize/1&#34;&gt;OMRON connect賞&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;blockquote&gt;
-&lt;p&gt;体重や血圧、歩数などのバイタルデータの計測と記録が習慣となり、健康の増進や維持に役立つサービス。はかる。気づく。変わる。という好循環を創出できるようなアイディアを評価します。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.line-community.me/awards/prize/2&#34;&gt;Xperia Ear Duo賞&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Xperia Ear Duo のような ヒアラブルデバイスでの利用を想定して、徒歩・電車・バスなど移動中のシーンにおいて、日常生活を便利にしたり、ユーザーがワクワクするような体験を行うことができる、サービスを表彰します。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.line-community.me/awards/prize/3&#34;&gt;RIZAP賞&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;blockquote&gt;
-&lt;p&gt;RIZAPが提供する美しく健康的なボディメイクを体験できる・体験したくなるようなサービスやトレーナーとのコミュニケーションやトレーニング・食事の管理などをより便利にして、RIZAPのプログラムをサポートする​など、より多くの人々にとってRIZAP自体やその考え方などが身近になるようなサービスを表彰します。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.line-community.me/awards/prize/4&#34;&gt;鎌倉市SDGs未来都市賞&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;blockquote&gt;
-&lt;p&gt;鎌倉市はSDGs未来都市及びSDGsモデル事業に採択されました。SDGsは国連サミットで採択された持続可能な開発のための国際目標です。SDGs未来都市かまくらの実現にふさわしい作品を表彰し、実証に向け協力します。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;ハッカソン当日は実際の製品の提供や各企業・団体のサポートが実施され、各データやサービスを掛け合わせた新しい活用法が次々と登場しました！&lt;/p&gt;
-&lt;h2 id=&#34;発表作品をドドっと紹介&#34;&gt;発表作品をドドっと紹介&lt;/h2&gt;
-&lt;p&gt;2日間かけてチーム結成、アイデア出しから開発まで実施され、計9作品が誕生しました。さっそく&lt;strong&gt;発表作品の紹介&lt;/strong&gt;にいってみたいと思います！&lt;/p&gt;
-&lt;p&gt;声の特性をうまく使ったClovaスキルや、LINE BeaconとLINE BOTの連携アイデアなど、注目ですよ〜！&lt;/p&gt;
-&lt;h3 id=&#34;会場投票で圧倒的人気-参加者も巻き込んだ-my-training&#34;&gt;会場投票で圧倒的人気！参加者も巻き込んだ『My Training』&lt;/h3&gt;
-&lt;p&gt;会場でいきなり始まるトレーニング、これは一体……？！
-&lt;img src=&#34;https://i.gyazo.com/9f4bf6edccb7213964feb3ab78654d6b.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;中村氏による『My Training』は、Clovaから手軽にエクササイズを始められるトレーニングサポートスキルです。Clovaが「今日のトレーニングを始めるぜ」と、トレーニングの指定とカウントを行ってくれます。&lt;/p&gt;
-&lt;p&gt;聞きなれないトレーニング名が飛び出しますが、そんなときは連携されたLINE BOT側の動画で正しい方法をチェックできる万全っぷり。&lt;/p&gt;
-&lt;p&gt;ちなみに&lt;strong&gt;何種目実施されるかはClova次第&lt;/strong&gt;で、駆り出された若者たちはひいひいしていました……。&lt;/p&gt;
-&lt;p&gt;&lt;center&gt;
-&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;スパルタwww &lt;a href=&#34;https://twitter.com/hashtag/linebootawards?src=hash&amp;amp;ref_src=twsrc%5Etfw&#34;&gt;#linebootawards&lt;/a&gt; &lt;a href=&#34;https://t.co/xLE2gMlG7G&#34;&gt;pic.twitter.com/xLE2gMlG7G&lt;/a&gt;&lt;/p&gt; ちゃんとく( ˙꒳​˙ ) (@tokutoku393) &lt;a href=&#34;https://twitter.com/tokutoku393/status/1033648831731097600?ref_src=twsrc%5Etfw&#34;&gt;2018年8月26日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
-&lt;/center&gt;&lt;/p&gt;
-&lt;p&gt;会場全員による全員投票では、&lt;strong&gt;圧倒的人気で見事オーディエンス賞を受賞&lt;/strong&gt;！
-&lt;img src=&#34;https://i.gyazo.com/49f9f9cd7ab1729290a08bb12793b8b9.jpg&#34; alt=&#34;Image from Gyazo&#34; /&gt;
-公開された暁には、私も頑張ってトレーニングしたいと思います…多分……。&lt;/p&gt;
-&lt;h3 id=&#34;コミュ障でも大丈夫-会話を助ける-エージェントフレンズ&#34;&gt;コミュ障でも大丈夫？会話を助ける『エージェントフレンズ』&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/12fb35045ee33584544d230db894fd63.jpg&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;初対面の人との会話に困った……。そんな時に助けてくれるのが『エージェントフレンズ』です。&lt;/p&gt;
-&lt;p&gt;BOTに「ヘルプ」と助けを求めると、&lt;strong&gt;オススメの話題を耳元で囁いて教えてくれます&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/890dbe40d98dc4c3ffb110b70955114d.jpg&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;Xperia Ear DuoのLINE未読メッセージ読み上げ機能を活用した連携で、装着感がスパイっぽくてかっこいいからエージェントなんだそう。&lt;/p&gt;
-&lt;h3 id=&#34;オープンな意見交換-パブリック行政&#34;&gt;オープンな意見交換『パブリック行政』&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/333b05b32364e860b4040365adfbc2e5.jpg&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;街のちょっとしたことを行政に伝えたいけど、市役所に行って目安箱に意見箱を入れて、ってすごく大変ですよね。『パブリック行政』を使うと、&lt;strong&gt;LINEで簡単に行政に意見を投書&lt;/strong&gt;できちゃいます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/0368d9fd943cfff357dc2ab66a553cc3.jpg&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;他の人が投書した意見に賛成・反対をリアクションでき、行政側も要望の高い意見を見つけやすくなる一石二鳥のBOTサービスです。&lt;/p&gt;
-&lt;p&gt;行政からの最新情報やアンケート配信機能もあり、オープンで距離の近い行政が実現できそうですね！&lt;/p&gt;
-&lt;h3 id=&#34;病院に行く前に毎日簡単チェック-my-doctor&#34;&gt;病院に行く前に毎日簡単チェック『My Doctor』&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/8d3579f20283813950b7c5f141f46e8f.jpg&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;「病院に行くほどではないけど、なんだか体調が悪いなあ」というときは『My Doctor』で簡単問診！&lt;/p&gt;
-&lt;p&gt;BOTでもClovaでも、&lt;strong&gt;一問一答形式で手軽に体調チェックを受けることができる&lt;/strong&gt;サービスです。&lt;/p&gt;
-&lt;p&gt;バイタルデータを家族間で共有して、献立に役立てたりダイエットを応援したりと活用できるかも。&lt;/p&gt;
-&lt;h3 id=&#34;手ぶらでも観光を楽しく便利に-鎌倉マスターくらちゃん&#34;&gt;手ぶらでも観光を楽しく便利に『鎌倉マスターくらちゃん』&lt;/h3&gt;
-&lt;p&gt;観光はしたいけど、事前に情報を調べるのは面倒。たくさんのお土産を抱えて帰るのも大変。そんなときは『鎌倉マスターくらちゃん』で手ぶら観光を楽しみましょう！&lt;/p&gt;
-&lt;p&gt;&lt;center&gt;
-&lt;img src=&#34;https://i.gyazo.com/a6c70a0b5d8ca946ed76170b4ccefbaa.jpg&#34; alt=&#34;Image from Gyazo&#34; /&gt;
-&lt;font color=&#34;grey&#34;&gt;▲デモは「大仏に近づいた時」&lt;/font&gt;
-&lt;/center&gt;&lt;/p&gt;
-&lt;p&gt;大仏など&lt;strong&gt;観光スポットに近づくとBeaconに応じてXperia Ear Duoからガイド音声&lt;/strong&gt;が流れ、BOTのリマインドで&lt;strong&gt;帰りの時間も逃さない&lt;/strong&gt;ように。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/3415c306570b89866bf67eec62149402.png&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;帰りがけに&lt;strong&gt;LINE Payでお土産を買って自宅に届ける&lt;/strong&gt;こともできちゃいます。楽しさはそのままに手ぶら＆キャッシュレス観光、最高ですね……！&lt;/p&gt;
-&lt;h3 id=&#34;心の音を聞く-heart-beat-music-recommender&#34;&gt;心の音を聞く『Heart Beat Music Recommender』&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/2e7f5ca5ae6b94e0ec1caefadbcf30b6.jpg&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;その時々に合わせた心の音を聞いてみよう、という『Heart Beat Music Recommender』では&lt;strong&gt;心拍数の速さからClovaが今の気持ちにぴったりの曲をレコメンド&lt;/strong&gt;してくれます。&lt;/p&gt;
-&lt;p&gt;心拍数が低い時に「気分が高まる曲」や高い時に「落ち着く曲」をレコメンドしてもらうことも可能。今後は美術館や遊園地などスポットに応じた選曲も考えているそう。&lt;/p&gt;
-&lt;p&gt;&lt;center&gt;
-&lt;img src=&#34;https://i.gyazo.com/1604637516aff92dc8da317b22459d55.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;
-&lt;font color=&#34;grey&#34;&gt;▲ 心拍数が高いときのレコメンドを試すデモ&lt;/font&gt;
-&lt;/center&gt;&lt;/p&gt;
-&lt;p&gt;先日Clova連携ハンズオンが開催された&lt;a href=&#34;https://obniz.io/&#34;&gt;obniz&lt;/a&gt;で心拍センサとの連携を簡単に実装できたとのことで、バイタルデータとの連携アイデアが広がりますね！&lt;/p&gt;
-&lt;h3 id=&#34;鎌倉のビッグデータを目で見てみよう-kamakura-signage&#34;&gt;鎌倉のビッグデータを目で見てみよう。『Kamakura Signage』&lt;/h3&gt;
-&lt;p&gt;『Kamakura Signage』では&lt;strong&gt;鎌倉市に関するデータを目で見て楽しむ&lt;/strong&gt;ことができます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/3ec748bcac8e248c2eac8ecfe865a335.jpg&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;データがビジュアライズされ、近づいていくとBeaconが反応して該当データを拡大して参照できます。新しいビッグデータの活用法として流行るかも？&lt;/p&gt;
-&lt;h3 id=&#34;体重を簡単管理-俺の体重計&#34;&gt;体重を簡単管理『俺の体重計』&lt;/h3&gt;
-&lt;p&gt;毎日の体重を管理する俺のためのサービス、『俺の体重計』！&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/8d5204e88291a32653f38fbb41472ce3.jpg&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;Xperia Ear Duoなら外の音も聞こえるので、&lt;strong&gt;ジョギング中の消費データをリアルタイムにお知らせするのにも相性がいい&lt;/strong&gt;そう。&lt;/p&gt;
-&lt;p&gt;耳で確認できる通知と、目で見れるLINEメッセージ通知で、運動中のログ管理も簡単そうですね！&lt;/p&gt;
-&lt;h3 id=&#34;晒される恐怖で結果にコミット-コミットフレンズ&#34;&gt;晒される恐怖で結果にコミット！？『コミットフレンズ』&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/5420e31a568c618e68165ec48e9f2290.jpg&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;痩せたいけど一人だと心が折れて続かない……そんなときは『コミットフレンズ』で友人の力を借りましょう！Clovaとの会話で日々のダイエット記録をつけつつ、&lt;strong&gt;達成度合いがなんとLINEグループでシェア&lt;/strong&gt;されちゃいます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/bac5742a1c3d8cf7d763b6ac91b829bb.jpg&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;自分にプレッシャーをかけることで、結果にコミットできる仕組みなんだとか。それでもコミットできない方には……絶対に痩せられると噂の&lt;a href=&#34;https://www.rizap.jp/&#34;&gt;&lt;strong&gt;あのサービス&lt;/strong&gt;&lt;/a&gt;をオススメしてくれます。&lt;/p&gt;
-&lt;h2 id=&#34;活用できるapiやインフラも豊富&#34;&gt;活用できるAPIやインフラも豊富&lt;/h2&gt;
-&lt;p&gt;以上9作品、いかがでしたでしょうか？LINEの各サービスと協賛テーマを絡めた新しいアイデアがたくさん登場しました。&lt;/p&gt;
-&lt;p&gt;LINE BOOT AWARDSでは協賛テーマ以外にも、LINE BOTやClovaスキル開発に活用できるAPI / インフラが各企業から提供されています。&lt;/p&gt;
-&lt;p&gt;&lt;center&gt;
-&lt;a href=&#34;https://www.line-community.me/awards/apis&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/1afe520b930d12c4f6b297188576b999.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;
-&lt;a href=&#34;https://www.line-community.me/awards/apis&#34;&gt;API / インフラ一覧&lt;/a&gt;
-&lt;/center&gt;&lt;/p&gt;
-&lt;p&gt;LINEが提供しているサービスだけでもLINE BOT、CEKに加えて、LINE Beacon、LINE Notify、LINE Pay……とかなりいろいろなことができそうです。ノンプログラミングでLINE BOTを作成できるサービスや、手軽にハードウェア実装できる製品が提供されているのも面白いですね。&lt;/p&gt;
-&lt;p&gt;時間勝負のハッカソンやアワードでは、手軽に実装できる各サービスをぜひ活用してみてください！&lt;/p&gt;
-&lt;h2 id=&#34;アイデアとハックを加速させるハッカソン環境&#34;&gt;アイデアとハックを加速させるハッカソン環境&lt;/h2&gt;
-&lt;p&gt;チームビルディングからアイデア出し、開発までと2日間で駆け抜けるハッカソンですが、さまざまなアイデアに富んだサービスが生まれました。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/ff89e647e9805e541591e9b06f0c0a18.jpg&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;ハッカソンでは、アイデアの研鑽、仲間探し、プロトタイプ開発と、&lt;strong&gt;サービス開発に必要な要素を集めて加速させる&lt;/strong&gt;ことができます。一人でなかなか進められないな〜という方は、エンジニア以外の方も大丈夫なのでぜひぜひ参加してみましょう！&lt;/p&gt;
-&lt;p&gt;9/22〜23にもまた&lt;a href=&#34;https://linedev.connpass.com/event/97817/&#34;&gt;東京ハッカソン&lt;/a&gt;があるみたいです。熊本、金沢、奈良、大阪、鎌倉、京都、と地方展開も豊富なので要注目ですね！&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;1000万円とるぞー！！&lt;/strong&gt;&lt;/p&gt;
-&lt;style&gt;
-blockquote &gt; p {
-font-size: 90%;
-}
-&lt;/style&gt;</description></item></channel></rss>
+&lt;p&gt;ぜひ使ってみてください。&lt;/p&gt;</description></item></channel></rss>
