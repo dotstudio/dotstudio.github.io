@@ -1,4 +1,330 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Try on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/categories/try/</link><description>Recent content in Try on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Thu, 24 Jan 2019 00:51:35 +0900</lastBuildDate><atom:link href="/categories/try/" rel="self" type="application/rss+xml"/><item><title>Moddable SDKを使ってJavaScriptでIoT開発してみた</title><link>https://dotstud.io/blog/developed-iot-using-moddable/</link><pubDate>Thu, 24 Jan 2019 00:51:35 +0900</pubDate><guid>https://dotstud.io/blog/developed-iot-using-moddable/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Try on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/categories/try/</link><description>Recent content in Try on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Mon, 28 Jan 2019 00:51:35 +0900</lastBuildDate><atom:link href="/categories/try/" rel="self" type="application/rss+xml"/><item><title>ArduinoでTwitter連携！愛しのぬいぐるみトンピーちゃんに命を吹き込んでみた</title><link>https://dotstud.io/blog/arduino-nodejs-twitter-connect/</link><pubDate>Mon, 28 Jan 2019 00:51:35 +0900</pubDate><guid>https://dotstud.io/blog/arduino-nodejs-twitter-connect/</guid><description>
+&lt;p&gt;皆さん、大好きなぬいぐるみが動き出したらいいなと思ったこと、ありませんか？&lt;/p&gt;
+&lt;p&gt;今回は私の愛すべきお友達「トンピーちゃん」に命を吹き込むべく、プログラミング初心者の私がArduinoとTwitterの連携に挑戦してみました！&lt;/p&gt;
+&lt;p&gt;&lt;font size=&#34;4&#34;&gt;こちらです！！&lt;/font&gt;
+&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/721a8190-3ffc-8bca-c4b3-774ee58d45e9.gif&#34; alt=&#34;ezgif.com-video-to-gif.gif&#34; /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;今回やること&#34;&gt;今回やること&lt;/h2&gt;
+&lt;h3 id=&#34;実装の構成&#34;&gt;実装の構成&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&#34;https://gyazo.com/a75b45dc702b385f5e32fcd3e39c5b64&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/a75b45dc702b385f5e32fcd3e39c5b64.png&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;ざっくりの構成です。Node.jsでTwitterの「#tonpy」というハッシュタグを監視し、「move #tonpy」「stop #tonpy」というツイートがあったらArduinoを経由してトンピーちゃんが動いたり止まったりします。&lt;/p&gt;
+&lt;h3 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h3&gt;
+&lt;h4 id=&#34;こぐまのトンピーちゃん&#34;&gt;■こぐまのトンピーちゃん&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/210df088-f5f0-6f8a-e9ee-2a63f06e2364.jpeg&#34; alt=&#34;トンピー.jpg&#34; /&gt;
+愛用のトンピーちゃんです。乾電池を入れるとピーヒャラドンドンします。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;購入: &lt;a href=&#34;https://www.amazon.co.jp/%E3%82%A4%E3%83%AF%E3%83%A4-%E3%81%93%E3%81%90%E3%81%BE%E3%81%AE%E3%83%88%E3%83%B3%E3%83%94%E3%83%BC/dp/B0002U3OBA&#34;&gt;Amazon.co.jp&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;arduino-uno&#34;&gt;■Arduino Uno&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/c26d230d-e320-b73d-f15f-32d813e1294f.jpeg&#34; alt=&#34;Arduino Uno.jpg&#34; /&gt;
+Arduino Unoは2010年に発売されたArduinoで、&lt;a href=&#34;https://store.arduino.cc/usa/arduino-uno-rev3&#34;&gt;Arduinoの公式サイト&lt;/a&gt;にも「&lt;strong&gt;電子工作初心者に最適&lt;/strong&gt;」と書いてあったのでこちらに決めました。&lt;/p&gt;
+&lt;p&gt;購入にあたっては「Arduino 初心者」と調べヒットした「&lt;a href=&#34;https://www.amazon.co.jp/%E3%82%B9%E3%82%A4%E3%83%83%E3%83%81%E3%82%B5%E3%82%A4%E3%82%A8%E3%83%B3%E3%82%B9-SSCI-GettingStartedArduinoKit-Arduino%E3%82%92%E3%81%AF%E3%81%98%E3%82%81%E3%82%88%E3%81%86%E3%82%AD%E3%83%83%E3%83%88/dp/B0025Y6C5G/ref=sr_1_fkmr1_2?ie=UTF8&amp;amp;qid=1544321570&amp;amp;sr=8-2-fkmr1&amp;amp;keywords=arduino+%E3%82%B9%E3%82%BF%E3%83%BC%E3%83%88%E3%82%AD%E3%83%83%E3%83%88&#34;&gt;Arduinoをはじめようキット&lt;/a&gt;」を購入しました。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/d7099cb0-97aa-8ff1-4e3d-b959e8139fb4.jpeg&#34;&gt;
+─ Arduinoをはじめようキット
+&lt;/center&gt;
+Arduino Unoの他にブレッドボードや抵抗など電子工作を始めるにあたり必要なもの一式が揃っているため、すぐに始める事ができます。&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;fet-pch-mosfet-2sjs527l-e-60v5a&#34;&gt;■FET（Pch MOSFET 2SJS527L-E 60V5A）&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/88510174-eed9-e286-5343-3deeb08a7884.jpeg&#34; alt=&#34;I-08315.jpg&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;FETはロードスイッチとも呼ばれ、簡単にいうと外部からの電圧によって電流の流れを制御できるスイッチのようなもののようです。小さな電力で動作させる事ができます。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/#回路を作成&#34;&gt;回路を作成&lt;/a&gt;で説明しますが、FETには「Pチャネル」と「Nチャネル」の2種類あります。今回はNチャネルのFETを利用します。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;購入: &lt;a href=&#34;http://akizukidenshi.com/catalog/g/gI-07145/&#34;&gt;秋月電子&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;node-jsをインストールしたpc&#34;&gt;■Node.jsをインストールしたPC&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/efcdf34b-504e-cc68-125a-0acadd815510.jpeg&#34; alt=&#34;IMG_9204.jpg&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;今回はNode.jsでプログラムを動かします。下記記事を参考にインストールしてみてください！&lt;/p&gt;
+&lt;section class=&#34;link&#34; id=&#34;136&#34;&gt;
+&lt;div class=&#34;link_content&#34;&gt;
+&lt;a href=&#34;https://dotstud.io/blog/nodejs-install-use-nodebrew/&#34;&gt;&lt;/a&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/136/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
+&lt;/div&gt;
+&lt;div class=&#34;link_content&#34;&gt;
+&lt;div class=&#34;link_detail&#34;&gt;
+&lt;div class=&#34;link_title&#34;&gt;
+Node.jsを始めよう！nodebrewを使って5分で環境構築
+&lt;/div&gt;
+&lt;div class=&#34;link_date&#34;&gt;
+2017-12-15
+&lt;/div&gt;
+&lt;div class=&#34;link_desc&#34;&gt;
+nodebrewを使ったNode.jsのインストール方法をまとめました。
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/section&gt;
+&lt;/section&gt;
+&lt;ul&gt;
+&lt;li&gt;筆者PC: mac OS HighSierra バージョン10.13.6&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;Node.js: v10.10.0&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;その他&#34;&gt;■その他&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/eb369434-a5ff-e44a-c7b9-02a065030098.jpeg&#34; alt=&#34;IMG_9206.jpg&#34; /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://dotstud.io/docs/breadboard/&#34;&gt;ブレッドボード&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://localhost:1313/docs/jumperwire/#%E3%83%9F%E3%83%8E%E3%83%A0%E3%82%B7%E3%82%AF%E3%83%AA%E3%83%83%E3%83%97-%E3%83%AF%E3%83%8B%E5%8F%A3&#34;&gt;ワニ口クリップ&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;抵抗（今回は220Ω）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;トンピーちゃんを解体&#34;&gt;トンピーちゃんを解体&lt;/h2&gt;
+&lt;p&gt;まずはトンピーちゃんの導線を確認するため、少し解体します。
+&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/69ccd688-afb6-0715-124a-44d886fe3178.jpeg&#34; alt=&#34;IMG_6786.jpg&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/84c4fcd7-8c65-a0dc-1a84-ee75b5c2ef48.jpeg&#34; alt=&#34;IMG_9205.jpg&#34; /&gt;
+電池の部分を取り外してみました。すると、導線は電池部分と本体でパックリ分かれている事が確認できました。今回はその部分にArduino Unoを繋げば回路の開/閉が制御できそうですね。&lt;/p&gt;
+&lt;h2 id=&#34;arduino-unoとトンピーちゃんを連携&#34;&gt;Arduino Unoとトンピーちゃんを連携&lt;/h2&gt;
+&lt;h3 id=&#34;回路を作成&#34;&gt;回路を作成&lt;/h3&gt;
+&lt;p&gt;Arduino Unoから直接ON/OFFを制御しようとすると、電流が少なく回路を開/閉できませんでした。そこでArduino Unoとトンピーちゃんの間に&lt;strong&gt;FETを挿入&lt;/strong&gt;します。&lt;/p&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/230/fet.png&#34; alt=&#34;fet&#34;&gt;
+&lt;/center&gt;
+&lt;p&gt;FETは、電圧の加え方の違いによって「Pチャネル」と「Nチャネル」の2種類に分かれます。今回はNチャネルのFETを利用します。&lt;/p&gt;
+&lt;p&gt;また、回路の「+側」にFETを繋ぐことを「ハイサイド（スイッチ）」、-側に繋ぐことを「ローサイド（スイッチ）」と呼称します。今回はNチャネルなので、ローサイドにFETを繋ぎます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/d32c3f6f4b1de908ceced242cc2ba7f4.png&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;最終的に上記のような回路図になりました。&lt;/p&gt;
+&lt;h3 id=&#34;arduino-unoにプログラムを書き込む&#34;&gt;Arduino Unoにプログラムを書き込む&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/b544f541-a5ac-ee97-18a3-de3963210c92.png&#34; alt=&#34;スクリーンショット 2018-12-18 12.35.58.png&#34; /&gt;
+ArduinoをUSBケーブルでPCに繋ぎ、アプリケーションでArduino IDEを開きます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/da16043a-121e-52e2-e395-3121a8a3e48f.png&#34; alt=&#34;スクリーンショット 2018-12-16 15.10.09.png&#34; /&gt;
+ファイル→新規ファイルを選択します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/2a42d894-497d-a0c4-5573-6a4c148fc5fe.png&#34; alt=&#34;スクリーンショット 2018-12-16 15.09.45.png&#34; /&gt;
+ツール→ボード→繋いだArduino（今回はArduino Uno）を選択します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/9f5d63e2-454b-c637-ef5d-07550cccf8d5.png&#34; alt=&#34;スクリーンショット 2018-12-16 15.11.33.png&#34; /&gt;
+ツール→シリアルポート→接続したArduinoを選択します。&lt;/p&gt;
+&lt;p&gt;下記コードを新規ファイルにコピー&amp;amp;ペーストします。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;// pins
+const int tonpyPin = 2;
+void setup() {
+// initialize serial:
+Serial.begin(9600);
+// make the pins outputs:
+pinMode(tonpyPin, OUTPUT);
+}
+void loop() {
+// if there&#39;s any serial available, read it:
+while (Serial.available() &amp;gt; 0) {
+char value = Serial.read();
+if (value == &#39;p&#39;) {
+digitalWrite(tonpyPin, HIGH);
+} else if (value == &#39;q&#39;){
+digitalWrite(tonpyPin, LOW);
+} else{
+digitalWrite(tonpyPin, LOW);
+}
+Serial.println(value);
+}
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/8ec32eee-c610-137c-febd-9408f22db6e1.png&#34; alt=&#34;スクリーンショット 2018-12-10 9.25.26.png&#34; /&gt;
+左上にある「→」ボタンを押してマイコンボードに書き込みます。&lt;/p&gt;
+&lt;p&gt;これでArduino Unoからの信号（p: スイッチON、q: スイッチOFF）でトンピーちゃんが動く/止まるようになりました。&lt;/p&gt;
+&lt;p&gt;これをツイートと連動できれば完成です！&lt;/p&gt;
+&lt;h2 id=&#34;node-jsのプログラム&#34;&gt;Node.jsのプログラム&lt;/h2&gt;
+&lt;p&gt;ハッシュタグ「#tonpy」を取得し、さらに「move」「stop」のツイートがあったらArduino Unoに送るプログラムを作成します。&lt;/p&gt;
+&lt;h3 id=&#34;twitter-apiの準備&#34;&gt;Twitter APIの準備&lt;/h3&gt;
+&lt;p&gt;API使用には&lt;a href=&#34;https://developer.twitter.com/&#34;&gt;Twitter Developer&lt;/a&gt;へ登録する必要があります。登録の際、用途など英文で書く部分がありました（筆者はGoogle翻訳を駆使しました）。&lt;/p&gt;
+&lt;p&gt;手順については下記の記事に詳しく書かれており、そちらに沿って登録しました。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;参考: &lt;a href=&#34;https://qiita.com/kngsym2018/items/2524d21455aac111cdee&#34;&gt;Twitter API 登録 (アカウント申請方法) から承認されるまでの手順まとめ　※2018年9月時点の情報&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;tweetを取得するnode-jsのプログラムを作成&#34;&gt;Tweetを取得するNode.jsのプログラムを作成&lt;/h3&gt;
+&lt;h4 id=&#34;ディレクトリを用意&#34;&gt;■ディレクトリを用意&lt;/h4&gt;
+&lt;p&gt;任意の保存場所にフォルダを用意します。今回はDesktopにTonpyフォルダを作りました。&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;jsファイルを作成&#34;&gt;■JSファイルを作成&lt;/h4&gt;
+&lt;p&gt;作成したフォルダに任意の名前のJSファイルを用意します。今回は「app.js」としました。&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;twitter-apiを使用するモジュールのインストール&#34;&gt;■Twitter APIを使用するモジュールのインストール&lt;/h4&gt;
+&lt;p&gt;Node.jsでTwitter APIが使用できるよう&lt;a href=&#34;https://www.npmjs.com/package/twitter&#34;&gt;Twitterモジュール&lt;/a&gt;をnpmでインストールします。ターミナルで作成したフォルダを開き、下記コマンドを叩きます。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ npm install twitter
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;これでNode.jsでTwitter APIが使用できるようになりました。&lt;/p&gt;
+&lt;p&gt;実際に使用する際はJSファイル内で最初に下記のように書くとTwitter APIが呼び出されます。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;const Twitter = require(&#39;twitter&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;ツイートを取得するプログラムを作成&#34;&gt;■ツイートを取得するプログラムを作成&lt;/h4&gt;
+&lt;p&gt;TwitterAPIには「REST API」と「Streaming API」の2種類があります。&lt;/p&gt;
+&lt;p&gt;REST APIはエンドポイントへリクエストして初めて結果が得られるものに対して、Streaming APIはレートのリミットなくツイートを受信し続ける事ができます。&lt;/p&gt;
+&lt;p&gt;今回はツイートを常に監視し該当のツイートがあったら結果を取得する、という事がしたいので&lt;strong&gt;Streaming API&lt;/strong&gt;を使用します。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;const twitter = require(&amp;quot;twitter&amp;quot;);
+const fs = require(&amp;quot;fs&amp;quot;);
+const client = new twitter({
+consumer_key: &#39;&#39;,//Dev Accountで取得したkeyを書く
+consumer_secret: &#39;&#39;,
+access_token_key: &#39;&#39;,
+access_token_secret: &#39;&#39;,
+});
+let tweetText =&#39;w&#39;;
+client.stream(&#39;statuses/filter&#39;, {track:&amp;quot;#tonpy &amp;quot;}, (stream) =&amp;gt; {//Streaming APIを呼び出す
+stream.on(&#39;data&#39;, (tweet) =&amp;gt; {
+tweetText = tweet.text;
+(~tweetText.indexOf(&#39;move&#39;)) ? (tweetText = &#39;p&#39;) : (~tweetText.indexOf(&#39;stop&#39;)) ? (tweetText = &#39;q&#39;) : (tweetText = &#39;w&#39;);
+});
+stream.on(&#39;error&#39;, (error) =&amp;gt; {//エラー
+console.error(`Error: ${error.message}`);
+stream.destroy();
+});
+});
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;ツイートを取得するNode.jsのプログラムが完成しました。&lt;/p&gt;
+&lt;h3 id=&#34;arduinoに送るプログラムを作成&#34;&gt;Arduinoに送るプログラムを作成&lt;/h3&gt;
+&lt;h4 id=&#34;シリアル通信をするモジュールのインストール&#34;&gt;■シリアル通信をするモジュールのインストール&lt;/h4&gt;
+&lt;p&gt;PCとArduino間でシリアル通信をするために、シリアルポートでシリアル通信を行うモジュールもnpmでインストールします。&lt;/p&gt;
+&lt;p&gt;シリアルポートとは&lt;strong&gt;シリアル通信を行う時の接続口&lt;/strong&gt;のことで、今回はArduinoと接続したPCのUSBポートにあたります。&lt;/p&gt;
+&lt;p&gt;ターミナルで下記コマンドを叩きます。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ npm install serialport
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;これでNode.jsでシリアルポートを制御できるようになりました。&lt;/p&gt;
+&lt;p&gt;使用する際はJSファイル内で最初に下記のように呼び出します。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;const Serialport = require(&#39;serialport&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;シリアルポートの名前を調べる&#34;&gt;■シリアルポートの名前を調べる&lt;/h4&gt;
+&lt;p&gt;プログラム内では、USBポートに挿しているArduino Uno（ttyデバイス）を指定します。&lt;/p&gt;
+&lt;p&gt;ターミナルで下記コマンドを打ち、PCのシリアルポートに接続されている機器を表示します。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ ls -l /dev/tty.*
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Auduino Unoを挿し、もう一度先ほどのコマンドを打ちます。新しく出てきたttyデバイス名がArduino Unoです。&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;arduino-unoに送るnode-jsのプログラムを作成&#34;&gt;■ Arduino Unoに送るNode.jsのプログラムを作成&lt;/h4&gt;
+&lt;p&gt;下記がシリアル通信するためのコードです。ツイートを取得するためのJSファイルの続きに記述してください。&lt;/p&gt;
+&lt;p&gt;1行目の&lt;code&gt;/dev/tty.xxx&lt;/code&gt;には上記のシリアルポート名を記入してください。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;const port = new SerialPort(&#39;/dev/tty.xxx&#39;,{
+baudRate: 9600//baudRate:9600は1秒に最大9600ビットを送信するという意味
+});
+port.write(&#39;main screen turn on&#39;, function(err) {
+if (err) {
+return console.log(&#39;Error on write: &#39;, err.message);
+}
+console.log(&#39;message written&#39;);
+});
+port.on(&#39;open&#39;, () =&amp;gt; {
+console.log(&#39;Serial open.&#39;);
+setInterval(write, 1000);
+});
+const write = () =&amp;gt; {
+console.log(`Input to Arduino: ${tweetText}`);
+port.write(tweetText, (error) =&amp;gt; {
+if(error) {
+console.error(`Error: ${error.message}`);
+}
+});
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;これでツイート情報を取得し、Arduinoに信号を送る事ができるようになりました。&lt;/p&gt;
+&lt;h3 id=&#34;完成コード&#34;&gt;完成コード&lt;/h3&gt;
+&lt;p&gt;ツイートを取得するプログラム、Arduinoを制御するプログラムを合わせた完成コードは下記のようになります。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;//-----------------------------------------------
+// twitterからツイートを取得
+//-----------------------------------------------
+const twitter = require(&amp;quot;twitter&amp;quot;);
+const client = new twitter({
+consumer_key: &#39;&#39;,//Dev Accountで取得したkeyを書く
+consumer_secret: &#39;&#39;,
+access_token_key: &#39;&#39;,
+access_token_secret: &#39;&#39;,
+});
+let tweetText =&#39;w&#39;;
+client.stream(&#39;statuses/filter&#39;, {track:&amp;quot;#tonpy &amp;quot;}, (stream) =&amp;gt; {
+stream.on(&#39;data&#39;, (tweet) =&amp;gt; {
+tweetText = tweet.text;
+(~tweetText.indexOf(&#39;move&#39;)) ? (tweetText = &#39;p&#39;) : (~tweetText.indexOf(&#39;stop&#39;)) ? (tweetText = &#39;q&#39;) : (tweetText = &#39;w&#39;);
+});
+stream.on(&#39;error&#39;, (error) =&amp;gt; {
+console.error(`Error: ${error.message}`);
+stream.destroy();
+});
+});
+//-----------------------------------------------
+// Node.jsからArduinoに送信
+//----------------------------------------------
+const SerialPort = require(&#39;serialport&#39;);
+const port = new SerialPort(&#39;/dev/tty.xxx&#39;,{
+baudRate: 9600
+});
+port.on(&#39;open&#39;, () =&amp;gt; {
+console.log(&#39;Serial open.&#39;);
+setInterval(write, 1000);
+});
+port.on(&#39;data&#39;, (data) =&amp;gt; {
+console.log(`Data from Arduino: ${data}`);
+});
+const write = () =&amp;gt; {
+console.log(`Input to Arduino: ${tweetText}`);
+port.write(tweetText, (error) =&amp;gt; {
+if(error) {
+console.error(`Error: ${error.message}`);
+}
+});
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;node-jsを実行する&#34;&gt;■Node.jsを実行する&lt;/h4&gt;
+&lt;p&gt;Node.jsは、ファイルのある場所で下記コマンドで実行します。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ node app.js
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;app.js&lt;/code&gt;部分は、ご自身が作成したファイル名に置き換えてください。「Serial open」がターミナル上に表示されたら無事実行されています。&lt;/p&gt;
+&lt;h2 id=&#34;動かしてみる&#34;&gt;動かしてみる&lt;/h2&gt;
+&lt;p&gt;Node.jsを起動しながら、ツイートしてみましょう……。「&lt;strong&gt;#tonpy move&lt;/strong&gt;」!!!!!
+&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/9c8c2611-d9b2-e7dd-3710-8d2011c2b424.gif&#34; alt=&#34;ezgif.com-video-to-gif.gif&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;う、動いたーーーー！！！（少々タイムラグがありますが……。）&lt;/p&gt;
+&lt;p&gt;初めてのIoTとっっても楽しかったです！電子工作やNode.jsの勉強にもなり一石二鳥ですね。&lt;/p&gt;
+&lt;p&gt;これから色々作っていきたいです！&lt;/p&gt;
+&lt;style&gt;
+.caution {
+border: 1px solid #BFBFBF;
+padding: 1em 2em;
+margin: 2em 0;
+color: #474747;
+background: whitesmoke;/*背景色*/
+border-left: double 7px #0B0B61;/*左線*/
+font-size: 90%;
+}
+.caution &gt; p {
+font-weight: bold;
+margin: 0 0 10px 0;
+padding: 0;
+}
+blockquote {
+font-size:80%;
+}
+.accbox {
+margin: 2em 0;
+padding: 0;
+max-width: 710px;
+}
+.accbox label {
+display: block;
+margin: 1.5px 0;
+padding : 11px 12px;
+color :#ffffff;
+font-weight: bold;
+background :#2f2f2f;
+cursor :pointer;
+transition: all 0.5s;
+}
+.accbox label:hover {
+background :#A4A4A4;
+}
+.accbox input {
+display: none;
+}
+.accbox .accshow {
+height: 0;
+padding: 0;
+overflow: hidden;
+opacity: 0;
+transition: 0.8s;
+}
+.cssacc:checked + .accshow {
+height: auto;
+padding: 5px;
+background: #eaeaea;
+opacity: 1;
+}
+&lt;/style&gt;</description></item><item><title>Moddable SDKを使ってJavaScriptでIoT開発してみた</title><link>https://dotstud.io/blog/developed-iot-using-moddable/</link><pubDate>Thu, 24 Jan 2019 00:51:35 +0900</pubDate><guid>https://dotstud.io/blog/developed-iot-using-moddable/</guid><description>
 &lt;p&gt;どうも。&lt;a href=&#34;https://dotstud.io/members/horihiro&#34;&gt;ほりひろ&lt;/a&gt; です。
 dotstudioブログでは、初めましてですね。&lt;/p&gt;
 &lt;p&gt;JavaScript や IoT が好きな、でも実は半田付けも抵抗値の計算もろくにできないレベルの週末プログラマーです。
@@ -3304,378 +3630,4 @@ LED部分だけ残すように、上からゴリゴリネイルを塗ります�
 &lt;/div&gt;
 &lt;/section&gt;
 &lt;/section&gt;
-&lt;/p&gt;</description></item><item><title>Clova CEKでのスキル開発の始め方〜Node.jsで開発スタート編〜</title><link>https://dotstud.io/blog/clova-cek-nodejs-tutorial/</link><pubDate>Fri, 03 Aug 2018 10:56:31 +0900</pubDate><guid>https://dotstud.io/blog/clova-cek-nodejs-tutorial/</guid><description>
-&lt;p&gt;こんにちは、&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;#linebootawards&lt;/code&gt;関連でハンズオンをやる機会が増えそうなので学習メモがてら、&lt;a href=&#34;https://dotstud.io/blog/line-clova-skill-tutorial/&#34;&gt;前回&lt;/a&gt;に引き続きClovaの開発チュートリアルを書いていきます。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Node.jsとClovaの連携をとりあえずやりたい&lt;/strong&gt;って人向けです。&lt;/p&gt;
-&lt;p&gt;Clovaってなんぞやって人はこちらの記事を先に読んでみてください。&lt;/p&gt;
-&lt;section class=&#34;link&#34; id=&#34;185&#34;&gt;
-&lt;div class=&#34;link_content&#34;&gt;
-&lt;a href=&#34;https://dotstud.io/blog/clova-ifttt-nefrybt-arduino/&#34;&gt;&lt;/a&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/185/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
-&lt;/div&gt;
-&lt;div class=&#34;link_content&#34;&gt;
-&lt;div class=&#34;link_detail&#34;&gt;
-&lt;div class=&#34;link_title&#34;&gt;
-ClovaとNefryBT（ESP32）を連携させてみよう
-&lt;/div&gt;
-&lt;div class=&#34;link_date&#34;&gt;
-2018-07-10
-&lt;/div&gt;
-&lt;div class=&#34;link_desc&#34;&gt;
-Nefry BTを使って電子工作した勤怠システムとClovaを連携させてみました。
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/section&gt;
-&lt;/section&gt;
-&lt;p&gt;いわゆるClovaのAPIのことをCEKと呼ぶんですよ〜&lt;/p&gt;
-&lt;section class=&#34;link&#34; id=&#34;186&#34;&gt;
-&lt;div class=&#34;link_content&#34;&gt;
-&lt;a href=&#34;https://dotstud.io/blog/line-clova-skill-tutorial/&#34;&gt;&lt;/a&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/186/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
-&lt;/div&gt;
-&lt;div class=&#34;link_content&#34;&gt;
-&lt;div class=&#34;link_detail&#34;&gt;
-&lt;div class=&#34;link_title&#34;&gt;
-本日リリース！LINE Clovaのスキル開発の始め方〜申請編〜 #clova #linebootawards #clova_cek
-&lt;/div&gt;
-&lt;div class=&#34;link_date&#34;&gt;
-2018-07-12
-&lt;/div&gt;
-&lt;div class=&#34;link_desc&#34;&gt;
-リリース直後ですが、LINEのAIアシスタントClovaでのスキル開発の始め方を紹介します！ LINE BOOT AWARDSで賞金1000万円も狙いましょ。
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/section&gt;
-&lt;/section&gt;
-&lt;h2 id=&#34;作るもの&#34;&gt;作るもの&lt;/h2&gt;
-&lt;p&gt;のびすけ「&lt;strong&gt;秋葉原のカレー屋さん教えて&lt;/strong&gt;」&lt;/p&gt;
-&lt;p&gt;Clova「秋葉原のオススメのカレー屋は ぺらぺらぺら」&lt;/p&gt;
-&lt;p&gt;これを作ってみます。完成はこんなイメージです。&lt;/p&gt;
-&lt;p&gt;&lt;center&gt;
-&lt;blockquote class=&#34;instagram-media&#34; data-instgrm-captioned data-instgrm-permalink=&#34;https://www.instagram.com/p/BmAG2Snnk4v/?utm_source=ig_embed&#34; data-instgrm-version=&#34;9&#34; style=&#34; background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);&#34;&gt;&lt;div style=&#34;padding:8px;&#34;&gt; &lt;div style=&#34; background:#F8F8F8; line-height:0; margin-top:40px; padding:28.125% 0; text-align:center; width:100%;&#34;&gt; &lt;div style=&#34; background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;&#34;&gt;&lt;/div&gt;&lt;/div&gt; &lt;p style=&#34; margin:8px 0 0 0; padding:0 4px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/BmAG2Snnk4v/?utm_source=ig_embed&#34; style=&#34; color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;&#34; target=&#34;_blank&#34;&gt;ハンズオンに使えそうなカレースキル！ #clova_cek #linebootawards&lt;/a&gt;&lt;/p&gt; &lt;p style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;&#34;&gt;&lt;a href=&#34;https://www.instagram.com/n0bisuke/?utm_source=ig_embed&#34; style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px;&#34; target=&#34;_blank&#34;&gt; n0bisuke&lt;/a&gt;さん(@n0bisuke)がシェアした投稿 - &lt;time style=&#34; font-family:Arial,sans-serif; font-size:14px; line-height:17px;&#34; datetime=&#34;2018-08-03T03:29:52+00:00&#34;&gt;2018年 8月月2日午後8時29分PDT&lt;/time&gt;&lt;/p&gt;&lt;/div&gt;&lt;/blockquote&gt; &lt;script async defer src=&#34;//www.instagram.com/embed.js&#34;&gt;&lt;/script&gt;
-&lt;/center&gt;&lt;/p&gt;
-&lt;h2 id=&#34;環境&#34;&gt;環境&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Clova Friends Mini (サリー)&lt;/li&gt;
-&lt;li&gt;Node.js v10.6.0&lt;/li&gt;
-&lt;li&gt;Google Chrome / macOS Sierra v10.12&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;使い始めの申請&#34;&gt;使い始めの申請&lt;/h2&gt;
-&lt;p&gt;こちらの記事を参照して、利用開始できる状態にしましょう。&lt;/p&gt;
-&lt;section class=&#34;link&#34; id=&#34;186&#34;&gt;
-&lt;div class=&#34;link_content&#34;&gt;
-&lt;a href=&#34;https://dotstud.io/blog/line-clova-skill-tutorial/&#34;&gt;&lt;/a&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/186/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
-&lt;/div&gt;
-&lt;div class=&#34;link_content&#34;&gt;
-&lt;div class=&#34;link_detail&#34;&gt;
-&lt;div class=&#34;link_title&#34;&gt;
-本日リリース！LINE Clovaのスキル開発の始め方〜申請編〜 #clova #linebootawards #clova_cek
-&lt;/div&gt;
-&lt;div class=&#34;link_date&#34;&gt;
-2018-07-12
-&lt;/div&gt;
-&lt;div class=&#34;link_desc&#34;&gt;
-リリース直後ですが、LINEのAIアシスタントClovaでのスキル開発の始め方を紹介します！ LINE BOOT AWARDSで賞金1000万円も狙いましょ。
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/section&gt;
-&lt;/section&gt;
-&lt;h2 id=&#34;対話モデルの作成&#34;&gt;対話モデルの作成&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&#34;https://clova-developers.line.me/cek/#/list&#34;&gt;Clova Developer Center&lt;/a&gt;にアクセスします。&lt;/p&gt;
-&lt;p&gt;作成中スキルの一覧が表示されます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/508750a1d4f916de4d0167b71c0a133e.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;作成対象となるスキル名の&lt;code&gt;対話モデル&lt;/code&gt;の&lt;code&gt;修正&lt;/code&gt;を選択します。&lt;/p&gt;
-&lt;p&gt;すると別ウィンドウが開き、対話モデルの編集画面になります。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/54f6b93e2ed00cfadaa96da38aeaff4c.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;h3 id=&#34;インテントとスロット&#34;&gt;インテントとスロット&lt;/h3&gt;
-&lt;p&gt;インテントとスロットを設定していきます。&lt;/p&gt;
-&lt;p&gt;個人的にはインテントとスロットの概念を理解すればあとはBOT開発などとそこまで変わらないような印象があります。&lt;/p&gt;
-&lt;p&gt;説明はあってるのか不安なので、スマートスピーカー開発に慣れてる人が見て変だったら教えてください笑&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://clova-developers.line.me/guide/#/Design/Design_Guideline_For_Extension.md#Intent&#34;&gt;公式ドキュメントのこの辺&lt;/a&gt;を見ると詳しく載っています。&lt;/p&gt;
-&lt;h3 id=&#34;スロット&#34;&gt;スロット&lt;/h3&gt;
-&lt;p&gt;スロットはスキル内で扱う名詞情報です。&lt;/p&gt;
-&lt;p&gt;今回の「&lt;strong&gt;秋葉原のカレー屋さん教えて&lt;/strong&gt;」という発話を認識させる為に&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;秋葉原&lt;/strong&gt;という名詞（スロット）を登録しましょう。&lt;/p&gt;
-&lt;p&gt;また、その名詞（スロット）はどういう属性かという上位概念を&lt;strong&gt;スロットタイプ&lt;/strong&gt;として設定します。&lt;/p&gt;
-&lt;p&gt;では実際に&lt;/p&gt;
-&lt;p&gt;左側のメニューに&lt;code&gt;カスタムスロットタイプ&lt;/code&gt;という項目があるので、そこの&lt;code&gt;+ボタン&lt;/code&gt;を押します。&lt;/p&gt;
-&lt;p&gt;ここでスロットタイプのタイトルを決めますが、秋葉原は駅名や地名なので場所にちなんだタイトルが良さそうです。ここでは&lt;code&gt;area&lt;/code&gt;（エリア）としました。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/84fc629262b42452abb4798c1b0e7c05.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;作成を押すと、areaというスロットタイプが作成されます。&lt;/p&gt;
-&lt;p&gt;僕みたいに覚えにくい人は&lt;code&gt;スロットタイプ=単語群&lt;/code&gt;だと思えば良いと思います。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/cae4ce277668b5899690c0f881c3d96d.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;次にスロット登録です。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;スロットの新たな代表語を入力&lt;/code&gt;の箇所に&lt;code&gt;秋葉原&lt;/code&gt;と入力し、同義語の箇所に読み方や別名を入力します。こうすることで&lt;code&gt;あきば&lt;/code&gt;などの名称でも認識してくれるようになります。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/01ce1b560aef8dc9192e2cb714759c72.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;秋葉原もカレー屋は多いですがカレーと言えば神保町や神田周辺もかなり多いのでareaに神保町と神田も追加しておきました。&lt;/strong&gt;重要情報（謎）&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/7d642f6710cb0a323ffebf4782f539a4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;最後に&lt;code&gt;保存&lt;/code&gt;を押してスロットはOKです。個人的には難所50%クリアです。&lt;/p&gt;
-&lt;h3 id=&#34;インテント&#34;&gt;インテント&lt;/h3&gt;
-&lt;p&gt;インテントは会話や命令の種類です。&lt;/p&gt;
-&lt;p&gt;今回の「&lt;strong&gt;秋葉原のカレー屋さん教えて&lt;/strong&gt;」はカレー情報の検索だと思うので&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;CurreySearchIntent&lt;/strong&gt;（カレーサーチ）を作ってみます。&lt;/p&gt;
-&lt;p&gt;メニュー左の&lt;code&gt;カスタムインテント&lt;/code&gt;箇所の&lt;code&gt;+ボタン&lt;/code&gt;を選択し、インテント名を入力して進みます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/6e770429f2a1b04e066dbb940e9f04bb.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;フォーム下部の&lt;code&gt;スロットリスト&lt;/code&gt;からこのインテントで利用するスロットの登録をします。
-先ほど作成した&lt;code&gt;area&lt;/code&gt;を登録しましょう。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/1c2a9e525890692a3135fae2598d571f.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;次に&lt;code&gt;サンプル発話リスト&lt;/code&gt;箇所に例文を入れていきます。&lt;/p&gt;
-&lt;p&gt;先ほどから何回も出ている「&lt;strong&gt;秋葉原のカレー屋さん教えて&lt;/strong&gt;」をここに入力します。&lt;/p&gt;
-&lt;p&gt;さらに&lt;code&gt;秋葉原&lt;/code&gt;の部分が先ほど登録したスロット部分になるので、&lt;strong&gt;この文章のここがスロットだよ&lt;/strong&gt;ということを登録してあげます。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;秋葉原&lt;/code&gt;をドラッグするとスロット登録が出来るフォームが出てくるのでそこで&lt;code&gt;area&lt;/code&gt;を選択しましょう。&lt;/p&gt;
-&lt;p&gt;ここは操作が難しい印象なので↓のキャプチャGIF参照で！&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/29779f252afe64d6c06efc36aa258522.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;完成したら保存しましょう。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/411e1670a0c7406b69cf42264fd8091d.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;h2 id=&#34;対話モデルのビルド&#34;&gt;対話モデルのビルド&lt;/h2&gt;
-&lt;p&gt;ここまで来たら左上の&lt;code&gt;ビルド&lt;/code&gt;ボタンを押してひとまず完了です。&lt;/p&gt;
-&lt;p&gt;ここ、けっこう時間かかります。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/eb50163b57f4e4522b63c8686dc3e0ef.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;体感5~10分程度。&lt;/p&gt;
-&lt;p&gt;ただ待つのもしんどいので次の準備にかかりましょう。&lt;/p&gt;
-&lt;h2 id=&#34;node-jsの環境準備&#34;&gt;Node.jsの環境準備&lt;/h2&gt;
-&lt;p&gt;お待たせしました。コード書いていきましょう。&lt;/p&gt;
-&lt;p&gt;Node.jsのSDKがあるのでこちらを使っていきます。&lt;/p&gt;
-&lt;p&gt;Node.js以外にも現時点で&lt;a href=&#34;https://clova-developers.line.me/guide/#/CEK/Guides/Clova_CEK_SDK.md&#34;&gt;Swift/Kotlin/Elixir&lt;/a&gt;のSDKが出ています。&lt;/p&gt;
-&lt;p&gt;Node.jsのインストールがまだな方はこちらの記事をみてインストールしてみましょう。&lt;/p&gt;
-&lt;p&gt;ちなみにNode.jsは公式サイトからではなくnodebrew経由でインストールする形にした方が後々便利です。僕のオススメは以下の記事にあるnodebrew経由でのインストールになります。&lt;/p&gt;
-&lt;section class=&#34;link&#34; id=&#34;136&#34;&gt;
-&lt;div class=&#34;link_content&#34;&gt;
-&lt;a href=&#34;https://dotstud.io/blog/nodejs-install-use-nodebrew/&#34;&gt;&lt;/a&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/136/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
-&lt;/div&gt;
-&lt;div class=&#34;link_content&#34;&gt;
-&lt;div class=&#34;link_detail&#34;&gt;
-&lt;div class=&#34;link_title&#34;&gt;
-Node.jsを始めよう！nodebrewを使って5分で環境構築
-&lt;/div&gt;
-&lt;div class=&#34;link_date&#34;&gt;
-2017-12-15
-&lt;/div&gt;
-&lt;div class=&#34;link_desc&#34;&gt;
-nodebrewを使ったNode.jsのインストール方法をまとめました。
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/section&gt;
-&lt;/section&gt;
-&lt;p&gt;ターミナル操作が不安な方はこちらの記事を先に見ておきましょう。&lt;/p&gt;
-&lt;p&gt;
-&lt;section class=&#34;link&#34; id=&#34;158&#34;&gt;
-&lt;div class=&#34;link_content&#34;&gt;
-&lt;a href=&#34;https://dotstud.io/blog/how-to-use-cli/&#34;&gt;&lt;/a&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/158/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
-&lt;/div&gt;
-&lt;div class=&#34;link_content&#34;&gt;
-&lt;div class=&#34;link_detail&#34;&gt;
-&lt;div class=&#34;link_title&#34;&gt;
-【Mac向け】「黒い画面」の苦手意識を克服しよう！コマンドラインインタフェースの基本操作
-&lt;/div&gt;
-&lt;div class=&#34;link_date&#34;&gt;
-2018-04-09
-&lt;/div&gt;
-&lt;div class=&#34;link_desc&#34;&gt;
-Macユーザ向けコマンドラインインタフェースの使い方！実は難しくない「黒い画面」の操作方法を覚えていきましょう。
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/section&gt;
-&lt;/section&gt;
-&lt;br /&gt;
-&lt;section class=&#34;link&#34; id=&#34;161&#34;&gt;
-&lt;/section&gt;
-&lt;/p&gt;
-&lt;h3 id=&#34;準備&#34;&gt;準備&lt;/h3&gt;
-&lt;p&gt;以下のコマンドで進めていきます。
-フォルダ作成と準備です。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ mkdir clova_curry
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;$ cd clova_curry
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;$ npm init -y
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;SDKをnpm経由でインストールします。expressとbody-parserも利用します。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ npm i @line/clova-cek-sdk-nodejs express body-parser
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;現時点では&lt;code&gt;node_modules&lt;/code&gt;,&lt;code&gt;package-lock.json&lt;/code&gt;,&lt;code&gt;package.json&lt;/code&gt;のファイルがある状態ですね。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ ls
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;node_modules package-lock.json package.json
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&#34;コードを書いていく&#34;&gt;コードを書いていく&lt;/h3&gt;
-&lt;p&gt;&lt;code&gt;app.js&lt;/code&gt;というファイルを作成して以下のコードを記述します。&lt;/p&gt;
-&lt;p&gt;また、スキルの基本情報を登録した際の&lt;code&gt;Extention ID&lt;/code&gt;を利用するので確認しておきましょう。&lt;/p&gt;
-&lt;p&gt;公式のサンプルよりもシンプルにしています。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;const clova = require(&#39;@line/clova-cek-sdk-nodejs&#39;);
-const express = require(&#39;express&#39;);
-const clovaSkillHandler = clova.Client
-.configureSkill()
-//起動時に喋る
-.onLaunchRequest(responseHelper =&amp;gt; {
-responseHelper.setSimpleSpeech({
-lang: &#39;ja&#39;,
-type: &#39;PlainText&#39;,
-value: &#39;カレー屋さんを探します。&#39;,
-});
-})
-//ユーザーからの発話が来たら反応する箇所
-.onIntentRequest(async responseHelper =&amp;gt; {
-const intent = responseHelper.getIntentName();
-const sessionId = responseHelper.getSessionId();
-console.log(&#39;Intent:&#39; + intent);
-})
-//終了時
-.onSessionEndedRequest(responseHelper =&amp;gt; {
-const sessionId = responseHelper.getSessionId();
-})
-.handle();
-const app = new express();
-const port = process.env.PORT || 3000;
-//リクエストの検証を行う場合。環境変数APPLICATION_ID(値はClova Developer Center上で入力したExtension ID)が必須
-const clovaMiddleware = clova.Middleware({applicationId: &#39;YOUR_EXTENSION_ID&#39;});
-app.post(&#39;/clova&#39;, clovaMiddleware, clovaSkillHandler);
-app.listen(port, () =&amp;gt; console.log(`Server running on ${port}`));
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&#34;起動&#34;&gt;起動&lt;/h3&gt;
-&lt;p&gt;記述出来たら&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ node app.js
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;Server running on 3000
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;で起動です。エラーがなければとりあえずOKです。&lt;/p&gt;
-&lt;h2 id=&#34;ngrokでホスティングせずに疎通確認&#34;&gt;ngrokでホスティングせずに疎通確認&lt;/h2&gt;
-&lt;p&gt;ngrokというトンネリングツールを使ってローカル開発が出来るようにしましょう。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;参考: &lt;a href=&#34;https://ngrok.com/&#34;&gt;https://ngrok.com/&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&lt;img src=&#34;https://camo.qiitausercontent.com/f97d3442e199ccc5272c34c3eb5a964348660a9a/68747470733a2f2f6e67726f6b2e636f6d2f7374617469632f696d672f776562686f6f6b732e706e67&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;LINE BOTの開発でも同様ですが、&lt;strong&gt;通常はHTTPS対応したサーバーにプログラムをホスティングしてClovaと通信させます。&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;HTTPS対応したサーバーを用意するのは骨が折れるのとホスティングして失敗するとエラー修正が大変なので、ローカル開発で最初は挙動確認するのが個人的にはおすすめです。&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;ngrokを使うことでローカル環境をホスティング環境のようにエミュレート出来るイメージです。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;参考: &lt;a href=&#34;https://qiita.com/n0bisuke/items/ceaa09ef8898bee8369d&#34;&gt;1時間でLINE BOTを作るハンズオン&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;pre&gt;&lt;code&gt;$ npm i -g ngrok
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;これでインストール完了です。&lt;/p&gt;
-&lt;p&gt;以下のコマンドで利用しますが、ngrokがターミナル占有してしまうので、Node.jsを起動するターミナルとは別で立ち上げましょう。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ ngrok http 3000
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/5eec2e34bf4dd507279099e08496658d.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;こんな雰囲気。右がngrok、左がNode.jsです。&lt;/p&gt;
-&lt;p&gt;ngrokを起動すると&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;Forwarding https://xxxxxxx.ngrok.io -&amp;gt; localhost:3000
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;といった項目が表示されます。&lt;/p&gt;
-&lt;p&gt;この&lt;code&gt;https://xxxxxxx.ngrok.io&lt;/code&gt;に&lt;code&gt;/clova&lt;/code&gt;を追加したアドレスをClovaのサーバー設定の&lt;code&gt;ExtensionサーバーのURL&lt;/code&gt;に記載して保存しましょう。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/1e2feeed00daeb97553dfc463b6356ef.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;https://xxxxxxx.ngrok.io/clova&lt;/code&gt;となります。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;xxxxxx&lt;/code&gt;の箇所はngrokを再起動すると変わってしまうのでその際は再度サーバー設定を更新してください。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;これでClovaに話しかけると手元（ローカル環境）のNode.jsまでリクエストが来ます。&lt;/strong&gt;&lt;/p&gt;
-&lt;h2 id=&#34;テスターでテスト&#34;&gt;テスターでテスト&lt;/h2&gt;
-&lt;p&gt;直接話しかけても良いのですが、テスターを使ってみましょう。&lt;/p&gt;
-&lt;p&gt;対話モデルのダッシュボードに戻ります。&lt;/p&gt;
-&lt;p&gt;たぶんビルドは完了してますよね。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;テスト&lt;/code&gt;を選択し、&lt;code&gt;ユーザーのサンプル発話をテスト&lt;/code&gt;の箇所に「&lt;strong&gt;秋葉原のカレー屋を教えて&lt;/strong&gt;」と入力し&lt;code&gt;テストボタン&lt;/code&gt;押しましょう。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/62a98f040486429ef42942e605ddaf26.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;Node.jsを起動させているターミナル側で&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;Intent:CurreySearchIntent&lt;/code&gt;と表示されていればOKです。&lt;/p&gt;
-&lt;p&gt;疎通確認が出来ました！
-コードでいうと&lt;code&gt;onIntentRequest()&lt;/code&gt;の箇所までリクエストが通ってることになります。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;.onIntentRequest(async responseHelper =&amp;gt; {
-const intent = responseHelper.getIntentName();
-const sessionId = responseHelper.getSessionId();
-console.log(&#39;Intent:&#39; + intent); //←ここが反応した
-})
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&#34;エラーが出る場合&#34;&gt;エラーが出る場合&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;Error: Invalid application id: ~~~
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;などのエラーが出た人は&lt;code&gt;app.js&lt;/code&gt;内のExtension IDの設定を忘れている可能性が高いので再度チェックしてみましょう。&lt;/p&gt;
-&lt;h3 id=&#34;スロット情報も取得してみる&#34;&gt;スロット情報も取得してみる&lt;/h3&gt;
-&lt;p&gt;&lt;code&gt;app.js&lt;/code&gt;の&lt;code&gt;onIntentRequest()&lt;/code&gt;の箇所をまるっと差し替えてみましょう。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;//ユーザーからの発話が来たら反応する箇所
-.onIntentRequest(async responseHelper =&amp;gt; {
-const intent = responseHelper.getIntentName();
-const sessionId = responseHelper.getSessionId();
-console.log(&#39;Intent:&#39; + intent);
-if(intent === &#39;CurreySearchIntent&#39;){
-const slots = responseHelper.getSlots();
-console.log(slots); //←ここでスロット(今回の場合エリア名)が反応
-}
-})
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Node.jsを再起動して確認してみます。&lt;/p&gt;
-&lt;p&gt;テスターでは&lt;code&gt;秋葉原のカレー情報教えて&lt;/code&gt;、&lt;code&gt;神保町のカレー情報教えて&lt;/code&gt;、&lt;code&gt;上野のカレー情報教えて&lt;/code&gt;を順番に実行してみます。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ node app.js
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;Server running on 3000
-Intent:CurreySearchIntent
-{ area: &#39;秋葉原&#39; } //←秋葉原のカレー情報教えて
-Intent:CurreySearchIntent
-{ area: &#39;神保町&#39; } //←神保町のカレー情報教えて
-Intent:CurreySearchIntent
-{} //←上野のカレー情報教えて
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;先ほどのスロット名登録の際に、&lt;code&gt;秋葉原&lt;/code&gt;、&lt;code&gt;神保町&lt;/code&gt;、&lt;code&gt;神田&lt;/code&gt;を登録してましたが、&lt;code&gt;上野&lt;/code&gt;は登録してなかったので「上野のカレー情報教えて」だと空になります。&lt;/p&gt;
-&lt;h2 id=&#34;clovaにカレー屋情報をしゃべらせる&#34;&gt;Clovaにカレー屋情報をしゃべらせる&lt;/h2&gt;
-&lt;p&gt;最後です！&lt;/p&gt;
-&lt;p&gt;先ほど同様に&lt;code&gt;app.js&lt;/code&gt;の&lt;code&gt;onIntentRequest()&lt;/code&gt;の箇所をまるっと差し替えてみましょう。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;.onIntentRequest(async responseHelper =&amp;gt; {
-const intent = responseHelper.getIntentName();
-const sessionId = responseHelper.getSessionId();
-console.log(&#39;Intent:&#39; + intent);
-if(intent === &#39;CurreySearchIntent&#39;){
-const slots = responseHelper.getSlots();
-console.log(slots);
-//デフォルトのスピーチ内容を記載 - 該当スロットがない場合をデフォルト設定
-let speech = {
-lang: &#39;ja&#39;,
-type: &#39;PlainText&#39;,
-value: `まだ登録されていないエリアです。`
-}
-if(slots.area === &#39;秋葉原&#39;){
-speech.value = `${slots.area}のオススメのカレー屋は フジヤマドラゴンカレー です。`;
-}else if(slots.area === &#39;神保町&#39;){
-speech.value = `${slots.area}のオススメのカレー屋は 共栄堂 です。`;
-}else if(slots.area === &#39;神田&#39;){
-//神田のカレー情報検索
-//何か自分で書いてみましょう。
-}
-responseHelper.setSimpleSpeech(speech);
-responseHelper.setSimpleSpeech(speech, true);
-}
-})
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;code&gt;slots.area&lt;/code&gt;にエリア情報が入っているので、あとはif文で判定して喋らせる内容を変更していきます。&lt;/p&gt;
-&lt;p&gt;最後の&lt;code&gt;responseHelper.setSimpleSpeech()&lt;/code&gt;を呼ぶことでClovaが喋ってくれます。&lt;/p&gt;
-&lt;h2 id=&#34;実機テスト&#34;&gt;実機テスト&lt;/h2&gt;
-&lt;p&gt;Node.jsのサーバーを再起動して試してみましょう。&lt;/p&gt;
-&lt;p&gt;起動する際は、&lt;strong&gt;{ウェイクワード} -&amp;gt; {スキル名}を起動して&lt;/strong&gt;となります。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;ウェイクワード: Clovaの呼び名&lt;/li&gt;
-&lt;li&gt;スキル名: 基本情報に登録したスキル名&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;その後、設定したインテントを発話しましょう。&lt;/p&gt;
-&lt;p&gt;ということで、人によって違うのですが僕の場合は&lt;code&gt;ねぇ、Clova&lt;/code&gt;がウェイクワードになっていて、今回は&lt;code&gt;カレー情報&lt;/code&gt;というスキル名でした。&lt;/p&gt;
-&lt;p&gt;のびすけ: 「&lt;strong&gt;ねぇクローバ&lt;/strong&gt;」&lt;/p&gt;
-&lt;p&gt;Clova: 「ポンっ（LEDが緑色に光る）」&lt;/p&gt;
-&lt;p&gt;のびすけ: 「&lt;strong&gt;カレー情報を起動して&lt;/strong&gt;」&lt;/p&gt;
-&lt;p&gt;Clova: 「カレー屋さんを探します。」 (← Node.jsで記述している)&lt;/p&gt;
-&lt;p&gt;Clova: 「ポンっ（LEDが緑色に光る）」&lt;/p&gt;
-&lt;p&gt;のびすけ:「&lt;strong&gt;秋葉原のカレー屋さんを教えて&lt;/strong&gt;」&lt;/p&gt;
-&lt;p&gt;Clova: 「秋葉原のオススメのカレー屋はフジヤマドラゴンカレーです。」 (← Node.jsで記述している)&lt;/p&gt;
-&lt;p&gt;という感じの使い方になります。&lt;/p&gt;
-&lt;p&gt;動画もどうぞ&lt;/p&gt;
-&lt;p&gt;&lt;center&gt;
-&lt;blockquote class=&#34;instagram-media&#34; data-instgrm-captioned data-instgrm-permalink=&#34;https://www.instagram.com/p/BmAG2Snnk4v/?utm_source=ig_embed&#34; data-instgrm-version=&#34;9&#34; style=&#34; background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);&#34;&gt;&lt;div style=&#34;padding:8px;&#34;&gt; &lt;div style=&#34; background:#F8F8F8; line-height:0; margin-top:40px; padding:28.125% 0; text-align:center; width:100%;&#34;&gt; &lt;div style=&#34; background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;&#34;&gt;&lt;/div&gt;&lt;/div&gt; &lt;p style=&#34; margin:8px 0 0 0; padding:0 4px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/BmAG2Snnk4v/?utm_source=ig_embed&#34; style=&#34; color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;&#34; target=&#34;_blank&#34;&gt;ハンズオンに使えそうなカレースキル！ #clova_cek #linebootawards&lt;/a&gt;&lt;/p&gt; &lt;p style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;&#34;&gt;&lt;a href=&#34;https://www.instagram.com/n0bisuke/?utm_source=ig_embed&#34; style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px;&#34; target=&#34;_blank&#34;&gt; n0bisuke&lt;/a&gt;さん(@n0bisuke)がシェアした投稿 - &lt;time style=&#34; font-family:Arial,sans-serif; font-size:14px; line-height:17px;&#34; datetime=&#34;2018-08-03T03:29:52+00:00&#34;&gt;2018年 8月月2日午後8時29分PDT&lt;/time&gt;&lt;/p&gt;&lt;/div&gt;&lt;/blockquote&gt; &lt;script async defer src=&#34;//www.instagram.com/embed.js&#34;&gt;&lt;/script&gt;
-&lt;/center&gt;&lt;/p&gt;
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-&lt;p&gt;こんな感じでとりあえず試す手順を紹介しました。&lt;/p&gt;
-&lt;p&gt;ホスティングもnowやherokuを使うと簡単に出来るので&lt;a href=&#34;https://www.dropbox.com/s/547siacriaudy4f/CEK_Handson%1D_0729.pdf?dl=0&#34;&gt;立花さんのハンズオン資料&lt;/a&gt;を参照して理解を深めましょう！&lt;/p&gt;
-&lt;p&gt;ホスティングに関しても余裕があれば追記したいと思います。&lt;/p&gt;</description></item></channel></rss>
+&lt;/p&gt;</description></item></channel></rss>

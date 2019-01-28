@@ -1,4 +1,330 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Handson on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/handson/</link><description>Recent content in Handson on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Thu, 13 Dec 2018 05:17:31 +0900</lastBuildDate><atom:link href="/series/handson/" rel="self" type="application/rss+xml"/><item><title>【ハンズオン資料】GR-LYCHEEとOpenCVで画像認識やってみよう</title><link>https://dotstud.io/blog/gr-lychee-opencv-handson/</link><pubDate>Thu, 13 Dec 2018 05:17:31 +0900</pubDate><guid>https://dotstud.io/blog/gr-lychee-opencv-handson/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Handson on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/handson/</link><description>Recent content in Handson on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Mon, 28 Jan 2019 00:51:35 +0900</lastBuildDate><atom:link href="/series/handson/" rel="self" type="application/rss+xml"/><item><title>ArduinoでTwitter連携！愛しのぬいぐるみトンピーちゃんに命を吹き込んでみた</title><link>https://dotstud.io/blog/arduino-nodejs-twitter-connect/</link><pubDate>Mon, 28 Jan 2019 00:51:35 +0900</pubDate><guid>https://dotstud.io/blog/arduino-nodejs-twitter-connect/</guid><description>
+&lt;p&gt;皆さん、大好きなぬいぐるみが動き出したらいいなと思ったこと、ありませんか？&lt;/p&gt;
+&lt;p&gt;今回は私の愛すべきお友達「トンピーちゃん」に命を吹き込むべく、プログラミング初心者の私がArduinoとTwitterの連携に挑戦してみました！&lt;/p&gt;
+&lt;p&gt;&lt;font size=&#34;4&#34;&gt;こちらです！！&lt;/font&gt;
+&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/721a8190-3ffc-8bca-c4b3-774ee58d45e9.gif&#34; alt=&#34;ezgif.com-video-to-gif.gif&#34; /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;今回やること&#34;&gt;今回やること&lt;/h2&gt;
+&lt;h3 id=&#34;実装の構成&#34;&gt;実装の構成&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&#34;https://gyazo.com/a75b45dc702b385f5e32fcd3e39c5b64&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/a75b45dc702b385f5e32fcd3e39c5b64.png&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;ざっくりの構成です。Node.jsでTwitterの「#tonpy」というハッシュタグを監視し、「move #tonpy」「stop #tonpy」というツイートがあったらArduinoを経由してトンピーちゃんが動いたり止まったりします。&lt;/p&gt;
+&lt;h3 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h3&gt;
+&lt;h4 id=&#34;こぐまのトンピーちゃん&#34;&gt;■こぐまのトンピーちゃん&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/210df088-f5f0-6f8a-e9ee-2a63f06e2364.jpeg&#34; alt=&#34;トンピー.jpg&#34; /&gt;
+愛用のトンピーちゃんです。乾電池を入れるとピーヒャラドンドンします。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;購入: &lt;a href=&#34;https://www.amazon.co.jp/%E3%82%A4%E3%83%AF%E3%83%A4-%E3%81%93%E3%81%90%E3%81%BE%E3%81%AE%E3%83%88%E3%83%B3%E3%83%94%E3%83%BC/dp/B0002U3OBA&#34;&gt;Amazon.co.jp&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;arduino-uno&#34;&gt;■Arduino Uno&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/c26d230d-e320-b73d-f15f-32d813e1294f.jpeg&#34; alt=&#34;Arduino Uno.jpg&#34; /&gt;
+Arduino Unoは2010年に発売されたArduinoで、&lt;a href=&#34;https://store.arduino.cc/usa/arduino-uno-rev3&#34;&gt;Arduinoの公式サイト&lt;/a&gt;にも「&lt;strong&gt;電子工作初心者に最適&lt;/strong&gt;」と書いてあったのでこちらに決めました。&lt;/p&gt;
+&lt;p&gt;購入にあたっては「Arduino 初心者」と調べヒットした「&lt;a href=&#34;https://www.amazon.co.jp/%E3%82%B9%E3%82%A4%E3%83%83%E3%83%81%E3%82%B5%E3%82%A4%E3%82%A8%E3%83%B3%E3%82%B9-SSCI-GettingStartedArduinoKit-Arduino%E3%82%92%E3%81%AF%E3%81%98%E3%82%81%E3%82%88%E3%81%86%E3%82%AD%E3%83%83%E3%83%88/dp/B0025Y6C5G/ref=sr_1_fkmr1_2?ie=UTF8&amp;amp;qid=1544321570&amp;amp;sr=8-2-fkmr1&amp;amp;keywords=arduino+%E3%82%B9%E3%82%BF%E3%83%BC%E3%83%88%E3%82%AD%E3%83%83%E3%83%88&#34;&gt;Arduinoをはじめようキット&lt;/a&gt;」を購入しました。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/d7099cb0-97aa-8ff1-4e3d-b959e8139fb4.jpeg&#34;&gt;
+─ Arduinoをはじめようキット
+&lt;/center&gt;
+Arduino Unoの他にブレッドボードや抵抗など電子工作を始めるにあたり必要なもの一式が揃っているため、すぐに始める事ができます。&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;fet-pch-mosfet-2sjs527l-e-60v5a&#34;&gt;■FET（Pch MOSFET 2SJS527L-E 60V5A）&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/88510174-eed9-e286-5343-3deeb08a7884.jpeg&#34; alt=&#34;I-08315.jpg&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;FETはロードスイッチとも呼ばれ、簡単にいうと外部からの電圧によって電流の流れを制御できるスイッチのようなもののようです。小さな電力で動作させる事ができます。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/#回路を作成&#34;&gt;回路を作成&lt;/a&gt;で説明しますが、FETには「Pチャネル」と「Nチャネル」の2種類あります。今回はNチャネルのFETを利用します。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;購入: &lt;a href=&#34;http://akizukidenshi.com/catalog/g/gI-07145/&#34;&gt;秋月電子&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;node-jsをインストールしたpc&#34;&gt;■Node.jsをインストールしたPC&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/efcdf34b-504e-cc68-125a-0acadd815510.jpeg&#34; alt=&#34;IMG_9204.jpg&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;今回はNode.jsでプログラムを動かします。下記記事を参考にインストールしてみてください！&lt;/p&gt;
+&lt;section class=&#34;link&#34; id=&#34;136&#34;&gt;
+&lt;div class=&#34;link_content&#34;&gt;
+&lt;a href=&#34;https://dotstud.io/blog/nodejs-install-use-nodebrew/&#34;&gt;&lt;/a&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/136/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
+&lt;/div&gt;
+&lt;div class=&#34;link_content&#34;&gt;
+&lt;div class=&#34;link_detail&#34;&gt;
+&lt;div class=&#34;link_title&#34;&gt;
+Node.jsを始めよう！nodebrewを使って5分で環境構築
+&lt;/div&gt;
+&lt;div class=&#34;link_date&#34;&gt;
+2017-12-15
+&lt;/div&gt;
+&lt;div class=&#34;link_desc&#34;&gt;
+nodebrewを使ったNode.jsのインストール方法をまとめました。
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/section&gt;
+&lt;/section&gt;
+&lt;ul&gt;
+&lt;li&gt;筆者PC: mac OS HighSierra バージョン10.13.6&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;Node.js: v10.10.0&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;その他&#34;&gt;■その他&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/eb369434-a5ff-e44a-c7b9-02a065030098.jpeg&#34; alt=&#34;IMG_9206.jpg&#34; /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://dotstud.io/docs/breadboard/&#34;&gt;ブレッドボード&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://localhost:1313/docs/jumperwire/#%E3%83%9F%E3%83%8E%E3%83%A0%E3%82%B7%E3%82%AF%E3%83%AA%E3%83%83%E3%83%97-%E3%83%AF%E3%83%8B%E5%8F%A3&#34;&gt;ワニ口クリップ&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;抵抗（今回は220Ω）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;トンピーちゃんを解体&#34;&gt;トンピーちゃんを解体&lt;/h2&gt;
+&lt;p&gt;まずはトンピーちゃんの導線を確認するため、少し解体します。
+&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/69ccd688-afb6-0715-124a-44d886fe3178.jpeg&#34; alt=&#34;IMG_6786.jpg&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/84c4fcd7-8c65-a0dc-1a84-ee75b5c2ef48.jpeg&#34; alt=&#34;IMG_9205.jpg&#34; /&gt;
+電池の部分を取り外してみました。すると、導線は電池部分と本体でパックリ分かれている事が確認できました。今回はその部分にArduino Unoを繋げば回路の開/閉が制御できそうですね。&lt;/p&gt;
+&lt;h2 id=&#34;arduino-unoとトンピーちゃんを連携&#34;&gt;Arduino Unoとトンピーちゃんを連携&lt;/h2&gt;
+&lt;h3 id=&#34;回路を作成&#34;&gt;回路を作成&lt;/h3&gt;
+&lt;p&gt;Arduino Unoから直接ON/OFFを制御しようとすると、電流が少なく回路を開/閉できませんでした。そこでArduino Unoとトンピーちゃんの間に&lt;strong&gt;FETを挿入&lt;/strong&gt;します。&lt;/p&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/230/fet.png&#34; alt=&#34;fet&#34;&gt;
+&lt;/center&gt;
+&lt;p&gt;FETは、電圧の加え方の違いによって「Pチャネル」と「Nチャネル」の2種類に分かれます。今回はNチャネルのFETを利用します。&lt;/p&gt;
+&lt;p&gt;また、回路の「+側」にFETを繋ぐことを「ハイサイド（スイッチ）」、-側に繋ぐことを「ローサイド（スイッチ）」と呼称します。今回はNチャネルなので、ローサイドにFETを繋ぎます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/d32c3f6f4b1de908ceced242cc2ba7f4.png&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;最終的に上記のような回路図になりました。&lt;/p&gt;
+&lt;h3 id=&#34;arduino-unoにプログラムを書き込む&#34;&gt;Arduino Unoにプログラムを書き込む&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/b544f541-a5ac-ee97-18a3-de3963210c92.png&#34; alt=&#34;スクリーンショット 2018-12-18 12.35.58.png&#34; /&gt;
+ArduinoをUSBケーブルでPCに繋ぎ、アプリケーションでArduino IDEを開きます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/da16043a-121e-52e2-e395-3121a8a3e48f.png&#34; alt=&#34;スクリーンショット 2018-12-16 15.10.09.png&#34; /&gt;
+ファイル→新規ファイルを選択します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/2a42d894-497d-a0c4-5573-6a4c148fc5fe.png&#34; alt=&#34;スクリーンショット 2018-12-16 15.09.45.png&#34; /&gt;
+ツール→ボード→繋いだArduino（今回はArduino Uno）を選択します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/9f5d63e2-454b-c637-ef5d-07550cccf8d5.png&#34; alt=&#34;スクリーンショット 2018-12-16 15.11.33.png&#34; /&gt;
+ツール→シリアルポート→接続したArduinoを選択します。&lt;/p&gt;
+&lt;p&gt;下記コードを新規ファイルにコピー&amp;amp;ペーストします。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;// pins
+const int tonpyPin = 2;
+void setup() {
+// initialize serial:
+Serial.begin(9600);
+// make the pins outputs:
+pinMode(tonpyPin, OUTPUT);
+}
+void loop() {
+// if there&#39;s any serial available, read it:
+while (Serial.available() &amp;gt; 0) {
+char value = Serial.read();
+if (value == &#39;p&#39;) {
+digitalWrite(tonpyPin, HIGH);
+} else if (value == &#39;q&#39;){
+digitalWrite(tonpyPin, LOW);
+} else{
+digitalWrite(tonpyPin, LOW);
+}
+Serial.println(value);
+}
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/8ec32eee-c610-137c-febd-9408f22db6e1.png&#34; alt=&#34;スクリーンショット 2018-12-10 9.25.26.png&#34; /&gt;
+左上にある「→」ボタンを押してマイコンボードに書き込みます。&lt;/p&gt;
+&lt;p&gt;これでArduino Unoからの信号（p: スイッチON、q: スイッチOFF）でトンピーちゃんが動く/止まるようになりました。&lt;/p&gt;
+&lt;p&gt;これをツイートと連動できれば完成です！&lt;/p&gt;
+&lt;h2 id=&#34;node-jsのプログラム&#34;&gt;Node.jsのプログラム&lt;/h2&gt;
+&lt;p&gt;ハッシュタグ「#tonpy」を取得し、さらに「move」「stop」のツイートがあったらArduino Unoに送るプログラムを作成します。&lt;/p&gt;
+&lt;h3 id=&#34;twitter-apiの準備&#34;&gt;Twitter APIの準備&lt;/h3&gt;
+&lt;p&gt;API使用には&lt;a href=&#34;https://developer.twitter.com/&#34;&gt;Twitter Developer&lt;/a&gt;へ登録する必要があります。登録の際、用途など英文で書く部分がありました（筆者はGoogle翻訳を駆使しました）。&lt;/p&gt;
+&lt;p&gt;手順については下記の記事に詳しく書かれており、そちらに沿って登録しました。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;参考: &lt;a href=&#34;https://qiita.com/kngsym2018/items/2524d21455aac111cdee&#34;&gt;Twitter API 登録 (アカウント申請方法) から承認されるまでの手順まとめ　※2018年9月時点の情報&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;tweetを取得するnode-jsのプログラムを作成&#34;&gt;Tweetを取得するNode.jsのプログラムを作成&lt;/h3&gt;
+&lt;h4 id=&#34;ディレクトリを用意&#34;&gt;■ディレクトリを用意&lt;/h4&gt;
+&lt;p&gt;任意の保存場所にフォルダを用意します。今回はDesktopにTonpyフォルダを作りました。&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;jsファイルを作成&#34;&gt;■JSファイルを作成&lt;/h4&gt;
+&lt;p&gt;作成したフォルダに任意の名前のJSファイルを用意します。今回は「app.js」としました。&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;twitter-apiを使用するモジュールのインストール&#34;&gt;■Twitter APIを使用するモジュールのインストール&lt;/h4&gt;
+&lt;p&gt;Node.jsでTwitter APIが使用できるよう&lt;a href=&#34;https://www.npmjs.com/package/twitter&#34;&gt;Twitterモジュール&lt;/a&gt;をnpmでインストールします。ターミナルで作成したフォルダを開き、下記コマンドを叩きます。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ npm install twitter
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;これでNode.jsでTwitter APIが使用できるようになりました。&lt;/p&gt;
+&lt;p&gt;実際に使用する際はJSファイル内で最初に下記のように書くとTwitter APIが呼び出されます。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;const Twitter = require(&#39;twitter&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;ツイートを取得するプログラムを作成&#34;&gt;■ツイートを取得するプログラムを作成&lt;/h4&gt;
+&lt;p&gt;TwitterAPIには「REST API」と「Streaming API」の2種類があります。&lt;/p&gt;
+&lt;p&gt;REST APIはエンドポイントへリクエストして初めて結果が得られるものに対して、Streaming APIはレートのリミットなくツイートを受信し続ける事ができます。&lt;/p&gt;
+&lt;p&gt;今回はツイートを常に監視し該当のツイートがあったら結果を取得する、という事がしたいので&lt;strong&gt;Streaming API&lt;/strong&gt;を使用します。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;const twitter = require(&amp;quot;twitter&amp;quot;);
+const fs = require(&amp;quot;fs&amp;quot;);
+const client = new twitter({
+consumer_key: &#39;&#39;,//Dev Accountで取得したkeyを書く
+consumer_secret: &#39;&#39;,
+access_token_key: &#39;&#39;,
+access_token_secret: &#39;&#39;,
+});
+let tweetText =&#39;w&#39;;
+client.stream(&#39;statuses/filter&#39;, {track:&amp;quot;#tonpy &amp;quot;}, (stream) =&amp;gt; {//Streaming APIを呼び出す
+stream.on(&#39;data&#39;, (tweet) =&amp;gt; {
+tweetText = tweet.text;
+(~tweetText.indexOf(&#39;move&#39;)) ? (tweetText = &#39;p&#39;) : (~tweetText.indexOf(&#39;stop&#39;)) ? (tweetText = &#39;q&#39;) : (tweetText = &#39;w&#39;);
+});
+stream.on(&#39;error&#39;, (error) =&amp;gt; {//エラー
+console.error(`Error: ${error.message}`);
+stream.destroy();
+});
+});
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;ツイートを取得するNode.jsのプログラムが完成しました。&lt;/p&gt;
+&lt;h3 id=&#34;arduinoに送るプログラムを作成&#34;&gt;Arduinoに送るプログラムを作成&lt;/h3&gt;
+&lt;h4 id=&#34;シリアル通信をするモジュールのインストール&#34;&gt;■シリアル通信をするモジュールのインストール&lt;/h4&gt;
+&lt;p&gt;PCとArduino間でシリアル通信をするために、シリアルポートでシリアル通信を行うモジュールもnpmでインストールします。&lt;/p&gt;
+&lt;p&gt;シリアルポートとは&lt;strong&gt;シリアル通信を行う時の接続口&lt;/strong&gt;のことで、今回はArduinoと接続したPCのUSBポートにあたります。&lt;/p&gt;
+&lt;p&gt;ターミナルで下記コマンドを叩きます。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ npm install serialport
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;これでNode.jsでシリアルポートを制御できるようになりました。&lt;/p&gt;
+&lt;p&gt;使用する際はJSファイル内で最初に下記のように呼び出します。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;const Serialport = require(&#39;serialport&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;シリアルポートの名前を調べる&#34;&gt;■シリアルポートの名前を調べる&lt;/h4&gt;
+&lt;p&gt;プログラム内では、USBポートに挿しているArduino Uno（ttyデバイス）を指定します。&lt;/p&gt;
+&lt;p&gt;ターミナルで下記コマンドを打ち、PCのシリアルポートに接続されている機器を表示します。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ ls -l /dev/tty.*
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Auduino Unoを挿し、もう一度先ほどのコマンドを打ちます。新しく出てきたttyデバイス名がArduino Unoです。&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;arduino-unoに送るnode-jsのプログラムを作成&#34;&gt;■ Arduino Unoに送るNode.jsのプログラムを作成&lt;/h4&gt;
+&lt;p&gt;下記がシリアル通信するためのコードです。ツイートを取得するためのJSファイルの続きに記述してください。&lt;/p&gt;
+&lt;p&gt;1行目の&lt;code&gt;/dev/tty.xxx&lt;/code&gt;には上記のシリアルポート名を記入してください。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;const port = new SerialPort(&#39;/dev/tty.xxx&#39;,{
+baudRate: 9600//baudRate:9600は1秒に最大9600ビットを送信するという意味
+});
+port.write(&#39;main screen turn on&#39;, function(err) {
+if (err) {
+return console.log(&#39;Error on write: &#39;, err.message);
+}
+console.log(&#39;message written&#39;);
+});
+port.on(&#39;open&#39;, () =&amp;gt; {
+console.log(&#39;Serial open.&#39;);
+setInterval(write, 1000);
+});
+const write = () =&amp;gt; {
+console.log(`Input to Arduino: ${tweetText}`);
+port.write(tweetText, (error) =&amp;gt; {
+if(error) {
+console.error(`Error: ${error.message}`);
+}
+});
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;これでツイート情報を取得し、Arduinoに信号を送る事ができるようになりました。&lt;/p&gt;
+&lt;h3 id=&#34;完成コード&#34;&gt;完成コード&lt;/h3&gt;
+&lt;p&gt;ツイートを取得するプログラム、Arduinoを制御するプログラムを合わせた完成コードは下記のようになります。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;//-----------------------------------------------
+// twitterからツイートを取得
+//-----------------------------------------------
+const twitter = require(&amp;quot;twitter&amp;quot;);
+const client = new twitter({
+consumer_key: &#39;&#39;,//Dev Accountで取得したkeyを書く
+consumer_secret: &#39;&#39;,
+access_token_key: &#39;&#39;,
+access_token_secret: &#39;&#39;,
+});
+let tweetText =&#39;w&#39;;
+client.stream(&#39;statuses/filter&#39;, {track:&amp;quot;#tonpy &amp;quot;}, (stream) =&amp;gt; {
+stream.on(&#39;data&#39;, (tweet) =&amp;gt; {
+tweetText = tweet.text;
+(~tweetText.indexOf(&#39;move&#39;)) ? (tweetText = &#39;p&#39;) : (~tweetText.indexOf(&#39;stop&#39;)) ? (tweetText = &#39;q&#39;) : (tweetText = &#39;w&#39;);
+});
+stream.on(&#39;error&#39;, (error) =&amp;gt; {
+console.error(`Error: ${error.message}`);
+stream.destroy();
+});
+});
+//-----------------------------------------------
+// Node.jsからArduinoに送信
+//----------------------------------------------
+const SerialPort = require(&#39;serialport&#39;);
+const port = new SerialPort(&#39;/dev/tty.xxx&#39;,{
+baudRate: 9600
+});
+port.on(&#39;open&#39;, () =&amp;gt; {
+console.log(&#39;Serial open.&#39;);
+setInterval(write, 1000);
+});
+port.on(&#39;data&#39;, (data) =&amp;gt; {
+console.log(`Data from Arduino: ${data}`);
+});
+const write = () =&amp;gt; {
+console.log(`Input to Arduino: ${tweetText}`);
+port.write(tweetText, (error) =&amp;gt; {
+if(error) {
+console.error(`Error: ${error.message}`);
+}
+});
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;node-jsを実行する&#34;&gt;■Node.jsを実行する&lt;/h4&gt;
+&lt;p&gt;Node.jsは、ファイルのある場所で下記コマンドで実行します。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ node app.js
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;app.js&lt;/code&gt;部分は、ご自身が作成したファイル名に置き換えてください。「Serial open」がターミナル上に表示されたら無事実行されています。&lt;/p&gt;
+&lt;h2 id=&#34;動かしてみる&#34;&gt;動かしてみる&lt;/h2&gt;
+&lt;p&gt;Node.jsを起動しながら、ツイートしてみましょう……。「&lt;strong&gt;#tonpy move&lt;/strong&gt;」!!!!!
+&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/9c8c2611-d9b2-e7dd-3710-8d2011c2b424.gif&#34; alt=&#34;ezgif.com-video-to-gif.gif&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;う、動いたーーーー！！！（少々タイムラグがありますが……。）&lt;/p&gt;
+&lt;p&gt;初めてのIoTとっっても楽しかったです！電子工作やNode.jsの勉強にもなり一石二鳥ですね。&lt;/p&gt;
+&lt;p&gt;これから色々作っていきたいです！&lt;/p&gt;
+&lt;style&gt;
+.caution {
+border: 1px solid #BFBFBF;
+padding: 1em 2em;
+margin: 2em 0;
+color: #474747;
+background: whitesmoke;/*背景色*/
+border-left: double 7px #0B0B61;/*左線*/
+font-size: 90%;
+}
+.caution &gt; p {
+font-weight: bold;
+margin: 0 0 10px 0;
+padding: 0;
+}
+blockquote {
+font-size:80%;
+}
+.accbox {
+margin: 2em 0;
+padding: 0;
+max-width: 710px;
+}
+.accbox label {
+display: block;
+margin: 1.5px 0;
+padding : 11px 12px;
+color :#ffffff;
+font-weight: bold;
+background :#2f2f2f;
+cursor :pointer;
+transition: all 0.5s;
+}
+.accbox label:hover {
+background :#A4A4A4;
+}
+.accbox input {
+display: none;
+}
+.accbox .accshow {
+height: 0;
+padding: 0;
+overflow: hidden;
+opacity: 0;
+transition: 0.8s;
+}
+.cssacc:checked + .accshow {
+height: auto;
+padding: 5px;
+background: #eaeaea;
+opacity: 1;
+}
+&lt;/style&gt;</description></item><item><title>【ハンズオン資料】GR-LYCHEEとOpenCVで画像認識やってみよう</title><link>https://dotstud.io/blog/gr-lychee-opencv-handson/</link><pubDate>Thu, 13 Dec 2018 05:17:31 +0900</pubDate><guid>https://dotstud.io/blog/gr-lychee-opencv-handson/</guid><description>
 &lt;p&gt;この記事は12/07の&lt;a href=&#34;https://ai-iot-bol-fukui.connpass.com/event/109573/&#34;&gt;AI×IoT ハンズオン with IoTLT&amp;amp;ふくもく会 in 福井&lt;/a&gt;向け資料です。記事を読んで試せる内容になっているので、終了後や参加されていない方もぜひ試してみてください！&lt;/p&gt;
 &lt;section class=&#34;caution&#34;&gt;
 &lt;p&gt;■ハンズオンの進行について&lt;/p&gt;
@@ -3762,168 +4088,4 @@ delay(10);
 最後は他社線からの振替輸送受託時に実行されるパリピ点滅。画像では少しわかりづらいですね……。&lt;/p&gt;
 &lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
 &lt;p&gt;今回は、京急が遅延していると光るガジェットをESPr® Developerをつかって作成しました。情報の取得方法はかなり力技でしたが、WEB上の情報を簡単に可視化できたことは良かったです。&lt;/p&gt;
-&lt;p&gt;実際にこのガジェットは、職場のデスクで稼働していて、いつも京急の運行情報を知らせてくれます。今後は他社線バージョンの作成を検討しています。&lt;/p&gt;</description></item><item><title>Wio NodeとIFTTTで簡単IoT！紫外線情報を取得してみよう</title><link>https://dotstud.io/blog/wionode-ifttt-uv-ornament/</link><pubDate>Tue, 06 Jun 2017 20:26:13 +0900</pubDate><guid>https://dotstud.io/blog/wionode-ifttt-uv-ornament/</guid><description>
-&lt;p&gt;こんにちは、dotstudioライターのゆっきん（&lt;a href=&#34;https://twitter.com/yukkin4649&#34;&gt;@yukkin4649&lt;/a&gt;）です。普段はシステムエンジニアをしています！&lt;/p&gt;
-&lt;p&gt;IoTLTでのびすけさんから「電子工作でかわいいもの作ってくれ」という無茶ぶりを受けたので（笑）、女子の天敵&lt;strong&gt;紫外線指数を光って知らせてくれるオーナメント&lt;/strong&gt;を作ってみます！&lt;/p&gt;
-&lt;p&gt;今回は「Wio Node」というスマホから設定できるデバイスと、ノンプログラミングでサービス連携ができる「IFTTT」というWebサービスを使います。初心者の私でも簡単にできたので是非挑戦してみてください。&lt;/p&gt;
-&lt;h2 id=&#34;wio-nodeとは&#34;&gt;Wio Nodeとは&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/wio.png&#34; alt=&#34;&#34; /&gt;
-「Wio Node」とはSeeed Studio社が開発したIoTデバイスで、Wi-Fiモジュールが初期搭載されています。対応のモジュールをさすだけで使え、スマートフォンで設定できるシンプルな設計が特徴です。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.seeedstudio.com/Wio-Node-p-2637.html&#34;&gt;公式サイト&lt;/a&gt;によると&lt;strong&gt;IoTアプリケーション構築までたったの５分&lt;/strong&gt;だそうです。如何に簡単にできるのかが伺えます。&lt;/p&gt;
-&lt;h2 id=&#34;iftttとは&#34;&gt;IFTTTとは&lt;/h2&gt;
-&lt;p&gt;「IFTTT」では多数あるWebサービス同士を連携させ、自分好みの連携機能を作成することが出来ます。例えば【&lt;strong&gt;Twitterでお気に入りしたツイートをEvernoteに保存する&lt;/strong&gt;】等があります。&lt;/p&gt;
-&lt;p&gt;他の人が作成した連携（ここではレシピと呼ぶ）も利用することができ、カスタマイズも可能。今回はこの「IFTTT」を使って紫外線取得サービスとWio Nodeを連携します。&lt;/p&gt;
-&lt;h2 id=&#34;準備&#34;&gt;準備&lt;/h2&gt;
-&lt;h3 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;① Wio Node本体（&lt;a href=&#34;https://dotstud.io/shop/wionode-social-remote-control/&#34;&gt;購入ページ&lt;/a&gt;）&lt;br /&gt;
-② Grove LED Bar v2.0（型番：SEEED-104020006）&lt;br /&gt;
-③給電用のMicro USBケーブル&lt;br /&gt;
-④ スマートフォン（iOSまたはAndroid端末）&lt;br /&gt;
-⑤ グリーンオーナメント SS（100円均一で購入）&lt;br /&gt;
-⑥ 紙&lt;br /&gt;
-⑦ テープ&lt;br /&gt;
-⑧ ペン&lt;br /&gt;&lt;/p&gt;
-&lt;h3 id=&#34;筆者の環境&#34;&gt;筆者の環境&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;MacBook Air 11-inch Early 2014&lt;/li&gt;
-&lt;li&gt;OS X El Capitan　v10.11.6&lt;/li&gt;
-&lt;li&gt;iPhone6（iOS 10.3.1）&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;作り方&#34;&gt;作り方&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/2.png&#34; alt=&#34;&#34; /&gt;
-ざっくりとした構成です。IFTTTを使って「Today&amp;rsquo;s weather report」からUV値を取得し、Wio NodeのLED Barで表示させます。&lt;/p&gt;
-&lt;p&gt;それでは早速作っていきましょう。&lt;/p&gt;
-&lt;h3 id=&#34;1-wio-nodeの設定&#34;&gt;1. Wio Nodeの設定&lt;/h3&gt;
-&lt;h4 id=&#34;インストールとセットアップ&#34;&gt;インストールとセットアップ&lt;/h4&gt;
-&lt;p&gt;ここではWio Node開発用アプリのインストールと設定をしていきます。Wio NodeはPC・モバイルバッテリー等からUSBケーブルで接続し給電しましょう。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/3.png&#34; alt=&#34;&#34; /&gt;
-App Store等でWio Nodeアプリを検索し、インストールします。iOSでは「Wio Link」、Androidでは「Wio」と言う名称です。&lt;/p&gt;
-&lt;p&gt;本記事ではiOSの「Wio Link」の画面で説明していきます。&lt;/p&gt;
-&lt;p&gt;iOS: &lt;a href=&#34;https://itunes.apple.com/jp/app/wio-link/id1054893491?mt=8&#34;&gt;https://itunes.apple.com/jp/app/wio-link/id1054893491?mt=8&lt;/a&gt;&lt;br /&gt;
-Android: &lt;a href=&#34;https://play.google.com/store/apps/details?id=cc.seeed.iot.ap&amp;amp;hl=ja&#34;&gt;https://play.google.com/store/apps/details?id=cc.seeed.iot.ap&amp;amp;hl=ja&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/4.png&#34; alt=&#34;&#34; /&gt;
-インストール後、アプリを立ち上げるとログイン画面が表示されるので〔SIGN UP〕のタブに切り替えてメールアドレスとパスワードを入力し〔SIGN UP〕のボタンを押下します。２回目以降は〔LOG IN〕タブから登録した情報を入力してログインして下さい。&lt;/p&gt;
-&lt;p&gt;※他のサービスと連携が上手くいかないこともあるのでGoogleアカウントやFacebookアカウントの連携によるユーザー登録は非推奨とします。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/5.png&#34; alt=&#34;&#34; /&gt;
-Device Listの画面が表示されたら、右上の〔+〕又は中央の〔Add Your First Device〕を押下します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/6.png&#34; alt=&#34;&#34; /&gt;
-デバイスの選択画面が表示されるので〔Wio Node〕を選択します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/7.png&#34; alt=&#34;&#34; /&gt;
-セットアップ画面の図と同様にWio Node本体のボタンを４秒程押下します。青いライトの光り方が変わることを確認後、次の手順に移ります。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/8.png&#34; alt=&#34;&#34; /&gt;
-iPhoneの〔設定〕アプリを起動します。〔Wi-Fi〕設定画面でWi-FiをONにし、〔Wio_XXXXXX〕を選択します。XXXXXXには割り当てられた文字列が入ります。（Android版はアプリの画面内で選択します。）&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/9.png&#34; alt=&#34;&#34; /&gt;
-Wio Nodeアプリに戻り、〔Goto wifi list〕を押下します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/10.png&#34; alt=&#34;&#34; /&gt;
-現在利用できる任意のWi-Fiを選択します。表示されない場合は右上の〔Refresh〕を押下して下さい。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/11.png&#34; alt=&#34;&#34; /&gt;
-選択したWi-Fiのパスワードを入力し、〔Join〕を押下します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/12.png&#34; alt=&#34;&#34; /&gt;
-この画面では、デバイスの名前をつけます。任意の名前を入力し、〔Start Wio-ing〕を押下します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/13.png&#34; alt=&#34;&#34; /&gt;
-Wio Nodeが認識され、モジュールの設定画面に移りました。最初のセットアップは以上です。&lt;/p&gt;
-&lt;p&gt;もしセットアップが上手くいかない場合は&lt;a href=&#34;https://dotstud.io/docs/wionode-wiosetup/&#34;&gt;こちら&lt;/a&gt;からセットアップしてみてください。&lt;/p&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;h4 id=&#34;モジュールの設定&#34;&gt;モジュールの設定&lt;/h4&gt;
-&lt;p&gt;続いて今回使うモジュールを設定していきます。
-&lt;img src=&#34;https://dotstud.io/img/blog/106/14.png&#34; alt=&#34;&#34; /&gt;
-次にLED Barを取り付けます。Wio Node本体を画面と同じ向きに見た時、左側（PORT0）にLED Barを接続します。アプリ画面では、〔UART〕タブの〔LED Bar〕を選択し、〔Update Firmware〕を押下します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/15.png&#34; alt=&#34;&#34; /&gt;
-〔OK〕を押下します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/16.png&#34; alt=&#34;&#34; /&gt;
-設定が完了すると〔View API〕というリンクが表示されます。&lt;/p&gt;
-&lt;p&gt;APIを試してみましょう。〔View API〕を押下します。&lt;/p&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;h4 id=&#34;apiを試してみる&#34;&gt;APIを試してみる&lt;/h4&gt;
-&lt;p&gt;View APIのページではあらかじめ用意されているAPIを使ってWio Nodeとモジュールの挙動を試すことができます。
-&lt;img src=&#34;https://dotstud.io/img/blog/106/17.png&#34; alt=&#34;&#34; /&gt;
-今回利用する〔level〕APIの〔Test Request〕に「10」と入力します。〔GET〕を押下します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/led.png&#34; alt=&#34;&#34; /&gt;
-LED Barが10個すべて光りました！数値を変えると光るBarの個数が変わります。&lt;/p&gt;
-&lt;p&gt;モジュールの設定は以上です。&lt;/p&gt;
-&lt;h3 id=&#34;2-iftttの設定&#34;&gt;2. IFTTTの設定&lt;/h3&gt;
-&lt;h4 id=&#34;インストールとセットアップ-1&#34;&gt;インストールとセットアップ&lt;/h4&gt;
-&lt;p&gt;次にIFTTT側の設定をしていきます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/18.png&#34; alt=&#34;&#34; /&gt;
-最初にIFTTTのアプリをダウンロードします。&lt;strong&gt;ブラウザから設定する場合はアプリのインストールは不要&lt;/strong&gt;です。ブラウザで「IFTTT」を検索してIFTTTの画面に遷移してください。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/19.png&#34; alt=&#34;&#34; /&gt;
-ダウンロード後、アプリを起動します。アカウントを持っていない場合は、〔Sign up〕を押下します。アカウントを既に取得している場合は、〔Sign in〕を押下してログインしてください。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/20.png&#34; alt=&#34;&#34; /&gt;
-アカウントを新規登録する場合はメールアドレスと任意のパスワードを入力し、〔Sign up〕を押下します。&lt;/p&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;h4 id=&#34;レシピを作成する&#34;&gt;レシピを作成する&lt;/h4&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/21.png&#34; alt=&#34;&#34; /&gt;
-それでは早速レシピを作ってみましょう。〔My Applets〕に移動し、右上の〔＋〕を押下します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/22.png&#34; alt=&#34;&#34; /&gt;
-IFTTTでは「if this then that」という構文を使って、サービスを連携させていきます。熊本弁で言うと「こぎゃん（こう）したら、あぎゃん（ああ）なる」みたいな感じです。&lt;/p&gt;
-&lt;p&gt;まずは「こうしたら」のトリガー部分を作っていきましょう。最初に〔this〕を押下します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/23.png&#34; alt=&#34;&#34; /&gt;
-IFTTTでは連携に利用できるWebサービスのことをチャンネルと言います。&lt;/p&gt;
-&lt;p&gt;トリガーとして利用できるチャンネルが表示されるので、「Wether Underground」チャンネルを検索し、選択します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/24.png&#34; alt=&#34;&#34; /&gt;
-「Wether Underground」で利用できるトリガーの一覧が表示されます。今回は〔Today&amp;rsquo;s weather report〕を使うので、選択してください。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/25.png&#34; alt=&#34;&#34; /&gt;
-「Today&amp;rsquo;s weather report」は今日の現在の天気情報を取得できます。この画面では取得する時間を設定します。好きな時間に設定してください。&lt;/p&gt;
-&lt;p&gt;私の場合は昼休みで外に出る時の時間を設定しました。&lt;/p&gt;
-&lt;p&gt;続いて「こうなる」の部分を作ります。
-&lt;img src=&#34;https://dotstud.io/img/blog/106/26.png&#34; alt=&#34;&#34; /&gt;
-「if this then that」の〔that〕を押下します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/27.png&#34; alt=&#34;&#34; /&gt;
-アクション（発動条件を満たした後の動作）として利用できるチャンネルが表示されます。〔Search services〕に「seeed」と入力して検索しましょう。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/28.png&#34; alt=&#34;&#34; /&gt;
-「Seeed」チャンネルを選択します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/29.png&#34; alt=&#34;&#34; /&gt;
-〔connect〕を押下します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/30.png&#34; alt=&#34;&#34; /&gt;
-アカウント設定画面が表示されます。ここにWio Nodeで設定したアカウント情報を入力し、〔Sign in〕を押下します。&lt;/p&gt;
-&lt;p&gt;Wio Node側でGoogleやFacebook連携でログインしていて上手く連携できない場合は、Wio Nodeのアプリからメールアドレスで登録しなおしましょう。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/31.png&#34; alt=&#34;&#34; /&gt;
-「Seeed」チャンネルで利用できるアクションの一覧が表示されます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/32.png&#34; alt=&#34;&#34; /&gt;
-一覧の下の方にある〔Drive any Grove〕を選択してください。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/33.png&#34; alt=&#34;&#34; /&gt;
-詳細設定をしていきます。functionを選択するプルダウンでは〔level（float level）〕を選択します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/34.png&#34; alt=&#34;&#34; /&gt;
-次にFirst Parameterを設定します。〔Add Ingredient〕を押下すると、設定できる候補が表示されます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/35.png&#34; alt=&#34;&#34; /&gt;
-今回取得するのはUV値なので〔UVindex〕を選択します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/36.png&#34; alt=&#34;&#34; /&gt;
-〔Next〕を押下します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/37.png&#34; alt=&#34;&#34; /&gt;
-タイトルが自動生成されるので、変更する場合は〔Edit title〕から編集します。最後に〔Finish〕を押下します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/38.png&#34; alt=&#34;&#34; /&gt;
-これでレシピは完成です！&lt;/p&gt;
-&lt;h3 id=&#34;3-オーナメント作り&#34;&gt;3. オーナメント作り&lt;/h3&gt;
-&lt;p&gt;最後に見せ方の部分である、オーナメント作りをしていきます。&lt;/p&gt;
-&lt;p&gt;では、グリーンオーナメントにWio Nodeを巻いていきます。この時、一度Wio NodeからUSBケーブルを抜いておくと良いでしょう。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/39.png&#34; alt=&#34;&#34; /&gt;
-購入したグリーンオーナメントにもよりますが、グリーンオーナメントの中の構成を把握してWio Nodeを取り付けるとコードが目立たないようになります。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/40.png&#34; alt=&#34;&#34; /&gt;
-今回の場合は、グリーンオーナメントの中心軸を避けたところにWio Nodeを設置し、コードを軸に這わせながら巻きつけていきます。巻きつけた後は、葉っぱでコードを隠します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/41.png&#34; alt=&#34;&#34; /&gt;
-LEDもコードがなるべく見えないように周りの葉っぱで隠します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/42.png&#34; alt=&#34;&#34; /&gt;
-次に目を用意します。自分の好きな目を書いてください。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/43.png&#34; alt=&#34;&#34; /&gt;
-目を作成したら、グリーンオーナメントに装着します。両面テープや養生テープを使うと、目の位置等を簡単に変えられます。目の位置によって表情が変わるので好きな位置に取り付けましょう。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/44.png&#34; alt=&#34;&#34; /&gt;
-最後にUSBケーブルと接続します。オーナメントによりますが、USBケーブルに色が移ることもあるので気をつけてください。&lt;/p&gt;
-&lt;p&gt;オーナメント作りはこれで完成です！&lt;/p&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;h4 id=&#34;カスタマイズ&#34;&gt;カスタマイズ&lt;/h4&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/45.png&#34; alt=&#34;&#34; /&gt;
-目だけでなく、ちょっとした花を付け加えるとより個性が出ます。色々試してみてください。&lt;/p&gt;
-&lt;h2 id=&#34;試してみる&#34;&gt;試してみる&lt;/h2&gt;
-&lt;p&gt;さて、一通り完成したので動作検証してみます。&lt;/p&gt;
-&lt;p&gt;IFTTTの〔My Applets〕で自分の作成したアプレットが確認できます。今回はテストなので時間を12時45分にしました。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/46.png&#34; alt=&#34;&#34; /&gt;
-実行されるとIFTTTから通知が来ます。確認してみると正常に動いているようです。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/47.png&#34; alt=&#34;&#34; /&gt;
-UVindexの値を確認すると「9」となっています。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/106/48.png&#34; alt=&#34;&#34; /&gt;
-LED Barは&amp;hellip;レベル9まで光っています！&lt;strong&gt;外に出る時は紫外線対策をしっかりしましょう！！&lt;/strong&gt;&lt;/p&gt;
-&lt;h2 id=&#34;最後に&#34;&gt;最後に&lt;/h2&gt;
-&lt;p&gt;今回は「Wio Node」と「IFTTT」を使ってノンプログラミングでUV（紫外線）のレベルをLED Barで表示させました。初心者の方でも簡単にできたのではないでしょうか。「IFTTT」で取得する値を変えたりアクションを変えたりするともっと色んなことができそうですね。&lt;/p&gt;
-&lt;p&gt;また、「IFTTT」で取得する値は0〜16ですが、現状は10以上の場合もLED Barは10までの表示です。これ以上細かい表示をする場合はプログラムを組んでみましょう。そちらの方も是非挑戦してみてください。&lt;/p&gt;
-&lt;p&gt;最後まで読んで頂きありがとうございました。&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;実際にこのガジェットは、職場のデスクで稼働していて、いつも京急の運行情報を知らせてくれます。今後は他社線バージョンの作成を検討しています。&lt;/p&gt;</description></item></channel></rss>

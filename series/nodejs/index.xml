@@ -1,4 +1,330 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Nodejs on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/nodejs/</link><description>Recent content in Nodejs on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Thu, 24 Jan 2019 00:51:35 +0900</lastBuildDate><atom:link href="/series/nodejs/" rel="self" type="application/rss+xml"/><item><title>Moddable SDKを使ってJavaScriptでIoT開発してみた</title><link>https://dotstud.io/blog/developed-iot-using-moddable/</link><pubDate>Thu, 24 Jan 2019 00:51:35 +0900</pubDate><guid>https://dotstud.io/blog/developed-iot-using-moddable/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Nodejs on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/nodejs/</link><description>Recent content in Nodejs on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Mon, 28 Jan 2019 00:51:35 +0900</lastBuildDate><atom:link href="/series/nodejs/" rel="self" type="application/rss+xml"/><item><title>ArduinoでTwitter連携！愛しのぬいぐるみトンピーちゃんに命を吹き込んでみた</title><link>https://dotstud.io/blog/arduino-nodejs-twitter-connect/</link><pubDate>Mon, 28 Jan 2019 00:51:35 +0900</pubDate><guid>https://dotstud.io/blog/arduino-nodejs-twitter-connect/</guid><description>
+&lt;p&gt;皆さん、大好きなぬいぐるみが動き出したらいいなと思ったこと、ありませんか？&lt;/p&gt;
+&lt;p&gt;今回は私の愛すべきお友達「トンピーちゃん」に命を吹き込むべく、プログラミング初心者の私がArduinoとTwitterの連携に挑戦してみました！&lt;/p&gt;
+&lt;p&gt;&lt;font size=&#34;4&#34;&gt;こちらです！！&lt;/font&gt;
+&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/721a8190-3ffc-8bca-c4b3-774ee58d45e9.gif&#34; alt=&#34;ezgif.com-video-to-gif.gif&#34; /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;今回やること&#34;&gt;今回やること&lt;/h2&gt;
+&lt;h3 id=&#34;実装の構成&#34;&gt;実装の構成&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&#34;https://gyazo.com/a75b45dc702b385f5e32fcd3e39c5b64&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/a75b45dc702b385f5e32fcd3e39c5b64.png&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;ざっくりの構成です。Node.jsでTwitterの「#tonpy」というハッシュタグを監視し、「move #tonpy」「stop #tonpy」というツイートがあったらArduinoを経由してトンピーちゃんが動いたり止まったりします。&lt;/p&gt;
+&lt;h3 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h3&gt;
+&lt;h4 id=&#34;こぐまのトンピーちゃん&#34;&gt;■こぐまのトンピーちゃん&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/210df088-f5f0-6f8a-e9ee-2a63f06e2364.jpeg&#34; alt=&#34;トンピー.jpg&#34; /&gt;
+愛用のトンピーちゃんです。乾電池を入れるとピーヒャラドンドンします。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;購入: &lt;a href=&#34;https://www.amazon.co.jp/%E3%82%A4%E3%83%AF%E3%83%A4-%E3%81%93%E3%81%90%E3%81%BE%E3%81%AE%E3%83%88%E3%83%B3%E3%83%94%E3%83%BC/dp/B0002U3OBA&#34;&gt;Amazon.co.jp&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;arduino-uno&#34;&gt;■Arduino Uno&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/c26d230d-e320-b73d-f15f-32d813e1294f.jpeg&#34; alt=&#34;Arduino Uno.jpg&#34; /&gt;
+Arduino Unoは2010年に発売されたArduinoで、&lt;a href=&#34;https://store.arduino.cc/usa/arduino-uno-rev3&#34;&gt;Arduinoの公式サイト&lt;/a&gt;にも「&lt;strong&gt;電子工作初心者に最適&lt;/strong&gt;」と書いてあったのでこちらに決めました。&lt;/p&gt;
+&lt;p&gt;購入にあたっては「Arduino 初心者」と調べヒットした「&lt;a href=&#34;https://www.amazon.co.jp/%E3%82%B9%E3%82%A4%E3%83%83%E3%83%81%E3%82%B5%E3%82%A4%E3%82%A8%E3%83%B3%E3%82%B9-SSCI-GettingStartedArduinoKit-Arduino%E3%82%92%E3%81%AF%E3%81%98%E3%82%81%E3%82%88%E3%81%86%E3%82%AD%E3%83%83%E3%83%88/dp/B0025Y6C5G/ref=sr_1_fkmr1_2?ie=UTF8&amp;amp;qid=1544321570&amp;amp;sr=8-2-fkmr1&amp;amp;keywords=arduino+%E3%82%B9%E3%82%BF%E3%83%BC%E3%83%88%E3%82%AD%E3%83%83%E3%83%88&#34;&gt;Arduinoをはじめようキット&lt;/a&gt;」を購入しました。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/d7099cb0-97aa-8ff1-4e3d-b959e8139fb4.jpeg&#34;&gt;
+─ Arduinoをはじめようキット
+&lt;/center&gt;
+Arduino Unoの他にブレッドボードや抵抗など電子工作を始めるにあたり必要なもの一式が揃っているため、すぐに始める事ができます。&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;fet-pch-mosfet-2sjs527l-e-60v5a&#34;&gt;■FET（Pch MOSFET 2SJS527L-E 60V5A）&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/88510174-eed9-e286-5343-3deeb08a7884.jpeg&#34; alt=&#34;I-08315.jpg&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;FETはロードスイッチとも呼ばれ、簡単にいうと外部からの電圧によって電流の流れを制御できるスイッチのようなもののようです。小さな電力で動作させる事ができます。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/#回路を作成&#34;&gt;回路を作成&lt;/a&gt;で説明しますが、FETには「Pチャネル」と「Nチャネル」の2種類あります。今回はNチャネルのFETを利用します。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;購入: &lt;a href=&#34;http://akizukidenshi.com/catalog/g/gI-07145/&#34;&gt;秋月電子&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;node-jsをインストールしたpc&#34;&gt;■Node.jsをインストールしたPC&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/efcdf34b-504e-cc68-125a-0acadd815510.jpeg&#34; alt=&#34;IMG_9204.jpg&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;今回はNode.jsでプログラムを動かします。下記記事を参考にインストールしてみてください！&lt;/p&gt;
+&lt;section class=&#34;link&#34; id=&#34;136&#34;&gt;
+&lt;div class=&#34;link_content&#34;&gt;
+&lt;a href=&#34;https://dotstud.io/blog/nodejs-install-use-nodebrew/&#34;&gt;&lt;/a&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/136/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
+&lt;/div&gt;
+&lt;div class=&#34;link_content&#34;&gt;
+&lt;div class=&#34;link_detail&#34;&gt;
+&lt;div class=&#34;link_title&#34;&gt;
+Node.jsを始めよう！nodebrewを使って5分で環境構築
+&lt;/div&gt;
+&lt;div class=&#34;link_date&#34;&gt;
+2017-12-15
+&lt;/div&gt;
+&lt;div class=&#34;link_desc&#34;&gt;
+nodebrewを使ったNode.jsのインストール方法をまとめました。
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/section&gt;
+&lt;/section&gt;
+&lt;ul&gt;
+&lt;li&gt;筆者PC: mac OS HighSierra バージョン10.13.6&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;Node.js: v10.10.0&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;その他&#34;&gt;■その他&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/eb369434-a5ff-e44a-c7b9-02a065030098.jpeg&#34; alt=&#34;IMG_9206.jpg&#34; /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://dotstud.io/docs/breadboard/&#34;&gt;ブレッドボード&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://localhost:1313/docs/jumperwire/#%E3%83%9F%E3%83%8E%E3%83%A0%E3%82%B7%E3%82%AF%E3%83%AA%E3%83%83%E3%83%97-%E3%83%AF%E3%83%8B%E5%8F%A3&#34;&gt;ワニ口クリップ&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;抵抗（今回は220Ω）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;トンピーちゃんを解体&#34;&gt;トンピーちゃんを解体&lt;/h2&gt;
+&lt;p&gt;まずはトンピーちゃんの導線を確認するため、少し解体します。
+&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/69ccd688-afb6-0715-124a-44d886fe3178.jpeg&#34; alt=&#34;IMG_6786.jpg&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/84c4fcd7-8c65-a0dc-1a84-ee75b5c2ef48.jpeg&#34; alt=&#34;IMG_9205.jpg&#34; /&gt;
+電池の部分を取り外してみました。すると、導線は電池部分と本体でパックリ分かれている事が確認できました。今回はその部分にArduino Unoを繋げば回路の開/閉が制御できそうですね。&lt;/p&gt;
+&lt;h2 id=&#34;arduino-unoとトンピーちゃんを連携&#34;&gt;Arduino Unoとトンピーちゃんを連携&lt;/h2&gt;
+&lt;h3 id=&#34;回路を作成&#34;&gt;回路を作成&lt;/h3&gt;
+&lt;p&gt;Arduino Unoから直接ON/OFFを制御しようとすると、電流が少なく回路を開/閉できませんでした。そこでArduino Unoとトンピーちゃんの間に&lt;strong&gt;FETを挿入&lt;/strong&gt;します。&lt;/p&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/230/fet.png&#34; alt=&#34;fet&#34;&gt;
+&lt;/center&gt;
+&lt;p&gt;FETは、電圧の加え方の違いによって「Pチャネル」と「Nチャネル」の2種類に分かれます。今回はNチャネルのFETを利用します。&lt;/p&gt;
+&lt;p&gt;また、回路の「+側」にFETを繋ぐことを「ハイサイド（スイッチ）」、-側に繋ぐことを「ローサイド（スイッチ）」と呼称します。今回はNチャネルなので、ローサイドにFETを繋ぎます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/d32c3f6f4b1de908ceced242cc2ba7f4.png&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;最終的に上記のような回路図になりました。&lt;/p&gt;
+&lt;h3 id=&#34;arduino-unoにプログラムを書き込む&#34;&gt;Arduino Unoにプログラムを書き込む&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/b544f541-a5ac-ee97-18a3-de3963210c92.png&#34; alt=&#34;スクリーンショット 2018-12-18 12.35.58.png&#34; /&gt;
+ArduinoをUSBケーブルでPCに繋ぎ、アプリケーションでArduino IDEを開きます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/da16043a-121e-52e2-e395-3121a8a3e48f.png&#34; alt=&#34;スクリーンショット 2018-12-16 15.10.09.png&#34; /&gt;
+ファイル→新規ファイルを選択します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/2a42d894-497d-a0c4-5573-6a4c148fc5fe.png&#34; alt=&#34;スクリーンショット 2018-12-16 15.09.45.png&#34; /&gt;
+ツール→ボード→繋いだArduino（今回はArduino Uno）を選択します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/9f5d63e2-454b-c637-ef5d-07550cccf8d5.png&#34; alt=&#34;スクリーンショット 2018-12-16 15.11.33.png&#34; /&gt;
+ツール→シリアルポート→接続したArduinoを選択します。&lt;/p&gt;
+&lt;p&gt;下記コードを新規ファイルにコピー&amp;amp;ペーストします。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;// pins
+const int tonpyPin = 2;
+void setup() {
+// initialize serial:
+Serial.begin(9600);
+// make the pins outputs:
+pinMode(tonpyPin, OUTPUT);
+}
+void loop() {
+// if there&#39;s any serial available, read it:
+while (Serial.available() &amp;gt; 0) {
+char value = Serial.read();
+if (value == &#39;p&#39;) {
+digitalWrite(tonpyPin, HIGH);
+} else if (value == &#39;q&#39;){
+digitalWrite(tonpyPin, LOW);
+} else{
+digitalWrite(tonpyPin, LOW);
+}
+Serial.println(value);
+}
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/8ec32eee-c610-137c-febd-9408f22db6e1.png&#34; alt=&#34;スクリーンショット 2018-12-10 9.25.26.png&#34; /&gt;
+左上にある「→」ボタンを押してマイコンボードに書き込みます。&lt;/p&gt;
+&lt;p&gt;これでArduino Unoからの信号（p: スイッチON、q: スイッチOFF）でトンピーちゃんが動く/止まるようになりました。&lt;/p&gt;
+&lt;p&gt;これをツイートと連動できれば完成です！&lt;/p&gt;
+&lt;h2 id=&#34;node-jsのプログラム&#34;&gt;Node.jsのプログラム&lt;/h2&gt;
+&lt;p&gt;ハッシュタグ「#tonpy」を取得し、さらに「move」「stop」のツイートがあったらArduino Unoに送るプログラムを作成します。&lt;/p&gt;
+&lt;h3 id=&#34;twitter-apiの準備&#34;&gt;Twitter APIの準備&lt;/h3&gt;
+&lt;p&gt;API使用には&lt;a href=&#34;https://developer.twitter.com/&#34;&gt;Twitter Developer&lt;/a&gt;へ登録する必要があります。登録の際、用途など英文で書く部分がありました（筆者はGoogle翻訳を駆使しました）。&lt;/p&gt;
+&lt;p&gt;手順については下記の記事に詳しく書かれており、そちらに沿って登録しました。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;参考: &lt;a href=&#34;https://qiita.com/kngsym2018/items/2524d21455aac111cdee&#34;&gt;Twitter API 登録 (アカウント申請方法) から承認されるまでの手順まとめ　※2018年9月時点の情報&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;tweetを取得するnode-jsのプログラムを作成&#34;&gt;Tweetを取得するNode.jsのプログラムを作成&lt;/h3&gt;
+&lt;h4 id=&#34;ディレクトリを用意&#34;&gt;■ディレクトリを用意&lt;/h4&gt;
+&lt;p&gt;任意の保存場所にフォルダを用意します。今回はDesktopにTonpyフォルダを作りました。&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;jsファイルを作成&#34;&gt;■JSファイルを作成&lt;/h4&gt;
+&lt;p&gt;作成したフォルダに任意の名前のJSファイルを用意します。今回は「app.js」としました。&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;twitter-apiを使用するモジュールのインストール&#34;&gt;■Twitter APIを使用するモジュールのインストール&lt;/h4&gt;
+&lt;p&gt;Node.jsでTwitter APIが使用できるよう&lt;a href=&#34;https://www.npmjs.com/package/twitter&#34;&gt;Twitterモジュール&lt;/a&gt;をnpmでインストールします。ターミナルで作成したフォルダを開き、下記コマンドを叩きます。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ npm install twitter
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;これでNode.jsでTwitter APIが使用できるようになりました。&lt;/p&gt;
+&lt;p&gt;実際に使用する際はJSファイル内で最初に下記のように書くとTwitter APIが呼び出されます。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;const Twitter = require(&#39;twitter&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;ツイートを取得するプログラムを作成&#34;&gt;■ツイートを取得するプログラムを作成&lt;/h4&gt;
+&lt;p&gt;TwitterAPIには「REST API」と「Streaming API」の2種類があります。&lt;/p&gt;
+&lt;p&gt;REST APIはエンドポイントへリクエストして初めて結果が得られるものに対して、Streaming APIはレートのリミットなくツイートを受信し続ける事ができます。&lt;/p&gt;
+&lt;p&gt;今回はツイートを常に監視し該当のツイートがあったら結果を取得する、という事がしたいので&lt;strong&gt;Streaming API&lt;/strong&gt;を使用します。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;const twitter = require(&amp;quot;twitter&amp;quot;);
+const fs = require(&amp;quot;fs&amp;quot;);
+const client = new twitter({
+consumer_key: &#39;&#39;,//Dev Accountで取得したkeyを書く
+consumer_secret: &#39;&#39;,
+access_token_key: &#39;&#39;,
+access_token_secret: &#39;&#39;,
+});
+let tweetText =&#39;w&#39;;
+client.stream(&#39;statuses/filter&#39;, {track:&amp;quot;#tonpy &amp;quot;}, (stream) =&amp;gt; {//Streaming APIを呼び出す
+stream.on(&#39;data&#39;, (tweet) =&amp;gt; {
+tweetText = tweet.text;
+(~tweetText.indexOf(&#39;move&#39;)) ? (tweetText = &#39;p&#39;) : (~tweetText.indexOf(&#39;stop&#39;)) ? (tweetText = &#39;q&#39;) : (tweetText = &#39;w&#39;);
+});
+stream.on(&#39;error&#39;, (error) =&amp;gt; {//エラー
+console.error(`Error: ${error.message}`);
+stream.destroy();
+});
+});
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;ツイートを取得するNode.jsのプログラムが完成しました。&lt;/p&gt;
+&lt;h3 id=&#34;arduinoに送るプログラムを作成&#34;&gt;Arduinoに送るプログラムを作成&lt;/h3&gt;
+&lt;h4 id=&#34;シリアル通信をするモジュールのインストール&#34;&gt;■シリアル通信をするモジュールのインストール&lt;/h4&gt;
+&lt;p&gt;PCとArduino間でシリアル通信をするために、シリアルポートでシリアル通信を行うモジュールもnpmでインストールします。&lt;/p&gt;
+&lt;p&gt;シリアルポートとは&lt;strong&gt;シリアル通信を行う時の接続口&lt;/strong&gt;のことで、今回はArduinoと接続したPCのUSBポートにあたります。&lt;/p&gt;
+&lt;p&gt;ターミナルで下記コマンドを叩きます。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ npm install serialport
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;これでNode.jsでシリアルポートを制御できるようになりました。&lt;/p&gt;
+&lt;p&gt;使用する際はJSファイル内で最初に下記のように呼び出します。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;const Serialport = require(&#39;serialport&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;シリアルポートの名前を調べる&#34;&gt;■シリアルポートの名前を調べる&lt;/h4&gt;
+&lt;p&gt;プログラム内では、USBポートに挿しているArduino Uno（ttyデバイス）を指定します。&lt;/p&gt;
+&lt;p&gt;ターミナルで下記コマンドを打ち、PCのシリアルポートに接続されている機器を表示します。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ ls -l /dev/tty.*
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Auduino Unoを挿し、もう一度先ほどのコマンドを打ちます。新しく出てきたttyデバイス名がArduino Unoです。&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;arduino-unoに送るnode-jsのプログラムを作成&#34;&gt;■ Arduino Unoに送るNode.jsのプログラムを作成&lt;/h4&gt;
+&lt;p&gt;下記がシリアル通信するためのコードです。ツイートを取得するためのJSファイルの続きに記述してください。&lt;/p&gt;
+&lt;p&gt;1行目の&lt;code&gt;/dev/tty.xxx&lt;/code&gt;には上記のシリアルポート名を記入してください。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-javascript&#34;&gt;const port = new SerialPort(&#39;/dev/tty.xxx&#39;,{
+baudRate: 9600//baudRate:9600は1秒に最大9600ビットを送信するという意味
+});
+port.write(&#39;main screen turn on&#39;, function(err) {
+if (err) {
+return console.log(&#39;Error on write: &#39;, err.message);
+}
+console.log(&#39;message written&#39;);
+});
+port.on(&#39;open&#39;, () =&amp;gt; {
+console.log(&#39;Serial open.&#39;);
+setInterval(write, 1000);
+});
+const write = () =&amp;gt; {
+console.log(`Input to Arduino: ${tweetText}`);
+port.write(tweetText, (error) =&amp;gt; {
+if(error) {
+console.error(`Error: ${error.message}`);
+}
+});
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;これでツイート情報を取得し、Arduinoに信号を送る事ができるようになりました。&lt;/p&gt;
+&lt;h3 id=&#34;完成コード&#34;&gt;完成コード&lt;/h3&gt;
+&lt;p&gt;ツイートを取得するプログラム、Arduinoを制御するプログラムを合わせた完成コードは下記のようになります。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;//-----------------------------------------------
+// twitterからツイートを取得
+//-----------------------------------------------
+const twitter = require(&amp;quot;twitter&amp;quot;);
+const client = new twitter({
+consumer_key: &#39;&#39;,//Dev Accountで取得したkeyを書く
+consumer_secret: &#39;&#39;,
+access_token_key: &#39;&#39;,
+access_token_secret: &#39;&#39;,
+});
+let tweetText =&#39;w&#39;;
+client.stream(&#39;statuses/filter&#39;, {track:&amp;quot;#tonpy &amp;quot;}, (stream) =&amp;gt; {
+stream.on(&#39;data&#39;, (tweet) =&amp;gt; {
+tweetText = tweet.text;
+(~tweetText.indexOf(&#39;move&#39;)) ? (tweetText = &#39;p&#39;) : (~tweetText.indexOf(&#39;stop&#39;)) ? (tweetText = &#39;q&#39;) : (tweetText = &#39;w&#39;);
+});
+stream.on(&#39;error&#39;, (error) =&amp;gt; {
+console.error(`Error: ${error.message}`);
+stream.destroy();
+});
+});
+//-----------------------------------------------
+// Node.jsからArduinoに送信
+//----------------------------------------------
+const SerialPort = require(&#39;serialport&#39;);
+const port = new SerialPort(&#39;/dev/tty.xxx&#39;,{
+baudRate: 9600
+});
+port.on(&#39;open&#39;, () =&amp;gt; {
+console.log(&#39;Serial open.&#39;);
+setInterval(write, 1000);
+});
+port.on(&#39;data&#39;, (data) =&amp;gt; {
+console.log(`Data from Arduino: ${data}`);
+});
+const write = () =&amp;gt; {
+console.log(`Input to Arduino: ${tweetText}`);
+port.write(tweetText, (error) =&amp;gt; {
+if(error) {
+console.error(`Error: ${error.message}`);
+}
+});
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;node-jsを実行する&#34;&gt;■Node.jsを実行する&lt;/h4&gt;
+&lt;p&gt;Node.jsは、ファイルのある場所で下記コマンドで実行します。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ node app.js
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;app.js&lt;/code&gt;部分は、ご自身が作成したファイル名に置き換えてください。「Serial open」がターミナル上に表示されたら無事実行されています。&lt;/p&gt;
+&lt;h2 id=&#34;動かしてみる&#34;&gt;動かしてみる&lt;/h2&gt;
+&lt;p&gt;Node.jsを起動しながら、ツイートしてみましょう……。「&lt;strong&gt;#tonpy move&lt;/strong&gt;」!!!!!
+&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/309368/9c8c2611-d9b2-e7dd-3710-8d2011c2b424.gif&#34; alt=&#34;ezgif.com-video-to-gif.gif&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;う、動いたーーーー！！！（少々タイムラグがありますが……。）&lt;/p&gt;
+&lt;p&gt;初めてのIoTとっっても楽しかったです！電子工作やNode.jsの勉強にもなり一石二鳥ですね。&lt;/p&gt;
+&lt;p&gt;これから色々作っていきたいです！&lt;/p&gt;
+&lt;style&gt;
+.caution {
+border: 1px solid #BFBFBF;
+padding: 1em 2em;
+margin: 2em 0;
+color: #474747;
+background: whitesmoke;/*背景色*/
+border-left: double 7px #0B0B61;/*左線*/
+font-size: 90%;
+}
+.caution &gt; p {
+font-weight: bold;
+margin: 0 0 10px 0;
+padding: 0;
+}
+blockquote {
+font-size:80%;
+}
+.accbox {
+margin: 2em 0;
+padding: 0;
+max-width: 710px;
+}
+.accbox label {
+display: block;
+margin: 1.5px 0;
+padding : 11px 12px;
+color :#ffffff;
+font-weight: bold;
+background :#2f2f2f;
+cursor :pointer;
+transition: all 0.5s;
+}
+.accbox label:hover {
+background :#A4A4A4;
+}
+.accbox input {
+display: none;
+}
+.accbox .accshow {
+height: 0;
+padding: 0;
+overflow: hidden;
+opacity: 0;
+transition: 0.8s;
+}
+.cssacc:checked + .accshow {
+height: auto;
+padding: 5px;
+background: #eaeaea;
+opacity: 1;
+}
+&lt;/style&gt;</description></item><item><title>Moddable SDKを使ってJavaScriptでIoT開発してみた</title><link>https://dotstud.io/blog/developed-iot-using-moddable/</link><pubDate>Thu, 24 Jan 2019 00:51:35 +0900</pubDate><guid>https://dotstud.io/blog/developed-iot-using-moddable/</guid><description>
 &lt;p&gt;どうも。&lt;a href=&#34;https://dotstud.io/members/horihiro&#34;&gt;ほりひろ&lt;/a&gt; です。
 dotstudioブログでは、初めましてですね。&lt;/p&gt;
 &lt;p&gt;JavaScript や IoT が好きな、でも実は半田付けも抵抗値の計算もろくにできないレベルの週末プログラマーです。
@@ -2079,127 +2405,4 @@ change package.json
 &lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
 &lt;p&gt;chokidarを使ってファイル監視して「特定のファイルが更新されたら〇〇する」というトリガーを簡単に作れます。&lt;/p&gt;
 &lt;p&gt;プロジェクト管理などで活用してみてください。&lt;/p&gt;
-&lt;p&gt;それでは。&lt;/p&gt;</description></item><item><title>2016年12月版　Node.jsをホスティング出来るPaaSまとめ</title><link>https://dotstud.io/blog/nodejs-hosting-services-2016/</link><pubDate>Sun, 25 Dec 2016 02:19:41 +0900</pubDate><guid>https://dotstud.io/blog/nodejs-hosting-services-2016/</guid><description>
-&lt;p&gt;こんにちは、dotstudio代表の&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
-&lt;p&gt;年の瀬ですね。というかクリスマスですね。
-今回の記事は&lt;a href=&#34;http://qiita.com/advent-calendar/2016/ipu&#34;&gt;岩手県立大学アドベントカレンダー2016&lt;/a&gt;に登録しています。&lt;/p&gt;
-&lt;p&gt;僕が学生時代(2014年1月)に書いた記事「&lt;a href=&#34;http://offsidenow.phpapps.jp/archives/1671&#34;&gt;GUMBY + NODE.JS(EXPRESS) +APPFOGでペライチページを作ったので解説&lt;/a&gt;」を見つけて、この中で&lt;a href=&#34;https://www.ctl.io/appfog&#34;&gt;AppFog&lt;/a&gt;を利用してNode.jsのホスティングを行なっていました。
-最近になって「AppFogって今どうなってるんだろう」とか「もっと他のPaaSは無いのか」とか思ったので改めて調べてみたのでまとめてみます。&lt;/p&gt;
-&lt;p&gt;（ちなみに、この記事内で触れている盛岡TSUTAYAのカフェCulfeは&lt;a href=&#34;http://www.recomtank.com/entry/moriokatsutaya&#34;&gt;電源とWi-Fi完備&lt;/a&gt;で頻繁に利用していましたが、&lt;a href=&#34;http://morioka-tsutaya.net/news/morioka-tsutaya-%E3%82%AB%E3%83%95%E3%82%A7%E3%80%80culfe%E3%80%80%E9%96%89%E5%BA%97%E3%81%AE%E3%81%8A%E7%9F%A5%E3%82%89%E3%81%9B/&#34;&gt;2016年3月で閉店してしまっていた&lt;/a&gt;みたいです……）&lt;/p&gt;
-&lt;h2 id=&#34;前置き&#34;&gt;前置き&lt;/h2&gt;
-&lt;p&gt;まとめを読むにあたり、この辺を把握してもらえると嬉しいです。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;AWS、GCP、Azure、Bluemixなどの大手ベンダーは今回は対象外としました。&lt;/li&gt;
-&lt;li&gt;全てを使ってみている訳ではないのでPaaSじゃないのも混ざってるかもしれないですけどご容赦下さい。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;また、今回参考にしたのは以下のサイトです。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://blog.appdynamics.com/product/battle-of-the-paas-node-js-apps-in-the-cloud/&#34;&gt;Battle of the PaaS: Node.js Apps in the Cloud&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://www.axlight.com/mt/sundayhacking/2015/07/nodejspaas.html&#34;&gt;node.jsアプリをデプロイするためのPaaSのクラウドサービスを探した&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://matome.naver.jp/odai/2133923360659821201&#34;&gt;今アツいWeb開発者向けクラウドプラットフォームまとめ&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/nodejs/node-v0.x-archive/wiki/Node-Hosting&#34;&gt;Hosting compatible with Node&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;node-jsのホスティングで使えそうなサービスたち&#34;&gt;Node.jsのホスティングで使えそうなサービスたち&lt;/h2&gt;
-&lt;h3 id=&#34;heroku&#34;&gt;Heroku&lt;/h3&gt;
-&lt;p&gt;URL: &lt;a href=&#34;https://www.heroku.com&#34;&gt;https://www.heroku.com&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;昔から安定のHerokuです。Node.js以外にもRuby/Java/PHP/Python/Go/Scala/Clojureが利用できます。&lt;/p&gt;
-&lt;h3 id=&#34;modulus&#34;&gt;Modulus&lt;/h3&gt;
-&lt;p&gt;URL: &lt;a href=&#34;https://modulus.io&#34;&gt;https://modulus.io&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;npm install -g modulus&lt;/code&gt;でCLIツールをインストールして利用できます。
-Node.js/PHP/Java/Python/&lt;a href=&#34;https://www.meteor.com&#34;&gt;Meteor&lt;/a&gt;(Node.jsのフレームワーク)が利用できます。&lt;/p&gt;
-&lt;h3 id=&#34;cloudnode&#34;&gt;cloudnode&lt;/h3&gt;
-&lt;p&gt;URL: &lt;a href=&#34;https://cloudno.de/&#34;&gt;https://cloudno.de/&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;Node.js向けのPaaSです。&lt;code&gt;npm install -g cloudnode-cli&lt;/code&gt;で&lt;code&gt;cloudnodeコマンド&lt;/code&gt;を利用してデプロイします。
-CouchDB、MongoDB、Redisなども利用できます。&lt;/p&gt;
-&lt;h3 id=&#34;evennode&#34;&gt;evennode&lt;/h3&gt;
-&lt;p&gt;URL: &lt;a href=&#34;https://www.evennode.com/&#34;&gt;https://www.evennode.com/&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;Node.js(とPython)向けのPaaSです。他のPaaSと違いアプリを作成すると「&lt;code&gt;git@git.evennode.com:xxxxxxxx.git&lt;/code&gt;」という感じのGitリポジトリのURLが発行され、そこにプッシュすることでデプロイできます。
-CLIツールのインストールも不要なのは手軽ですね。&lt;/p&gt;
-&lt;h3 id=&#34;nodechef&#34;&gt;NodeChef&lt;/h3&gt;
-&lt;p&gt;URL: &lt;a href=&#34;https://nodechef.com/&#34;&gt;https://nodechef.com/&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;こちらもNode.js向けのPaaSです。コマンドラインからデプロイができます。
-MongoDBやMeteorなどにも対応していてNode.js開発者が好むミドルウェアをサポートしてくれています。&lt;/p&gt;
-&lt;h3 id=&#34;nodejs-in-the-cloud-by-clever-cloud&#34;&gt;Nodejs in the cloud （by Clever Cloud）&lt;/h3&gt;
-&lt;p&gt;URL: &lt;a href=&#34;http://nodejs-cloud.com/en&#34;&gt;http://nodejs-cloud.com/en&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;「A cloud for Node.js HOST YOUR WEB APPS IN THE CLOUD WITHOUT HASSLE」とあるように、Node.jsを簡単にデプロイできるPaaSです。
-中身は&lt;a href=&#34;https://www.clever-cloud.com/&#34;&gt;Clever Cloud&lt;/a&gt;が提供しているもののようです。&lt;/p&gt;
-&lt;h3 id=&#34;flow-app-engine&#34;&gt;FLOW APP ENGINE&lt;/h3&gt;
-&lt;p&gt;URL: &lt;a href=&#34;https://flow.ch/appengine/&#34;&gt;https://flow.ch/appengine/&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;Node.jsのデプロイだけでなく、WebサーバーでのバランシングやDBの用意なども簡単なボタン操作で設定できます。
-NginxやApache、MongoDBやMySQLなどの有名なミドルウェアだけでなくかなり多くのミドルウェアをサポートしてくれています。&lt;/p&gt;
-&lt;h3 id=&#34;nodejitsu&#34;&gt;Nodejitsu&lt;/h3&gt;
-&lt;p&gt;URL: &lt;a href=&#34;https://nodejitsu.com/&#34;&gt;https://nodejitsu.com/&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/08.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;Node.js専用のPaaSです。今は新規のアカウント登録はできず前述したModulus経由で扱うことができるようです。&lt;/p&gt;
-&lt;h3 id=&#34;joyent&#34;&gt;Joyent&lt;/h3&gt;
-&lt;p&gt;URL: &lt;a href=&#34;https://www.joyent.com/&#34;&gt;https://www.joyent.com/&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/09.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;IaaS提供もありますが、Dockerコンテナに最適化したクラウドサービス「&lt;a href=&#34;https://www.joyent.com/triton&#34;&gt;Triton&lt;/a&gt;」やオブジェクトストレージの「&lt;a href=&#34;https://www.joyent.com/manta&#34;&gt;Manta&lt;/a&gt;」を提供しています。
-Manta FUNCTIONSという機能ではNode.jsやPython、Rubyなど様々な言語を実行できます。&lt;/p&gt;
-&lt;h3 id=&#34;appfog&#34;&gt;AppFog&lt;/h3&gt;
-&lt;p&gt;URL: &lt;a href=&#34;http://appfog.com&#34;&gt;http://appfog.com&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;冒頭でも触れたPaaSです。二年前くらいは無料でそこそこ使えて学生時代の僕にはすごくいいサービスだったのですが、今は有料化してしまったみたいです。&lt;/p&gt;
-&lt;h2 id=&#34;解説いれるくらい試せて無いサービスたち&#34;&gt;解説いれるくらい試せて無いサービスたち&lt;/h2&gt;
-&lt;p&gt;試せて無いですがNode.jsホスティングで調べて出てきたサービスたちです。
-中にはVPSっぽいのもあるのでPaaSって感じでは無いのもあると思います。&lt;/p&gt;
-&lt;p&gt;あとで試してみて解説が書けそうだったら別途まとめたいと思います。&lt;/p&gt;
-&lt;p&gt;……ということで解説抜きでURLとキャプチャのみです。&lt;/p&gt;
-&lt;h3 id=&#34;platform-sh&#34;&gt;platform.sh&lt;/h3&gt;
-&lt;p&gt;URL: &lt;a href=&#34;https://platform.sh/hosting/nodejs/&#34;&gt;https://platform.sh/hosting/nodejs/&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;h3 id=&#34;engine-yard&#34;&gt;Engine Yard&lt;/h3&gt;
-&lt;p&gt;URL: &lt;a href=&#34;https://www.engineyard.com/&#34;&gt;https://www.engineyard.com/&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/12.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;h3 id=&#34;iclickandhost&#34;&gt;iClickAndHost&lt;/h3&gt;
-&lt;p&gt;URL: &lt;a href=&#34;https://iclickandhost.com/website-hosting/&#34;&gt;https://iclickandhost.com/website-hosting/&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/13.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;h3 id=&#34;scalingo&#34;&gt;Scalingo&lt;/h3&gt;
-&lt;p&gt;URL: &lt;a href=&#34;https://scalingo.com/&#34;&gt;https://scalingo.com/&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/14.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;h3 id=&#34;rosehosting&#34;&gt;RoseHosting&lt;/h3&gt;
-&lt;p&gt;URL: &lt;a href=&#34;https://www.rosehosting.com/&#34;&gt;https://www.rosehosting.com/&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/15.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;h3 id=&#34;exoscale-apps&#34;&gt;exoscale apps&lt;/h3&gt;
-&lt;p&gt;URL: &lt;a href=&#34;https://www.exoscale.ch/add-on/apps/&#34;&gt;https://www.exoscale.ch/add-on/apps/&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/16.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;h3 id=&#34;clerve-cloud&#34;&gt;clerve cloud&lt;/h3&gt;
-&lt;p&gt;URL: &lt;a href=&#34;https://www.clever-cloud.com/nodejs&#34;&gt;https://www.clever-cloud.com/nodejs&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/17.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;h3 id=&#34;linode&#34;&gt;Linode&lt;/h3&gt;
-&lt;p&gt;URL: &lt;a href=&#34;https://www.linode.com/&#34;&gt;https://www.linode.com/&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/18.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;h3 id=&#34;cloud-foundry&#34;&gt;Cloud Foundry&lt;/h3&gt;
-&lt;p&gt;URL: &lt;a href=&#34;https://www.cloudfoundry.org/&#34;&gt;https://www.cloudfoundry.org/&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/19.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;h3 id=&#34;redhat-open-shift&#34;&gt;RedHat Open Shift&lt;/h3&gt;
-&lt;p&gt;URL: &lt;a href=&#34;https://www.openshift.com/&#34;&gt;https://www.openshift.com/&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/20.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;h3 id=&#34;pogodan&#34;&gt;Pogodan&lt;/h3&gt;
-&lt;p&gt;URL: &lt;a href=&#34;http://www.pogodan.com/&#34;&gt;http://www.pogodan.com/&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/21.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;h2 id=&#34;おまけ&#34;&gt;おまけ&lt;/h2&gt;
-&lt;p&gt;今回の記事を書く上で探してて惜しかったサービスをその他枠として挙げておきます。&lt;/p&gt;
-&lt;h3 id=&#34;commando-io-by-nodesocket&#34;&gt;Commando.io （by nodesocket）&lt;/h3&gt;
-&lt;p&gt;URL: &lt;a href=&#34;https://commando.io/&#34;&gt;https://commando.io/&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/22.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;http://nodesocket.com/&#34;&gt;nodeSocket&lt;/a&gt;というサービス名かと思いきや会社名でした。
-Command.ioというサービスでおそらくVPSサービスです。なのでNode.jsももちろん使えます。PaaSでは無いっぽいのでおまけ枠です。&lt;/p&gt;
-&lt;h3 id=&#34;c4sa&#34;&gt;C4SA&lt;/h3&gt;
-&lt;p&gt;URL: &lt;a href=&#34;http://c4sa.nifty.com/&#34;&gt;http://c4sa.nifty.com/&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/061/23.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;Niftyが運営しているサービスです。残念ながらNode.jsには対応してませんでしたがPHPやRubyなどは利用できるみたいです。&lt;/p&gt;
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-&lt;p&gt;いかがでしたでしょうか。
-思った以上にいっぱいあるなぁという感想です。&lt;/p&gt;
-&lt;p&gt;色々と調べててやはりHerokuが使い勝手や情報の調べやすさ的に圧倒的だなと感じました。&lt;/p&gt;
-&lt;p&gt;特にこだわりなどが無く、「通常利用で無料である程度試したい」くらいであればHerokuを使うのが良いかと思います。
-ちょっと気分を変えたいときや、何かの理由でHerokuが厳しいと感じた際の参考になれば幸いです。&lt;/p&gt;
 &lt;p&gt;それでは。&lt;/p&gt;</description></item></channel></rss>
