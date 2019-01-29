@@ -1,4 +1,148 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blogs on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/blog/</link><description>Recent content in Blogs on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Mon, 28 Jan 2019 00:51:35 +0900</lastBuildDate><atom:link href="/blog/" rel="self" type="application/rss+xml"/><item><title>ArduinoでTwitter連携！愛しのぬいぐるみトンピーちゃんに命を吹き込んでみた</title><link>https://dotstud.io/blog/arduino-nodejs-twitter-connect/</link><pubDate>Mon, 28 Jan 2019 00:51:35 +0900</pubDate><guid>https://dotstud.io/blog/arduino-nodejs-twitter-connect/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blogs on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/blog/</link><description>Recent content in Blogs on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Tue, 29 Jan 2019 02:11:45 +0900</lastBuildDate><atom:link href="/blog/" rel="self" type="application/rss+xml"/><item><title>電池が切れても消えないディスプレイって？電子ペーパーを使ってみた！</title><link>https://dotstud.io/blog/using-e-paper-module/</link><pubDate>Tue, 29 Jan 2019 02:11:45 +0900</pubDate><guid>https://dotstud.io/blog/using-e-paper-module/</guid><description>
+&lt;p&gt;こんにちは、わくわくエンジニアの&lt;a href=&#34;https://dotstud.io/members/tomato/&#34;&gt;佐々木さん&lt;/a&gt;です。&lt;/p&gt;
+&lt;p&gt;みなさんは&lt;strong&gt;電子ペーパー&lt;/strong&gt;を知っていますか？&lt;/p&gt;
+&lt;p&gt;電子ペーパーはその名の通り、&lt;u&gt;紙のような見た目のディスプレイ&lt;/u&gt;です。低消費電力であることや、最後に表示したものを電源がなくても保持し続けることが特徴として挙げられます。&lt;/p&gt;
+&lt;p&gt;&lt;u&gt;身近なものだとAmazonの&lt;a href=&#34;https://www.amazon.co.jp/Kindle-New%E3%83%A2%E3%83%87%E3%83%AB-%E9%9B%BB%E5%AD%90%E6%9B%B8%E7%B1%8D%E3%83%AA%E3%83%BC%E3%83%80%E3%83%BC-Wi-Fi-%E3%83%96%E3%83%A9%E3%83%83%E3%82%AF-%E3%82%AD%E3%83%A3%E3%83%B3%E3%83%9A%E3%83%BC%E3%83%B3%E6%83%85%E5%A0%B1%E3%81%A4%E3%81%8D%E3%83%A2%E3%83%87%E3%83%AB/dp/B0186FESEE/ref=sr_1_1?ie=UTF8&amp;amp;qid=1547970527&amp;amp;sr=8-1&amp;amp;keywords=kindle&#34;&gt;Kindle&lt;/a&gt;で採用されています。&lt;/u&gt;&lt;/p&gt;
+&lt;p&gt;それでは実際に本題に入っていきましょう！&lt;/p&gt;
+&lt;h2 id=&#34;電子ペーパーの仕組み&#34;&gt;電子ペーパーの仕組み&lt;/h2&gt;
+&lt;p&gt;今回使用するのは&lt;a href=&#34;https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-58WG&#34;&gt;2.9inch e-Paper Module&lt;/a&gt;という電子ペーパー。&lt;/p&gt;
+&lt;p&gt;電子ペーパーは複数の表示方式がありますが、2.9inch e-Paper Moduleは&lt;strong&gt;電気泳動方式&lt;/strong&gt;というものが採用されているためこちらの説明をしたいと思います。&lt;/p&gt;
+&lt;p&gt;電気泳動方式では、ディスプレイの中に&lt;strong&gt;マイクロカプセル&lt;/strong&gt;という&lt;u&gt;色を表現するための透明なカプセル&lt;/u&gt;が隙間なく並んでいます。そのマイクロカプセルの中には色のついた粒子が入っており、かける電圧で粒子を移動させることによって、見える色を変えています。電源がなくなっても粒子は移動しないので、最後に表示したものを保持し続けることができます。&lt;/p&gt;
+&lt;p&gt;従来は白黒のディスプレイが主流でしたが、現在では3色のディスプレイも多くなっています。&lt;/p&gt;
+&lt;h2 id=&#34;使ったもの&#34;&gt;使ったもの&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-58WG&#34;&gt;2.9inch e-Paper Module&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/143395/abfea5c3-70e3-6e80-b108-841ff52824d0.jpeg&#34; alt=&#34;20180810_165537.jpg&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;このディスプレイは白黒黄の3色を表現できるディスプレイになっています。この他にも、白黒や白黒赤などを表示することができるディスプレイもあります。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.switch-science.com/catalog/3646/&#34;&gt;Raspberry Pi Zero WH&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/143395/62d5a886-b22e-f1bd-e436-cea221c7c1d8.jpeg&#34; alt=&#34;20190120_192847.jpg&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;このRaspberry Pi Zero WHはIoTで使われるボードの１つです。&lt;/p&gt;
+&lt;h2 id=&#34;ディスプレイに表示させてみよう&#34;&gt;ディスプレイに表示させてみよう&lt;/h2&gt;
+&lt;p&gt;今回は&lt;a href=&#34;https://www.waveshare.com/w/upload/9/98/2.9inch-e-paper-module-user-manual-en.pdf&#34;&gt;2.9inch e-Paper Module User Manual&lt;/a&gt;を参考にして進めていきます。&lt;/p&gt;
+&lt;h3 id=&#34;配線&#34;&gt;配線&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;center&#34;&gt;GPIO&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;2.9inch e-Paper Module&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;3.3V&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;3.3V&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;GND&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;GND&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;MOSI&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;DIN&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;SCLK&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;CLK&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;CE0&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;CS&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;25&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;DC&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;17&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;RST&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;24&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;BUSY&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;環境構築&#34;&gt;環境構築&lt;/h3&gt;
+&lt;p&gt;以下のコマンドが今回プログラムを実行するのに必要なものをインストールするコマンドになります。&lt;/p&gt;
+&lt;p&gt;ターミナルを開いて実行してください。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo apt-get install python-pip
+sudo pip install spidev
+sudo apt-get install libjpeg-dev
+sudo pip install Image
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;次に、&lt;strong&gt;&lt;code&gt;/boot/config.txt&lt;/code&gt;&lt;/strong&gt;を編集します。以下のコマンドを実行してください。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;sudo nano /boot/config.txt&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;すると、nanoエディタが開くので、以下の手順を行なってください。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;番下に&lt;strong&gt;&lt;code&gt;dtparam=spi=on&lt;/code&gt;&lt;/strong&gt;を追加&lt;/li&gt;
+&lt;li&gt;キーボードの &lt;strong&gt;&lt;code&gt;controlキー&lt;/code&gt;&lt;/strong&gt; と &lt;strong&gt;&lt;code&gt;xキー&lt;/code&gt;&lt;/strong&gt; を同時に押す&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;yキー&lt;/code&gt;&lt;/strong&gt;を押す&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;enterキー&lt;/code&gt;&lt;/strong&gt;を押す&lt;/li&gt;
+&lt;li&gt;全て完了したら&lt;strong&gt;&lt;code&gt;reboot&lt;/code&gt;&lt;/strong&gt;コマンドで再起動&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;これで環境構築は完了です。&lt;/p&gt;
+&lt;h3 id=&#34;プログラム&#34;&gt;プログラム&lt;/h3&gt;
+&lt;p&gt;デモプログラムが公開されているため、&lt;a href=&#34;https://www.waveshare.com/wiki/File:2.9inch_e-paper_module_b_code.7z&#34;&gt;こちら&lt;/a&gt;からcurrentと書かれているものをダウンロードしてください。&lt;/p&gt;
+&lt;p&gt;ダウンロードが完了したら以下のコマンドを実行してください。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo apt-get install p7zip-full
+7z x 2.9inch_e-paper_module_b_code.7z
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;上記のコマンドで出てきた中の&lt;strong&gt;&lt;code&gt;RaspberryPi/python2&lt;/code&gt;&lt;/strong&gt;を今回は使います。&lt;/p&gt;
+&lt;p&gt;ターミナルで&lt;strong&gt;&lt;code&gt;RaspberryPi/python2&lt;/code&gt;&lt;/strong&gt;ディレクトリに移動して&lt;code&gt;python main.py&lt;/code&gt;**を実行すると、デモプログラムが起動します（※何も編集していない状態だとフォントが存在していないためエラーが発生します）。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;nano main.py&lt;/code&gt;&lt;/strong&gt;でファイルを少し編集します。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;main.py&lt;/code&gt;には以下のようなプログラムがあります。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;main.py&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;font24 = ImageFont.truetype(&#39;/usr/share/fonts/truetype/wqy/wqy-microhei.ttc&#39;, 24)
+font18 = ImageFont.truetype(&#39;/usr/share/fonts/truetype/wqy/wqy-microhei.ttc&#39;, 18)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;この&lt;strong&gt;&lt;code&gt;&#39;/usr/share/fonts/truetype/wqy/wqy-microhei.ttc&#39;&lt;/code&gt;&lt;/strong&gt;という部分を
+&lt;strong&gt;&lt;code&gt;&#39;/opt/vc/src/hello_pi/hello_font/Vera.ttf&#39;&lt;/code&gt;&lt;/strong&gt;に変更します。&lt;/p&gt;
+&lt;p&gt;もう一度&lt;code&gt;python main.py&lt;/code&gt;を実行すると、画面がピカピカし始め、Hello, worldなどが画像に表示されます。&lt;/p&gt;
+&lt;p&gt;では、実際にプログラムを少し変えて見ていきましょう。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;main.py&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;#!/usr/bin/python
+# -*- coding:utf-8 -*-
+import epd2in9b
+import time
+from PIL import Image,ImageDraw,ImageFont
+import traceback
+try:
+# ディスプレイの初期化処理をしています。
+epd = epd2in9b.EPD()
+epd.init()
+print &amp;quot;clear&amp;quot;
+epd.Clear(0xFF)
+# ディスプレイを横に使うように設定しています。
+HBlackimage = Image.new(&#39;1&#39;, (epd2in9b.EPD_HEIGHT, epd2in9b.EPD_WIDTH), 255) # 298*126
+HRedimage = Image.new(&#39;1&#39;, (epd2in9b.EPD_HEIGHT, epd2in9b.EPD_WIDTH), 255) # 298*126
+print &amp;quot;Drawing&amp;quot;
+drawblack = ImageDraw.Draw(HBlackimage)
+drawred = ImageDraw.Draw(HRedimage)
+# １つ目の引数でフォント、2つ目の引数でフォントのサイズを指定しています。
+font30 = ImageFont.truetype(&#39;/opt/vc/src/hello_pi/hello_font/Vera.ttf&#39;, 30)
+# １つ目の引数で座標、２つ目に表示させたい文字列、３つ目には上記のフォントを指定します。
+drawblack.text((10, 0), &#39;Hello, World&#39;, font = font30)
+# ディスプレイに表示させます。
+epd.display(epd.getbuffer(HBlackimage), epd.getbuffer(HRedimage))
+time.sleep(2)
+print &amp;quot;read bmp file&amp;quot;
+HBlackimage = Image.open(&#39;2in9b-b.bmp&#39;)
+epd.display(epd.getbuffer(HBlackimage), epd.getbuffer(HRedimage))
+time.sleep(2)
+except Exception, e:
+print &#39;traceback.format_exc():\n%s&#39; % traceback.format_exc()
+exit()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;このプログラムを実行すると以下のようになります。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/143395/45152d05-0b37-6d40-a992-2dc034553d67.gif&#34; alt=&#34;20190121_002653.gif&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/143395/c4b5f8b7-40c1-5145-5ba6-11c9b7a6f69a.gif&#34; alt=&#34;20190121_002722.gif&#34; /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;いかがでしたでしょうか？&lt;/p&gt;
+&lt;p&gt;電子ペーパーは、低消費電力という特徴があるので、センサからとれるデータを一定時間ごとに表示したり、自分の好きなものを表示して持ち運んだりすることもできます。&lt;/p&gt;
+&lt;p&gt;電子部品の販売店に売っていたりしますが、電子ペーパーの使い方はあまり広がっていないように感じるので、この記事を参考にぜひやってみてください！&lt;/p&gt;</description></item><item><title>ArduinoでTwitter連携！愛しのぬいぐるみトンピーちゃんに命を吹き込んでみた</title><link>https://dotstud.io/blog/arduino-nodejs-twitter-connect/</link><pubDate>Mon, 28 Jan 2019 00:51:35 +0900</pubDate><guid>https://dotstud.io/blog/arduino-nodejs-twitter-connect/</guid><description>
 &lt;p&gt;皆さん、大好きなぬいぐるみが動き出したらいいなと思ったこと、ありませんか？&lt;/p&gt;
 &lt;p&gt;今回は私の愛すべきお友達「トンピーちゃん」に命を吹き込むべく、プログラミング初心者の私がArduinoとTwitterの連携に挑戦してみました！&lt;/p&gt;
 &lt;p&gt;&lt;font size=&#34;4&#34;&gt;こちらです！！&lt;/font&gt;
@@ -3315,403 +3459,4 @@ Clova CEKのPythonチュートリアルです。奈良先端科学技術大学�
 &lt;/ul&gt;
 &lt;p&gt;などが出来る（らしい）ので興味のある方はぜひお問い合わせください〜
 （↑は公式文言じゃないのであしからず）&lt;/p&gt;
-&lt;p&gt;とりあえず &lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;@n0bisuke&lt;/a&gt; 宛で大丈夫です笑&lt;/p&gt;</description></item><item><title>Clova CEKでのスキル開発の始め方〜Pythonで開発スタート編〜</title><link>https://dotstud.io/blog/clova-cek-python-tutorial/</link><pubDate>Sat, 15 Sep 2018 10:56:31 +0900</pubDate><guid>https://dotstud.io/blog/clova-cek-python-tutorial/</guid><description>
-&lt;p&gt;こんにちは、&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;#linebootawards&lt;/code&gt;のハッカソンで奈良先端科学技術大学院大学に来ています。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;https://linedev.connpass.com/event/96813/&#34;&gt;【9/15-16】奈良先端科学技術大学院大学ユビ研×LINE BOOT AWARDSハッカソン&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/clova-cek-nodejs-tutorial/&#34;&gt;前回&lt;/a&gt;はNode.jsでのチュートリアルを書きましたが、今回はPythonでのClovaの開発チュートリアルを書いていきます。&lt;/p&gt;
-&lt;section class=&#34;link&#34; id=&#34;195&#34;&gt;
-&lt;div class=&#34;link_content&#34;&gt;
-&lt;a href=&#34;https://dotstud.io/blog/clova-cek-nodejs-tutorial/&#34;&gt;&lt;/a&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/195/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
-&lt;/div&gt;
-&lt;div class=&#34;link_content&#34;&gt;
-&lt;div class=&#34;link_detail&#34;&gt;
-&lt;div class=&#34;link_title&#34;&gt;
-Clova CEKでのスキル開発の始め方〜Node.jsで開発スタート編〜
-&lt;/div&gt;
-&lt;div class=&#34;link_date&#34;&gt;
-2018-08-03
-&lt;/div&gt;
-&lt;div class=&#34;link_desc&#34;&gt;
-Clova CEKのNode.jsチュートリアルです。カレースキルを作ります。
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/section&gt;
-&lt;/section&gt;
-&lt;p&gt;&lt;strong&gt;PythonとClovaの連携をとりあえずやりたい&lt;/strong&gt;って人向けです。&lt;/p&gt;
-&lt;p&gt;Clovaってなんぞやって人はこちらの記事たちを先に読んでみてください。&lt;/p&gt;
-&lt;section class=&#34;link&#34; id=&#34;185&#34;&gt;
-&lt;div class=&#34;link_content&#34;&gt;
-&lt;a href=&#34;https://dotstud.io/blog/clova-ifttt-nefrybt-arduino/&#34;&gt;&lt;/a&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/185/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
-&lt;/div&gt;
-&lt;div class=&#34;link_content&#34;&gt;
-&lt;div class=&#34;link_detail&#34;&gt;
-&lt;div class=&#34;link_title&#34;&gt;
-ClovaとNefryBT（ESP32）を連携させてみよう
-&lt;/div&gt;
-&lt;div class=&#34;link_date&#34;&gt;
-2018-07-10
-&lt;/div&gt;
-&lt;div class=&#34;link_desc&#34;&gt;
-Nefry BTを使って電子工作した勤怠システムとClovaを連携させてみました。
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/section&gt;
-&lt;/section&gt;
-&lt;p&gt;いわゆるClovaのAPIのことをCEKと呼ぶんですよ〜&lt;/p&gt;
-&lt;section class=&#34;link&#34; id=&#34;186&#34;&gt;
-&lt;div class=&#34;link_content&#34;&gt;
-&lt;a href=&#34;https://dotstud.io/blog/line-clova-skill-tutorial/&#34;&gt;&lt;/a&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/186/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
-&lt;/div&gt;
-&lt;div class=&#34;link_content&#34;&gt;
-&lt;div class=&#34;link_detail&#34;&gt;
-&lt;div class=&#34;link_title&#34;&gt;
-本日リリース！LINE Clovaのスキル開発の始め方〜申請編〜 #clova #linebootawards #clova_cek
-&lt;/div&gt;
-&lt;div class=&#34;link_date&#34;&gt;
-2018-07-12
-&lt;/div&gt;
-&lt;div class=&#34;link_desc&#34;&gt;
-リリース直後ですが、LINEのAIアシスタントClovaでのスキル開発の始め方を紹介します！ LINE BOOT AWARDSで賞金1000万円も狙いましょ。
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/section&gt;
-&lt;/section&gt;
-&lt;p&gt;そもそも僕がPythonの使い方がイマイチ分かってないので抜けがある可能性高いのでコメントなどいただけたら幸いです。 -&amp;gt; @n0bisuke&lt;/p&gt;
-&lt;h2 id=&#34;作るもの&#34;&gt;作るもの&lt;/h2&gt;
-&lt;p&gt;今回、「&lt;strong&gt;倦怠期のカップルや夫婦のコミュニケーションを円滑にするスキル&lt;/strong&gt;」 という案が出ていたのでそれをネタにチュートリアルを進めてみたいと思います。&lt;/p&gt;
-&lt;p&gt;旦那「&lt;strong&gt;妻の気分を教えて&lt;/strong&gt;」&lt;/p&gt;
-&lt;p&gt;Clova「妻の気分はいい感じです。」&lt;/p&gt;
-&lt;p&gt;これを作ってみます。会話のキッカケを増やしたり作ったりするスキルですね。&lt;/p&gt;
-&lt;p&gt;完成はこんなイメージです。&lt;/p&gt;
-&lt;p&gt;&lt;center&gt;
-&lt;blockquote class=&#34;instagram-media&#34; data-instgrm-captioned data-instgrm-permalink=&#34;https://www.instagram.com/p/Bnxv3E6BxYJ/?utm_source=ig_embed_loading&#34; data-instgrm-version=&#34;12&#34; style=&#34; background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);&#34;&gt;&lt;div style=&#34;padding:16px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/Bnxv3E6BxYJ/?utm_source=ig_embed_loading&#34; style=&#34; background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;&#34; target=&#34;_blank&#34;&gt; &lt;div style=&#34; display: flex; flex-direction: row; align-items: center;&#34;&gt; &lt;div style=&#34;background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 40px; margin-right: 14px; width: 40px;&#34;&gt;&lt;/div&gt; &lt;div style=&#34;display: flex; flex-direction: column; flex-grow: 1; justify-content: center;&#34;&gt; &lt;div style=&#34; background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 100px;&#34;&gt;&lt;/div&gt; &lt;div style=&#34; background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 60px;&#34;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div style=&#34;padding: 19% 0;&#34;&gt;&lt;/div&gt;&lt;div style=&#34;display:block; height:50px; margin:0 auto 12px; width:50px;&#34;&gt;&lt;svg width=&#34;50px&#34; height=&#34;50px&#34; viewBox=&#34;0 0 60 60&#34; version=&#34;1.1&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34; xmlns:xlink=&#34;http://www.w3.org/1999/xlink&#34;&gt;&lt;g stroke=&#34;none&#34; stroke-width=&#34;1&#34; fill=&#34;none&#34; fill-rule=&#34;evenodd&#34;&gt;&lt;g transform=&#34;translate(-511.000000, -20.000000)&#34; fill=&#34;#000000&#34;&gt;&lt;g&gt;&lt;path d=&#34;M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33.886 C532.1,33.886 524.886,41.1 524.886,50 C524.886,58.899 532.1,66.113 541,66.113 C549.9,66.113 557.115,58.899 557.115,50 C557.115,41.1 549.9,33.886 541,33.886 M565.378,62.101 C565.244,65.022 564.756,66.606 564.346,67.663 C563.803,69.06 563.154,70.057 562.106,71.106 C561.058,72.155 560.06,72.803 558.662,73.347 C557.607,73.757 556.021,74.244 553.102,74.378 C549.944,74.521 548.997,74.552 541,74.552 C533.003,74.552 532.056,74.521 528.898,74.378 C525.979,74.244 524.393,73.757 523.338,73.347 C521.94,72.803 520.942,72.155 519.894,71.106 C518.846,70.057 518.197,69.06 517.654,67.663 C517.244,66.606 516.755,65.022 516.623,62.101 C516.479,58.943 516.448,57.996 516.448,50 C516.448,42.003 516.479,41.056 516.623,37.899 C516.755,34.978 517.244,33.391 517.654,32.338 C518.197,30.938 518.846,29.942 519.894,28.894 C520.942,27.846 521.94,27.196 523.338,26.654 C524.393,26.244 525.979,25.756 528.898,25.623 C532.057,25.479 533.004,25.448 541,25.448 C548.997,25.448 549.943,25.479 553.102,25.623 C556.021,25.756 557.607,26.244 558.662,26.654 C560.06,27.196 561.058,27.846 562.106,28.894 C563.154,29.942 563.803,30.938 564.346,32.338 C564.756,33.391 565.244,34.978 565.378,37.899 C565.522,41.056 565.552,42.003 565.552,50 C565.552,57.996 565.522,58.943 565.378,62.101 M570.82,37.631 C570.674,34.438 570.167,32.258 569.425,30.349 C568.659,28.377 567.633,26.702 565.965,25.035 C564.297,23.368 562.623,22.342 560.652,21.575 C558.743,20.834 556.562,20.326 553.369,20.18 C550.169,20.033 549.148,20 541,20 C532.853,20 531.831,20.033 528.631,20.18 C525.438,20.326 523.257,20.834 521.349,21.575 C519.376,22.342 517.703,23.368 516.035,25.035 C514.368,26.702 513.342,28.377 512.574,30.349 C511.834,32.258 511.326,34.438 511.181,37.631 C511.035,40.831 511,41.851 511,50 C511,58.147 511.035,59.17 511.181,62.369 C511.326,65.562 511.834,67.743 512.574,69.651 C513.342,71.625 514.368,73.296 516.035,74.965 C517.703,76.634 519.376,77.658 521.349,78.425 C523.257,79.167 525.438,79.673 528.631,79.82 C531.831,79.965 532.853,80.001 541,80.001 C549.148,80.001 550.169,79.965 553.369,79.82 C556.562,79.673 558.743,79.167 560.652,78.425 C562.623,77.658 564.297,76.634 565.965,74.965 C567.633,73.296 568.659,71.625 569.425,69.651 C570.167,67.743 570.674,65.562 570.82,62.369 C570.966,59.17 571,58.147 571,50 C571,41.851 570.966,40.831 570.82,37.631&#34;&gt;&lt;/path&gt;&lt;/g&gt;&lt;/g&gt;&lt;/g&gt;&lt;/svg&gt;&lt;/div&gt;&lt;div style=&#34;padding-top: 8px;&#34;&gt; &lt;div style=&#34; color:#3897f0; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:550; line-height:18px;&#34;&gt; View this post on Instagram&lt;/div&gt;&lt;/div&gt;&lt;div style=&#34;padding: 12.5% 0;&#34;&gt;&lt;/div&gt; &lt;div style=&#34;display: flex; flex-direction: row; margin-bottom: 14px; align-items: center;&#34;&gt;&lt;div&gt; &lt;div style=&#34;background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(0px) translateY(7px);&#34;&gt;&lt;/div&gt; &lt;div style=&#34;background-color: #F4F4F4; height: 12.5px; transform: rotate(-45deg) translateX(3px) translateY(1px); width: 12.5px; flex-grow: 0; margin-right: 14px; margin-left: 2px;&#34;&gt;&lt;/div&gt; &lt;div style=&#34;background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(9px) translateY(-18px);&#34;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div style=&#34;margin-left: 8px;&#34;&gt; &lt;div style=&#34; background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 20px; width: 20px;&#34;&gt;&lt;/div&gt; &lt;div style=&#34; width: 0; height: 0; border-top: 2px solid transparent; border-left: 6px solid #f4f4f4; border-bottom: 2px solid transparent; transform: translateX(16px) translateY(-4px) rotate(30deg)&#34;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div style=&#34;margin-left: auto;&#34;&gt; &lt;div style=&#34; width: 0px; border-top: 8px solid #F4F4F4; border-right: 8px solid transparent; transform: translateY(16px);&#34;&gt;&lt;/div&gt; &lt;div style=&#34; background-color: #F4F4F4; flex-grow: 0; height: 12px; width: 16px; transform: translateY(-4px);&#34;&gt;&lt;/div&gt; &lt;div style=&#34; width: 0; height: 0; border-top: 8px solid #F4F4F4; border-left: 8px solid transparent; transform: translateY(-4px) translateX(8px);&#34;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/a&gt; &lt;p style=&#34; margin:8px 0 0 0; padding:0 4px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/Bnxv3E6BxYJ/?utm_source=ig_embed_loading&#34; style=&#34; color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;&#34; target=&#34;_blank&#34;&gt;Pythonで書いてみた #倦怠期 #linebootawards #clova_cek&lt;/a&gt;&lt;/p&gt; &lt;p style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;&#34;&gt;&lt;a href=&#34;https://www.instagram.com/n0bisuke/?utm_source=ig_embed_loading&#34; style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px;&#34; target=&#34;_blank&#34;&gt; n0bisuke&lt;/a&gt;さん(@n0bisuke)がシェアした投稿 - &lt;time style=&#34; font-family:Arial,sans-serif; font-size:14px; line-height:17px;&#34; datetime=&#34;2018-09-16T06:42:59+00:00&#34;&gt;2018年 9月月15日午後11時42分PDT&lt;/time&gt;&lt;/p&gt;&lt;/div&gt;&lt;/blockquote&gt; &lt;script async defer src=&#34;//www.instagram.com/embed.js&#34;&gt;&lt;/script&gt;
-&lt;/center&gt;&lt;/p&gt;
-&lt;p&gt;中身はハローワールド的な内容なので単純にClovaに喋ってもらう入門だと思ってください。&lt;/p&gt;
-&lt;h2 id=&#34;環境&#34;&gt;環境&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Clova Friends Mini (サリー)&lt;/li&gt;
-&lt;li&gt;Python v2.7.10&lt;/li&gt;
-&lt;li&gt;Google Chrome / macOS Sierra v10.12&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;$ python -v
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;でPythonのバージョン調べられます。&lt;/p&gt;
-&lt;h2 id=&#34;使い始めの申請&#34;&gt;使い始めの申請&lt;/h2&gt;
-&lt;p&gt;まずは、&lt;strong&gt;&lt;a href=&#34;https://developers.line.me/console/register/clova-skill/provider/&#34;&gt;新規チャンネル作成&lt;/a&gt;&lt;/strong&gt;からチャンネルを作成します。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/line-clova-skill-tutorial/&#34;&gt;こちらの記事&lt;/a&gt;を参照して、利用開始できる状態にしましょう。&lt;/p&gt;
-&lt;p&gt;「&lt;a href=&#34;https://dotstud.io/blog/line-clova-skill-tutorial/#チャネルの基本設定&#34;&gt;チャネルの基本設定&lt;/a&gt;」の箇所まで進められばOKです。&lt;/p&gt;
-&lt;section class=&#34;link&#34; id=&#34;186&#34;&gt;
-&lt;div class=&#34;link_content&#34;&gt;
-&lt;a href=&#34;https://dotstud.io/blog/line-clova-skill-tutorial/&#34;&gt;&lt;/a&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/186/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
-&lt;/div&gt;
-&lt;div class=&#34;link_content&#34;&gt;
-&lt;div class=&#34;link_detail&#34;&gt;
-&lt;div class=&#34;link_title&#34;&gt;
-本日リリース！LINE Clovaのスキル開発の始め方〜申請編〜 #clova #linebootawards #clova_cek
-&lt;/div&gt;
-&lt;div class=&#34;link_date&#34;&gt;
-2018-07-12
-&lt;/div&gt;
-&lt;div class=&#34;link_desc&#34;&gt;
-リリース直後ですが、LINEのAIアシスタントClovaでのスキル開発の始め方を紹介します！ LINE BOOT AWARDSで賞金1000万円も狙いましょ。
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/section&gt;
-&lt;/section&gt;
-&lt;p&gt;ちなみに今回は以下の情報にしてみました。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;スキル名: 倦怠期Clova&lt;/li&gt;
-&lt;li&gt;呼び出し名（メイン）: 倦怠期&lt;/li&gt;
-&lt;li&gt;呼び出し名（サブ）: ケンタッキー&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/6ba0c91a586bd8f3b20b8a7d5b334219.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;「倦怠期（けんたいき）」と言う言葉が発話した際に「ケンタッキー」と誤認識される可能性があったので&lt;code&gt;呼び出し名（サブ）&lt;/code&gt;にケンタッキーを登録しています。（笑うところ）&lt;/p&gt;
-&lt;h2 id=&#34;対話モデルの作成&#34;&gt;対話モデルの作成&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&#34;https://clova-developers.line.me/cek/#/list&#34;&gt;Clova Developer Center&lt;/a&gt;にアクセスします。&lt;/p&gt;
-&lt;p&gt;作成中スキルの一覧が表示されます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/508750a1d4f916de4d0167b71c0a133e.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;作成対象となるスキル名の&lt;code&gt;対話モデル&lt;/code&gt;の&lt;code&gt;修正&lt;/code&gt;を選択します。&lt;/p&gt;
-&lt;p&gt;すると別ウィンドウが開き、対話モデルの編集画面になります。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/56f974e19cac116d82c4bceb69ef7361.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;なぜここだけ別ウィンドウなのかは永遠の謎。&lt;/p&gt;
-&lt;h3 id=&#34;インテントとスロット&#34;&gt;インテントとスロット&lt;/h3&gt;
-&lt;p&gt;インテントとスロットを設定していきます。&lt;/p&gt;
-&lt;p&gt;個人的にはインテントとスロットの概念を理解すればあとはBOT開発などとそこまで変わらないような印象があります。&lt;/p&gt;
-&lt;p&gt;説明はあってるのか不安なので、スマートスピーカー開発に慣れてる人が見て変だったら教えてください笑&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://clova-developers.line.me/guide/#/Design/Design_Guideline_For_Extension.md#Intent&#34;&gt;公式ドキュメントのこの辺&lt;/a&gt;を見ると詳しく載っています。&lt;/p&gt;
-&lt;h3 id=&#34;スロット&#34;&gt;スロット&lt;/h3&gt;
-&lt;p&gt;スロットはスキル内で扱う名詞情報です。&lt;/p&gt;
-&lt;p&gt;今回の「&lt;strong&gt;妻の気分を教えて&lt;/strong&gt;」という発話を認識させる為に&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;気分&lt;/strong&gt;という名詞（スロット）を登録しましょう。&lt;/p&gt;
-&lt;p&gt;また、「妻の欲しい物を知りたい」というケースに対応するために&lt;strong&gt;欲しい物&lt;/strong&gt;というスロットを登録します。&lt;/p&gt;
-&lt;p&gt;また、その名詞（スロット）はどういう属性かという上位概念を&lt;strong&gt;スロットタイプ&lt;/strong&gt;として設定します。&lt;/p&gt;
-&lt;p&gt;では実際に左側のメニューに&lt;code&gt;カスタムスロットタイプ&lt;/code&gt;という項目があるので、そこの&lt;code&gt;+ボタン&lt;/code&gt;を押します。&lt;/p&gt;
-&lt;p&gt;ここでスロットタイプのタイトルを決めますが、気分や欲しい物や妻がどういった状態かを知りたいので、ここでは&lt;code&gt;status&lt;/code&gt;（ステータス）としました。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;書いてて今回の例が少し分かりにくいかなぁと思ってるのですが、Node.jsのチュートリアルでは「秋葉原のカレー屋を教えて」という例文を利用していて、秋葉原や、神田、神保町といった駅名や地名、場所にちなんだ単語をスロットに登録しました。この場合は&lt;code&gt;area&lt;/code&gt;（エリア）というスロットタイプにしました。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/b18a2045e972093a352e63cb95bee4d5.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;statusとスロットタイプに入力して作成を押すと、statusというスロットタイプが作成されます。&lt;/p&gt;
-&lt;p&gt;僕みたいに覚えにくい人は&lt;code&gt;スロットタイプ=単語群&lt;/code&gt;だと思えば良いと思います。&lt;/p&gt;
-&lt;p&gt;次にスロット登録です。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;スロットの新たな代表語を入力&lt;/code&gt;の箇所に&lt;code&gt;気分&lt;/code&gt;と入力し、同義語の箇所に読み方や別名を入力します。こうすることで&lt;code&gt;きぶん&lt;/code&gt;などの名称でも認識してくれるようになります。&lt;code&gt;欲しい物&lt;/code&gt;の場合は&lt;code&gt;欲しいもの&lt;/code&gt;や&lt;code&gt;ほしいもの&lt;/code&gt;なども登録してあげると認識精度が上がります。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/7b0d59e92c34a5609fbd8903989f4e8e.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;同義語はカンマで区切って複数登録できます。&lt;/p&gt;
-&lt;p&gt;最後に&lt;code&gt;保存&lt;/code&gt;を押してスロットはOKです。個人的には難所50%クリアです。&lt;/p&gt;
-&lt;h3 id=&#34;インテント&#34;&gt;インテント&lt;/h3&gt;
-&lt;p&gt;インテントは会話や命令の種類です。&lt;/p&gt;
-&lt;p&gt;今回の「&lt;strong&gt;妻の気分を教えて&lt;/strong&gt;」は妻の状態を知りたいという命令だと思うので&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;WifeStatusIntent&lt;/strong&gt;（ワイフステータス）を作ってみます。&lt;/p&gt;
-&lt;p&gt;メニュー左の&lt;code&gt;カスタムインテント&lt;/code&gt;箇所の&lt;code&gt;+ボタン&lt;/code&gt;を選択し、インテント名を入力して進みます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/d65b99b0490c65806fd0e569d94ae584.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;次に&lt;code&gt;サンプル発話リスト&lt;/code&gt;箇所に例文を入れていきます。&lt;/p&gt;
-&lt;p&gt;先ほどから何回も出ている「&lt;strong&gt;妻の気分を教えて&lt;/strong&gt;」をここに入力してエンターを押しましょう。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/336651e051d1bbcd0dd0a69815ff4780.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;さらに&lt;code&gt;気分&lt;/code&gt;の部分が先ほど登録したスロット部分になるので、&lt;strong&gt;この文章のここがスロットだよ&lt;/strong&gt;ということを登録してあげます。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;気分&lt;/code&gt;をドラッグするとスロット登録が出来るフォームが出てくるのでそこで&lt;code&gt;status&lt;/code&gt;と入力してスロット名を登録します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/48ede67edc49b7f57bfe37a6369c998f.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;さらにスロットタイプのプルダウンメニューが出てくるので先ほど作成した&lt;code&gt;status&lt;/code&gt;スロットを紐付けします。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/5c22f277ffdd0645bce54882b2650bcc.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;最後に保存を押しましょう。&lt;/p&gt;
-&lt;h2 id=&#34;対話モデルのビルド&#34;&gt;対話モデルのビルド&lt;/h2&gt;
-&lt;p&gt;ここまで来たら左上の&lt;code&gt;ビルド&lt;/code&gt;ボタンを押してひとまず完了です。&lt;/p&gt;
-&lt;p&gt;ここ、少し時間かかります。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/e4f16af4107c3274d8e84bfefcec150c.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;1~2分程度掛かります。昔は10~20分程掛かってたのですが、アップデートで凄く短縮されました。&lt;/p&gt;
-&lt;p&gt;&lt;center&gt;
-&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;Clova Developer Centerにおいて作成する対話モデルのビルド時間が大幅に削減されました、ぜひお試しください！これまでご不便をおかけしてごめんなさい、まだまだ色々ありますが少しずつ改善重ねていきますので、皆様と一緒にClovaを育てていければ嬉しいです！よろしくお願いします！！！&lt;a href=&#34;https://twitter.com/hashtag/Clova_CEK?src=hash&amp;amp;ref_src=twsrc%5Etfw&#34;&gt;#Clova_CEK&lt;/a&gt; &lt;a href=&#34;https://t.co/1H0zKpevDy&#34;&gt;pic.twitter.com/1H0zKpevDy&lt;/a&gt;&lt;/p&gt; LINE_DEV (@LINE_DEV) &lt;a href=&#34;https://twitter.com/LINE_DEV/status/1035340611233013760?ref_src=twsrc%5Etfw&#34;&gt;2018年8月31日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
-&lt;/center&gt;&lt;/p&gt;
-&lt;p&gt;ただ待つのも時間が勿体無いので次の準備にかかりましょう。&lt;/p&gt;
-&lt;h2 id=&#34;pythonの環境準備&#34;&gt;Pythonの環境準備&lt;/h2&gt;
-&lt;p&gt;お待たせしました。コード書いていきましょう。&lt;/p&gt;
-&lt;p&gt;PythonのSDKがあるのでこちらを使っていきます。&lt;/p&gt;
-&lt;p&gt;Python以外の言語のSDKも現時点では&lt;a href=&#34;https://clova-developers.line.me/guide/#/CEK/Guides/Clova_CEK_SDK.md&#34;&gt;Swift/Kotlin/Elixir/Java/Go/Node.js&lt;/a&gt;のSDKが出ています。&lt;/p&gt;
-&lt;p&gt;Pythonのインストールがまだな方は公式サイトなどからDLしてインストールして下さい。&lt;/p&gt;
-&lt;p&gt;MacだとデフォルトでPythonがインストールされているのでインストールに関してはそこまで問題無いと思います。&lt;/p&gt;
-&lt;p&gt;ターミナル操作が不安な方はこちらの記事を先に見ておきましょう。&lt;/p&gt;
-&lt;section class=&#34;link&#34; id=&#34;158&#34;&gt;
-&lt;div class=&#34;link_content&#34;&gt;
-&lt;a href=&#34;https://dotstud.io/blog/how-to-use-cli/&#34;&gt;&lt;/a&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/158/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
-&lt;/div&gt;
-&lt;div class=&#34;link_content&#34;&gt;
-&lt;div class=&#34;link_detail&#34;&gt;
-&lt;div class=&#34;link_title&#34;&gt;
-【Mac向け】「黒い画面」の苦手意識を克服しよう！コマンドラインインタフェースの基本操作
-&lt;/div&gt;
-&lt;div class=&#34;link_date&#34;&gt;
-2018-04-09
-&lt;/div&gt;
-&lt;div class=&#34;link_desc&#34;&gt;
-Macユーザ向けコマンドラインインタフェースの使い方！実は難しくない「黒い画面」の操作方法を覚えていきましょう。
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/section&gt;
-&lt;/section&gt;
-&lt;section class=&#34;link&#34; id=&#34;161&#34;&gt;
-&lt;/section&gt;
-&lt;h3 id=&#34;準備&#34;&gt;準備&lt;/h3&gt;
-&lt;p&gt;以下のコマンドで進めていきます。基本Mac向けなのでWinな人は適宜読み替えをお願いします。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;pipのインストール&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;pipはNode.jsでいうnpmのようなPython向けのモジュールの管理ツールです。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ sudo easy_install pip
-&lt;/code&gt;&lt;/pre&gt;
-&lt;ul&gt;
-&lt;li&gt;Flaskのインストール&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Python向けのマイクロフレームワークのFlaskをpip経由でインストールします。
-Node.jsでいうExpressのようなものです。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ pip install Flask
-&lt;/code&gt;&lt;/pre&gt;
-&lt;ul&gt;
-&lt;li&gt;clova-cek-sdk&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Clova CEKのPython SDKをインストールします。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ pip install clova-cek-sdk
-&lt;/code&gt;&lt;/pre&gt;
-&lt;ul&gt;
-&lt;li&gt;server.pyを作成&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;フォルダ作成と準備です。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ mkdir clova_kentaiki
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;$ cd clova_kentaiki
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;code&gt;server.py&lt;/code&gt;を作成してプログラムを書いていきましょう。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ touch server.py
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&#34;コードを書いていく&#34;&gt;コードを書いていく&lt;/h3&gt;
-&lt;p&gt;&lt;code&gt;server.py&lt;/code&gt;に以下のコードを記述します。&lt;/p&gt;
-&lt;p&gt;また、スキルの基本情報を登録した際の&lt;code&gt;Extention ID&lt;/code&gt;を利用するので確認しておきましょう。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/line/clova-cek-sdk-python-sample/blob/master/home-extension.py&#34;&gt;公式のサンプル&lt;/a&gt;よりもシンプルにしています。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;以下のコードのapplication_id=&amp;ldquo;MY EXTENSION ID&amp;rdquo;の箇所を自分のExtension IDに書き換えましょう&lt;/strong&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;# coding: utf-8
-from flask import Flask, request, jsonify
-import cek
-app = Flask(__name__)
-clova = cek.Clova(
-application_id=&amp;quot;MY EXTENSION ID&amp;quot;,
-default_language=&amp;quot;ja&amp;quot;,
-debug_mode=True)
-# /clova に対してのPOSTリクエストを受け付けるサーバーを立てる
-@app.route(&#39;/clova&#39;, methods=[&#39;POST&#39;])
-def my_service():
-body_dict = clova.route(body=request.data, header=request.headers)
-response = jsonify(body_dict)
-response.headers[&#39;Content-Type&#39;] = &#39;application/json;charset-UTF-8&#39;
-return response
-# 起動時の処理
-@clova.handle.launch
-def launch_request_handler(clova_request):
-welcome_japanese = cek.Message(message=&amp;quot;調子どうだい？&amp;quot;, language=&amp;quot;ja&amp;quot;)
-response = clova.response([welcome_japanese])
-return response
-# WifeStatusIntentの発火箇所
-@clova.handle.intent(&amp;quot;WifeStatusIntent&amp;quot;)
-def wife_status_handler(clova_request):
-print(&amp;quot;ワイフインテント&amp;quot;)
-message_japanese = cek.Message(message=&amp;quot;奥さんの気分はいい感じです&amp;quot;, language=&amp;quot;ja&amp;quot;)
-response = clova.response([message_japanese])
-return response
-# 終了時
-@clova.handle.end
-def end_handler(clova_request):
-# Session ended, this handler can be used to clean up
-logger.info(&amp;quot;Session ended.&amp;quot;)
-# 認識できなかった場合
-@clova.handle.default
-def default_handler(request):
-return clova.response(&amp;quot;Sorry I don&#39;t understand! Could you please repeat?&amp;quot;)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&#34;起動&#34;&gt;起動&lt;/h3&gt;
-&lt;p&gt;記述出来たら以下のコマンドで起動しましょう。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ FLASK_APP=server.py flask run
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt; * Serving Flask app &amp;quot;server.py&amp;quot;
-* Environment: production
-WARNING: Do not use the development server in a production environment.
-Use a production WSGI server instead.
-* Debug mode: off
-* Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;で起動です。エラーがなければとりあえずOKです。&lt;/p&gt;
-&lt;p&gt;5000番ポートでサーバーが起動します。&lt;/p&gt;
-&lt;h2 id=&#34;ngrokでホスティングせずに疎通確認&#34;&gt;ngrokでホスティングせずに疎通確認&lt;/h2&gt;
-&lt;p&gt;ngrokというトンネリングツールを使ってローカル開発が出来るようにしましょう。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;参考: &lt;a href=&#34;https://ngrok.com/&#34;&gt;https://ngrok.com/&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&lt;img src=&#34;https://camo.qiitausercontent.com/f97d3442e199ccc5272c34c3eb5a964348660a9a/68747470733a2f2f6e67726f6b2e636f6d2f7374617469632f696d672f776562686f6f6b732e706e67&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;LINE BOTの開発でも同様ですが、&lt;strong&gt;通常はHTTPS対応したサーバーにプログラムをホスティングしてClovaと通信させます。&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;HTTPS対応したサーバーを用意するのは骨が折れるのとホスティングして失敗するとエラー修正が大変なので、ローカル開発で最初は挙動確認するのが個人的にはおすすめです。&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;ngrokを使うことでローカル環境をホスティング環境のようにエミュレート出来るイメージです。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;参考: &lt;a href=&#34;https://qiita.com/n0bisuke/items/ceaa09ef8898bee8369d&#34;&gt;1時間でLINE BOTを作るハンズオン&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;pre&gt;&lt;code&gt;$ npm i -g ngrok
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;これでインストール完了です。&lt;/p&gt;
-&lt;p&gt;npmを入れてない人はbrew経由でもインストール可能です。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ brew install ngrok
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;以下のコマンドで利用しますが、ngrokがターミナル占有してしまうので、Pythonを起動するターミナルとは別で立ち上げましょう。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ ngrok http 5000
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/50a45788dbc18229269745fa1f7d35e5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;こんな雰囲気。右がngrok、左がPythonです。&lt;/p&gt;
-&lt;p&gt;ngrokを起動すると&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;Forwarding https://xxxxxxx.ngrok.io -&amp;gt; localhost:5000
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;といった項目が表示されます。&lt;/p&gt;
-&lt;p&gt;この&lt;code&gt;https://xxxxxxx.ngrok.io&lt;/code&gt;に&lt;code&gt;/clova&lt;/code&gt;を追加したアドレスをClovaのサーバー設定の&lt;code&gt;ExtensionサーバーのURL&lt;/code&gt;に記載して保存しましょう。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/1e2feeed00daeb97553dfc463b6356ef.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;https://xxxxxxx.ngrok.io/clova&lt;/code&gt;となります。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;xxxxxx&lt;/code&gt;の箇所はngrokを再起動すると変わってしまうのでその際は再度サーバー設定を更新してください。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;これでClovaに話しかけると手元（ローカル環境）のPythonプログラムまでリクエストが来ます。&lt;/strong&gt;&lt;/p&gt;
-&lt;h2 id=&#34;テスターでテスト&#34;&gt;テスターでテスト&lt;/h2&gt;
-&lt;p&gt;直接話しかけても良いのですが、テスターを使ってみましょう。&lt;/p&gt;
-&lt;p&gt;対話モデルのダッシュボードに戻ります。&lt;/p&gt;
-&lt;p&gt;たぶんビルドは完了してますよね。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;テスト&lt;/code&gt;を選択し、&lt;code&gt;ユーザーのサンプル発話をテスト&lt;/code&gt;の箇所に「&lt;strong&gt;妻の気分を教えて&lt;/strong&gt;」と入力し&lt;code&gt;テストボタン&lt;/code&gt;押しましょう。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/7caed17382c5ac0ca00ad1d51633dc40.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;Pythonを起動させているターミナル側で&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;ワイフインテント&lt;/code&gt;と表示されていればOKです。&lt;/p&gt;
-&lt;p&gt;疎通確認が出来ました！&lt;/p&gt;
-&lt;p&gt;コードでいうと&lt;code&gt;@clova.handle.intent(&amp;quot;WifeStatusIntent&amp;quot;)&lt;/code&gt;の箇所までリクエストが通ってることになります。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;# WifeStatusIntentの発火箇所
-@clova.handle.intent(&amp;quot;WifeStatusIntent&amp;quot;)
-def wife_status_handler(clova_request):
-print(&amp;quot;ワイフインテント&amp;quot;)
-message_japanese = cek.Message(message=&amp;quot;奥さんの気分はいい感じです&amp;quot;, language=&amp;quot;ja&amp;quot;)
-response = clova.response([message_japanese])
-return response
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&#34;エラーが出る場合&#34;&gt;エラーが出る場合&lt;/h3&gt;
-&lt;p&gt;エラーが出た人は&lt;code&gt;server.py&lt;/code&gt;内のExtension IDの設定を忘れている可能性が高いので再度チェックしてみましょう。&lt;/p&gt;
-&lt;h2 id=&#34;clovaにしゃべらせる&#34;&gt;Clovaにしゃべらせる&lt;/h2&gt;
-&lt;p&gt;最後です！&lt;/p&gt;
-&lt;h3 id=&#34;スロット情報も取得してみる&#34;&gt;スロット情報も取得してみる&lt;/h3&gt;
-&lt;p&gt;&lt;code&gt;server.py&lt;/code&gt;の&lt;code&gt;@clova.handle.intent(&amp;quot;WifeStatusIntent&amp;quot;)&lt;/code&gt;の箇所をまるっと差し替えてみましょう。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;# WifeStatusIntentの発火箇所
-@clova.handle.intent(&amp;quot;WifeStatusIntent&amp;quot;)
-def wife_status_handler(clova_request):
-print(&amp;quot;ワイフインテント&amp;quot;)
-slot = clova_request.slot_value(&amp;quot;status&amp;quot;)
-message_japanese = cek.Message(message=&amp;quot;もう一回言って下さい&amp;quot;, language=&amp;quot;ja&amp;quot;)
-if u&amp;quot;気分&amp;quot; in slot:
-message_japanese = cek.Message(message=&amp;quot;奥さんの気分はいい感じです&amp;quot;, language=&amp;quot;ja&amp;quot;)
-elif u&amp;quot;欲しい物&amp;quot; in slot:
-message_japanese = cek.Message(message=&amp;quot;奥さんは旅行に行きたがっています&amp;quot;, language=&amp;quot;ja&amp;quot;)
-response = clova.response([message_japanese])
-return response
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;code&gt;clova_request.slot_value(&amp;quot;status&amp;quot;)&lt;/code&gt;にスロット情報が入っているので、あとはif文で判定して喋らせる内容を変更していきます。&lt;/p&gt;
-&lt;p&gt;最後の&lt;code&gt;response = clova.response([message_japanese])&lt;/code&gt;を呼ぶことでClovaが喋ってくれます。&lt;/p&gt;
-&lt;p&gt;ここまでをまとめたコードは&lt;a href=&#34;https://gist.github.com/n0bisuke/3755c3faaf1ad0fe621af8eaffb9b63f&#34;&gt;こちら&lt;/a&gt;です。&lt;/p&gt;
-&lt;h2 id=&#34;実機テスト&#34;&gt;実機テスト&lt;/h2&gt;
-&lt;p&gt;&lt;code&gt;server.py&lt;/code&gt;のサーバーを再起動して試してみましょう。&lt;/p&gt;
-&lt;p&gt;起動する際は、&lt;strong&gt;{ウェイクワード} -&amp;gt; {スキル名}を起動して&lt;/strong&gt;となります。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;ウェイクワード: Clovaの呼び名&lt;/li&gt;
-&lt;li&gt;スキル名: 基本情報に登録したスキル名&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;その後、設定したインテントを発話しましょう。&lt;/p&gt;
-&lt;p&gt;ということで、人によって違うのですが僕の場合は&lt;code&gt;ねぇ、Clova&lt;/code&gt;がウェイクワードになっていて、今回は&lt;code&gt;倦怠期&lt;/code&gt;というスキル名でした。&lt;/p&gt;
-&lt;p&gt;のびすけ: 「&lt;strong&gt;ねぇクローバ&lt;/strong&gt;」&lt;/p&gt;
-&lt;p&gt;Clova: 「ポンっ（LEDが緑色に光る）」&lt;/p&gt;
-&lt;p&gt;のびすけ: 「&lt;strong&gt;倦怠期を起動して&lt;/strong&gt;」&lt;/p&gt;
-&lt;p&gt;Clova: 「調子どうだい？」 (← server.pyで記述している)&lt;/p&gt;
-&lt;p&gt;Clova: 「ポンっ（LEDが緑色に光る）」&lt;/p&gt;
-&lt;p&gt;のびすけ:「&lt;strong&gt;妻の気分を教えて&lt;/strong&gt;」&lt;/p&gt;
-&lt;p&gt;Clova: 「奥さんの気分はいい感じです」 (← server.pyで記述している)&lt;/p&gt;
-&lt;p&gt;のびすけ:「&lt;strong&gt;妻の欲しい物を教えて&lt;/strong&gt;」&lt;/p&gt;
-&lt;p&gt;Clova: 「奥さんは旅行に行きたがっています」 (← server.pyで記述している)&lt;/p&gt;
-&lt;p&gt;という感じの使い方になります。&lt;/p&gt;
-&lt;p&gt;完成動画はこの記事の上部を確認して下さい。↑&lt;/p&gt;
-&lt;p&gt;ちなみに、妻が状況を登録するときはこんな感じでやる模様です。&lt;/p&gt;
-&lt;p&gt;&lt;center&gt;
-&lt;blockquote class=&#34;instagram-media&#34; data-instgrm-captioned data-instgrm-permalink=&#34;https://www.instagram.com/p/BnxRaMqhLIZ/?utm_source=ig_embed_loading&#34; data-instgrm-version=&#34;12&#34; style=&#34; background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);&#34;&gt;&lt;div style=&#34;padding:16px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/BnxRaMqhLIZ/?utm_source=ig_embed_loading&#34; style=&#34; background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;&#34; target=&#34;_blank&#34;&gt; &lt;div style=&#34; display: flex; flex-direction: row; align-items: center;&#34;&gt; &lt;div style=&#34;background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 40px; margin-right: 14px; width: 40px;&#34;&gt;&lt;/div&gt; &lt;div style=&#34;display: flex; flex-direction: column; flex-grow: 1; justify-content: center;&#34;&gt; &lt;div style=&#34; background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 100px;&#34;&gt;&lt;/div&gt; &lt;div style=&#34; background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 60px;&#34;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div style=&#34;padding: 19% 0;&#34;&gt;&lt;/div&gt;&lt;div style=&#34;display:block; height:50px; margin:0 auto 12px; width:50px;&#34;&gt;&lt;svg width=&#34;50px&#34; height=&#34;50px&#34; viewBox=&#34;0 0 60 60&#34; version=&#34;1.1&#34; xmlns=&#34;http://www.w3.org/2000/svg&#34; xmlns:xlink=&#34;http://www.w3.org/1999/xlink&#34;&gt;&lt;g stroke=&#34;none&#34; stroke-width=&#34;1&#34; fill=&#34;none&#34; fill-rule=&#34;evenodd&#34;&gt;&lt;g transform=&#34;translate(-511.000000, -20.000000)&#34; fill=&#34;#000000&#34;&gt;&lt;g&gt;&lt;path d=&#34;M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33.886 C532.1,33.886 524.886,41.1 524.886,50 C524.886,58.899 532.1,66.113 541,66.113 C549.9,66.113 557.115,58.899 557.115,50 C557.115,41.1 549.9,33.886 541,33.886 M565.378,62.101 C565.244,65.022 564.756,66.606 564.346,67.663 C563.803,69.06 563.154,70.057 562.106,71.106 C561.058,72.155 560.06,72.803 558.662,73.347 C557.607,73.757 556.021,74.244 553.102,74.378 C549.944,74.521 548.997,74.552 541,74.552 C533.003,74.552 532.056,74.521 528.898,74.378 C525.979,74.244 524.393,73.757 523.338,73.347 C521.94,72.803 520.942,72.155 519.894,71.106 C518.846,70.057 518.197,69.06 517.654,67.663 C517.244,66.606 516.755,65.022 516.623,62.101 C516.479,58.943 516.448,57.996 516.448,50 C516.448,42.003 516.479,41.056 516.623,37.899 C516.755,34.978 517.244,33.391 517.654,32.338 C518.197,30.938 518.846,29.942 519.894,28.894 C520.942,27.846 521.94,27.196 523.338,26.654 C524.393,26.244 525.979,25.756 528.898,25.623 C532.057,25.479 533.004,25.448 541,25.448 C548.997,25.448 549.943,25.479 553.102,25.623 C556.021,25.756 557.607,26.244 558.662,26.654 C560.06,27.196 561.058,27.846 562.106,28.894 C563.154,29.942 563.803,30.938 564.346,32.338 C564.756,33.391 565.244,34.978 565.378,37.899 C565.522,41.056 565.552,42.003 565.552,50 C565.552,57.996 565.522,58.943 565.378,62.101 M570.82,37.631 C570.674,34.438 570.167,32.258 569.425,30.349 C568.659,28.377 567.633,26.702 565.965,25.035 C564.297,23.368 562.623,22.342 560.652,21.575 C558.743,20.834 556.562,20.326 553.369,20.18 C550.169,20.033 549.148,20 541,20 C532.853,20 531.831,20.033 528.631,20.18 C525.438,20.326 523.257,20.834 521.349,21.575 C519.376,22.342 517.703,23.368 516.035,25.035 C514.368,26.702 513.342,28.377 512.574,30.349 C511.834,32.258 511.326,34.438 511.181,37.631 C511.035,40.831 511,41.851 511,50 C511,58.147 511.035,59.17 511.181,62.369 C511.326,65.562 511.834,67.743 512.574,69.651 C513.342,71.625 514.368,73.296 516.035,74.965 C517.703,76.634 519.376,77.658 521.349,78.425 C523.257,79.167 525.438,79.673 528.631,79.82 C531.831,79.965 532.853,80.001 541,80.001 C549.148,80.001 550.169,79.965 553.369,79.82 C556.562,79.673 558.743,79.167 560.652,78.425 C562.623,77.658 564.297,76.634 565.965,74.965 C567.633,73.296 568.659,71.625 569.425,69.651 C570.167,67.743 570.674,65.562 570.82,62.369 C570.966,59.17 571,58.147 571,50 C571,41.851 570.966,40.831 570.82,37.631&#34;&gt;&lt;/path&gt;&lt;/g&gt;&lt;/g&gt;&lt;/g&gt;&lt;/svg&gt;&lt;/div&gt;&lt;div style=&#34;padding-top: 8px;&#34;&gt; &lt;div style=&#34; color:#3897f0; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:550; line-height:18px;&#34;&gt; View this post on Instagram&lt;/div&gt;&lt;/div&gt;&lt;div style=&#34;padding: 12.5% 0;&#34;&gt;&lt;/div&gt; &lt;div style=&#34;display: flex; flex-direction: row; margin-bottom: 14px; align-items: center;&#34;&gt;&lt;div&gt; &lt;div style=&#34;background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(0px) translateY(7px);&#34;&gt;&lt;/div&gt; &lt;div style=&#34;background-color: #F4F4F4; height: 12.5px; transform: rotate(-45deg) translateX(3px) translateY(1px); width: 12.5px; flex-grow: 0; margin-right: 14px; margin-left: 2px;&#34;&gt;&lt;/div&gt; &lt;div style=&#34;background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(9px) translateY(-18px);&#34;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div style=&#34;margin-left: 8px;&#34;&gt; &lt;div style=&#34; background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 20px; width: 20px;&#34;&gt;&lt;/div&gt; &lt;div style=&#34; width: 0; height: 0; border-top: 2px solid transparent; border-left: 6px solid #f4f4f4; border-bottom: 2px solid transparent; transform: translateX(16px) translateY(-4px) rotate(30deg)&#34;&gt;&lt;/div&gt;&lt;/div&gt;&lt;div style=&#34;margin-left: auto;&#34;&gt; &lt;div style=&#34; width: 0px; border-top: 8px solid #F4F4F4; border-right: 8px solid transparent; transform: translateY(16px);&#34;&gt;&lt;/div&gt; &lt;div style=&#34; background-color: #F4F4F4; flex-grow: 0; height: 12px; width: 16px; transform: translateY(-4px);&#34;&gt;&lt;/div&gt; &lt;div style=&#34; width: 0; height: 0; border-top: 8px solid #F4F4F4; border-left: 8px solid transparent; transform: translateY(-4px) translateX(8px);&#34;&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/a&gt; &lt;p style=&#34; margin:8px 0 0 0; padding:0 4px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/BnxRaMqhLIZ/?utm_source=ig_embed_loading&#34; style=&#34; color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;&#34; target=&#34;_blank&#34;&gt;倦怠期clova #linebootawards&lt;/a&gt;&lt;/p&gt; &lt;p style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;&#34;&gt;&lt;a href=&#34;https://www.instagram.com/n0bisuke/?utm_source=ig_embed_loading&#34; style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px;&#34; target=&#34;_blank&#34;&gt; n0bisuke&lt;/a&gt;さん(@n0bisuke)がシェアした投稿 - &lt;time style=&#34; font-family:Arial,sans-serif; font-size:14px; line-height:17px;&#34; datetime=&#34;2018-09-16T02:16:11+00:00&#34;&gt;2018年 9月月15日午後7時16分PDT&lt;/time&gt;&lt;/p&gt;&lt;/div&gt;&lt;/blockquote&gt; &lt;script async defer src=&#34;//www.instagram.com/embed.js&#34;&gt;&lt;/script&gt;
-&lt;/center&gt;&lt;/p&gt;
-&lt;h2 id=&#34;おまけ-発話履歴の確認&#34;&gt;おまけ: 発話履歴の確認&lt;/h2&gt;
-&lt;p&gt;テスターの&lt;code&gt;発話履歴&lt;/code&gt;を見るとClova側でどんな認識になっているかが分かるのですが&amp;rdquo;妻の&amp;rdquo;が&amp;rdquo;その&amp;rdquo;などに認識されていて認識の揺れが発生してるのが分かりますね。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/6a8f698f16fda08bf3efc845bed09ed3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;Clovaが発話をうまく認識してくれないときはここを見て確認しましょう。&lt;/p&gt;
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-&lt;p&gt;こんな感じでとりあえず試す手順を紹介しました。&lt;/p&gt;
-&lt;p&gt;ホスティングもnowやherokuを使うと簡単に出来るので&lt;a href=&#34;https://www.dropbox.com/s/547siacriaudy4f/CEK_Handson%1D_0729.pdf?dl=0&#34;&gt;立花さんのハンズオン資料&lt;/a&gt;を参照して理解を深めましょう！&lt;/p&gt;
-&lt;p&gt;ホスティングに関しても余裕があれば追記したいと思います。&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;とりあえず &lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;@n0bisuke&lt;/a&gt; 宛で大丈夫です笑&lt;/p&gt;</description></item></channel></rss>

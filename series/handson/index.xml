@@ -1,4 +1,148 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Handson on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/handson/</link><description>Recent content in Handson on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Mon, 28 Jan 2019 00:51:35 +0900</lastBuildDate><atom:link href="/series/handson/" rel="self" type="application/rss+xml"/><item><title>ArduinoでTwitter連携！愛しのぬいぐるみトンピーちゃんに命を吹き込んでみた</title><link>https://dotstud.io/blog/arduino-nodejs-twitter-connect/</link><pubDate>Mon, 28 Jan 2019 00:51:35 +0900</pubDate><guid>https://dotstud.io/blog/arduino-nodejs-twitter-connect/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Handson on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/handson/</link><description>Recent content in Handson on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Tue, 29 Jan 2019 02:11:45 +0900</lastBuildDate><atom:link href="/series/handson/" rel="self" type="application/rss+xml"/><item><title>電池が切れても消えないディスプレイって？電子ペーパーを使ってみた！</title><link>https://dotstud.io/blog/using-e-paper-module/</link><pubDate>Tue, 29 Jan 2019 02:11:45 +0900</pubDate><guid>https://dotstud.io/blog/using-e-paper-module/</guid><description>
+&lt;p&gt;こんにちは、わくわくエンジニアの&lt;a href=&#34;https://dotstud.io/members/tomato/&#34;&gt;佐々木さん&lt;/a&gt;です。&lt;/p&gt;
+&lt;p&gt;みなさんは&lt;strong&gt;電子ペーパー&lt;/strong&gt;を知っていますか？&lt;/p&gt;
+&lt;p&gt;電子ペーパーはその名の通り、&lt;u&gt;紙のような見た目のディスプレイ&lt;/u&gt;です。低消費電力であることや、最後に表示したものを電源がなくても保持し続けることが特徴として挙げられます。&lt;/p&gt;
+&lt;p&gt;&lt;u&gt;身近なものだとAmazonの&lt;a href=&#34;https://www.amazon.co.jp/Kindle-New%E3%83%A2%E3%83%87%E3%83%AB-%E9%9B%BB%E5%AD%90%E6%9B%B8%E7%B1%8D%E3%83%AA%E3%83%BC%E3%83%80%E3%83%BC-Wi-Fi-%E3%83%96%E3%83%A9%E3%83%83%E3%82%AF-%E3%82%AD%E3%83%A3%E3%83%B3%E3%83%9A%E3%83%BC%E3%83%B3%E6%83%85%E5%A0%B1%E3%81%A4%E3%81%8D%E3%83%A2%E3%83%87%E3%83%AB/dp/B0186FESEE/ref=sr_1_1?ie=UTF8&amp;amp;qid=1547970527&amp;amp;sr=8-1&amp;amp;keywords=kindle&#34;&gt;Kindle&lt;/a&gt;で採用されています。&lt;/u&gt;&lt;/p&gt;
+&lt;p&gt;それでは実際に本題に入っていきましょう！&lt;/p&gt;
+&lt;h2 id=&#34;電子ペーパーの仕組み&#34;&gt;電子ペーパーの仕組み&lt;/h2&gt;
+&lt;p&gt;今回使用するのは&lt;a href=&#34;https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-58WG&#34;&gt;2.9inch e-Paper Module&lt;/a&gt;という電子ペーパー。&lt;/p&gt;
+&lt;p&gt;電子ペーパーは複数の表示方式がありますが、2.9inch e-Paper Moduleは&lt;strong&gt;電気泳動方式&lt;/strong&gt;というものが採用されているためこちらの説明をしたいと思います。&lt;/p&gt;
+&lt;p&gt;電気泳動方式では、ディスプレイの中に&lt;strong&gt;マイクロカプセル&lt;/strong&gt;という&lt;u&gt;色を表現するための透明なカプセル&lt;/u&gt;が隙間なく並んでいます。そのマイクロカプセルの中には色のついた粒子が入っており、かける電圧で粒子を移動させることによって、見える色を変えています。電源がなくなっても粒子は移動しないので、最後に表示したものを保持し続けることができます。&lt;/p&gt;
+&lt;p&gt;従来は白黒のディスプレイが主流でしたが、現在では3色のディスプレイも多くなっています。&lt;/p&gt;
+&lt;h2 id=&#34;使ったもの&#34;&gt;使ったもの&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-58WG&#34;&gt;2.9inch e-Paper Module&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/143395/abfea5c3-70e3-6e80-b108-841ff52824d0.jpeg&#34; alt=&#34;20180810_165537.jpg&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;このディスプレイは白黒黄の3色を表現できるディスプレイになっています。この他にも、白黒や白黒赤などを表示することができるディスプレイもあります。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.switch-science.com/catalog/3646/&#34;&gt;Raspberry Pi Zero WH&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/143395/62d5a886-b22e-f1bd-e436-cea221c7c1d8.jpeg&#34; alt=&#34;20190120_192847.jpg&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;このRaspberry Pi Zero WHはIoTで使われるボードの１つです。&lt;/p&gt;
+&lt;h2 id=&#34;ディスプレイに表示させてみよう&#34;&gt;ディスプレイに表示させてみよう&lt;/h2&gt;
+&lt;p&gt;今回は&lt;a href=&#34;https://www.waveshare.com/w/upload/9/98/2.9inch-e-paper-module-user-manual-en.pdf&#34;&gt;2.9inch e-Paper Module User Manual&lt;/a&gt;を参考にして進めていきます。&lt;/p&gt;
+&lt;h3 id=&#34;配線&#34;&gt;配線&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;center&#34;&gt;GPIO&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;2.9inch e-Paper Module&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;3.3V&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;3.3V&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;GND&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;GND&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;MOSI&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;DIN&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;SCLK&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;CLK&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;CE0&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;CS&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;25&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;DC&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;17&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;RST&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;24&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;BUSY&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;環境構築&#34;&gt;環境構築&lt;/h3&gt;
+&lt;p&gt;以下のコマンドが今回プログラムを実行するのに必要なものをインストールするコマンドになります。&lt;/p&gt;
+&lt;p&gt;ターミナルを開いて実行してください。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo apt-get install python-pip
+sudo pip install spidev
+sudo apt-get install libjpeg-dev
+sudo pip install Image
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;次に、&lt;strong&gt;&lt;code&gt;/boot/config.txt&lt;/code&gt;&lt;/strong&gt;を編集します。以下のコマンドを実行してください。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;sudo nano /boot/config.txt&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;すると、nanoエディタが開くので、以下の手順を行なってください。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;番下に&lt;strong&gt;&lt;code&gt;dtparam=spi=on&lt;/code&gt;&lt;/strong&gt;を追加&lt;/li&gt;
+&lt;li&gt;キーボードの &lt;strong&gt;&lt;code&gt;controlキー&lt;/code&gt;&lt;/strong&gt; と &lt;strong&gt;&lt;code&gt;xキー&lt;/code&gt;&lt;/strong&gt; を同時に押す&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;yキー&lt;/code&gt;&lt;/strong&gt;を押す&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;enterキー&lt;/code&gt;&lt;/strong&gt;を押す&lt;/li&gt;
+&lt;li&gt;全て完了したら&lt;strong&gt;&lt;code&gt;reboot&lt;/code&gt;&lt;/strong&gt;コマンドで再起動&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;これで環境構築は完了です。&lt;/p&gt;
+&lt;h3 id=&#34;プログラム&#34;&gt;プログラム&lt;/h3&gt;
+&lt;p&gt;デモプログラムが公開されているため、&lt;a href=&#34;https://www.waveshare.com/wiki/File:2.9inch_e-paper_module_b_code.7z&#34;&gt;こちら&lt;/a&gt;からcurrentと書かれているものをダウンロードしてください。&lt;/p&gt;
+&lt;p&gt;ダウンロードが完了したら以下のコマンドを実行してください。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo apt-get install p7zip-full
+7z x 2.9inch_e-paper_module_b_code.7z
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;上記のコマンドで出てきた中の&lt;strong&gt;&lt;code&gt;RaspberryPi/python2&lt;/code&gt;&lt;/strong&gt;を今回は使います。&lt;/p&gt;
+&lt;p&gt;ターミナルで&lt;strong&gt;&lt;code&gt;RaspberryPi/python2&lt;/code&gt;&lt;/strong&gt;ディレクトリに移動して&lt;code&gt;python main.py&lt;/code&gt;**を実行すると、デモプログラムが起動します（※何も編集していない状態だとフォントが存在していないためエラーが発生します）。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;nano main.py&lt;/code&gt;&lt;/strong&gt;でファイルを少し編集します。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;main.py&lt;/code&gt;には以下のようなプログラムがあります。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;main.py&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;font24 = ImageFont.truetype(&#39;/usr/share/fonts/truetype/wqy/wqy-microhei.ttc&#39;, 24)
+font18 = ImageFont.truetype(&#39;/usr/share/fonts/truetype/wqy/wqy-microhei.ttc&#39;, 18)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;この&lt;strong&gt;&lt;code&gt;&#39;/usr/share/fonts/truetype/wqy/wqy-microhei.ttc&#39;&lt;/code&gt;&lt;/strong&gt;という部分を
+&lt;strong&gt;&lt;code&gt;&#39;/opt/vc/src/hello_pi/hello_font/Vera.ttf&#39;&lt;/code&gt;&lt;/strong&gt;に変更します。&lt;/p&gt;
+&lt;p&gt;もう一度&lt;code&gt;python main.py&lt;/code&gt;を実行すると、画面がピカピカし始め、Hello, worldなどが画像に表示されます。&lt;/p&gt;
+&lt;p&gt;では、実際にプログラムを少し変えて見ていきましょう。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;main.py&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;#!/usr/bin/python
+# -*- coding:utf-8 -*-
+import epd2in9b
+import time
+from PIL import Image,ImageDraw,ImageFont
+import traceback
+try:
+# ディスプレイの初期化処理をしています。
+epd = epd2in9b.EPD()
+epd.init()
+print &amp;quot;clear&amp;quot;
+epd.Clear(0xFF)
+# ディスプレイを横に使うように設定しています。
+HBlackimage = Image.new(&#39;1&#39;, (epd2in9b.EPD_HEIGHT, epd2in9b.EPD_WIDTH), 255) # 298*126
+HRedimage = Image.new(&#39;1&#39;, (epd2in9b.EPD_HEIGHT, epd2in9b.EPD_WIDTH), 255) # 298*126
+print &amp;quot;Drawing&amp;quot;
+drawblack = ImageDraw.Draw(HBlackimage)
+drawred = ImageDraw.Draw(HRedimage)
+# １つ目の引数でフォント、2つ目の引数でフォントのサイズを指定しています。
+font30 = ImageFont.truetype(&#39;/opt/vc/src/hello_pi/hello_font/Vera.ttf&#39;, 30)
+# １つ目の引数で座標、２つ目に表示させたい文字列、３つ目には上記のフォントを指定します。
+drawblack.text((10, 0), &#39;Hello, World&#39;, font = font30)
+# ディスプレイに表示させます。
+epd.display(epd.getbuffer(HBlackimage), epd.getbuffer(HRedimage))
+time.sleep(2)
+print &amp;quot;read bmp file&amp;quot;
+HBlackimage = Image.open(&#39;2in9b-b.bmp&#39;)
+epd.display(epd.getbuffer(HBlackimage), epd.getbuffer(HRedimage))
+time.sleep(2)
+except Exception, e:
+print &#39;traceback.format_exc():\n%s&#39; % traceback.format_exc()
+exit()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;このプログラムを実行すると以下のようになります。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/143395/45152d05-0b37-6d40-a992-2dc034553d67.gif&#34; alt=&#34;20190121_002653.gif&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/143395/c4b5f8b7-40c1-5145-5ba6-11c9b7a6f69a.gif&#34; alt=&#34;20190121_002722.gif&#34; /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;いかがでしたでしょうか？&lt;/p&gt;
+&lt;p&gt;電子ペーパーは、低消費電力という特徴があるので、センサからとれるデータを一定時間ごとに表示したり、自分の好きなものを表示して持ち運んだりすることもできます。&lt;/p&gt;
+&lt;p&gt;電子部品の販売店に売っていたりしますが、電子ペーパーの使い方はあまり広がっていないように感じるので、この記事を参考にぜひやってみてください！&lt;/p&gt;</description></item><item><title>ArduinoでTwitter連携！愛しのぬいぐるみトンピーちゃんに命を吹き込んでみた</title><link>https://dotstud.io/blog/arduino-nodejs-twitter-connect/</link><pubDate>Mon, 28 Jan 2019 00:51:35 +0900</pubDate><guid>https://dotstud.io/blog/arduino-nodejs-twitter-connect/</guid><description>
 &lt;p&gt;皆さん、大好きなぬいぐるみが動き出したらいいなと思ったこと、ありませんか？&lt;/p&gt;
 &lt;p&gt;今回は私の愛すべきお友達「トンピーちゃん」に命を吹き込むべく、プログラミング初心者の私がArduinoとTwitterの連携に挑戦してみました！&lt;/p&gt;
 &lt;p&gt;&lt;font size=&#34;4&#34;&gt;こちらです！！&lt;/font&gt;
@@ -3832,260 +3976,4 @@ issues発行します。&lt;/p&gt;
 &lt;p&gt;今回はIoTでも実装に手間がかかるインターネット上の反応をlittleBitsに降ろす仕組みを軸にお伝えしましたがIFTTTとlittleBits Cloudの連携は手軽に作れますね。IoTにおけるいろいろな技術要素が裏側でしっかり作られています。&lt;/p&gt;
 &lt;p&gt;もちろん、IFTTTと連携するとAmazon Dash Buttonのような、ボタンを押すとツイートがされるようなlittleBitsからインターネットを動かす仕組みについても実現可能です。&lt;/p&gt;
 &lt;p&gt;littleBitsの持つブロックを組み合わせて電子工作ができる手軽さに加えて、IFTTTが組み合わさることでインターネットもあたかもブロックのように扱えてるlittleBits cloudBitモジュール、ぜひ試してみてください！&lt;/p&gt;
-&lt;p&gt;※今回の図表の一部では&lt;a href=&#34;http://icooon-mono.com/&#34;&gt;アイコン素材ダウンロードサイト「icooon-mono」&lt;/a&gt;さんの画像を利用いたしました。ありがとうございます。&lt;/p&gt;</description></item><item><title>ESP8266を使って京急が遅延すると光るガジェットを作ってみた</title><link>https://dotstud.io/blog/pokio-esp-keikyu-chien/</link><pubDate>Tue, 13 Jun 2017 19:28:32 +0900</pubDate><guid>https://dotstud.io/blog/pokio-esp-keikyu-chien/</guid><description>
-&lt;p&gt;こんにちは、京急が大好きなポキオです。&lt;/p&gt;
-&lt;p&gt;普段はAndroidエンジニアをやってますが、週末は趣味でArduinoやESP8266を触って心を落ち着かせています。先日、「京急が遅延すると光るガジェット」を作って&lt;a href=&#34;https://iotlt.connpass.com/&#34;&gt;IoTLT&lt;/a&gt;で発表を行ってきました。&lt;/p&gt;
-&lt;p&gt;今回は、そこで発表したガジェットの作成段階や、技術的な仕組みを紹介します。（発表後に一部パーツ・コーディングを変更しています）&lt;/p&gt;
-&lt;h2 id=&#34;今回作るもの&#34;&gt;今回作るもの&lt;/h2&gt;
-&lt;p&gt;ESP8266というWi-Fiモジュールを搭載した開発ボード「ESPr® Developer」を使って京急のホームページから運行情報を取得し、遅延していたらLEDを光らせる仕組みを作ります。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/099/01_map.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;h3 id=&#34;筆者の環境&#34;&gt;筆者の環境&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;MacBook Air（13-inch、Mid 2013）&lt;/li&gt;
-&lt;li&gt;OS X Yosemite（v10.10.5）&lt;/li&gt;
-&lt;li&gt;Arduino IDE 1.8.0&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;ESPr® DeveloperESP8266&lt;/li&gt;
-&lt;li&gt;マイコン内臓RGB LED&lt;/li&gt;
-&lt;li&gt;光らせたいガジェット（今回はBトレインショーティ）&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;主なパーツ&#34;&gt;主なパーツ&lt;/h2&gt;
-&lt;h3 id=&#34;espr-developer&#34;&gt;ESPr® Developer&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/099/02_esper.png&#34; alt=&#34;画像&#34; /&gt;
-&lt;a href=&#34;https://www.switch-science.com/catalog/2500/&#34;&gt;スイッチサイエンス&lt;/a&gt;さんで売られている、ESP8266というWi-Fiモジュールを搭載した開発ボードです。素のESP8266を直接触るのはハードルが高いですが、USB-シリアル変換やレギュレータ、リセットスイッチなど実装済みで、Arduino IDEでも開発できるため便利です。&lt;/p&gt;
-&lt;p&gt;ただし、筆者の開発環境ではArduino IDEからコードを流し込む際に、一手間必要でした。詳しくはこちら。&lt;/p&gt;
-&lt;p&gt;参考: &lt;a href=&#34;http://qiita.com/shanonim/items/68fab6dc28b72b31a258&#34;&gt;ESPr Developer（ESP-WROOM-02開発ボード）で &amp;ldquo;warning: espcomm_sync failed&amp;rdquo; と表示される場合の対処&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&#34;マイコン内蔵rgb-led&#34;&gt;マイコン内蔵RGB LED&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/099/03_led.png&#34; alt=&#34;画像&#34; /&gt;
-秋葉原の&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gI-08412/&#34;&gt;秋月電子通商&lt;/a&gt;さんで1個40円で売られているものを使用します。通常のLEDは足が2本ですが、こちらは足が4本。これらを制御することで、様々な色でLEDを光らせることができます。ESP8266（Arduino）向けに便利なライブラリが公開されているので、今回はこれを使ってコーディングしていきます。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/adafruit/Adafruit_NeoPixel&#34;&gt;Adafruit NeoPixel Library&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&#34;bトレインショーティー&#34;&gt;Bトレインショーティー&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/099/04_train.png&#34; alt=&#34;画像&#34; /&gt;
-&lt;a href=&#34;https://bandai-hobby.net/train/&#34;&gt;Bトレインショーティー&lt;/a&gt;はバンダイさんから発売されている、自分で組み立てるタイプの鉄道模型です。特徴は、何と言っても可愛さ。実車のディテールを表現しつつ、車両の長さをギュッと縮めてコミカルなルックスになっています。今回は（もちろん京急の）2100形をチョイス。京急の中で好きな車両の一つです。&lt;/p&gt;
-&lt;h2 id=&#34;ガジェットを作ってみる&#34;&gt;ガジェットを作ってみる&lt;/h2&gt;
-&lt;h3 id=&#34;京急の2100形車両の組み立て&#34;&gt;京急の2100形車両の組み立て&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/099/05_keikyu1.png&#34; alt=&#34;画像&#34; /&gt;
-なにはともあれ、京急の車両を組み立てるところから始めます。Bトレインショーティーの京急2100形は、塗装済みで接着剤不要で組み立てができます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/099/06_keikyu2.png&#34; alt=&#34;画像&#34; /&gt;
-久しぶりのプラモデルにテンションがアガります。&lt;/p&gt;
-&lt;h3 id=&#34;マイコン内蔵rgb-ledを埋め込む&#34;&gt;マイコン内蔵RGB LEDを埋め込む&lt;/h3&gt;
-&lt;p&gt;出来上がった京急の車両にLEDを埋め込んでいきます。ここで便利なのがサンハヤトさんの&lt;a href=&#34;http://www.sunhayato.co.jp/material2/index.php/item?cell003=%E3%83%A6%E3%83%8B%E3%83%90%E3%83%BC%E3%82%B5%E3%83%AB%E5%9F%BA%E6%9D%BF%E8%A3%BD%E5%93%81&amp;amp;cell004=%E4%B8%AD%E5%9E%8B%E3%83%A6%E3%83%8B%E3%83%90%E3%83%BC%E3%82%B5%E3%83%AB%E5%9F%BA%E6%9D%BF&amp;amp;name=%E8%96%84%E5%9E%8B%E3%83%A6%E3%83%8B%E3%83%90%E3%83%BC%E3%82%B5%E3%83%AB%E5%9F%BA%E6%9D%BF+UB-THN01&amp;amp;id=722&amp;amp;label=1&#34;&gt;ハサミで切れるユニバーサル基板&lt;/a&gt;です。
-&lt;img src=&#34;https://dotstud.io/img/blog/099/07_universal1.png&#34; alt=&#34;画像&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;謳い文句の通り、ハサミで自由にカットができて、今回のような小さい車両にも基板を収めることができます。
-&lt;img src=&#34;https://dotstud.io/img/blog/099/08_universal2.png&#34; alt=&#34;画像&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;こんな感じで簡単に、そしてその場で車両ピッタリの基板ができました。
-&lt;img src=&#34;https://dotstud.io/img/blog/099/09_rgb_led.png&#34; alt=&#34;画像&#34; /&gt;&lt;/p&gt;
-&lt;h3 id=&#34;配線&#34;&gt;配線&lt;/h3&gt;
-&lt;p&gt;マイコン内蔵RGB LEDは先述の通り足が4本あり、電源（VDD）とグラウンド（GND）に加えて、制御信号の入出力（DIN・DO）があります。DIN・DOは図のように数珠つなぎで配線します。
-&lt;img src=&#34;https://dotstud.io/img/blog/099/10_rgb_led2.png&#34; alt=&#34;画像&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;電源とグラウンドは共通で、それぞれESPr® DeveloperのVOUTとGNDに接続します。大元のDINはPIN4に接続します。&lt;/p&gt;
-&lt;h3 id=&#34;遅延情報の取得ロジック&#34;&gt;遅延情報の取得ロジック&lt;/h3&gt;
-&lt;p&gt;WebAPI等は使用せずに、10分に一度、&lt;a href=&#34;http://unkou.keikyu.co.jp/&#34;&gt;京急の運行情報ページ&lt;/a&gt;にアクセスして情報を取得します。&lt;/p&gt;
-&lt;p&gt;ESPr® Developerから運行情報の文言をHTTP-GETで取得して、その文言に&lt;strong&gt;特定の文字列&lt;/strong&gt;が含まれるかどうかで運行状態を推測します。具体的には・・・&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;「&lt;strong&gt;受託&lt;/strong&gt;」という文字列が含まれていたら、他社線からの振替輸送受託のために遅延していると判断する&lt;/li&gt;
-&lt;li&gt;「&lt;strong&gt;見合わせ&lt;/strong&gt;」という文字列が含まれていたら、運転見合わせが発生していると判断する&lt;/li&gt;
-&lt;li&gt;「&lt;strong&gt;乱れ&lt;/strong&gt;」という文字列が含まれていたら、ダイヤが大幅に乱れていると判断する&lt;/li&gt;
-&lt;li&gt;「&lt;strong&gt;遅れ&lt;/strong&gt;」や「&lt;strong&gt;運休&lt;/strong&gt;」が含まれていたら、ダイヤが少し乱れていると判断する&lt;/li&gt;
-&lt;li&gt;「&lt;strong&gt;平常&lt;/strong&gt;」が含まれていたら、平常運転であると判断する&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;このような感じです。そして、運転見合わせであれば赤い点滅、ダイヤが少し乱れているときは黄色い点滅をさせるといった感じで、運行状態に応じてマイコン内蔵RGB LEDの光り方を変えることで、運行状態をひと目で把握することができます。&lt;/p&gt;
-&lt;p&gt;ちなみに、他社線からの振替輸送受託が理由で京急が遅延しているときは、個人的にすこし残念な気持ちになるので、光り方を変えています（笑）&lt;/p&gt;
-&lt;h3 id=&#34;espr-developerのコーディング&#34;&gt;ESPr® Developerのコーディング&lt;/h3&gt;
-&lt;p&gt;かなり無理矢理ですが、こんな感じでコーディングしました。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;#include &amp;lt;ESP8266WiFi.h&amp;gt;
-#include &amp;lt;WiFiClient.h&amp;gt;
-#include &amp;lt;Adafruit_NeoPixel.h&amp;gt;
-#define PIN 4 // DINを接続しているPIN
-#define NUMLED 4 // マイコン内蔵RGB LEDの個数
-#define SSID &amp;quot;（Wi-FiアクセスポイントのSSID）&amp;quot;
-#define PASSWORD &amp;quot;（Wi-Fiアクセスポイントのパスワード）&amp;quot;
-#define KEIKYU_PAGE &amp;quot;unkou.keikyu.co.jp&amp;quot; // 運行情報のページ
-#define INTERVAL_SEC 10 * 60 // ポーリング間隔
-Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMLED, PIN, NEO_RGB + NEO_KHZ800);
-void setup() {
-// Serialの初期化
-Serial.begin(115200);
-Serial.println(&amp;quot;&amp;quot;);
-// マイコン内蔵RGB LEDの初期化
-pixels.begin();
-}
-void loop() {
-// Wi-Fi接続開始
-connectWifi();
-// 京急の運行ページから運行情報取得
-String trainInfo = getTrainInfo();
-// Wi-Fi接続終了
-disconnectWifi();
-// 「受託」という文字が含まれていたら、他社からの振替輸送受託で遅延していると判断
-if (trainInfo.indexOf(&amp;quot;受託&amp;quot;) &amp;gt; 0) {
-Serial.println(&amp;quot;振替輸送受託！&amp;quot;);
-blinkLikePartyPeople(INTERVAL_SEC);
-return;
-}
-// 「見合わせ」という文字が含まれていたら、運転見合わせが発生していると判断
-if (trainInfo.indexOf(&amp;quot;見合わせ&amp;quot;) &amp;gt; 0) {
-Serial.println(&amp;quot;運転見合わせ！&amp;quot;);
-blinkRed(INTERVAL_SEC);
-return;
-}
-// 「乱れ」という文字が含まれていたら、ダイヤが大幅に乱れていると判断
-if (trainInfo.indexOf(&amp;quot;乱れ&amp;quot;) &amp;gt; 0) {
-Serial.println(&amp;quot;大幅に乱れている！&amp;quot;);
-blinkYellowAndRed(INTERVAL_SEC);
-return;
-}
-// 「遅れ」「運休」という文字が含まれていたら、ダイヤが少し乱れていると判断
-if (trainInfo.indexOf(&amp;quot;遅れ&amp;quot;) &amp;gt; 0 || trainInfo.indexOf(&amp;quot;運休&amp;quot;) &amp;gt; 0) {
-Serial.println(&amp;quot;遅延！&amp;quot;);
-blinkYellow(INTERVAL_SEC);
-return;
-}
-// 「平常」という文字が含まれていたら、平常運転をしていると判断
-if (trainInfo.indexOf(&amp;quot;平常&amp;quot;) &amp;gt; 0) {
-Serial.println(&amp;quot;たぶん平常通り運転！&amp;quot;);
-delay(INTERVAL_SEC * 1000);
-return;
-}
-// 運行情報取得エラーかもしれないので、10秒待ってもう一度取得する
-blinkWhite(10);
-}
-// Wi-Fi接続
-void connectWifi() {
-WiFi.mode(WIFI_STA);
-WiFi.begin(SSID, PASSWORD);
-while (WiFi.status() != WL_CONNECTED) {
-Serial.print(&amp;quot;.&amp;quot;);
-blinkWhite(3);
-}
-Serial.println(&amp;quot;Wi-Fi接続完了&amp;quot;);
-}
-// Wi-Fi切断
-void disconnectWifi() {
-WiFi.disconnect();
-Serial.println(&amp;quot;Wi-Fi切断完了&amp;quot;);
-}
-// 運行情報の文字列取得
-String getTrainInfo() {
-WiFiClient client;
-if ( !client.connect(KEIKYU_PAGE, 80) ) {
-// 接続エラー
-return String(&amp;quot;&amp;quot;);
-}
-// HTTP-GET
-// レスポンスのLengthが長すぎるとエラーになることがあったのでRangeを指定している
-client.print(String(&amp;quot;GET &amp;quot;) + &amp;quot;/&amp;quot; + &amp;quot; HTTP/1.1\r\n&amp;quot; +
-&amp;quot;Host: &amp;quot; + KEIKYU_PAGE + &amp;quot;\r\n&amp;quot; +
-&amp;quot;Range: bytes=8000-9000\r\n&amp;quot; +
-&amp;quot;Connection: close\r\n\r\n&amp;quot;);
-client.println();
-delay(1000);
-String body = &amp;quot;&amp;quot;;
-String trainInfo = &amp;quot;&amp;lt;!-- ======================== 運行情報 =================================== --&amp;gt;&amp;quot;;
-while (client.available()) {
-body += client.readStringUntil(&#39;\r&#39;);
-}
-// レスポンスから運行情報部分だけを切り抜く
-body = body.substring(body.indexOf(trainInfo) + trainInfo.length());
-body = body.substring(0, body.indexOf(trainInfo));
-return body;
-}
-// 白い点滅
-void blinkWhite(int sec) {
-int count = 0;
-while (count &amp;lt; sec) {
-for (int i = 0; i &amp;lt; 256; i += 5) {
-setColor( i, i, i);
-}
-for (int i = 255; i &amp;gt;= 0; i -= 5) {
-setColor( i, i, i);
-}
-count++;
-}
-}
-//　黄色い点滅
-void blinkYellow(int sec) {
-int count = 0;
-while (count &amp;lt; sec) {
-for (int i = 0; i &amp;lt; 256; i += 5) {
-setColor( i, i, 0);
-}
-for (int i = 255; i &amp;gt;= 0; i -= 5) {
-setColor( i, i, 0);
-}
-count++;
-}
-}
-// 黄色と赤の点滅
-void blinkYellowAndRed(int sec) {
-int count = 0;
-while (count &amp;lt; sec) {
-for (int i = 0; i &amp;lt; 256; i += 5) {
-setColor( i, 0, 0);
-}
-for (int i = 255; i &amp;gt;= 0; i -= 5) {
-setColor( i, 0, 0);
-}
-for (int i = 0; i &amp;lt; 256; i += 5) {
-setColor( i, i, 0);
-}
-for (int i = 255; i &amp;gt;= 0; i -= 5) {
-setColor( i, i, 0);
-}
-count++;
-count++;
-}
-}
-// 赤い点滅
-void blinkRed(int sec) {
-int count = 0;
-while (count &amp;lt; sec) {
-for (int i = 0; i &amp;lt; 256; i += 5) {
-setColor( i, 0, 0);
-}
-for (int i = 255; i &amp;gt;= 0; i -= 5) {
-setColor( i, 0, 0);
-}
-count++;
-}
-}
-// パリピな輝き
-void blinkLikePartyPeople(int sec) {
-int count = 0;
-while (count &amp;lt; sec) {
-for (int i = 0; i &amp;lt; 20; i++) {
-setRandomColor();
-delay(50);
-}
-count++;
-}
-}
-// LEDを指定した色で光らせる
-void setColor(int r, int g, int b) {
-for (int i = 0 ; i &amp;lt; NUMLED; i++) {
-pixels.setPixelColor(i, pixels.Color(r, g, b));
-pixels.show();
-}
-delay(10);
-}
-// LEDをランダムな色で光らせる
-void setRandomColor() {
-for (int i = 0 ; i &amp;lt; NUMLED; i++) {
-pixels.setPixelColor(i, pixels.Color(64 * random(1, 5) - 1 , 64 * random(1, 5) - 1 , 64 * random(1, 5) - 1 ));
-pixels.show();
-}
-delay(10);
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;実際に光らせてみたのがこちら。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/099/11_setting.png&#34; alt=&#34;画像&#34; /&gt;
-情報取得中に実行される白い点滅。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/099/12_late.png&#34; alt=&#34;画像&#34; /&gt;
-運転見合わせ時に実行される赤い点滅。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/099/13_transport.png&#34; alt=&#34;画像&#34; /&gt;
-最後は他社線からの振替輸送受託時に実行されるパリピ点滅。画像では少しわかりづらいですね……。&lt;/p&gt;
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-&lt;p&gt;今回は、京急が遅延していると光るガジェットをESPr® Developerをつかって作成しました。情報の取得方法はかなり力技でしたが、WEB上の情報を簡単に可視化できたことは良かったです。&lt;/p&gt;
-&lt;p&gt;実際にこのガジェットは、職場のデスクで稼働していて、いつも京急の運行情報を知らせてくれます。今後は他社線バージョンの作成を検討しています。&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;※今回の図表の一部では&lt;a href=&#34;http://icooon-mono.com/&#34;&gt;アイコン素材ダウンロードサイト「icooon-mono」&lt;/a&gt;さんの画像を利用いたしました。ありがとうございます。&lt;/p&gt;</description></item></channel></rss>

@@ -1,4 +1,148 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Try on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/categories/try/</link><description>Recent content in Try on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Mon, 28 Jan 2019 00:51:35 +0900</lastBuildDate><atom:link href="/categories/try/" rel="self" type="application/rss+xml"/><item><title>ArduinoでTwitter連携！愛しのぬいぐるみトンピーちゃんに命を吹き込んでみた</title><link>https://dotstud.io/blog/arduino-nodejs-twitter-connect/</link><pubDate>Mon, 28 Jan 2019 00:51:35 +0900</pubDate><guid>https://dotstud.io/blog/arduino-nodejs-twitter-connect/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Try on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/categories/try/</link><description>Recent content in Try on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Tue, 29 Jan 2019 02:11:45 +0900</lastBuildDate><atom:link href="/categories/try/" rel="self" type="application/rss+xml"/><item><title>電池が切れても消えないディスプレイって？電子ペーパーを使ってみた！</title><link>https://dotstud.io/blog/using-e-paper-module/</link><pubDate>Tue, 29 Jan 2019 02:11:45 +0900</pubDate><guid>https://dotstud.io/blog/using-e-paper-module/</guid><description>
+&lt;p&gt;こんにちは、わくわくエンジニアの&lt;a href=&#34;https://dotstud.io/members/tomato/&#34;&gt;佐々木さん&lt;/a&gt;です。&lt;/p&gt;
+&lt;p&gt;みなさんは&lt;strong&gt;電子ペーパー&lt;/strong&gt;を知っていますか？&lt;/p&gt;
+&lt;p&gt;電子ペーパーはその名の通り、&lt;u&gt;紙のような見た目のディスプレイ&lt;/u&gt;です。低消費電力であることや、最後に表示したものを電源がなくても保持し続けることが特徴として挙げられます。&lt;/p&gt;
+&lt;p&gt;&lt;u&gt;身近なものだとAmazonの&lt;a href=&#34;https://www.amazon.co.jp/Kindle-New%E3%83%A2%E3%83%87%E3%83%AB-%E9%9B%BB%E5%AD%90%E6%9B%B8%E7%B1%8D%E3%83%AA%E3%83%BC%E3%83%80%E3%83%BC-Wi-Fi-%E3%83%96%E3%83%A9%E3%83%83%E3%82%AF-%E3%82%AD%E3%83%A3%E3%83%B3%E3%83%9A%E3%83%BC%E3%83%B3%E6%83%85%E5%A0%B1%E3%81%A4%E3%81%8D%E3%83%A2%E3%83%87%E3%83%AB/dp/B0186FESEE/ref=sr_1_1?ie=UTF8&amp;amp;qid=1547970527&amp;amp;sr=8-1&amp;amp;keywords=kindle&#34;&gt;Kindle&lt;/a&gt;で採用されています。&lt;/u&gt;&lt;/p&gt;
+&lt;p&gt;それでは実際に本題に入っていきましょう！&lt;/p&gt;
+&lt;h2 id=&#34;電子ペーパーの仕組み&#34;&gt;電子ペーパーの仕組み&lt;/h2&gt;
+&lt;p&gt;今回使用するのは&lt;a href=&#34;https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-58WG&#34;&gt;2.9inch e-Paper Module&lt;/a&gt;という電子ペーパー。&lt;/p&gt;
+&lt;p&gt;電子ペーパーは複数の表示方式がありますが、2.9inch e-Paper Moduleは&lt;strong&gt;電気泳動方式&lt;/strong&gt;というものが採用されているためこちらの説明をしたいと思います。&lt;/p&gt;
+&lt;p&gt;電気泳動方式では、ディスプレイの中に&lt;strong&gt;マイクロカプセル&lt;/strong&gt;という&lt;u&gt;色を表現するための透明なカプセル&lt;/u&gt;が隙間なく並んでいます。そのマイクロカプセルの中には色のついた粒子が入っており、かける電圧で粒子を移動させることによって、見える色を変えています。電源がなくなっても粒子は移動しないので、最後に表示したものを保持し続けることができます。&lt;/p&gt;
+&lt;p&gt;従来は白黒のディスプレイが主流でしたが、現在では3色のディスプレイも多くなっています。&lt;/p&gt;
+&lt;h2 id=&#34;使ったもの&#34;&gt;使ったもの&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-58WG&#34;&gt;2.9inch e-Paper Module&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/143395/abfea5c3-70e3-6e80-b108-841ff52824d0.jpeg&#34; alt=&#34;20180810_165537.jpg&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;このディスプレイは白黒黄の3色を表現できるディスプレイになっています。この他にも、白黒や白黒赤などを表示することができるディスプレイもあります。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.switch-science.com/catalog/3646/&#34;&gt;Raspberry Pi Zero WH&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/143395/62d5a886-b22e-f1bd-e436-cea221c7c1d8.jpeg&#34; alt=&#34;20190120_192847.jpg&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;このRaspberry Pi Zero WHはIoTで使われるボードの１つです。&lt;/p&gt;
+&lt;h2 id=&#34;ディスプレイに表示させてみよう&#34;&gt;ディスプレイに表示させてみよう&lt;/h2&gt;
+&lt;p&gt;今回は&lt;a href=&#34;https://www.waveshare.com/w/upload/9/98/2.9inch-e-paper-module-user-manual-en.pdf&#34;&gt;2.9inch e-Paper Module User Manual&lt;/a&gt;を参考にして進めていきます。&lt;/p&gt;
+&lt;h3 id=&#34;配線&#34;&gt;配線&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;center&#34;&gt;GPIO&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;2.9inch e-Paper Module&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;3.3V&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;3.3V&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;GND&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;GND&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;MOSI&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;DIN&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;SCLK&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;CLK&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;CE0&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;CS&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;25&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;DC&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;17&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;RST&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;24&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;BUSY&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;環境構築&#34;&gt;環境構築&lt;/h3&gt;
+&lt;p&gt;以下のコマンドが今回プログラムを実行するのに必要なものをインストールするコマンドになります。&lt;/p&gt;
+&lt;p&gt;ターミナルを開いて実行してください。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo apt-get install python-pip
+sudo pip install spidev
+sudo apt-get install libjpeg-dev
+sudo pip install Image
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;次に、&lt;strong&gt;&lt;code&gt;/boot/config.txt&lt;/code&gt;&lt;/strong&gt;を編集します。以下のコマンドを実行してください。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;sudo nano /boot/config.txt&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;すると、nanoエディタが開くので、以下の手順を行なってください。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;番下に&lt;strong&gt;&lt;code&gt;dtparam=spi=on&lt;/code&gt;&lt;/strong&gt;を追加&lt;/li&gt;
+&lt;li&gt;キーボードの &lt;strong&gt;&lt;code&gt;controlキー&lt;/code&gt;&lt;/strong&gt; と &lt;strong&gt;&lt;code&gt;xキー&lt;/code&gt;&lt;/strong&gt; を同時に押す&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;yキー&lt;/code&gt;&lt;/strong&gt;を押す&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;enterキー&lt;/code&gt;&lt;/strong&gt;を押す&lt;/li&gt;
+&lt;li&gt;全て完了したら&lt;strong&gt;&lt;code&gt;reboot&lt;/code&gt;&lt;/strong&gt;コマンドで再起動&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;これで環境構築は完了です。&lt;/p&gt;
+&lt;h3 id=&#34;プログラム&#34;&gt;プログラム&lt;/h3&gt;
+&lt;p&gt;デモプログラムが公開されているため、&lt;a href=&#34;https://www.waveshare.com/wiki/File:2.9inch_e-paper_module_b_code.7z&#34;&gt;こちら&lt;/a&gt;からcurrentと書かれているものをダウンロードしてください。&lt;/p&gt;
+&lt;p&gt;ダウンロードが完了したら以下のコマンドを実行してください。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;sudo apt-get install p7zip-full
+7z x 2.9inch_e-paper_module_b_code.7z
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;上記のコマンドで出てきた中の&lt;strong&gt;&lt;code&gt;RaspberryPi/python2&lt;/code&gt;&lt;/strong&gt;を今回は使います。&lt;/p&gt;
+&lt;p&gt;ターミナルで&lt;strong&gt;&lt;code&gt;RaspberryPi/python2&lt;/code&gt;&lt;/strong&gt;ディレクトリに移動して&lt;code&gt;python main.py&lt;/code&gt;**を実行すると、デモプログラムが起動します（※何も編集していない状態だとフォントが存在していないためエラーが発生します）。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;nano main.py&lt;/code&gt;&lt;/strong&gt;でファイルを少し編集します。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;main.py&lt;/code&gt;には以下のようなプログラムがあります。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;main.py&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;font24 = ImageFont.truetype(&#39;/usr/share/fonts/truetype/wqy/wqy-microhei.ttc&#39;, 24)
+font18 = ImageFont.truetype(&#39;/usr/share/fonts/truetype/wqy/wqy-microhei.ttc&#39;, 18)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;この&lt;strong&gt;&lt;code&gt;&#39;/usr/share/fonts/truetype/wqy/wqy-microhei.ttc&#39;&lt;/code&gt;&lt;/strong&gt;という部分を
+&lt;strong&gt;&lt;code&gt;&#39;/opt/vc/src/hello_pi/hello_font/Vera.ttf&#39;&lt;/code&gt;&lt;/strong&gt;に変更します。&lt;/p&gt;
+&lt;p&gt;もう一度&lt;code&gt;python main.py&lt;/code&gt;を実行すると、画面がピカピカし始め、Hello, worldなどが画像に表示されます。&lt;/p&gt;
+&lt;p&gt;では、実際にプログラムを少し変えて見ていきましょう。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;main.py&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;#!/usr/bin/python
+# -*- coding:utf-8 -*-
+import epd2in9b
+import time
+from PIL import Image,ImageDraw,ImageFont
+import traceback
+try:
+# ディスプレイの初期化処理をしています。
+epd = epd2in9b.EPD()
+epd.init()
+print &amp;quot;clear&amp;quot;
+epd.Clear(0xFF)
+# ディスプレイを横に使うように設定しています。
+HBlackimage = Image.new(&#39;1&#39;, (epd2in9b.EPD_HEIGHT, epd2in9b.EPD_WIDTH), 255) # 298*126
+HRedimage = Image.new(&#39;1&#39;, (epd2in9b.EPD_HEIGHT, epd2in9b.EPD_WIDTH), 255) # 298*126
+print &amp;quot;Drawing&amp;quot;
+drawblack = ImageDraw.Draw(HBlackimage)
+drawred = ImageDraw.Draw(HRedimage)
+# １つ目の引数でフォント、2つ目の引数でフォントのサイズを指定しています。
+font30 = ImageFont.truetype(&#39;/opt/vc/src/hello_pi/hello_font/Vera.ttf&#39;, 30)
+# １つ目の引数で座標、２つ目に表示させたい文字列、３つ目には上記のフォントを指定します。
+drawblack.text((10, 0), &#39;Hello, World&#39;, font = font30)
+# ディスプレイに表示させます。
+epd.display(epd.getbuffer(HBlackimage), epd.getbuffer(HRedimage))
+time.sleep(2)
+print &amp;quot;read bmp file&amp;quot;
+HBlackimage = Image.open(&#39;2in9b-b.bmp&#39;)
+epd.display(epd.getbuffer(HBlackimage), epd.getbuffer(HRedimage))
+time.sleep(2)
+except Exception, e:
+print &#39;traceback.format_exc():\n%s&#39; % traceback.format_exc()
+exit()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;このプログラムを実行すると以下のようになります。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/143395/45152d05-0b37-6d40-a992-2dc034553d67.gif&#34; alt=&#34;20190121_002653.gif&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/143395/c4b5f8b7-40c1-5145-5ba6-11c9b7a6f69a.gif&#34; alt=&#34;20190121_002722.gif&#34; /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;いかがでしたでしょうか？&lt;/p&gt;
+&lt;p&gt;電子ペーパーは、低消費電力という特徴があるので、センサからとれるデータを一定時間ごとに表示したり、自分の好きなものを表示して持ち運んだりすることもできます。&lt;/p&gt;
+&lt;p&gt;電子部品の販売店に売っていたりしますが、電子ペーパーの使い方はあまり広がっていないように感じるので、この記事を参考にぜひやってみてください！&lt;/p&gt;</description></item><item><title>ArduinoでTwitter連携！愛しのぬいぐるみトンピーちゃんに命を吹き込んでみた</title><link>https://dotstud.io/blog/arduino-nodejs-twitter-connect/</link><pubDate>Mon, 28 Jan 2019 00:51:35 +0900</pubDate><guid>https://dotstud.io/blog/arduino-nodejs-twitter-connect/</guid><description>
 &lt;p&gt;皆さん、大好きなぬいぐるみが動き出したらいいなと思ったこと、ありませんか？&lt;/p&gt;
 &lt;p&gt;今回は私の愛すべきお友達「トンピーちゃん」に命を吹き込むべく、プログラミング初心者の私がArduinoとTwitterの連携に挑戦してみました！&lt;/p&gt;
 &lt;p&gt;&lt;font size=&#34;4&#34;&gt;こちらです！！&lt;/font&gt;
@@ -3505,129 +3649,4 @@ padding: 0;
 vertical-align: middle;
 padding-left: 30px;
 }
-&lt;/style&gt;</description></item><item><title>【夏の自由工作2018】改札や自販機にピッとするたび光る！非接触発光LEDで光るネイル作ってみた</title><link>https://dotstud.io/blog/summer-homework-2018-chantoku/</link><pubDate>Mon, 13 Aug 2018 04:13:36 +0900</pubDate><guid>https://dotstud.io/blog/summer-homework-2018-chantoku/</guid><description>
-&lt;p&gt;こんにちは、&lt;a href=&#34;https://dotstud.io/members/chantoku&#34;&gt;ちゃんとく&lt;/a&gt;です。世間はすっかり夏休みですね！&lt;/p&gt;
-&lt;p&gt;弊dotstudioも絶賛夏休み中ですが、夏休みといえば宿題、宿題といえば自由工作………。&lt;/p&gt;
-&lt;p&gt;ということで、&lt;strong&gt;特別企画・夏の自由工作2018&lt;/strong&gt;を開催します！！！（ドンドンドンドン）&lt;/p&gt;
-&lt;p&gt;この記事を皮切りに、1週間連続でdotstudioメンバーが自由工作を発表していきますよ〜。実際の自由工作に役立つガジェットも登場するかも！？&lt;/p&gt;
-&lt;p&gt;初日からギリギリ更新ですが、それも宿題の醍醐味ですねっ☆&lt;/p&gt;
-&lt;h2 id=&#34;光るネイルを作ろう&#34;&gt;光るネイルを作ろう&lt;/h2&gt;
-&lt;p&gt;小さな爪の上に回路やら電源やらを考えるのは面倒なので、今回は「&lt;strong&gt;非接触ICリーダーに反応して光るLEDモジュール&lt;/strong&gt;」を使っていきます。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://gyazo.com/564206a6c714e9e73b23c33194d62be5&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/564206a6c714e9e73b23c33194d62be5.png&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;
-共立電子さんで売っている「&lt;a href=&#34;http://eleshop.jp/shop/g/g402524/&#34;&gt;NFC非接触発光LED&lt;/a&gt;」というモジュールは、改札や自動販売機の非接触ICリーダーにかざすと光る性質があります。&lt;/p&gt;
-&lt;p&gt;形もサイズもネイル用に作られたと言っても過言ではないな……！&lt;/p&gt;
-&lt;h2 id=&#34;ざっくりデザイン&#34;&gt;ざっくりデザイン&lt;/h2&gt;
-&lt;p&gt;ネイルを作る前に、ざっくりデザインを考えます。せっかく光らせるので、電子工作風にしてみました。&lt;/p&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/201/design.png&#34; alt=&#34;design&#34;&gt;
-&lt;/center&gt;
-でーん。Genuino風ネイル〜！緑の丸部分がLEDの想定です。&lt;/p&gt;
-&lt;p&gt;マイコンボードの中で1番好きな配色のGenuino 101（※）というArduino互換ボードをベースにしてみました。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://gyazo.com/9fe1b9fac74db201332a22408038f03a&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/9fe1b9fac74db201332a22408038f03a.png&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;font size=&#34;2&#34;&gt;
-※残念ながら生産停止になってしまいました……。悲しい……。
-&lt;/font&gt;&lt;/p&gt;
-&lt;h2 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h2&gt;
-&lt;h3 id=&#34;nfc非接触発光led&#34;&gt;NFC非接触発光LED&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&#34;https://gyazo.com/1f05e8e9d0a32242cef1a0c9f9e8ce61&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/1f05e8e9d0a32242cef1a0c9f9e8ce61.png&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;
-今回はネイルのデザインに合わせてブルーグリーンという色にしました！お安いので各指に乗せても大丈夫。&lt;/p&gt;
-&lt;h3 id=&#34;ネイルアート用ネイルチップ&#34;&gt;ネイルアート用ネイルチップ&lt;/h3&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/201/chip.png&#34; alt=&#34;chip&#34;&gt;
-&lt;/center&gt;
-ドン・キホーテで購入。普通のやつです。&lt;/p&gt;
-&lt;h3 id=&#34;好きな色のネイル&#34;&gt;好きな色のネイル&lt;/h3&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/201/nail.png&#34; alt=&#34;nail&#34;&gt;
-&lt;/center&gt;
-こちらもドン・キホーテで1番安いものを購入。ちょっと不安でしたが、発色もいいしガンガン重ね塗りできるのでオススメです！&lt;/p&gt;
-&lt;p&gt;あとは剥がれるのを防止する用にトップコートがあると◎。&lt;/p&gt;
-&lt;h3 id=&#34;ネイルグルー&#34;&gt;ネイルグルー&lt;/h3&gt;
-&lt;p&gt;ネイルチップを貼る用に、専用のグルーやテープを用意します。&lt;/p&gt;
-&lt;p&gt;100円均一などで購入できます。剥がす際にアセトンが必要なものもあるので注意！&lt;/p&gt;
-&lt;h2 id=&#34;制作&#34;&gt;制作&lt;/h2&gt;
-&lt;p&gt;制作といってもネイルを塗っていくだけなのですが、簡単に紹介します。&lt;strong&gt;ちゃんとく、雑なのであまり参考にしないでください&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/201/1.png&#34; alt=&#34;1&#34;&gt;
-&lt;/center&gt;
-ネイルチップにベース色を塗っていきます。「適当でいけるだろ！」と思ってたんですが、すごく持ちづらかったので&lt;strong&gt;セロテープを丸めたものをくっつけて&lt;/strong&gt;土台にしています。&lt;/p&gt;
-&lt;p&gt;ネイルをたっぷり取って、中央からハケを平たくするイメージで塗るのがコツって聞いたような聞いてないような……。一度塗って&lt;strong&gt;完全に乾くのを待って&lt;/strong&gt;から、二、三回重ね塗りをしていきます。&lt;/p&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/201/2.png&#34; alt=&#34;2&#34;&gt;
-&lt;/center&gt;
-あとでラインを引くので根元は適当でOK。&lt;/p&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/201/3.png&#34; alt=&#34;3&#34;&gt;
-&lt;/center&gt;
-小指はデザインに沿って、ちょんちょんちょんとドットを配置。なぜか仮面ライダーを想起させる仕上がり。&lt;/p&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/201/4.png&#34; alt=&#34;4&#34;&gt;
-&lt;/center&gt;
-LEDを載せる爪は、まずLEDを配置（&lt;strong&gt;裏面がシールになっています、最高&lt;/strong&gt;）。&lt;/p&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/201/5.png&#34; alt=&#34;5&#34;&gt;
-&lt;/center&gt;
-LED部分だけ残すように、上からゴリゴリネイルを塗ります。なんか浮いてる気もするけど気にしない気にしない。&lt;/p&gt;
-&lt;p&gt;全体をしっかりと乾かして完成〜！&lt;/p&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/201/after.png&#34; alt=&#34;after&#34;&gt;
-&lt;/center&gt;
-え？デザイン画と違う？&lt;/p&gt;
-&lt;p&gt;&lt;font size=&#34;4&#34;&gt;Arduinoマークなんて書けるわけないだろ！！！！&lt;/font&gt;&lt;/p&gt;
-&lt;p&gt;&lt;br /&gt;
-色は渋いのにつけてみると意外と派手な仕上がり。
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/201/after2.png&#34; alt=&#34;after2&#34;&gt;
-&lt;/center&gt;
-&lt;/p&gt;
-&lt;h2 id=&#34;街に出て光ってみる&#34;&gt;街に出て光ってみる&lt;/h2&gt;
-&lt;p&gt;せっかく作ったので、実際にかざして光らせてみます！&lt;/p&gt;
-&lt;p&gt;自販機を探して10分、なかなか非接触IC搭載の自販機が見つからない……。駅前とかじゃないと、意外とないもんです。&lt;/p&gt;
-&lt;p&gt;ようやく見つけたのはタバコの自販機。TASPOも光る仕様で助かったー。&lt;/p&gt;
-&lt;p&gt;リーダーに爪をかざすと……
-&lt;a href=&#34;https://gyazo.com/620360121553296154cf2c5b9e90b3dc&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/620360121553296154cf2c5b9e90b3dc.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;
-ちゃんと光った〜！さりげなくて良い感じ！&lt;/p&gt;
-&lt;h2 id=&#34;光るアレとコラボさせてみる&#34;&gt;光るアレとコラボさせてみる&lt;/h2&gt;
-&lt;p&gt;さらにさらに、せっかくなので&lt;strong&gt;光るアレとコラボ&lt;/strong&gt;させてみます。&lt;/p&gt;
-&lt;p&gt;どん。
-&lt;a href=&#34;https://gyazo.com/0b99edfda6b97c48f38fd82a87c99e02&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/0b99edfda6b97c48f38fd82a87c99e02.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;font size=&#34;4&#34;&gt;光ってる。私いま最高に光ってる。&lt;/font&gt;&lt;/p&gt;
-&lt;p&gt;&lt;br /&gt;
-ちなみにこれ1人で撮影しているのですが、初めて「ええい、ままよっ！」という気持ちになりました。&lt;/p&gt;
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-&lt;p&gt;安くて超簡単に作れる上、オシャレにも自由工作にも活用できる（？）のでオススメです！&lt;/p&gt;
-&lt;p&gt;ぜひ試してみてください〜！&lt;/p&gt;
-&lt;p&gt;明日の自由工作発表は、しゃちょーの&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です！お楽しみに！&lt;/p&gt;
-&lt;p&gt;&lt;center&gt;
-↓↓光るアレの紹介記事はこちら↓↓
-&lt;/center&gt;
-&lt;section class=&#34;link&#34; id=&#34;126&#34;&gt;
-&lt;div class=&#34;link_content&#34;&gt;
-&lt;a href=&#34;https://dotstud.io/blog/led-eyelash-gadget-report/&#34;&gt;&lt;/a&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/126/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
-&lt;/div&gt;
-&lt;div class=&#34;link_content&#34;&gt;
-&lt;div class=&#34;link_detail&#34;&gt;
-&lt;div class=&#34;link_title&#34;&gt;
-【検証】光るまつげ！？クラブで目立つこと間違いなしのLEDまつげを試してみた
-&lt;/div&gt;
-&lt;div class=&#34;link_date&#34;&gt;
-2017-09-11
-&lt;/div&gt;
-&lt;div class=&#34;link_desc&#34;&gt;
-秋葉原で見かけた面白プロダクトを実際に検証してみます。第一弾はLEDまつげ！使い方や使用感をレポートします！
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/section&gt;
-&lt;/section&gt;
-&lt;/p&gt;</description></item></channel></rss>
+&lt;/style&gt;</description></item></channel></rss>
