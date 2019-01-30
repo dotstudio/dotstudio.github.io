@@ -1,4 +1,194 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tips on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/categories/tips/</link><description>Recent content in Tips on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Tue, 22 Jan 2019 12:27:36 +0900</lastBuildDate><atom:link href="/categories/tips/" rel="self" type="application/rss+xml"/><item><title>Hugo&#43;GitHub Pagesで作ってるブログ運用をGitLabからCircle CI&#43;GitHubに切り替えました。</title><link>https://dotstud.io/blog/circleci-hugo-github-pages/</link><pubDate>Tue, 22 Jan 2019 12:27:36 +0900</pubDate><guid>https://dotstud.io/blog/circleci-hugo-github-pages/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tips on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/categories/tips/</link><description>Recent content in Tips on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Wed, 30 Jan 2019 10:47:09 +0900</lastBuildDate><atom:link href="/categories/tips/" rel="self" type="application/rss+xml"/><item><title>VuePressのブログをカスタムドメイン&#43;SSL対応させたGitLab Pagesにデプロイ</title><link>https://dotstud.io/blog/gitlab-vuepress-custom-domain/</link><pubDate>Wed, 30 Jan 2019 10:47:09 +0900</pubDate><guid>https://dotstud.io/blog/gitlab-vuepress-custom-domain/</guid><description>
+&lt;p&gt;こんにちは、最近スパにハマっている&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
+&lt;p&gt;今日はタイトル通り&lt;strong&gt;VuePressで作ったブログをGitLab Pagesに乗せてカスタムドメイン+SSL対応していきます。&lt;/strong&gt; 2019年1月時点版です。UIなどはガンガン変わっていくと思いますので適宜読み替えましょう。&lt;/p&gt;
+&lt;p&gt;過去に書いたこの記事とは別のサイトの運用話です。&lt;/p&gt;
+&lt;section class=&#34;link&#34; id=&#34;236&#34;&gt;
+&lt;div class=&#34;link_content&#34;&gt;
+&lt;a href=&#34;https://dotstud.io/blog/circleci-hugo-github-pages/&#34;&gt;&lt;/a&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/236/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
+&lt;/div&gt;
+&lt;div class=&#34;link_content&#34;&gt;
+&lt;div class=&#34;link_detail&#34;&gt;
+&lt;div class=&#34;link_title&#34;&gt;
+Hugo&amp;#43;GitHub Pagesで作ってるブログ運用をGitLabからCircle CI&amp;#43;GitHubに切り替えました。
+&lt;/div&gt;
+&lt;div class=&#34;link_date&#34;&gt;
+2019-01-22
+&lt;/div&gt;
+&lt;div class=&#34;link_desc&#34;&gt;
+Circle CIを使ってHugoのビルドをしてGitHub Pagesにデプロイする手順のメモです。
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/section&gt;
+&lt;/section&gt;
+&lt;p&gt;気持ち的にHugoブログもVuePressに移行したいと思っている感じですね。&lt;/p&gt;
+&lt;h2 id=&#34;gitlab-pagesの基本&#34;&gt;GitLab Pagesの基本&lt;/h2&gt;
+&lt;p&gt;GitLab PagesはGitLabで利用できる無料ホスティング環境です。&lt;/p&gt;
+&lt;p&gt;GitHub PagesのGitLab版って認識で大丈夫です。&lt;/p&gt;
+&lt;h3 id=&#34;gitlab-pagesでサイト公開の仕方&#34;&gt;GitLab Pagesでサイト公開の仕方&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;publicフォルダを作成します。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;リポジトリのルートに&lt;code&gt;public&lt;/code&gt;フォルダを作成して、その中にindex.htmlや関連するcssやjsファイルなどを入れていきます。基本的には&lt;code&gt;public/index.html&lt;/code&gt;がプロジェクトのトップページとして認識されます。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;.gitlab-ci.ymlを作成します。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;リポジトリのルート（&lt;code&gt;public&lt;/code&gt;フォルダと同じ階層）に&lt;code&gt;.gitlab-ci.yml&lt;/code&gt;を作成します。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;pages:
+stage: deploy
+script:
+- echo &#39;Nothing to do...&#39;
+artifacts:
+paths:
+- public
+only:
+- master
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;あとはGitLabのリポジトリにプッシュするだけです。
+この場合masterブランチにプッシュすると更新されます。&lt;/p&gt;
+&lt;p&gt;ファイル構成はイメージはこんな感じです。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/239/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;.gitlab-ci.yml&lt;/code&gt;がある状態でGitLabのリポジトリにプッシュするとCIが動いてごにょごにょやってくれます。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;https://&amp;lt;ユーザー名&amp;gt;.gitlab.io/&amp;lt;リポジトリ名&amp;gt; にアクセス&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;https://&amp;lt;ユーザー名&amp;gt;.gitlab.io/&amp;lt;リポジトリ名&amp;gt;&lt;/code&gt;が公開URLです。&lt;/p&gt;
+&lt;p&gt;GitLabのリポジトリのURLが&lt;code&gt;https://gitlab.com/&amp;lt;ユーザー名&amp;gt;/&amp;lt;リポジトリ名&amp;gt;&lt;/code&gt;となっているので適宜読み替えましょう。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;例えば、リポジトリのURLが&lt;code&gt;https://gitlab.com/n0bisuke/akihabara&lt;/code&gt;だとしたら、公開用のGitLab PagesのURLは&lt;code&gt;https://n0bisuke.gitlab.io/akihabara&lt;/code&gt;になります。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;プッシュしてから更新まで数分時間が掛かることがあるので少し経ってからまた確認してみましょう。&lt;/p&gt;
+&lt;p&gt;うまくいかない場合は&lt;code&gt;https://gitlab.com/&amp;lt;ユーザー名&amp;gt;/&amp;lt;リポジトリ名&amp;gt;/-/jobs&lt;/code&gt;に行くとジョブの確認が出来るので、エラーなどを確認してみましょう。&lt;/p&gt;
+&lt;h2 id=&#34;vuepressをgitlab-pagesにデプロイ&#34;&gt;VuePressをGitLab Pagesにデプロイ&lt;/h2&gt;
+&lt;p&gt;先ほどの利用したGitLab CIを利用します。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://vuepress.vuejs.org/&#34;&gt;VuePress&lt;/a&gt;はVue.jsの作者が作ったVue.js製の静的サイトジェネレータです。&lt;/p&gt;
+&lt;p&gt;公式のドキュメントに、&lt;a href=&#34;https://vuepress.vuejs.org/guide/deploy.html#gitlab-pages-and-gitlab-ci&#34;&gt;VuePressをGitLab PagesとGitLab CIにデプロイする方法&lt;/a&gt;が載っていますが、個人的には以下の2ステップだけで問題ないと思います。&lt;/p&gt;
+&lt;h3 id=&#34;1-vuepressのconfig-jsの設定&#34;&gt;1. VuePressのconfig.jsの設定&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;docs/.vuepress/config.js&lt;/code&gt;の中に&lt;code&gt;base&lt;/code&gt;というキーがあります。
+ここにリポジトリ名をパスとして設定してあげます。&lt;/p&gt;
+&lt;p&gt;例えば&lt;code&gt;https://gitlab.com/n0bisuke/hogehoge&lt;/code&gt;というリポジトリで&lt;code&gt;https://n0bisuke.gitlab.io/hogehoge&lt;/code&gt;という公開URLになる場合は、&lt;code&gt;base&lt;/code&gt;の箇所を&lt;code&gt;/hogehoge/&lt;/code&gt;にしましょう。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/239/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;後述しますが、もし、この後の手順のカスタムドメインまでを設定するならばここの&lt;code&gt;base&lt;/code&gt;は&lt;code&gt;/&lt;/code&gt;の設定のままで大丈夫です。&lt;/p&gt;
+&lt;h3 id=&#34;2-gitlab-ci-yml-の記述&#34;&gt;2. &lt;code&gt;.gitlab-ci.yml&lt;/code&gt;の記述&lt;/h3&gt;
+&lt;p&gt;以下のyml記述だけで完了です。プッシュして&lt;code&gt;https://n0bisuke.gitlab.io/hogehoge&lt;/code&gt;(自分の環境に読み替え)などにアクセスして確認しましょう。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;image: node:current-alpine
+pages:
+cache:
+paths:
+- node_modules/
+before_script:
+- node -v
+- npm i
+script:
+- npm run docs:build
+- cp -pr docs/.vuepress/dist public
+artifacts:
+paths:
+- public
+only:
+- master
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;デフォルトのチュートリアル通りだとビルドのコマンドが&lt;code&gt;npm run docs:build&lt;/code&gt;になっているはずなので、プッシュするとCI環境側で&lt;code&gt;npm run docs:build&lt;/code&gt;でビルドして、ビルド後のdistフォルダをpublicフォルダにコピー、その後publicフォルダをGitLab Pagesとしてデプロイします。&lt;/p&gt;
+&lt;p&gt;公式ドキュメントにはビルド先のフォルダをdistではなくpublicにする設定などがありましたが、この記述でも問題ないです。&lt;/p&gt;
+&lt;h2 id=&#34;カスタムドメインの利用-ssl対応&#34;&gt;カスタムドメインの利用 &amp;amp; SSL対応&lt;/h2&gt;
+&lt;p&gt;現状で、&lt;code&gt;https://n0bisuke.gitlab.io/hogehoge&lt;/code&gt;というアドレスが公開URLになっているものを&lt;code&gt;https://hogehoge.dotstud.io&lt;/code&gt;でアクセスさせるようにしていきます。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.cloudflare.com/&#34;&gt;Cloudflare&lt;/a&gt;を利用します。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://letsencrypt.org/&#34;&gt;Let&amp;rsquo;s Encrypt&lt;/a&gt;を利用する手もあるのですが、更新の手間があるのと既にdotstud.ioでCloudflareを使ってDNSやSSL設定をしていたので&lt;strong&gt;Cloudflareを利用してのGitLab Pagesのカスタムドメイン&amp;amp;SSL対応を紹介&lt;/strong&gt;します。&lt;/p&gt;
+&lt;p&gt;GitLab公式の&lt;a href=&#34;https://about.gitlab.com/2017/02/07/setting-up-gitlab-pages-with-cloudflare-certificates/&#34;&gt;Setting up GitLab Pages with CloudFlare Certificates&lt;/a&gt;を見ながら試してみました。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;DNSのAレコードをGitLab Pagesに向けることも出来るみたいですが、今回はCNAMEでサブドメインをリダイレクトさせる形にします。&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&#34;1-証明書の作成&#34;&gt;1. 証明書の作成&lt;/h3&gt;
+&lt;p&gt;CloudflareのCrypto画面を開きます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/239/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Origin Certificates&lt;/code&gt;の項目にある&lt;code&gt;Create Certificate&lt;/code&gt;(証明書の作成)の青いボタンを押します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/239/4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;モーダルウィンドウが開かれますが、&lt;code&gt;List the hostnames&lt;/code&gt;の箇所だけ変更して、利用したいドメイン名を記述して、NEXTボタンで進みましょう。&lt;/p&gt;
+&lt;p&gt;今回は&lt;code&gt;https://hogehoge.dotstud.io&lt;/code&gt;でアクセスしたいので、ここには&lt;code&gt;hogehoge.dotstud.io&lt;/code&gt;などのドメイン名だけを入力しておきます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/239/5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;これで証明書の文字列が生成されます。
+&lt;code&gt;Ker format&lt;/code&gt;はデフォルトの&lt;code&gt;PEM&lt;/code&gt;のままで大丈夫です。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/239/6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Origin certificate&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Private key&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;この二種類の文字列をあとで使うのでコピーしておきましょう。&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&#34;2-gitlab-pagesに設定する&#34;&gt;2. GitLab Pagesに設定する&lt;/h3&gt;
+&lt;p&gt;GitLabのリポジトリ設定画面からPagesの設定画面に行きます。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;https://gitlab.com/&amp;lt;ユーザー名&amp;gt;/&amp;lt;リポジトリ名&amp;gt;/pages&lt;/code&gt;が設定画面です。&lt;/p&gt;
+&lt;p&gt;ここから&lt;code&gt;New Domain&lt;/code&gt;ボタンを押してカスタムドメインの設定をします。&lt;/p&gt;
+&lt;p&gt;また、この際に&lt;code&gt;Force domains with SSL certificates to use HTTPS&lt;/code&gt;のチェックがありますが、SSL対応させるのでデフォルトのままチェックしておきましょう。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/239/7.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Domain&lt;/code&gt;の項目に設定したいカスタムドメイン（今回は&lt;code&gt;hogehoge.dotstud.io&lt;/code&gt;）を設定します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/239/8.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;以下の二箇所には先ほどのCloudflareで生成した証明書文字列を指定します。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Certificate (PEM): &lt;code&gt;Origin certificate&lt;/code&gt;の文字列&lt;/li&gt;
+&lt;li&gt;Key (PEM): &lt;code&gt;Private key&lt;/code&gt;の文字列&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;----BEGIN CERTIFICATE----&lt;/code&gt;などの文字を含めて全部コピペしましょう。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/239/9.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;ここにさらにCloudflareの証明書の文字列が必要になります。&lt;a href=&#34;https://support.cloudflare.com/hc/en-us/articles/218689638&#34;&gt;CloudFlare&amp;rsquo;s Origin CA — RSA Root&lt;/a&gt;というらしいです。&lt;/p&gt;
+&lt;p&gt;以下の文字列(CloudFlare&amp;rsquo;s Origin CA)をコピーしましょう。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;-----BEGIN CERTIFICATE-----
+MIID/DCCAuagAwIBAgIID+rOSdTGfGcwCwYJKoZIhvcNAQELMIGLMQswCQYDVQQG
+EwJVUzEZMBcGA1UEChMQQ2xvdWRGbGFyZSwgSW5jLjE0MDIGA1UECxMrQ2xvdWRG
+bGFyZSBPcmlnaW4gU1NMIENlcnRpZmljYXRlIEF1dGhvcml0eTEWMBQGA1UEBxMN
+U2FuIEZyYW5jaXNjbzETMBEGA1UECBMKQ2FsaWZvcm5pYTAeFw0xNDExMTMyMDM4
+NTBaFw0xOTExMTQwMTQzNTBaMIGLMQswCQYDVQQGEwJVUzEZMBcGA1UEChMQQ2xv
+dWRGbGFyZSwgSW5jLjE0MDIGA1UECxMrQ2xvdWRGbGFyZSBPcmlnaW4gU1NMIENl
+cnRpZmljYXRlIEF1dGhvcml0eTEWMBQGA1UEBxMNU2FuIEZyYW5jaXNjbzETMBEG
+A1UECBMKQ2FsaWZvcm5pYTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+AMBIlWf1KEKR5hbB75OYrAcUXobpD/AxvSYRXr91mbRu+lqE7YbyyRUShQh15lem
+ef+umeEtPZoLFLhcLyczJxOhI+siLGDQm/a/UDkWvAXYa5DZ+pHU5ct5nZ8pGzqJ
+p8G1Hy5RMVYDXZT9F6EaHjMG0OOffH6Ih25TtgfyyrjXycwDH0u6GXt+G/rywcqz
+/9W4Aki3XNQMUHNQAtBLEEIYHMkyTYJxuL2tXO6ID5cCsoWw8meHufTeZW2DyUpl
+yP3AHt4149RQSyWZMJ6AyntL9d8Xhfpxd9rJkh9Kge2iV9rQTFuE1rRT5s7OSJcK
+xUsklgHcGHYMcNfNMilNHb8CAwEAAaNmMGQwDgYDVR0PAQH/BAQDAgAGMBIGA1Ud
+EwEB/wQIMAYBAf8CAQIwHQYDVR0OBBYEFCToU1ddfDRAh6nrlNu64RZ4/CmkMB8G
+A1UdIwQYMBaAFCToU1ddfDRAh6nrlNu64RZ4/CmkMAsGCSqGSIb3DQEBCwOCAQEA
+cQDBVAoRrhhsGegsSFsv1w8v27zzHKaJNv6ffLGIRvXK8VKKK0gKXh2zQtN9SnaD
+gYNe7Pr4C3I8ooYKRJJWLsmEHdGdnYYmj0OJfGrfQf6MLIc/11bQhLepZTxdhFYh
+QGgDl6gRmb8aDwk7Q92BPvek5nMzaWlP82ixavvYI+okoSY8pwdcVKobx6rWzMWz
+ZEC9M6H3F0dDYE23XcCFIdgNSAmmGyXPBstOe0aAJXwJTxOEPn36VWr0PKIQJy5Y
+4o1wpMpqCOIwWc8J9REV/REzN6Z1LXImdUgXIXOwrz56gKUJzPejtBQyIGj0mveX
+Fu6q54beR89jDc+oABmOgg==
+-----END CERTIFICATE-----
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;この&lt;code&gt;CloudFlare&#39;s Origin CA&lt;/code&gt;をコピーしたら、先ほど&lt;code&gt;Certificate (PEM)&lt;/code&gt;のフォームに入れ込んだ文字列の後ろに改行をいれて、&lt;code&gt;CloudFlare&#39;s Origin CA&lt;/code&gt;を貼り付けます。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;この画面のような感じです。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/239/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;ここまで出来たら、ページ下部の&lt;code&gt;Create New Domain&lt;/code&gt;のボタンを押して進みましょう。&lt;/p&gt;
+&lt;h3 id=&#34;3-dnsの設定&#34;&gt;3. DNSの設定&lt;/h3&gt;
+&lt;p&gt;無事に作成出来ると、以下のような確認画面になります。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/239/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;この画面の指示にしたがってCloudflareのDNS設定画面でCNAMEとTXTレコードを設定してあげる必要があります。&lt;/p&gt;
+&lt;h4 id=&#34;cnameレコード設定&#34;&gt;CNAMEレコード設定&lt;/h4&gt;
+&lt;p&gt;まずはCNAMEレコードです。 以下のように設定します。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Type: CNAME&lt;/li&gt;
+&lt;li&gt;Name: 利用したいカスタムドメイン名&lt;/li&gt;
+&lt;li&gt;Value: &amp;lt;ユーザー名&amp;gt;.gitlab.io&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;例えば&lt;code&gt;https://hogehoge.dotstud.io&lt;/code&gt;にしたい場合は&lt;strong&gt;Name&lt;/strong&gt;を&lt;code&gt;hogehoge&lt;/code&gt;にし、元々のGitLabリポジトリが&lt;code&gt;https://n0bisuke.gitlab.io/hogehoge&lt;/code&gt;などであれば,&lt;strong&gt;Value&lt;/strong&gt;を&lt;code&gt;n0bisuke.gitlab.io&lt;/code&gt;にします。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/239/12.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;これで&lt;code&gt;https://hogehoge.dotstud.io&lt;/code&gt;にアクセスした際に&lt;code&gt;https://n0bisuke.gitlab.io&lt;/code&gt;側にリダイレクトされるようになります。&lt;/p&gt;
+&lt;h4 id=&#34;txtレコード設定-所有者確認&#34;&gt;TXTレコード設定（所有者確認）&lt;/h4&gt;
+&lt;p&gt;GitLab側から見ると&lt;code&gt;hogehoge.dotstud.io&lt;/code&gt;をそのユーザーが所有しているか分からないため、所有権の確認作業が発生します。&lt;/p&gt;
+&lt;p&gt;GitLabの設定画面に&lt;code&gt;Verification status&lt;/code&gt;の箇所に&lt;code&gt;_gitlab-pages-verification-code.hogehoge.dotstud.io TXT gitlab-pages-verification-code=xxxxxxxxxxxxxxxxxx&lt;/code&gt;などの文字列が表示されていることが分かります。この情報をCloudflareに登録してあげればOKです。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/239/13.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;登録が出来たら、おそらく赤くなっているUnverifiedのボタンを押して確認しましょう。
+上手くいくとこんな感じで&lt;code&gt;Successfully verified&lt;/code&gt;などの文字が表示されます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/239/14.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;h3 id=&#34;4-sslの設定&#34;&gt;4. SSLの設定&lt;/h3&gt;
+&lt;p&gt;CloudflareのCrypto画面からSSLの設定が出来ます。&lt;code&gt;Full&lt;/code&gt;もしくは&lt;code&gt;Full(strict)&lt;/code&gt;にしておきましょう。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/239/14.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;あとは、ドメインが浸透したりするのを少し待ちましょう。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;https://hogehoge.dotstud.io&lt;/code&gt;にアクセすると&lt;code&gt;https://n0bisuke.gitlab.io/hogehoge&lt;/code&gt;に内部的にリダイレクトされるようになりました。&lt;/p&gt;
+&lt;h3 id=&#34;5-vuepressの設定を戻す&#34;&gt;5. VuePressの設定を戻す&lt;/h3&gt;
+&lt;p&gt;先ほどの紹介で、VuePressをGitLab Pagesで公開する際に&lt;code&gt;docs/.vuepress/config.js&lt;/code&gt;の&lt;code&gt;base&lt;/code&gt;キーを&lt;code&gt;/リポジトリ名/&lt;/code&gt;とする紹介がありましたが、カスタムドメインまでやった人は&lt;code&gt;base&lt;/code&gt;キーを&lt;code&gt;/&lt;/code&gt;に戻しておいてください。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;ここの設定を間違えるとCSSやJSが上手く読み込まれなくなってしまいます。&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;如何でしょう。GitLab Pagesや周辺ツール/サービスを活用して無料でカスタムドメイン+SSLのVuePressブログを作ることが出来ました。&lt;/p&gt;
+&lt;p&gt;この辺のことを試す際の参考になれば幸いです。&lt;/p&gt;</description></item><item><title>Hugo&#43;GitHub Pagesで作ってるブログ運用をGitLabからCircle CI&#43;GitHubに切り替えました。</title><link>https://dotstud.io/blog/circleci-hugo-github-pages/</link><pubDate>Tue, 22 Jan 2019 12:27:36 +0900</pubDate><guid>https://dotstud.io/blog/circleci-hugo-github-pages/</guid><description>
 &lt;p&gt;こんにちは、代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
 &lt;p&gt;タイトル通り、dotstudioのブログの構成を変更したのでメモを残しておこうとおもいます。&lt;/p&gt;
 &lt;h2 id=&#34;今までの構成とデプロイの流れ&#34;&gt;今までの構成とデプロイの流れ&lt;/h2&gt;
@@ -1904,76 +2094,4 @@ NYはブルックリンスタイルをイメージした自慢のオシャレキ
 &lt;p&gt;ということで&lt;strong&gt;&lt;a href=&#34;http://amzn.asia/8KHCkEv&#34;&gt;ウィッシュリスト&lt;/a&gt;&lt;/strong&gt;も作りましたのでよかったら応援おねがいします（笑）&lt;/p&gt;
 &lt;h3 id=&#34;おまけ&#34;&gt;おまけ&lt;/h3&gt;
 &lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/132/sushi.png&#34; alt=&#34;&#34; /&gt;
-慰労寿司パ（定期）&lt;/p&gt;</description></item><item><title>Node.js製の静的サイトジェネレータ「Hexo」で無料ブログ開発 vol.3</title><link>https://dotstud.io/blog/hexo-static-site-vol3/</link><pubDate>Tue, 31 Oct 2017 17:53:15 +0900</pubDate><guid>https://dotstud.io/blog/hexo-static-site-vol3/</guid><description>
-&lt;p&gt;こんにちは、エンジニアのちゃんとくです。ひょんなことから&lt;a href=&#34;https://nodejs.connpass.com/&#34;&gt;&lt;strong&gt;Node女学園&lt;/strong&gt;&lt;/a&gt;というNode.jsを学ぶ女性のためのコミュニティを立ち上げました。&lt;/p&gt;
-&lt;p&gt;このシリーズではNode女学園のブログを作りながら、&lt;strong&gt;Node.js製の静的サイトジェネレータ「Hexo」&lt;/strong&gt;の使い方を紹介していきます！&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/hexo-static-site-vol2&#34;&gt;&lt;strong&gt;前回&lt;/strong&gt;&lt;/a&gt;はデザインを当ててブログのカスタマイズをしてみました。&lt;/p&gt;
-&lt;section class=&#34;link&#34; id=&#34;107&#34;&gt;
-&lt;div class=&#34;link_content&#34;&gt;
-&lt;a href=&#34;https://dotstud.io/blog/hexo-static-site-vol2/&#34;&gt;&lt;/a&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/107/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
-&lt;/div&gt;
-&lt;div class=&#34;link_content&#34;&gt;
-&lt;div class=&#34;link_detail&#34;&gt;
-&lt;div class=&#34;link_title&#34;&gt;
-Node.js製の静的サイトジェネレータ「Hexo」で無料ブログ開発 vol.2
-&lt;/div&gt;
-&lt;div class=&#34;link_date&#34;&gt;
-2017-07-25
-&lt;/div&gt;
-&lt;div class=&#34;link_desc&#34;&gt;
-Node.jsによるNode.jsのためのサイトづくり！テーマを当てておしゃれ感を出す回です。
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/section&gt;
-&lt;/section&gt;
-&lt;p&gt;今回はルートを追加してブログ記事以外のページを作ってみます。&lt;/p&gt;
-&lt;h2 id=&#34;今回やること&#34;&gt;今回やること&lt;/h2&gt;
-&lt;p&gt;現在はコマンドで記事を追加すると&lt;code&gt;サイトURL/:YYYY/:MM/:DD&lt;/code&gt;という記事が作成されるようになっています。&lt;/p&gt;
-&lt;p&gt;これを変更して、&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;サイトURL/about/&lt;/code&gt;という情報ページを追加&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;サイトURL/blog/:title&lt;/code&gt;に記事を生成&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;というのをやってみます。&lt;/p&gt;
-&lt;h2 id=&#34;新しいルートを追加&#34;&gt;新しいルートを追加&lt;/h2&gt;
-&lt;p&gt;ルートの追加は、&lt;code&gt;hexo new page &amp;quot;[新しいルート]&amp;quot;&lt;/code&gt;というコマンドで簡単にできます。
-&lt;img src=&#34;https://dotstud.io/img/blog/108/new_route.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;コマンドを実行すると&lt;code&gt;/source&lt;/code&gt;の下に新しいディレクトリが作成されます。
-&lt;img src=&#34;https://dotstud.io/img/blog/108/about_dir.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;作成された&lt;code&gt;about/index.md&lt;/code&gt;にページ内容を記載します。&lt;/p&gt;
-&lt;p&gt;ローカルサーバを起動して&lt;a href=&#34;http://localhost:4000/about/&#34;&gt;http://localhost:4000/about/&lt;/a&gt; を見てみます。
-&lt;img src=&#34;https://dotstud.io/img/blog/108/about.png&#34; alt=&#34;&#34; /&gt;
-新しいページができました！&lt;/p&gt;
-&lt;h2 id=&#34;メニューに追加&#34;&gt;メニューに追加&lt;/h2&gt;
-&lt;p&gt;今のままではどこからもリンクがないのでメニューのHomeの横に追加してみます。
-&lt;img src=&#34;https://dotstud.io/img/blog/108/menu_before.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;/themes/pacman/_config.yml&lt;/code&gt;の&lt;code&gt;menu:&lt;/code&gt;に表示名とPATHを記載します。
-&lt;img src=&#34;https://dotstud.io/img/blog/108/menu.png&#34; alt=&#34;&#34; /&gt;
-Archivesはしばらく不要なので消しました。ついでにEventsとStaffページも追加してみます。&lt;/p&gt;
-&lt;p&gt;表示を確認します。
-&lt;img src=&#34;https://dotstud.io/img/blog/108/menu_after.png&#34; alt=&#34;&#34; /&gt;
-メニューができました！各リンクが正しいかも確認しておきましょう。&lt;/p&gt;
-&lt;h2 id=&#34;blog記事のurlを変更する&#34;&gt;blog記事のURLを変更する&lt;/h2&gt;
-&lt;p&gt;続いてブログ記事が&lt;code&gt;サイトURL/blog/:title&lt;/code&gt;となるように変更していきます。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;プロジェクト/_config.yml&lt;/code&gt;を変更しましょう。
-&lt;img src=&#34;https://dotstud.io/img/blog/108/title.png&#34; alt=&#34;&#34; /&gt;
-&lt;code&gt;permalink:&lt;/code&gt;を&lt;code&gt;/:title/&lt;/code&gt;に変更します。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;new_post_name:&lt;/code&gt;の項目を&lt;code&gt;blog/:title.md&lt;/code&gt;に変更します。
-&lt;img src=&#34;https://dotstud.io/img/blog/108/blog_title.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;新しい記事を作成してみます。
-&lt;img src=&#34;https://dotstud.io/img/blog/108/new_post.png&#34; alt=&#34;&#34; /&gt;
-&lt;code&gt;/source/blog&lt;/code&gt;の下に記事が追加されるようになりました。&lt;/p&gt;
-&lt;p&gt;トップページを確認してみましょう。
-&lt;img src=&#34;https://dotstud.io/img/blog/108/top.png&#34; alt=&#34;&#34; /&gt;
-&lt;a href=&#34;http://localhost:4000&#34;&gt;http://localhost:4000&lt;/a&gt; にはブログ一覧が表示されます。&lt;/p&gt;
-&lt;p&gt;記事をクリックして飛んでみます。
-&lt;img src=&#34;https://dotstud.io/img/blog/108/art.png&#34; alt=&#34;&#34; /&gt;
-&lt;code&gt;サイトURL/blog/:title&lt;/code&gt;の形で記事が発行されました！&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;hexo deploy -g&lt;/code&gt;でデプロイです。&lt;/p&gt;
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/108/done.png&#34; alt=&#34;&#34; /&gt;
-今回もコマンドと設定ファイルの編集で簡単にルーティングをすることができました。&lt;/p&gt;
-&lt;p&gt;かなりサイトらしくなってきましたね！&lt;/p&gt;
-&lt;p&gt;次回はサイドバーをカスタマイズしてみたいと思います。&lt;/p&gt;</description></item></channel></rss>
+慰労寿司パ（定期）&lt;/p&gt;</description></item></channel></rss>

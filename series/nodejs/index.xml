@@ -1,4 +1,194 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Nodejs on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/nodejs/</link><description>Recent content in Nodejs on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Mon, 28 Jan 2019 00:51:35 +0900</lastBuildDate><atom:link href="/series/nodejs/" rel="self" type="application/rss+xml"/><item><title>ArduinoでTwitter連携！愛しのぬいぐるみトンピーちゃんに命を吹き込んでみた</title><link>https://dotstud.io/blog/arduino-nodejs-twitter-connect/</link><pubDate>Mon, 28 Jan 2019 00:51:35 +0900</pubDate><guid>https://dotstud.io/blog/arduino-nodejs-twitter-connect/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Nodejs on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/nodejs/</link><description>Recent content in Nodejs on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Wed, 30 Jan 2019 10:47:09 +0900</lastBuildDate><atom:link href="/series/nodejs/" rel="self" type="application/rss+xml"/><item><title>VuePressのブログをカスタムドメイン&#43;SSL対応させたGitLab Pagesにデプロイ</title><link>https://dotstud.io/blog/gitlab-vuepress-custom-domain/</link><pubDate>Wed, 30 Jan 2019 10:47:09 +0900</pubDate><guid>https://dotstud.io/blog/gitlab-vuepress-custom-domain/</guid><description>
+&lt;p&gt;こんにちは、最近スパにハマっている&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
+&lt;p&gt;今日はタイトル通り&lt;strong&gt;VuePressで作ったブログをGitLab Pagesに乗せてカスタムドメイン+SSL対応していきます。&lt;/strong&gt; 2019年1月時点版です。UIなどはガンガン変わっていくと思いますので適宜読み替えましょう。&lt;/p&gt;
+&lt;p&gt;過去に書いたこの記事とは別のサイトの運用話です。&lt;/p&gt;
+&lt;section class=&#34;link&#34; id=&#34;236&#34;&gt;
+&lt;div class=&#34;link_content&#34;&gt;
+&lt;a href=&#34;https://dotstud.io/blog/circleci-hugo-github-pages/&#34;&gt;&lt;/a&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/236/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
+&lt;/div&gt;
+&lt;div class=&#34;link_content&#34;&gt;
+&lt;div class=&#34;link_detail&#34;&gt;
+&lt;div class=&#34;link_title&#34;&gt;
+Hugo&amp;#43;GitHub Pagesで作ってるブログ運用をGitLabからCircle CI&amp;#43;GitHubに切り替えました。
+&lt;/div&gt;
+&lt;div class=&#34;link_date&#34;&gt;
+2019-01-22
+&lt;/div&gt;
+&lt;div class=&#34;link_desc&#34;&gt;
+Circle CIを使ってHugoのビルドをしてGitHub Pagesにデプロイする手順のメモです。
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/section&gt;
+&lt;/section&gt;
+&lt;p&gt;気持ち的にHugoブログもVuePressに移行したいと思っている感じですね。&lt;/p&gt;
+&lt;h2 id=&#34;gitlab-pagesの基本&#34;&gt;GitLab Pagesの基本&lt;/h2&gt;
+&lt;p&gt;GitLab PagesはGitLabで利用できる無料ホスティング環境です。&lt;/p&gt;
+&lt;p&gt;GitHub PagesのGitLab版って認識で大丈夫です。&lt;/p&gt;
+&lt;h3 id=&#34;gitlab-pagesでサイト公開の仕方&#34;&gt;GitLab Pagesでサイト公開の仕方&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;publicフォルダを作成します。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;リポジトリのルートに&lt;code&gt;public&lt;/code&gt;フォルダを作成して、その中にindex.htmlや関連するcssやjsファイルなどを入れていきます。基本的には&lt;code&gt;public/index.html&lt;/code&gt;がプロジェクトのトップページとして認識されます。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;.gitlab-ci.ymlを作成します。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;リポジトリのルート（&lt;code&gt;public&lt;/code&gt;フォルダと同じ階層）に&lt;code&gt;.gitlab-ci.yml&lt;/code&gt;を作成します。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;pages:
+stage: deploy
+script:
+- echo &#39;Nothing to do...&#39;
+artifacts:
+paths:
+- public
+only:
+- master
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;あとはGitLabのリポジトリにプッシュするだけです。
+この場合masterブランチにプッシュすると更新されます。&lt;/p&gt;
+&lt;p&gt;ファイル構成はイメージはこんな感じです。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/239/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;.gitlab-ci.yml&lt;/code&gt;がある状態でGitLabのリポジトリにプッシュするとCIが動いてごにょごにょやってくれます。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;https://&amp;lt;ユーザー名&amp;gt;.gitlab.io/&amp;lt;リポジトリ名&amp;gt; にアクセス&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;code&gt;https://&amp;lt;ユーザー名&amp;gt;.gitlab.io/&amp;lt;リポジトリ名&amp;gt;&lt;/code&gt;が公開URLです。&lt;/p&gt;
+&lt;p&gt;GitLabのリポジトリのURLが&lt;code&gt;https://gitlab.com/&amp;lt;ユーザー名&amp;gt;/&amp;lt;リポジトリ名&amp;gt;&lt;/code&gt;となっているので適宜読み替えましょう。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;例えば、リポジトリのURLが&lt;code&gt;https://gitlab.com/n0bisuke/akihabara&lt;/code&gt;だとしたら、公開用のGitLab PagesのURLは&lt;code&gt;https://n0bisuke.gitlab.io/akihabara&lt;/code&gt;になります。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;プッシュしてから更新まで数分時間が掛かることがあるので少し経ってからまた確認してみましょう。&lt;/p&gt;
+&lt;p&gt;うまくいかない場合は&lt;code&gt;https://gitlab.com/&amp;lt;ユーザー名&amp;gt;/&amp;lt;リポジトリ名&amp;gt;/-/jobs&lt;/code&gt;に行くとジョブの確認が出来るので、エラーなどを確認してみましょう。&lt;/p&gt;
+&lt;h2 id=&#34;vuepressをgitlab-pagesにデプロイ&#34;&gt;VuePressをGitLab Pagesにデプロイ&lt;/h2&gt;
+&lt;p&gt;先ほどの利用したGitLab CIを利用します。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://vuepress.vuejs.org/&#34;&gt;VuePress&lt;/a&gt;はVue.jsの作者が作ったVue.js製の静的サイトジェネレータです。&lt;/p&gt;
+&lt;p&gt;公式のドキュメントに、&lt;a href=&#34;https://vuepress.vuejs.org/guide/deploy.html#gitlab-pages-and-gitlab-ci&#34;&gt;VuePressをGitLab PagesとGitLab CIにデプロイする方法&lt;/a&gt;が載っていますが、個人的には以下の2ステップだけで問題ないと思います。&lt;/p&gt;
+&lt;h3 id=&#34;1-vuepressのconfig-jsの設定&#34;&gt;1. VuePressのconfig.jsの設定&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;docs/.vuepress/config.js&lt;/code&gt;の中に&lt;code&gt;base&lt;/code&gt;というキーがあります。
+ここにリポジトリ名をパスとして設定してあげます。&lt;/p&gt;
+&lt;p&gt;例えば&lt;code&gt;https://gitlab.com/n0bisuke/hogehoge&lt;/code&gt;というリポジトリで&lt;code&gt;https://n0bisuke.gitlab.io/hogehoge&lt;/code&gt;という公開URLになる場合は、&lt;code&gt;base&lt;/code&gt;の箇所を&lt;code&gt;/hogehoge/&lt;/code&gt;にしましょう。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/239/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;後述しますが、もし、この後の手順のカスタムドメインまでを設定するならばここの&lt;code&gt;base&lt;/code&gt;は&lt;code&gt;/&lt;/code&gt;の設定のままで大丈夫です。&lt;/p&gt;
+&lt;h3 id=&#34;2-gitlab-ci-yml-の記述&#34;&gt;2. &lt;code&gt;.gitlab-ci.yml&lt;/code&gt;の記述&lt;/h3&gt;
+&lt;p&gt;以下のyml記述だけで完了です。プッシュして&lt;code&gt;https://n0bisuke.gitlab.io/hogehoge&lt;/code&gt;(自分の環境に読み替え)などにアクセスして確認しましょう。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;image: node:current-alpine
+pages:
+cache:
+paths:
+- node_modules/
+before_script:
+- node -v
+- npm i
+script:
+- npm run docs:build
+- cp -pr docs/.vuepress/dist public
+artifacts:
+paths:
+- public
+only:
+- master
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;デフォルトのチュートリアル通りだとビルドのコマンドが&lt;code&gt;npm run docs:build&lt;/code&gt;になっているはずなので、プッシュするとCI環境側で&lt;code&gt;npm run docs:build&lt;/code&gt;でビルドして、ビルド後のdistフォルダをpublicフォルダにコピー、その後publicフォルダをGitLab Pagesとしてデプロイします。&lt;/p&gt;
+&lt;p&gt;公式ドキュメントにはビルド先のフォルダをdistではなくpublicにする設定などがありましたが、この記述でも問題ないです。&lt;/p&gt;
+&lt;h2 id=&#34;カスタムドメインの利用-ssl対応&#34;&gt;カスタムドメインの利用 &amp;amp; SSL対応&lt;/h2&gt;
+&lt;p&gt;現状で、&lt;code&gt;https://n0bisuke.gitlab.io/hogehoge&lt;/code&gt;というアドレスが公開URLになっているものを&lt;code&gt;https://hogehoge.dotstud.io&lt;/code&gt;でアクセスさせるようにしていきます。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.cloudflare.com/&#34;&gt;Cloudflare&lt;/a&gt;を利用します。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://letsencrypt.org/&#34;&gt;Let&amp;rsquo;s Encrypt&lt;/a&gt;を利用する手もあるのですが、更新の手間があるのと既にdotstud.ioでCloudflareを使ってDNSやSSL設定をしていたので&lt;strong&gt;Cloudflareを利用してのGitLab Pagesのカスタムドメイン&amp;amp;SSL対応を紹介&lt;/strong&gt;します。&lt;/p&gt;
+&lt;p&gt;GitLab公式の&lt;a href=&#34;https://about.gitlab.com/2017/02/07/setting-up-gitlab-pages-with-cloudflare-certificates/&#34;&gt;Setting up GitLab Pages with CloudFlare Certificates&lt;/a&gt;を見ながら試してみました。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;DNSのAレコードをGitLab Pagesに向けることも出来るみたいですが、今回はCNAMEでサブドメインをリダイレクトさせる形にします。&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&#34;1-証明書の作成&#34;&gt;1. 証明書の作成&lt;/h3&gt;
+&lt;p&gt;CloudflareのCrypto画面を開きます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/239/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Origin Certificates&lt;/code&gt;の項目にある&lt;code&gt;Create Certificate&lt;/code&gt;(証明書の作成)の青いボタンを押します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/239/4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;モーダルウィンドウが開かれますが、&lt;code&gt;List the hostnames&lt;/code&gt;の箇所だけ変更して、利用したいドメイン名を記述して、NEXTボタンで進みましょう。&lt;/p&gt;
+&lt;p&gt;今回は&lt;code&gt;https://hogehoge.dotstud.io&lt;/code&gt;でアクセスしたいので、ここには&lt;code&gt;hogehoge.dotstud.io&lt;/code&gt;などのドメイン名だけを入力しておきます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/239/5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;これで証明書の文字列が生成されます。
+&lt;code&gt;Ker format&lt;/code&gt;はデフォルトの&lt;code&gt;PEM&lt;/code&gt;のままで大丈夫です。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/239/6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Origin certificate&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Private key&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;この二種類の文字列をあとで使うのでコピーしておきましょう。&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&#34;2-gitlab-pagesに設定する&#34;&gt;2. GitLab Pagesに設定する&lt;/h3&gt;
+&lt;p&gt;GitLabのリポジトリ設定画面からPagesの設定画面に行きます。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;https://gitlab.com/&amp;lt;ユーザー名&amp;gt;/&amp;lt;リポジトリ名&amp;gt;/pages&lt;/code&gt;が設定画面です。&lt;/p&gt;
+&lt;p&gt;ここから&lt;code&gt;New Domain&lt;/code&gt;ボタンを押してカスタムドメインの設定をします。&lt;/p&gt;
+&lt;p&gt;また、この際に&lt;code&gt;Force domains with SSL certificates to use HTTPS&lt;/code&gt;のチェックがありますが、SSL対応させるのでデフォルトのままチェックしておきましょう。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/239/7.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Domain&lt;/code&gt;の項目に設定したいカスタムドメイン（今回は&lt;code&gt;hogehoge.dotstud.io&lt;/code&gt;）を設定します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/239/8.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;以下の二箇所には先ほどのCloudflareで生成した証明書文字列を指定します。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Certificate (PEM): &lt;code&gt;Origin certificate&lt;/code&gt;の文字列&lt;/li&gt;
+&lt;li&gt;Key (PEM): &lt;code&gt;Private key&lt;/code&gt;の文字列&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;----BEGIN CERTIFICATE----&lt;/code&gt;などの文字を含めて全部コピペしましょう。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/239/9.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;ここにさらにCloudflareの証明書の文字列が必要になります。&lt;a href=&#34;https://support.cloudflare.com/hc/en-us/articles/218689638&#34;&gt;CloudFlare&amp;rsquo;s Origin CA — RSA Root&lt;/a&gt;というらしいです。&lt;/p&gt;
+&lt;p&gt;以下の文字列(CloudFlare&amp;rsquo;s Origin CA)をコピーしましょう。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;-----BEGIN CERTIFICATE-----
+MIID/DCCAuagAwIBAgIID+rOSdTGfGcwCwYJKoZIhvcNAQELMIGLMQswCQYDVQQG
+EwJVUzEZMBcGA1UEChMQQ2xvdWRGbGFyZSwgSW5jLjE0MDIGA1UECxMrQ2xvdWRG
+bGFyZSBPcmlnaW4gU1NMIENlcnRpZmljYXRlIEF1dGhvcml0eTEWMBQGA1UEBxMN
+U2FuIEZyYW5jaXNjbzETMBEGA1UECBMKQ2FsaWZvcm5pYTAeFw0xNDExMTMyMDM4
+NTBaFw0xOTExMTQwMTQzNTBaMIGLMQswCQYDVQQGEwJVUzEZMBcGA1UEChMQQ2xv
+dWRGbGFyZSwgSW5jLjE0MDIGA1UECxMrQ2xvdWRGbGFyZSBPcmlnaW4gU1NMIENl
+cnRpZmljYXRlIEF1dGhvcml0eTEWMBQGA1UEBxMNU2FuIEZyYW5jaXNjbzETMBEG
+A1UECBMKQ2FsaWZvcm5pYTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB
+AMBIlWf1KEKR5hbB75OYrAcUXobpD/AxvSYRXr91mbRu+lqE7YbyyRUShQh15lem
+ef+umeEtPZoLFLhcLyczJxOhI+siLGDQm/a/UDkWvAXYa5DZ+pHU5ct5nZ8pGzqJ
+p8G1Hy5RMVYDXZT9F6EaHjMG0OOffH6Ih25TtgfyyrjXycwDH0u6GXt+G/rywcqz
+/9W4Aki3XNQMUHNQAtBLEEIYHMkyTYJxuL2tXO6ID5cCsoWw8meHufTeZW2DyUpl
+yP3AHt4149RQSyWZMJ6AyntL9d8Xhfpxd9rJkh9Kge2iV9rQTFuE1rRT5s7OSJcK
+xUsklgHcGHYMcNfNMilNHb8CAwEAAaNmMGQwDgYDVR0PAQH/BAQDAgAGMBIGA1Ud
+EwEB/wQIMAYBAf8CAQIwHQYDVR0OBBYEFCToU1ddfDRAh6nrlNu64RZ4/CmkMB8G
+A1UdIwQYMBaAFCToU1ddfDRAh6nrlNu64RZ4/CmkMAsGCSqGSIb3DQEBCwOCAQEA
+cQDBVAoRrhhsGegsSFsv1w8v27zzHKaJNv6ffLGIRvXK8VKKK0gKXh2zQtN9SnaD
+gYNe7Pr4C3I8ooYKRJJWLsmEHdGdnYYmj0OJfGrfQf6MLIc/11bQhLepZTxdhFYh
+QGgDl6gRmb8aDwk7Q92BPvek5nMzaWlP82ixavvYI+okoSY8pwdcVKobx6rWzMWz
+ZEC9M6H3F0dDYE23XcCFIdgNSAmmGyXPBstOe0aAJXwJTxOEPn36VWr0PKIQJy5Y
+4o1wpMpqCOIwWc8J9REV/REzN6Z1LXImdUgXIXOwrz56gKUJzPejtBQyIGj0mveX
+Fu6q54beR89jDc+oABmOgg==
+-----END CERTIFICATE-----
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;この&lt;code&gt;CloudFlare&#39;s Origin CA&lt;/code&gt;をコピーしたら、先ほど&lt;code&gt;Certificate (PEM)&lt;/code&gt;のフォームに入れ込んだ文字列の後ろに改行をいれて、&lt;code&gt;CloudFlare&#39;s Origin CA&lt;/code&gt;を貼り付けます。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;この画面のような感じです。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/239/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;ここまで出来たら、ページ下部の&lt;code&gt;Create New Domain&lt;/code&gt;のボタンを押して進みましょう。&lt;/p&gt;
+&lt;h3 id=&#34;3-dnsの設定&#34;&gt;3. DNSの設定&lt;/h3&gt;
+&lt;p&gt;無事に作成出来ると、以下のような確認画面になります。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/239/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;この画面の指示にしたがってCloudflareのDNS設定画面でCNAMEとTXTレコードを設定してあげる必要があります。&lt;/p&gt;
+&lt;h4 id=&#34;cnameレコード設定&#34;&gt;CNAMEレコード設定&lt;/h4&gt;
+&lt;p&gt;まずはCNAMEレコードです。 以下のように設定します。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Type: CNAME&lt;/li&gt;
+&lt;li&gt;Name: 利用したいカスタムドメイン名&lt;/li&gt;
+&lt;li&gt;Value: &amp;lt;ユーザー名&amp;gt;.gitlab.io&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;例えば&lt;code&gt;https://hogehoge.dotstud.io&lt;/code&gt;にしたい場合は&lt;strong&gt;Name&lt;/strong&gt;を&lt;code&gt;hogehoge&lt;/code&gt;にし、元々のGitLabリポジトリが&lt;code&gt;https://n0bisuke.gitlab.io/hogehoge&lt;/code&gt;などであれば,&lt;strong&gt;Value&lt;/strong&gt;を&lt;code&gt;n0bisuke.gitlab.io&lt;/code&gt;にします。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/239/12.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;これで&lt;code&gt;https://hogehoge.dotstud.io&lt;/code&gt;にアクセスした際に&lt;code&gt;https://n0bisuke.gitlab.io&lt;/code&gt;側にリダイレクトされるようになります。&lt;/p&gt;
+&lt;h4 id=&#34;txtレコード設定-所有者確認&#34;&gt;TXTレコード設定（所有者確認）&lt;/h4&gt;
+&lt;p&gt;GitLab側から見ると&lt;code&gt;hogehoge.dotstud.io&lt;/code&gt;をそのユーザーが所有しているか分からないため、所有権の確認作業が発生します。&lt;/p&gt;
+&lt;p&gt;GitLabの設定画面に&lt;code&gt;Verification status&lt;/code&gt;の箇所に&lt;code&gt;_gitlab-pages-verification-code.hogehoge.dotstud.io TXT gitlab-pages-verification-code=xxxxxxxxxxxxxxxxxx&lt;/code&gt;などの文字列が表示されていることが分かります。この情報をCloudflareに登録してあげればOKです。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/239/13.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;登録が出来たら、おそらく赤くなっているUnverifiedのボタンを押して確認しましょう。
+上手くいくとこんな感じで&lt;code&gt;Successfully verified&lt;/code&gt;などの文字が表示されます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/239/14.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;h3 id=&#34;4-sslの設定&#34;&gt;4. SSLの設定&lt;/h3&gt;
+&lt;p&gt;CloudflareのCrypto画面からSSLの設定が出来ます。&lt;code&gt;Full&lt;/code&gt;もしくは&lt;code&gt;Full(strict)&lt;/code&gt;にしておきましょう。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/239/14.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;あとは、ドメインが浸透したりするのを少し待ちましょう。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;https://hogehoge.dotstud.io&lt;/code&gt;にアクセすると&lt;code&gt;https://n0bisuke.gitlab.io/hogehoge&lt;/code&gt;に内部的にリダイレクトされるようになりました。&lt;/p&gt;
+&lt;h3 id=&#34;5-vuepressの設定を戻す&#34;&gt;5. VuePressの設定を戻す&lt;/h3&gt;
+&lt;p&gt;先ほどの紹介で、VuePressをGitLab Pagesで公開する際に&lt;code&gt;docs/.vuepress/config.js&lt;/code&gt;の&lt;code&gt;base&lt;/code&gt;キーを&lt;code&gt;/リポジトリ名/&lt;/code&gt;とする紹介がありましたが、カスタムドメインまでやった人は&lt;code&gt;base&lt;/code&gt;キーを&lt;code&gt;/&lt;/code&gt;に戻しておいてください。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;ここの設定を間違えるとCSSやJSが上手く読み込まれなくなってしまいます。&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;如何でしょう。GitLab Pagesや周辺ツール/サービスを活用して無料でカスタムドメイン+SSLのVuePressブログを作ることが出来ました。&lt;/p&gt;
+&lt;p&gt;この辺のことを試す際の参考になれば幸いです。&lt;/p&gt;</description></item><item><title>ArduinoでTwitter連携！愛しのぬいぐるみトンピーちゃんに命を吹き込んでみた</title><link>https://dotstud.io/blog/arduino-nodejs-twitter-connect/</link><pubDate>Mon, 28 Jan 2019 00:51:35 +0900</pubDate><guid>https://dotstud.io/blog/arduino-nodejs-twitter-connect/</guid><description>
 &lt;p&gt;皆さん、大好きなぬいぐるみが動き出したらいいなと思ったこと、ありませんか？&lt;/p&gt;
 &lt;p&gt;今回は私の愛すべきお友達「トンピーちゃん」に命を吹き込むべく、プログラミング初心者の私がArduinoとTwitterの連携に挑戦してみました！&lt;/p&gt;
 &lt;p&gt;&lt;font size=&#34;4&#34;&gt;こちらです！！&lt;/font&gt;
@@ -2364,45 +2554,4 @@ changedRows: 0 }
 &lt;p&gt;Node.jsからMySQLにアクセスする方法を紹介しました。
 基礎的な内容になるので、初めてチャレンジする方は参考にして下さい。&lt;/p&gt;
 &lt;p&gt;SQL直書きだと脆弱性が&amp;hellip;&amp;hellip;とかの話はありそうですがそれはまた別の機会で書けたらと思います。&lt;/p&gt;
-&lt;p&gt;それでは。&lt;/p&gt;</description></item><item><title>Node.jsでファイル監視を行うchokidarを使ってみよう</title><link>https://dotstud.io/blog/nodejs-npm-chokidar-fswatch/</link><pubDate>Mon, 26 Dec 2016 14:00:27 +0900</pubDate><guid>https://dotstud.io/blog/nodejs-npm-chokidar-fswatch/</guid><description>
-&lt;p&gt;こんにちは、dotstudio代表の&lt;a href=&#34;http://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/nodejs-npm-readline-sync/&#34;&gt;Node.jsでコマンドラインツール作るときに使いやすいreadline-sync&lt;/a&gt;に続いて、Node.jsのモジュール紹介です。&lt;/p&gt;
-&lt;p&gt;Gitなどを用いて開発を行っていると「ファイルの変更を検知して何かを実行したい」という場面があります。
-今日はそんな場面で活用できるファイル監視を行うモジュールを紹介します。&lt;/p&gt;
-&lt;h2 id=&#34;執筆時点のマシンスペック&#34;&gt;執筆時点のマシンスペック&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;macOS Sierra (v10.12)&lt;/li&gt;
-&lt;li&gt;Node.js v6.6.0&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;何か不具合があったときに参照してください。&lt;/p&gt;
-&lt;h2 id=&#34;インストール&#34;&gt;インストール&lt;/h2&gt;
-&lt;p&gt;URL: &lt;a href=&#34;https://github.com/paulmillr/chokidar&#34;&gt;chokidar&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;npm init&lt;/code&gt;で&lt;code&gt;package.json&lt;/code&gt;を作成してから進めます。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;npm init --yes
-npm i --save chokidar
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&#34;サンプルを動かしてみる&#34;&gt;サンプルを動かしてみる&lt;/h2&gt;
-&lt;h3 id=&#34;ファイル監視&#34;&gt;ファイル監視&lt;/h3&gt;
-&lt;p&gt;app.jsを作成します。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;const chokidar = require(&#39;chokidar&#39;);
-// One-liner for current directory, ignores .dotfiles
-chokidar.watch(&#39;.&#39;, {ignored: /[\/\\]\./}).on(&#39;all&#39;, (event, path) =&amp;gt; {
-console.log(event, path);
-});
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;app.jsを保存したらアプリケーションを起動しましょう。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;node app
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;これで、nodeコマンドを実行したディレクトリ以下のファイルを監視しはじめます。&lt;/p&gt;
-&lt;p&gt;先ほど実行した&lt;code&gt;npm init --yes&lt;/code&gt;で&lt;code&gt;package.json&lt;/code&gt;が作成されます。&lt;code&gt;app.js&lt;/code&gt;を実行したまま&lt;code&gt;package.json&lt;/code&gt;を編集してみましょう。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/1e9ddbebcda4037874c803f91d6a8b66.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;このように、変更があったファイルを検知してくれます。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;・
-・
-・
-change package.json
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-&lt;p&gt;chokidarを使ってファイル監視して「特定のファイルが更新されたら〇〇する」というトリガーを簡単に作れます。&lt;/p&gt;
-&lt;p&gt;プロジェクト管理などで活用してみてください。&lt;/p&gt;
 &lt;p&gt;それでは。&lt;/p&gt;</description></item></channel></rss>
