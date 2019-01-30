@@ -1,4 +1,278 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Try on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/categories/try/</link><description>Recent content in Try on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Tue, 29 Jan 2019 02:11:45 +0900</lastBuildDate><atom:link href="/categories/try/" rel="self" type="application/rss+xml"/><item><title>電池が切れても消えないディスプレイって？電子ペーパーを使ってみた！</title><link>https://dotstud.io/blog/using-e-paper-module/</link><pubDate>Tue, 29 Jan 2019 02:11:45 +0900</pubDate><guid>https://dotstud.io/blog/using-e-paper-module/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Try on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/categories/try/</link><description>Recent content in Try on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Wed, 30 Jan 2019 04:43:15 +0900</lastBuildDate><atom:link href="/categories/try/" rel="self" type="application/rss+xml"/><item><title>Let&#39;s 顔面製造！第二弾！ 歌うサンタ顔面ロボットを作ろう</title><link>https://dotstud.io/blog/face-robot-making-basic2/</link><pubDate>Wed, 30 Jan 2019 04:43:15 +0900</pubDate><guid>https://dotstud.io/blog/face-robot-making-basic2/</guid><description>
+&lt;p&gt;みなさん、こんにちは！&lt;a href=&#34;https://dotstud.io/members/maruko&#34;&gt;へっぽこまるこ&lt;/a&gt;です！&lt;/p&gt;
+&lt;p&gt;今回は、クリスマスをいい感じに盛り上げてくれるサンタ（っぽい）ロボットを
+&lt;strong&gt;obnizとgoogle home mini&lt;/strong&gt;でつくってみました！&lt;/p&gt;
+&lt;p&gt;少し遅めの（めっちゃ早めの）サンタクロースをご覧あれ〜！&lt;/p&gt;
+&lt;p&gt;以前に「&lt;a href=&#34;https://dotstud.io/blog/face-robot-making-basic/&#34;&gt;Let&amp;rsquo;s 顔面製造！ダンボールとサーボモータで喋る顔面ロボットを作ろう&lt;/a&gt;」でつくった顔面ロボット（的なもの）を改造して作ってみます！&lt;/p&gt;
+&lt;h2 id=&#34;完成イメージ&#34;&gt;完成イメージ&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.youtube.com/watch?v=zyrQC8Du9b0&#34;&gt;&lt;img src=&#34;http://img.youtube.com/vi/zyrQC8Du9b0/0.jpg&#34; alt=&#34;画像が表示できません&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;u&gt;※LEDが結構強めに光っているので閲覧にはご注意ください&lt;/u&gt;&lt;/p&gt;
+&lt;p&gt;obnizでgoogle-home-notifierを使ってgoogle home miniから音源を再生します。
+google-home-notifierは、&lt;strong&gt;スキル開発なしでgoogle homeにテキストを読ませたり、MP3などの音源が再生できたりするnode.jsのライブラリ&lt;/strong&gt;です。&lt;/p&gt;
+&lt;p&gt;再生された曲に連動して下唇に仕込んだサーボモータを動かして、
+歌ってる感じにしてみます。&lt;/p&gt;
+&lt;h2 id=&#34;つくってみよう&#34;&gt;つくってみよう&lt;/h2&gt;
+&lt;p&gt;###
++ obniz
++ sg90（顔面ロボの流用）
++ LED（顔面ロボの流用）
++ 顔デバイス（顔面ロボの流用）
++ ジャンパワイヤー（顔面ロボの流用）
++ 切ないクリスマスソングの音源
++ 白のファー生地や赤いフェルトなど（デバイス装飾用）&lt;/p&gt;
+&lt;p&gt;macOS High Sierraの環境で進めます。&lt;/p&gt;
+&lt;h3 id=&#34;サンタデバイス準備&#34;&gt;サンタデバイス準備&lt;/h3&gt;
+&lt;p&gt;顔面デバイスをデコります。
+毛足10cm程度のファー生地を裂いたものと、
+赤いフェルトで適当につくった帽子をくっつけます。
+&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/115325/56e1e21b-16cd-4d5e-0bdf-f8b8afdf4dba.jpeg&#34; alt=&#34;IMG_2790.JPG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;サーボモータとLEDをobnizに接続します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/115325/daae1da4-7ee0-dd52-978e-e64c46026a01.png&#34; alt=&#34;obniz_servo_led.png&#34; /&gt;&lt;/p&gt;
+&lt;h3 id=&#34;ライブラリやら準備&#34;&gt;ライブラリやら準備&lt;/h3&gt;
+&lt;p&gt;node.jsがインストールされてる前提で進めます。&lt;/p&gt;
+&lt;p&gt;ターミナルで以下のコマンドを叩きます。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;//ディレクトリ作成&amp;amp;移動
+$ mkdir santa
+$ cd santa
+//google-home-notifierとobnizのライブラリをインストール
+$ npm install google-home-notifier
+$ npm install obniz
+//メインのプログラムファイルを作成
+$ touch face.js
+//音源格納用ディレクトリを作成
+$ mkdir audio　
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;audioフォルダには音源のkurisumasusong.mp3を格納しておきます。&lt;/p&gt;
+&lt;h3 id=&#34;音源準備&#34;&gt;音源準備&lt;/h3&gt;
+&lt;p&gt;google-home-notifierを使って簡単に曲を再生するには、
+クリスマスソングが入ったMP3をネットにアップして、
+URLを取得する必要があります。&lt;/p&gt;
+&lt;p&gt;今回は、&lt;a href=&#34;https://qiita.com/n0bisuke/items/0c09ae5da43b551e98b1#%E3%83%9B%E3%82%B9%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%99%E3%82%8B&#34;&gt;n0bisuk先生のハンズオン&lt;/a&gt;で教えてもらった
+ngork+pythonを使った方法でホスティングします。&lt;/p&gt;
+&lt;p&gt;santa ディレクトリ配下で作業します。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ python -m SimpleHTTPServer 8080
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;別タブで以下を実行します。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ cd santa
+$ ngrok http 8080
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;実行結果です。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;ngrok by @inconshreveable (Ctrl+C to quit)
+Session Status online
+Account nougami (Plan: Free)
+Version 2.2.8
+Region United States (us)
+Web Interface http://127.0.0.1:4040
+Forwarding http://84019d5b.ngrok.io -&amp;gt; localhost:8080
+Forwarding https://84019d5b.ngrok.io -&amp;gt; localhost:8080
+Connections ttl opn rt1 rt5 p50 p90
+57 0 0.00 0.00 6.51 8.91
+HTTP Requests
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;a href=&#34;https://84019d5b.ngrok.io/audio/kurisumasusong.mp3&#34;&gt;https://84019d5b.ngrok.io/audio/kurisumasusong.mp3&lt;/a&gt; が音源ファイルのURLになります。&lt;/p&gt;
+&lt;h2 id=&#34;へっぽこプログラム&#34;&gt;へっぽこプログラム&lt;/h2&gt;
+&lt;p&gt;node.jsでプログラムを書きます。
+（async/awaitはまだ勉強中・・・）&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-javascript:face.js&#34;&gt;
+const googlehome = require(&#39;google-home-notifier&#39;);
+const language = &#39;ja&#39;;
+const Obniz = require(&amp;quot;obniz&amp;quot;);
+const obniz = new Obniz(&amp;quot;××××-××××&amp;quot;);
+obniz.onconnect = async function () {
+var mouth = obniz.wired(&amp;quot;ServoMotor&amp;quot;, {signal:0, vcc:1, gnd:2});
+var leftLed = obniz.wired(&amp;quot;LED&amp;quot;, { anode:3, cathode:4 });
+var rigthLed = obniz.wired(&amp;quot;LED&amp;quot;, { anode:5, cathode:6 });
+mouthMove = async function (maxDeg, maxDegWait, minDeg, minDegWait) {
+await mouth.angle(maxDeg);
+await obniz.wait(maxDegWait);
+await mouth.angle(minDeg);
+await obniz.wait(minDegWait);
+}
+singMouth = async function () {
+//init
+await mouthMove(0.0, 1300, 0.0, 0);
+//く
+await mouthMove(40.0, 400, 0.0, 100);
+//り
+await mouthMove(40.0, 400, 0.0, 100);
+//す
+await mouthMove(40.0, 400, 0.0, 100);
+//ま
+await mouthMove(30.0, 80, 0.0, 100);
+//す
+await mouthMove(30.0, 80, 0.0, 100);
+//きゃ
+await mouthMove(50.0, 100, 0.0, 100);
+//ろ
+await mouthMove(30.0, 100, 0.0, 100);
+//る
+await mouthMove(30.0, 120, 0.0, 100);
+//が
+await mouthMove(40.0, 900, 0.0, 500);
+//な
+await mouthMove(40.0, 400, 0.0, 100);
+//が
+await mouthMove(40.0, 400, 0.0, 100);
+//れ
+await mouthMove(40.0, 400, 0.0, 100);
+//る
+await mouthMove(40.0, 400, 0.0, 100);
+//こ
+await mouthMove(40.0, 100, 0.0, 100);
+//ろ
+await mouthMove(40.0, 100, 0.0, 100);
+//に
+await mouthMove(40.0, 100, 0.0, 100);
+//は
+await mouthMove(50.0, 1300, 0.0, 500);
+//き
+await mouthMove(40.0, 100, 0.0, 100);
+//い
+await mouthMove(40.0, 100, 0.0, 100);
+//と
+await mouthMove(40.0, 200, 0.0, 100);
+//ぼ
+await mouthMove(40.0, 100, 0.0, 100);
+//く
+await mouthMove(40.0, 100, 0.0, 100);
+//の
+await mouthMove(40.0, 100, 0.0, 100);
+//こ
+await mouthMove(40.0, 170, 0.0, 100);
+//た
+await mouthMove(40.0, 170, 0.0, 100);
+//え
+await mouthMove(40.0, 170, 0.0, 100);
+//も
+await mouthMove(30.0, 1000, 0.0, 500);
+//き
+await mouthMove(40.0, 100, 0.0, 100);
+//い
+await mouthMove(40.0, 100, 0.0, 100);
+//と
+await mouthMove(40.0, 500, 0.0, 100);
+//で
+await mouthMove(40.0, 100, 0.0, 100);
+//て
+await mouthMove(40.0, 100, 0.0, 100);
+//い
+await mouthMove(40.0, 100, 0.0, 100);
+//る
+await mouthMove(40.0, 100, 0.0, 100);
+//だ
+await mouthMove(40.0, 100, 0.0, 100);
+//あ
+await mouthMove(40.0, 100, 0.0, 100);
+//ろ
+await mouthMove(40.0, 800, 5.0, 600);
+//く
+await mouthMove(40.0, 400, 0.0, 100);
+//り
+await mouthMove(40.0, 400, 0.0, 100);
+//す
+await mouthMove(40.0, 400, 0.0, 100);
+//ま
+await mouthMove(30.0, 80, 0.0, 100);
+//す
+await mouthMove(30.0, 80, 0.0, 100);
+//きゃ
+await mouthMove(50.0, 100, 0.0, 100);
+//ろ
+await mouthMove(30.0, 100, 0.0, 100);
+//る
+await mouthMove(30.0, 120, 0.0, 100);
+//が
+await mouthMove(40.0, 900, 0.0, 500);
+//な
+await mouthMove(40.0, 400, 0.0, 100);
+//が
+await mouthMove(40.0, 400, 0.0, 100);
+//れ
+await mouthMove(40.0, 400, 0.0, 100);
+//る
+await mouthMove(40.0, 400, 0.0, 100);
+//こ
+await mouthMove(40.0, 100, 0.0, 100);
+//ろ
+await mouthMove(40.0, 100, 0.0, 100);
+//に
+await mouthMove(40.0, 100, 0.0, 100);
+//は
+await mouthMove(50.0, 1300, 0.0, 500);
+//だ
+await mouthMove(40.0, 100, 0.0, 100);
+//れ
+await mouthMove(40.0, 100, 0.0, 100);
+//を
+await mouthMove(40.0, 400, 0.0, 100);
+//あ
+await mouthMove(40.0, 100, 0.0, 100);
+//い
+await mouthMove(30.0, 100, 0.0, 100);
+//し
+await mouthMove(30.0, 100, 0.0, 100);
+//て
+await mouthMove(30.0, 100, 0.0, 100);
+//る
+await mouthMove(30.0, 100, 0.0, 100);
+//の
+await mouthMove(40.0, 100, 0.0, 100);
+//か
+await mouthMove(30.0, 1000, 0.0, 500);
+//い
+await mouthMove(40.0, 100, 0.0, 100);
+//ま
+await mouthMove(40.0, 100, 0.0, 100);
+//は
+await mouthMove(40.0, 500, 0.0, 100);
+//み
+await mouthMove(40.0, 100, 0.0, 100);
+//え
+await mouthMove(40.0, 100, 0.0, 100);
+//な
+await mouthMove(20.0, 100, 0.0, 100);
+//く
+await mouthMove(20.0, 100, 0.0, 100);
+//て
+await mouthMove(40.0, 100, 0.0, 100);
+//も
+await mouthMove(40.0, 100, 0.0, 100);
+//お
+await mouthMove(50.0, 5000, 50.0, 0);
+for (i=49; i&amp;gt;=0; i--){
+await mouth.angle(i);
+await obniz.wait(80);
+}
+}
+google_home = async function() {
+googlehome.device(&#39;Google-Home&#39;, language);
+await googlehome.play(&#39;http://×××××.ngrok.io/audio/kurisumasusong.mp3&#39;, function(res) {
+console.log(res);
+leftLed.on();
+rigthLed.on();
+singMouth();
+});
+}
+await google_home();
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;for (i=49; i&amp;gt;=0; i&amp;ndash;){
+　await mouth.angle(i);
+　await obniz.wait(80);
+}
+↑はこだわった部分なので、
+注目してみてもらえると嬉しいです。&lt;/p&gt;
+&lt;h2 id=&#34;実行&#34;&gt;実行&lt;/h2&gt;
+&lt;p&gt;サンタデバイスにgoogle home miniをそっと添えて、
+以下のコマンドで実行します。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ node face.js
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;サンタが歌ってる感じになります。&lt;/p&gt;
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;哀愁漂うサンタクロースができたのではないでしょうか。&lt;/p&gt;
+&lt;p&gt;私にとって、スマートスピーカーは電子部品的存在なので、
+今後も色々な作品に仕込んで、へっぽこなモノづくりに一役買ってもらおうと思っています。&lt;/p&gt;
+&lt;p&gt;よかったら是非「スマスピ + デバイス」挑戦してみてください！&lt;/p&gt;</description></item><item><title>電池が切れても消えないディスプレイって？電子ペーパーを使ってみた！</title><link>https://dotstud.io/blog/using-e-paper-module/</link><pubDate>Tue, 29 Jan 2019 02:11:45 +0900</pubDate><guid>https://dotstud.io/blog/using-e-paper-module/</guid><description>
 &lt;p&gt;こんにちは、わくわくエンジニアの&lt;a href=&#34;https://dotstud.io/members/tomato/&#34;&gt;佐々木さん&lt;/a&gt;です。&lt;/p&gt;
 &lt;p&gt;みなさんは&lt;strong&gt;電子ペーパー&lt;/strong&gt;を知っていますか？&lt;/p&gt;
 &lt;p&gt;電子ペーパーはその名の通り、&lt;u&gt;紙のような見た目のディスプレイ&lt;/u&gt;です。低消費電力であることや、最後に表示したものを電源がなくても保持し続けることが特徴として挙げられます。&lt;/p&gt;
@@ -3397,222 +3671,6 @@ padding-left: 30px;
 &lt;/div&gt;
 &lt;div class=&#34;text&#34;&gt;
 かわいい。100点。えこひいきです。
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;style&gt;
-.parent {
-position: relative;
-margin: 2em 0;
-}
-.dialogue {
-padding: 30px;
-position: relative;
-margin: auto;
-border: 1px solid #C0C0C0;
-width: 600px;
-display: table;
-box-shadow: 0 3px 4px rgba(0, 0, 0, 0.32);
-}
-.speaker {
-width: 70px;
-height: 70px;
-margin-right: 30px;
-padding-right: 10px;
-display: table-cell;
-vertical-align: middle;
-font-size: 90%;
-}
-.speaker img {
-border-radius: 50%;
-border: 2px solid pink;
-}
-.text {
-display: table-cell;
-padding: 0;
-vertical-align: middle;
-padding-left: 30px;
-}
-&lt;/style&gt;</description></item><item><title>【夏の自由工作2018】立体的なデザインを表現できるLEDキューブを作ってみた</title><link>https://dotstud.io/blog/summer-homework-2018-sasakisan/</link><pubDate>Wed, 15 Aug 2018 10:30:14 +0900</pubDate><guid>https://dotstud.io/blog/summer-homework-2018-sasakisan/</guid><description>
-&lt;p&gt;こんにちは、3日目担当の&lt;a href=&#34;https://dotstud.io/members/tomato/&#34;&gt;ささきさん&lt;/a&gt;です。突然ですが、みなさんの学生時代の夏休みの思い出はどんなものがあるでしょうか？&lt;/p&gt;
-&lt;p&gt;僕の夏休みといえば、毎年夏休み終わりギリギリになってようやく宿題や工作をはじめて結局終わらず……みたいなことを一番思い出します（笑）。&lt;/p&gt;
-&lt;p&gt;まさか社会人になってから宿題をやるとは思いませんでしたが、&lt;strong&gt;今年の宿題は最後までやりきる&lt;/strong&gt;ということを頑張っていきたいと思います！&lt;/p&gt;
-&lt;h2 id=&#34;光る立方体-ledキューブを作ってみよう&#34;&gt;光る立方体！LEDキューブを作ってみよう&lt;/h2&gt;
-&lt;p&gt;さて、今回はLEDをつないでキューブ状にしていく、&lt;strong&gt;LEDキューブ&lt;/strong&gt;を作ってみたいと思います。&lt;/p&gt;
-&lt;p&gt;LEDを使って電子工作をするときは、普通だと平面的にブレッドボードに挿したり半田付けしたりしますよね。LEDキューブは、平面的に配線するだけでなく、縦にも配線していきます。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/203/ledcube.png&#34; alt=&#34;ledcube&#34;&gt;
-─ LEDキューブの画像検索
-&lt;/center&gt;
-&lt;p&gt;今回は各面9個ずつの小さなものですが、たくさん繋いで大きなものを作ることもできるので、自由工作にもピッタリだと思います！&lt;/p&gt;
-&lt;h2 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h2&gt;
-&lt;h3 id=&#34;arduino-uno-http-akizukidenshi-com-catalog-g-gm-07385&#34;&gt;&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gM-07385/&#34;&gt;Arduino Uno&lt;/a&gt;&lt;/h3&gt;
-&lt;p&gt;Arduino Unoは、電子工作では定番の開発ボードで、電子回路の制御等をすることができます。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/203/arduino.png&#34; alt=&#34;arduino&#34;&gt;
-&lt;/center&gt;
-&lt;h3 id=&#34;5mm赤色led-http-akizukidenshi-com-catalog-g-gi-11655-27個&#34;&gt;&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gI-11655/&#34;&gt;5mm赤色LED&lt;/a&gt; 27個&lt;/h3&gt;
-&lt;p&gt;今回は赤く光るLEDを用意しました。光る色を指定できるフルカラーLEDを使っても面白いですね！&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/203/led.png&#34; alt=&#34;led&#34;&gt;
-&lt;/center&gt;
-&lt;h3 id=&#34;150ω抵抗-http-akizukidenshi-com-catalog-g-gr-25151-3個&#34;&gt;&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gR-25151/&#34;&gt;150Ω抵抗&lt;/a&gt; 3個&lt;/h3&gt;
-&lt;p&gt;電流を調整するカーボン抵抗です。色によって何Ωか見分けることができます。&lt;/p&gt;
-&lt;p&gt;詳細はドキュメントの&lt;a href=&#34;https://dotstud.io/docs/resistance/#%E6%8A%B5%E6%8A%97%E5%99%A8%E3%81%AE%E7%A8%AE%E9%A1%9E&#34;&gt;抵抗器&lt;/a&gt;を参照してください。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/203/carbon.png&#34; alt=&#34;carbon&#34;&gt;
-&lt;/center&gt;
-&lt;h3 id=&#34;ユニバーサル基板-http-akizukidenshi-com-catalog-g-gp-00517&#34;&gt;&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gP-00517/&#34;&gt;ユニバーサル基板&lt;/a&gt;&lt;/h3&gt;
-&lt;p&gt;部品を半田付けするための穴が並んだ基板です。それぞれの穴には銅箔（ランド）が付いていて、ジャンパや脚を半田して配線していきます。&lt;/p&gt;
-&lt;p&gt;自分で回路を組む場合は、ブレッドボードなどで動作を確認してから半田付けするのがオススメです。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/203/universalboard.png&#34; alt=&#34;universalboard&#34;&gt;
-&lt;/center&gt;
-&lt;h3 id=&#34;ジャンパー線-24本&#34;&gt;ジャンパー線 24本&lt;/h3&gt;
-&lt;p&gt;抵抗やLEDなどの電子部品を繋ぐときに使います。&lt;/p&gt;
-&lt;p&gt;ジャンパ線には1cmなどの短いものから30cm以上の長いものまであります。今回は、10cmくらいのものが使いやすいと思います。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/203/jumper.png&#34; alt=&#34;jumper&#34;&gt;
-&lt;/center&gt;
-&lt;h3 id=&#34;ブレッドボード&#34;&gt;ブレッドボード&lt;/h3&gt;
-&lt;p&gt;電子回路を組む際に半田付けなしで手軽に配線をすることができる基板です。&lt;/p&gt;
-&lt;p&gt;半田付けをしないので、回路を間違っても簡単に組み直すことができる利点があります。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/203/bread.png&#34; alt=&#34;bread&#34;&gt;
-&lt;/center&gt;
-&lt;h2 id=&#34;ledキューブの半田付け&#34;&gt;LEDキューブの半田付け&lt;/h2&gt;
-&lt;p&gt;回路の作り方を説明していきます。&lt;/p&gt;
-&lt;h3 id=&#34;ledの脚の加工&#34;&gt;LEDの脚の加工&lt;/h3&gt;
-&lt;p&gt;まず、LEDの脚を加工していきます。&lt;/p&gt;
-&lt;p&gt;アノード（長い方の脚、プラス側）を画像のように根元から90度に曲げます。
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/203/anode.png&#34; alt=&#34;anode&#34;&gt;
-&lt;/center&gt;
-&lt;/p&gt;
-&lt;p&gt;次に、曲げた足をさらに90度曲げます。
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/203/anode2.png&#34; alt=&#34;anode2&#34;&gt;
-&lt;/center&gt;
-&lt;/p&gt;
-&lt;p&gt;アノードを曲げ終わったら、カソード（短い方の脚、マイナス側）をアノードと90度になるよう根元から曲げます。
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/203/casode.png&#34; alt=&#34;casode&#34;&gt;
-&lt;/center&gt;
-&lt;/p&gt;
-&lt;p&gt;この手順をLED27個分繰り返します。&lt;/p&gt;
-&lt;h3 id=&#34;ベース組み&#34;&gt;ベース組み&lt;/h3&gt;
-&lt;p&gt;LEDのカソード同士を半田付けします。&lt;strong&gt;半田部分がアノードにくっつかないよう注意&lt;/strong&gt;してください。&lt;/p&gt;
-&lt;p&gt;LED3つ組み（写真上部）を3セット、LED2つ組み（写真下部）を9セット作ります。
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/203/3set.png&#34; alt=&#34;3set&#34;&gt;
-&lt;/center&gt;
-&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/203/2set.png&#34; alt=&#34;2set&#34;&gt;
-&lt;/center&gt;
-&lt;h3 id=&#34;面を作る&#34;&gt;面を作る&lt;/h3&gt;
-&lt;p&gt;LED3つ組みのそれぞれのカソードに、LED2つ組みを繋げていきます。
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/203/3-2.png&#34; alt=&#34;3-2&#34;&gt;
-&lt;/center&gt;
-&lt;/p&gt;
-&lt;p&gt;3セット分繋げ終わると、以下のような感じになります。
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/203/3-3.png&#34; alt=&#34;3-3&#34;&gt;
-&lt;/center&gt;
-&lt;/p&gt;
-&lt;h3 id=&#34;立方体を作る&#34;&gt;立方体を作る&lt;/h3&gt;
-&lt;p&gt;今度は、上記でできた3セットを縦に重ね、アノード同士を繋げていきます。
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/203/vertical.png&#34; alt=&#34;vertical&#34;&gt;
-&lt;/center&gt;
-&lt;/p&gt;
-&lt;p&gt;3段分繋げ終わるとLEDキューブは完成です。
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/203/cube.png&#34; alt=&#34;cube&#34;&gt;
-&lt;/center&gt;
-&lt;/p&gt;
-&lt;h3 id=&#34;ユニバーサル基板へ取り付ける&#34;&gt;ユニバーサル基板へ取り付ける&lt;/h3&gt;
-&lt;p&gt;ユニバーサル基板にキューブのアノード9箇所を取り付け、それぞれにジャンパー線を繋ぎます。
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/203/universal.png&#34; alt=&#34;universal&#34;&gt;
-&lt;/center&gt;
-&lt;/p&gt;
-&lt;p&gt;カソード3箇所（宙に浮いた脚）にも、それぞれジャンパー線を半田で繋ぎます。
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/203/casode2.png&#34; alt=&#34;casode2&#34;&gt;
-&lt;/center&gt;
-&lt;/p&gt;
-&lt;h2 id=&#34;回路を組む&#34;&gt;回路を組む&lt;/h2&gt;
-&lt;p&gt;この回路図はLED CUBEを真上から見たものになります。
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/203/circuit.png&#34; alt=&#34;circuit&#34;&gt;
-&lt;/center&gt;
-Arduinoの0〜8番ピンにアノードを、9〜11番ピンには抵抗を挟みカソードを接続します。&lt;/p&gt;
-&lt;p&gt;配線すると下記のようになります。
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/203/circuit2.png&#34; alt=&#34;circuit2&#34;&gt;
-&lt;/center&gt;
-&lt;/p&gt;
-&lt;h2 id=&#34;プログラム&#34;&gt;プログラム&lt;/h2&gt;
-&lt;p&gt;このプログラムはLEDを1つ1つ順番に点灯させるプログラムです。Arduino IDEという専用のフリーソフトを使って書き込みます。&lt;/p&gt;
-&lt;p&gt;詳細はドキュメントの&lt;a href=&#34;https://dotstud.io/docs/arduinoide-setup/&#34;&gt;Arduino IDEをPCにインストール&lt;/a&gt;からご覧ください。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;// LEDの列のカウンタ
-int colCount;
-// LEDの段のカウンタ
-int rowCount;
-void setup() {
-colCount = 0;
-rowCount = 9;
-// 使うピンをセットアップ
-pinMode(0, OUTPUT);
-pinMode(1, OUTPUT);
-pinMode(2, OUTPUT);
-pinMode(3, OUTPUT);
-pinMode(4, OUTPUT);
-pinMode(5, OUTPUT);
-pinMode(6, OUTPUT);
-pinMode(7, OUTPUT);
-pinMode(8, OUTPUT);
-pinMode(9, OUTPUT);
-pinMode(10, OUTPUT);
-pinMode(11, OUTPUT);
-}
-void loop() {
-// LEDを500ms光らせて消す
-digitalWrite(colCount, HIGH);
-digitalWrite(rowCount, LOW);
-delay(500);
-digitalWrite(colCount, LOW);
-digitalWrite(rowCount, HIGH);
-// 段と列をずらす
-rowCount++;
-if (rowCount == 12) {
-rowCount = 9;
-if (colCount != 8) {
-colCount++;
-} else {
-colCount = 0;
-}
-}
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&#34;光らせてみよう&#34;&gt;光らせてみよう&lt;/h2&gt;
-&lt;p&gt;プログラムを書き込んだらいよいよ完成です！&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/203/cube.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-&lt;p&gt;今回の夏休み自由工作は無事完成させることができました！&lt;/p&gt;
-&lt;p&gt;赤色LEDの3×3×3で作りましたが、違う色のLEDを使ったり、個数を増やしたりすることで、表現したいものの再現度を高めることができます。&lt;/p&gt;
-&lt;p&gt;皆さんもぜひLEDキューブを作ってみてください！&lt;/p&gt;
-&lt;p&gt;明日の担当はテクニカルエディター・&lt;a href=&#34;https://dotstud.io/members/kiki&#34;&gt;きき&lt;/a&gt;さんです。お楽しみに！&lt;/p&gt;
-&lt;div class=&#34;parent&#34;&gt;
-&lt;div class=&#34;dialogue&#34;&gt;
-&lt;div class=&#34;speaker&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/members/chantoku/author.png&#34; /&gt;
-&lt;b&gt;ちゃんとく&lt;/b&gt;
-&lt;/div&gt;
-&lt;div class=&#34;text&#34;&gt;
-初心者向けで勉強になるし、応用も効くので100点。ただし、表紙の流れを汲めなかったので減点20点です。
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;

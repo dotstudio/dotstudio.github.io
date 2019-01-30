@@ -1,4 +1,278 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Marukorobot on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/marukorobot/</link><description>Recent content in Marukorobot on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Wed, 04 Jul 2018 10:00:00 +0900</lastBuildDate><atom:link href="/series/marukorobot/" rel="self" type="application/rss+xml"/><item><title>Let&#39;s 顔面製造！ダンボールとサーボモータで喋る顔面ロボットを作ろう</title><link>https://dotstud.io/blog/face-robot-making-basic/</link><pubDate>Wed, 04 Jul 2018 10:00:00 +0900</pubDate><guid>https://dotstud.io/blog/face-robot-making-basic/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Marukorobot on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/marukorobot/</link><description>Recent content in Marukorobot on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Wed, 30 Jan 2019 04:43:15 +0900</lastBuildDate><atom:link href="/series/marukorobot/" rel="self" type="application/rss+xml"/><item><title>Let&#39;s 顔面製造！第二弾！ 歌うサンタ顔面ロボットを作ろう</title><link>https://dotstud.io/blog/face-robot-making-basic2/</link><pubDate>Wed, 30 Jan 2019 04:43:15 +0900</pubDate><guid>https://dotstud.io/blog/face-robot-making-basic2/</guid><description>
+&lt;p&gt;みなさん、こんにちは！&lt;a href=&#34;https://dotstud.io/members/maruko&#34;&gt;へっぽこまるこ&lt;/a&gt;です！&lt;/p&gt;
+&lt;p&gt;今回は、クリスマスをいい感じに盛り上げてくれるサンタ（っぽい）ロボットを
+&lt;strong&gt;obnizとgoogle home mini&lt;/strong&gt;でつくってみました！&lt;/p&gt;
+&lt;p&gt;少し遅めの（めっちゃ早めの）サンタクロースをご覧あれ〜！&lt;/p&gt;
+&lt;p&gt;以前に「&lt;a href=&#34;https://dotstud.io/blog/face-robot-making-basic/&#34;&gt;Let&amp;rsquo;s 顔面製造！ダンボールとサーボモータで喋る顔面ロボットを作ろう&lt;/a&gt;」でつくった顔面ロボット（的なもの）を改造して作ってみます！&lt;/p&gt;
+&lt;h2 id=&#34;完成イメージ&#34;&gt;完成イメージ&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.youtube.com/watch?v=zyrQC8Du9b0&#34;&gt;&lt;img src=&#34;http://img.youtube.com/vi/zyrQC8Du9b0/0.jpg&#34; alt=&#34;画像が表示できません&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;u&gt;※LEDが結構強めに光っているので閲覧にはご注意ください&lt;/u&gt;&lt;/p&gt;
+&lt;p&gt;obnizでgoogle-home-notifierを使ってgoogle home miniから音源を再生します。
+google-home-notifierは、&lt;strong&gt;スキル開発なしでgoogle homeにテキストを読ませたり、MP3などの音源が再生できたりするnode.jsのライブラリ&lt;/strong&gt;です。&lt;/p&gt;
+&lt;p&gt;再生された曲に連動して下唇に仕込んだサーボモータを動かして、
+歌ってる感じにしてみます。&lt;/p&gt;
+&lt;h2 id=&#34;つくってみよう&#34;&gt;つくってみよう&lt;/h2&gt;
+&lt;p&gt;###
++ obniz
++ sg90（顔面ロボの流用）
++ LED（顔面ロボの流用）
++ 顔デバイス（顔面ロボの流用）
++ ジャンパワイヤー（顔面ロボの流用）
++ 切ないクリスマスソングの音源
++ 白のファー生地や赤いフェルトなど（デバイス装飾用）&lt;/p&gt;
+&lt;p&gt;macOS High Sierraの環境で進めます。&lt;/p&gt;
+&lt;h3 id=&#34;サンタデバイス準備&#34;&gt;サンタデバイス準備&lt;/h3&gt;
+&lt;p&gt;顔面デバイスをデコります。
+毛足10cm程度のファー生地を裂いたものと、
+赤いフェルトで適当につくった帽子をくっつけます。
+&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/115325/56e1e21b-16cd-4d5e-0bdf-f8b8afdf4dba.jpeg&#34; alt=&#34;IMG_2790.JPG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;サーボモータとLEDをobnizに接続します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/115325/daae1da4-7ee0-dd52-978e-e64c46026a01.png&#34; alt=&#34;obniz_servo_led.png&#34; /&gt;&lt;/p&gt;
+&lt;h3 id=&#34;ライブラリやら準備&#34;&gt;ライブラリやら準備&lt;/h3&gt;
+&lt;p&gt;node.jsがインストールされてる前提で進めます。&lt;/p&gt;
+&lt;p&gt;ターミナルで以下のコマンドを叩きます。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;//ディレクトリ作成&amp;amp;移動
+$ mkdir santa
+$ cd santa
+//google-home-notifierとobnizのライブラリをインストール
+$ npm install google-home-notifier
+$ npm install obniz
+//メインのプログラムファイルを作成
+$ touch face.js
+//音源格納用ディレクトリを作成
+$ mkdir audio　
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;audioフォルダには音源のkurisumasusong.mp3を格納しておきます。&lt;/p&gt;
+&lt;h3 id=&#34;音源準備&#34;&gt;音源準備&lt;/h3&gt;
+&lt;p&gt;google-home-notifierを使って簡単に曲を再生するには、
+クリスマスソングが入ったMP3をネットにアップして、
+URLを取得する必要があります。&lt;/p&gt;
+&lt;p&gt;今回は、&lt;a href=&#34;https://qiita.com/n0bisuke/items/0c09ae5da43b551e98b1#%E3%83%9B%E3%82%B9%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0%E3%81%99%E3%82%8B&#34;&gt;n0bisuk先生のハンズオン&lt;/a&gt;で教えてもらった
+ngork+pythonを使った方法でホスティングします。&lt;/p&gt;
+&lt;p&gt;santa ディレクトリ配下で作業します。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ python -m SimpleHTTPServer 8080
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;別タブで以下を実行します。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ cd santa
+$ ngrok http 8080
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;実行結果です。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;ngrok by @inconshreveable (Ctrl+C to quit)
+Session Status online
+Account nougami (Plan: Free)
+Version 2.2.8
+Region United States (us)
+Web Interface http://127.0.0.1:4040
+Forwarding http://84019d5b.ngrok.io -&amp;gt; localhost:8080
+Forwarding https://84019d5b.ngrok.io -&amp;gt; localhost:8080
+Connections ttl opn rt1 rt5 p50 p90
+57 0 0.00 0.00 6.51 8.91
+HTTP Requests
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;a href=&#34;https://84019d5b.ngrok.io/audio/kurisumasusong.mp3&#34;&gt;https://84019d5b.ngrok.io/audio/kurisumasusong.mp3&lt;/a&gt; が音源ファイルのURLになります。&lt;/p&gt;
+&lt;h2 id=&#34;へっぽこプログラム&#34;&gt;へっぽこプログラム&lt;/h2&gt;
+&lt;p&gt;node.jsでプログラムを書きます。
+（async/awaitはまだ勉強中・・・）&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-javascript:face.js&#34;&gt;
+const googlehome = require(&#39;google-home-notifier&#39;);
+const language = &#39;ja&#39;;
+const Obniz = require(&amp;quot;obniz&amp;quot;);
+const obniz = new Obniz(&amp;quot;××××-××××&amp;quot;);
+obniz.onconnect = async function () {
+var mouth = obniz.wired(&amp;quot;ServoMotor&amp;quot;, {signal:0, vcc:1, gnd:2});
+var leftLed = obniz.wired(&amp;quot;LED&amp;quot;, { anode:3, cathode:4 });
+var rigthLed = obniz.wired(&amp;quot;LED&amp;quot;, { anode:5, cathode:6 });
+mouthMove = async function (maxDeg, maxDegWait, minDeg, minDegWait) {
+await mouth.angle(maxDeg);
+await obniz.wait(maxDegWait);
+await mouth.angle(minDeg);
+await obniz.wait(minDegWait);
+}
+singMouth = async function () {
+//init
+await mouthMove(0.0, 1300, 0.0, 0);
+//く
+await mouthMove(40.0, 400, 0.0, 100);
+//り
+await mouthMove(40.0, 400, 0.0, 100);
+//す
+await mouthMove(40.0, 400, 0.0, 100);
+//ま
+await mouthMove(30.0, 80, 0.0, 100);
+//す
+await mouthMove(30.0, 80, 0.0, 100);
+//きゃ
+await mouthMove(50.0, 100, 0.0, 100);
+//ろ
+await mouthMove(30.0, 100, 0.0, 100);
+//る
+await mouthMove(30.0, 120, 0.0, 100);
+//が
+await mouthMove(40.0, 900, 0.0, 500);
+//な
+await mouthMove(40.0, 400, 0.0, 100);
+//が
+await mouthMove(40.0, 400, 0.0, 100);
+//れ
+await mouthMove(40.0, 400, 0.0, 100);
+//る
+await mouthMove(40.0, 400, 0.0, 100);
+//こ
+await mouthMove(40.0, 100, 0.0, 100);
+//ろ
+await mouthMove(40.0, 100, 0.0, 100);
+//に
+await mouthMove(40.0, 100, 0.0, 100);
+//は
+await mouthMove(50.0, 1300, 0.0, 500);
+//き
+await mouthMove(40.0, 100, 0.0, 100);
+//い
+await mouthMove(40.0, 100, 0.0, 100);
+//と
+await mouthMove(40.0, 200, 0.0, 100);
+//ぼ
+await mouthMove(40.0, 100, 0.0, 100);
+//く
+await mouthMove(40.0, 100, 0.0, 100);
+//の
+await mouthMove(40.0, 100, 0.0, 100);
+//こ
+await mouthMove(40.0, 170, 0.0, 100);
+//た
+await mouthMove(40.0, 170, 0.0, 100);
+//え
+await mouthMove(40.0, 170, 0.0, 100);
+//も
+await mouthMove(30.0, 1000, 0.0, 500);
+//き
+await mouthMove(40.0, 100, 0.0, 100);
+//い
+await mouthMove(40.0, 100, 0.0, 100);
+//と
+await mouthMove(40.0, 500, 0.0, 100);
+//で
+await mouthMove(40.0, 100, 0.0, 100);
+//て
+await mouthMove(40.0, 100, 0.0, 100);
+//い
+await mouthMove(40.0, 100, 0.0, 100);
+//る
+await mouthMove(40.0, 100, 0.0, 100);
+//だ
+await mouthMove(40.0, 100, 0.0, 100);
+//あ
+await mouthMove(40.0, 100, 0.0, 100);
+//ろ
+await mouthMove(40.0, 800, 5.0, 600);
+//く
+await mouthMove(40.0, 400, 0.0, 100);
+//り
+await mouthMove(40.0, 400, 0.0, 100);
+//す
+await mouthMove(40.0, 400, 0.0, 100);
+//ま
+await mouthMove(30.0, 80, 0.0, 100);
+//す
+await mouthMove(30.0, 80, 0.0, 100);
+//きゃ
+await mouthMove(50.0, 100, 0.0, 100);
+//ろ
+await mouthMove(30.0, 100, 0.0, 100);
+//る
+await mouthMove(30.0, 120, 0.0, 100);
+//が
+await mouthMove(40.0, 900, 0.0, 500);
+//な
+await mouthMove(40.0, 400, 0.0, 100);
+//が
+await mouthMove(40.0, 400, 0.0, 100);
+//れ
+await mouthMove(40.0, 400, 0.0, 100);
+//る
+await mouthMove(40.0, 400, 0.0, 100);
+//こ
+await mouthMove(40.0, 100, 0.0, 100);
+//ろ
+await mouthMove(40.0, 100, 0.0, 100);
+//に
+await mouthMove(40.0, 100, 0.0, 100);
+//は
+await mouthMove(50.0, 1300, 0.0, 500);
+//だ
+await mouthMove(40.0, 100, 0.0, 100);
+//れ
+await mouthMove(40.0, 100, 0.0, 100);
+//を
+await mouthMove(40.0, 400, 0.0, 100);
+//あ
+await mouthMove(40.0, 100, 0.0, 100);
+//い
+await mouthMove(30.0, 100, 0.0, 100);
+//し
+await mouthMove(30.0, 100, 0.0, 100);
+//て
+await mouthMove(30.0, 100, 0.0, 100);
+//る
+await mouthMove(30.0, 100, 0.0, 100);
+//の
+await mouthMove(40.0, 100, 0.0, 100);
+//か
+await mouthMove(30.0, 1000, 0.0, 500);
+//い
+await mouthMove(40.0, 100, 0.0, 100);
+//ま
+await mouthMove(40.0, 100, 0.0, 100);
+//は
+await mouthMove(40.0, 500, 0.0, 100);
+//み
+await mouthMove(40.0, 100, 0.0, 100);
+//え
+await mouthMove(40.0, 100, 0.0, 100);
+//な
+await mouthMove(20.0, 100, 0.0, 100);
+//く
+await mouthMove(20.0, 100, 0.0, 100);
+//て
+await mouthMove(40.0, 100, 0.0, 100);
+//も
+await mouthMove(40.0, 100, 0.0, 100);
+//お
+await mouthMove(50.0, 5000, 50.0, 0);
+for (i=49; i&amp;gt;=0; i--){
+await mouth.angle(i);
+await obniz.wait(80);
+}
+}
+google_home = async function() {
+googlehome.device(&#39;Google-Home&#39;, language);
+await googlehome.play(&#39;http://×××××.ngrok.io/audio/kurisumasusong.mp3&#39;, function(res) {
+console.log(res);
+leftLed.on();
+rigthLed.on();
+singMouth();
+});
+}
+await google_home();
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;for (i=49; i&amp;gt;=0; i&amp;ndash;){
+　await mouth.angle(i);
+　await obniz.wait(80);
+}
+↑はこだわった部分なので、
+注目してみてもらえると嬉しいです。&lt;/p&gt;
+&lt;h2 id=&#34;実行&#34;&gt;実行&lt;/h2&gt;
+&lt;p&gt;サンタデバイスにgoogle home miniをそっと添えて、
+以下のコマンドで実行します。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ node face.js
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;サンタが歌ってる感じになります。&lt;/p&gt;
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;哀愁漂うサンタクロースができたのではないでしょうか。&lt;/p&gt;
+&lt;p&gt;私にとって、スマートスピーカーは電子部品的存在なので、
+今後も色々な作品に仕込んで、へっぽこなモノづくりに一役買ってもらおうと思っています。&lt;/p&gt;
+&lt;p&gt;よかったら是非「スマスピ + デバイス」挑戦してみてください！&lt;/p&gt;</description></item><item><title>Let&#39;s 顔面製造！ダンボールとサーボモータで喋る顔面ロボットを作ろう</title><link>https://dotstud.io/blog/face-robot-making-basic/</link><pubDate>Wed, 04 Jul 2018 10:00:00 +0900</pubDate><guid>https://dotstud.io/blog/face-robot-making-basic/</guid><description>
 &lt;p&gt;都内でひっそりOLやってるへっぽこまるこです！&lt;/p&gt;
 &lt;p&gt;電子工作に入門してサーボモータが動かせるようになったので、顔面ロボット（っぽいもの）を工作してみました！&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;メインの材料で使う材料はダンボールです&lt;/strong&gt;！Amazonさんからたくさん届きますよね！ダンボール！！&lt;/p&gt;
