@@ -1,4 +1,394 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blogs on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/blog/</link><description>Recent content in Blogs on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Wed, 30 Jan 2019 10:47:09 +0900</lastBuildDate><atom:link href="/blog/" rel="self" type="application/rss+xml"/><item><title>VuePressのブログをカスタムドメイン&#43;SSL対応させたGitLab Pagesにデプロイする</title><link>https://dotstud.io/blog/gitlab-vuepress-custom-domain/</link><pubDate>Wed, 30 Jan 2019 10:47:09 +0900</pubDate><guid>https://dotstud.io/blog/gitlab-vuepress-custom-domain/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blogs on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/blog/</link><description>Recent content in Blogs on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Thu, 31 Jan 2019 03:21:47 +0900</lastBuildDate><atom:link href="/blog/" rel="self" type="application/rss+xml"/><item><title>NefryBTからGoogleDriveにデータをアップロードする方法</title><link>https://dotstud.io/blog/update-nefrybt-to-googledrive/</link><pubDate>Thu, 31 Jan 2019 03:21:47 +0900</pubDate><guid>https://dotstud.io/blog/update-nefrybt-to-googledrive/</guid><description>
+&lt;p&gt;こんにちは、NefryBTきっかけでIoTの世界に入った&lt;a href=&#34;https://dotstud.io/members/kuroda&#34;&gt;黒田&lt;/a&gt;と言います。Webとどう接していけばいいのか分からないときにNefryBTと出会い、意外と難しくない(何とかなる)ことを知りました。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/members/wami&#34;&gt;わみさん&lt;/a&gt;、ありがとうございます。&lt;/p&gt;
+&lt;p&gt;今回は、NefryBTからGoogleDriveにデータをアップロード出来たので紹介したいと思います。&lt;/p&gt;
+&lt;p&gt;おそらく&lt;strong&gt;ESP32マイコン搭載モジュール&lt;/strong&gt;であれば、同じ考えで出来ると思います。&lt;/p&gt;
+&lt;h2 id=&#34;アップロードまでの手順&#34;&gt;アップロードまでの手順&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;リフレッシュトークンなど必要な情報を取得する(最初の一度だけ)&lt;/li&gt;
+&lt;li&gt;リフレッシュトークンから認証用のアクセストークンを取得する&lt;/li&gt;
+&lt;li&gt;http POSTリクエストでデータをアップロードする&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;はい、とてもシンプルです。&lt;/p&gt;
+&lt;p&gt;&lt;u&gt;httpを全く分からない私としてはここまでたどり着くまでかなり苦労しました・・・先人の方々が様々な実績を残してくれているのを本当に感謝しています。) &lt;/u&gt;&lt;/p&gt;
+&lt;p&gt;もう少し詳しく説明します。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://developers.google.com/drive/api/v3/about-sdk&#34;&gt;Google Drive REST APIのサイト&lt;/a&gt;を読みますと、まずGoogleDriveへアクセスするには認証用のアクセストークンが必要なこと、データをアップロードするときの&lt;a href=&#34;https://developers.google.com/drive/api/v3/multipart-upload&#34;&gt;POSTリクエストの書き方&lt;/a&gt;が決まっていることが分かります。&lt;/p&gt;
+&lt;p&gt;そのためアクセストークンで認証を行いつつPOSTリクエストを投げれば、NefryBTからでもデータをアップロード出来ます。&lt;/p&gt;
+&lt;p&gt;ここで一つ&lt;strong&gt;トラップ&lt;/strong&gt;があります。
+アクセストークンの有効期限は3600秒(1時間)です。当初これを知らなかったので、&lt;u&gt;時間が経つとなぜか認証エラーになる問題&lt;/u&gt;に悩まされました。&lt;/p&gt;
+&lt;p&gt;回避策としてリフレッシュトークンからアクセストークンを取得するようにします。すると、アクセストークンが新しくなるので、認証もばっちり通ります。
+つまり、&lt;u&gt;アクセストークンよりも再発行用のリフレッシュトークンが欲しい&lt;/u&gt;のです。&lt;/p&gt;
+&lt;p&gt;ではでは、具体的な手順を説明していきたいと思います。&lt;/p&gt;
+&lt;h3 id=&#34;手順1-リフレッシュトークンなど必要な情報を取得する-最初の一度だけ&#34;&gt;[手順1] リフレッシュトークンなど必要な情報を取得する(最初の一度だけ)&lt;/h3&gt;
+&lt;p&gt;今回はNode.jsで取得します。&lt;/p&gt;
+&lt;p&gt;公式サイトの&lt;a href=&#34;https://developers.google.com/drive/api/v3/quickstart/nodejs&#34;&gt;Node.js Quickstart&lt;/a&gt;に従って進めていきます。&lt;/p&gt;
+&lt;p&gt;公式サイトにある「ENABLE THE DRIVE API」を押します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/0ba2b731-7e29-2db2-7591-6ae56f1a7950.png&#34; alt=&#34;OAuth0.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;するとOAuth2.0クライアントIDを作ってくれます。
+続けて「DOWNLOAD CLIENT CONFIGURATION」を押してcredentials.jsonを取得します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/d4efa193-e36c-2e83-81f5-590cf105894a.png&#34; alt=&#34;OAuth1.PNG&#34; /&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;(補足)
+例えばcredentials.jsonを削除してしまって、もう一度取得したい場合・・・
+Google Cloud PlatformのAPI認証情報からダウンロードできます。&lt;/p&gt;
+&lt;p&gt;左上のメニューを押して「APIとサービス」を押します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/b26bff46-0dea-afba-38cd-51cb6ba8eb68.png&#34; alt=&#34;OAuth2-1.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;認証情報の中に先ほど作成したクライアントIDがありますので、ダウンロードします。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/901be3e5-b947-c290-e641-8db7dd075dcf.png&#34; alt=&#34;OAuth2-2.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;※ファイル名は「client&lt;em&gt;secret&lt;/em&gt;***.json」となっていますので「credentials.json」に変更します。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;次にNode.jsでアクセストークンなどの情報を取得します。(Node.jsやnpmが動く環境は用意されているものとします。)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;アクセストークンを取得するフォルダを用意して以下のモジュールをインストールします。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;npm install googleapis@27 --save
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;credentials.jsonも同じフォルダに移動させます。&lt;/li&gt;
+&lt;li&gt;index.jsを作成します。公式サイトのままではスコープがReadOnlyになっているのでアップロードできるスコープに変更します。それ以外は全く同じです。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;[変更前]
+const SCOPES = [&#39;https://www.googleapis.com/auth/drive.metadata.readonly&#39;];
+[変更後]
+const SCOPES = [&#39;https://www.googleapis.com/auth/drive&#39;];
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;スコープについて詳しくは&lt;a href=&#34;https://developers.google.com/drive/api/v2/about-auth&#34;&gt;About Authorization&lt;/a&gt;を参照ください。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;準備は整ったのでNode.jsを実行します。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;１. credentials.json、index.jsなど一式入っているフォルダです。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/52fdf814-f643-1754-9a6c-2a6d9e3fe8bd.png&#34; alt=&#34;AccessToken_0.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;２. nodeを実行します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/1ce7b76c-988e-fd6f-c863-eef96b1fa4ac.png&#34; alt=&#34;AccessToken_1.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;３. URLが表示されるのでアクセスします。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/64852163-ae0f-6156-6d7d-fac9e90c7a27.png&#34; alt=&#34;AccessToken_2.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;４. 紐づけるGoogleアカウントを選択し、GoogleDriveへのアクセスを許可します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/dac52655-b356-073b-96bf-678c073897c1.png&#34; alt=&#34;AccessToken_3.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/55cd28a0-da9b-e5ee-2b91-095030c96f37.png&#34; alt=&#34;AccessToken_4.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;５. 最後に表示されるコードを上記3.の続きに貼り付けます。
+&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/3fd64238-c27d-6412-23f9-d9754bec9ff9.png&#34; alt=&#34;AccessToken_5.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/90f1683d-0731-25e9-e376-cdbb11156e2b.png&#34; alt=&#34;AccessToken_6.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;６.無事token.jsonを取得できました。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/7aa8a2bb-b2d0-f5d0-787c-6f142da997a8.png&#34; alt=&#34;AccessToken_7.PNG&#34; /&gt;&lt;/p&gt;
+&lt;h3 id=&#34;手順2-リフレッシュトークンから認証用のアクセストークンを取得する&#34;&gt;[手順2] リフレッシュトークンから認証用のアクセストークンを取得する&lt;/h3&gt;
+&lt;p&gt;アップロードに必要な情報は揃ったので、あとはNefryBTだけ触っていきます。&lt;/p&gt;
+&lt;p&gt;リフレッシュトークンからアクセストークンを取得するhttp POSTリクエストは次の通りとなります。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[ヘッダー]
+POST /oauth2/v4/token HTTP/1.1
+Host: www.googleapis.com:443
+Connection: close
+Content-Type: application/x-www-form-urlencoded
+Content-Length: [POSTするデータの長さ]
+[POSTするデータ]
+refresh_token=[リフレッシュトークン]&amp;amp;client_id=[クライアントID]&amp;amp;client_secret=[クライアントシークレット]&amp;amp;grant_type=refresh_token
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;クライアントIDとクライアントシークレットは「credentials.json」に書いてあります。もしくはGoogle Cloud PlatformのAPIの認証情報でも確認できます。&lt;/li&gt;
+&lt;li&gt;リフレッシュトークンは「token.json」に書いてあります。&lt;br /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;POSTリクエストを投げるとレスポンスがjson形式で返ってきます。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{
+&amp;quot;access_token&amp;quot;: &amp;quot;***&amp;quot;,
+&amp;quot;expires_in&amp;quot;: 3600,
+&amp;quot;scope&amp;quot;: &amp;quot;https://www.googleapis.com/auth/drive&amp;quot;,
+&amp;quot;token_type&amp;quot;: &amp;quot;Bearer&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;access_token:***が取得したいアクセストークンになります。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;上記の内容をNefryBTで書くと次のようになります。&lt;/p&gt;
+&lt;p&gt;※&lt;a href=&#34;https://github.com/NearMugi/NefrySample/tree/master/GoogleAPI/%23createLibrary/googleAPI/PostDrive&#34;&gt;プログラムソース&lt;/a&gt;のうち主要な部分を抜粋しています。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;リフレッシュトークン・クライアントID・クライアントシークレットは個人情報なので、直接プログラムソースに記載するのではなくNefryBTのDataStoreに登録します。&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;POSTするデータを設定します。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt; String postData = &amp;quot;&amp;quot;;
+postData += &amp;quot;refresh_token=&amp;quot; + refresh_token;
+postData += &amp;quot;&amp;amp;client_id=&amp;quot; + client_id;
+postData += &amp;quot;&amp;amp;client_secret=&amp;quot; + client_secret;
+postData += &amp;quot;&amp;amp;grant_type=&amp;quot; + String(&amp;quot;refresh_token&amp;quot;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;ヘッダーを設定します。
+データの長さはPOSTするデータ(postData)から算出します。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt; String postHeader = &amp;quot;&amp;quot;;
+postHeader += (&amp;quot;POST &amp;quot; + token_uri + &amp;quot; HTTP/1.1\r\n&amp;quot;);
+postHeader += (&amp;quot;Host: &amp;quot; + String(host) + &amp;quot;:&amp;quot; + String(httpsPort) + &amp;quot;\r\n&amp;quot;);
+postHeader += (&amp;quot;Connection: close\r\n&amp;quot;);
+postHeader += (&amp;quot;Content-Type: application/x-www-form-urlencoded\r\n&amp;quot;);
+postHeader += (&amp;quot;Content-Length: &amp;quot;);
+postHeader += (postData.length());
+postHeader += (&amp;quot;\r\n\r\n&amp;quot;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;POSTリクエストを投げてレスポンスを取得します。更にレスポンスからアクセストークンを取得します。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt; String result = postRequest(host, postHeader, postData);
+//取得したjsonデータからAccessTokenを取得する
+const int BUFFER_SIZE = JSON_OBJECT_SIZE(4) + JSON_ARRAY_SIZE(1);
+StaticJsonBuffer&amp;lt;BUFFER_SIZE&amp;gt; jsonBuffer;
+char json[result.length() + 1];
+result.toCharArray(json, sizeof(json));
+JsonObject&amp;amp; root = jsonBuffer.parseObject(json);
+const char* tmp = root[&amp;quot;access_token&amp;quot;];
+token = tmp;
+return token;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;POSTリクエストを行っているソース(&lt;code&gt;postRequest&lt;/code&gt;)です。正常に処理が終わればレスポンスを返します。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt; String postRequest(const char* server, String header, String data) {
+String result = &amp;quot;&amp;quot;;
+// Use WiFiClientSecure class to create TLS connection
+WiFiClientSecure client;
+Serial.print(&amp;quot;Connecting to: &amp;quot;); Serial.println(server);
+if (!client.connect(server, httpsPort)) {
+Serial.println(&amp;quot;connection failed&amp;quot;);
+return result;
+}
+Serial.println(&amp;quot;certificate matches&amp;quot;);
+Serial.print(&amp;quot;post: &amp;quot;); Serial.println(header + data);
+client.print(header + data);
+Serial.println(&amp;quot;Receiving response&amp;quot;);
+if (client.connected()) {
+if (client.find(&amp;quot;HTTP/1.1 &amp;quot;)) {
+String status_code = client.readStringUntil(&#39;\r&#39;);
+Serial.print(&amp;quot;Status code: &amp;quot;); Serial.println(status_code);
+if (status_code != &amp;quot;200 OK&amp;quot;) {
+Serial.println(&amp;quot;There was an error&amp;quot;);
+}
+}
+if (client.find(&amp;quot;\r\n\r\n&amp;quot;)) {
+Serial.println(F(&amp;quot;[Read Data]&amp;quot;));
+}
+String line = client.readStringUntil(&#39;\r&#39;);
+Serial.println(line);
+result += line;
+}
+Serial.println(&amp;quot;closing connection&amp;quot;);
+return result;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;だいたいこんな感じで無事アクセストークンを取得できました。&lt;/p&gt;
+&lt;h3 id=&#34;手順3-http-postリクエストでデータをアップロードする&#34;&gt;[手順3] http POSTリクエストでデータをアップロードする&lt;/h3&gt;
+&lt;p&gt;いよいよデータをアップロードしてみます。今回はテキストファイルとJpegファイルのアップロード方法を紹介します。
+公式サイトの&lt;a href=&#34;https://developers.google.com/drive/api/v3/manage-uploads&#34;&gt;Uploading Files&lt;/a&gt;によりますと、アップロード方法は3パターンあります。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Simple upload&lt;/li&gt;
+&lt;li&gt;Multipart upload&lt;/li&gt;
+&lt;li&gt;Resumable upload&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&amp;ldquo;Simple upload&amp;rdquo;の場合、アップロードしたファイル名は全て&amp;rdquo;untitled&amp;rdquo;となってしまい、具合がよろしくありません。
+&amp;ldquo;Multipart upload&amp;rdquo;の場合、ファイルに様々な設定を付加できます。今回はファイル名・親フォルダの指定・コメントを設定しました。
+(&amp;ldquo;Resumable upload&amp;rdquo;はどんなものか調べていません・・・)&lt;/p&gt;
+&lt;p&gt;Multipart uploadのPOSTリクエストは次の通りです。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;POST https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart HTTP/1.1
+Authorization: Bearer [YOUR_AUTH_TOKEN]
+Content-Type: multipart/related; boundary=foo_bar_baz
+Content-Length: [NUMBER_OF_BYTES_IN_ENTIRE_REQUEST_BODY]
+--foo_bar_baz
+Content-Type: application/json; charset=UTF-8
+{
+&amp;quot;name&amp;quot;: &amp;quot;myObject&amp;quot;
+}
+--foo_bar_baz
+Content-Type: image/jpeg
+[JPEG_DATA]
+--foo_bar_baz--
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;[YOUR_AUTH_TOKEN]はアクセストークンを設定します。&lt;/li&gt;
+&lt;li&gt;[NUMBER_OF_BYTES_IN_ENTIRE_REQUEST_BODY]は &lt;strong&gt;ヘッダーから最後のデータまですべてのサイズ&lt;/strong&gt; となります。つまり最初のPOSTから最後の&amp;ndash;foo_bar_baz&amp;ndash;まで全てのサイズを設定します。これを間違えると正しくPOSTリクエストを投げることが出来ません。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;quot;name&amp;quot;: &amp;quot;myObject&amp;quot;&lt;/code&gt; の部分がアップロードするファイルの設定を記載する部分となります。
+何を設定できるかは&lt;a href=&#34;https://developers.google.com/drive/api/v3/reference/files&#34;&gt;公式ページの&amp;rdquo;Files&amp;rdquo;&lt;/a&gt;を参照ください。&lt;/li&gt;
+&lt;li&gt;その下の&lt;code&gt;Content-Type: image/jpeg&lt;/code&gt; がアップロードするデータの形式となり、その次にデータの中身を記述していきます。&lt;/li&gt;
+&lt;li&gt;最後に&lt;code&gt;--foo_bar_baz--&lt;/code&gt; で閉めます。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;まとめますと、プログラムを書くとき毎回設定しなければならないのは次の4つです。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;アクセストークン&lt;/li&gt;
+&lt;li&gt;POSTリクエスト全体のサイズ&lt;/li&gt;
+&lt;li&gt;ファイルの設定(ファイル名・親フォルダ・コメント)&lt;/li&gt;
+&lt;li&gt;ファイルの中身&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;テキストファイルをアップロードする&#34;&gt;テキストファイルをアップロードする&lt;/h2&gt;
+&lt;p&gt;上記の仕様を踏まえてテキストファイルをアップロードする例を挙げます。この次に紹介するJpegファイルのアップロードと比べるとシンプルで分かりやすいと思います。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;POSTリクエストのファイルの指定周り(&lt;code&gt;--foo_bar_baz&lt;/code&gt;部分)を設定します。&lt;/li&gt;
+&lt;li&gt;上記1.のあとPOSTリクエスト全体のサイズが分かるのでヘッダー(&lt;code&gt;POST https://&lt;/code&gt;部分)を設定します。&lt;/li&gt;
+&lt;li&gt;上記1.と2.をPOSTします。&lt;/li&gt;
+&lt;li&gt;データの中身をPOSTします。&lt;/li&gt;
+&lt;li&gt;最後の&amp;rsquo;&amp;ndash;foo_bar_baz&amp;ndash;&amp;lsquo;をPOSTします。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt; void postDrive_Text(String _fileName, String _textData, String _comment) {
+uint8_t DataSize = _textData.length();
+uint8_t postData[DataSize];
+for (int i = 0; i &amp;lt; DataSize; i++) {
+postData[i] = (uint8_t)_textData[i];
+}
+1. POSTリクエストのファイルの指定周りを設定
+String start_request = getStartRequest_Text(_fileName, _comment);
+2. ヘッダーを設定
+uint16_t full_length;
+full_length = start_request.length() + DataSize + end_request.length();
+String postHeader = getPostHeader(full_length);
+String result = &amp;quot;&amp;quot;;
+// Use WiFiClientSecure class to create TLS connection
+WiFiClientSecure client;
+if (!client.connect(host, httpsPort)) {
+Serial.println(&amp;quot;connection failed&amp;quot;);
+return ;
+}
+3. 1.と2.をPOST
+client.print(postHeader + start_request);
+4. データの中身をPOST
+client.write(&amp;amp;postData[0] , DataSize);
+5. --foo_bar_baz--をPOST
+client.println(end_request);
+if (client.connected()) {
+if (client.find(&amp;quot;HTTP/1.1 &amp;quot;)) {
+String status_code = client.readStringUntil(&#39;\r&#39;);
+Serial.print(&amp;quot;Status code: &amp;quot;); Serial.println(status_code);
+if (status_code != &amp;quot;200 OK&amp;quot;) {
+Serial.println(&amp;quot;There was an error&amp;quot;);
+}
+}
+if (client.find(&amp;quot;\r\n\r\n&amp;quot;)) {
+Serial.println(F(&amp;quot;[Read Data]&amp;quot;));
+} else {
+Serial.println(F(&amp;quot;[WARNING] Response Data is Nothing&amp;quot;));
+}
+String line = client.readStringUntil(&#39;\r&#39;);
+Serial.println(line);
+result += line;
+}
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;実際にテキストファイルをアップロードしている様子&#34;&gt;実際にテキストファイルをアップロードしている様子&lt;/h3&gt;
+&lt;p&gt;１. アップロード先のフォルダを作成しておきます。親フォルダIDは「&lt;code&gt;https://drive.google.com/drive/folders/***&lt;/code&gt;」の***の部分です。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/c32ed96f-9dc4-59cb-0eef-c1091b088397.png&#34; alt=&#34;GoogleDrive_Text_0.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;２. NefryBTのセットアップが完了するのを待ちます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/699a3064-ec88-d560-2429-f5cab310ce9b.jpeg&#34; alt=&#34;DSC_0003.JPG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/3b5bc537-b82a-eb2e-a751-077817386f7e.jpeg&#34; alt=&#34;DSC_0005.JPG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;３. セットアップが完了したらNefryBTについているボタンを押します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/cfafe65c-ebb7-d82c-e566-d47436cf7ee9.jpeg&#34; alt=&#34;DSC_0006.JPG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;４. 成功しました！&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/97de4845-f602-0aa5-26ac-064cd47609be.jpeg&#34; alt=&#34;DSC_0007.JPG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;５. GoogleDriveを見てみるとしっかりとアップロードされています！&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/72fae28e-6ac8-4fca-e940-265031c2c8cf.png&#34; alt=&#34;GoogleDrive_Text_1.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/5b5cb82b-7dd1-d3e4-bf3b-bb60bfffdb1a.png&#34; alt=&#34;GoogleDrive_Text_2.PNG&#34; /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;jpegファイルをアップロードする&#34;&gt;Jpegファイルをアップロードする&lt;/h2&gt;
+&lt;p&gt;続いてJpegファイルをアップロードする方法です。&lt;strong&gt;ここからかなり込み入った内容になります。&lt;/strong&gt;
+今回JpegファイルにしてアップロードしたものはNefryBTに接続したカメラモジュールで撮った画像となります。そのためカメラモジュールの話とGoogleDriveへアップロードする話が混在しますのでご了承ください・・・&lt;/p&gt;
+&lt;h3 id=&#34;カメラモジュールについて&#34;&gt;カメラモジュールについて&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/eeaaa02a-2c36-b131-aa32-eeacef9abb63.jpeg&#34; alt=&#34;ArduCAM.jpg&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;使用したカメラモジュールは&lt;a href=&#34;https://www.switch-science.com/catalog/3780/&#34;&gt;Arducam Miniモジュール(2メガピクセル)&lt;/a&gt;です。ESP32向けのサンプルがあったので動かせるだろうと思って選びました。
+(NefryBTのことを考えれば&lt;a href=&#34;https://www.switch-science.com/catalog/1626/&#34;&gt;Groveのカメラ&lt;/a&gt;でも良かったとあとで気づきました・・・)&lt;/p&gt;
+&lt;p&gt;初期設定やカメラモジュールからデータを取得するところは&lt;a href=&#34;https://github.com/NearMugi/NefrySample/tree/master/ArduCAM/OV2640&#34;&gt;プログラムソース&lt;/a&gt;を参照ください。&lt;/p&gt;
+&lt;p&gt;厄介なのは&lt;strong&gt;取得したデータ全てがJpegデータではない&lt;/strong&gt;ことです。このカメラモジュールの場合、1バイト目に0x00が入っています。これ、要らないデータなのです。きちんとJpegファイルにあたるデータをアップロードしないと正しく表示されません。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.setsuki.com/hsp/ext/jpg.htm&#34;&gt;Jpegファイル&lt;/a&gt;は開始位置(0xFFD8)と終了位置(0xFFD9)が決まっています。この範囲のデータだけをアップロードすればJpegファイルとして正しく表示されます。&lt;/p&gt;
+&lt;h3 id=&#34;プログラムのポイント&#34;&gt;プログラムのポイント&lt;/h3&gt;
+&lt;p&gt;カメラモジュールの仕様を踏まえてアップロードします。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Jpegファイルのデータサイズは何十万バイトと膨大なので全て変数に入れて一括でPOSTすることはできません。そのためデータを分割してカメラモジュールから取得、POSTを繰り返します。&lt;/li&gt;
+&lt;li&gt;POSTリクエスト全体のサイズとJpegファイルのサイズが異なるので、&lt;strong&gt;POSTリクエスト全体のサイズに足りない分を最後に0x00をPOSTする&lt;/strong&gt;ことで整合性を合わせています。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;プログラムソースを抜粋します。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;// ReadSizeはカメラモジュールで取得したデータサイズ
+//GoogleDriveへポスト
+String start_request = api.getStartRequest_Jpeg(&amp;quot;Capture&amp;quot;, &amp;quot;From ArduCam&amp;quot;);
+String end_request = api.getEndRequest();
+uint32_t full_length;
+full_length = start_request.length() + ReadSize + end_request.length();
+String postHeader = api.getPostHeader(full_length);
+(中略)
+client.print(postHeader + start_request);
+//JPEGデータ
+static const size_t bufferSize = 2048;
+static uint8_t buffer[bufferSize] = {0xFF};
+uint32_t index = 0;
+uint32_t sizeCnt = 0;
+uint8_t now = 0;
+uint8_t prev = 0;
+myCAM.CS_LOW();
+myCAM.set_fifo_burst();
+カメラモジュールのデータをPOSTしている部分
+bool isHeader = false;
+while (ReadSize--) {
+prev = now;
+now = SPI.transfer(0x00);
+//ヘッダーを探す(0xFF,0xD8)
+if (!isHeader) {
+if (prev == 0xFF &amp;amp;&amp;amp; now == 0xD8) {
+Serial.println(F(&amp;quot;JPEG First Data is Found&amp;quot;));
+buffer[0] = 0xFF;
+buffer[1] = 0xD8;
+index = 2;
+sizeCnt = 2;
+isHeader = true;
+}
+continue;
+}
+//ヘッダーが見つかったあと
+sizeCnt++;
+// JPEGファイルの最後を検出したら終了(0xFF,0xD9)
+if (prev == 0xFF &amp;amp;&amp;amp; now == 0xD9) {
+Serial.println(F(&amp;quot;JPEG Last Data is Found&amp;quot;));
+buffer[index++] = now;
+client.write(&amp;amp;buffer[0], index);
+myCAM.CS_HIGH();
+break;
+}
+if (index &amp;lt; bufferSize) {
+buffer[index] = now;
+index++;
+} else {
+if (!client.connected()) break;
+client.write(&amp;amp;buffer[0], bufferSize);
+index = 0;
+buffer[index++] = now;
+}
+}
+myCAM.CS_HIGH();
+ReadSize += 1;
+Serial.print(F(&amp;quot;JPEG Data Size: &amp;quot;)); Serial.println(sizeCnt);
+Serial.print(F(&amp;quot;Remaining Data Size: &amp;quot;)); Serial.println(ReadSize);
+client.println(end_request);
+POSTリクエスト全体のサイズを調整している部分
+//バッファーメモリサイズと画像サイズが異なるため、full_lengthに達していない。
+//足りない分の帳尻を合わせる
+uint8_t tmpbuf[ReadSize] = {0x00};
+client.write(&amp;amp;tmpbuf[0], ReadSize);
+(以下、省略)
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;実際にjpegファイルをアップロードしている様子&#34;&gt;実際にJpegファイルをアップロードしている様子&lt;/h3&gt;
+&lt;p&gt;１. アップロード先のフォルダはテキストファイルと同じところにします。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/2660eda8-1474-644d-fae2-bba8b87c502d.png&#34; alt=&#34;GoogleDrive_Jpeg_0.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;２. カメラで撮ってみます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/c25e4a34-5b9c-44ff-3f78-b390c2c492de.jpeg&#34; alt=&#34;DSC_0015.JPG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;３. NefryBTのセットアップが完了するのを待ちます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/91963234-adc5-7317-654b-41dbd6b8b9ca.jpeg&#34; alt=&#34;DSC_0010.JPG&#34; /&gt;
+&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/a85255a7-e375-2d75-c7d0-4d126e66b60f.jpeg&#34; alt=&#34;DSC_0012.JPG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;４. セットアップが完了したらNefryBTについているボタンを押します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/6e91d9ac-0e56-6df0-062b-2d158fd75b3e.jpeg&#34; alt=&#34;DSC_0013.JPG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;５. 成功しました！&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/c7291283-ac2a-feb9-d924-9c23963058b1.jpeg&#34; alt=&#34;DSC_0014.JPG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;６. GoogleDriveを見てみるとしっかりとアップロードされています！&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/b9ed65c6-185b-a57c-1877-1bb079b2400f.png&#34; alt=&#34;GoogleDrive_Jpeg_1.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/fac4420d-d91a-3849-f71c-b17ab86d842f.png&#34; alt=&#34;GoogleDrive_Jpeg_2.PNG&#34; /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;参考にしたサイト&#34;&gt;参考にしたサイト&lt;/h2&gt;
+&lt;p&gt;大変助かりました。&lt;/p&gt;
+&lt;p&gt;*&lt;a href=&#34;https://github.com/jalmeroth/ESP8266-OAUTH2/blob/master/ESP8266-OAUTH2/ESP8266-OAUTH2.ino&#34;&gt;jalmeroth/ESP8266-OAUTH2&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;*&lt;a href=&#34;https://himakan.net/websites/how_to_google_oauth&#34;&gt;Google APIを使用するためにGoogle OAuth認証をしようよ&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;*&lt;a href=&#34;https://zudoh.com/trouble-shooting/google-oauth-expired&#34;&gt;時間が立つとGoogle APIのOAuth認証に失敗する&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;*&lt;a href=&#34;http://indoor.lolipop.jp/IndoorCorgiElec/ESP-SensorCam.php&#34;&gt;ESP-SensorCam&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;NefryBTから直接GoogleDriveにアクセスできたときは感動しました！こんな小さなボードがネットに繋がるなんて！&lt;/p&gt;
+&lt;p&gt;またGmailやスプレッドシートなどの他のアプリケーションにもアクセスできると思います。面白い組み合わせがあるかもしれません。&lt;/p&gt;
+&lt;p&gt;みなさんのIoTライフの参考になれば幸いです。ではでは。&lt;/p&gt;</description></item><item><title>VuePressのブログをカスタムドメイン&#43;SSL対応させたGitLab Pagesにデプロイする</title><link>https://dotstud.io/blog/gitlab-vuepress-custom-domain/</link><pubDate>Wed, 30 Jan 2019 10:47:09 +0900</pubDate><guid>https://dotstud.io/blog/gitlab-vuepress-custom-domain/</guid><description>
 &lt;p&gt;こんにちは、最近スパにハマっている&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
 &lt;p&gt;今日はタイトル通り&lt;strong&gt;VuePressで作ったブログをGitLab Pagesに乗せてカスタムドメイン+SSL対応していきます。&lt;/strong&gt; 2019年1月時点版です。UIなどはガンガン変わっていくと思いますので適宜読み替えましょう。&lt;/p&gt;
 &lt;p&gt;過去に書いたこの記事とは別のサイトの運用話です。&lt;/p&gt;
@@ -3442,170 +3832,4 @@ Arduinoシールドのリーフもあります。プロトタイプをつくる�
 &lt;p&gt;人生、何が起こるかわからないですね。&lt;/p&gt;
 &lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
 &lt;p&gt;まだまだドキュメントの整備や使用例はこれからのようです。
-来年から販売予定だそうなので、目が離せませんね！&lt;/p&gt;</description></item><item><title>気分はセレブ！手を叩くとディナーを出してくれるデバイスを作ろう</title><link>https://dotstud.io/blog/device-of-celebrity-dinner/</link><pubDate>Thu, 27 Sep 2018 12:34:10 +0900</pubDate><guid>https://dotstud.io/blog/device-of-celebrity-dinner/</guid><description>
-&lt;p&gt;こんにちは、たいしょーです。&lt;/p&gt;
-&lt;p&gt;いきなりですが、&lt;u&gt;高級なレストランで指パッチンや手を叩いて合図するとウェイターがディナーを出してくれるシーン&lt;/u&gt;を見たことありませんか？&lt;/p&gt;
-&lt;h2 id=&#34;憧れのシーンを実現したい&#34;&gt;憧れのシーンを実現したい&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/a7be6476-4059-9a5e-b3d6-9aeaff37db85.png&#34; alt=&#34;image&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;どこで見たかわからないけどなんとなく想像できる人も多いと思います。&lt;/p&gt;
-&lt;p&gt;&lt;font size=&#34;4&#34;&gt;&lt;strong&gt;で、私はそのシーンをめっちゃ再現したいわけです。&lt;/strong&gt;&lt;/font&gt;&lt;/p&gt;
-&lt;p&gt;何も言わずとも合図を送るだけで自分の好みを把握したウェイターがスッとディナーを出してくれる&amp;hellip;そんなセレブ気分を味わいたい…………！
-しかし、高級レストランに行くお金もなければ、行けたとしても恥ずかしくてそんなことやる勇気も出ないので自宅で再現してみましょう。&lt;/p&gt;
-&lt;h2 id=&#34;設計&#34;&gt;設計&lt;/h2&gt;
-&lt;p&gt;先ほどのイメージ画像通り「合図するとディナーを出してくれる」のが完成イメージですが、より具体的な実現方法を考えてみます。&lt;/p&gt;
-&lt;p&gt;考えた結果、&lt;u&gt;手を叩いたことをセンサーで認識して、「&lt;strong&gt;Amazon Dash Button&lt;/strong&gt;」を押すことでディナーをネット注文することにしました。&lt;/u&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/0af2d3f4-e6a0-9053-7048-c3968bef281e.jpeg&#34; alt=&#34;概要図&#34; /&gt;&lt;/p&gt;
-&lt;h2 id=&#34;準備するもの&#34;&gt;準備するもの&lt;/h2&gt;
-&lt;h3 id=&#34;準備するものリスト&#34;&gt;準備するものリスト&lt;/h3&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th align=&#34;left&#34;&gt;名前&lt;/th&gt;
-&lt;th align=&#34;center&#34;&gt;個数&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;Amazon Dash Button　&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;1&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;Arduino Uno&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;1&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;&lt;a href=&#34;http://www.aitendo.com/product/4070&#34;&gt;拍手制御スイッチ [AKIT-107]&lt;/a&gt;&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;1&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;&lt;a href=&#34;http://www.aitendo.com/product/3277&#34;&gt;トランジスタ（S8050）&lt;/a&gt;&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;1&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;デジタル・マイクロサーボ SG90&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;1&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;ジャンパー線（オス）&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;最低6本&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;太い輪ゴム&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;1&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td align=&#34;left&#34;&gt;半田付けセット&lt;/td&gt;
-&lt;td align=&#34;center&#34;&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;p&gt;手を叩くことを認識するセンサー部分は、aitendo様に「&lt;strong&gt;拍手制御スイッチ&lt;/strong&gt;」というまんま目的に合った素敵キットがあったので注文しました。&lt;/p&gt;
-&lt;h2 id=&#34;拍手制御スイッチを組み立てる&#34;&gt;拍手制御スイッチを組み立てる&lt;/h2&gt;
-&lt;h3 id=&#34;半田付けする&#34;&gt;半田付けする&lt;/h3&gt;
-&lt;p&gt;&lt;font color=&#34;Red&#34;, font size=&#34;3&#34;&gt;&lt;strong&gt;はやく半田付けをしたい人も、このセクションの【注意点!!】を読んでから半田付けをはじめてください。&lt;/strong&gt;&lt;/font&gt;&lt;/p&gt;
-&lt;p&gt;拍手制御スイッチは自分で部品を半田付けするキットで届くので組み立てていきましょう。&lt;/p&gt;
-&lt;p&gt;半田付けの基本については村田製作所様のこちらのページが参考になります。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.murata.com/ja-jp/campaign/ads/japan/elekids/ele/craft/knack/soldering&#34;&gt;電子工作のコツ/はんだ付け | 村田製作所 - Murata&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;さて、今回用意した半田付けセットはこちら。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/8f09c0ef-4ad5-ef26-4aed-b5a74f2b4fd3.jpeg&#34; alt=&#34;はんだセット&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;はんだは&lt;strong&gt;線径0.6mm&lt;/strong&gt;のもの、半田ごては温度を&lt;strong&gt;350度&lt;/strong&gt;に設定したものを用意しました。
-洗濯バサミみたいな道具はヒートシンクといい、半田ごての熱から熱に弱い部品を守るものですが今回は使いませんでした。&lt;/p&gt;
-&lt;p&gt;どの部品を基板のどこにつけるかなのですが、aitendo様のWebページに&lt;a href=&#34;http://www.aitendo.com/product/4070&#34;&gt;部品リストと回路図&lt;/a&gt;が載っているのでこれを見ながら組み立てて行くしかありません……。&lt;/p&gt;
-&lt;p&gt;&lt;font size=&#34;4&#34;&gt;&lt;strong&gt;これが滅茶苦茶大変です。&lt;/strong&gt;&lt;/font&gt;&lt;/p&gt;
-&lt;p&gt;オススメのやり方は最初に部品リストの順番通りに部品を並べてから半田付けを始めることです。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/7ff3ab54-423f-7402-cad2-c53d798258f9.jpeg&#34; alt=&#34;部品並べ&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;抵抗などは下記のページで抵抗値を入力して5本色帯カラーコードに変換しながら照らし合わせると間違いづらいです。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;http://www.desmots.net/hitme/audio/iroobi.php&#34;&gt;抵抗 - カラーコード（4本・5本色帯）変換 - 計算ツール&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&#34;font-color-red-注意点-font&#34;&gt;&lt;font color=&#34;red&#34;&gt;注意点!!&lt;/font&gt;&lt;/h3&gt;
-&lt;p&gt;さて、いよいよ半田付け・・・&lt;strong&gt;と、ちょっと待ってください!!&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;部品を整理したら&lt;font color=&#34;Red&#34;&gt;&lt;strong&gt;&lt;u&gt;Q4の場所につけるトランジスタ（S9014）をトランジスタ（S8050）に差し替えてください。&lt;/u&gt;&lt;/strong&gt;&lt;/font&gt;
-組み立ててから気づいたのですが、ここの部品をすり替えないと組み上がった後正常に動作しません。（予備に2つ基板を買って試しましたがどちらも同じ結果でした）&lt;/p&gt;
-&lt;p&gt;部品を差し替えたら今度こそ半田付けをします。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;電解コンデンサ、LED、ダイオード&lt;/strong&gt;は取り付け向きが決まっているので注意しましょう。
-電解コンデンサ、LEDは2本ある足の長い方が+側。ダイオードは黒く模様がついている方向を基板の模様と合わせてください。&lt;/p&gt;
-&lt;p&gt;無事、組み終わったものがこちらです。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/7d0c5023-7edd-ee18-68de-ce8716f791c5.jpeg&#34; alt=&#34;センサ完成&#34; /&gt;&lt;/p&gt;
-&lt;h3 id=&#34;試してみる&#34;&gt;試してみる&lt;/h3&gt;
-&lt;p&gt;図のような簡単な回路を組んで、ちゃんと動くか試して見ましょう。
-拍手スイッチの&lt;strong&gt;Power（入力電圧）は5Vではなく3.3V&lt;/strong&gt;であることに注意してください。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/ff0c1050-c860-4a07-46e8-7ef7e59306d4.png&#34; alt=&#34;AKIT_TEST.png&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;font size=&#34;2&#34;&gt;&lt;u&gt;今回Fritzing用に拍手制御スイッチ（AKIT-107）のカスタムパーツを作りましたので&lt;a href=&#34;https://github.com/TakedaHiromasa/Fritzing/blob/master/aitendo_AKIT-107.fzpz&#34;&gt;こちら&lt;/a&gt;からDLできます。
-よかったらどうぞ。&lt;/u&gt;&lt;/font&gt;&lt;/p&gt;
-&lt;p&gt;回路を組んだらセンサの上で手を叩いて見ます。手を叩くたびにLEDが点灯・消灯すれば成功です！&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/50c1369b-9a73-538a-d7da-c8730fc0f0d0.gif&#34; alt=&#34;Claptest.gif&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;u&gt;（これが楽しくて、30分ぐらいセンサーの上で手を叩いてました。）&lt;/u&gt;&lt;/p&gt;
-&lt;h2 id=&#34;サーボの原点合わせ&#34;&gt;サーボの原点合わせ&lt;/h2&gt;
-&lt;p&gt;今回用意した「デジタル・マイクロサーボ SG90」は「Amazon Dash Button」を押すのに使います。まずはサーボの原点合わせを行いましょう。&lt;/p&gt;
-&lt;p&gt;今回使用するSG90は0~180°まで回るのですが、買った初期状態ではどこを向いているのかわからないので原点として初めに&lt;strong&gt;90°&lt;/strong&gt;に位置合わせを行います。&lt;/p&gt;
-&lt;p&gt;まず以下のようにサーボとArduinoを繋ぎましょう。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/7de1f622-c738-1667-9575-601c877556e3.png&#34; alt=&#34;sarvo.png&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;そして以下のプログラムを書き込んで実行します。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;#include &amp;lt;Servo.h&amp;gt;
-Servo myservo;
-void setup() {
-myservo.attach( 10 );
-}
-void loop() {
-myservo.write( 90 );
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;これでサーボの原点が決まったので、付属のホーンを以下のように真上を向くようにつけます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/a66bca6c-f673-4f92-adea-23871a836489.jpeg&#34; alt=&#34;DSC_0577.JPG&#34; /&gt;&lt;/p&gt;
-&lt;h3 id=&#34;全体の配線&#34;&gt;全体の配線&lt;/h3&gt;
-&lt;p&gt;いよいよ全体の配線！
-以下のように配線します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/16a09bda-31dc-1e91-ec16-cdaa9535296b.png&#34; alt=&#34;全体&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;「サーボ」と「Amazon Dash Button」は輪ゴムで合体させました。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/aa85d4a4-ac2d-4800-dcfe-f248b70bbe7c.png&#34; alt=&#34;Screenshot_2018-09-17-00-05-37.png&#34; /&gt;&lt;/p&gt;
-&lt;h3 id=&#34;プログラム&#34;&gt;プログラム&lt;/h3&gt;
-&lt;p&gt;以下のプログラムを書き込みます。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-c&#34;&gt;#include &amp;lt;Servo.h&amp;gt;
-Servo myservo;
-volatile int flag = 0;
-void interruptsw()
-{
-flag = 1;
-}
-void setup() {
-myservo.attach( 10 );
-attachInterrupt(0, interruptsw, CHANGE);
-}
-void loop() {
-if(flag == 1){
-myservo.write( 45 );
-delay(500);
-flag = 0;
-}else{
-myservo.write( 90 );
-}
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;今回のプログラムのポイントは&lt;strong&gt;割り込み処理&lt;/strong&gt;と&lt;strong&gt;volatile&lt;/strong&gt;です。&lt;/p&gt;
-&lt;h3 id=&#34;割り込み処理&#34;&gt;割り込み処理&lt;/h3&gt;
-&lt;p&gt;割り込み処理とは簡単に言えば、&lt;strong&gt;「イベントが起こった時に、コンピュータがどんな処理をしていようと無理やり別の処理を割り込ませる」&lt;/strong&gt;というもの。&lt;/p&gt;
-&lt;p&gt;今回のプログラムの場合&lt;strong&gt;attachInterrupt(0, interruptsw, CHANGE);&lt;/strong&gt;で、&lt;strong&gt;どのピンのどんなイベントを監視するか指定&lt;/strong&gt;しています。指定の仕方は、&lt;strong&gt;attachInterrupt([監視するピン], [割り込ませる処理], [反応するイベントの種類]);&lt;/strong&gt;です。&lt;/p&gt;
-&lt;p&gt;Arduino Unoでは監視するピンは&lt;strong&gt;0か１&lt;/strong&gt;しか指定できなく、それぞれ&lt;strong&gt;pin2, pin3&lt;/strong&gt;に対応しています。&lt;/p&gt;
-&lt;p&gt;今回のプログラムの&lt;strong&gt;attachInterrupt(0, interruptsw, CHANGE);&lt;/strong&gt;とは&lt;strong&gt;「&lt;font color=&#34;Red&#34;&gt;2pin&lt;/font&gt;の信号が&lt;font color=&#34;Red&#34;&gt;CHANGE&lt;/font&gt;（変化するたび）&lt;font color=&#34;Red&#34;&gt;interruptsw&lt;/font&gt;を実行してね」&lt;/strong&gt;という指定をしていることになります。&lt;/p&gt;
-&lt;h3 id=&#34;volatile&#34;&gt;volatile&lt;/h3&gt;
-&lt;p&gt;volatileとは&lt;strong&gt;「この変数に関係する部分は消さないで！」&lt;/strong&gt;という指定。&lt;/p&gt;
-&lt;p&gt;どういうことかというと、プログラムをよく見てもらうと&lt;u&gt;volatileをつけているflagという変数はloop()の中で、何の計算にも使われていません（足すとか引くとか）。&lt;/u&gt;loop()の中では、&lt;strong&gt;if(flag == 1)&lt;/strong&gt;の部分でフラグが１になることを待っていますが、コンピュータはかしこい？ので、&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;flagはloop()の中で計算に使ってない&lt;/strong&gt;&lt;br&gt;&lt;/p&gt;
-&lt;p&gt;↓&lt;br&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;計算に使ってないならflagの値が増えたり減ったりすることは一生ないんじゃね？&lt;/strong&gt;&lt;br&gt;&lt;/p&gt;
-&lt;p&gt;↓&lt;br&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;じゃあ「flag == 1」になることはありえんね、無駄なんでif文消しまーす&lt;/strong&gt;&lt;br&gt;&lt;/p&gt;
-&lt;p&gt;↓&lt;br&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;俺優秀☆&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;という具合に&lt;strong&gt;最悪の場合勝手にif文を消します&lt;/strong&gt;。
-私たちからすれば「そこは割り込みが起こった時に1が代入されるんだけど・・・」と思いますがコンピュータは知ったこっちゃありません。ということで、計算には使ってないけど割り込みなどで確実に値が変化する変数については&lt;strong&gt;volatile&lt;/strong&gt;をつけて消されないようにしてあげます。&lt;/p&gt;
-&lt;h2 id=&#34;実際に使ってみる&#34;&gt;実際に使ってみる&lt;/h2&gt;
-&lt;p&gt;さて、難しい話はこれぐらいにして早速完成したデバイスを使ってみましょう！&lt;/p&gt;
-&lt;p&gt;より雰囲気を出すために&lt;u&gt;フリー素材のおじさまウェイターの画像をA3用紙4枚刷りで印刷し、そこにデバイスを貼り付けました。&lt;/u&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/259617/f505fed2-0763-3db7-4e7c-6e9df474b17e.jpeg&#34; alt=&#34;DSC_0571.JPG&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;font size =&#34;4&#34;&gt;いざ起動・・・・！！！&lt;/font&gt;&lt;/p&gt;
-&lt;p&gt;&lt;center&gt;
-&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/XlFNMBB7lt4&#34; frameborder=&#34;0&#34; allow=&#34;autoplay; encrypted-media&#34; allowfullscreen&gt;&lt;/iframe&gt;
-&lt;/center&gt;&lt;/p&gt;
-&lt;p&gt;&lt;font size =&#34;4&#34;&gt;&lt;strong&gt;無事、手を叩いただけでディナーが届きました！！！！！&lt;/strong&gt;&lt;/font&gt;&lt;/p&gt;
-&lt;p&gt;「シーチキン」の「Amazon Dash Button」を使ったのでシーチキンが届きました。今回使った拍手センサは使い方も簡単なので、他にも音で動くデバイスを作ってみると面白いと思います！&lt;/p&gt;
-&lt;p&gt;それでは、みなさん良きセレブライフをー！&lt;/p&gt;</description></item></channel></rss>
+来年から販売予定だそうなので、目が離せませんね！&lt;/p&gt;</description></item></channel></rss>

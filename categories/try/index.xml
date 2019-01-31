@@ -1,4 +1,394 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Try on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/categories/try/</link><description>Recent content in Try on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Wed, 30 Jan 2019 04:43:15 +0900</lastBuildDate><atom:link href="/categories/try/" rel="self" type="application/rss+xml"/><item><title>Let&#39;s 顔面製造！第二弾！ 歌うサンタ顔面ロボットを作ろう</title><link>https://dotstud.io/blog/face-robot-making-basic2/</link><pubDate>Wed, 30 Jan 2019 04:43:15 +0900</pubDate><guid>https://dotstud.io/blog/face-robot-making-basic2/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Try on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/categories/try/</link><description>Recent content in Try on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Thu, 31 Jan 2019 03:21:47 +0900</lastBuildDate><atom:link href="/categories/try/" rel="self" type="application/rss+xml"/><item><title>NefryBTからGoogleDriveにデータをアップロードする方法</title><link>https://dotstud.io/blog/update-nefrybt-to-googledrive/</link><pubDate>Thu, 31 Jan 2019 03:21:47 +0900</pubDate><guid>https://dotstud.io/blog/update-nefrybt-to-googledrive/</guid><description>
+&lt;p&gt;こんにちは、NefryBTきっかけでIoTの世界に入った&lt;a href=&#34;https://dotstud.io/members/kuroda&#34;&gt;黒田&lt;/a&gt;と言います。Webとどう接していけばいいのか分からないときにNefryBTと出会い、意外と難しくない(何とかなる)ことを知りました。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/members/wami&#34;&gt;わみさん&lt;/a&gt;、ありがとうございます。&lt;/p&gt;
+&lt;p&gt;今回は、NefryBTからGoogleDriveにデータをアップロード出来たので紹介したいと思います。&lt;/p&gt;
+&lt;p&gt;おそらく&lt;strong&gt;ESP32マイコン搭載モジュール&lt;/strong&gt;であれば、同じ考えで出来ると思います。&lt;/p&gt;
+&lt;h2 id=&#34;アップロードまでの手順&#34;&gt;アップロードまでの手順&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;リフレッシュトークンなど必要な情報を取得する(最初の一度だけ)&lt;/li&gt;
+&lt;li&gt;リフレッシュトークンから認証用のアクセストークンを取得する&lt;/li&gt;
+&lt;li&gt;http POSTリクエストでデータをアップロードする&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;はい、とてもシンプルです。&lt;/p&gt;
+&lt;p&gt;&lt;u&gt;httpを全く分からない私としてはここまでたどり着くまでかなり苦労しました・・・先人の方々が様々な実績を残してくれているのを本当に感謝しています。) &lt;/u&gt;&lt;/p&gt;
+&lt;p&gt;もう少し詳しく説明します。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://developers.google.com/drive/api/v3/about-sdk&#34;&gt;Google Drive REST APIのサイト&lt;/a&gt;を読みますと、まずGoogleDriveへアクセスするには認証用のアクセストークンが必要なこと、データをアップロードするときの&lt;a href=&#34;https://developers.google.com/drive/api/v3/multipart-upload&#34;&gt;POSTリクエストの書き方&lt;/a&gt;が決まっていることが分かります。&lt;/p&gt;
+&lt;p&gt;そのためアクセストークンで認証を行いつつPOSTリクエストを投げれば、NefryBTからでもデータをアップロード出来ます。&lt;/p&gt;
+&lt;p&gt;ここで一つ&lt;strong&gt;トラップ&lt;/strong&gt;があります。
+アクセストークンの有効期限は3600秒(1時間)です。当初これを知らなかったので、&lt;u&gt;時間が経つとなぜか認証エラーになる問題&lt;/u&gt;に悩まされました。&lt;/p&gt;
+&lt;p&gt;回避策としてリフレッシュトークンからアクセストークンを取得するようにします。すると、アクセストークンが新しくなるので、認証もばっちり通ります。
+つまり、&lt;u&gt;アクセストークンよりも再発行用のリフレッシュトークンが欲しい&lt;/u&gt;のです。&lt;/p&gt;
+&lt;p&gt;ではでは、具体的な手順を説明していきたいと思います。&lt;/p&gt;
+&lt;h3 id=&#34;手順1-リフレッシュトークンなど必要な情報を取得する-最初の一度だけ&#34;&gt;[手順1] リフレッシュトークンなど必要な情報を取得する(最初の一度だけ)&lt;/h3&gt;
+&lt;p&gt;今回はNode.jsで取得します。&lt;/p&gt;
+&lt;p&gt;公式サイトの&lt;a href=&#34;https://developers.google.com/drive/api/v3/quickstart/nodejs&#34;&gt;Node.js Quickstart&lt;/a&gt;に従って進めていきます。&lt;/p&gt;
+&lt;p&gt;公式サイトにある「ENABLE THE DRIVE API」を押します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/0ba2b731-7e29-2db2-7591-6ae56f1a7950.png&#34; alt=&#34;OAuth0.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;するとOAuth2.0クライアントIDを作ってくれます。
+続けて「DOWNLOAD CLIENT CONFIGURATION」を押してcredentials.jsonを取得します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/d4efa193-e36c-2e83-81f5-590cf105894a.png&#34; alt=&#34;OAuth1.PNG&#34; /&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;(補足)
+例えばcredentials.jsonを削除してしまって、もう一度取得したい場合・・・
+Google Cloud PlatformのAPI認証情報からダウンロードできます。&lt;/p&gt;
+&lt;p&gt;左上のメニューを押して「APIとサービス」を押します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/b26bff46-0dea-afba-38cd-51cb6ba8eb68.png&#34; alt=&#34;OAuth2-1.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;認証情報の中に先ほど作成したクライアントIDがありますので、ダウンロードします。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/901be3e5-b947-c290-e641-8db7dd075dcf.png&#34; alt=&#34;OAuth2-2.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;※ファイル名は「client&lt;em&gt;secret&lt;/em&gt;***.json」となっていますので「credentials.json」に変更します。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;次にNode.jsでアクセストークンなどの情報を取得します。(Node.jsやnpmが動く環境は用意されているものとします。)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;アクセストークンを取得するフォルダを用意して以下のモジュールをインストールします。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;npm install googleapis@27 --save
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;credentials.jsonも同じフォルダに移動させます。&lt;/li&gt;
+&lt;li&gt;index.jsを作成します。公式サイトのままではスコープがReadOnlyになっているのでアップロードできるスコープに変更します。それ以外は全く同じです。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;[変更前]
+const SCOPES = [&#39;https://www.googleapis.com/auth/drive.metadata.readonly&#39;];
+[変更後]
+const SCOPES = [&#39;https://www.googleapis.com/auth/drive&#39;];
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;スコープについて詳しくは&lt;a href=&#34;https://developers.google.com/drive/api/v2/about-auth&#34;&gt;About Authorization&lt;/a&gt;を参照ください。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;準備は整ったのでNode.jsを実行します。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;１. credentials.json、index.jsなど一式入っているフォルダです。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/52fdf814-f643-1754-9a6c-2a6d9e3fe8bd.png&#34; alt=&#34;AccessToken_0.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;２. nodeを実行します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/1ce7b76c-988e-fd6f-c863-eef96b1fa4ac.png&#34; alt=&#34;AccessToken_1.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;３. URLが表示されるのでアクセスします。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/64852163-ae0f-6156-6d7d-fac9e90c7a27.png&#34; alt=&#34;AccessToken_2.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;４. 紐づけるGoogleアカウントを選択し、GoogleDriveへのアクセスを許可します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/dac52655-b356-073b-96bf-678c073897c1.png&#34; alt=&#34;AccessToken_3.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/55cd28a0-da9b-e5ee-2b91-095030c96f37.png&#34; alt=&#34;AccessToken_4.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;５. 最後に表示されるコードを上記3.の続きに貼り付けます。
+&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/3fd64238-c27d-6412-23f9-d9754bec9ff9.png&#34; alt=&#34;AccessToken_5.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/90f1683d-0731-25e9-e376-cdbb11156e2b.png&#34; alt=&#34;AccessToken_6.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;６.無事token.jsonを取得できました。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/7aa8a2bb-b2d0-f5d0-787c-6f142da997a8.png&#34; alt=&#34;AccessToken_7.PNG&#34; /&gt;&lt;/p&gt;
+&lt;h3 id=&#34;手順2-リフレッシュトークンから認証用のアクセストークンを取得する&#34;&gt;[手順2] リフレッシュトークンから認証用のアクセストークンを取得する&lt;/h3&gt;
+&lt;p&gt;アップロードに必要な情報は揃ったので、あとはNefryBTだけ触っていきます。&lt;/p&gt;
+&lt;p&gt;リフレッシュトークンからアクセストークンを取得するhttp POSTリクエストは次の通りとなります。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[ヘッダー]
+POST /oauth2/v4/token HTTP/1.1
+Host: www.googleapis.com:443
+Connection: close
+Content-Type: application/x-www-form-urlencoded
+Content-Length: [POSTするデータの長さ]
+[POSTするデータ]
+refresh_token=[リフレッシュトークン]&amp;amp;client_id=[クライアントID]&amp;amp;client_secret=[クライアントシークレット]&amp;amp;grant_type=refresh_token
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;クライアントIDとクライアントシークレットは「credentials.json」に書いてあります。もしくはGoogle Cloud PlatformのAPIの認証情報でも確認できます。&lt;/li&gt;
+&lt;li&gt;リフレッシュトークンは「token.json」に書いてあります。&lt;br /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;POSTリクエストを投げるとレスポンスがjson形式で返ってきます。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{
+&amp;quot;access_token&amp;quot;: &amp;quot;***&amp;quot;,
+&amp;quot;expires_in&amp;quot;: 3600,
+&amp;quot;scope&amp;quot;: &amp;quot;https://www.googleapis.com/auth/drive&amp;quot;,
+&amp;quot;token_type&amp;quot;: &amp;quot;Bearer&amp;quot;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;access_token:***が取得したいアクセストークンになります。&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;上記の内容をNefryBTで書くと次のようになります。&lt;/p&gt;
+&lt;p&gt;※&lt;a href=&#34;https://github.com/NearMugi/NefrySample/tree/master/GoogleAPI/%23createLibrary/googleAPI/PostDrive&#34;&gt;プログラムソース&lt;/a&gt;のうち主要な部分を抜粋しています。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;リフレッシュトークン・クライアントID・クライアントシークレットは個人情報なので、直接プログラムソースに記載するのではなくNefryBTのDataStoreに登録します。&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;POSTするデータを設定します。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt; String postData = &amp;quot;&amp;quot;;
+postData += &amp;quot;refresh_token=&amp;quot; + refresh_token;
+postData += &amp;quot;&amp;amp;client_id=&amp;quot; + client_id;
+postData += &amp;quot;&amp;amp;client_secret=&amp;quot; + client_secret;
+postData += &amp;quot;&amp;amp;grant_type=&amp;quot; + String(&amp;quot;refresh_token&amp;quot;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;ヘッダーを設定します。
+データの長さはPOSTするデータ(postData)から算出します。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt; String postHeader = &amp;quot;&amp;quot;;
+postHeader += (&amp;quot;POST &amp;quot; + token_uri + &amp;quot; HTTP/1.1\r\n&amp;quot;);
+postHeader += (&amp;quot;Host: &amp;quot; + String(host) + &amp;quot;:&amp;quot; + String(httpsPort) + &amp;quot;\r\n&amp;quot;);
+postHeader += (&amp;quot;Connection: close\r\n&amp;quot;);
+postHeader += (&amp;quot;Content-Type: application/x-www-form-urlencoded\r\n&amp;quot;);
+postHeader += (&amp;quot;Content-Length: &amp;quot;);
+postHeader += (postData.length());
+postHeader += (&amp;quot;\r\n\r\n&amp;quot;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;POSTリクエストを投げてレスポンスを取得します。更にレスポンスからアクセストークンを取得します。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt; String result = postRequest(host, postHeader, postData);
+//取得したjsonデータからAccessTokenを取得する
+const int BUFFER_SIZE = JSON_OBJECT_SIZE(4) + JSON_ARRAY_SIZE(1);
+StaticJsonBuffer&amp;lt;BUFFER_SIZE&amp;gt; jsonBuffer;
+char json[result.length() + 1];
+result.toCharArray(json, sizeof(json));
+JsonObject&amp;amp; root = jsonBuffer.parseObject(json);
+const char* tmp = root[&amp;quot;access_token&amp;quot;];
+token = tmp;
+return token;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;POSTリクエストを行っているソース(&lt;code&gt;postRequest&lt;/code&gt;)です。正常に処理が終わればレスポンスを返します。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt; String postRequest(const char* server, String header, String data) {
+String result = &amp;quot;&amp;quot;;
+// Use WiFiClientSecure class to create TLS connection
+WiFiClientSecure client;
+Serial.print(&amp;quot;Connecting to: &amp;quot;); Serial.println(server);
+if (!client.connect(server, httpsPort)) {
+Serial.println(&amp;quot;connection failed&amp;quot;);
+return result;
+}
+Serial.println(&amp;quot;certificate matches&amp;quot;);
+Serial.print(&amp;quot;post: &amp;quot;); Serial.println(header + data);
+client.print(header + data);
+Serial.println(&amp;quot;Receiving response&amp;quot;);
+if (client.connected()) {
+if (client.find(&amp;quot;HTTP/1.1 &amp;quot;)) {
+String status_code = client.readStringUntil(&#39;\r&#39;);
+Serial.print(&amp;quot;Status code: &amp;quot;); Serial.println(status_code);
+if (status_code != &amp;quot;200 OK&amp;quot;) {
+Serial.println(&amp;quot;There was an error&amp;quot;);
+}
+}
+if (client.find(&amp;quot;\r\n\r\n&amp;quot;)) {
+Serial.println(F(&amp;quot;[Read Data]&amp;quot;));
+}
+String line = client.readStringUntil(&#39;\r&#39;);
+Serial.println(line);
+result += line;
+}
+Serial.println(&amp;quot;closing connection&amp;quot;);
+return result;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;だいたいこんな感じで無事アクセストークンを取得できました。&lt;/p&gt;
+&lt;h3 id=&#34;手順3-http-postリクエストでデータをアップロードする&#34;&gt;[手順3] http POSTリクエストでデータをアップロードする&lt;/h3&gt;
+&lt;p&gt;いよいよデータをアップロードしてみます。今回はテキストファイルとJpegファイルのアップロード方法を紹介します。
+公式サイトの&lt;a href=&#34;https://developers.google.com/drive/api/v3/manage-uploads&#34;&gt;Uploading Files&lt;/a&gt;によりますと、アップロード方法は3パターンあります。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Simple upload&lt;/li&gt;
+&lt;li&gt;Multipart upload&lt;/li&gt;
+&lt;li&gt;Resumable upload&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&amp;ldquo;Simple upload&amp;rdquo;の場合、アップロードしたファイル名は全て&amp;rdquo;untitled&amp;rdquo;となってしまい、具合がよろしくありません。
+&amp;ldquo;Multipart upload&amp;rdquo;の場合、ファイルに様々な設定を付加できます。今回はファイル名・親フォルダの指定・コメントを設定しました。
+(&amp;ldquo;Resumable upload&amp;rdquo;はどんなものか調べていません・・・)&lt;/p&gt;
+&lt;p&gt;Multipart uploadのPOSTリクエストは次の通りです。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;POST https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart HTTP/1.1
+Authorization: Bearer [YOUR_AUTH_TOKEN]
+Content-Type: multipart/related; boundary=foo_bar_baz
+Content-Length: [NUMBER_OF_BYTES_IN_ENTIRE_REQUEST_BODY]
+--foo_bar_baz
+Content-Type: application/json; charset=UTF-8
+{
+&amp;quot;name&amp;quot;: &amp;quot;myObject&amp;quot;
+}
+--foo_bar_baz
+Content-Type: image/jpeg
+[JPEG_DATA]
+--foo_bar_baz--
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;[YOUR_AUTH_TOKEN]はアクセストークンを設定します。&lt;/li&gt;
+&lt;li&gt;[NUMBER_OF_BYTES_IN_ENTIRE_REQUEST_BODY]は &lt;strong&gt;ヘッダーから最後のデータまですべてのサイズ&lt;/strong&gt; となります。つまり最初のPOSTから最後の&amp;ndash;foo_bar_baz&amp;ndash;まで全てのサイズを設定します。これを間違えると正しくPOSTリクエストを投げることが出来ません。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;quot;name&amp;quot;: &amp;quot;myObject&amp;quot;&lt;/code&gt; の部分がアップロードするファイルの設定を記載する部分となります。
+何を設定できるかは&lt;a href=&#34;https://developers.google.com/drive/api/v3/reference/files&#34;&gt;公式ページの&amp;rdquo;Files&amp;rdquo;&lt;/a&gt;を参照ください。&lt;/li&gt;
+&lt;li&gt;その下の&lt;code&gt;Content-Type: image/jpeg&lt;/code&gt; がアップロードするデータの形式となり、その次にデータの中身を記述していきます。&lt;/li&gt;
+&lt;li&gt;最後に&lt;code&gt;--foo_bar_baz--&lt;/code&gt; で閉めます。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;まとめますと、プログラムを書くとき毎回設定しなければならないのは次の4つです。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;アクセストークン&lt;/li&gt;
+&lt;li&gt;POSTリクエスト全体のサイズ&lt;/li&gt;
+&lt;li&gt;ファイルの設定(ファイル名・親フォルダ・コメント)&lt;/li&gt;
+&lt;li&gt;ファイルの中身&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;テキストファイルをアップロードする&#34;&gt;テキストファイルをアップロードする&lt;/h2&gt;
+&lt;p&gt;上記の仕様を踏まえてテキストファイルをアップロードする例を挙げます。この次に紹介するJpegファイルのアップロードと比べるとシンプルで分かりやすいと思います。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;POSTリクエストのファイルの指定周り(&lt;code&gt;--foo_bar_baz&lt;/code&gt;部分)を設定します。&lt;/li&gt;
+&lt;li&gt;上記1.のあとPOSTリクエスト全体のサイズが分かるのでヘッダー(&lt;code&gt;POST https://&lt;/code&gt;部分)を設定します。&lt;/li&gt;
+&lt;li&gt;上記1.と2.をPOSTします。&lt;/li&gt;
+&lt;li&gt;データの中身をPOSTします。&lt;/li&gt;
+&lt;li&gt;最後の&amp;rsquo;&amp;ndash;foo_bar_baz&amp;ndash;&amp;lsquo;をPOSTします。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code&gt; void postDrive_Text(String _fileName, String _textData, String _comment) {
+uint8_t DataSize = _textData.length();
+uint8_t postData[DataSize];
+for (int i = 0; i &amp;lt; DataSize; i++) {
+postData[i] = (uint8_t)_textData[i];
+}
+1. POSTリクエストのファイルの指定周りを設定
+String start_request = getStartRequest_Text(_fileName, _comment);
+2. ヘッダーを設定
+uint16_t full_length;
+full_length = start_request.length() + DataSize + end_request.length();
+String postHeader = getPostHeader(full_length);
+String result = &amp;quot;&amp;quot;;
+// Use WiFiClientSecure class to create TLS connection
+WiFiClientSecure client;
+if (!client.connect(host, httpsPort)) {
+Serial.println(&amp;quot;connection failed&amp;quot;);
+return ;
+}
+3. 1.と2.をPOST
+client.print(postHeader + start_request);
+4. データの中身をPOST
+client.write(&amp;amp;postData[0] , DataSize);
+5. --foo_bar_baz--をPOST
+client.println(end_request);
+if (client.connected()) {
+if (client.find(&amp;quot;HTTP/1.1 &amp;quot;)) {
+String status_code = client.readStringUntil(&#39;\r&#39;);
+Serial.print(&amp;quot;Status code: &amp;quot;); Serial.println(status_code);
+if (status_code != &amp;quot;200 OK&amp;quot;) {
+Serial.println(&amp;quot;There was an error&amp;quot;);
+}
+}
+if (client.find(&amp;quot;\r\n\r\n&amp;quot;)) {
+Serial.println(F(&amp;quot;[Read Data]&amp;quot;));
+} else {
+Serial.println(F(&amp;quot;[WARNING] Response Data is Nothing&amp;quot;));
+}
+String line = client.readStringUntil(&#39;\r&#39;);
+Serial.println(line);
+result += line;
+}
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;実際にテキストファイルをアップロードしている様子&#34;&gt;実際にテキストファイルをアップロードしている様子&lt;/h3&gt;
+&lt;p&gt;１. アップロード先のフォルダを作成しておきます。親フォルダIDは「&lt;code&gt;https://drive.google.com/drive/folders/***&lt;/code&gt;」の***の部分です。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/c32ed96f-9dc4-59cb-0eef-c1091b088397.png&#34; alt=&#34;GoogleDrive_Text_0.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;２. NefryBTのセットアップが完了するのを待ちます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/699a3064-ec88-d560-2429-f5cab310ce9b.jpeg&#34; alt=&#34;DSC_0003.JPG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/3b5bc537-b82a-eb2e-a751-077817386f7e.jpeg&#34; alt=&#34;DSC_0005.JPG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;３. セットアップが完了したらNefryBTについているボタンを押します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/cfafe65c-ebb7-d82c-e566-d47436cf7ee9.jpeg&#34; alt=&#34;DSC_0006.JPG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;４. 成功しました！&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/97de4845-f602-0aa5-26ac-064cd47609be.jpeg&#34; alt=&#34;DSC_0007.JPG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;５. GoogleDriveを見てみるとしっかりとアップロードされています！&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/72fae28e-6ac8-4fca-e940-265031c2c8cf.png&#34; alt=&#34;GoogleDrive_Text_1.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/5b5cb82b-7dd1-d3e4-bf3b-bb60bfffdb1a.png&#34; alt=&#34;GoogleDrive_Text_2.PNG&#34; /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;jpegファイルをアップロードする&#34;&gt;Jpegファイルをアップロードする&lt;/h2&gt;
+&lt;p&gt;続いてJpegファイルをアップロードする方法です。&lt;strong&gt;ここからかなり込み入った内容になります。&lt;/strong&gt;
+今回JpegファイルにしてアップロードしたものはNefryBTに接続したカメラモジュールで撮った画像となります。そのためカメラモジュールの話とGoogleDriveへアップロードする話が混在しますのでご了承ください・・・&lt;/p&gt;
+&lt;h3 id=&#34;カメラモジュールについて&#34;&gt;カメラモジュールについて&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/eeaaa02a-2c36-b131-aa32-eeacef9abb63.jpeg&#34; alt=&#34;ArduCAM.jpg&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;使用したカメラモジュールは&lt;a href=&#34;https://www.switch-science.com/catalog/3780/&#34;&gt;Arducam Miniモジュール(2メガピクセル)&lt;/a&gt;です。ESP32向けのサンプルがあったので動かせるだろうと思って選びました。
+(NefryBTのことを考えれば&lt;a href=&#34;https://www.switch-science.com/catalog/1626/&#34;&gt;Groveのカメラ&lt;/a&gt;でも良かったとあとで気づきました・・・)&lt;/p&gt;
+&lt;p&gt;初期設定やカメラモジュールからデータを取得するところは&lt;a href=&#34;https://github.com/NearMugi/NefrySample/tree/master/ArduCAM/OV2640&#34;&gt;プログラムソース&lt;/a&gt;を参照ください。&lt;/p&gt;
+&lt;p&gt;厄介なのは&lt;strong&gt;取得したデータ全てがJpegデータではない&lt;/strong&gt;ことです。このカメラモジュールの場合、1バイト目に0x00が入っています。これ、要らないデータなのです。きちんとJpegファイルにあたるデータをアップロードしないと正しく表示されません。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.setsuki.com/hsp/ext/jpg.htm&#34;&gt;Jpegファイル&lt;/a&gt;は開始位置(0xFFD8)と終了位置(0xFFD9)が決まっています。この範囲のデータだけをアップロードすればJpegファイルとして正しく表示されます。&lt;/p&gt;
+&lt;h3 id=&#34;プログラムのポイント&#34;&gt;プログラムのポイント&lt;/h3&gt;
+&lt;p&gt;カメラモジュールの仕様を踏まえてアップロードします。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Jpegファイルのデータサイズは何十万バイトと膨大なので全て変数に入れて一括でPOSTすることはできません。そのためデータを分割してカメラモジュールから取得、POSTを繰り返します。&lt;/li&gt;
+&lt;li&gt;POSTリクエスト全体のサイズとJpegファイルのサイズが異なるので、&lt;strong&gt;POSTリクエスト全体のサイズに足りない分を最後に0x00をPOSTする&lt;/strong&gt;ことで整合性を合わせています。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;プログラムソースを抜粋します。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;// ReadSizeはカメラモジュールで取得したデータサイズ
+//GoogleDriveへポスト
+String start_request = api.getStartRequest_Jpeg(&amp;quot;Capture&amp;quot;, &amp;quot;From ArduCam&amp;quot;);
+String end_request = api.getEndRequest();
+uint32_t full_length;
+full_length = start_request.length() + ReadSize + end_request.length();
+String postHeader = api.getPostHeader(full_length);
+(中略)
+client.print(postHeader + start_request);
+//JPEGデータ
+static const size_t bufferSize = 2048;
+static uint8_t buffer[bufferSize] = {0xFF};
+uint32_t index = 0;
+uint32_t sizeCnt = 0;
+uint8_t now = 0;
+uint8_t prev = 0;
+myCAM.CS_LOW();
+myCAM.set_fifo_burst();
+カメラモジュールのデータをPOSTしている部分
+bool isHeader = false;
+while (ReadSize--) {
+prev = now;
+now = SPI.transfer(0x00);
+//ヘッダーを探す(0xFF,0xD8)
+if (!isHeader) {
+if (prev == 0xFF &amp;amp;&amp;amp; now == 0xD8) {
+Serial.println(F(&amp;quot;JPEG First Data is Found&amp;quot;));
+buffer[0] = 0xFF;
+buffer[1] = 0xD8;
+index = 2;
+sizeCnt = 2;
+isHeader = true;
+}
+continue;
+}
+//ヘッダーが見つかったあと
+sizeCnt++;
+// JPEGファイルの最後を検出したら終了(0xFF,0xD9)
+if (prev == 0xFF &amp;amp;&amp;amp; now == 0xD9) {
+Serial.println(F(&amp;quot;JPEG Last Data is Found&amp;quot;));
+buffer[index++] = now;
+client.write(&amp;amp;buffer[0], index);
+myCAM.CS_HIGH();
+break;
+}
+if (index &amp;lt; bufferSize) {
+buffer[index] = now;
+index++;
+} else {
+if (!client.connected()) break;
+client.write(&amp;amp;buffer[0], bufferSize);
+index = 0;
+buffer[index++] = now;
+}
+}
+myCAM.CS_HIGH();
+ReadSize += 1;
+Serial.print(F(&amp;quot;JPEG Data Size: &amp;quot;)); Serial.println(sizeCnt);
+Serial.print(F(&amp;quot;Remaining Data Size: &amp;quot;)); Serial.println(ReadSize);
+client.println(end_request);
+POSTリクエスト全体のサイズを調整している部分
+//バッファーメモリサイズと画像サイズが異なるため、full_lengthに達していない。
+//足りない分の帳尻を合わせる
+uint8_t tmpbuf[ReadSize] = {0x00};
+client.write(&amp;amp;tmpbuf[0], ReadSize);
+(以下、省略)
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;実際にjpegファイルをアップロードしている様子&#34;&gt;実際にJpegファイルをアップロードしている様子&lt;/h3&gt;
+&lt;p&gt;１. アップロード先のフォルダはテキストファイルと同じところにします。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/2660eda8-1474-644d-fae2-bba8b87c502d.png&#34; alt=&#34;GoogleDrive_Jpeg_0.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;２. カメラで撮ってみます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/c25e4a34-5b9c-44ff-3f78-b390c2c492de.jpeg&#34; alt=&#34;DSC_0015.JPG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;３. NefryBTのセットアップが完了するのを待ちます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/91963234-adc5-7317-654b-41dbd6b8b9ca.jpeg&#34; alt=&#34;DSC_0010.JPG&#34; /&gt;
+&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/a85255a7-e375-2d75-c7d0-4d126e66b60f.jpeg&#34; alt=&#34;DSC_0012.JPG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;４. セットアップが完了したらNefryBTについているボタンを押します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/6e91d9ac-0e56-6df0-062b-2d158fd75b3e.jpeg&#34; alt=&#34;DSC_0013.JPG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;５. 成功しました！&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/c7291283-ac2a-feb9-d924-9c23963058b1.jpeg&#34; alt=&#34;DSC_0014.JPG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;６. GoogleDriveを見てみるとしっかりとアップロードされています！&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/b9ed65c6-185b-a57c-1877-1bb079b2400f.png&#34; alt=&#34;GoogleDrive_Jpeg_1.PNG&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/fac4420d-d91a-3849-f71c-b17ab86d842f.png&#34; alt=&#34;GoogleDrive_Jpeg_2.PNG&#34; /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;参考にしたサイト&#34;&gt;参考にしたサイト&lt;/h2&gt;
+&lt;p&gt;大変助かりました。&lt;/p&gt;
+&lt;p&gt;*&lt;a href=&#34;https://github.com/jalmeroth/ESP8266-OAUTH2/blob/master/ESP8266-OAUTH2/ESP8266-OAUTH2.ino&#34;&gt;jalmeroth/ESP8266-OAUTH2&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;*&lt;a href=&#34;https://himakan.net/websites/how_to_google_oauth&#34;&gt;Google APIを使用するためにGoogle OAuth認証をしようよ&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;*&lt;a href=&#34;https://zudoh.com/trouble-shooting/google-oauth-expired&#34;&gt;時間が立つとGoogle APIのOAuth認証に失敗する&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;*&lt;a href=&#34;http://indoor.lolipop.jp/IndoorCorgiElec/ESP-SensorCam.php&#34;&gt;ESP-SensorCam&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;NefryBTから直接GoogleDriveにアクセスできたときは感動しました！こんな小さなボードがネットに繋がるなんて！&lt;/p&gt;
+&lt;p&gt;またGmailやスプレッドシートなどの他のアプリケーションにもアクセスできると思います。面白い組み合わせがあるかもしれません。&lt;/p&gt;
+&lt;p&gt;みなさんのIoTライフの参考になれば幸いです。ではでは。&lt;/p&gt;</description></item><item><title>Let&#39;s 顔面製造！第二弾！ 歌うサンタ顔面ロボットを作ろう</title><link>https://dotstud.io/blog/face-robot-making-basic2/</link><pubDate>Wed, 30 Jan 2019 04:43:15 +0900</pubDate><guid>https://dotstud.io/blog/face-robot-making-basic2/</guid><description>
 &lt;p&gt;みなさん、こんにちは！&lt;a href=&#34;https://dotstud.io/members/maruko&#34;&gt;へっぽこまるこ&lt;/a&gt;です！&lt;/p&gt;
 &lt;p&gt;今回は、クリスマスをいい感じに盛り上げてくれるサンタ（っぽい）ロボットを
 &lt;strong&gt;obnizとgoogle home mini&lt;/strong&gt;でつくってみました！&lt;/p&gt;
@@ -3522,155 +3912,6 @@ Donating to EFF: https://eff.org/donate-le
 &lt;/div&gt;
 &lt;div class=&#34;text&#34;&gt;
 完成までたどり着けなかったのは残念ですが、なんかすごそうなので90点です。
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;style&gt;
-.parent {
-position: relative;
-margin: 2em 0;
-}
-.dialogue {
-padding: 30px;
-position: relative;
-margin: auto;
-border: 1px solid #C0C0C0;
-width: 600px;
-display: table;
-box-shadow: 0 3px 4px rgba(0, 0, 0, 0.32);
-}
-.speaker {
-width: 70px;
-height: 70px;
-margin-right: 30px;
-padding-right: 10px;
-display: table-cell;
-vertical-align: middle;
-font-size: 90%;
-}
-.speaker img {
-border-radius: 50%;
-border: 2px solid pink;
-}
-.text {
-display: table-cell;
-padding: 0;
-vertical-align: middle;
-padding-left: 30px;
-}
-&lt;/style&gt;</description></item><item><title>【夏の自由工作2018】学校の工作課題におすすめ！毛糸と和紙を使ってランプシェード作ってみた</title><link>https://dotstud.io/blog/summer-homework-2018-kiki/</link><pubDate>Thu, 16 Aug 2018 12:24:37 +0900</pubDate><guid>https://dotstud.io/blog/summer-homework-2018-kiki/</guid><description>
-&lt;p&gt;みなさんこんにちは、テクニカルエディターの&lt;a href=&#34;https://dotstud.io/members/kiki/&#34;&gt;きき&lt;/a&gt;です。&lt;/p&gt;
-&lt;p&gt;突然ですが、dotstudioで自由工作記事を執筆するということで正直な気持ちを申し上げます。&lt;/p&gt;
-&lt;p&gt;アイデアが何も思い浮かびません。本当に、恥ずかしいことながらこれっっっっぽっっっっちも浮かばないのです。切ない。他のみんなはすごいのに、ううう……。&lt;/p&gt;
-&lt;p&gt;ということで！！！&lt;/p&gt;
-&lt;p&gt;いっそのこと振り切って小学生・中学生の夏休みの自由工作課題向け！&lt;strong&gt;簡単に作れるランプシェード&lt;/strong&gt;を作りまーす！LEDを使っているので許してください……！&lt;/p&gt;
-&lt;h2 id=&#34;準備するよ&#34;&gt;準備するよ&lt;/h2&gt;
-&lt;p&gt;youtubeを見るのが大好きな私は、ひたすら「電子工作 初心者」「電子工作 LED」などのワードでひたすら検索しまくり、見つけたのが今回作るランプシェード。毛糸で作るバージョンと和紙を作るバージョンの2種類作ってみました。&lt;/p&gt;
-&lt;h3 id=&#34;使うもの&#34;&gt;使うもの&lt;/h3&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/204/1.png&#34; alt=&#34;1&#34;&gt;
-&lt;/center&gt;
-&lt;p&gt;【毛糸のランプシェード】&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;毛糸 ×2&lt;/li&gt;
-&lt;li&gt;紙コップ ×1&lt;/li&gt;
-&lt;li&gt;木工用ボンド ×1&lt;/li&gt;
-&lt;li&gt;手袋 ×1&lt;/li&gt;
-&lt;li&gt;水風船 ×好きなだけ&lt;/li&gt;
-&lt;li&gt;ハケ&lt;/li&gt;
-&lt;li&gt;つまようじ ×1&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;【和紙のランプシェード】&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;和紙 ×1（今回はフラワーペーパーを使っています）&lt;/li&gt;
-&lt;li&gt;紙コップ ×1&lt;/li&gt;
-&lt;li&gt;水のり ×1&lt;/li&gt;
-&lt;li&gt;手袋 ×1&lt;/li&gt;
-&lt;li&gt;風船（大きいやつ） ×好きなだけ&lt;/li&gt;
-&lt;li&gt;ハケ&lt;/li&gt;
-&lt;li&gt;つまようじ ×1&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;材料は全部100均で購入できるので準備自体がささっとできます。&lt;/p&gt;
-&lt;h3 id=&#34;使用したled&#34;&gt;使用したLED&lt;/h3&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/204/2.png&#34; alt=&#34;2&#34;&gt;
-&lt;/center&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.amazon.co.jp/LED%E3%82%A4%E3%83%AB%E3%83%9F%E3%83%8D%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E3%83%A9%E3%82%A4%E3%83%88-LeHom-%E3%82%B9%E3%83%88%E3%83%AA%E3%83%B3%E3%82%B0%E3%83%A9%E3%82%A4%E3%83%88-%E3%83%95%E3%82%A7%E3%82%A2%E3%83%AA%E3%83%BC%E3%83%A9%E3%82%A4%E3%83%88-%E3%82%A6%E3%82%A9%E3%83%BC%E3%83%A0%E3%83%9B%E3%83%AF%E3%82%A4%E3%83%88/dp/B075B49YB1&#34;&gt;LEDイルミネーションライト 5M50LED&lt;/a&gt;: &lt;u&gt;単三電池3本で動きます&lt;/u&gt;&lt;/li&gt;
-&lt;li&gt;LEDキャンドルライト: 100均で買いました（100均すごい）&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;早速つくるよ&#34;&gt;早速つくるよ&lt;/h2&gt;
-&lt;h3 id=&#34;毛糸のランプシェードのつくりかた&#34;&gt;毛糸のランプシェードのつくりかた&lt;/h3&gt;
-&lt;p&gt;①楽器を吹くかのような心意気で&lt;strong&gt;水風船を膨らませます&lt;/strong&gt;。大きさは全体的に丸くなるくらいですね。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/204/3.png&#34; alt=&#34;3&#34;&gt;
-&lt;/center&gt;
-&lt;p&gt;今回は9個つくりたいので予備に10個膨らませました。童心に戻りますね。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/204/9.png&#34; alt=&#34;9&#34;&gt;
-&lt;/center&gt;
-&lt;p&gt;②&lt;strong&gt;紙コップに木工用ボンドと水を入れて混ぜます&lt;/strong&gt;。量は目分量です（ざっくり）。&lt;/p&gt;
-&lt;p&gt;③&lt;strong&gt;毛糸を風船にくるくる巻きつけます&lt;/strong&gt;。力加減のバランスが地味に難しくて、緩くなると解けてしまい、きつくなると風船が変形します。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/204/4.png&#34; alt=&#34;4&#34;&gt;
-&lt;/center&gt;
-&lt;p&gt;④&lt;strong&gt;ハケで①で作ったボンド水を毛糸に塗ります。&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;⑤&lt;strong&gt;半日乾かします。&lt;/strong&gt;&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/204/5.png&#34; alt=&#34;5&#34;&gt;
-&lt;/center&gt;
-&lt;p&gt;触ってみて、コツコツ音がなるようになっていたらいい感じです。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/204/6.png&#34; alt=&#34;6&#34;&gt;
-&lt;/center&gt;
-&lt;p&gt;⑥&lt;strong&gt;つまようじで風船を割ります&lt;/strong&gt;。音フェチなら絶対喜ぶであろう音を聞くことができますよ。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/204/7.png&#34; alt=&#34;7&#34;&gt;
-&lt;/center&gt;
-&lt;p&gt;⑦&lt;strong&gt;LEDイルミネーションライトの電球を毛糸の中に入れます&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;完成形はのちほど披露しますね！次は和紙のランプシェードです。&lt;/p&gt;
-&lt;h3 id=&#34;和紙のランプシェードのつくりかた&#34;&gt;和紙のランプシェードのつくりかた&lt;/h3&gt;
-&lt;p&gt;①楽器を吹くかのような心意気の2倍の肺活量で&lt;strong&gt;風船を膨らませます&lt;/strong&gt;。こちらも丸い形になるように膨らませます。&lt;/p&gt;
-&lt;p&gt;②&lt;strong&gt;和紙をちぎります&lt;/strong&gt;。小さくちぎりすぎると貼るときに大変なので、大きいサイズでも用意しておくと疲れません。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/204/8.png&#34; alt=&#34;8&#34;&gt;
-&lt;/center&gt;
-&lt;p&gt;③&lt;strong&gt;紙コップに水のりと水を入れて混ぜます&lt;/strong&gt;。こちらも量は目分量です。&lt;/p&gt;
-&lt;p&gt;④&lt;strong&gt;風船に和紙をペタペタ貼ります&lt;/strong&gt;。破けてしまうと切ないので、三重くらいにしました。&lt;/p&gt;
-&lt;p&gt;⑤&lt;strong&gt;半日乾かします&lt;/strong&gt;。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/204/10.png&#34; alt=&#34;10&#34;&gt;
-&lt;/center&gt;
-&lt;p&gt;⑥&lt;strong&gt;つまようじで風船を割ります&lt;/strong&gt;。毛糸の時とはまた違う音フェチの楽しみがあります。&lt;/p&gt;
-&lt;p&gt;⑦&lt;strong&gt;キャンドルライトの上に被せます&lt;/strong&gt;。&lt;/p&gt;
-&lt;h2 id=&#34;完成したよ&#34;&gt;完成したよ&lt;/h2&gt;
-&lt;h3 id=&#34;毛糸のランプシェードはうつくし&#34;&gt;毛糸のランプシェードはうつくし&lt;/h3&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/204/11.png&#34; alt=&#34;11&#34;&gt;
-&lt;/center&gt;
-&lt;p&gt;思っていたよりそれっぽいインテリア感が出ている……！&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/04fa3635bc80d3d88cda862fc6005dc4.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;チカチカさせるとこんな感じです。&lt;/p&gt;
-&lt;p&gt;我が家の門番、くま大先生にも巻きつけてみました。めっちゃハートウォーミングじゃないですかせんせいっ……！！&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/47c12fa8aad3a4b83883ac8352d34b27.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;
-&lt;center&gt;
-くま大先生「可愛いし、なかなか悪くないね」
-&lt;/center&gt;&lt;/p&gt;
-&lt;h3 id=&#34;和紙のランプシェードはいとをかし&#34;&gt;和紙のランプシェードはいとをかし&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/fa2ca28729df24f48ce5ff5a392aa7e5.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;和紙のランプシェードは、LEDの橙色が強すぎて、ピンク色感がなくなってしまいました。もうちょっと薄めな色のLEDにしたらピンク感出るのかなぁ……。&lt;/p&gt;
-&lt;p&gt;でも、なんだか風情ありますね。心が浄化されます。&lt;/p&gt;
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-&lt;p&gt;お子さま向けの自由工作をやってみましたが、いかがでしたでしょうか？「夏休みの自由課題に何作ればいいんや！」と悩んでいる方はぜひ作ってみてくださいー！&lt;/p&gt;
-&lt;p&gt;ついに明日は自由工作企画最終日！宇宙エンジニアの&lt;a href=&#34;https://dotstud.io/members/takudooon/&#34;&gt;たくろーどん&lt;/a&gt;です！&lt;/p&gt;
-&lt;div class=&#34;parent&#34;&gt;
-&lt;div class=&#34;dialogue&#34;&gt;
-&lt;div class=&#34;speaker&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/members/chantoku/author.png&#34; /&gt;
-&lt;b&gt;ちゃんとく&lt;/b&gt;
-&lt;/div&gt;
-&lt;div class=&#34;text&#34;&gt;
-かわいい。100点。えこひいきです。
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/div&gt;
