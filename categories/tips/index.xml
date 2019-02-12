@@ -1,4 +1,261 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tips on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/categories/tips/</link><description>Recent content in Tips on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Wed, 30 Jan 2019 10:47:09 +0900</lastBuildDate><atom:link href="/categories/tips/" rel="self" type="application/rss+xml"/><item><title>VuePressのブログをカスタムドメイン&#43;SSL対応させたGitLab Pagesにデプロイする</title><link>https://dotstud.io/blog/gitlab-vuepress-custom-domain/</link><pubDate>Wed, 30 Jan 2019 10:47:09 +0900</pubDate><guid>https://dotstud.io/blog/gitlab-vuepress-custom-domain/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tips on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/categories/tips/</link><description>Recent content in Tips on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Tue, 12 Feb 2019 12:20:03 +0900</lastBuildDate><atom:link href="/categories/tips/" rel="self" type="application/rss+xml"/><item><title>CloudflareのAPIをNode.js&#43;GitLab CIから実行してキャッシュクリアしてみよう</title><link>https://dotstud.io/blog/cloudflare-cache-clear-nodejs/</link><pubDate>Tue, 12 Feb 2019 12:20:03 +0900</pubDate><guid>https://dotstud.io/blog/cloudflare-cache-clear-nodejs/</guid><description>
+&lt;p&gt;こんにちは、&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
+&lt;p&gt;過去にも書いているように、dotstudioでは&lt;a href=&#34;https://cloudflare.com&#34;&gt;Cloudflare&lt;/a&gt;を使っています。&lt;/p&gt;
+&lt;section class=&#34;link&#34; id=&#34;239&#34;&gt;
+&lt;div class=&#34;link_content&#34;&gt;
+&lt;a href=&#34;https://dotstud.io/blog/gitlab-vuepress-custom-domain/&#34;&gt;&lt;/a&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/239/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
+&lt;/div&gt;
+&lt;div class=&#34;link_content&#34;&gt;
+&lt;div class=&#34;link_detail&#34;&gt;
+&lt;div class=&#34;link_title&#34;&gt;
+VuePressのブログをカスタムドメイン&amp;#43;SSL対応させたGitLab Pagesにデプロイする
+&lt;/div&gt;
+&lt;div class=&#34;link_date&#34;&gt;
+2019-01-30
+&lt;/div&gt;
+&lt;div class=&#34;link_desc&#34;&gt;
+VuePressで作成したサイトをGitLab CIを使ってGitLab Pagesにデプロイします。Cloudflareを利用してカスタムドメインとSSL対応もしていきます。
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/section&gt;
+&lt;/section&gt;
+&lt;p&gt;無料で使えて便利なのですが、&lt;u&gt;キャッシュが強くて中々更新されないといった現象&lt;/u&gt;があります。&lt;/p&gt;
+&lt;p&gt;調べてみるとCloudflareのAPIでキャッシュクリアが出来るみたいだったのでNode.jsで叩きつつデプロイ時のCIタスクに乗せてみました。&lt;/p&gt;
+&lt;h2 id=&#34;今回の環境&#34;&gt;今回の環境&lt;/h2&gt;
+&lt;p&gt;参考までに今回の筆者の環境です。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;macOS 10.14 Mojave&lt;/li&gt;
+&lt;li&gt;Node.js v11.9.0&lt;/li&gt;
+&lt;li&gt;npm 6.7.0&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;cloudflareでのキャッシュクリア方法&#34;&gt;Cloudflareでのキャッシュクリア方法&lt;/h2&gt;
+&lt;p&gt;APIを使わない場合は、ページから直接削除できます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/242/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Custom Purgeのボタンを押すと、モーダルウィンドウが出てくるのでキャッシュクリアしたいドメインやページを指定しましょう。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/242/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;こんな感じの指定が出来ます。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;https://dotstud.io&lt;/code&gt;のようにメインドメイン指定が出来ます。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;https://hogehoge.dotstud.io&lt;/code&gt;のようにサブドメインでも大丈夫です。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;https://hogehoge.dotstud.io/hoge.html&lt;/code&gt;のようにファイル指定も可能です。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;記述したら&lt;code&gt;Purge&lt;/code&gt;ボタンを押してキャッシュクリアです。&lt;/p&gt;
+&lt;p&gt;確認する際ですが、ブラウザ側のキャッシュが残ってしまってる可能性もあるので、ブラウザのシークレットモードなどでページを開いてあげると確実だと思います。&lt;/p&gt;
+&lt;h2 id=&#34;api経由でcloudflareのキャッシュをクリア&#34;&gt;API経由でCloudflareのキャッシュをクリア&lt;/h2&gt;
+&lt;p&gt;デプロイ時にキャッシュクリアをしたいので、API経由でキャッシュクリアをしてみましょう。&lt;/p&gt;
+&lt;h3 id=&#34;cloudflareのapi-キーの取得&#34;&gt;CloudflareのAPI キーの取得&lt;/h3&gt;
+&lt;p&gt;まずはAPIキーを取得します。右上のユーザーアイコンから&lt;code&gt;My Profile&lt;/code&gt;を選択し、ページ下部のAPI Keysの箇所を確認します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/242/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Global API KeyのViewボタンを押すとパスワード入力を求められるので、パスワードを入力するとAPIキーが表示されます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/242/4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;h3 id=&#34;apiキーを使ってcurlでキャッシュクリアをしてみる&#34;&gt;APIキーを使ってcurlでキャッシュクリアをしてみる&lt;/h3&gt;
+&lt;p&gt;参考記事を元に試してみます。最初からNode.jsでやりたい人はスキップでOKです。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;参考: &lt;a href=&#34;https://blog.mosuke.tech/entry/2017/05/29/how_to_use_cloudflare_api/&#34;&gt;CloudFlare APIを使ってキャッシュを削除する&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;CloudflareのAPIの呼び出しはヘッダーには&lt;code&gt;X-Auth-Email&lt;/code&gt;と&lt;code&gt;X-Auth-Key&lt;/code&gt;の指定、&lt;code&gt;Content-Type: application/json&lt;/code&gt;の指定をする必要があります。&lt;/p&gt;
+&lt;p&gt;手順としては大きく分けて2つSTEPです。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;STEP1. ZONE IDと呼ばれるIDを取得&lt;/li&gt;
+&lt;li&gt;STEP2. ZONE IDを使ってキャッシュクリア&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;以下のコマンドをターミナルなどで実行してみましょう。&lt;/p&gt;
+&lt;h4 id=&#34;step1-zone-idと呼ばれるidを取得&#34;&gt;STEP1. ZONE IDと呼ばれるIDを取得&lt;/h4&gt;
+&lt;p&gt;まずはZONE　IDの取得です。以下のコマンドで取得できます。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;curl -s -X GET &amp;quot;https://api.cloudflare.com/client/v4/zones?name=&amp;lt;MY DOMAIN&amp;gt;&amp;quot; -H &amp;quot;X-Auth-Email: &amp;lt;MY EMAIL&amp;gt;&amp;quot; -H &amp;quot;X-Auth-Key: &amp;lt;MY API KEY&amp;gt;&amp;quot; -H &amp;quot;Content-Type: application/json&amp;quot;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;&amp;lt;MY DOMAIN&amp;gt;&lt;/code&gt;、&lt;code&gt;&amp;lt;MY EMAIL&amp;gt;&lt;/code&gt;、&lt;code&gt;&amp;lt;MY API KEY&amp;gt;&lt;/code&gt;の箇所を適宜変更して実行して下さい。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;それぞれ、自分が管理しているドメイン、登録しているメールアドレス、先ほど取得したAPIキーです。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;実行例&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;curl -s -X GET &amp;quot;https://api.cloudflare.com/client/v4/zones?name=dotstud.io&amp;quot; \
+-H &amp;quot;X-Auth-Email: hogehoge@gmail.com&amp;quot; \
+-H &amp;quot;X-Auth-Key: xxxxxxxxxxxxxxxx&amp;quot; \
+-H &amp;quot;Content-Type: application/json&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;ZONE ID&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;コマンドを実行してエラーがなければ、JSONがかえってきます。ここのidの値がZONE IDになります。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{&amp;quot;result&amp;quot;:[{&amp;quot;id&amp;quot;:&amp;quot;yyyyyyyyyyyyyyyyyyyy&amp;quot;,&amp;quot;name&amp;quot;:&amp;quot;dotstud.io&amp;quot;,&amp;quot;status&amp;quot;:&amp;quot;active&amp;quot;,&amp;quot;paused&amp;quot;:false,&amp;quot;type&amp;quot;:&amp;quot;full&amp;quot;, (......以下省略)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/242/5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;step2-zone-idを使ってキャッシュクリア&#34;&gt;STEP2. ZONE IDを使ってキャッシュクリア&lt;/h4&gt;
+&lt;p&gt;次にZONE IDを使ってキャッシュクリアです。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;curl -X DELETE &amp;quot;https://api.cloudflare.com/client/v4/zones/&amp;lt;ZONE ID&amp;gt;/purge_cache&amp;quot; -H &amp;quot;Content-Type:application/json&amp;quot; -H &amp;quot;X-Auth-Key: &amp;lt;MY EMAIL&amp;gt;&amp;quot; -H &amp;quot;X-Auth-Email: &amp;lt;MY API KEY&amp;gt;&amp;quot; --data &#39;{&amp;quot;files&amp;quot;:[&amp;quot;&amp;lt;TARGET&amp;gt;&amp;quot;]}&#39;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;先ほどと同様に適宜変更します。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;&amp;lt;ZONE ID&amp;gt;&lt;/code&gt;、&lt;code&gt;&amp;lt;MY EMAIL&amp;gt;&lt;/code&gt;、&lt;code&gt;&amp;lt;MY API KEY&amp;gt;&lt;/code&gt;、&lt;code&gt;&amp;lt;TARGET&amp;gt;&lt;/code&gt;の箇所を適宜変更して実行して下さい。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;&amp;lt;ZONE ID&amp;gt;&lt;/code&gt;はSTEP1で取得したZONE IDで、&lt;code&gt;&amp;lt;TARGET&amp;gt;&lt;/code&gt;はキャッシュクリアさせたいドメインやファイル名の指定です。最初にAPI利用なしでCloudflareのサイト上でキャッシュクリアをした時に指定したときと同様の指定ができます。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;実行例&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;curl -X DELETE &amp;quot;https://api.cloudflare.com/client/v4/zones/yyyyyyyyyyyyyyyyyyyy/purge_cache&amp;quot; \
+-H &amp;quot;Content-Type:application/json&amp;quot; \
+-H &amp;quot;X-Auth-Key: xxxxxxxxxxxxxxxx&amp;quot; \
+-H &amp;quot;X-Auth-Email: hogehoge@gmail.com&amp;quot; \
+--data &#39;{&amp;quot;files&amp;quot;:[&amp;quot;https://hogehoge.dotstud.io/&amp;quot;]}&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;成功すると以下のようなレスポンスがあり、キャッシュがクリアされます。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{&amp;quot;result&amp;quot;:{&amp;quot;id&amp;quot;:&amp;quot;yyyyyyyyyyyyyyyyyyyy&amp;quot;},&amp;quot;success&amp;quot;:true,&amp;quot;errors&amp;quot;:[],&amp;quot;messages&amp;quot;:[]}%
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;node-jsでapiを叩いてみる&#34;&gt;Node.jsでAPIを叩いてみる&lt;/h3&gt;
+&lt;p&gt;まずはフォルダやファイルの準備をしましょう。
+mycfフォルダ内に&lt;code&gt;purge_cache.js&lt;/code&gt;というファイルを作成します。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;mkdir mycf
+cd mycf
+touch purge_cache.js
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;HTTPリクエストを利用する為に&lt;a href=&#34;https://www.npmjs.com/package/axios&#34;&gt;axios&lt;/a&gt;をインストールします。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;npm init -y
+npm i axios
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;purge_cache.js&lt;/code&gt;に以下の内容をコピペして、&lt;code&gt;YOUREMAIL&lt;/code&gt;、&lt;code&gt;APIKEY&lt;/code&gt;、&lt;code&gt;PURGE_TARGETS&lt;/code&gt;を適宜書き換えましょう。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
+const YOUREMAIL = `hogehoge@gmail.com`; //Cloudflareに登録してるメールアドレス
+const APIKEY = `xxxxxxxxxxxxxxxxx`; //CloudflareのAPI KEY
+const PURGE_TARGETS = [`https://hogehoge.dotstud.io`]; //消す対象ページ
+const axiosBase = require(&#39;axios&#39;);
+const axios = axiosBase.create({
+baseURL: `https://api.cloudflare.com/client/v4/zones`,
+headers: {
+&#39;Content-Type&#39;: &#39;application/json&#39;,
+&#39;X-Auth-Key&#39;: APIKEY,
+&#39;X-Auth-Email&#39;: YOUREMAIL
+}
+})
+const main = async() =&amp;gt; {
+try {
+//STEP1. ZoneIDの取得
+let res = await axios.get(&#39;/&#39;);
+const zoneid = res.data.result[0].id;
+//STEP2. キャッシュ削除
+res = await axios.delete(`/${zoneid}/purge_cache`,{
+data: {
+files: PURGE_TARGETS
+}
+});
+console.log(res.data);
+} catch (error) {
+console.log(error.response.data)
+}
+}
+main();
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;実行します。エラーが出なければこれでキャッシュクリアされます。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;node purge_cache.js
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;これでNode.jsからCloudflareのキャッシュクリアをすることが出来ました。&lt;/p&gt;
+&lt;h2 id=&#34;gitlab-ciのタスクで実行する&#34;&gt;GitLab CIのタスクで実行する&lt;/h2&gt;
+&lt;p&gt;実際にデプロイした際にキャッシュクリアされるようにしたいのでGitLab CIのタスクに入れ込みました。&lt;/p&gt;
+&lt;h3 id=&#34;ソースコードの変更&#34;&gt;ソースコードの変更&lt;/h3&gt;
+&lt;p&gt;先ほどソースコード上に書いていた&lt;code&gt;YOUREMAIL&lt;/code&gt;などの値は環境変数から取得するように&lt;code&gt;purge_cache.js&lt;/code&gt;を変更しました。また、最後(STEP3)にDiscordにデプロイ成功を通知する処理も追加しています。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
+if(!process.env.YOUREMAIL || !process.env.APIKEY || !process.env.PURGE_TARGET){
+console.log(&#39;環境変数が足りません&#39;);
+return;
+}
+const YOUREMAIL = process.env.YOUREMAIL; //Cloudflareに登録してるメールアドレス
+const APIKEY = process.env.APIKEY; //CloudflareのAPI KEY
+const PURGE_TARGETS = [process.env.PURGE_TARGET]; //消す対象ページ
+const axiosBase = require(&#39;axios&#39;);
+const axios = axiosBase.create({
+baseURL: `https://api.cloudflare.com/client/v4/zones`,
+headers: {
+&#39;Content-Type&#39;: &#39;application/json&#39;,
+&#39;X-Auth-Key&#39;: APIKEY,
+&#39;X-Auth-Email&#39;: YOUREMAIL
+}
+})
+const main = async() =&amp;gt; {
+try {
+//STEP1. ZoneIDの取得
+let res = await axios.get(&#39;/&#39;);
+const zoneid = res.data.result[0].id;
+//STEP2. キャッシュ削除
+res = await axios.delete(`/${zoneid}/purge_cache`,{
+data: {
+files: PURGE_TARGETS
+}
+});
+console.log(res.data);
+//STEP3. Discordへ通知
+res = await axiosBase.post(process.env.DISCORD_WEBHOOK_URL,{
+content: &#39;デプロイ成功 &amp;amp; キャッシュクリア&#39;
+});
+console.log(res.data);
+} catch (error) {
+console.log(error.response.data)
+}
+}
+main();
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;package-jsonの変更&#34;&gt;package.jsonの変更&lt;/h3&gt;
+&lt;p&gt;また、先日書いた記事にもあるような、VuePressのデプロイフローに今回のタスクを乗せていきます。&lt;/p&gt;
+&lt;section class=&#34;link&#34; id=&#34;239&#34;&gt;
+&lt;div class=&#34;link_content&#34;&gt;
+&lt;a href=&#34;https://dotstud.io/blog/gitlab-vuepress-custom-domain/&#34;&gt;&lt;/a&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/239/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
+&lt;/div&gt;
+&lt;div class=&#34;link_content&#34;&gt;
+&lt;div class=&#34;link_detail&#34;&gt;
+&lt;div class=&#34;link_title&#34;&gt;
+VuePressのブログをカスタムドメイン&amp;#43;SSL対応させたGitLab Pagesにデプロイする
+&lt;/div&gt;
+&lt;div class=&#34;link_date&#34;&gt;
+2019-01-30
+&lt;/div&gt;
+&lt;div class=&#34;link_desc&#34;&gt;
+VuePressで作成したサイトをGitLab CIを使ってGitLab Pagesにデプロイします。Cloudflareを利用してカスタムドメインとSSL対応もしていきます。
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/section&gt;
+&lt;/section&gt;
+&lt;p&gt;&lt;code&gt;package.json&lt;/code&gt;に&lt;code&gt;ci:purge_cache&lt;/code&gt;を追加して&lt;code&gt;purge_cache.js&lt;/code&gt;を実行するスクリプトを追加します。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;(省略)
+&amp;quot;scripts&amp;quot;: {
+&amp;quot;dev&amp;quot;: &amp;quot;vuepress dev docs&amp;quot;,
+&amp;quot;build&amp;quot;: &amp;quot;vuepress build docs&amp;quot;,
+&amp;quot;ci:purge_cache&amp;quot;: &amp;quot;node purge_cache.js&amp;quot;,
+},
+(省略)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;gitlab-ci-ymlの変更&#34;&gt;.gitlab-ci.ymlの変更&lt;/h3&gt;
+&lt;p&gt;GitLab CIの挙動として&lt;code&gt;.gitlab-ci.yml&lt;/code&gt;の記述は以下のようにしています。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;after_script&lt;/code&gt;の箇所で&lt;code&gt;npm run ci:purge_cache&lt;/code&gt;をすることで、デプロイが終わった後に&lt;code&gt;purge_cache.js&lt;/code&gt;が実行されてキャッシュクリアがされます。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;image: node:current-alpine
+pages:
+cache:
+paths:
+- node_modules/
+before_script:
+- node -v
+- npm i
+script:
+- npm run build
+- cp docs/robots.txt docs/.vuepress/dist #限定公開の場合
+- cp -pr docs/.vuepress/dist public
+after_script:
+- npm run ci:purge_cache #Cloudflareのキャッシュクリア &amp;amp; Discordへ通知
+artifacts:
+paths:
+- public
+only:
+- master
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;環境変数の登録&#34;&gt;環境変数の登録&lt;/h3&gt;
+&lt;p&gt;GitLabのリポジトリから環境変数を追加することができます。&lt;/p&gt;
+&lt;p&gt;リポジトリの&lt;code&gt;Settings&amp;gt;CI/CD&lt;/code&gt;から&lt;code&gt;Environment variables&lt;/code&gt;の箇所を開きます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/242/6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;各値を名前をソースコードに記述した変数名と一致させつつ設定しましょう。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/242/7.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;ここまでの手順が出来るとデプロイするたびに、Cloudflareのキャッシュがクリアされて、なかなか更新されない問題が解消できると思います。&lt;/p&gt;
+&lt;p&gt;これでもページが更新されない場合はブラウザ側でキャッシュされている可能性が高いのでシークレットモードなどで確認したり、ブラウザを変えてみるのがベターだと思います。&lt;/p&gt;
+&lt;p&gt;キャッシュコントロールをしてCloudflareをもっと便利に使っていきましょう。&lt;/p&gt;
+&lt;p&gt;それでは！&lt;/p&gt;</description></item><item><title>VuePressのブログをカスタムドメイン&#43;SSL対応させたGitLab Pagesにデプロイする</title><link>https://dotstud.io/blog/gitlab-vuepress-custom-domain/</link><pubDate>Wed, 30 Jan 2019 10:47:09 +0900</pubDate><guid>https://dotstud.io/blog/gitlab-vuepress-custom-domain/</guid><description>
 &lt;p&gt;こんにちは、最近スパにハマっている&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
 &lt;p&gt;今日はタイトル通り&lt;strong&gt;VuePressで作ったブログをGitLab Pagesに乗せてカスタムドメイン+SSL対応していきます。&lt;/strong&gt; 2019年1月時点版です。UIなどはガンガン変わっていくと思いますので適宜読み替えましょう。&lt;/p&gt;
 &lt;p&gt;過去に書いたこの記事とは別のサイトの運用話です。&lt;/p&gt;
@@ -2050,48 +2307,4 @@ range: &#39;Class Data!A2:E&#39;,
 &lt;blockquote&gt;
 &lt;p&gt;&lt;a href=&#34;https://qiita.com/n0bisuke/items/3313a64c56317932919e&#34;&gt;勉強会( #IoTLT )の登壇者管理でHeadless Chromeを利用している話&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;それでは！&lt;/p&gt;</description></item><item><title>【祝！移転】電気街すぐそこ！dotstudioのオフィスが移転しました！【D.I.Y】</title><link>https://dotstud.io/blog/office-relocation-for-akihabara/</link><pubDate>Thu, 16 Nov 2017 00:00:00 +0000</pubDate><guid>https://dotstud.io/blog/office-relocation-for-akihabara/</guid><description>
-&lt;p&gt;こんにちは、ちゃんとくです。もうすっかり冬ですね。なかなか出歩くのが億劫な季節になりました。&lt;/p&gt;
-&lt;p&gt;でもオフィスから電気街遠い……駅も遠い……ってことで&lt;strong&gt;オフィス移転しましたー！！！&lt;/strong&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/132/1.png&#34; alt=&#34;&#34; /&gt;
-今回は新オフィスの様子をたっぷりお伝えしたいと思います！！&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/132/2.png&#34; alt=&#34;&#34; /&gt;
-ちなみにこちらが入居時の様子です。内装屋さんに頼んで、天井と床を剥いでもらいました。ペンキ塗りと床貼りのさまざまな知見（not IT）を得たのでいずれ記事にしたいと思います。&lt;/p&gt;
-&lt;h2 id=&#34;移転場所は電気街すぐ&#34;&gt;移転場所は電気街すぐ！&lt;/h2&gt;
-&lt;p&gt;新しいオフィスを選ぶにあたっての一番の条件は「&lt;strong&gt;電気街に近いこと&lt;/strong&gt;」だったので、電気街すぐの場所に移動しました！
-&lt;img src=&#34;https://dotstud.io/img/blog/132/5.png&#34; alt=&#34;&#34; /&gt;
-秋月、千石、ツクモなどのパーツ屋さんはもちろん、カレーにラーメンにケバブなど、美味しいお店もたくさんあって嬉しいです（泣）&lt;/p&gt;
-&lt;h2 id=&#34;オフィス内をチラ見せ&#34;&gt;オフィス内をチラ見せ！&lt;/h2&gt;
-&lt;p&gt;オフィスの中を紹介します！改装中なのでなにかとお見苦しいですが、&lt;strong&gt;らしさ&lt;/strong&gt;ということでお願いいたします。
-&lt;img src=&#34;https://dotstud.io/img/blog/132/map.png&#34; alt=&#34;&#34; /&gt;
-ざっくりとした配置（予定）はこんな感じ。&lt;/p&gt;
-&lt;h3 id=&#34;エントランス&#34;&gt;エントランス&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/132/3.png&#34; alt=&#34;&#34; /&gt;
-扉を開けると、ぺっぱーくんがお出迎えしてくれます。生気がないのは気のせいです。&lt;/p&gt;
-&lt;p&gt;中が丸見えで残念な感じですが、パーテーションを立てて草で装飾してステキな感じになる予定です。&lt;/p&gt;
-&lt;h3 id=&#34;打ち合わせスペース&#34;&gt;打ち合わせスペース&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/132/4.png&#34; alt=&#34;&#34; /&gt;
-入って左は、来客用の打ち合わせスペースです。現状だと&lt;strong&gt;机が足りない&lt;/strong&gt;のでかなりタイトな感じになっています。&lt;/p&gt;
-&lt;p&gt;コーヒーメーカーが導入されたのでお客様にコーヒーが出せるようになりました！！（ブラックのみ）&lt;/p&gt;
-&lt;h3 id=&#34;ハンズオンスペース&#34;&gt;ハンズオンスペース&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/132/6.png&#34; alt=&#34;&#34; /&gt;
-ここが待望だったハンズオンスペースです。&lt;strong&gt;心の目で見てください&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;壁一面のデバイス棚、巨大モニター、芝生カーペットの上に半田ごて作業スペース……素敵ですよね。ここでイベントを開催する日が待ち遠しいです。&lt;/p&gt;
-&lt;p&gt;※dotstudioはいま圧倒的に&lt;a href=&#34;http://amzn.asia/8KHCkEv&#34;&gt;床と照明&lt;/a&gt;が不足しています。&lt;/p&gt;
-&lt;h3 id=&#34;キッチンスペース&#34;&gt;キッチンスペース&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/132/8.png&#34; alt=&#34;&#34; /&gt;
-NYはブルックリンスタイルをイメージした自慢のオシャレキッチン（予定地）です。&lt;/p&gt;
-&lt;p&gt;テーブルとハイチェアを増設してバーカウンターみたいなやつを作ったり作らなかったりするかもしれない。&lt;/p&gt;
-&lt;h3 id=&#34;執務スペース&#34;&gt;執務スペース&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/132/9.png&#34; alt=&#34;&#34; /&gt;
-会社のメイン機能である執務スペース！個人の引き出しやモニタが追加されました。日当たりがよくて眠かったり画面見えなかったりしますが、わたし的に一番好きな場所です。&lt;/p&gt;
-&lt;p&gt;床（自分たちで貼った）が完全に乾いたら、みんな大好きな良いイスが導入されるよ！&lt;/p&gt;
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-&lt;p&gt;床が足りなかったり、棚がなかったり、電球少なくて暗かったり……。新オフィスはまだまだ作っている途中です。
-旧オフィスにも荷物があるので、こんな感じでちまちまと物を運んでいます。
-&lt;img src=&#34;https://dotstud.io/img/blog/132/10.png&#34; alt=&#34;&#34; /&gt;
-いつ来ても楽しくくつろいで過ごせるオフィスを目指して頑張っていきます！&lt;/p&gt;
-&lt;p&gt;ということで&lt;strong&gt;&lt;a href=&#34;http://amzn.asia/8KHCkEv&#34;&gt;ウィッシュリスト&lt;/a&gt;&lt;/strong&gt;も作りましたのでよかったら応援おねがいします（笑）&lt;/p&gt;
-&lt;h3 id=&#34;おまけ&#34;&gt;おまけ&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/132/sushi.png&#34; alt=&#34;&#34; /&gt;
-慰労寿司パ（定期）&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;それでは！&lt;/p&gt;</description></item></channel></rss>

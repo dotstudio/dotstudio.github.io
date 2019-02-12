@@ -1,4 +1,261 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Nodejs on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/nodejs/</link><description>Recent content in Nodejs on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Thu, 31 Jan 2019 03:21:47 +0900</lastBuildDate><atom:link href="/series/nodejs/" rel="self" type="application/rss+xml"/><item><title>NefryBTからGoogleDriveにデータをアップロードする方法</title><link>https://dotstud.io/blog/update-nefrybt-to-googledrive/</link><pubDate>Thu, 31 Jan 2019 03:21:47 +0900</pubDate><guid>https://dotstud.io/blog/update-nefrybt-to-googledrive/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Nodejs on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/nodejs/</link><description>Recent content in Nodejs on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Tue, 12 Feb 2019 12:20:03 +0900</lastBuildDate><atom:link href="/series/nodejs/" rel="self" type="application/rss+xml"/><item><title>CloudflareのAPIをNode.js&#43;GitLab CIから実行してキャッシュクリアしてみよう</title><link>https://dotstud.io/blog/cloudflare-cache-clear-nodejs/</link><pubDate>Tue, 12 Feb 2019 12:20:03 +0900</pubDate><guid>https://dotstud.io/blog/cloudflare-cache-clear-nodejs/</guid><description>
+&lt;p&gt;こんにちは、&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
+&lt;p&gt;過去にも書いているように、dotstudioでは&lt;a href=&#34;https://cloudflare.com&#34;&gt;Cloudflare&lt;/a&gt;を使っています。&lt;/p&gt;
+&lt;section class=&#34;link&#34; id=&#34;239&#34;&gt;
+&lt;div class=&#34;link_content&#34;&gt;
+&lt;a href=&#34;https://dotstud.io/blog/gitlab-vuepress-custom-domain/&#34;&gt;&lt;/a&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/239/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
+&lt;/div&gt;
+&lt;div class=&#34;link_content&#34;&gt;
+&lt;div class=&#34;link_detail&#34;&gt;
+&lt;div class=&#34;link_title&#34;&gt;
+VuePressのブログをカスタムドメイン&amp;#43;SSL対応させたGitLab Pagesにデプロイする
+&lt;/div&gt;
+&lt;div class=&#34;link_date&#34;&gt;
+2019-01-30
+&lt;/div&gt;
+&lt;div class=&#34;link_desc&#34;&gt;
+VuePressで作成したサイトをGitLab CIを使ってGitLab Pagesにデプロイします。Cloudflareを利用してカスタムドメインとSSL対応もしていきます。
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/section&gt;
+&lt;/section&gt;
+&lt;p&gt;無料で使えて便利なのですが、&lt;u&gt;キャッシュが強くて中々更新されないといった現象&lt;/u&gt;があります。&lt;/p&gt;
+&lt;p&gt;調べてみるとCloudflareのAPIでキャッシュクリアが出来るみたいだったのでNode.jsで叩きつつデプロイ時のCIタスクに乗せてみました。&lt;/p&gt;
+&lt;h2 id=&#34;今回の環境&#34;&gt;今回の環境&lt;/h2&gt;
+&lt;p&gt;参考までに今回の筆者の環境です。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;macOS 10.14 Mojave&lt;/li&gt;
+&lt;li&gt;Node.js v11.9.0&lt;/li&gt;
+&lt;li&gt;npm 6.7.0&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;cloudflareでのキャッシュクリア方法&#34;&gt;Cloudflareでのキャッシュクリア方法&lt;/h2&gt;
+&lt;p&gt;APIを使わない場合は、ページから直接削除できます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/242/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Custom Purgeのボタンを押すと、モーダルウィンドウが出てくるのでキャッシュクリアしたいドメインやページを指定しましょう。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/242/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;こんな感じの指定が出来ます。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;https://dotstud.io&lt;/code&gt;のようにメインドメイン指定が出来ます。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;https://hogehoge.dotstud.io&lt;/code&gt;のようにサブドメインでも大丈夫です。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;https://hogehoge.dotstud.io/hoge.html&lt;/code&gt;のようにファイル指定も可能です。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;記述したら&lt;code&gt;Purge&lt;/code&gt;ボタンを押してキャッシュクリアです。&lt;/p&gt;
+&lt;p&gt;確認する際ですが、ブラウザ側のキャッシュが残ってしまってる可能性もあるので、ブラウザのシークレットモードなどでページを開いてあげると確実だと思います。&lt;/p&gt;
+&lt;h2 id=&#34;api経由でcloudflareのキャッシュをクリア&#34;&gt;API経由でCloudflareのキャッシュをクリア&lt;/h2&gt;
+&lt;p&gt;デプロイ時にキャッシュクリアをしたいので、API経由でキャッシュクリアをしてみましょう。&lt;/p&gt;
+&lt;h3 id=&#34;cloudflareのapi-キーの取得&#34;&gt;CloudflareのAPI キーの取得&lt;/h3&gt;
+&lt;p&gt;まずはAPIキーを取得します。右上のユーザーアイコンから&lt;code&gt;My Profile&lt;/code&gt;を選択し、ページ下部のAPI Keysの箇所を確認します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/242/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Global API KeyのViewボタンを押すとパスワード入力を求められるので、パスワードを入力するとAPIキーが表示されます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/242/4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;h3 id=&#34;apiキーを使ってcurlでキャッシュクリアをしてみる&#34;&gt;APIキーを使ってcurlでキャッシュクリアをしてみる&lt;/h3&gt;
+&lt;p&gt;参考記事を元に試してみます。最初からNode.jsでやりたい人はスキップでOKです。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;参考: &lt;a href=&#34;https://blog.mosuke.tech/entry/2017/05/29/how_to_use_cloudflare_api/&#34;&gt;CloudFlare APIを使ってキャッシュを削除する&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;CloudflareのAPIの呼び出しはヘッダーには&lt;code&gt;X-Auth-Email&lt;/code&gt;と&lt;code&gt;X-Auth-Key&lt;/code&gt;の指定、&lt;code&gt;Content-Type: application/json&lt;/code&gt;の指定をする必要があります。&lt;/p&gt;
+&lt;p&gt;手順としては大きく分けて2つSTEPです。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;STEP1. ZONE IDと呼ばれるIDを取得&lt;/li&gt;
+&lt;li&gt;STEP2. ZONE IDを使ってキャッシュクリア&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;以下のコマンドをターミナルなどで実行してみましょう。&lt;/p&gt;
+&lt;h4 id=&#34;step1-zone-idと呼ばれるidを取得&#34;&gt;STEP1. ZONE IDと呼ばれるIDを取得&lt;/h4&gt;
+&lt;p&gt;まずはZONE　IDの取得です。以下のコマンドで取得できます。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;curl -s -X GET &amp;quot;https://api.cloudflare.com/client/v4/zones?name=&amp;lt;MY DOMAIN&amp;gt;&amp;quot; -H &amp;quot;X-Auth-Email: &amp;lt;MY EMAIL&amp;gt;&amp;quot; -H &amp;quot;X-Auth-Key: &amp;lt;MY API KEY&amp;gt;&amp;quot; -H &amp;quot;Content-Type: application/json&amp;quot;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;&amp;lt;MY DOMAIN&amp;gt;&lt;/code&gt;、&lt;code&gt;&amp;lt;MY EMAIL&amp;gt;&lt;/code&gt;、&lt;code&gt;&amp;lt;MY API KEY&amp;gt;&lt;/code&gt;の箇所を適宜変更して実行して下さい。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;それぞれ、自分が管理しているドメイン、登録しているメールアドレス、先ほど取得したAPIキーです。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;実行例&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;curl -s -X GET &amp;quot;https://api.cloudflare.com/client/v4/zones?name=dotstud.io&amp;quot; \
+-H &amp;quot;X-Auth-Email: hogehoge@gmail.com&amp;quot; \
+-H &amp;quot;X-Auth-Key: xxxxxxxxxxxxxxxx&amp;quot; \
+-H &amp;quot;Content-Type: application/json&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;ZONE ID&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;コマンドを実行してエラーがなければ、JSONがかえってきます。ここのidの値がZONE IDになります。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{&amp;quot;result&amp;quot;:[{&amp;quot;id&amp;quot;:&amp;quot;yyyyyyyyyyyyyyyyyyyy&amp;quot;,&amp;quot;name&amp;quot;:&amp;quot;dotstud.io&amp;quot;,&amp;quot;status&amp;quot;:&amp;quot;active&amp;quot;,&amp;quot;paused&amp;quot;:false,&amp;quot;type&amp;quot;:&amp;quot;full&amp;quot;, (......以下省略)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/242/5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;step2-zone-idを使ってキャッシュクリア&#34;&gt;STEP2. ZONE IDを使ってキャッシュクリア&lt;/h4&gt;
+&lt;p&gt;次にZONE IDを使ってキャッシュクリアです。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;curl -X DELETE &amp;quot;https://api.cloudflare.com/client/v4/zones/&amp;lt;ZONE ID&amp;gt;/purge_cache&amp;quot; -H &amp;quot;Content-Type:application/json&amp;quot; -H &amp;quot;X-Auth-Key: &amp;lt;MY EMAIL&amp;gt;&amp;quot; -H &amp;quot;X-Auth-Email: &amp;lt;MY API KEY&amp;gt;&amp;quot; --data &#39;{&amp;quot;files&amp;quot;:[&amp;quot;&amp;lt;TARGET&amp;gt;&amp;quot;]}&#39;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;先ほどと同様に適宜変更します。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;&amp;lt;ZONE ID&amp;gt;&lt;/code&gt;、&lt;code&gt;&amp;lt;MY EMAIL&amp;gt;&lt;/code&gt;、&lt;code&gt;&amp;lt;MY API KEY&amp;gt;&lt;/code&gt;、&lt;code&gt;&amp;lt;TARGET&amp;gt;&lt;/code&gt;の箇所を適宜変更して実行して下さい。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;&amp;lt;ZONE ID&amp;gt;&lt;/code&gt;はSTEP1で取得したZONE IDで、&lt;code&gt;&amp;lt;TARGET&amp;gt;&lt;/code&gt;はキャッシュクリアさせたいドメインやファイル名の指定です。最初にAPI利用なしでCloudflareのサイト上でキャッシュクリアをした時に指定したときと同様の指定ができます。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;実行例&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;curl -X DELETE &amp;quot;https://api.cloudflare.com/client/v4/zones/yyyyyyyyyyyyyyyyyyyy/purge_cache&amp;quot; \
+-H &amp;quot;Content-Type:application/json&amp;quot; \
+-H &amp;quot;X-Auth-Key: xxxxxxxxxxxxxxxx&amp;quot; \
+-H &amp;quot;X-Auth-Email: hogehoge@gmail.com&amp;quot; \
+--data &#39;{&amp;quot;files&amp;quot;:[&amp;quot;https://hogehoge.dotstud.io/&amp;quot;]}&#39;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;成功すると以下のようなレスポンスがあり、キャッシュがクリアされます。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;{&amp;quot;result&amp;quot;:{&amp;quot;id&amp;quot;:&amp;quot;yyyyyyyyyyyyyyyyyyyy&amp;quot;},&amp;quot;success&amp;quot;:true,&amp;quot;errors&amp;quot;:[],&amp;quot;messages&amp;quot;:[]}%
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;node-jsでapiを叩いてみる&#34;&gt;Node.jsでAPIを叩いてみる&lt;/h3&gt;
+&lt;p&gt;まずはフォルダやファイルの準備をしましょう。
+mycfフォルダ内に&lt;code&gt;purge_cache.js&lt;/code&gt;というファイルを作成します。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;mkdir mycf
+cd mycf
+touch purge_cache.js
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;HTTPリクエストを利用する為に&lt;a href=&#34;https://www.npmjs.com/package/axios&#34;&gt;axios&lt;/a&gt;をインストールします。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;npm init -y
+npm i axios
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;purge_cache.js&lt;/code&gt;に以下の内容をコピペして、&lt;code&gt;YOUREMAIL&lt;/code&gt;、&lt;code&gt;APIKEY&lt;/code&gt;、&lt;code&gt;PURGE_TARGETS&lt;/code&gt;を適宜書き換えましょう。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
+const YOUREMAIL = `hogehoge@gmail.com`; //Cloudflareに登録してるメールアドレス
+const APIKEY = `xxxxxxxxxxxxxxxxx`; //CloudflareのAPI KEY
+const PURGE_TARGETS = [`https://hogehoge.dotstud.io`]; //消す対象ページ
+const axiosBase = require(&#39;axios&#39;);
+const axios = axiosBase.create({
+baseURL: `https://api.cloudflare.com/client/v4/zones`,
+headers: {
+&#39;Content-Type&#39;: &#39;application/json&#39;,
+&#39;X-Auth-Key&#39;: APIKEY,
+&#39;X-Auth-Email&#39;: YOUREMAIL
+}
+})
+const main = async() =&amp;gt; {
+try {
+//STEP1. ZoneIDの取得
+let res = await axios.get(&#39;/&#39;);
+const zoneid = res.data.result[0].id;
+//STEP2. キャッシュ削除
+res = await axios.delete(`/${zoneid}/purge_cache`,{
+data: {
+files: PURGE_TARGETS
+}
+});
+console.log(res.data);
+} catch (error) {
+console.log(error.response.data)
+}
+}
+main();
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;実行します。エラーが出なければこれでキャッシュクリアされます。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;node purge_cache.js
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;これでNode.jsからCloudflareのキャッシュクリアをすることが出来ました。&lt;/p&gt;
+&lt;h2 id=&#34;gitlab-ciのタスクで実行する&#34;&gt;GitLab CIのタスクで実行する&lt;/h2&gt;
+&lt;p&gt;実際にデプロイした際にキャッシュクリアされるようにしたいのでGitLab CIのタスクに入れ込みました。&lt;/p&gt;
+&lt;h3 id=&#34;ソースコードの変更&#34;&gt;ソースコードの変更&lt;/h3&gt;
+&lt;p&gt;先ほどソースコード上に書いていた&lt;code&gt;YOUREMAIL&lt;/code&gt;などの値は環境変数から取得するように&lt;code&gt;purge_cache.js&lt;/code&gt;を変更しました。また、最後(STEP3)にDiscordにデプロイ成功を通知する処理も追加しています。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
+if(!process.env.YOUREMAIL || !process.env.APIKEY || !process.env.PURGE_TARGET){
+console.log(&#39;環境変数が足りません&#39;);
+return;
+}
+const YOUREMAIL = process.env.YOUREMAIL; //Cloudflareに登録してるメールアドレス
+const APIKEY = process.env.APIKEY; //CloudflareのAPI KEY
+const PURGE_TARGETS = [process.env.PURGE_TARGET]; //消す対象ページ
+const axiosBase = require(&#39;axios&#39;);
+const axios = axiosBase.create({
+baseURL: `https://api.cloudflare.com/client/v4/zones`,
+headers: {
+&#39;Content-Type&#39;: &#39;application/json&#39;,
+&#39;X-Auth-Key&#39;: APIKEY,
+&#39;X-Auth-Email&#39;: YOUREMAIL
+}
+})
+const main = async() =&amp;gt; {
+try {
+//STEP1. ZoneIDの取得
+let res = await axios.get(&#39;/&#39;);
+const zoneid = res.data.result[0].id;
+//STEP2. キャッシュ削除
+res = await axios.delete(`/${zoneid}/purge_cache`,{
+data: {
+files: PURGE_TARGETS
+}
+});
+console.log(res.data);
+//STEP3. Discordへ通知
+res = await axiosBase.post(process.env.DISCORD_WEBHOOK_URL,{
+content: &#39;デプロイ成功 &amp;amp; キャッシュクリア&#39;
+});
+console.log(res.data);
+} catch (error) {
+console.log(error.response.data)
+}
+}
+main();
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;package-jsonの変更&#34;&gt;package.jsonの変更&lt;/h3&gt;
+&lt;p&gt;また、先日書いた記事にもあるような、VuePressのデプロイフローに今回のタスクを乗せていきます。&lt;/p&gt;
+&lt;section class=&#34;link&#34; id=&#34;239&#34;&gt;
+&lt;div class=&#34;link_content&#34;&gt;
+&lt;a href=&#34;https://dotstud.io/blog/gitlab-vuepress-custom-domain/&#34;&gt;&lt;/a&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/239/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
+&lt;/div&gt;
+&lt;div class=&#34;link_content&#34;&gt;
+&lt;div class=&#34;link_detail&#34;&gt;
+&lt;div class=&#34;link_title&#34;&gt;
+VuePressのブログをカスタムドメイン&amp;#43;SSL対応させたGitLab Pagesにデプロイする
+&lt;/div&gt;
+&lt;div class=&#34;link_date&#34;&gt;
+2019-01-30
+&lt;/div&gt;
+&lt;div class=&#34;link_desc&#34;&gt;
+VuePressで作成したサイトをGitLab CIを使ってGitLab Pagesにデプロイします。Cloudflareを利用してカスタムドメインとSSL対応もしていきます。
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/section&gt;
+&lt;/section&gt;
+&lt;p&gt;&lt;code&gt;package.json&lt;/code&gt;に&lt;code&gt;ci:purge_cache&lt;/code&gt;を追加して&lt;code&gt;purge_cache.js&lt;/code&gt;を実行するスクリプトを追加します。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;(省略)
+&amp;quot;scripts&amp;quot;: {
+&amp;quot;dev&amp;quot;: &amp;quot;vuepress dev docs&amp;quot;,
+&amp;quot;build&amp;quot;: &amp;quot;vuepress build docs&amp;quot;,
+&amp;quot;ci:purge_cache&amp;quot;: &amp;quot;node purge_cache.js&amp;quot;,
+},
+(省略)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;gitlab-ci-ymlの変更&#34;&gt;.gitlab-ci.ymlの変更&lt;/h3&gt;
+&lt;p&gt;GitLab CIの挙動として&lt;code&gt;.gitlab-ci.yml&lt;/code&gt;の記述は以下のようにしています。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;after_script&lt;/code&gt;の箇所で&lt;code&gt;npm run ci:purge_cache&lt;/code&gt;をすることで、デプロイが終わった後に&lt;code&gt;purge_cache.js&lt;/code&gt;が実行されてキャッシュクリアがされます。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;image: node:current-alpine
+pages:
+cache:
+paths:
+- node_modules/
+before_script:
+- node -v
+- npm i
+script:
+- npm run build
+- cp docs/robots.txt docs/.vuepress/dist #限定公開の場合
+- cp -pr docs/.vuepress/dist public
+after_script:
+- npm run ci:purge_cache #Cloudflareのキャッシュクリア &amp;amp; Discordへ通知
+artifacts:
+paths:
+- public
+only:
+- master
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;環境変数の登録&#34;&gt;環境変数の登録&lt;/h3&gt;
+&lt;p&gt;GitLabのリポジトリから環境変数を追加することができます。&lt;/p&gt;
+&lt;p&gt;リポジトリの&lt;code&gt;Settings&amp;gt;CI/CD&lt;/code&gt;から&lt;code&gt;Environment variables&lt;/code&gt;の箇所を開きます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/242/6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;各値を名前をソースコードに記述した変数名と一致させつつ設定しましょう。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/242/7.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;ここまでの手順が出来るとデプロイするたびに、Cloudflareのキャッシュがクリアされて、なかなか更新されない問題が解消できると思います。&lt;/p&gt;
+&lt;p&gt;これでもページが更新されない場合はブラウザ側でキャッシュされている可能性が高いのでシークレットモードなどで確認したり、ブラウザを変えてみるのがベターだと思います。&lt;/p&gt;
+&lt;p&gt;キャッシュコントロールをしてCloudflareをもっと便利に使っていきましょう。&lt;/p&gt;
+&lt;p&gt;それでは！&lt;/p&gt;</description></item><item><title>NefryBTからGoogleDriveにデータをアップロードする方法</title><link>https://dotstud.io/blog/update-nefrybt-to-googledrive/</link><pubDate>Thu, 31 Jan 2019 03:21:47 +0900</pubDate><guid>https://dotstud.io/blog/update-nefrybt-to-googledrive/</guid><description>
 &lt;p&gt;こんにちは、NefryBTきっかけでIoTの世界に入った&lt;a href=&#34;https://dotstud.io/members/kuroda&#34;&gt;黒田&lt;/a&gt;と言います。Webとどう接していけばいいのか分からないときにNefryBTと出会い、意外と難しくない(何とかなる)ことを知りました。&lt;/p&gt;
 &lt;p&gt;&lt;a href=&#34;https://dotstud.io/members/wami&#34;&gt;わみさん&lt;/a&gt;、ありがとうございます。&lt;/p&gt;
 &lt;p&gt;今回は、NefryBTからGoogleDriveにデータをアップロード出来たので紹介したいと思います。&lt;/p&gt;
@@ -2800,136 +3057,4 @@ Archivesはしばらく不要なので消しました。ついでにEventsとSta
 &lt;p&gt;ClovaもGateboxはすごく未来を感じさせてくれるプロダクトなので、それらの組み合わせは本当に期待ですね。&lt;/p&gt;
 &lt;p&gt;APIやSDKが提供され始めたらぜひ使ってみたいです。&lt;/p&gt;
 &lt;p&gt;まだLINE DEVELOPER DAYは続いてますが面白いセッションが多いので、ツイートを　#linedevdayのハッシュタグで振り返ると面白いですよ。&lt;/p&gt;
-&lt;p&gt;それでは、現場からは以上です :)&lt;/p&gt;</description></item><item><title>Node.js製の静的サイトジェネレータ「Hexo」で無料ブログ開発 vol.2</title><link>https://dotstud.io/blog/hexo-static-site-vol2/</link><pubDate>Tue, 25 Jul 2017 13:19:25 +0900</pubDate><guid>https://dotstud.io/blog/hexo-static-site-vol2/</guid><description>
-&lt;p&gt;こんにちは、エンジニアのちゃんとくです。ひょんなことから&lt;a href=&#34;https://nodejs.connpass.com/&#34;&gt;&lt;strong&gt;Node女学園&lt;/strong&gt;&lt;/a&gt;というNode.jsを学ぶ女性のためのコミュニティを立ち上げました。&lt;/p&gt;
-&lt;p&gt;このシリーズではNode女学園のブログを作りながら、&lt;strong&gt;Node.js製の静的サイトジェネレータ「Hexo」&lt;/strong&gt;の使い方を紹介していきます！&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/hexo-static-site-vol1&#34;&gt;&lt;strong&gt;前回&lt;/strong&gt;&lt;/a&gt;は環境構築とデプロイまでやってみました。&lt;/p&gt;
-&lt;section class=&#34;link&#34; id=&#34;105&#34;&gt;
-&lt;div class=&#34;link_content&#34;&gt;
-&lt;a href=&#34;https://dotstud.io/blog/hexo-static-site-vol1/&#34;&gt;&lt;/a&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/105/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
-&lt;/div&gt;
-&lt;div class=&#34;link_content&#34;&gt;
-&lt;div class=&#34;link_detail&#34;&gt;
-&lt;div class=&#34;link_title&#34;&gt;
-Node.js製の静的サイトジェネレータ「Hexo」で無料ブログ開発 vol.1
-&lt;/div&gt;
-&lt;div class=&#34;link_date&#34;&gt;
-2017-06-07
-&lt;/div&gt;
-&lt;div class=&#34;link_desc&#34;&gt;
-Node.jsによるNode.jsのためのサイトづくり！Node.jsが書けなくても制作できます。
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/section&gt;
-&lt;/section&gt;
-&lt;p&gt;今回はテーマを当ててブログデザインをカスタマイズしてみます。&lt;/p&gt;
-&lt;h2 id=&#34;テーマの探し方&#34;&gt;テーマの探し方&lt;/h2&gt;
-&lt;p&gt;Hexoでは既存のテーマを使うことで簡単にデザインを適用できます。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://hexo.io/themes/&#34;&gt;Hexoの公式サイト&lt;/a&gt;では130以上のテーマが紹介されています。
-&lt;img src=&#34;https://dotstud.io/img/blog/107/themes.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;また&lt;a href=&#34;https://github.com&#34;&gt;github&lt;/a&gt;で&lt;code&gt;hexo-theme&lt;/code&gt;を検索するとユーザが制作したテーマを探すことができます。
-&lt;img src=&#34;https://dotstud.io/img/blog/107/search.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;LICENSEに注意しつつ、好きなテーマを探しましょう。&lt;/p&gt;
-&lt;p&gt;今回Node女学園のブログは「ロゴに合わせてオレンジ系統」「ポップな感じ」にしたかったので、こちらの&lt;strong&gt;pacman&lt;/strong&gt;のテーマを使うことにしました。
-&lt;img src=&#34;https://dotstud.io/img/blog/107/demo.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/A-limon/pacman&#34;&gt;github - A-limon/pacman&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://a-limon.github.io/pacman/&#34;&gt;demoページ&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;テーマをダウンロード&#34;&gt;テーマをダウンロード&lt;/h2&gt;
-&lt;p&gt;まずはテーマをダウンロードします。cloneして取ってきましょう。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;git clone https://github.com/A-limon/pacman.git themes/pacman
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;git URLとディレクトリ名は適宜自分のダウンロードしたいテーマのものに置き換えてください。（大体のテーマはREADMEに記載があるはずです。）&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/107/clone_theme.png&#34; alt=&#34;&#34; /&gt;
-cloneして&lt;code&gt;/themes&lt;/code&gt;の下に&lt;code&gt;/pacman&lt;/code&gt;ディレクトリができました。デフォルトの&lt;code&gt;/landscape&lt;/code&gt;は使わないので消してしまいます。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;_config.yml&lt;/code&gt;ファイルの&lt;code&gt;theme:&lt;/code&gt;をダウンロードしたテーマ名に書き換えます。
-&lt;img src=&#34;https://dotstud.io/img/blog/107/chose_theme.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;この状態でローカルサーバを起動してみましょう。
-&lt;img src=&#34;https://dotstud.io/img/blog/107/pacman.png&#34; alt=&#34;&#34; /&gt;
-pacmanのテーマが適用されました！&lt;/p&gt;
-&lt;h2 id=&#34;カスタマイズ&#34;&gt;カスタマイズ&lt;/h2&gt;
-&lt;p&gt;デフォルトでは言語が違っていたり不要なリンクがあったりするので、自分の好みに編集していきます。&lt;/p&gt;
-&lt;p&gt;今回はカスタマイズの一例としてpacmanに沿って紹介します。テーマによって方法が異なる場合があるので、各READMEを見つつこの以下は参考程度に見てください。&lt;/p&gt;
-&lt;h3 id=&#34;author情報を設定&#34;&gt;Author情報を設定&lt;/h3&gt;
-&lt;p&gt;&lt;code&gt;themes/pacman/_config.yml&lt;/code&gt;を編集していきます。先ほどまでの&lt;code&gt;_config.yml&lt;/code&gt;とは違うファイルなので混同しないようにしてください。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;author:&lt;/code&gt;の部分を変更します。
-&lt;img src=&#34;https://dotstud.io/img/blog/107/author_before.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;intro_line&lt;/code&gt;はフッタに表示されるメッセージです。適宜SNSのアカウントを記載して不要な項目は消去します。&lt;/p&gt;
-&lt;p&gt;以下のように設定しました。
-&lt;img src=&#34;https://dotstud.io/img/blog/107/author_after.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;続いて&lt;code&gt;author_img&lt;/code&gt;を編集します。
-&lt;img src=&#34;https://dotstud.io/img/blog/107/author_img.png&#34; alt=&#34;&#34; /&gt;
-画像データをURLで指定する場合は&lt;code&gt;dataURI: true&lt;/code&gt;にして&lt;code&gt;author_img_data:&lt;/code&gt;のあとにURLを記述します。&lt;/p&gt;
-&lt;p&gt;ローカルに画像を置く場合は&lt;code&gt;dataURI: false&lt;/code&gt;のまま&lt;code&gt;author_img:&lt;/code&gt;のあとにコメントに習ってPATHを記載しましょう。&lt;/p&gt;
-&lt;p&gt;変更を確認してみます。
-&lt;img src=&#34;https://dotstud.io/img/blog/107/footer.png&#34; alt=&#34;&#34; /&gt;
-フッターに画像、メッセージ、SNSが表示されました！&lt;/p&gt;
-&lt;h3 id=&#34;言語を設定&#34;&gt;言語を設定&lt;/h3&gt;
-&lt;p&gt;&lt;code&gt;/themes/pacman/languages&lt;/code&gt;以下で、&lt;code&gt;default.yml&lt;/code&gt;を残して他の言語ファイルを消去します。
-&lt;img src=&#34;https://dotstud.io/img/blog/107/lang.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;確認してみます。
-&lt;img src=&#34;https://dotstud.io/img/blog/107/en.png&#34; alt=&#34;&#34; /&gt;
-&lt;code&gt;default.yml&lt;/code&gt;の内容が適用されました。日本語などにしたい場合は&lt;code&gt;default.yml&lt;/code&gt;の中を編集しましょう。&lt;/p&gt;
-&lt;h3 id=&#34;サイドバーを編集&#34;&gt;サイドバーを編集&lt;/h3&gt;
-&lt;p&gt;続いてサイドバーを変更します。
-&lt;img src=&#34;https://dotstud.io/img/blog/107/del_rss_be.png&#34; alt=&#34;&#34; /&gt;
-今回RSSは不要なので消してみます。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;/themes/pacman/layout/_widget&lt;/code&gt;の下の&lt;code&gt;rss.ejs&lt;/code&gt;を消去します。
-&lt;img src=&#34;https://dotstud.io/img/blog/107/del_rss1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;themes/pacman/_config.yml&lt;/code&gt;の&lt;code&gt;widget:&lt;/code&gt;からrssを消去します。
-&lt;img src=&#34;https://dotstud.io/img/blog/107/del_rss2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;RSSの表示が消えました。
-&lt;img src=&#34;https://dotstud.io/img/blog/107/del_rss_af.png&#34; alt=&#34;&#34; /&gt;
-続いてタグの記事数を表す数字も消してみます。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;/themes/pacman/layout/_widget/tag.ejs&lt;/code&gt;で数字を記述している部分を消去します。
-&lt;img src=&#34;https://dotstud.io/img/blog/107/del_tag.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;記事数を表す数字が消えました。
-&lt;img src=&#34;https://dotstud.io/img/blog/107/del_tag_af.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;h3 id=&#34;記事の表示を編集&#34;&gt;記事の表示を編集&lt;/h3&gt;
-&lt;p&gt;記事をクリックして各記事ページもカスタマイズしましょう。&lt;/p&gt;
-&lt;p&gt;まず記事内に表示されている目次（Contents）を消してみます。
-&lt;img src=&#34;https://dotstud.io/img/blog/107/del_content_be.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;/themes/pacman/layout/_partial/post/article.ejs&lt;/code&gt;を編集します。
-&lt;img src=&#34;https://dotstud.io/img/blog/107/del_content.png&#34; alt=&#34;&#34; /&gt;
-&lt;code&gt;contents&lt;/code&gt;を表示させている部分を消去します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/107/del_contents.png&#34; alt=&#34;&#34; /&gt;
-目次が消えました。&lt;/p&gt;
-&lt;h3 id=&#34;記事のフッタを編集&#34;&gt;記事のフッタを編集&lt;/h3&gt;
-&lt;p&gt;記事のフッタにはあまり馴染みのないSNSのシェアリンクがあるので変更します。
-&lt;img src=&#34;https://dotstud.io/img/blog/107/art_footer_before.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;/themes/pacman/layout/_partial/after_footer.ejs&lt;/code&gt;の90行目あたりを見てみます。
-&lt;img src=&#34;https://dotstud.io/img/blog/107/del_share.png&#34; alt=&#34;&#34; /&gt;
-リンクを追加している部分があるので不要なものを消します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/107/del_share_af.png&#34; alt=&#34;&#34; /&gt;
-FacebookとTwitterのみ残しました。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/107/art_footer_after.png&#34; alt=&#34;&#34; /&gt;
-ブログ側もFacebookとTwitterのみになっています。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;hexo deploy -g&lt;/code&gt;でデプロイしましょう！&lt;/p&gt;
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-&lt;p&gt;カスタマイズを加えて自分のブログらしさを出すことができました！
-&lt;img src=&#34;https://dotstud.io/img/blog/107/done.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;テーマによって編集箇所が変わりますが、&lt;strong&gt;基本はHTMLとJavaScriptで構成されている&lt;/strong&gt;のでREADMEを読みつつ焦らず直していきましょう。&lt;/p&gt;
-&lt;p&gt;次回はルーティングをやってみたいと思います。&lt;/p&gt;
-&lt;section class=&#34;link&#34; id=&#34;108&#34;&gt;
-&lt;div class=&#34;link_content&#34;&gt;
-&lt;a href=&#34;https://dotstud.io/blog/hexo-static-site-vol3/&#34;&gt;&lt;/a&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/108/00_thumbnail.png&#34; alt=&#34;サムネイル&#34;&gt;
-&lt;/div&gt;
-&lt;div class=&#34;link_content&#34;&gt;
-&lt;div class=&#34;link_detail&#34;&gt;
-&lt;div class=&#34;link_title&#34;&gt;
-Node.js製の静的サイトジェネレータ「Hexo」で無料ブログ開発 vol.3
-&lt;/div&gt;
-&lt;div class=&#34;link_date&#34;&gt;
-2017-10-31
-&lt;/div&gt;
-&lt;div class=&#34;link_desc&#34;&gt;
-Node.jsによるNode.jsのためのサイトづくり！簡易ルーティグで情報ページを作る回。
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;/section&gt;
-&lt;/section&gt;</description></item></channel></rss>
+&lt;p&gt;それでは、現場からは以上です :)&lt;/p&gt;</description></item></channel></rss>
