@@ -1,4 +1,317 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blogs on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/blog/</link><description>Recent content in Blogs on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Wed, 13 Feb 2019 12:50:00 +0900</lastBuildDate><atom:link href="/blog/" rel="self" type="application/rss+xml"/><item><title>【どんと来い、列車遅延】 勤怠メールをサクッと送れるオレオレツールを作ってみた</title><link>https://dotstud.io/blog/pokio-nodered-keikyu-chien/</link><pubDate>Wed, 13 Feb 2019 12:50:00 +0900</pubDate><guid>https://dotstud.io/blog/pokio-nodered-keikyu-chien/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blogs on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/blog/</link><description>Recent content in Blogs on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Wed, 27 Feb 2019 06:55:35 +0900</lastBuildDate><atom:link href="/blog/" rel="self" type="application/rss+xml"/><item><title>初めてのArduino〜トレーニングマシンを作る編〜</title><link>https://dotstud.io/blog/jikyuryoku-aruduino-training-machine/</link><pubDate>Wed, 27 Feb 2019 06:55:35 +0900</pubDate><guid>https://dotstud.io/blog/jikyuryoku-aruduino-training-machine/</guid><description>
+&lt;p&gt;初めまして、今月からdotstudioでお世話になる&lt;a href=&#34;https://dotstud.io/members/jikyuryoku&#34;&gt;自給力&lt;/a&gt;です。&lt;/p&gt;
+&lt;p&gt;プログラミングスクール卒業後でフラフラしてたところを、のびすけしゃちょーから「記事を書いてみない？」と誘っていただきました。これから、バシバシ記事を書いていきますのでよろしくお願いします。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;コードの書き方や手順で変なところあるかもしれませんが、許してください……！&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;僕はフィットネス業界での事業を考えています！せっかくなので、フィットネスに絡めて何か作って、記事にしていきたいと思います。プログラミングはかじってはいるのですが、IoTのコーディングや電子工作は初めてなので、&lt;u&gt;初心者さん向けに自分の失敗の工程も含めてお伝えできればと思ってます。&lt;/u&gt;&lt;/p&gt;
+&lt;p&gt;そして、まず作ろうと決意したモノは……&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;
+&lt;font size=&#34;3&#34;&gt;&lt;strong&gt;「自宅でのトレーニングで回数を数えてくれるサービス」&lt;/strong&gt;です！！パチパチ〜〜！！&lt;/font&gt;
+&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;意外とスクワットとかダンベルのトレーニングしている時って回数数えるの面倒なんですよね。&lt;/p&gt;
+&lt;p&gt;そこで、勝手に回数数えてくれるサービスがあればテレビ見ながらでも回数に気を取られずにトレーニングができる！そんな思いから、サービス作ってみようと思ったわけです。&lt;/p&gt;
+&lt;h2 id=&#34;のびすけしゃちょーに相談してみる&#34;&gt;のびすけしゃちょーに相談してみる&lt;/h2&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_s&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/suga.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;自給力&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+というわけで、ダンベルを上げ下げしてる時に回数数える物作りたいっす！
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_n&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/nobi.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;のびすけ&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+いいね。じゃあどうやって数えるか考えよう。カウントの仕方としては、&lt;u&gt;赤外線センサ使うとか、腕の動きで変わる気圧を計測する&lt;/u&gt;ってやりかたもあるよ、加速度センサでy軸方向に動いた回数を、、、（etc）&lt;/b&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_s&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/suga.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;自給力&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+（おお、なんか凄そうなのが作れそうだ）&lt;br&gt;
+なるほど！！面白そうですね！！！！じゃあ加速度センサ使ってみたいです！！！&lt;br&gt;
+（理由:かっこいいから）
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_n&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/nobi.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;のびすけ&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+ま、それは難しいから最初はスイッチだな（バッサリ）
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_s&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/suga.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;自給力&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+（え、なんで他の紹介したん……）
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;そんなこんなで、iot初心者の僕は&lt;strong&gt;「磁気スイッチ」を使ったカウントマシン&lt;/strong&gt;を作ることに決まりました！！&lt;/p&gt;
+&lt;h2 id=&#34;まずは準備&#34;&gt;まずは準備&lt;/h2&gt;
+&lt;p&gt;今回使うのはArduino（写真左）と磁気スイッチ（写真真ん中と右）&lt;/p&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/1.png&#34; alt=&#34;1&#34;&gt;
+&lt;/center&gt;
+&lt;p&gt;まず、Arduinoにコードを書き込むためにArduino IDEをインストールしましょう。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/arduinoide-setup/?fbclid=IwAR3BB5HrFh-K6cMGcnGl4rjHIA4u2OJYDDlNjLmN5IrprOn8n3zY6g-Kp8s&#34;&gt;こちらのドキュメント&lt;/a&gt;の通りにやれば簡単にインストールできます。&lt;/p&gt;
+&lt;p&gt;そして、磁気スイッチの使い方は&lt;a href=&#34;http://wiki.seeedstudio.com/Grove-Magnetic_Switch/&#34;&gt;こちら&lt;/a&gt;を参考にしました！&lt;/p&gt;
+&lt;p&gt;サイト内は英語で書かれていますが、ここでやることしては&lt;strong&gt;ArduinoのD２のピンに刺し、写真のように組み立てる&lt;/strong&gt;のだそうです。&lt;/p&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/2.png&#34; alt=&#34;2&#34;&gt;
+&lt;/center&gt;
+&lt;h2 id=&#34;さぁ-数を数えよう&#34;&gt;さぁ、数を数えよう&lt;/h2&gt;
+&lt;p&gt;「数なんてすぐに数えられるわい」っと思ったのも束の間……。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;「あれ？何を数えるんだ？？？」&lt;/strong&gt;と、なんとも初歩的な壁にぶつかりました。&lt;/p&gt;
+&lt;p&gt;ダンベルを動かした回数を頭の中で数えるのは簡単ですが、機械に数えさせるのは訳が違う。まずは何を数えるか考えなければならないのです。&lt;/p&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_s&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/suga.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;自給力&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+のびさん、オレは何を数えるんですか？（語彙力）
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_n&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/nobi.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;のびすけ&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+まずは、センサが反応してる時にフラグを立ててみたら？&lt;br&gt;
+フラグが立った状態からフラグが無くなったときにカウントできるようにしてみる方法があるよ。
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_s&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/suga.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;自給力&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+なるほど！それですね！（フラグって何……？）
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;「フラグ」が何を指しているのかが分からなかったので、&lt;strong&gt;「Arduino フラグ」&lt;/strong&gt;でググってみました。どうやらセンサの状態を変数に入れて管理することだということが分かりました。&lt;/p&gt;
+&lt;p&gt;（参考１）&lt;a href=&#34;http://monoist.atmarkit.co.jp/mn/articles/1308/09/news001_3.html&#34;&gt;アイデア・ハック!! Arduinoで遊ぼう（2）&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;次に、「Arduino 数える」でググり、「変数でどう数えるのか」について、以下の記事を参考にしました。&lt;/p&gt;
+&lt;p&gt;（参考２）&lt;a href=&#34;https://n.mtng.org/ele/arduino/samples/variable2.html&#34;&gt;変数で回数を数える&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;やることとしては、&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;センサの状態をフラグ（変数）として認識させる&lt;/li&gt;
+&lt;li&gt;フラグがついてる状態から、なくなった状態に「+１」していく&lt;/li&gt;
+&lt;li&gt;1と2を繰り返す&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;なるほどなるほど。だいたい道筋が見えてきたので、作っていきます！&lt;/p&gt;
+&lt;h2 id=&#34;よし-作ろう&#34;&gt;よし、作ろう&lt;/h2&gt;
+&lt;p&gt;（参考１）&lt;a href=&#34;http://monoist.atmarkit.co.jp/mn/articles/1308/09/news001_3.html&#34;&gt;アイデア・ハック!! Arduinoで遊ぼう（2）&lt;/a&gt;からスイッチのon/offで数を数えるためコードがあり、アレンジをしてみました。&lt;/p&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/3.png&#34; alt=&#34;3&#34;&gt;
+&lt;/center&gt;
+&lt;p&gt;必要なのは&lt;strong&gt;「グローバル変数の定義」「フラグの定義」「フラグからカウントする際のコード」の３つ&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;まずは&lt;strong&gt;「グローバル変数の定義」&lt;/strong&gt;です。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;int G_state = FLG_OFF;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;簡単ですね。&lt;/p&gt;
+&lt;p&gt;次に&lt;strong&gt;「フラグの定義」&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;フラグ立っている時は「1」、立っていない時は「0」と教えてあげます。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;const int FLG_ON = 1;
+const int FLG_OFF = 0;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;楽勝！&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;それでは、最後に&lt;strong&gt;「フラグからカウントする際のコード」&lt;/strong&gt;を書いてみましょう。&lt;/p&gt;
+&lt;p&gt;Void setup()の中に、&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Serial.begin(115200);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;を書き、
+void loop()の中に、&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt; int val = digitalRead(MAGNECTIC_SWITCH);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;を書きます。&lt;/p&gt;
+&lt;p&gt;これはつまり、&lt;strong&gt;センサで取得した値を変数valに入れている&lt;/strong&gt;わけです。&lt;/p&gt;
+&lt;p&gt;そして&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;if(G_state == FLG_OFF){
+count += 1;
+}
+Serial.println(count);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;と書き、コンパイルして、書き込みをしていきます。&lt;/p&gt;
+&lt;p&gt;ちょっとここでケアレスミスがあり、書き込みの際にエラーが何回か出ましたが、難なく解消。&lt;/p&gt;
+&lt;p&gt;よし！これで動く！&lt;/p&gt;
+&lt;p&gt;ツールの中のシリアルモニタを見てみましょう。&lt;/p&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/4.png&#34; alt=&#34;4&#34;&gt;
+&lt;/center&gt;
+&lt;p&gt;&lt;strong&gt;な、なにーーー！！&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;なんか勝手に数が増えてる！！！！このままじゃ数字が止まらなくなる！！！（パニック状態）&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_s&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/suga.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;自給力&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+助けて！のびさんんんんんんんん！！
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_n&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/nobi.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;のびすけ&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+ん？？これ、&lt;u&gt;if( G_state == FLG_OFF )で+1&lt;/u&gt;で書かないと、めっちゃ数えるよ。
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_s&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/suga.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;自給力&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+あ、そうか……。
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;つまり、コードを日本語訳にすると、&lt;strong&gt;「G_stateの中のフラグがないときは、足していく」&lt;/strong&gt;という意味。フラグが無い状態では+1され続けてしまうんです。そりゃうまくイカンわ！！！&lt;/p&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_n&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/nobi.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;のびすけ&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+&lt;u&gt;if(G_state == FLG_OFF)の一文を消して、elseの中でフラグの判定&lt;/u&gt;した方がいいよ。
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;のびさんのご指摘の通り、&lt;strong&gt;elseの中にif文を書いてフラグがonだったら1カウントをするコード&lt;/strong&gt;に書き換えました。&lt;/p&gt;
+&lt;p&gt;よし！これでどうだ！！！書き込み開始！！&lt;/p&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/5.png&#34; alt=&#34;5&#34;&gt;
+&lt;/center&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_s&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/suga.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;自給力&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+あれ？？？なんで58から始まるんだ？わけわからん数字だ……。
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_n&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/nobi.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;のびすけ&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+&lt;u&gt;デフォルトの数字は、setupで数字初期化されるから、setupの定義内でcount=０&lt;/u&gt;にすればいいんじゃない？
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_s&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/suga.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;自給力&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+ほうほう。
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;center&gt;
+&lt;font size=&#34;3&#34;&gt;実際に書き換えてみると、見事解決！&lt;/font&gt;
+&lt;/center&gt;&lt;/p&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/6.png&#34; alt=&#34;6&#34;&gt;
+&lt;/center&gt;
+&lt;h2 id=&#34;ちゃんと数えてくれるか検証&#34;&gt;ちゃんと数えてくれるか検証&lt;/h2&gt;
+&lt;p&gt;磁石をセンサに近づけて、、
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/7.png&#34; alt=&#34;7&#34;&gt;
+&lt;/center&gt;
+&lt;/p&gt;
+&lt;p&gt;離すと、、
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/8.png&#34; alt=&#34;8&#34;&gt;
+&lt;/center&gt;
+&lt;/p&gt;
+&lt;p&gt;そしてシリアルモニタを見ると
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/9.png&#34; alt=&#34;9&#34;&gt;
+&lt;/center&gt;
+&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;
+&lt;font size=&#34;3&#34;&gt;カウント「１」！！！！&lt;/font&gt;
+&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;見事成功です。&lt;/p&gt;
+&lt;p&gt;いやぁ、一口に数を数えるとは言っても奥が深いですね！今日のところはこの辺で終わりたいと思います。&lt;/p&gt;
+&lt;p&gt;続編をお楽しみに……！&lt;/p&gt;
+&lt;style&gt;
+.dialogue {
+padding: 10px;
+display: table;
+}
+.image_n, .image_s {
+width: 75px;
+height: 75px;
+margin-right: 10px;
+display: table-cell;
+vertical-align: middle;
+}
+.image_n img {
+border-radius: 50%;
+border: 2px solid blue;
+}
+.image_s img {
+border-radius: 50%;
+border: 2px solid green;
+}
+.name {
+font-weight: bold;
+text-align: center;
+}
+.text {
+display: table-cell;
+padding: 0;
+vertical-align: middle;
+padding-left: 20px;
+}
+&lt;/style&gt;</description></item><item><title>【どんと来い、列車遅延】 勤怠メールをサクッと送れるオレオレツールを作ってみた</title><link>https://dotstud.io/blog/pokio-nodered-keikyu-chien/</link><pubDate>Wed, 13 Feb 2019 12:50:00 +0900</pubDate><guid>https://dotstud.io/blog/pokio-nodered-keikyu-chien/</guid><description>
 &lt;p&gt;こんにちは、&lt;a href=&#34;https://dotstud.io/members/pokio&#34;&gt;ポキオ&lt;/a&gt;です。&lt;/p&gt;
 &lt;p&gt;急いでるときに限って、いつも使ってる通勤列車が遅延してたりして、あたふたすることってありますよね？&lt;/p&gt;
 &lt;p&gt;そんなときに、勤務先などにサクッとメールを送れるオレオレツールを作ってみました。&lt;/p&gt;
@@ -3795,214 +4108,6 @@ padding: 0;
 blockquote {
 font-size:80%;
 }
-.accbox {
-margin: 2em 0;
-padding: 0;
-max-width: 710px;
-}
-.accbox label {
-display: block;
-margin: 1.5px 0;
-padding : 11px 12px;
-color :#ffffff;
-font-weight: bold;
-background :#2f2f2f;
-cursor :pointer;
-transition: all 0.5s;
-}
-.accbox label:hover {
-background :#A4A4A4;
-}
-.accbox input {
-display: none;
-}
-.accbox .accshow {
-height: 0;
-padding: 0;
-overflow: hidden;
-opacity: 0;
-transition: 0.8s;
-}
-.cssacc:checked + .accshow {
-height: auto;
-padding: 5px;
-background: #eaeaea;
-opacity: 1;
-}
-&lt;/style&gt;</description></item><item><title>加速度センサとマイコン内蔵LEDで魔法の杖を作ってみた！</title><link>https://dotstud.io/blog/halloween-gadget-witch-stick/</link><pubDate>Wed, 31 Oct 2018 10:07:13 +0900</pubDate><guid>https://dotstud.io/blog/halloween-gadget-witch-stick/</guid><description>
-&lt;p&gt;みなさんこんにちは。トボリです。&lt;/p&gt;
-&lt;p&gt;私は電子工作が大好きで、いろいろいじったり、&lt;a href=&#34;http://toboli.hatenablog.com/&#34;&gt;ブログ&lt;/a&gt;を書いたりして暮らしています。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;ところで、みなさん魔法は好きですか？&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;電子工作と魔法ってかなり相性いいと思うんですよ。勝手に光る、勝手に動く、勝手にしゃべる……とか！&lt;/p&gt;
-&lt;p&gt;気づけばもう10月31日。そう、本日はハロウィンです！電子工作を愛し、電子工作に愛された者として、このイベントで魔法っぽいものを作りたい！！&lt;/p&gt;
-&lt;p&gt;魔法といえば、そう、杖ですよね！！&lt;/p&gt;
-&lt;p&gt;ということで、今回はみんなが一度は憧れたであろう、&lt;strong&gt;『魔法の杖』&lt;/strong&gt; を作ってみました！&lt;/p&gt;
-&lt;h2 id=&#34;振ると光る杖-を作ることにした&#34;&gt;「振ると光る杖」を作ることにした&lt;/h2&gt;
-&lt;p&gt;『魔法の杖』っていうからには、できるだけかっこいいことがしたい！
-トボリも想像力だけは無駄に豊かなので、うきうきいろんな機能をイメージしました。&lt;/p&gt;
-&lt;p&gt;家電を操作したり、一振りでカーテン開けられたりできたらいいなあ～！何か浮かせられたらもっとおもしろいかも……。&lt;/p&gt;
-&lt;p&gt;しかし。&lt;/p&gt;
-&lt;p&gt;&lt;span style=&#34;font-size: 200%&#34;&gt;時間と技術力は限られている！！&lt;/span&gt;&lt;/p&gt;
-&lt;p&gt;今のトボリの技術力でハロウィンまでに作れそうなものといえば、「振ると光る」杖です。&lt;/p&gt;
-&lt;p&gt;想像よりだいぶスケールが小さくなりましたが、どんなにささやかな物でもまずは作ることが大事！
-と自分に言い聞かせ、とにかく作ってみることにしました！&lt;/p&gt;
-&lt;h2 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h2&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/228/parts.png&#34; alt=&#34;parts&#34;&gt;
-&lt;/center&gt;
-電子工作初心者の味方、Arduinoを使って作ろうと思います！&lt;/p&gt;
-&lt;p&gt;また、なぜミニブレッドボードを使用するかというと……これを見てください！
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/228/breadboard.png&#34; alt=&#34;breadboard&#34;&gt;
-&lt;/center&gt;
-&lt;/p&gt;
-&lt;p&gt;たまたま買った電池ボックスとミニブレッドボードのサイズがほぼ同じ！&lt;/p&gt;
-&lt;p&gt;これを見た瞬間、絶対に使おう！と固く決意したのです。
-（本当はユニバーサル基板に半田付けしてたんですが、完成間近にピンヘッダの取り付けミスが発覚し、安心安全のブレッドボードでやり直したという経緯があります。つらい。）&lt;/p&gt;
-&lt;h2 id=&#34;魔法の杖を作る&#34;&gt;魔法の杖を作る&lt;/h2&gt;
-&lt;p&gt;魔法の杖は、下記の3ステップで作って行きます！&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;プログラムを書く&lt;/li&gt;
-&lt;li&gt;ブレッドボードに回路を作る&lt;/li&gt;
-&lt;li&gt;見た目をそれっぽく造形する&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h3 id=&#34;プログラムを書く&#34;&gt;プログラムを書く&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/arduinoide-setup/&#34;&gt;Arduino IDE&lt;/a&gt;を使ってプログラムを書いていきます。&lt;/p&gt;
-&lt;p&gt;加速度センサのサンプルプログラムと、フルカラーLEDのサンプルプログラムをただ合体しただけのお手軽コードです！&lt;/p&gt;
-&lt;div class=&#34;accbox&#34;&gt;
-&lt;label for=&#34;label1&#34;&gt;クリックしてコードを表示&lt;/labe&gt;
-&lt;input type=&#34;checkbox&#34; id=&#34;label1&#34; class=&#34;cssacc&#34; /&gt;
-&lt;div class=&#34;accshow&#34;&gt;
-&lt;pre&gt;
-&lt;code class=&#34;hljs hljs-line-numbers&#34;&gt;
-#include &amp;lt;Wire.h&amp;gt;
-#include &amp;lt;SparkFun_MMA8452Q.h&amp;gt;
-#include &amp;lt;Adafruit_NeoPixel.h&amp;gt;
-#define PIN 2
-Adafruit_NeoPixel pixels = Adafruit_NeoPixel(1, PIN, NEO_GRB + NEO_KHZ800);
-MMA8452Q accel;
-void setup() {
-Serial.begin(9600);
-Serial.println(&#34;MMA8452Q Test Code!&#34;);
-pixels.begin();
-pixels.show();
-accel.init();
-}
-void loop() {
-if(accel.available()) {
-accel.read();
-printCalculatedAccels();
-printOrientation();
-Serial.println();
-}
-}
-void printOrientation() {
-byte pl = accel.readPL();
-switch (pl) {
-case PORTRAIT_U:
-Serial.print(&#34;Portrait Up&#34;);
-break;
-case PORTRAIT_D:
-Serial.print(&#34;Portrait Down&#34;);
-break;
-case LANDSCAPE_R:
-Serial.print(&#34;Landscape Right&#34;);
-rainbow(20);
-break;
-case LANDSCAPE_L:
-Serial.print(&#34;Landscape Left&#34;);
-rainbow(20);
-break;
-case LOCKOUT:
-Serial.print(&#34;Flat&#34;);
-pixels.show();
-break;
-}
-}
-void rainbow(uint8_t wait) {
-uint16_t i, j;
-for(j=0; j&amp;lt;256; j++) {
-for(i=0; i&amp;lt;pixels.numPixels(); i++) {
-pixels.setPixelColor(i, Wheel((i+j) &amp; 255));
-}
-pixels.show();
-delay(wait);
-}
-}
-uint32_t Wheel(byte WheelPos) {
-WheelPos = 255 - WheelPos;
-if(WheelPos &amp;lt; 85) {
-return pixels.Color(255 - WheelPos * 3, 0, WheelPos * 3);
-}
-if(WheelPos &amp;lt; 170) {
-WheelPos -= 85;
-return pixels.Color(0, WheelPos * 3, 255 - WheelPos * 3);
-}
-WheelPos -= 170;
-return pixels.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
-}
-&lt;/code&gt;
-&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;h3 id=&#34;ブレッドボードに回路を作る&#34;&gt;ブレッドボードに回路を作る&lt;/h3&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/228/fritzing.png&#34; alt=&#34;fritzing&#34;&gt;
-&lt;/center&gt;
-まずはブレッドボードに配線していきます！配線図はこんな感じ。&lt;/p&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/228/circuit.png&#34; alt=&#34;circuit&#34;&gt;
-&lt;/center&gt;
-実際に配線したものがこちらです！
-LEDの部分だけ基板から離れてしまうので、後で半田付けをします。&lt;/p&gt;
-&lt;p&gt;みなさん半田付けって好きですか？トボリは電子工作作業の中で半田付けが一番好きです！
-半田の香りは下手なアロマより癒される気がします。&lt;/p&gt;
-&lt;h3 id=&#34;見た目をそれっぽく造形する&#34;&gt;見た目をそれっぽく造形する&lt;/h3&gt;
-&lt;p&gt;杖はそれっぽい形になればなんでもいいので、3Dプリンタを使える方は使ってもいいし、お好きなやり方で大丈夫です！今回は、粘土をこねて作ってみたので、参考までに材料と作り方も載せておきます！&lt;/p&gt;
-&lt;h4 id=&#34;用意するもの-1&#34;&gt;■ 用意するもの&lt;/h4&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/228/stick1.png&#34; alt=&#34;stick1&#34;&gt;
-&lt;/center&gt;
-石粉粘土・トイレットペーパーの芯・市販のスティックを用意します。これらは全て百均で買うことができました！いい時代ですね！&lt;/p&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/228/stick2.png&#34; alt=&#34;stick2&#34;&gt;
-&lt;/center&gt;
-この市販のスティックを分解し、筒状の棒だけ取り出します。&lt;/p&gt;
-&lt;h4 id=&#34;杖の形に造形する&#34;&gt;■ 杖の形に造形する&lt;/h4&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/228/stick3.png&#34; alt=&#34;stick3&#34;&gt;
-&lt;/center&gt;
-市販の棒とトイレットペーパーの芯をくっつけます。トイレットペーパーの芯の先に切れ込みを入れて、画像のように内側に折り込みます。トイレットペーパーの芯に棒を差し込んで、テープで固定します。&lt;/p&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/228/stick4.png&#34; alt=&#34;stick4&#34;&gt;
-&lt;/center&gt;
-中に基板を入れ、筒の中にLEDのワイヤーを通してから、LEDを半田付けします。&lt;/p&gt;
-&lt;p&gt;動作チェックをして問題なさそうだったら、どんどん土台に石粉粘土を貼り付けていきます！少しずつ貼り付けて、時々手でなでて滑らかにしていきます。&lt;/p&gt;
-&lt;p&gt;乾いたら、カッターで傷をつけ、茶色と黒のアクリル絵の具をインスピレーションに従っていい感じに塗ります。&lt;/p&gt;
-&lt;h4 id=&#34;完成&#34;&gt;■ 完成！&lt;/h4&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/228/stick5.png&#34; alt=&#34;stick5&#34;&gt;
-&lt;/center&gt;
-できた～～～！！！
-どう見ても、魔法の杖！！少なくとも自分にとっては手塩にかけた最愛の杖！！&lt;/p&gt;
-&lt;h2 id=&#34;魔法を発動する&#34;&gt;魔法を発動する&lt;/h2&gt;
-&lt;p&gt;さっそく魔法を発動していきましょう！
-左右に杖を振ると……虹色の光が出ます！やった～～！魔法っぽい！
-&lt;img src=&#34;https://dotstud.io/img/blog/228/demo.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;h2 id=&#34;次こそはもっとうまく作りたい-それが電子工作沼&#34;&gt;次こそはもっとうまく作りたい……それが電子工作沼&lt;/h2&gt;
-&lt;p&gt;LEDとセンサーひとつですが、結構楽しいものができました！&lt;/p&gt;
-&lt;p&gt;でも、やっぱり本当はこうしたい……もっとかっこいい機能搭載したい……という欲望はとめどなく溢れ、「次こそもっといいものを！」という気持ちになります。&lt;/p&gt;
-&lt;p&gt;もうこうなったらズブズブですよね。&lt;b&gt;電子工作沼&lt;/b&gt;に。このハロウィンは今自分が作れる楽しいものを作りまくって、一緒に電子工作沼で溺れましょう！&lt;/p&gt;
-&lt;p&gt;ではでは、トボリでした！&lt;/p&gt;
-&lt;style&gt;
 .accbox {
 margin: 2em 0;
 padding: 0;
