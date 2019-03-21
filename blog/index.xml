@@ -1,4 +1,278 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blogs on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/blog/</link><description>Recent content in Blogs on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Mon, 11 Mar 2019 23:00:00 +0900</lastBuildDate><atom:link href="/blog/" rel="self" type="application/rss+xml"/><item><title>初めてのArduino〜トレーニングマシンを作る編〜</title><link>https://dotstud.io/blog/jikyuryoku-aruduino-training-machine/</link><pubDate>Mon, 11 Mar 2019 23:00:00 +0900</pubDate><guid>https://dotstud.io/blog/jikyuryoku-aruduino-training-machine/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blogs on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/blog/</link><description>Recent content in Blogs on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Thu, 21 Mar 2019 00:00:00 +0000</lastBuildDate><atom:link href="/blog/" rel="self" type="application/rss+xml"/><item><title>MPU9250で回転角度を検知する</title><link>https://dotstud.io/blog/detect-rotation-angle-with-mpu9250/</link><pubDate>Thu, 21 Mar 2019 00:00:00 +0000</pubDate><guid>https://dotstud.io/blog/detect-rotation-angle-with-mpu9250/</guid><description>
+&lt;p&gt;はじめまして。ライターとして起用していただきました、ありか(&lt;a href=&#34;https://twitter.com/hakase0617&#34;&gt;@hakase0617&lt;/a&gt;)です。&lt;/p&gt;
+&lt;p&gt;秋田高専で高専ロボコンを5年間やっていました。
+ロボコン界隈には卒業後も関わり続けているため、そういった若きエンジニアの手助けができたらと思っています！&lt;/p&gt;
+&lt;p&gt;マネジメントや教育に興味があり、その一環でIoT、AIの勉強をしています。
+将来的にはエンジニアを育成したり、一緒にお仕事ができたりしたら楽しそうだなって思います。&lt;/p&gt;
+&lt;h2 id=&#34;9軸センサとは&#34;&gt;9軸センサとは&lt;/h2&gt;
+&lt;p&gt;早速ですが、今日はMPU9250というセンサを紹介します。
+これは「9軸センサ」と呼ばれるものです。&lt;/p&gt;
+&lt;p&gt;え、9軸ってx,y,zとあとは何！？&lt;/p&gt;
+&lt;p&gt;これは&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;加速度センサ　x,y,z&lt;/li&gt;
+&lt;li&gt;角速度センサ　x,y,z&lt;/li&gt;
+&lt;li&gt;地磁気センサ　x,y,z&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;の3軸ずつ、合わせて9軸というものです。
+まずは各センサの紹介からいきます。&lt;/p&gt;
+&lt;h2 id=&#34;加速度センサとは&#34;&gt;加速度センサとは&lt;/h2&gt;
+&lt;p&gt;加速度とは、&lt;u&gt;「どのくらいの速度が変化しているか」という指標です。&lt;/u&gt;
+車を運転しているイメージをしてください。
+アクセルを思いっきり踏んで、時速20km/hで走っていた車を時速60km/hまで加速させたとします。
+この時、体は後ろに引っ張られる感じがします。
+あの感じが加速度です。&lt;/p&gt;
+&lt;p&gt;加速度センサでは、物が動いているかどうかということも検出できます。
+加速度センサの応用例としてはカメラの手ぶれ補正やスマホの画面回転、ハードディスクの揺れ検知などが該当します。
+ロボットの姿勢制御には欠かせない技術でもあります。&lt;/p&gt;
+&lt;h2 id=&#34;角速度センサとは&#34;&gt;角速度センサとは&lt;/h2&gt;
+&lt;p&gt;角速度とは読んで字のごとく、回転角の速度です。
+ものが回っている時の速さの単位に「回転数」（rpmなど）や周波数（Hzなど）がありますが、これらは「何回回ったか」を示す指標です。
+&lt;u&gt;回っているものの「角度」に注目して速さを表す指標が角速度です。&lt;/u&gt;&lt;/p&gt;
+&lt;h2 id=&#34;地磁気センサとは&#34;&gt;地磁気センサとは&lt;/h2&gt;
+&lt;p&gt;地磁気センサでは、磁力の強さを検知出来ます。
+地球は大きな磁石ですが丸いので、地球上のどの位置にいるかで地磁気の強さは異なります。
+そのため、&lt;u&gt;地磁気の強さやら向きやらを測定すると自分がいる位置が分かり、自分が向いている方角も分かるというものです。&lt;/u&gt;&lt;/p&gt;
+&lt;h2 id=&#34;9軸センサで何が出来るか&#34;&gt;9軸センサで何が出来るか&lt;/h2&gt;
+&lt;p&gt;さて、これら3つのセンサが合体した9軸センサで、何ができるのでしょうか？&lt;/p&gt;
+&lt;p&gt;&lt;u&gt;角速度センサで「自分がどれだけ回ったのか」が分かります。&lt;/u&gt;&lt;/p&gt;
+&lt;p&gt;しかし弱点があります。
+角速度センサだけでは、今「動いている」のか「止まっている」のかは分かりません。
+そこで加速度センサの出番です。加速度センサは上記状態を把握できます。
+これらを合わせて「6軸センサ」と呼ぶのですが、&lt;u&gt;この6軸センサを使うと「回転角度」が分かります。&lt;/u&gt;&lt;/p&gt;
+&lt;p&gt;じゃあ6軸でいいじゃん、と思ってしまいますが、6軸センサには弱点があります。
+ずばり、「ドリフト」です。&lt;/p&gt;
+&lt;p&gt;角速度センサは「積分方式」で回転角度を検出します。
+どういうことかというと、「15度動いた」「20度動いた」「10度動いた」を合わせて「45度動いた」といった風に、足し算で算出します。
+しかし、みんなの敵である「誤差」という概念がここで登場します。&lt;/p&gt;
+&lt;p&gt;さっきの例で、毎回+1度の誤差が生じてしまうとします。
+すると　16度+21度+11度＝48度　となり、誤差がどんどん大きくなっていきます。
+つまり、試行回数（時間経過）とともに誤差が大きくなっていくではありませんか。&lt;/p&gt;
+&lt;p&gt;これを解決するためには、別の方法で校正を行う必要があります。
+そこで「地磁気センサ」を使います。&lt;/p&gt;
+&lt;p&gt;地磁気センサは、簡単に言うと「方位磁針」です。そのため、北を向いたまま10分経とうが1時間経とうが、&lt;u&gt;地磁気センサは「北を向いている」という状態を教えてくれます。&lt;/u&gt;&lt;/p&gt;
+&lt;p&gt;まとめると、
+　角速度センサ→何度回ったかが分かる
+　加速度センサ→回ったかが分かる
+　地磁気センサ→ドリフトを打ち消す
+といった役割を持ち、回転を検知するセンサとなります。&lt;/p&gt;
+&lt;h2 id=&#34;実際に使ってみよう&#34;&gt;実際に使ってみよう&lt;/h2&gt;
+&lt;p&gt;MPU9250を使って、実際に回転角度を測定してみましょう。
+今回は開発環境にArduinoを選定しました。
+ライブラリが公開されており、初心者である僕でもサクッと動作確認が可能な点に魅力を感じました。&lt;/p&gt;
+&lt;p&gt;今回は入門として、角速度センサのみで回転角度を検出してみます。&lt;/p&gt;
+&lt;h2 id=&#34;開発環境&#34;&gt;開発環境&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;OS:Windows10&lt;/li&gt;
+&lt;li&gt;ArduinoIDE&lt;/li&gt;
+&lt;li&gt;Arduino UNO&lt;/li&gt;
+&lt;li&gt;MPU9250&lt;/li&gt;
+&lt;li&gt;ジャンパワイヤ5本&lt;/li&gt;
+&lt;li&gt;ブレッドボード&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;スケッチ&#34;&gt;スケッチ&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-C:Gyro&#34;&gt;#include &amp;lt;Wire.h&amp;gt;
+#define FIL 0.9 //フィルタ
+#define AVE 100 //測定回数
+#define GYRO 30 //ドリフト許容値
+int emp[6] = {};
+int data = 0; //生データ格納 1から順に加速度xyz角速度xyz
+long datasum = 0; //合計データ格納　平均算出用
+int th = 0; //閾値
+long integral = 0; //積分値
+int degree; //回転角度
+int rock; //ロック機構により導かれた初期値
+char input;
+void setup() {
+Wire.begin(); Serial.begin(115200); Wire.begin(0x68);
+Wire.beginTransmission(0x68); Wire.write(0x6B); Wire.write(0x00); Wire.endTransmission();
+Wire.beginTransmission(0x68); Wire.write(0x1C); Wire.write(0x10); Wire.endTransmission();
+Wire.beginTransmission(0x68); Wire.write(0x1B); Wire.write(0x08); Wire.endTransmission();
+Wire.beginTransmission(0x68); Wire.write(0x1A); Wire.write(0x05); Wire.endTransmission();
+Serial.print(&amp;quot;*****************\nCalibrating now\nplease turn once and press &#39;f&#39;\n&amp;quot;);
+while (1) {
+reading();
+datasum = 0;
+input = Serial.read();
+if (input == &#39;f&#39;) {
+rock = integral / 360;
+Serial.print(&amp;quot;Ready!&amp;quot;);
+Serial.print(&amp;quot;\n*******\n&amp;quot;);
+integral = 0;
+delay(500);
+break;
+}
+}
+}
+void loop() {
+reading();
+degree = abs(integral / rock);
+Serial.println(degree);
+datasum = 0;
+}
+void reading() {
+for (int i = 0; i &amp;lt; AVE; i++) {
+Wire.beginTransmission(0x68); Wire.write(0x3B); Wire.endTransmission(); Wire.requestFrom(0x68, 14);
+while (Wire.available() &amp;lt; 14);
+emp[0] = Wire.read() &amp;lt;&amp;lt; 8 | Wire.read();
+emp[1] = Wire.read() &amp;lt;&amp;lt; 8 | Wire.read();
+emp[2] = Wire.read() &amp;lt;&amp;lt; 8 | Wire.read();
+emp[3] = Wire.read() &amp;lt;&amp;lt; 8 | Wire.read();
+emp[4] = Wire.read() &amp;lt;&amp;lt; 8 | Wire.read();
+emp[5] = Wire.read() &amp;lt;&amp;lt; 8 | Wire.read();
+data = Wire.read() &amp;lt;&amp;lt; 8 | Wire.read();
+datasum += data;
+}
+datasum /= AVE;
+if (th == 0) {
+th = datasum;
+}
+if (abs(datasum - th) &amp;gt; GYRO) { //誤差が小さい場合はスルー ドリフト対策
+integral += datasum - th;
+}
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;arduinoとの接続&#34;&gt;Arduinoとの接続&lt;/h2&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;left&#34;&gt;Arduino&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;MPU9250&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;5V&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;VCC&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;GND&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;GND&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;A2&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;INT&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;A4&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;SDA&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;A5&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;SCL&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;実物&#34;&gt;実物&lt;/h2&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/245/1.png&#34; alt=&#34;1&#34;&gt;
+&lt;/center&gt;
+&lt;h2 id=&#34;スケッチ簡易解説&#34;&gt;スケッチ簡易解説&lt;/h2&gt;
+&lt;p&gt;今回は角速度センサのｚ軸のみを使用します。
+ｚ軸、つまり地面と鉛直な方向の回転が分かる、早い話が自分がどれだけ回ったかが分かります。&lt;/p&gt;
+&lt;p&gt;まず、角速度センサを使うにあたって、センサから返ってくる値を調べる必要があります。
+センサは「何度回ったよ」とは教えてくれません。
+「4253」「71469」みたいな無機質な値を教えてくれます。
+そのため、その値がいくつで360度に相当するのかを確認する必要があります。&lt;/p&gt;
+&lt;p&gt;どうすればいいのか、答えは「360度回せばいい」のです。そのままです。&lt;/p&gt;
+&lt;p&gt;今回はArduinoを起動した際に、まず1回転して値を取得して、それから角度検出をする、というスケッチを作りました。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-C:while&#34;&gt; while (1) {
+reading();
+datasum = 0;
+input = Serial.read();
+if (input == &#39;f&#39;) {
+rock = integral / 360;
+Serial.print(&amp;quot;Ready!&amp;quot;);
+Serial.print(&amp;quot;\n*******\n&amp;quot;);
+integral = 0;
+delay(500);
+break;
+}
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;reading()関数の中で実際に値を取得するのですが、1回転した合図として「Arduinoのシリアル通信で&amp;rsquo;f&amp;rsquo;を送ってあげた時にwhile()から抜けて角度検出モードに移行します。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-C:reading&#34;&gt;void reading() {
+for (int i = 0; i &amp;lt; AVE; i++) {
+Wire.beginTransmission(0x68); Wire.write(0x3B); Wire.endTransmission(); Wire.requestFrom(0x68, 14);
+while (Wire.available() &amp;lt; 14);
+emp[0] = Wire.read() &amp;lt;&amp;lt; 8 | Wire.read();
+emp[1] = Wire.read() &amp;lt;&amp;lt; 8 | Wire.read();
+emp[2] = Wire.read() &amp;lt;&amp;lt; 8 | Wire.read();
+emp[3] = Wire.read() &amp;lt;&amp;lt; 8 | Wire.read();
+emp[4] = Wire.read() &amp;lt;&amp;lt; 8 | Wire.read();
+emp[5] = Wire.read() &amp;lt;&amp;lt; 8 | Wire.read();
+data = Wire.read() &amp;lt;&amp;lt; 8 | Wire.read();
+datasum += data;
+}
+datasum /= AVE;
+if (th == 0) {
+th = datasum;
+}
+if (abs(datasum - th) &amp;gt; GYRO) { //誤差が小さい場合はスルー ドリフト対策
+integral += datasum - th;
+}
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;そのreading()の中では、平均を取るためにAVEで指定された回数値を格納し続けています。
+emp[]で色々格納していますが、上から
+加速度ｘ軸、ｙ軸、ｚ軸
+温度
+角速度ｘ軸、ｙ軸、ｚ軸
+という風に格納されていきます。そのため今回は角速度ｚ軸のみを取り出すためこういった書き方です。&lt;/p&gt;
+&lt;h2 id=&#34;動かしてみよう&#34;&gt;動かしてみよう&lt;/h2&gt;
+&lt;p&gt;リード線を数本接続しただけで動作確認が出来るなんて、とっても楽ですね！
+早速動かしてみます。&lt;/p&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/245/2.png&#34; alt=&#34;2&#34;&gt;
+&lt;/center&gt;
+&lt;p&gt;できました！
+角度が表示されています。&lt;/p&gt;
+&lt;h2 id=&#34;何に使えるの&#34;&gt;何に使えるの？&lt;/h2&gt;
+&lt;p&gt;今回注目したのは、自律移動ロボットの位置制御です。
+ロボットコンテストなどでは、コントローラなどを用いず自動でロボットが移動することを求められるケースが多々あります。
+その自動ロボットの位置制御には、どのような方法が用いられているのでしょうか。&lt;/p&gt;
+&lt;p&gt;おそらく一般的なものは、モータにロータリエンコーダなどを取り付けて
+「モータがどのくらい回ったか」
+を検出し、位置を割り出す方法だと思います。&lt;/p&gt;
+&lt;p&gt;ですが、この方法には弱点があります。
+例えば、移動するフィールドが平らではなかったり、滑りやすい障害物（落ち葉など）があったり、タイヤが走行中に滑ったりといった「タイヤとフィールドの関係」で誤差が生じてしまいます。&lt;/p&gt;
+&lt;p&gt;この誤差をなんとかしたい！
+そんな時に便利なのがこの9軸センサです。&lt;/p&gt;
+&lt;p&gt;自身がどれくらい動いたか、どれくらい回ったかが分かるこのセンサがあれば、たとえタイヤが空回りしてしまっても、「今いる位置」を知ることが可能なのです！&lt;/p&gt;
+&lt;h2 id=&#34;最後に&#34;&gt;最後に&lt;/h2&gt;
+&lt;p&gt;今回は9軸センサのうちたった1軸しか使っていませんが、回転を検出することができました。
+より高度なスケッチを作ることでより高度な測定が可能になるため、これからも勉強を続けていきたいです。&lt;/p&gt;
+&lt;style&gt;
+.dialogue {
+padding: 10px;
+display: table;
+}
+.image_n, .image_s {
+width: 75px;
+height: 75px;
+margin-right: 10px;
+display: table-cell;
+vertical-align: middle;
+}
+.image_n img {
+border-radius: 50%;
+border: 2px solid blue;
+}
+.image_s img {
+border-radius: 50%;
+border: 2px solid green;
+}
+.name {
+font-weight: bold;
+text-align: center;
+}
+.text {
+display: table-cell;
+padding: 0;
+vertical-align: middle;
+padding-left: 20px;
+}
+&lt;/style&gt;</description></item><item><title>初めてのArduino〜トレーニングマシンを作る編〜</title><link>https://dotstud.io/blog/jikyuryoku-aruduino-training-machine/</link><pubDate>Mon, 11 Mar 2019 23:00:00 +0900</pubDate><guid>https://dotstud.io/blog/jikyuryoku-aruduino-training-machine/</guid><description>
 &lt;p&gt;初めまして、今月からdotstudioでお世話になる&lt;a href=&#34;https://dotstud.io/members/jikyuryoku&#34;&gt;自給力&lt;/a&gt;です。&lt;/p&gt;
 &lt;p&gt;プログラミングスクール卒業後でフラフラしてたところを、のびすけしゃちょーから「記事を書いてみない？」と誘っていただきました。これから、バシバシ記事を書いていきますのでよろしくお願いします。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;コードの書き方や手順で変なところあるかもしれませんが、許してください……！&lt;/strong&gt;&lt;/p&gt;
@@ -3396,700 +3670,6 @@ delay(10);
 &lt;li&gt;&lt;a href=&#34;http://gadget.renesas.com/ja/product/lychee_sp/8.html&#34;&gt;OpenCTの応用 輪郭検出、HSV色空間&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;ぜひ試してみてください！&lt;/p&gt;
-&lt;style&gt;
-.caution {
-border: 1px solid #BFBFBF;
-padding: 1em 2em;
-margin: 2em 0;
-color: #474747;
-background: whitesmoke;/*背景色*/
-border-left: double 7px #0B0B61;/*左線*/
-font-size: 90%;
-}
-.caution &gt; p {
-font-weight: bold;
-margin: 0 0 10px 0;
-padding: 0;
-}
-blockquote {
-font-size:80%;
-}
-.accbox {
-margin: 2em 0;
-padding: 0;
-max-width: 710px;
-}
-.accbox label {
-display: block;
-margin: 1.5px 0;
-padding : 11px 12px;
-color :#ffffff;
-font-weight: bold;
-background :#2f2f2f;
-cursor :pointer;
-transition: all 0.5s;
-}
-.accbox label:hover {
-background :#A4A4A4;
-}
-.accbox input {
-display: none;
-}
-.accbox .accshow {
-height: 0;
-padding: 0;
-overflow: hidden;
-opacity: 0;
-transition: 0.8s;
-}
-.cssacc:checked + .accshow {
-height: auto;
-padding: 5px;
-background: #eaeaea;
-opacity: 1;
-}
-&lt;/style&gt;</description></item><item><title>【ハンズオン資料】NefryBTでハジメテノIoT開発やってみよう！</title><link>https://dotstud.io/blog/handson-nefry-ma-kanazawa/</link><pubDate>Thu, 01 Nov 2018 10:07:13 +0900</pubDate><guid>https://dotstud.io/blog/handson-nefry-ma-kanazawa/</guid><description>
-&lt;p&gt;この記事は11/1の&lt;a href=&#34;https://mashupawards.connpass.com/event/103791/&#34;&gt;ハジメテノIoTハンズオン&lt;/a&gt;向け資料です。記事を読んで試せる内容になっているので、終了後や参加されていない方もぜひ試してみてください！&lt;/p&gt;
-&lt;section class=&#34;caution&#34;&gt;
-&lt;p&gt;■ハンズオンの進行について&lt;/p&gt;
-ハンズオンはこのページに沿って進めます。進められる方は、どんどん進めていきましょう！リンクは別タブや別ウィンドウで開くのがオススメです。
-&lt;/section&gt;
-&lt;section class=&#34;caution&#34;&gt;
-&lt;p&gt;■Nefry BTドキュメントについて&lt;/p&gt;
-&lt;a href=&#34;https://dotstud.io/docs/nefrybt/&#34;&gt;Nefry BTドキュメント&lt;/a&gt;: NefryBTの使い方に関するドキュメントページです。基本の動作や、調べ方、質問できる場所なども案内しています。
-&lt;/section&gt;
-&lt;h2 id=&#34;今回やってみること&#34;&gt;今回やってみること&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;湿度が高くなると自分のLINEに通知がくる仕組み&lt;/strong&gt;を、Nefry BT、温湿度センサ、IFTTTというWebサービスを使って作ってみます。室内の状態が異常になったときに通知する仕組みのようなイメージです。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/229/architecture.png&#34; alt=&#34;architecture&#34;&gt;
-&lt;/center&gt;
-&lt;h3 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h3&gt;
-&lt;h4 id=&#34;nefry-bt-ディスプレイ&#34;&gt;■Nefry BT＆ディスプレイ&lt;/h4&gt;
-&lt;p&gt;Nefry BTは「ESP-WROOM-32」というWi-Fi・BLE通信モジュールを搭載した、Arduinoと同じように開発できるマイコンボードです。
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/215/nefry.png&#34; alt=&#34;nefry&#34;&gt;
-&lt;/center&gt;
-&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/grove/&#34;&gt;Grove&lt;/a&gt;という刺すだけで配線できるモジュール対応のコネクタを搭載していて、&lt;strong&gt;ハードウェアをあまり意識せず&lt;/strong&gt;に開発できます。&lt;/p&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;h4 id=&#34;grove-温湿度センサ&#34;&gt;■Grove 温湿度センサ&lt;/h4&gt;
-&lt;p&gt;刺すだけで配線できる&lt;a href=&#34;https://dotstud.io/docs/grove/&#34;&gt;Grove&lt;/a&gt;シリーズの、温度と湿度を取得できるセンサです。
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/215/motion_sensor.png&#34; alt=&#34;motion_sensor&#34;&gt;
-&lt;/center&gt;
-&lt;/p&gt;
-&lt;p&gt;安価で扱いやすいセンサですが、高い精度や細かいデータの取得には向きません。プロトタイプ向きなセンサです。&lt;/p&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;h4 id=&#34;arduino-ide&#34;&gt;■Arduino IDE&lt;/h4&gt;
-&lt;p&gt;開発（プログラムの書き込み）には&lt;a href=&#34;https://www.arduino.cc/en/Main/Software&#34;&gt;Arduino IDE&lt;/a&gt;というフリーソフトウェアを利用します。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/arduinoide-setup/&#34;&gt;こちら&lt;/a&gt;の手順を見ながらご自身のPCにインストールしてください。&lt;/p&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;h4 id=&#34;arduino-ide-1&#34;&gt;■Arduino IDE&lt;/h4&gt;
-&lt;p&gt;開発（プログラムの書き込み）には&lt;a href=&#34;https://www.arduino.cc/en/Main/Software&#34;&gt;Arduino IDE&lt;/a&gt;というフリーソフトウェアを利用します。&lt;/p&gt;
-&lt;p&gt;まだインストールしていない方は、&lt;a href=&#34;https://dotstud.io/docs/arduinoide-setup/&#34;&gt;こちら&lt;/a&gt;の手順を見ながら進めてください。&lt;/p&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;h4 id=&#34;iftttアカウント&#34;&gt;■IFTTTアカウント&lt;/h4&gt;
-&lt;p&gt;&lt;a href=&#34;https://ifttt.com/&#34;&gt;IFTTT&lt;/a&gt;（いふと）は、モノとWebやWebサービス同士を簡単に連携できるサービスです。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/229/ifttt.png&#34; alt=&#34;ifttt&#34;&gt;
-&lt;/center&gt;
-&lt;p&gt;他の人が作ったアプレット（連携レシピ）を使ったり、自分で新たに作成したりできます。Nefry BTでは、簡単にIFTTT連携できるツールを用意しています。&lt;/p&gt;
-&lt;p&gt;ページトップの「&lt;strong&gt;Sign Up&lt;/strong&gt;」からアカウントをご作成ください。&lt;/p&gt;
-&lt;h2 id=&#34;事前準備-セットアップ&#34;&gt;事前準備（セットアップ）&lt;/h2&gt;
-&lt;h3 id=&#34;nefry-btのwi-fi設定&#34;&gt;Nefry BTのWi-Fi設定&lt;/h3&gt;
-&lt;p&gt;まずはNefry BTがインターネットにつながるよう、会場のWi-Fi情報をNefry BTに教えてあげます。スマホやPCを使う時と同じですね。&lt;/p&gt;
-&lt;p&gt;Nefry BTとPCを直接通信させ（アドホックモード）、立ち上がるNefryポータル（設定ウィンドウ）からSSIDとパスワードを入力する手順です。&lt;/p&gt;
-&lt;section class=&#34;caution&#34;&gt;
-&lt;p&gt;■Nefry BTが接続できるWi-Fi&lt;/p&gt;
-Nefry BTが接続できるWi-Fiは2.5GHz帯のWi-Fiのみです。新しい5GHz帯は利用できません（ほとんどのIoT機器が同様）。接続後にブラウザで再度ログインの必要なWi-Fiも、利用できません。
-&lt;/section&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;h4 id=&#34;ディスプレイを取り付け電源を入れる&#34;&gt;■ディスプレイを取り付け電源を入れる&lt;/h4&gt;
-&lt;p&gt;Nefry BTにディスプレイを取り付けます。4本の足をNefryの4本のピンソケットにさします。
-&lt;img src=&#34;https://dotstud.io/img/docs/nefrybt/display2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;このような形でささります。
-&lt;img src=&#34;https://dotstud.io/img/docs/nefrybt/display3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;Nefry BTに、PCやモバイルバッテリーなどから給電を開始します。ディスプレイに表示荒れる「NefryBT-XXXX」という部分が、&lt;strong&gt;ご自身のNefry BTが出す無線の名称&lt;/strong&gt;になります。
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/215/nefry.png&#34; alt=&#34;nefry&#34;&gt;
-&lt;/center&gt;
-&lt;/p&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;h4 id=&#34;pcをnefry-btの無線に接続する&#34;&gt;■PCをNefry BTの無線に接続する&lt;/h4&gt;
-&lt;p&gt;PCのWi-Fi接続設定から、ディスプレイに表示されている「NefryBT-XXXX」という無線を選び接続します。
-&lt;img src=&#34;https://dotstud.io/img/docs/nefrybt/nefry_wifi.png&#34; alt=&#34;&#34; /&gt;
-セットアップ中PCはインターネットに繋がらなくなるので、この説明ページは開いたまま進めるのがオススメです。&lt;/p&gt;
-&lt;p&gt;ちなみにSSIDは自由に変更することができます。（参照：&lt;a href=&#34;https://dotstud.io/docs/nefrybt-conv-change-ssid/&#34;&gt;SSIDを変更する&lt;/a&gt;）&lt;/p&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;h4 id=&#34;nefryポータルで設定する&#34;&gt;■Nefryポータルで設定する&lt;/h4&gt;
-&lt;p&gt;Nefry BTのWi-Fiに接続すると、自動でNefryポータルのウィンドウが立ち上がります（立ち上がらない場合はブラウザで&lt;a href=&#34;http://192.168.4.1&#34;&gt;http://192.168.4.1&lt;/a&gt; にアクセスします）。
-&lt;img src=&#34;https://dotstud.io/img/docs/nefrybt/setup_page.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;「お探しのページは…」と表示された場合は、「Move to main page」を洗濯してください。「Setup WiFi」をクリックし、利用するWi-FiのSSIDとパスワードを入力して「Save」で保存します。
-&lt;img src=&#34;https://dotstud.io/img/docs/nefrybt/setup_wifi.png&#34; alt=&#34;&#34; /&gt;
-保存すると、Nefry BTは自動で再起動します。緑の点滅が終了し再起動が完了したら、Wi-Fiのセットアップは完了です。&lt;/p&gt;
-&lt;p&gt;一度設定したら、同じWi-Fiを使っている間は起動するだけで接続されます。Wi-Fi情報は5つまで保存でき、消去もできます。&lt;/p&gt;
-&lt;h3 id=&#34;開発環境-arduino-ide-にボードを追加&#34;&gt;開発環境（Arduino IDE）にボードを追加&lt;/h3&gt;
-&lt;p&gt;Nefty BTの開発にはフリーソフトウェアの&lt;a href=&#34;https://www.arduino.cc/en/Main/Software&#34;&gt;Arduino IDE&lt;/a&gt;を利用します。インストールがまだの方は「&lt;a href=&#34;https://dotstud.io/docs/arduinoide-setup/&#34;&gt;Arduino IDEのインストール&lt;/a&gt;」を見ながら進めてください。&lt;/p&gt;
-&lt;p&gt;Arduino IDEには、Nefry BTのボード情報の追加が必要です。「&lt;a href=&#34;https://dotstud.io/docs/nefrybt-setup-arduino-ide/&#34;&gt;環境構築（Arduino IDE）&lt;/a&gt;」を見ながら追加してください。&lt;/p&gt;
-&lt;h2 id=&#34;はじめてのプログラムを書き込んでみる&#34;&gt;はじめてのプログラムを書き込んでみる&lt;/h2&gt;
-&lt;p&gt;まずはNefry BTに簡単なプログラムを書き込んでみましょう。Nefry BTは、最初から下記の機能が搭載されています。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;内蔵フルカラーLED&lt;/li&gt;
-&lt;li&gt;スイッチ（SW/RST）&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;nefry-btを起動&#34;&gt;Nefry BTを起動&lt;/h3&gt;
-&lt;p&gt;一度Nefry BTを電源から外し、ディスプレイを外します（内蔵LEDが隠れてしまうため）。マイコンボードに配線する時は、&lt;strong&gt;常に電源OFFの状態で操作&lt;/strong&gt;してください。&lt;/p&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/222/off.png&#34; alt=&#34;off&#34;&gt;
-&lt;/center&gt;
-マイコンボードは基本的に、給電によって電源のON/OFFを制御します。再起動時には最後に書き込んだプログラムが実行されます。プログラムは書き込むたびに上書きされます。&lt;/p&gt;
-&lt;p&gt;再度給電します。
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/222/on.png&#34; alt=&#34;on&#34;&gt;
-&lt;/center&gt;
-&lt;/p&gt;
-&lt;p&gt;緑色のLEDが点滅したあと、ランダムに光ります。&lt;/p&gt;
-&lt;h3 id=&#34;まずはlチカ&#34;&gt;まずはLチカ&lt;/h3&gt;
-&lt;p&gt;最初のプログラムとして、Lチカをやってみます。LEDチカチカの略で、入門向けのプログラムとして汎用的に紹介されています。&lt;/p&gt;
-&lt;p&gt;簡単なプログラムを書き込むことで、ボードが正常に動くか試す際に利用することも多いです。&lt;/p&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;h4 id=&#34;arduino-ideでプログラムを書く&#34;&gt;■Arduino IDEでプログラムを書く&lt;/h4&gt;
-&lt;p&gt;Arduino IDEを立ち上げ、メニューから&lt;strong&gt;&lt;code&gt;ファイル &amp;gt; 新規ファイル&lt;/code&gt;&lt;/strong&gt;を選択します。下記のような画面が開きます。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/215/ide.png&#34; alt=&#34;ide&#34;&gt;
-&lt;/center&gt;
-&lt;p&gt;エディタ部分に、下記のプログラムをコピーして貼り付けましょう（行番号までコピーしてしまわないようご注意ください）。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
-void setup() {
-}
-void loop() {
-Nefry.setLed(0, 0, 255); //色合いをRGBで指定
-Nefry.ndelay(1000); //1秒待つ
-Nefry.setLed(0, 0, 0); //LEDをオフにする
-Nefry.ndelay(1000); //1秒待つ
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;下記でプログラムの内容を解説しています。&lt;/p&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;h4 id=&#34;ボードを選択&#34;&gt;■ボードを選択&lt;/h4&gt;
-&lt;p&gt;メニューの&lt;strong&gt;&lt;code&gt;ツール &amp;gt; ボード &amp;gt; Nefry BT R2 / R3&lt;/code&gt;&lt;/strong&gt;を選択します。この際、ボードは使っているリビジョンに合わせて選択してください。（参照：&lt;a href=&#34;https://dotstud.io/docs/nefrybt-setup-revision/&#34;&gt;リビジョンを確認&lt;/a&gt;）&lt;/p&gt;
-&lt;p&gt;例えば、使っている基板がR3の場合は&lt;strong&gt;&lt;code&gt;ツール &amp;gt; ボード &amp;gt; Nefry BT R2 / R3&lt;/code&gt;&lt;/strong&gt;を選択します（ハンズオンでは全てR3を使用しています）。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/215/select_board.png&#34; alt=&#34;select_board&#34;&gt;
-&lt;/center&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/215/select_board2.png&#34; alt=&#34;select_board2&#34;&gt;
-&lt;/center&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;h4 id=&#34;シリアルポートを選択&#34;&gt;■シリアルポートを選択&lt;/h4&gt;
-&lt;p&gt;Nefry BTをPCのUSBポートにさします。プログラムはこのポートを介して、シリアル通信でNefry BTに流し込まれます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefrybt/power_supply.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;Macの場合は、メニューの&lt;strong&gt;&lt;code&gt;ツール &amp;gt; シリアルポート &amp;gt; /dev/cu.usbserial-xxxxxx&lt;/code&gt;&lt;/strong&gt;を選択します。環境によっては&lt;strong&gt;&lt;code&gt;/dev/tty.usbserial-xxxxxx&lt;/code&gt;&lt;/strong&gt;などの場合もあります。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/215/select_port.png&#34; alt=&#34;select_port&#34;&gt;
-&lt;/center&gt;
-&lt;p&gt;Windowsの場合は、&lt;strong&gt;&lt;code&gt;ツール &amp;gt; シリアルポート &amp;gt; /dev/COM-XX&lt;/code&gt;&lt;/strong&gt;を選択します。&lt;/p&gt;
-&lt;p&gt;&lt;font size=&#34;2&#34;&gt;
-※Nefry BTを抜き差しすると、シリアルポートの選択が解除される場合があります。適宜確認しましょう。
-&lt;/font&gt;&lt;/p&gt;
-&lt;section class=&#34;caution&#34;&gt;
-&lt;p&gt;■シリアルポートが選択できない方&lt;/p&gt;
-USBドライバのインストールが必要な場合があります。「&lt;a href=&#34;https://dotstud.io/docs/nefrybt-error-faq/#arduino-ideでシリアルポートが見つからない-書き込めない&#34;&gt;Arduino IDEでシリアルポートが見つからない・書き込めない&lt;/a&gt;」を参照して、USBを認識させるためのドライバをインストールしてください。また、Arduino IDEの再起動やUSBの抜き差しで認識する場合があります。
-&lt;/section&gt;
-&lt;section class=&#34;caution&#34;&gt;
-&lt;p&gt;■PCにUSB接続できない方&lt;/p&gt;
-セキュリティやポートの問題でPCにUSB接続できない方は、&lt;a href=&#34;https://dotstud.io/docs/nefrybt-program-zip/&#34;&gt;Wi-Fi経由でプログラムのアップロード&lt;/a&gt;が可能です。その場合、下記の書き込み手順は不要です。給電はコンセントやモバイルバッテリーから直接行ってください。
-&lt;/section&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;h4 id=&#34;名前をつけて保存&#34;&gt;■名前をつけて保存&lt;/h4&gt;
-&lt;p&gt;&lt;strong&gt;&lt;code&gt;ファイル&amp;gt;名前をつけて保存&lt;/code&gt;&lt;/strong&gt;を選択して保存します。「NefryLedBlink」など、後からみてわかりやすい名前がオススメです。&lt;/p&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;h4 id=&#34;プログラムを書き込む&#34;&gt;■プログラムを書き込む&lt;/h4&gt;
-&lt;p&gt;「✔️」を押してプログラムをコンパイルします。コンパイルとは、プログラムを機械が理解できる（人間には読みづらい）形式に変換することです。
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/229/compile.png&#34; alt=&#34;compile&#34;&gt;
-&lt;/center&gt;
-この手順は省略しても大丈夫ですが、シンタックス（文法）チェックをしてくれるので実施するのがオススメです。&lt;/p&gt;
-&lt;p&gt;左上の「→」ボタンを押してNefry BTにプログラムを書き込みます。
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/229/write.png&#34; alt=&#34;write&#34;&gt;
-&lt;/center&gt;
-&lt;/p&gt;
-&lt;p&gt;ESP32モジュールの特性上、書き込みに1分ほどかかります。エラーが出てしまうときは、「&lt;a href=&#34;https://dotstud.io/docs/nefrybt-error-handling-2/&#34;&gt;コンパイルは成功するのに書き込みが失敗する&lt;/a&gt;」を参照してください。&lt;/p&gt;
-&lt;p&gt;3分以上かかる場合、Nefry BTの不良の可能性があるので申し出てください。&lt;/p&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;h4 id=&#34;動作を確認&#34;&gt;■動作を確認&lt;/h4&gt;
-&lt;p&gt;起動したら、「青いLEDが1秒ごとに光る」ことを確認しましょう。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://gyazo.com/801e9ff4982f3326e6f1c3a133fd8de3&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/801e9ff4982f3326e6f1c3a133fd8de3.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;LEDがチカチカしました！&lt;/p&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;h4 id=&#34;プログラムの解説&#34;&gt;■プログラムの解説&lt;/h4&gt;
-&lt;p&gt;プログラムの要所を説明していきます。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;冒頭でライブラリを読み込んでいます。Nefry BTのライブラリでできることは「&lt;a href=&#34;https://dotstud.io/docs/nefrybt-liblary/&#34;&gt;Nefryのライブラリ&lt;/a&gt;」を参照してください。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;void setup() {
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;起動時に処理される部分です。今回はなにもしません。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;void loop() {
-Nefry.setLed(0, 0, 255); //色合いをRGBで指定
-Nefry.ndelay(1000); //1秒待つ
-Nefry.setLed(0, 0, 0); //LEDをオフにする
-Nefry.ndelay(1000); //1秒待つ
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;起動時に繰り返し実行する部分です。&lt;code&gt;//&lt;/code&gt;の後ろには任意のコメントを記入することができます。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;Nefry.setLed()&lt;/code&gt;という関数で、光らせる色合いをRGBの順で指定します。始めにR=0, G=0, B=255を渡しているので、青く光ります。&lt;/p&gt;
-&lt;p&gt;続いて&lt;code&gt;Nefry.ndelay()&lt;/code&gt;という関数で次の処理まで指定した時間待ちます。Arduinoでは時間はミリ秒で指定するので、1000は1秒です。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;Nefry.setLed()&lt;/code&gt;に0, 0, 0を渡すことで、LEDはオフになります。オンとオフのあと1秒ずつ待つことで、点滅を表現しています。&lt;/p&gt;
-&lt;p&gt;このように、マイコンボードは&lt;strong&gt;①起動時に行う処理&lt;/strong&gt;、&lt;strong&gt;②起動中に繰り返される処理&lt;/strong&gt;をプログラムして扱います。意外と簡単ではないですか……？&lt;/p&gt;
-&lt;h3 id=&#34;スイッチを押したらlチカ&#34;&gt;スイッチを押したらLチカ&lt;/h3&gt;
-&lt;h4 id=&#34;arduino-ideでプログラムを書く-1&#34;&gt;■Arduino IDEでプログラムを書く&lt;/h4&gt;
-&lt;p&gt;同様の手順で新規ファイルを作成し、下記のプログラムをNefry BTに書き込みます。おさらいがてら、やってみましょう。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
-void setup() {
-// スイッチを有効化
-Nefry.enableSW();
-}
-void loop() {
-// スイッチが押されたら
-if (Nefry.readSW()) {
-Nefry.setLed(255, 0, 0); //色合いをRGBで指定
-Nefry.ndelay(1000); //1秒待つ
-}
-// 青色に戻す
-Nefry.setLed(0, 0, 255);
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;下記でプログラムの内容を解説しています。&lt;/p&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;h4 id=&#34;動作を確認-1&#34;&gt;■動作を確認&lt;/h4&gt;
-&lt;p&gt;スイッチ（RSTではない方）を押したら、LEDが赤く光ることを確認します。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://gyazo.com/73185cad56d6374e6ad394eafbfef51d&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/73185cad56d6374e6ad394eafbfef51d.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;h4 id=&#34;プログラムの解説-1&#34;&gt;■プログラムの解説&lt;/h4&gt;
-&lt;p&gt;プログラムの要所を説明します。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;void setup() {
-// スイッチを有効化
-Nefry.enableSW();
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;起動時の処理では、&lt;code&gt;Nefry.enableSW()&lt;/code&gt;という関数でスイッチを有効化しています。マイコンボードでは、入力・出力に使うピンなどは&lt;code&gt;setup()&lt;/code&gt;関数内で有効化します。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;void loop() {
-// スイッチが押されたら
-if (Nefry.readSW()) {
-Nefry.setLed(255, 0, 0);//色合いをRGBで指定
-Nefry.ndelay(1000); //1秒待つ
-}
-// 青色に戻す
-Nefry.setLed(0, 0, 255);
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;code&gt;if(){}&lt;/code&gt;という条件式で、なにか動作させたいときの条件を決めます。&lt;code&gt;Nefry.readSW()&lt;/code&gt;でスイッチが押されたことを取得し、スイッチが押されたら&lt;code&gt;{}&lt;/code&gt;内を実行します。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;{}&lt;/code&gt;内ではLEDを赤く光らせ、1秒間待つ処理をしています。1秒後はまた&lt;code&gt;void loop()&lt;/code&gt;内を実行し、スイッチが押されているかどうか判定します。&lt;/p&gt;
-&lt;p&gt;スイッチが押されている以外のときは、青色のLEDを光らせます。&lt;/p&gt;
-&lt;h2 id=&#34;オフラインでgroveセンサを試す&#34;&gt;オフラインでGroveセンサを試す&lt;/h2&gt;
-&lt;p&gt;次は、配線してセンサのデータを取得してみます。&lt;strong&gt;まずはインターネットに繋がらない電子工作&lt;/strong&gt;、です。&lt;/p&gt;
-&lt;p&gt;エラーの切り分け（どこでエラーが起こっているか）を特定するために、自分で開発するときもステップバイステップでできているか確認しつつ進めるのがオススメです。&lt;/p&gt;
-&lt;h3 id=&#34;grove-温湿度センサを接続&#34;&gt;Grove 温湿度センサを接続&lt;/h3&gt;
-&lt;p&gt;Groveは刺すだけで配線できるのでGNDや信号線などの確認は必要ありませんが、デジタル・アナログ・I2Cなどの通信方法はGroveモジュールによって違います。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/229/seeed_wiki.png&#34; alt=&#34;seeed_wiki&#34;&gt;
-&lt;/center&gt;
-&lt;p&gt;通信方式は温湿度センサの製造元・SeeedStudioの&lt;a href=&#34;http://wiki.seeedstudio.com/Grove-TemperatureAndHumidity_Sensor/&#34;&gt;Wikiページ&lt;/a&gt;を見て確認しましょう。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/229/connect.png&#34; alt=&#34;connect&#34;&gt;
-&lt;/center&gt;
-&lt;p&gt;今回は「A0」というソケットに差し込みます。少し硬いですが、カチッと言うまで押し込めます。&lt;strong&gt;配線作業は常に電源オフの状態&lt;/strong&gt; で行います。&lt;/p&gt;
-&lt;h3 id=&#34;温湿度センサを扱うライブラリを読み込む&#34;&gt;温湿度センサを扱うライブラリを読み込む&lt;/h3&gt;
-&lt;p&gt;温湿度センサを扱うためのライブラリ（※）を追加でダウンロードします。リンク先のページで「Clone or Download」から「Download ZIP」を選択します（2つのページから両方ダウンロードしてください）。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/adafruit/DHT-sensor-library&#34;&gt;https://github.com/adafruit/DHT-sensor-library&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/adafruit/Adafruit_Sensor&#34;&gt;https://github.com/adafruit/Adafruit_Sensor&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/229/download.png&#34; alt=&#34;download&#34;&gt;
-&lt;/center&gt;
-&lt;p&gt;Arduino IDEの&lt;strong&gt;&lt;code&gt;スケッチ &amp;gt; ライブラリをインクルード &amp;gt; .ZIP形式のライブラリをインストール&lt;/code&gt;&lt;/strong&gt;から、ダウンロードされたZIPファイルを2つとも追加して完了です。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/229/library.png&#34; alt=&#34;library&#34;&gt;
-&lt;/center&gt;
-&lt;section class=&#34;caution&#34;&gt;
-&lt;p&gt;■ライブラリとは&lt;/p&gt;
-センサや外部サービスを使うために、あらかじめプログラムを書きパッケージ化したものです。既に誰かが作ってくれているものを取り込んだり、自作したりできます。
-&lt;/section&gt;
-&lt;h3 id=&#34;プログラムを書き込む-1&#34;&gt;プログラムを書き込む&lt;/h3&gt;
-&lt;p&gt;新規ファイルを作成し、下記のプログラムをNefry BTに書き込みます。書き込み手順は、上記の「&lt;a href=&#34;#まずはLチカ&#34;&gt;まずはLチカ&lt;/a&gt;」を参照してくださいね。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;#include &amp;quot;DHT.h&amp;quot;
-#include &amp;lt;Nefry.h&amp;gt;
-#define DHTPIN A0
-#define DHTTYPE DHT11
-DHT dht(DHTPIN, DHTTYPE);
-void setup() {
-Nefry.println(&amp;quot;温度・湿度をチェック&amp;quot;);
-dht.begin();
-}
-void loop() {
-delay(2000);
-float h = dht.readHumidity();
-float t = dht.readTemperature();
-if (isnan(h) || isnan(t)) {
-Nefry.println(&amp;quot;読み取りに失敗しました…&amp;quot;);
-return;
-}
-if (h &amp;gt; 70) {
-Nefry.println(&amp;quot;すっごく湿度が高いよ！&amp;quot;);
-}
-if (t &amp;gt; 30) {
-Nefry.println(&amp;quot;すっごく部屋が暑いよ！&amp;quot;);
-}
-Nefry.print(&amp;quot;湿度: &amp;quot;);
-Nefry.print(h);
-Nefry.print(&amp;quot; %\t&amp;quot;);
-Nefry.print(&amp;quot;温度: &amp;quot;);
-Nefry.print(t);
-Nefry.println(&amp;quot; *C &amp;quot;);
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&#34;動作を確認-2&#34;&gt;動作を確認&lt;/h3&gt;
-&lt;p&gt;メニューの&lt;strong&gt;&lt;code&gt;ツール&amp;gt;シリアルモニタ&lt;/code&gt;&lt;/strong&gt; を選択して開きます。
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/215/serial_monitor.png&#34; alt=&#34;serial_monitor&#34;&gt;
-&lt;/center&gt;
-&lt;/p&gt;
-&lt;p&gt;右下のbps設定を「115200bps」に変更します。
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/215/bps.png&#34; alt=&#34;bps&#34;&gt;
-&lt;/center&gt;
-&lt;/p&gt;
-&lt;p&gt;2秒ごとに、シリアルモニタに温度と湿度が表示されて行きます。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://gyazo.com/1d912b8d68ca7b63eb0c991c262d83f0&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/1d912b8d68ca7b63eb0c991c262d83f0.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;あまり動きがないですが、息を吹きかけると湿度が上がることを確認できます。湿度や温度が上がるとアラートメッセージが出ることを確認できたでしょうか？&lt;/p&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;h4 id=&#34;プログラムの解説-2&#34;&gt;■プログラムの解説&lt;/h4&gt;
-&lt;p&gt;プログラムの要所を解説します。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;#include &amp;quot;DHT.h&amp;quot;
-#include &amp;lt;Nefry.h&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;ライブラリの読み込み部分です。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;#define DHTPIN A0
-#define DHTTYPE DHT11
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;code&gt;#define&lt;/code&gt;で、配線したピンの場所を定義しています。「DHTPIN」という名前の箱に「A0」という値を入れているイメージです。&lt;/p&gt;
-&lt;p&gt;こうしておくことで、あとでピンの場所を変えても、ここの値だけ変更すればOKになります。DHTTYPEの値はWikiを参考に入れているだけなので、覚えなくて大丈夫です。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;void setup()
-{
-Nefry.println(&amp;quot;温度・湿度をチェック&amp;quot;);
-dht.begin();
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;setup関数内ではセンサの読み込みの開始と、シリアルモニタへの表示メッセージを指定しています。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;void loop()
-{
-delay(2000);
-float h = dht.readHumidity();
-float t = dht.readTemperature();
-// 省略
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;loop関数では、まず2秒ごとにループすることを指定しています。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;dht&lt;/code&gt;関数で湿度と温度の値を読み取っていて、値を&lt;code&gt;h&lt;/code&gt;と&lt;code&gt;t&lt;/code&gt;という変数にそれぞれ入れています。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;void loop()
-{
-// 省略
-if (h &amp;gt; 70) {
-Nefry.println(&amp;quot;すっごく湿度が高いよ！&amp;quot;);
-}
-if (t &amp;gt; 30) {
-Nefry.println(&amp;quot;すっごく部屋が暑いよ！&amp;quot;);
-}
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;code&gt;if() {}&lt;/code&gt; の条件式で、湿度が70を超えた時、温度が30を超えたときの処理をそれぞれ指定しています。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;Nefry.print(&amp;quot;湿度: &amp;quot;);
-Nefry.print(h);
-Nefry.print(&amp;quot; %\t&amp;quot;);
-Nefry.print(&amp;quot;温度: &amp;quot;);
-Nefry.print(t);
-Nefry.println(&amp;quot; *C &amp;quot;);
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;それ以外のときは温度・湿度を表示させます。&lt;/p&gt;
-&lt;h2 id=&#34;webサービスと連携してみる&#34;&gt;Webサービスと連携してみる&lt;/h2&gt;
-&lt;p&gt;それでは、湿度が70％を超えたら自分のメールやチャットに通知がくるようにしてみましょう。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/229/ifttt_action.png&#34; alt=&#34;ifttt_action&#34;&gt;
-&lt;/center&gt;
-&lt;p&gt;&lt;a href=&#34;https://ifttt.com/discover&#34;&gt;IFTTT&lt;/a&gt;で提供されているサービスであれば、LINE、メール、SMS、Twitter、Facebookなどなど、自由に通知先を設定することができます。この記事では、例としてLINEへの通知方法を紹介します。&lt;/p&gt;
-&lt;p&gt;余裕のある方は好きな通知先を選択してみてください！&lt;/p&gt;
-&lt;h3 id=&#34;iftttにアプレットを作成&#34;&gt;IFTTTにアプレットを作成&lt;/h3&gt;
-&lt;p&gt;まずはIFTTTにアプレット（レシピ）を作成します。IFTTTのアカウントを持っていない場合はアカウント取得から進めてください。&lt;/p&gt;
-&lt;p&gt;IFTTTのアプレットは「〇〇が起きたら△△する」というようにトリガー（〇〇）とアクション（△△）に分けられます。&lt;/p&gt;
-&lt;p&gt;今回は自作のサービスを利用できる「Webhooks」という機能を使い、「Webhooksを受け取ったらLINEに通知する」というアプレットを作ってみます。&lt;/p&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;h4 id=&#34;トリガーの作成&#34;&gt;■トリガーの作成&lt;/h4&gt;
-&lt;p&gt;IFTTTの&lt;a href=&#34;https://ifttt.com/create&#34;&gt;アプレット作成ページ&lt;/a&gt;から「+this」部分をクリックし、トリガーの作成をします。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/229/1.png&#34; alt=&#34;1&#34;&gt;
-&lt;/center&gt;
-&lt;p&gt;「Webhooks」を検索しましょう。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/229/2.png&#34; alt=&#34;2&#34;&gt;
-&lt;/center&gt;
-&lt;p&gt;「Receive a web request」を選択します。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/229/3.png&#34; alt=&#34;3&#34;&gt;
-&lt;/center&gt;
-&lt;p&gt;任意のイベント名をつけます。後ほどNefry BTにも登録するのでメモ帳などにコピーしておきましょう（大文字・小文字の区別があるのでコピー＆ペーストがオススメです）。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/229/4.png&#34; alt=&#34;4&#34;&gt;
-&lt;/center&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;h4 id=&#34;アクションの作成&#34;&gt;■アクションの作成&lt;/h4&gt;
-&lt;p&gt;続いてアクションを作成します。「+that」から進めましょう。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/229/5.png&#34; alt=&#34;5&#34;&gt;
-&lt;/center&gt;
-&lt;p&gt;Nefry BTからの送信を受け取ったら実行したいWebサービスを自由に選びます。今回はサンプルとしてLINEを連携してみますが、Twitter、Slack、Gmail、Googleカレンダー、Facebookなどなど、たぶん思いつく有名Webサービスはだいたいあります。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/229/6.png&#34; alt=&#34;6&#34;&gt;
-&lt;/center&gt;
-&lt;p&gt;起こしたいアクションを選びます。LINEは「メッセージを送る」機能のみですが、サービスによってはさまざまなアクションが起こせます。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/229/7.png&#34; alt=&#34;7&#34;&gt;
-&lt;/center&gt;
-&lt;p&gt;クリックすると、初回はアカウント認証を求められる気がします。LINEのログインメールアドレスがわからない、という方は、スマホのLINEアプリの設定から確認できます（&lt;strong&gt;&lt;code&gt;友だちタブ &amp;gt; 設定（歯車）ボタン &amp;gt; アカウント&amp;gt;メールアドレス・パスワード&lt;/code&gt;&lt;/strong&gt;）。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/229/8.png&#34; alt=&#34;8&#34;&gt;
-&lt;/center&gt;
-&lt;p&gt;メッセージを送るルーム、メッセージ内容を設定します。「1:1で〜」を選択すると自分個人宛てにメッセージが届きます。メッセージは「LINE Notify」というアカウントから送られる仕組みです。&lt;/p&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/229/9.png&#34; alt=&#34;9&#34;&gt;
-&lt;/center&gt;
-通知先は自分個人の他に、グループも選択できます。&lt;/p&gt;
-&lt;p&gt;メッセージを自由に作成します。Nefry BTから値を送信し受け取りたい場合は、「Add Ingredient」から&lt;code&gt;Value1&lt;/code&gt;を選択します。下記のような場合は、NefryBT側のプログラムで1つ目の値に湿度を送るよう設定します。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/229/10.png&#34; alt=&#34;10&#34;&gt;
-&lt;/center&gt;
-&lt;p&gt;このような感じで設定したら、「Create action」で作成します。
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/229/11.png&#34; alt=&#34;11&#34;&gt;
-&lt;/center&gt;
-&lt;/p&gt;
-&lt;p&gt;最終確認がされるので「Finish」で登録しましょう。
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/229/12.png&#34; alt=&#34;12&#34;&gt;
-&lt;/center&gt;
-&lt;/p&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;h4 id=&#34;webhooksのsecretkeyを取得&#34;&gt;■WebhooksのSecretKeyを取得&lt;/h4&gt;
-&lt;p&gt;Nefry BTとWebhooksと紐付けるための「Secret Key」を取得します。パスワードのようなものです。上部の検索欄からWebhooksを検索しましょう。
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/229/13.png&#34; alt=&#34;13&#34;&gt;
-&lt;/center&gt;
-&lt;/p&gt;
-&lt;p&gt;Webhooksのページに移動します（初回は認証画面が表示されるので「Connect」で開始しましょう）。
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/229/14.png&#34; alt=&#34;14&#34;&gt;
-&lt;/center&gt;
-&lt;/p&gt;
-&lt;p&gt;右上の「Setting」に移動します。
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/229/15.png&#34; alt=&#34;15&#34;&gt;
-&lt;/center&gt;
-&lt;/p&gt;
-&lt;p&gt;「URL」の末尾に自身のSecret Keyが記載されているのでコピーし、メモしておきます。このKeyは漏れると他人が自分にLINEを送れるようになってしまうので、&lt;strong&gt;Web上に公開しないよう注意&lt;/strong&gt;してください。
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/229/16.png&#34; alt=&#34;16&#34;&gt;
-&lt;/center&gt;
-&lt;/p&gt;
-&lt;h3 id=&#34;プログラムを書き込む-2&#34;&gt;プログラムを書き込む&lt;/h3&gt;
-&lt;h4 id=&#34;プログラム&#34;&gt;■プログラム&lt;/h4&gt;
-&lt;p&gt;以下のプログラムをNefry BTに書き込みます。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;#include &amp;quot;DHT.h&amp;quot;
-#include &amp;lt;Nefry.h&amp;gt;
-#include &amp;lt;NefryIFTTT.h&amp;gt;
-#define DHTPIN A0
-#define DHTTYPE DHT11
-String Event, SecretKey;
-DHT dht(DHTPIN, DHTTYPE);
-void setup() {
-Nefry.println(&amp;quot;温度・湿度をチェック&amp;quot;);
-Nefry.setStoreTitle(&amp;quot;SecretKey&amp;quot;, 0); //Nefry DataStoreのタイトルを指定
-Nefry.setStoreTitle(&amp;quot;Event&amp;quot;, 1);
-SecretKey = Nefry.getStoreStr(0); //Nefry DataStoreからデータを取得
-Event = Nefry.getStoreStr(1); //Nefry DataStoreからデータを取得
-dht.begin();
-}
-void loop() {
-delay(2000);
-float h = dht.readHumidity();
-float t = dht.readTemperature();
-if (isnan(h) || isnan(t)) {
-Nefry.println(&amp;quot;読み取りに失敗しました…&amp;quot;);
-return;
-}
-if (h &amp;gt; 70) {
-Nefry.println(&amp;quot;すっごく湿度が高いよ！&amp;quot;);
-bool sendData = IFTTT.send(Event, SecretKey, (String)h);
-if (!sendData) { //IFTTTにデータ送信が成功したかの判定
-Nefry.setLed(255, 0, 0); //エラーの時、赤色点灯
-delay(3000);
-} else {
-Nefry.setLed(0, 255, 0); //成功の時、緑色点灯
-delay(3000);
-}
-Nefry.ndelay(1000 * 30);
-}
-Nefry.print(&amp;quot;湿度: &amp;quot;);
-Nefry.print(h);
-Nefry.print(&amp;quot; %\t&amp;quot;);
-Nefry.print(&amp;quot;温度: &amp;quot;);
-Nefry.print(t);
-Nefry.println(&amp;quot; *C &amp;quot;);
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&#34;nefry-btにiftttのアカウント情報を設定&#34;&gt;Nefry BTにIFTTTのアカウント情報を設定&lt;/h3&gt;
-&lt;p&gt;Nefry BTにディスプレイを取り付けてから起動し、表示されているIPアドレスにアクセスします（画像の場合は&lt;code&gt;http://192.168.4.1/&lt;/code&gt;。人によって違います。 ）。
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/229/ip.png&#34; alt=&#34;ip&#34;&gt;
-&lt;/center&gt;
-&lt;/p&gt;
-&lt;p&gt;「Data Store」に移動します。
-&lt;img src=&#34;https://dotstud.io/img/docs/nefrybt/ifttt_setup1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;先ほど取得したWebhooksの「Secret Key」と「Event Name」をそれぞれ入力し保存します。Event Nameは大文字・小文字の区別があります。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/229/console.png&#34; alt=&#34;console&#34;&gt;
-&lt;/center&gt;
-&lt;p&gt;「Save」で保存するとNefry BTが再起動し、準備は完了です。&lt;/p&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;h3 id=&#34;動作を確認-3&#34;&gt;動作を確認&lt;/h3&gt;
-&lt;p&gt;さっそく完成したものを動かしてみましょう。&lt;/p&gt;
-&lt;p&gt;湿度の値が高くなると……&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://gyazo.com/bd6a5ae77bc93459b3c602d82fb00faa&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/bd6a5ae77bc93459b3c602d82fb00faa.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;LINEに通知されました！&lt;/p&gt;
-&lt;p&gt;お疲れ様でした〜！&lt;/p&gt;
-&lt;h3 id=&#34;プログラムの解説-3&#34;&gt;プログラムの解説&lt;/h3&gt;
-&lt;p&gt;要所を説明します。大事なところはちょっとだけです。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;void setup() {
-Nefry.setStoreTitle(&amp;quot;SecretKey&amp;quot;, 0); //Nefry DataStoreのタイトルを指定
-Nefry.setStoreTitle(&amp;quot;Event&amp;quot;, 1);
-SecretKey = Nefry.getStoreStr(0); //Nefry DataStoreからデータを取得
-Event = Nefry.getStoreStr(1); //Nefry DataStoreからデータを取得
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;code&gt;Nefry.setStoreTitle({タイトル}, {チャンネル番号})&lt;/code&gt;関数を使い、Nefry BTのDataStore機能に場所を作っています。この値はNefryポータル側から入力でき、変更があってもプログラムを書き換える必要はありません。&lt;/p&gt;
-&lt;p&gt;また値を&lt;code&gt;getStoreStr({チャンネル番号})&lt;/code&gt;で、ポータル側で設定した値を受け取っています。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;void loop() {
-// 省略
-if (h &amp;gt; 70) {
-Nefry.println(&amp;quot;すっごく湿度が高いよ！&amp;quot;);
-bool sendData = IFTTT.send(Event, SecretKey, (String)h);
-if (!sendData) { //IFTTTにデータ送信が成功したかの判定
-Nefry.setLed(255, 0, 0); //エラーの時、赤色点灯
-delay(3000);
-} else {
-Nefry.setLed(0, 255, 0); //成功の時、緑色点灯
-delay(3000);
-}
-Nefry.ndelay(1000 * 30);
-}
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;先ほど同様湿度が70%を超えたとき、という条件文を作っています。&lt;code&gt;IFTTT.send()&lt;/code&gt;関数を使い、もし送れなかったときは赤いLEDを光らせるという処理をしています（&lt;code&gt;!&lt;/code&gt;は&lt;code&gt;!==&lt;/code&gt;と同義で、&lt;code&gt;FALSE&lt;/code&gt;が返ったときに実行されます）。&lt;/p&gt;
-&lt;p&gt;何度も連続して通知が来るとウザいので、一度送ったあとは30秒（1000ミリ秒×30）待ちます。場合によっては30分待つ、1日待つ、などに変更します。&lt;/p&gt;
-&lt;h2 id=&#34;応用-いろいろなセンサを試してみる&#34;&gt;応用: いろいろなセンサを試してみる&lt;/h2&gt;
-&lt;p&gt;刺すだけで配線できるGroveモジュールは100種類以上あり、いろいろなデータを手軽に扱うことができます。下記ではモジュールと利用例を紹介します。&lt;/p&gt;
-&lt;h3 id=&#34;磁気スイッチ&#34;&gt;磁気スイッチ&lt;/h3&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/229/magnetic.png&#34; alt=&#34;magnetic&#34;&gt;
-&lt;/center&gt;
-磁石がくっついているか否か、を検知するセンサです。ドアの開閉検知によく使われ、市販の開閉検知装置も磁気センサを使っていることが多いです。&lt;/p&gt;
-&lt;p&gt;ドアが閉まっているときは磁石とセンサが接着、開いたときは離れるように設置することで開閉を検知できます。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;例: 開閉検知&lt;/li&gt;
-&lt;li&gt;参考: &lt;a href=&#34;http://www.atmarkit.co.jp/ait/articles/1806/26/news001.html&#34;&gt;磁気スイッチを使ってポストの開閉をメールで通知&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;人感センサ&#34;&gt;人感センサ&lt;/h3&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/229/pir.png&#34; alt=&#34;pir&#34;&gt;
-&lt;/center&gt;
-人が近くにいることを検知するセンサです。防犯用の近づくと光るなどに使われます。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;例: 防犯灯&lt;/li&gt;
-&lt;li&gt;参考: &lt;a href=&#34;https://dotstud.io/blog/nefrybt-handson-pir-linebot/&#34;&gt;Nefry BTと人感センサで防犯LINE BOTを作ってみよう&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;光センサ&#34;&gt;光センサ&lt;/h3&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/229/luminance.png&#34; alt=&#34;luminance&#34;&gt;
-&lt;/center&gt;
-照度（光の度合い）を検知します。暗くなったら明かりをつける仕組みや、異常のときに光るパトランプの近くに起き通知するなど、異常検知にも利用できます。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;例: 異常検知&lt;/li&gt;
-&lt;li&gt;参考: &lt;a href=&#34;https://qiita.com/n0bisuke/items/257126448cf4db482d43&#34;&gt;NefryでGrove Luminance Sensor(照度センサ)を触るメモ&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;超音波距離センサ&#34;&gt;超音波距離センサ&lt;/h3&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/229/wave.png&#34; alt=&#34;wave&#34;&gt;
-&lt;/center&gt;
-センサからモノへの距離を測るセンサです。超音波をぶつけて跳ね返りを調べる仕組みです。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;参考: &lt;a href=&#34;https://qiita.com/HiroyukiYasui/items/cf477e9ce83682513ab1&#34;&gt;NefryBTでGroveセンサーをつなげる時の？について&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;サーボモータ&#34;&gt;サーボモータ&lt;/h3&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/229/servo.png&#34; alt=&#34;servo&#34;&gt;
-&lt;/center&gt;
-角度を指定して回転させることができるアクチュエータです。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;参考: &lt;a href=&#34;https://poche-magique.com/2018/05/06/nefrybt_grove_servo/&#34;&gt;[Nefry BTとGrove接続実験] サーボモータ&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;カメラ&#34;&gt;カメラ&lt;/h3&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/229/camera.png&#34; alt=&#34;camera&#34;&gt;
-&lt;/center&gt;
-&lt;ul&gt;
-&lt;li&gt;例: 機械学習で画像認識&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://dotstud.io/blog/nefrybt-pepper-monitoring-system/&#34;&gt;Node.jsとNefry BTで監視システムを作ろう！ for Pepper #iotlt&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;関連情報&#34;&gt;関連情報&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://dotstud.io/shop/nefry-bt-set/&#34;&gt;Nefr BTの購入&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Nefry BTはこちらから購入できます（送料無料）。その他にも千石電商、ツクモ、若松通商、共立電子などの実店舗やECサイトで購入できます。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://dotstud.io/docs/nefrybt/&#34;&gt;Nefry BTドキュメント&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Nefry BTでは、IFTTTを使ったWebサービスとの連携や、その他のクラウドサービスとの連携も簡単です。ディスプレイを使ったイラスト描画や、100以上あるGroveモジュールの活用なども、ぜひ試してみてください。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://www.facebook.com/groups/nefry&#34;&gt;Nefryユーザーグループ（FB）&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Nefryユーザ同士が交流するページです。質問を投稿して解決した事例もたくさんありますので、困った際などはぜひお気軽にご利用ください。開発者もよく登場します。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://nefry.connpass.com/event/97692/&#34;&gt;Nefry User Meetup!&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Nefryユーザによる開催イベントです。ハンズオンやLT会、もくもく会などを実施しています。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://dotstudio.connpass.com/&#34;&gt;dotstudioイベント&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;blockquote&gt;
-&lt;p&gt;dotstudioによる開催イベントです。Nefry BT以外の題材を扱うことも多いです。&lt;/p&gt;
-&lt;/blockquote&gt;
 &lt;style&gt;
 .caution {
 border: 1px solid #BFBFBF;
