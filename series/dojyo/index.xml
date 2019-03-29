@@ -1,4 +1,251 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Dojyo on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/dojyo/</link><description>Recent content in Dojyo on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Fri, 22 Mar 2019 00:00:00 +0000</lastBuildDate><atom:link href="/series/dojyo/" rel="self" type="application/rss+xml"/><item><title>【114106→ｱｲｼﾃﾙ】平成の最後に最新のWebRTCでポケベルをつくってみた【体験編】</title><link>https://dotstud.io/blog/latest-webrtc-pokeberu-end-of-heisei/</link><pubDate>Fri, 22 Mar 2019 00:00:00 +0000</pubDate><guid>https://dotstud.io/blog/latest-webrtc-pokeberu-end-of-heisei/</guid><description>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Dojyo on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/dojyo/</link><description>Recent content in Dojyo on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Fri, 29 Mar 2019 00:00:00 +0600</lastBuildDate><atom:link href="/series/dojyo/" rel="self" type="application/rss+xml"/><item><title>【114106→ｱｲｼﾃﾙ】平成の最後に最新のWebRTCでポケベルをつくってみた【作り方編】</title><link>https://dotstud.io/blog/howto-make-webrtc-pokeberu/</link><pubDate>Fri, 29 Mar 2019 00:00:00 +0600</pubDate><guid>https://dotstud.io/blog/howto-make-webrtc-pokeberu/</guid><description>
+&lt;p&gt;こんにちは、ものづくり担当うこです。
+&lt;a href=&#34;https://dotstud.io/blog/latest-webrtc-pokeberu-end-of-heisei/&#34;&gt;前回の記事&lt;/a&gt;では、最新技術でポケベルを作ってみた！　というお話と、Webから2タッチ入力ができる公衆電話アプリの紹介をさせていただきました。&lt;/p&gt;
+&lt;p&gt;2回目の今回は「制作編」ということで、パーツさえ用意できれば誰でも作れてしまうポケベルの作り方を紹介したいと思います！&lt;/p&gt;
+&lt;h2 id=&#34;ハードウェア部分の制作&#34;&gt;ハードウェア部分の制作&lt;/h2&gt;
+&lt;h3 id=&#34;必要なもの&#34;&gt;必要なもの&lt;/h3&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/247/1.png&#34; alt=&#34;1&#34;&gt;
+&lt;/center&gt;
+&lt;ul&gt;
+&lt;li&gt;Raspberry Pi 3B+&lt;/li&gt;
+&lt;li&gt;マイクロUSBケーブル&lt;/li&gt;
+&lt;li&gt;マイクロSDカード（8GB以上）&lt;/li&gt;
+&lt;li&gt;GrovePi+&lt;/li&gt;
+&lt;li&gt;Grove Buzzer&lt;/li&gt;
+&lt;li&gt;Grove LCD RGB Backlight&lt;/li&gt;
+&lt;li&gt;有線LANで作業用PCと接続できる環境（セットアップに使います）&lt;/li&gt;
+&lt;li&gt;テープ（ガムテープやセロハンテープ、マスキングできれば何でも可）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;前提として、最低限のCLI（ターミナル）操作ができる方を対象として記事を書いています。予めご了承ください。&lt;/p&gt;
+&lt;h3 id=&#34;組み立て&#34;&gt;組み立て&lt;/h3&gt;
+&lt;h4 id=&#34;grovepi-をraspberry-piとドッキングする&#34;&gt;GrovePi+をRaspberry Piとドッキングする&lt;/h4&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/247/2.png&#34; alt=&#34;2&#34;&gt;
+&lt;/center&gt;
+&lt;p&gt;ガムテープやセロテープなどで、Raspberry PiのUSB端子の上部を図のように「マスキング」します。&lt;br /&gt;
+これは、上に乗せるGrovePi+の基板が直接触れることによるショートを防止するためです。&lt;/p&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/247/3.png&#34; alt=&#34;3&#34;&gt;
+&lt;/center&gt;
+&lt;p&gt;Raspberry Piの端子にGrovePi+のソケットを上から挿し込みます。&lt;br /&gt;
+このとき互いの端子の長さが異なりますが、写真のようにカド部分にあわせるようにしてください。&lt;/p&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/247/4.png&#34; alt=&#34;4&#34;&gt;
+&lt;/center&gt;
+&lt;p&gt;斜め上から見るとこのようになります。&lt;/p&gt;
+&lt;h4 id=&#34;groveのrgb-lcdとブザーを接続する&#34;&gt;GroveのRGB LCDとブザーを接続する&lt;/h4&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/247/5.png&#34; alt=&#34;5&#34;&gt;
+&lt;/center&gt;
+&lt;p&gt;Groveのブザーを「D8」と書かれている端子にGroveケーブルで接続します。&lt;br /&gt;
+また、Grove LCD RGB BacklightをI2Cと書かれている端子に接続します。こちらはI2C接続なので、I2Cと記述がある端子ならどこでもかまいませんが、写真ではI2C-1という端子に接続しています。&lt;/p&gt;
+&lt;h2 id=&#34;ソフトウェアのインストールと設定&#34;&gt;ソフトウェアのインストールと設定&lt;/h2&gt;
+&lt;h3 id=&#34;grovepi-向けos-raspbian-for-robots&#34;&gt;GrovePi+向けOS「Raspbian For Robots」&lt;/h3&gt;
+&lt;p&gt;このパートは以下のチュートリアルの概略になります。&lt;br /&gt;
+&lt;a href=&#34;https://www.dexterindustries.com/GrovePi/get-started-with-the-grovepi/&#34;&gt;Get Started with GrovePi&lt;/a&gt;&lt;/p&gt;
+&lt;h4 id=&#34;マイクロsdカードへのインストール&#34;&gt;マイクロSDカードへのインストール&lt;/h4&gt;
+&lt;p&gt;GrovePi+を動作させられるソフトウェアがプリインストールされたOSが格納されたマイクロSDカードを作成します。&lt;/p&gt;
+&lt;p&gt;公式サイトによると、すでにインストール済みのRaspbianも後から追加でGrovePi+用のソフトウェアがインストールできるとのことですが、記事執筆時点の最新ソフトウェアではうまく動作しませんでした。&lt;br /&gt;
+すでにRaspbianを使われている方も、お手数ではありますが新しいマイクロSDカードを入手してお試しください。&lt;/p&gt;
+&lt;p&gt;まず、以下のページからOSイメージファイルを入手します。&lt;br /&gt;
+&lt;a href=&#34;https://sourceforge.net/projects/dexterindustriesraspbianflavor/&#34;&gt;Raspbian For Robots by Dexter Industries download | SourceForge.net&lt;/a&gt;&lt;br /&gt;
+圧縮ファイルになっていますので、ダウンロード完了後に解凍しておきましょう。&lt;/p&gt;
+&lt;p&gt;このイメージファイルをマイクロSDカードに書き込みます。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;作業PCがWindowsの方は以下を参考に進めてください。&lt;br /&gt;
+&lt;a href=&#34;https://www.1ft-seabass.jp/memo/2018/07/23/raspbian-install-201807-memo/&#34;&gt;最近のRaspberry Piイメージ（Raspbian）をインストールするメモ - 1ft-seabass.jp.MEMO&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;作業PCがMacの方は以下を参考に進めてください。&lt;br /&gt;
+&lt;a href=&#34;https://qiita.com/py_iK/items/9070fc58f69d8c063e44&#34;&gt;MacでRaspberryPi入門 - Qiita&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;インストールが完了したら、RaspberryPiに挿入して電源を接続し起動させます。&lt;br /&gt;
+LANケーブルを使い、Raspberry Piと作業用PCを接続します。最近の小型PCはLANポートがついていないことも多いため、その際はUSBイーサネットアダプタなどを使うとよいでしょう。&lt;/p&gt;
+&lt;p&gt;接続が完了し、Raspberry PiとGrovePi+のPWR LEDが点灯していることを確認したら、作業用PCブラウザのURL入力欄に&lt;br /&gt;
+&lt;code&gt;http://dex.local/&lt;/code&gt;&lt;br /&gt;
+と入力して移動します。&lt;/p&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/247/6.png&#34; alt=&#34;6&#34;&gt;
+&lt;/center&gt;
+&lt;p&gt;ここまででうまくインストールと接続が完了していれば、このような画面が表示されます。&lt;br /&gt;
+ブラウザ中段左側の、&amp;rdquo;VNC&amp;rdquo; をクリックすると、ブラウザからRaspberry Piのデスクトップ画面へと直接アクセスすることができます。&lt;/p&gt;
+&lt;h4 id=&#34;設定とシステムのアップデート&#34;&gt;設定とシステムのアップデート&lt;/h4&gt;
+&lt;p&gt;&amp;ldquo;VNC&amp;rdquo; をクリックします。もしもパスワードが求められたら、&amp;rdquo;robots1234&amp;rdquo; と入力しましょう。&lt;br /&gt;
+Raspberry Piの本体にWiFiが内蔵されているモデル以外をお使いの場合は、WiFiドングル（USB接続の子機）を接続します。&lt;/p&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/247/7.png&#34; alt=&#34;7&#34;&gt;
+&lt;/center&gt;
+&lt;p&gt;右上に上下の矢印2つのアイコンをクリックして、WiFiに接続しましょう。&lt;br /&gt;
+有線LANによる接続と別でWiFiに接続していないと、アップデートやSkyWayへの接続などができません。&lt;/p&gt;
+&lt;p&gt;次にソフトウェアのアップデートを行います。&lt;br /&gt;
+&amp;ldquo;DI Software Update&amp;rdquo; というアイコンをダブルクリックして開き、しばらく待つと以下の画面になります。&lt;/p&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/247/8.png&#34; alt=&#34;8&#34;&gt;
+&lt;/center&gt;
+&lt;p&gt;以下の作業でダイアログが何回か出ますがすべてOKをクリックしてください。&lt;br /&gt;
+ドロップダウンメニューから &amp;ldquo;GrovePi&amp;rdquo; を選択し、&amp;rdquo;Update Firmware&amp;rdquo; をクリックします。&lt;br /&gt;
+それが完了したら、&amp;rdquo;Update Dexter Software&amp;rdquo; のボタンもクリックしてアップデートを行います。&lt;/p&gt;
+&lt;p&gt;ターミナルウインドウが出てアップデートが進行していきますので、少し時間がかかりますが終わるまで気長に待ちましょう。&lt;/p&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/247/9.png&#34; alt=&#34;9&#34;&gt;
+&lt;/center&gt;
+&lt;p&gt;ターミナルがこのような画面になったら閉じて、Raspberry Piを再起動します。&lt;br /&gt;
+再起動後は同様の手順でブラウザからデスクトップが表示できるところまで進めて、このデスクトップからターミナルを開きましょう。&lt;br /&gt;
+あるいは、SSHが使い慣れている方であれば、作業用PCから&lt;br /&gt;
+&lt;code&gt;$ ssh pi@dex.local&lt;/code&gt;&lt;br /&gt;
+で直接CLI操作をすることも可能ですので、使いやすいほうをお試しください。&lt;/p&gt;
+&lt;h2 id=&#34;ポケベルのプログラム部分の制作&#34;&gt;ポケベルのプログラム部分の制作&lt;/h2&gt;
+&lt;h3 id=&#34;groveのlcdとブザーを扱う&#34;&gt;GroveのLCDとブザーを扱う&lt;/h3&gt;
+&lt;p&gt;さて、ここからはポケベルを実際に動作させるためのプログラムを作成していきます！&lt;br /&gt;
+といっても、全てコピー&amp;amp;ペーストで作成していただけますのでご安心を。&lt;/p&gt;
+&lt;p&gt;まずは適当なディレクトリを作成して移動します。&lt;br /&gt;
+&lt;code&gt;$ mkdir ~/pocketbell; cd ~/pocketbell&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;LCDディスプレイを簡単に扱えるようにしてくれるモジュールをコピーします。&lt;br /&gt;
+&lt;code&gt;$ cp ~/Desktop/GrovePi/Software/Python/grove_rgb_lcd/grove_rgb_lcd.py ./&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;同じディレクトリに、テスト用スクリプトを作成しましょう。&lt;br /&gt;
+&lt;code&gt;$ vi grove_test.py&lt;/code&gt;&lt;br /&gt;
+ここではviエディタを使っていますが、vimやemacsなど、編集のできるものであれば何でもかまいません。&lt;br /&gt;
+編集画面になったら、以下のソースコードをコピー&amp;amp;ペーストして保存してください。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;ファイル:grove_test.py&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;import time, grovepi
+from grove_rgb_lcd import *
+buzzer = 8
+grovepi.pinMode(buzzer, &amp;quot;OUTPUT&amp;quot;)
+try:
+setRGB(200, 200, 200)
+setText(&amp;quot;Hello PocketBell&amp;quot;)
+grovepi.digitalWrite(buzzer, 1)
+time.sleep(1)
+grovepi.digitalWrite(buzzer, 0)
+except KeyboardInterrupt:
+grovepi.digitalWrite(buzzer, 0)
+except IOError:
+print (&amp;quot;Error&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;保存したら、python3で実行してみましょう。&lt;br /&gt;
+&lt;code&gt;$ python3 grove_test.py&lt;/code&gt;&lt;/p&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/247/10.png&#34; alt=&#34;10&#34;&gt;
+&lt;/center&gt;
+&lt;p&gt;ブザーからビープ音が鳴ると同時に、LCDに &amp;ldquo;Hello PocketBell&amp;rdquo; と表示されていれば、GroveがRaspberry PiのPythonから正しく扱えていることがわかります。&lt;/p&gt;
+&lt;h3 id=&#34;skywayと接続する&#34;&gt;SkyWayと接続する&lt;/h3&gt;
+&lt;p&gt;今回のポケベル制作における通信部分は、&lt;a href=&#34;https://webrtc.ecl.ntt.com&#34;&gt;SkyWay&lt;/a&gt;というWebRTCプラットホームを利用します。&lt;br /&gt;
+本来WebRTCはP2P通信なので、サーバーは必要ありません。ただし、最初のノード間の情報交換（シグナリング）がかなり大変なので、このSkyWayのシステムを使って実現します。&lt;br /&gt;
+また、WebRTCはもともとリッチなWebブラウザでしか動作しないものでしたが、ブラウザを介さずに動作させることのできる &lt;strong&gt;WebRTC Gateway&lt;/strong&gt; というものが開発されていて、無償で利用することができます。&lt;br /&gt;
+詳細は以下をご覧ください。&lt;br /&gt;
+&lt;a href=&#34;https://github.com/skyway/skyway-webrtc-gateway&#34;&gt;skyway/skyway-webrtc-gateway: &lt;em&gt;Experimental&lt;/em&gt; WebRTC Gateway for SkyWay&lt;/a&gt;&lt;/p&gt;
+&lt;h4 id=&#34;skywayのアカウント作成とapiキーの取得&#34;&gt;SkyWayのアカウント作成とAPIキーの取得&lt;/h4&gt;
+&lt;p&gt;&lt;a href=&#34;https://webrtc.ecl.ntt.com/signup.html&#34;&gt;新規登録 - SkyWay - Enterprise Cloud WebRTC Platform&lt;/a&gt;&lt;br /&gt;
+上記のページの「Community Edition」にある「無料で新規登録」のボタンから、アカウントを新規に作成しましょう。&lt;/p&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/247/11.png&#34; alt=&#34;11&#34;&gt;
+&lt;/center&gt;
+&lt;p&gt;アカウントを作成したらログインして、上段の &amp;ldquo;Create new application&amp;rdquo; をクリックします。するとアプリケーション作成ページに飛びますので、以下のように入力します。　　&lt;/p&gt;
+&lt;p&gt;Application description: my pocketbell（一例。任意の名前でよいです）&lt;br /&gt;
+Available domains: localhost, 127.0.0.1, ukkz.github.io&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;ukkz.github.io&amp;rdquo; は、後ほど公衆電話アプリからこのアプリケーションを利用するときのための設定なので、一通り終わったら削除しておいて構いません。&lt;br /&gt;
+入力完了したら緑色のCreateボタンをクリックして作成します。&lt;/p&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/247/12.png&#34; alt=&#34;12&#34;&gt;
+&lt;/center&gt;
+&lt;p&gt;作成後のページはこのように表示されているかと思います。&lt;br /&gt;
+API Keyの欄に表示されている文字列をコピーしてどこかに控えておきましょう。&lt;/p&gt;
+&lt;h4 id=&#34;webrtc-gatewayの取得と起動&#34;&gt;WebRTC Gatewayの取得と起動&lt;/h4&gt;
+&lt;p&gt;Raspberry Piに戻り、以下のコマンドを実行して &amp;ldquo;WebRTC Gateway&amp;rdquo; をダウンロードします。&lt;br /&gt;
+&lt;code&gt;$ wget https://github.com/skyway/skyway-webrtc-gateway/releases/download/0.0.4/gateway_linux_arm&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;実行権限を付与してから、バックエンドで起動させます。&lt;br /&gt;
+&lt;code&gt;$ chmod +x gateway_linux_arm ; sudo ./gateway_linux_arm &amp;amp;&lt;/code&gt;&lt;/p&gt;
+&lt;h4 id=&#34;gatewayをpythonで扱えるようにするモジュールの取得&#34;&gt;GatewayをPythonで扱えるようにするモジュールの取得&lt;/h4&gt;
+&lt;p&gt;今回、WebRTC Gatewayを扱うにあたり、簡単なモジュールを作成しました。&lt;br /&gt;
+Gitリポジトリをローカルにクローンします。&lt;br /&gt;
+&lt;code&gt;$ git clone https://github.com/ukkz/skygate.git&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;未完成のモジュールですので、今回は開発者モードでインストールします。&lt;br /&gt;
+&lt;code&gt;$ pip3 install -e skygate/&lt;/code&gt;&lt;br /&gt;
+&lt;code&gt;$ sudo python3 skygate/setup.py develop&lt;/code&gt;&lt;/p&gt;
+&lt;h4 id=&#34;skywayへの接続テスト&#34;&gt;SkyWayへの接続テスト&lt;/h4&gt;
+&lt;p&gt;以下のコマンドでサンプルスクリプトを実行します。&lt;br /&gt;
+&lt;code&gt;$ python3 skygate/sample.py bell-0000 xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;第1引数は「ピアID」といい、接続するデバイスに固有に割り振られるIDを自分で指定します。&lt;br /&gt;
+今回は &amp;ldquo;bell-0000&amp;rdquo; という値を使いましょう。&lt;br /&gt;
+第2引数は「APIキー」です。先ほど取得した、ご自身のアプリのAPIキーを入力しましょう。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Peer created as bell-0000: pt-829aa04e-449d-44a1-94f8-03481741cc5c&lt;/code&gt;&lt;br /&gt;
+以上のような結果が返ってきていれば、SkyWayと正常に接続しピアとして認識されています。&lt;br /&gt;
+Ctrl+C でサンプルスクリプトを終了させましょう。&lt;/p&gt;
+&lt;h3 id=&#34;skyway接続とgroveを組み合わせる&#34;&gt;SkyWay接続とGroveを組み合わせる&lt;/h3&gt;
+&lt;p&gt;以下のソースコードをコピー&amp;amp;ペーストし &amp;ldquo;pocketbell.py&amp;rdquo; という名前のファイルに保存してください。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;ファイル:pocketbell.py&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;#!/usr/bin/env python
+import time, sys, skygate, grovepi
+from grove_rgb_lcd import *
+buzzer = 8
+grovepi.pinMode(buzzer, &amp;quot;OUTPUT&amp;quot;)
+if len(sys.argv) &amp;gt;= 3:
+peer_id = str(sys.argv[1])
+api_key = str(sys.argv[2])
+try:
+peer = skygate.Peer(peer_id, api_key)
+except Exception as e:
+print(e)
+setRGB(100, 0, 0)
+quit()
+else:
+print(&#39;Peer created as &#39;+peer.id+&#39;: &#39;+peer.token)
+setRGB(0, 100, 0)
+try:
+while True:
+for data in peer.getDataConnections():
+if not data.getQueue().empty():
+mes = data.getQueue().get().decode()
+setText(mes)
+setRGB(200, 200, 200)
+print(mes)
+grovepi.digitalWrite(buzzer, 1)
+time.sleep(.1)
+grovepi.digitalWrite(buzzer, 0)
+time.sleep(2)
+setRGB(0, 100, 0)
+except KeyboardInterrupt:
+try:
+peer.close()
+except Exception as e:
+print(e)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;接続テストのときと同様、ピアIDとAPIキーを指定して実行します。&lt;br /&gt;
+ただし、ここではピアIDは &amp;ldquo;bell-0001&amp;rdquo; にしましょう。&lt;br /&gt;
+&lt;code&gt;$ python3 pocketbell.py bell-0001 xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;さて、ここまででポケベルは完成で、上記のプログラムを実行することで待ち受け状態となります。&lt;br /&gt;
+ではさっそく、公衆電話からデータを送ってみましょう！&lt;/p&gt;
+&lt;h2 id=&#34;web上の公衆電話から数字を送信しよう&#34;&gt;Web上の公衆電話から数字を送信しよう&lt;/h2&gt;
+&lt;p&gt;前回の記事で紹介した、Webから使えて自作ポケベルと通信ができる公衆電話を使います。&lt;br /&gt;
+&lt;a href=&#34;https://ukkz.github.io/skyway-payphone/?apikey=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&#34;&gt;PayPhone for SkyWay PocketBell&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;この公衆電話のURLは以下のようになっています。&lt;br /&gt;
+&lt;code&gt;https://ukkz.github.io/skyway-payphone/?apikey=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;このうち、&lt;code&gt;apikey=&lt;/code&gt;より右の部分を、ご自身で発行されたSkyWayのAPIキーに置き換えてもう一度アクセスしてみてください。&lt;/p&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/247/13.png&#34; alt=&#34;13&#34;&gt;
+&lt;/center&gt;
+&lt;p&gt;コインの投入口付近をクリックして、画面上の電話機のディスプレイが &amp;ldquo;CALL&amp;rdquo; になれば問題なくSkyWayに接続されています。&lt;br /&gt;
+これが確認できたら、以下の順番で操作を進めてみてください。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&amp;ldquo;0001&amp;rdquo;（ポケベルのピアIDであるbell-xxxxのxxxxに相当する4桁の数字）&lt;/li&gt;
+&lt;li&gt;電話機ディスプレイが &amp;ldquo;0001&amp;rdquo; 表示に変化&lt;/li&gt;
+&lt;li&gt;好きな数字を2〜3文字ほど打ち込んでみる&lt;/li&gt;
+&lt;li&gt;受話器を置く部分をクリックして終話する&lt;/li&gt;
+&lt;/ol&gt;
+&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/247/14.gif&#34; alt=&#34;14&#34;&gt;
+&lt;/center&gt;
+&lt;p&gt;ポケベルを確認してみましょう。&lt;br /&gt;
+ビープ音とともに、自分で打ち込んだ数字がGrove LCDの画面上に表示されましたでしょうか？&lt;br /&gt;
+今回は簡略版ですので、2タッチ入力で送ったカタカナ文字は表示できないという点がありますが、通信の難しさを意識することなくP2Pでのデータ送受信を体験いただけたかと思います。&lt;/p&gt;
+&lt;p&gt;ちなみに、前半の紹介記事で作っていたポケベルの動作のようすは以下のようになります。&lt;/p&gt;
+&lt;div style=&#34;margin:auto&#34;&gt;
+&lt;blockquote class=&#34;twitter-tweet tw-align-center&#34; data-conversation=&#34;none&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;着信音作っただけでまだ通信してなかった &lt;a href=&#34;https://twitter.com/hashtag/%E3%83%9D%E3%82%B1%E3%83%99%E3%83%AB?src=hash&amp;amp;ref_src=twsrc%5Etfw&#34;&gt;#ポケベル&lt;/a&gt; ちゃんとメッセージ受信できるようにしました📟送信側の公衆電話はWebで動きます☎️ 2タッチ入力対応・WebAudioでDTMF発音・WebRTCでデータ送信してますよん &lt;a href=&#34;https://t.co/NKauF6wd6E&#34;&gt;https://t.co/NKauF6wd6E&lt;/a&gt; &lt;a href=&#34;https://t.co/e4eOLBYbU1&#34;&gt;pic.twitter.com/e4eOLBYbU1&lt;/a&gt;&lt;/p&gt; うこ (@harmoniko) &lt;a href=&#34;https://twitter.com/harmoniko/status/1100371782152773633?ref_src=twsrc%5Etfw&#34;&gt;2019年2月26日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;WebRTCはWebブラウザ間でリアルタイムなデータの送受信を扱える最新の規格として普及していますが、ブラウザ以外のIoTデバイスでもこんなに簡単に扱えてしまう技術が登場しています。&lt;br /&gt;
+今回利用したSkyWayというサービスはJavaScriptのSDKが無償配布されていて、Webブラウザ上で動作するWebRTCアプリケーションを誰でも気軽に作成することができます。また、Raspberry Piから利用したGatewayも、WindowsやLinux上からブラウザを介さずに利用できるようになっています。&lt;br /&gt;
+あまり複雑なコードを書かなくてもこのようなP2P送受信ができますので、この機会にWebRTCを活用したものづくりにぜひともチャレンジしてみてくださいね！&lt;/p&gt;</description></item><item><title>【114106→ｱｲｼﾃﾙ】平成の最後に最新のWebRTCでポケベルをつくってみた【体験編】</title><link>https://dotstud.io/blog/latest-webrtc-pokeberu-end-of-heisei/</link><pubDate>Fri, 22 Mar 2019 00:00:00 +0000</pubDate><guid>https://dotstud.io/blog/latest-webrtc-pokeberu-end-of-heisei/</guid><description>
 &lt;p&gt;こんにちは、ものづくり担当うこです。&lt;br/&gt;
 ここ最近は次の元号が気になって、改元まで眠れません！&lt;/p&gt;
 &lt;p&gt;そんな平成の終了を追うように、平成初期に一世を風靡した「ポケベル」が、今年9月末で終了してしまうようですね。&lt;br/&gt;
