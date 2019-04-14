@@ -1,1 +1,1330 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Categories on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/categories/</link><description>Recent content in Categories on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Thu, 30 Aug 2018 09:40:24 +0900</lastBuildDate><atom:link href="/categories/" rel="self" type="application/rss+xml"/><item><title/><link>https://dotstud.io/categories/</link><pubDate>Thu, 30 Aug 2018 09:40:24 +0900</pubDate><guid>https://dotstud.io/categories/</guid><description/></item><item><title>Event</title><link>https://dotstud.io/categories/event/</link><pubDate>Tue, 18 Dec 2018 04:11:33 +0900</pubDate><guid>https://dotstud.io/categories/event/</guid><description/></item><item><title>Handson</title><link>https://dotstud.io/categories/handson/</link><pubDate>Thu, 13 Dec 2018 05:17:31 +0900</pubDate><guid>https://dotstud.io/categories/handson/</guid><description/></item><item><title>Learn</title><link>https://dotstud.io/categories/learn/</link><pubDate>Thu, 06 Sep 2018 10:58:59 +0900</pubDate><guid>https://dotstud.io/categories/learn/</guid><description/></item><item><title>News</title><link>https://dotstud.io/categories/news/</link><pubDate>Tue, 14 Aug 2018 18:29:55 +0900</pubDate><guid>https://dotstud.io/categories/news/</guid><description/></item><item><title>Sale</title><link>https://dotstud.io/categories/sale/</link><pubDate>Fri, 01 Jul 2016 00:00:03 +0900</pubDate><guid>https://dotstud.io/categories/sale/</guid><description/></item><item><title>Tips</title><link>https://dotstud.io/categories/tips/</link><pubDate>Tue, 12 Feb 2019 12:20:03 +0900</pubDate><guid>https://dotstud.io/categories/tips/</guid><description/></item><item><title>Try</title><link>https://dotstud.io/categories/try/</link><pubDate>Fri, 29 Mar 2019 00:00:00 +0700</pubDate><guid>https://dotstud.io/categories/try/</guid><description/></item></channel></rss>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>dotstudio（ドットスタジオ）</title><link>https://dotstud.io/categories/</link><description>Recent content on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Fri, 29 Mar 2019 00:00:00 +0700</lastBuildDate><atom:link href="/categories/" rel="self" type="application/rss+xml"/><item><title>【ハンズオン資料】Nefry BTと人感センサで防犯LINE BOTを作ってみよう</title><link>https://dotstud.io/blog/nefrybt-handson-pir-linebot/</link><pubDate>Thu, 30 Aug 2018 09:40:24 +0900</pubDate><guid>https://dotstud.io/blog/nefrybt-handson-pir-linebot/</guid><description>
+&lt;p&gt;この記事は8/30の&lt;a href=&#34;https://algyan.connpass.com/event/90564/&#34;&gt;IoT超入門！「Nefry BT」無料お試し体験ハンズオン！&lt;/a&gt;向け資料です。&lt;strong&gt;記事を読んで試せる内容&lt;/strong&gt;になっているので、参加されていない方もぜひ試してみてください！&lt;/p&gt;
+&lt;p&gt;最終的にはこんなものが出来上がります。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://gyazo.com/a2548f0ff2534496f75b85e87b5b629d&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/a2548f0ff2534496f75b85e87b5b629d.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;section class=&#34;caution&#34;&gt;
+&lt;p&gt;■ハンズオンの進行について&lt;/p&gt;
+ハンズオンはこのページに沿って進めます。進められる方は、どんどん進めていきましょう！リンクは別タブや別ウィンドウで開くのがオススメです。
+&lt;/section&gt;
+&lt;section class=&#34;caution&#34;&gt;
+&lt;p&gt;■Nefry BTドキュメントについて&lt;/p&gt;
+この授業に合わせて諸々リニューアルしたため、WIP状態の部分が多いです。ご了承ください（わかりづらい部分ぜひ教えてください）。近日中にアップデートします。
+&lt;/section&gt;
+&lt;h2 id=&#34;今回やってみること&#34;&gt;今回やってみること&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;人が近づくと自分のLINEに通知がくる仕組み&lt;/strong&gt;を、Nefry BT、LINE（、Azure）を使って作ってみます。近づくと点灯する玄関の防犯ライトに近いイメージです。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/architecture.png&#34; alt=&#34;architecture&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;h3 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h3&gt;
+&lt;h4 id=&#34;nefry-bt-ディスプレイ&#34;&gt;■Nefry BT＆ディスプレイ&lt;/h4&gt;
+&lt;p&gt;Nefry BTは「ESP-WROOM-32」というWi-Fi・BLE通信モジュールを搭載した、Arduinoと同じように開発できるマイコンボードです。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/nefry.png&#34; alt=&#34;nefry&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/grove/&#34;&gt;Grove&lt;/a&gt;という刺すだけで配線できるモジュール対応のコネクタを搭載していて、&lt;strong&gt;ハードウェアをあまり意識せず&lt;/strong&gt;に開発できます。&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;grove-pirモーションセンサ&#34;&gt;■Grove PIRモーションセンサ&lt;/h4&gt;
+&lt;p&gt;刺すだけで配線できる&lt;a href=&#34;https://dotstud.io/docs/grove/&#34;&gt;Grove&lt;/a&gt;シリーズの、人感センサです。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/motion_sensor.png&#34; alt=&#34;motion_sensor&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;arduino-ide&#34;&gt;■Arduino IDE&lt;/h4&gt;
+&lt;p&gt;開発（プログラムの書き込み）には&lt;a href=&#34;https://www.arduino.cc/en/Main/Software&#34;&gt;Arduino IDE&lt;/a&gt;というフリーソフトウェアを利用します。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/arduinoide-setup/&#34;&gt;こちら&lt;/a&gt;の手順を見ながらご自身のPCにインストールしてください。&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;lineアカウント&#34;&gt;■LINEアカウント&lt;/h4&gt;
+&lt;p&gt;今回はLINE通知の機能を作成します。LINEアカウントをご用意ください。&lt;/p&gt;
+&lt;p&gt;また、PCから設定する際にメールアドレスでのログインが必要になります。あらかじめスマートフォンアプリでメールアドレスを設定しておいてください。&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;azureアカウント&#34;&gt;■Azureアカウント&lt;/h4&gt;
+&lt;p&gt;WIP&lt;/p&gt;
+&lt;h2 id=&#34;事前準備-セットアップ&#34;&gt;事前準備（セットアップ）&lt;/h2&gt;
+&lt;h3 id=&#34;nefry-btのwi-fi設定&#34;&gt;Nefry BTのWi-Fi設定&lt;/h3&gt;
+&lt;p&gt;まずはNefry BTがインターネットにつながるよう、会場のWi-Fi情報をNefry BTに教えてあげます。&lt;/p&gt;
+&lt;p&gt;Nefry BTとPCを直接通信させ（アドホックモード）、立ち上がるNefryポータル（設定ウィンドウ）からSSIDとパスワードを入力する手順です。&lt;a href=&#34;https://dotstud.io/docs/nefrybt-setup-wifi/&#34;&gt;こちら&lt;/a&gt;の手順を見ながら進めてみてください。&lt;/p&gt;
+&lt;p&gt;一度設定したら、同じWi-Fiを使っている間は起動するだけで接続されます。Wi-Fi情報は5つまで保存でき、消去もできます。&lt;/p&gt;
+&lt;h3 id=&#34;開発環境-arduino-ide-にボードを追加&#34;&gt;開発環境（Arduino IDE）にボードを追加&lt;/h3&gt;
+&lt;p&gt;Nefty BTの開発にはフリーソフトウェアの&lt;a href=&#34;https://www.arduino.cc/en/Main/Software&#34;&gt;Arduino IDE&lt;/a&gt;を利用します。インストールがまだの方は「&lt;a href=&#34;https://dotstud.io/docs/arduinoide-setup/&#34;&gt;Arduino IDEのインストール&lt;/a&gt;」を見ながら進めてください。&lt;/p&gt;
+&lt;p&gt;Arduino IDEには、Nefry BTのボード情報の追加が必要です。「&lt;a href=&#34;https://dotstud.io/docs/nefrybt-setup-arduino-ide/&#34;&gt;環境構築（Arduino IDE）&lt;/a&gt;」を見ながら追加してください。&lt;/p&gt;
+&lt;section class=&#34;caution&#34;&gt;
+&lt;p&gt;■PCにUSB接続できない方&lt;/p&gt;
+セキュリティやポートの問題でPCにUSB接続できない方は、&lt;a href=&#34;https://dotstud.io/docs/nefrybt-program-zip/&#34;&gt;Wi-Fi経由でプログラムの書き込み&lt;/a&gt;が可能です。給電はコンセントやモバイルバッテリーから直接行ってください。
+&lt;/section&gt;
+&lt;h2 id=&#34;はじめてのプログラムを書き込んでみる&#34;&gt;はじめてのプログラムを書き込んでみる&lt;/h2&gt;
+&lt;p&gt;まずはNefry BTに簡単なプログラムを書き込んでみましょう。Nefry BTは、最初から下記の機能が搭載されています。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;内蔵フルカラーLED&lt;/li&gt;
+&lt;li&gt;スイッチ（SW/RST）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;まずはlチカ&#34;&gt;まずはLチカ&lt;/h3&gt;
+&lt;p&gt;最初のプログラムとして、Lチカをやってみます。LEDチカチカの略で、Webでいう”Hello, World!”です。&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;arduino-ideでプログラムを書く&#34;&gt;■Arduino IDEでプログラムを書く&lt;/h4&gt;
+&lt;p&gt;Arduino IDEを立ち上げ、メニューから&lt;strong&gt;&lt;code&gt;ファイル &amp;gt; 新規ファイル&lt;/code&gt;&lt;/strong&gt;を選択します。下記のような画面が開きます。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/ide.png&#34; alt=&#34;ide&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;エディタ部分に、下記のプログラムをコピーして貼り付けましょう。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+void setup() {
+}
+void loop() {
+Nefry.setLed(0, 0, 255); //色合いをRGBで指定
+Nefry.ndelay(1000); //1秒待つ
+Nefry.setLed(0, 0, 0); //LEDをオフにする
+Nefry.ndelay(1000); //1秒待つ
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;下記でプログラムの内容を解説しています。&lt;/p&gt;
+&lt;section class=&#34;caution&#34;&gt;
+&lt;p&gt;■PCにUSB接続できない方&lt;/p&gt;
+セキュリティやポートの問題でPCにUSB接続できない方は、&lt;a href=&#34;&#34;&gt;Wi-Fi経由でプログラムのアップロード&lt;/a&gt;が可能です。その場合、下記の書き込み手順は不要です。給電はコンセントやモバイルバッテリーから直接行ってください。
+&lt;/section&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;ボードを選択&#34;&gt;■ボードを選択&lt;/h4&gt;
+&lt;p&gt;メニューの&lt;strong&gt;&lt;code&gt;ツール &amp;gt; ボード &amp;gt; Nefry BT R2 / R3&lt;/code&gt;&lt;/strong&gt;を選択します。この際、ボードは使っているリビジョンに合わせて選択してください。（参照：&lt;a href=&#34;https://dotstud.io/docs/nefrybt-setup-revision/&#34;&gt;リビジョンを確認&lt;/a&gt;）&lt;/p&gt;
+&lt;p&gt;例えば、使っている基板がR3の場合は&lt;strong&gt;&lt;code&gt;ツール &amp;gt; ボード &amp;gt; Nefry BT R2 / R3&lt;/code&gt;&lt;/strong&gt;を選択します。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/select_board.png&#34; alt=&#34;select_board&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/select_board2.png&#34; alt=&#34;select_board2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;シリアルポートを選択&#34;&gt;■シリアルポートを選択&lt;/h4&gt;
+&lt;p&gt;Nefry BTをPCのUSBポートにさします。プログラムはこのポートを介して、シリアル通信でNefry BTに流し込まれます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/docs/nefrybt/power_supply.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Macの場合は、メニューの&lt;strong&gt;&lt;code&gt;ツール &amp;gt; シリアルポート &amp;gt; /dev/cu.usbserial-xxxxxx&lt;/code&gt;&lt;/strong&gt;を選択します。環境によっては&lt;strong&gt;&lt;code&gt;/dev/tty.usbserial-xxxxxx&lt;/code&gt;&lt;/strong&gt;などの場合もあります。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/select_port.png&#34; alt=&#34;select_port&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;Windowsの場合は、&lt;strong&gt;&lt;code&gt;ツール &amp;gt; シリアルポート &amp;gt; /dev/COM-XX&lt;/code&gt;&lt;/strong&gt;を選択します。&lt;/p&gt;
+&lt;p&gt;&lt;font size=&#34;2&#34;&gt;
+※Nefry BTを抜き差しすると、シリアルポートの選択が解除される場合があります。適宜確認しましょう。
+&lt;/font&gt;&lt;/p&gt;
+&lt;section class=&#34;caution&#34;&gt;
+&lt;p&gt;■シリアルポートが選択できない方&lt;/p&gt;
+USBドライバのインストールが必要な場合があります。&lt;a href=&#34;&#34;&gt;こちら&lt;/a&gt;を参照して、USBを認識させるためのドライバをインストールしてください。また、Arduino IDEの再起動やUSBの抜き差しで認識する場合があります。
+&lt;/section&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;名前をつけて保存&#34;&gt;■名前をつけて保存&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;ファイル&amp;gt;名前をつけて保存&lt;/code&gt;&lt;/strong&gt;を選択して保存します。「NefryLedBlink」など、後からみてわかりやすい名前がオススメです。&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;プログラムを書き込む&#34;&gt;■プログラムを書き込む&lt;/h4&gt;
+&lt;p&gt;「✔️」を押してプログラムをコンパイルします。
+&lt;img src=&#34;https://dotstud.io/img/docs/nefrybt/compile.png&#34; alt=&#34;&#34; /&gt;
+この手順は省略しても大丈夫ですが、シンタックス（文法）チェックをしてくれるので実施するのがオススメです。&lt;/p&gt;
+&lt;p&gt;左上の「→」ボタンを押してNefry BTにプログラムを書き込みます。
+&lt;img src=&#34;https://dotstud.io/img/docs/nefrybt/write.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;ESP32モジュールの特性上、書き込みに1分ほどかかります。エラーが出てしまうときは、「&lt;a href=&#34;https://dotstud.io/docs/nefrybt-error-handling-2/&#34;&gt;コンパイルは成功するのに書き込みが失敗する&lt;/a&gt;」を参照してください。&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;動作を確認&#34;&gt;■動作を確認&lt;/h4&gt;
+&lt;p&gt;起動したら、「青いLEDが1秒ごとに光る」ことを確認しましょう。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://gyazo.com/801e9ff4982f3326e6f1c3a133fd8de3&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/801e9ff4982f3326e6f1c3a133fd8de3.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;プログラムの解説&#34;&gt;■プログラムの解説&lt;/h4&gt;
+&lt;p&gt;プログラムの要所を説明していきます。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;冒頭でライブラリを読み込んでいます。Nefry BTのライブラリでできることは「&lt;a href=&#34;https://dotstud.io/docs/nefrybt-liblary/&#34;&gt;Nefryのライブラリ&lt;/a&gt;」を参照してください。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;void setup() {
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;起動時に処理される部分です。今回はなにもしません。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;void loop() {
+Nefry.setLed(0, 0, 255); //色合いをRGBで指定
+Nefry.ndelay(1000); //1秒待つ
+Nefry.setLed(0, 0, 0); //LEDをオフにする
+Nefry.ndelay(1000); //1秒待つ
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;起動時に繰り返し実行する部分です。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Nefry.setLed()&lt;/code&gt;という関数で、光らせる色合いをRGBの順で指定します。始めにR=0, G=0, B=255を渡しているので、青く光ります。&lt;/p&gt;
+&lt;p&gt;続いて&lt;code&gt;Nefry.ndelay()&lt;/code&gt;という関数で次の処理まで指定した時間待ちます。Arduinoでは時間はミリ秒で指定するので、1000は1秒です。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Nefry.setLed()&lt;/code&gt;に0, 0, 0を渡すことで、LEDはオフになります。オンとオフのあと1秒ずつ待つことで、点滅を表現しています。&lt;/p&gt;
+&lt;h3 id=&#34;スイッチを押したらlチカ&#34;&gt;スイッチを押したらLチカ&lt;/h3&gt;
+&lt;h4 id=&#34;arduino-ideでプログラムを書く-1&#34;&gt;■Arduino IDEでプログラムを書く&lt;/h4&gt;
+&lt;p&gt;同様の手順で新規ファイルを作成し、下記のプログラムをNefry BTに書き込みます。おさらいがてら、やってみましょう。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+void setup() {
+// スイッチを有効化
+Nefry.enableSW();
+}
+void loop() {
+// スイッチが押されたら
+if (Nefry.readSW()) {
+Nefry.setLed(255, 0, 0);
+Nefry.ndelay(1000);
+}
+// 青色に戻す
+Nefry.setLed(0, 0, 255);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;下記でプログラムの内容を解説しています。&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;動作を確認-1&#34;&gt;■動作を確認&lt;/h4&gt;
+&lt;p&gt;スイッチ（RSTではない方）を押したら、LEDが赤く光ることを確認します。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://gyazo.com/73185cad56d6374e6ad394eafbfef51d&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/73185cad56d6374e6ad394eafbfef51d.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;プログラムの解説-1&#34;&gt;■プログラムの解説&lt;/h4&gt;
+&lt;p&gt;プログラムの要所を説明します。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;void setup() {
+// スイッチを有効化
+Nefry.enableSW();
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;起動時の処理では、&lt;code&gt;Nefry.enableSW()&lt;/code&gt;という関数でスイッチを有効化しています。マイコンボードでは、入力・出力に使うピンなどは&lt;code&gt;setup()&lt;/code&gt;関数内で有効化します。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;void loop() {
+// スイッチが押されたら
+if (Nefry.readSW()) {
+Nefry.setLed(255, 0, 0);
+Nefry.ndelay(1000);
+}
+// 青色に戻す
+Nefry.setLed(0, 0, 255);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;if(){}&lt;/code&gt;という条件式で、スイッチが押されたことを取得します。スイッチが押されたら1秒間赤いLEDを光らせます。スイッチが押されている以外のときは、青色のLEDを光らせます。&lt;/p&gt;
+&lt;h2 id=&#34;オフラインでgroveセンサを試す&#34;&gt;オフラインでGroveセンサを試す&lt;/h2&gt;
+&lt;p&gt;次は、配線してセンサのデータを取得してみます。&lt;strong&gt;まずはインターネットに繋がらない電子工作&lt;/strong&gt;、です。&lt;/p&gt;
+&lt;p&gt;エラーの切り分け（どこでエラーが起こっているか）を特定するために、自分で開発するときもステップバイステップでできているか確認しつつ進めるのがオススメです。&lt;/p&gt;
+&lt;h3 id=&#34;grove-pirモーションセンサを接続&#34;&gt;Grove PIRモーションセンサを接続&lt;/h3&gt;
+&lt;p&gt;Groveは刺すだけで配線できるのでGNDや信号線などの確認は必要ありませんが、デジタル・アナログ・I2Cなどの通信方法はGroveモジュールによって違います。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/seeed_wiki.png&#34; alt=&#34;seeed_wiki&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;PIRモーションセンサの製造元・SeeedStudioの&lt;a href=&#34;http://wiki.seeedstudio.com/Grove-PIR_Motion_Sensor/&#34;&gt;Wikiページ&lt;/a&gt;を見てみると、デジタルで読みとることがわかります。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/connection.png&#34; alt=&#34;connection&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;Nefry BTのデジタル入力に対応する、「D2」というソケットに差し込みます。少し硬いですが、カチッと言うまで押し込めます。&lt;strong&gt;配線作業は常に電源オフの状態&lt;/strong&gt;で行います。&lt;/p&gt;
+&lt;section class=&#34;caution&#34;&gt;
+&lt;p&gt;■Nefry BT（無印）を使っている方&lt;/p&gt;
+Nefry BT（無印）において、D0・D1ピンはディスプレイの制御（I2C通信）に使用されているため、正常に動作しないことがあります（Nefry BT R2以降では修正されています）。リビジョンの調べ方は「&lt;a href=&#34;https://dotstud.io/docs/nefrybt-setup-revision/&#34;&gt;リビジョンの確認&lt;/a&gt;」をご参照ください。
+&lt;/section&gt;
+&lt;h3 id=&#34;プログラムを書き込む-1&#34;&gt;プログラムを書き込む&lt;/h3&gt;
+&lt;h4 id=&#34;プログラム&#34;&gt;■プログラム&lt;/h4&gt;
+&lt;p&gt;以下のプログラムをNefry BTに書き込みます。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+#define PIR_MOTION_SENSOR D2
+void setup()
+{
+pinMode(PIR_MOTION_SENSOR, INPUT);
+}
+void loop()
+{
+if(digitalRead(PIR_MOTION_SENSOR)) {
+Nefry.println(&amp;quot;誰かきたよ&amp;quot;);
+} else {
+Nefry.println(&amp;quot;監視中&amp;quot;);
+}
+delay(200);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;書き込み手順は、上記の「&lt;a href=&#34;#はじめてのプログラムを書き込んでみる&#34;&gt;はじめてのプログラムを書き込んでみる&lt;/a&gt;」を参照してくださいね。&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;動作を確認-2&#34;&gt;■動作を確認&lt;/h4&gt;
+&lt;p&gt;メニューの&lt;strong&gt;&lt;code&gt;ツール&amp;gt;シリアルモニタ&lt;/code&gt;&lt;/strong&gt;を選択して開きます。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/serial_monitor.png&#34; alt=&#34;serial_monitor&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;右下のbps設定を「115200bps」に変更します。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/bps.png&#34; alt=&#34;bps&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;人感センサに手をかざすと、シリアルモニタに「誰かきたよ」というメッセージが流れます。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://gyazo.com/adaf9534c9e944f3131336058a304671&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/adaf9534c9e944f3131336058a304671.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;プログラムの解説-2&#34;&gt;■プログラムの解説&lt;/h4&gt;
+&lt;p&gt;プログラムの要所を解説します。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;#define PIR_MOTION_SENSOR D2
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;#define&lt;/code&gt;で、配線したピンの場所を定義しています。「PIR_MOTION_SENSOR」という名前の箱に「D2」という値を入れているイメージです。&lt;/p&gt;
+&lt;p&gt;こうしておくことで、あとでピンの場所を変えても、ここの値だけ変更すればOKになります。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;void setup()
+{
+pinMode(PIR_MOTION_SENSOR, INPUT);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;setup関数内ではスイッチのとき同様、今回使うピンを有効化しています。&lt;code&gt;pinMode({ピンの場所}, {モード})&lt;/code&gt;で指定します。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;void loop()
+{
+if(digitalRead(PIR_MOTION_SENSOR)) {
+Nefry.println(&amp;quot;誰かきたよ&amp;quot;);
+} else {
+Nefry.println(&amp;quot;監視中&amp;quot;);
+}
+delay(200);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;loop関数では、モーションセンサに入力があったとき/それ以外のときで処理を分けています。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;digitalRead({ピン番号})&lt;/code&gt;で指定したピンの信号を読み取っていて、戻り値は「人を検知している = HIGH」「検知していない = LOW」です。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;if(digitalRead(PIR_MOTION_SENSOR)) {}&lt;/code&gt; の部分は&lt;code&gt;if(digitalRead(PIR_MOTION_SENSOR) == HIGH) {&lt;/code&gt;と同義で、比較演算子を省略するとHIGHのときにに実行されます。&lt;/p&gt;
+&lt;p&gt;200ミリ秒待つことで、0.2秒に1回センサの値をチェックするようになっています。&lt;/p&gt;
+&lt;h2 id=&#34;lineに通知してみる&#34;&gt;LINEに通知してみる&lt;/h2&gt;
+&lt;p&gt;それでは、人感センサが検知したら（= 人が来たら）自分のLINEに通知がくるようにしてみましょう。LINEが提供している、LINE Notifyというサービスを使っていきます。&lt;/p&gt;
+&lt;h3 id=&#34;lineの設定&#34;&gt;LINEの設定&lt;/h3&gt;
+&lt;h4 id=&#34;line-notifyアカウントと友達になる&#34;&gt;■LINE Notifyアカウントと友達になる&lt;/h4&gt;
+&lt;p&gt;LINE Notifyでは、「LINE Notify」というアカウントからメッセージが届きます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/109f4aa667871bcdb82342d6e2ac3233.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;まずはQRコードを読み取り、アカウントと友達になっておきましょう。&lt;/p&gt;
+&lt;h4 id=&#34;トークンを作成&#34;&gt;■トークンを作成&lt;/h4&gt;
+&lt;p&gt;自分のLINEと紐付けるために、トークン（鍵のようなもの）を発行します。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://notify-bot.line.me/my/&#34;&gt;LINE Notifyの設定ページ&lt;/a&gt;にいき、「トークンを発行する」ボタンを押します。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/token_button.png&#34; alt=&#34;token_button&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;下記のようなウィンドウが表示されます。「トークン名」にはLINE Notifyが何のサービスと連携したかわかる名前をつけましょう。通知するルームは、今回は「1:1」を選択します。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/token_config.png&#34; alt=&#34;token_config&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;トークンが発行されたら、コピーしてメモしておきます（あとで使います）。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/token_create.png&#34; alt=&#34;token_create&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;h3 id=&#34;プログラムを書き込む-2&#34;&gt;プログラムを書き込む&lt;/h3&gt;
+&lt;h4 id=&#34;プログラム-1&#34;&gt;■プログラム&lt;/h4&gt;
+&lt;p&gt;以下のプログラムをNefry BTに書き込みます。すごく長いですが、後ほど説明します。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+#include &amp;lt;NefryLineNotify.h&amp;gt;
+#define PIR_MOTION_SENSOR D2
+String auth, message;
+void setup() {
+pinMode(PIR_MOTION_SENSOR, INPUT);
+Nefry.setStoreTitle(&amp;quot;LINE Auth&amp;quot;,0);
+Nefry.setStoreTitle(&amp;quot;LINEMessage&amp;quot;,1);
+auth = Nefry.getStoreStr(0);
+message = Nefry.getStoreStr(1);
+Nefry.enableSW();
+}
+void loop() {
+if(digitalRead(PIR_MOTION_SENSOR)) {
+Nefry.println(&amp;quot;誰かきたよ&amp;quot;);
+if (!LineNotify.send(auth, message)) {
+Nefry.setLed(255, 0, 0);
+}
+Nefry.ndelay(1000*30);
+} else {
+Nefry.println(&amp;quot;監視中&amp;quot;);
+}
+delay(200);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;書き込み手順は、上記の「&lt;a href=&#34;#はじめてのプログラムを書き込んでみる&#34;&gt;はじめてのプログラムを書き込んでみる&lt;/a&gt;」を参照してくださいね。&lt;/p&gt;
+&lt;h3 id=&#34;nefry-btにトークン情報を設定&#34;&gt;Nefry BTにトークン情報を設定&lt;/h3&gt;
+&lt;p&gt;ディスプレイに表示されているIPアドレスに接続し、&lt;a href=&#34;https://dotstud.io/docs/nefrybt-basic-portal/&#34;&gt;Nefryポータル&lt;/a&gt;を開きます。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/nefry_portal.png&#34; alt=&#34;nefry_portal&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;「DataStore」のページに行くと2つのフォームが用意されているので、「LINE Auth」には先ほどコピーしたトークン、「LINEMessage」には送りたいメッセージを入力します。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/215/nefry_config.png&#34; alt=&#34;nefry_config&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;動作を確認-3&#34;&gt;■動作を確認&lt;/h4&gt;
+&lt;p&gt;さっそく完成したものを動かしてみましょう。&lt;/p&gt;
+&lt;p&gt;センサに人が近づくと……&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://gyazo.com/a2548f0ff2534496f75b85e87b5b629d&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/a2548f0ff2534496f75b85e87b5b629d.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;LINEに通知されました！&lt;/p&gt;
+&lt;p&gt;完成できた方、お疲れ様でした〜！&lt;/p&gt;
+&lt;h3 id=&#34;プログラムの解説-3&#34;&gt;プログラムの解説&lt;/h3&gt;
+&lt;p&gt;例のすごく長いコードについて、要所を説明します。大事なところはちょっとだけです。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;void setup() {
+pinMode(PIR_MOTION_SENSOR, INPUT);
+Nefry.setStoreTitle(&amp;quot;LINE Auth&amp;quot;,0);
+Nefry.setStoreTitle(&amp;quot;LINEMessage&amp;quot;,1);
+auth = Nefry.getStoreStr(0);
+message = Nefry.getStoreStr(1);
+Nefry.enableSW();
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;Nefry.setStoreTitle({タイトル}, {チャンネル番号})&lt;/code&gt;関数を使い、Nefry BTのDataStore機能に場所を作っています。この値はNefryポータル側から入力でき、変更があってもプログラムを書き換える必要はありません。&lt;/p&gt;
+&lt;p&gt;また値を&lt;code&gt;getStoreStr({チャンネル番号})&lt;/code&gt;で、ポータル側で設定した値を受け取っています。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;void loop() {
+if(digitalRead(PIR_MOTION_SENSOR)) {
+Nefry.println(&amp;quot;誰かきたよ&amp;quot;);
+if (!LineNotify.send(auth, message)) {
+Nefry.setLed(255, 0, 0);
+}
+Nefry.ndelay(1000*30);
+} else {
+Nefry.println(&amp;quot;監視中&amp;quot;);
+}
+delay(200);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;先ほど同様人感センサが検知したとき、という条件文を作っています。&lt;code&gt;LineNotify.send()&lt;/code&gt;関数を使い、もし送れなかったときは赤いLEDを光らせるという処理をしています（&lt;code&gt;!&lt;/code&gt;は&lt;code&gt;!==&lt;/code&gt;と同義で、&lt;code&gt;FALSE&lt;/code&gt;が返ったときに実行されます）。&lt;/p&gt;
+&lt;p&gt;何度も連続してLINEが来るとウザいので、一度送ったあとは30秒待ちます。&lt;/p&gt;
+&lt;p&gt;&lt;del&gt;LINE送信を実装している部分です、が、これ以降は&lt;strong&gt;気にしなくていいです&lt;/strong&gt;。この部分は&lt;a href=&#34;https://dotstud.io/docs/nefrybt-default/&#34;&gt;初期プログラム&lt;/a&gt;をコピーして作っています。たぶん近々ライブラリ化されます。&lt;/del&gt;&lt;/p&gt;
+&lt;p&gt;LINE Notifyがライブラリ化されたので編集しました！&lt;/p&gt;
+&lt;h2 id=&#34;応用課題-データをクラウドに送ってみる-ロギング&#34;&gt;応用課題: データをクラウドに送ってみる（ロギング）&lt;/h2&gt;
+&lt;p&gt;WIP（追記します）&lt;/p&gt;
+&lt;h2 id=&#34;関連情報&#34;&gt;関連情報&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://dotstud.io/shop/nefry-bt-set/&#34;&gt;Nefr BTの購入&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Nefry BTはこちらから購入できます（送料無料）。その他にも千石電商、ツクモ、若松通商、共立電子などの実店舗やECサイトで購入できます。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://dotstud.io/docs/nefrybt/&#34;&gt;Nefry BTドキュメント&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Nefry BTでは、IFTTTを使ったWebサービスとの連携や、その他のクラウドサービスとの連携も簡単です。ディスプレイを使ったイラスト描画や、100以上あるGroveモジュールの活用なども、ぜひ試してみてください。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://www.facebook.com/groups/nefry&#34;&gt;Nefryユーザーグループ（FB）&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Nefryユーザ同士が交流するページです。質問を投稿して解決した事例もたくさんありますので、困った際などはぜひお気軽にご利用ください。開発者もよく登場します。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://nefry.connpass.com/event/97692/&#34;&gt;Nefry User Meetup!&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Nefryユーザによる開催イベントです。ハンズオンやLT会、もくもく会などを実施しています。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://dotstudio.connpass.com/&#34;&gt;dotstudioイベント&lt;/a&gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;dotstudioによる開催イベントです。Nefry BT以外の題材を扱うことも多いです。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;style&gt;
+.caution {
+border: 1px solid #BFBFBF;
+padding: 1em 2em;
+margin: 2em 0;
+color: #474747;
+background: whitesmoke;/*背景色*/
+border-left: double 7px #0B0B61;/*左線*/
+font-size: 90%;
+}
+.caution &gt; p {
+font-weight: bold;
+margin: 0 0 10px 0;
+padding: 0;
+}
+blockquote {
+font-size:80%;
+}
+.accbox {
+margin: 2em 0;
+padding: 0;
+max-width: 710px;
+}
+.accbox label {
+display: block;
+margin: 1.5px 0;
+padding : 11px 12px;
+color :#ffffff;
+font-weight: bold;
+background :#2f2f2f;
+cursor :pointer;
+transition: all 0.5s;
+}
+.accbox label:hover {
+background :#A4A4A4;
+}
+.accbox input {
+display: none;
+}
+.accbox .accshow {
+height: 0;
+padding: 0;
+overflow: hidden;
+opacity: 0;
+transition: 0.8s;
+}
+.cssacc:checked + .accshow {
+height: auto;
+padding: 5px;
+background: #eaeaea;
+opacity: 1;
+}
+&lt;/style&gt;</description></item><item><title>7セグメントディスプレイをArduinoで光らせよう！シフトレジスタでのピンの増やし方</title><link>https://dotstud.io/blog/segment-display-shift-register/</link><pubDate>Mon, 04 Jun 2018 10:00:00 +0900</pubDate><guid>https://dotstud.io/blog/segment-display-shift-register/</guid><description>
+&lt;p&gt;電子工作が趣味なAndroidエンジニアのとまとと申します。&lt;/p&gt;
+&lt;p&gt;Arduinoはなんでもできて便利ですが、制御ピンの数に限りがあります。そのため、ピンをたくさん使いたいときは困ってしまいますよね。&lt;/p&gt;
+&lt;p&gt;例えばLEDを100個くらい用意してそれぞれ一つずつパターンを決めて制御したいとき、当然ピンが足りなくなりますよね……。&lt;/p&gt;
+&lt;p&gt;そんなときのために&lt;strong&gt;制御ピンを増やすことができる方法&lt;/strong&gt;を今回は紹介します！今回はたくさんのピンの制御が必要な7セグメントLEDディスプレイを少ないピンで光らせて見たいと思います。&lt;/p&gt;
+&lt;h2 id=&#34;準備するもの&#34;&gt;準備するもの&lt;/h2&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/169/image3.png&#34; alt=&#34;image3&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;今回はArduino Uno、7セグメントLEDに加えて、出力を増やすことのできるシフトレジスタや、スイッチングをすることのできるトランジスタを使って行きます。&lt;/p&gt;
+&lt;h3 id=&#34;小型3桁赤色7セグメントled表示器-7ｍｍ高-2381bs-http-akizukidenshi-com-catalog-g-gi-09084&#34;&gt;小型3桁赤色7セグメントLED表示器 7ｍｍ高（&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gI-09084/&#34;&gt;2381BS&lt;/a&gt;）&lt;/h3&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/169/7seg.png&#34; alt=&#34;7seg&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;7セグメントLEDは7個のLEDを八の字に組み合わせた電子部品で、それぞれのLEDを独立して制御することにより、数字などを表現することができます。&lt;/p&gt;
+&lt;p&gt;今回は2381BSという型番のものを使って行きます！&lt;/p&gt;
+&lt;h3 id=&#34;8ビットシフトレジスタ-74hc595-http-akizukidenshi-com-catalog-g-gi-08605&#34;&gt;8ビットシフトレジスタ（&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gI-08605/&#34;&gt;74HC595&lt;/a&gt;）&lt;/h3&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/169/shift.png&#34; alt=&#34;shift&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;シフトレジスタは、簡単に説明すると&lt;strong&gt;一つの出力を複数に増やすことのできる電子部品&lt;/strong&gt;のことです。&lt;/p&gt;
+&lt;p&gt;マイコンボードのピンは個数が限られているので、複数のセンサ等を使いたいときはシフトレジスタを用いることにより、資源を有効に使うことができます。&lt;/p&gt;
+&lt;p&gt;また、シフトレジスタは出力を増やす以外にも複数の入力を１つにまとめることもできます。&lt;/p&gt;
+&lt;h3 id=&#34;トランジスタ-c1815-http-akizukidenshi-com-catalog-g-gi-04268-8個&#34;&gt;トランジスタ（&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gI-04268/&#34;&gt;C1815&lt;/a&gt;） 8個&lt;/h3&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/169/image2.png&#34; alt=&#34;image2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;トランジスタには3本の端子があり、それぞれベース、コレクタ、エミッタと呼ばれます。コレクタ、エミッタ間を導通するかを、ベースに流すか流さないかで制御することができます。今回はこれをスイッチとして使います。&lt;/p&gt;
+&lt;p&gt;今回使うC1815は平らな面から見て左から順にエミッタ、コレクタ、ベースとなっています。&lt;/p&gt;
+&lt;h3 id=&#34;その他&#34;&gt;その他&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;カーボン抵抗（&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gR-16151/&#34;&gt;150Ω&lt;/a&gt;） × 8&lt;/li&gt;
+&lt;li&gt;カーボン抵抗（&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gR-16273/&#34;&gt;25KΩ&lt;/a&gt;） × 8&lt;/li&gt;
+&lt;li&gt;ブレッドボード&lt;/li&gt;
+&lt;li&gt;ジャンパ線&lt;/li&gt;
+&lt;li&gt;Arduino Unoまたは互換機&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;配線してみよう&#34;&gt;配線してみよう&lt;/h2&gt;
+&lt;p&gt;今回は初心者の方に取ってはあまり馴染みのないパーツも多いと思うので、それぞれ基本の回路の組み方から見ていきたいと思います。&lt;/p&gt;
+&lt;p&gt;とにかく7セグの回路が知りたい！と言う方は「&lt;strong&gt;7セグとトランジスタ、シフトレジスタの配線方法&lt;/strong&gt;」の項目を見てみてください。&lt;/p&gt;
+&lt;h3 id=&#34;トランジスタの配線方法&#34;&gt;トランジスタの配線方法&lt;/h3&gt;
+&lt;p&gt;まずはトランジスタの使い方から見てみます。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/169/image1.png&#34; alt=&#34;image1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;コレクタに制御したいピン（LEDなど）をつなぎ、ベースに制御するピン（Arduinoの13番など）をつなぎます。最後に、エミッタをGNDに繋げば回路の完成です。ベースのオンオフによってLEDをつけたり消したりすることができます。&lt;/p&gt;
+&lt;h3 id=&#34;シフトレジスタの配線方法&#34;&gt;シフトレジスタの配線方法&lt;/h3&gt;
+&lt;p&gt;シフトレジスタの回路の組み方は次のようになります。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/169/image5.png&#34; alt=&#34;image5&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;シフトレジスタの16番・10番を5Vに、13番・8番をGNDに繋いでいます。14、12、11番はそれぞれ、Arduinoの制御ピン（11、10、9番）に繋いでいます。&lt;/p&gt;
+&lt;p&gt;余ってる8つのピンをLEDのアノード（+）に繋ぎ、LEDのカソード（−）を抵抗を経由してGNDに繋げば完成です。&lt;/p&gt;
+&lt;h3 id=&#34;7セグとトランジスタ-シフトレジスタの配線方法&#34;&gt;7セグとトランジスタ、シフトレジスタの配線方法&lt;/h3&gt;
+&lt;p&gt;さて、いよいよ7セグを光らせてみましょう！回路は以下の図です。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/169/image4.png&#34; alt=&#34;image4&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;配線がかなり多くなるので、&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gP-02315/&#34;&gt;短いジャンパ&lt;/a&gt;を駆使するのがオススメです。&lt;/p&gt;
+&lt;p&gt;これで回路は完成です。&lt;/p&gt;
+&lt;h2 id=&#34;プログラムを書き込もう&#34;&gt;プログラムを書き込もう&lt;/h2&gt;
+&lt;p&gt;では、次のプログラムをコピペしてArduino IDEを使ってボードに書き込みましょう！&lt;code&gt;int num = 7&lt;/code&gt;には光らせたい数字を代入します。&lt;/p&gt;
+&lt;p&gt;プログラムの仕様は回路の組み方によって変わるため、今回は同じように組んでください。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;#define DATA 11
+#define LATCH 10
+#define CLOCK 9
+// 0b10000000 DP
+// 0b01000000 D
+// 0b00100000 E
+// 0b00010000 F
+// 0b00001000 A
+// 0b00000100 G
+// 0b00000010 C
+// 0b00000001 B
+static const int num[] {
+0b01111011, //ZERO
+0b00000011, //ONE
+0b01101101, //TWO
+0b01001111, //THREE
+0b00010111, //FOUR
+0b01011110, //FIVE
+0b01110110, //SIX
+0b00001011, //SEVEN
+0b01111111, //EIGHT
+0b01011111, //NINE
+};
+int count;
+void setup()
+{
+count = 0;
+pinMode(DATA, OUTPUT);
+pinMode(LATCH, OUTPUT);
+pinMode(CLOCK, OUTPUT);
+pinMode(1, OUTPUT);
+pinMode(2, OUTPUT);
+pinMode(3, OUTPUT);
+}
+void loop()
+{
+digitalWrite(1, HIGH);
+digitalWrite(2, HIGH);
+digitalWrite(3, HIGH);
+digitalWrite(LATCH, LOW);
+shiftOut(DATA, CLOCK, 8, num[count]);
+digitalWrite(LATCH, HIGH);
+delay(1000);
+if (count == 9)
+count = 0;
+else
+count++;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;プログラムの解説&#34;&gt;プログラムの解説&lt;/h3&gt;
+&lt;p&gt;プログラムの一部を解説していきます。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;#define DATA 11
+#define LATCH 10
+#define CLOCK 9
+// 0b10000000 DP
+// 0b01000000 D
+// 0b00100000 E
+// 0b00010000 F
+// 0b00001000 A
+// 0b00000100 G
+// 0b00000010 C
+// 0b00000001 B
+static const int num[] {
+0b01111011, //ZERO
+0b00000011, //ONE
+0b01101101, //TWO
+0b01001111, //THREE
+0b00010111, //FOUR
+0b01011110, //FIVE
+0b01110110, //SIX
+0b00001011, //SEVEN
+0b01111111, //EIGHT
+0b01011111, //NINE
+};
+int count; // カウンタ
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;ここでは使うピンと、7セグを光らせるパターンの定義をしています。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;void setup()
+{
+count = 0;
+pinMode(DATA, OUTPUT);
+pinMode(LATCH, OUTPUT);
+pinMode(CLOCK, OUTPUT);
+pinMode(1, OUTPUT);
+pinMode(2, OUTPUT);
+pinMode(3, OUTPUT);
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;ここでは、Arduinoから出力をするピンを指定します。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;void loop()
+{
+digitalWrite(1, HIGH);
+digitalWrite(2, HIGH);
+digitalWrite(3, HIGH);
+digitalWrite(LATCH, LOW);
+shiftOut(DATA, CLOCK, 8, num[count]);
+digitalWrite(LATCH, HIGH);
+delay(1000);
+if (count == 9)
+count = 0;
+else
+count++;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;ここで、1、2、3番ピンを全てHIGHにしていますが、LOWに切り替えることにより各7セグを制御することができます。&lt;/p&gt;
+&lt;p&gt;表示したい数字の配列を読み込み、&lt;code&gt;shiftOut()&lt;/code&gt;で光らせたいLEDのピンを指定します。&lt;/p&gt;
+&lt;p&gt;LATCHピンをLOWにすることにより、&lt;code&gt;shiftOut()&lt;/code&gt;でデータを送ることができ、送信後HIGHにすることにより、実際にそれぞれのLEDを光らせることができます。&lt;/p&gt;
+&lt;h2 id=&#34;試してみる&#34;&gt;試してみる&lt;/h2&gt;
+&lt;p&gt;上記のコードで&lt;code&gt;int num = 7&lt;/code&gt;を試してみると、このような感じで光らせることができます！&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/169/image6.png&#34; alt=&#34;image6&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;シフトレジスタを用いた回路は電子工作をやりはじめた人には難しいかもしれませんが、初歩的なものの組み合わせでできているのでこの記事を見て試してみるのも面白いと思います。&lt;/p&gt;
+&lt;p&gt;また今回使ったシフトレジスタは一つだけでしたが、複数組み合わせて身近なLCDディスプレイやLEDキューブ、自作のロボットの制御などのようなものを実現することができます。考え方次第でなんでも作ることができると思います！&lt;/p&gt;
+&lt;p&gt;ぜひ試してみてください！&lt;/p&gt;</description></item><item><title>Nefry BT</title><link>https://dotstud.io/shop/nefry-bt-single/</link><pubDate>Sat, 05 May 2018 14:40:04 +0900</pubDate><guid>https://dotstud.io/shop/nefry-bt-single/</guid><description>
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/shop/013/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;価格：4,980円（税抜き）&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;正式名称：Nefry BT（ねふりーびーてぃ）&lt;/li&gt;
+&lt;li&gt;搭載IC：ESP-WROOM-32&lt;/li&gt;
+&lt;li&gt;バッテリー：非搭載&lt;/li&gt;
+&lt;li&gt;電源供給方法：USB給電&lt;/li&gt;
+&lt;li&gt;Wi-Fi：搭載&lt;/li&gt;
+&lt;li&gt;Bluetooth：Bluetooth Low Energy搭載&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;ドキュメントや関連リンク等は&lt;a href=&#34;https://dotstud.io/docs/nefrybt&#34;&gt;こちら&lt;/a&gt;になります。&lt;/p&gt;
+&lt;h2 id=&#34;秋葉原のショップやその他オンラインサイトでも購入できます&#34;&gt;秋葉原のショップやその他オンラインサイトでも購入できます&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-55W8&#34;&gt;千石電商&lt;/a&gt;の購入ページ&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://shop.tsukumo.co.jp/goods/4589490377565&#34;&gt;ツクモ&lt;/a&gt;の購入ページ&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://eleshop.jp/shop/g/gI1J121/&#34;&gt;共立電子産業&lt;/a&gt;の購入ページ&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://wakamatsu.co.jp/biz/products/detail.php?product_id=38320041&#34;&gt;若松通商&lt;/a&gt;の購入ページ&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.chip1stop.com/view/dispDetail/DispDetail?partId=DOTS-0000001&amp;amp;cid=NefryBT_dotstudio&#34;&gt;チップワンストップ&lt;/a&gt;の購入ページ&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;ディスプレイはセットではないので、&lt;a href=&#34;https://dotstud.io/shop/nefry-bt-set&#34;&gt;ディスプレイセット&lt;/a&gt;または&lt;a href=&#34;https://dotstud.io/shop/nefry-bt-display&#34;&gt;ディスプレイ単品&lt;/a&gt;をご購入ください。&lt;/p&gt;</description></item><item><title>Nefry BT</title><link>https://dotstud.io/shop/nefry-bt-single/</link><pubDate>Sat, 05 May 2018 14:40:04 +0900</pubDate><guid>https://dotstud.io/shop/nefry-bt-single/</guid><description>
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/shop/013/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;価格：4,980円（税抜き）&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;正式名称：Nefry BT（ねふりーびーてぃ）&lt;/li&gt;
+&lt;li&gt;搭載IC：ESP-WROOM-32&lt;/li&gt;
+&lt;li&gt;バッテリー：非搭載&lt;/li&gt;
+&lt;li&gt;電源供給方法：USB給電&lt;/li&gt;
+&lt;li&gt;Wi-Fi：搭載&lt;/li&gt;
+&lt;li&gt;Bluetooth：Bluetooth Low Energy搭載&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;ドキュメントや関連リンク等は&lt;a href=&#34;https://dotstud.io/docs/nefrybt&#34;&gt;こちら&lt;/a&gt;になります。&lt;/p&gt;
+&lt;h2 id=&#34;秋葉原のショップやその他オンラインサイトでも購入できます&#34;&gt;秋葉原のショップやその他オンラインサイトでも購入できます&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-55W8&#34;&gt;千石電商&lt;/a&gt;の購入ページ&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://shop.tsukumo.co.jp/goods/4589490377565&#34;&gt;ツクモ&lt;/a&gt;の購入ページ&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://eleshop.jp/shop/g/gI1J121/&#34;&gt;共立電子産業&lt;/a&gt;の購入ページ&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://wakamatsu.co.jp/biz/products/detail.php?product_id=38320041&#34;&gt;若松通商&lt;/a&gt;の購入ページ&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.chip1stop.com/view/dispDetail/DispDetail?partId=DOTS-0000001&amp;amp;cid=NefryBT_dotstudio&#34;&gt;チップワンストップ&lt;/a&gt;の購入ページ&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;ディスプレイはセットではないので、&lt;a href=&#34;https://dotstud.io/shop/nefry-bt-set&#34;&gt;ディスプレイセット&lt;/a&gt;または&lt;a href=&#34;https://dotstud.io/shop/nefry-bt-display&#34;&gt;ディスプレイ単品&lt;/a&gt;をご購入ください。&lt;/p&gt;</description></item><item><title>Nefry BT&#43;専用小型ディスプレイセット</title><link>https://dotstud.io/shop/nefry-bt-set/</link><pubDate>Sat, 05 May 2018 00:00:04 +0900</pubDate><guid>https://dotstud.io/shop/nefry-bt-set/</guid><description>
+&lt;p&gt;&lt;strong&gt;Nefry BT本体&lt;/strong&gt;
+&lt;img src=&#34;https://dotstud.io/img/shop/013/00_eyecatch.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;正式名称：Nefry BT（ねふりーびーてぃ）&lt;/li&gt;
+&lt;li&gt;搭載IC：ESP-WROOM-32&lt;/li&gt;
+&lt;li&gt;バッテリー：非搭載&lt;/li&gt;
+&lt;li&gt;電源供給方法：USB給電&lt;/li&gt;
+&lt;li&gt;Wi-Fiモジュール：搭載&lt;/li&gt;
+&lt;li&gt;Bluetooth：Bluetooth Low Energy対応モジュール搭載&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;専用小型ディスプレイ&lt;/strong&gt;
+&lt;img src=&#34;https://i.gyazo.com/c258176100bd05a966e98e56b537c720.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;セット価格： 5880円（税抜）&lt;/p&gt;
+&lt;p&gt;Nefry BTに関するドキュメントや関連リンク等は&lt;a href=&#34;https://dotstud.io/docs/nefrybt&#34;&gt;こちら&lt;/a&gt;、ディスプレイについては&lt;a href=&#34;https://dotstud.io/docs/nefrybt-display&#34;&gt;こちら&lt;/a&gt;をご覧ください。&lt;/p&gt;
+&lt;h2 id=&#34;その他取扱店&#34;&gt;その他取扱店&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-55W8&#34;&gt;千石電商&lt;/a&gt;の購入ページ&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://shop.tsukumo.co.jp/goods/4589490377565&#34;&gt;ツクモ&lt;/a&gt;の購入ページ&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://eleshop.jp/shop/g/gI1J121/&#34;&gt;共立電子産業&lt;/a&gt;の購入ページ&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://wakamatsu.co.jp/biz/products/detail.php?product_id=38320041&#34;&gt;若松通商&lt;/a&gt;の購入ページ&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.chip1stop.com/view/dispDetail/DispDetail?partId=DOTS-0000001&amp;amp;cid=NefryBT_dotstudio&#34;&gt;チップワンストップ&lt;/a&gt;の購入ページ&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>Nefry BT&#43;専用小型ディスプレイセット</title><link>https://dotstud.io/shop/nefry-bt-set/</link><pubDate>Sat, 05 May 2018 00:00:04 +0900</pubDate><guid>https://dotstud.io/shop/nefry-bt-set/</guid><description>
+&lt;p&gt;&lt;strong&gt;Nefry BT本体&lt;/strong&gt;
+&lt;img src=&#34;https://dotstud.io/img/shop/013/00_eyecatch.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;正式名称：Nefry BT（ねふりーびーてぃ）&lt;/li&gt;
+&lt;li&gt;搭載IC：ESP-WROOM-32&lt;/li&gt;
+&lt;li&gt;バッテリー：非搭載&lt;/li&gt;
+&lt;li&gt;電源供給方法：USB給電&lt;/li&gt;
+&lt;li&gt;Wi-Fiモジュール：搭載&lt;/li&gt;
+&lt;li&gt;Bluetooth：Bluetooth Low Energy対応モジュール搭載&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;専用小型ディスプレイ&lt;/strong&gt;
+&lt;img src=&#34;https://i.gyazo.com/c258176100bd05a966e98e56b537c720.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;セット価格： 5880円（税抜）&lt;/p&gt;
+&lt;p&gt;Nefry BTに関するドキュメントや関連リンク等は&lt;a href=&#34;https://dotstud.io/docs/nefrybt&#34;&gt;こちら&lt;/a&gt;、ディスプレイについては&lt;a href=&#34;https://dotstud.io/docs/nefrybt-display&#34;&gt;こちら&lt;/a&gt;をご覧ください。&lt;/p&gt;
+&lt;h2 id=&#34;その他取扱店&#34;&gt;その他取扱店&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-55W8&#34;&gt;千石電商&lt;/a&gt;の購入ページ&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://shop.tsukumo.co.jp/goods/4589490377565&#34;&gt;ツクモ&lt;/a&gt;の購入ページ&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://eleshop.jp/shop/g/gI1J121/&#34;&gt;共立電子産業&lt;/a&gt;の購入ページ&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://wakamatsu.co.jp/biz/products/detail.php?product_id=38320041&#34;&gt;若松通商&lt;/a&gt;の購入ページ&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.chip1stop.com/view/dispDetail/DispDetail?partId=DOTS-0000001&amp;amp;cid=NefryBT_dotstudio&#34;&gt;チップワンストップ&lt;/a&gt;の購入ページ&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>Nefry BT専用小型ディスプレイ</title><link>https://dotstud.io/shop/nefry-bt-display/</link><pubDate>Tue, 22 Aug 2017 00:00:04 +0900</pubDate><guid>https://dotstud.io/shop/nefry-bt-display/</guid><description>&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/c258176100bd05a966e98e56b537c720.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;価格： 972円（税込）&lt;/p&gt;
+&lt;p&gt;ドキュメントや関連リンク等は&lt;a href=&#34;https://dotstud.io/docs/nefrybt-display&#34;&gt;こちら&lt;/a&gt;になります。&lt;/p&gt;</description></item><item><title>Nefry BT専用小型ディスプレイ</title><link>https://dotstud.io/shop/nefry-bt-display/</link><pubDate>Tue, 22 Aug 2017 00:00:04 +0900</pubDate><guid>https://dotstud.io/shop/nefry-bt-display/</guid><description>&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/c258176100bd05a966e98e56b537c720.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;価格： 972円（税込）&lt;/p&gt;
+&lt;p&gt;ドキュメントや関連リンク等は&lt;a href=&#34;https://dotstud.io/docs/nefrybt-display&#34;&gt;こちら&lt;/a&gt;になります。&lt;/p&gt;</description></item><item><title>Android開発者向けIoTプロトタイプボード「Waffle」</title><link>https://dotstud.io/shop/android-iot-board-waffle/</link><pubDate>Mon, 24 Jul 2017 00:00:04 +0900</pubDate><guid>https://dotstud.io/shop/android-iot-board-waffle/</guid><description>
+&lt;p&gt;&lt;img src=&#34;https://cf.kibidango.com/asset/sp/122f09f5-3173-4544-a57e-182625f6ba77.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;正式名称：Waffle（わっふる）&lt;/li&gt;
+&lt;li&gt;バッテリー：非搭載&lt;/li&gt;
+&lt;li&gt;電源供給方法：Micro-USB給電&lt;/li&gt;
+&lt;li&gt;Wi-Fi：非搭載&lt;/li&gt;
+&lt;li&gt;Bluetooth：非搭載&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;取扱店&#34;&gt;取扱店&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-55WA&#34;&gt;千石電商 購入リンク&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://shop.tsukumo.co.jp/goods/4589490377251/109970300000000&#34;&gt;TUKUMO 購入リンク&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;関連リンク&#34;&gt;関連リンク&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://kibidango.com/463&#34;&gt;kibidangoでのクラウドファンディングページ&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://codezine.jp/article/detail/9983&#34;&gt;CodeZine&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>Android開発者向けIoTプロトタイプボード「Waffle」</title><link>https://dotstud.io/shop/android-iot-board-waffle/</link><pubDate>Mon, 24 Jul 2017 00:00:04 +0900</pubDate><guid>https://dotstud.io/shop/android-iot-board-waffle/</guid><description>
+&lt;p&gt;&lt;img src=&#34;https://cf.kibidango.com/asset/sp/122f09f5-3173-4544-a57e-182625f6ba77.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;正式名称：Waffle（わっふる）&lt;/li&gt;
+&lt;li&gt;バッテリー：非搭載&lt;/li&gt;
+&lt;li&gt;電源供給方法：Micro-USB給電&lt;/li&gt;
+&lt;li&gt;Wi-Fi：非搭載&lt;/li&gt;
+&lt;li&gt;Bluetooth：非搭載&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;取扱店&#34;&gt;取扱店&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-55WA&#34;&gt;千石電商 購入リンク&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://shop.tsukumo.co.jp/goods/4589490377251/109970300000000&#34;&gt;TUKUMO 購入リンク&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;関連リンク&#34;&gt;関連リンク&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://kibidango.com/463&#34;&gt;kibidangoでのクラウドファンディングページ&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://codezine.jp/article/detail/9983&#34;&gt;CodeZine&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>【報告】青山学院大学でIoT体験講習会を開催しました。</title><link>https://dotstud.io/blog/aogaku-iot-course-report/</link><pubDate>Sat, 24 Jun 2017 00:30:36 +0900</pubDate><guid>https://dotstud.io/blog/aogaku-iot-course-report/</guid><description>
+&lt;p&gt;こんにちは、デザインエンジニアの&lt;a href=&#34;https://twitter.com/chachmaru&#34;&gt;ちゃちゃまる&lt;/a&gt;です。&lt;/p&gt;
+&lt;p&gt;先日、青山学院大学でdotstudioとしてIoT体験講習会を開催しました。今日はその報告です。&lt;/p&gt;
+&lt;h2 id=&#34;line-x-iotがテーマ&#34;&gt;LINE x IoTがテーマ&lt;/h2&gt;
+&lt;p&gt;開催概要は以下の通りとなっています。
+最近は大学生の間でも耳にする機会が増えて来た「IoT」と大学生はほぼ全員がやっている「LINE」を使って &lt;strong&gt;プログラミング不要なIoT体験講習会&lt;/strong&gt;をしました。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/112/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;パソコン無し-スマホだけでできるwio-node&#34;&gt;パソコン無し、スマホだけでできるWio Node&lt;/h2&gt;
+&lt;p&gt;当日は弊社でも販売やハンズオンを行なっているSeeed社製の&lt;a href=&#34;https://dotstud.io/shop/wionode-social-remote-control/&#34;&gt;Wio Node&lt;/a&gt;を用いました。&lt;/p&gt;
+&lt;p&gt;Wio Nodeはスマートフォンアプリだけでネットワーク設定ができ、Grove規格に対応しているため、センサ周りの難しい配線は不要です。&lt;/p&gt;
+&lt;p&gt;当日は、 &lt;strong&gt;Wio Nodeで温湿度センサの値を取得し、その値をLINEで確認する&lt;/strong&gt;という内容の体験を行いました。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/112/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;当日は20名の学生さんが参加&#34;&gt;当日は20名の学生さんが参加&lt;/h2&gt;
+&lt;p&gt;学生さんは「IoT」という言葉を就活で耳にする機会が多いようで、 &lt;strong&gt;「IoTという言葉がそもそも何なのか」というところにも興味がある&lt;/strong&gt;ようでした。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/112/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;前半はIoTについての座学、後半はハンズオンという形式で講習会を展開しました。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/112/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;パソコン持ち込み不要&lt;/strong&gt;という形で募集を掛けましたが、参加者は女性の受講生が多く、僕が見たことがある通常のIoTハンズオンなどとは違う雰囲気で新鮮でした。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/112/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;まとめと感想&#34;&gt;まとめと感想&lt;/h2&gt;
+&lt;p&gt;アンケートも取りましたが、全体的に満足度が高く、入り口としては良い体験会になったのではないかなと思っています。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/112/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;途中、Seeed社が提供しているWio Nodeのサーバがダウンしてバタバタすることもありましたが、なんとか回避して大半の参加者が最後まで進めることができました。（数名アプリ不具合があり最後まで到達できない人もいたのでSeeed社にフィードバックしつつクオリティを上げていきたいです。）&lt;/p&gt;
+&lt;p&gt;dotstudioではこんな形で大学や企業での研修、講習会を行なっています。
+気になった方がいましたらぜひお問い合わせください。&lt;/p&gt;</description></item><item><title>Node.jsアプリケーションからMySQLにアクセスする</title><link>https://dotstud.io/blog/operate-mysql-from-nodejs/</link><pubDate>Tue, 03 Jan 2017 10:05:15 +0900</pubDate><guid>https://dotstud.io/blog/operate-mysql-from-nodejs/</guid><description>
+&lt;p&gt;こんにちは、dotstudioの代表の&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/howto-setup-azure-mysql/&#34;&gt;前回の記事(AzureでMySQLのセットアップと接続方法)&lt;/a&gt;に続きMySQLの話です。&lt;/p&gt;
+&lt;p&gt;今日は初心者向けに、Node.jsからMySQLにアクセスする方法をチュートリアル的に紹介します。&lt;/p&gt;
+&lt;h2 id=&#34;mysqlモジュール-ドライバー&#34;&gt;MySQLモジュール（ドライバー）&lt;/h2&gt;
+&lt;p&gt;こちらのモジュールを利用します。
+おそらく一番利用されているMySQLのNode.jsモジュール（ドライバー）になります。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.npmjs.com/package/mysql&#34;&gt;https://www.npmjs.com/package/mysql&lt;/a&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;npm init --yes
+npm i mysql --save
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;これでインストールはできました。&lt;/p&gt;
+&lt;h2 id=&#34;mysqlデータベースを用意&#34;&gt;MySQLデータベースを用意&lt;/h2&gt;
+&lt;p&gt;接続を試す前にデータベースが用意できているか確認しましょう。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/howto-setup-azure-mysql/&#34;&gt;前回の記事(AzureでMySQLのセットアップと接続方法)&lt;/a&gt;などを参照してみましょう。&lt;/p&gt;
+&lt;p&gt;仮データをいれておきましょう。&lt;/p&gt;
+&lt;p&gt;今回は&amp;rsquo;test_user&amp;rsquo;テーブルを作って一件データを入れておきました。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/068/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;crud-クラッド-とsql&#34;&gt;CRUD（クラッド）とSQL&lt;/h2&gt;
+&lt;p&gt;データアクセスの前に&lt;a href=&#34;http://e-words.jp/w/CRUD.html&#34;&gt;CRUD&lt;/a&gt;について少し触れます。
+CRUDはデータベースシステムなどの基本概念であるデータの作成（Create）、読み出し（Read）、更新（Update）、削除（Delete）を表す言葉です。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://se-java-school.com/itstudy/database/intro_db_jdbc/sqltext_01.php&#34;&gt;SQL&lt;/a&gt;はデータベースを操作するための言語です。
+MySQLの操作の最初のステップとして、SQLを使用してCRUDを実現してみましょう。&lt;/p&gt;
+&lt;p&gt;CRUDはSQL構文では、以下のような形で対応しています。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Create -&amp;gt; INSERT文&lt;/li&gt;
+&lt;li&gt;Read -&amp;gt; SELECT文&lt;/li&gt;
+&lt;li&gt;Update -&amp;gt; UPDATE文&lt;/li&gt;
+&lt;li&gt;Delete -&amp;gt; DELETE文&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;この4つの構文に対応してコードを書いていきましょう。&lt;/p&gt;
+&lt;h2 id=&#34;接続テストとread-select文&#34;&gt;接続テストとRead（SELECT文）&lt;/h2&gt;
+&lt;p&gt;まずはNode.jsからMySQLへの接続テストをしつつ、データ表示のReadにあたるSELECT文を使います。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;参考: &lt;a href=&#34;http://www.dbonline.jp/mysql/select/index1.html&#34;&gt;http://www.dbonline.jp/mysql/select/index1.html&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;app.jsを作成しましょう。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;//app.js
+&#39;use strict&#39;
+const mysql = require(&#39;mysql&#39;);
+const connection = mysql.createConnection({
+host : &#39;hoge.hoge.com&#39;,
+user : &#39;n0bisuke&#39;,
+password : &#39;n0bipass&#39;,
+database : &#39;nobidb&#39;
+});
+//ここからMySQLアクセス
+connection.connect();
+let sql = &#39;select * from nobidb.test_user&#39;;
+connection.query(sql, (err, rows, fields) =&amp;gt; {
+if (err) throw err;
+console.log(&#39;test_userテーブル: &#39;, rows);
+});
+connection.end();
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;7〜10行目について&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;host: MySQLのホスト名です。仮にhoge.hoge.comを指定しています。&lt;/li&gt;
+&lt;li&gt;user: MySQLに登録してあるユーザー名です。仮にn0bisukeを指定しています。&lt;/li&gt;
+&lt;li&gt;password: MySQLに登録してあるパスワードです。仮にn0bipassを指定しています。&lt;/li&gt;
+&lt;li&gt;database: MySQLで利用するDB名です。仮にnobidbを指定しています。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;16行目がSQLです。&lt;/p&gt;
+&lt;p&gt;SELECT文は「&lt;code&gt;select カラム名 from DB名.テーブル名&lt;/code&gt;」が基本になります。
+全てのカラムを取得する場合は&lt;code&gt;*&lt;/code&gt;を指定します。&lt;/p&gt;
+&lt;p&gt;16行目のSQL文は「&lt;code&gt;nobidb&lt;/code&gt;データベースの&lt;code&gt;test_user&lt;/code&gt;テーブルの全てのカラムの情報を取得する」という内容になります。&lt;/p&gt;
+&lt;p&gt;それでは実行してみましょう。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ node app.js
+test_userテーブル: [ RowDataPacket { id: 11, name: &#39;n0bisuke&#39;, created: 2017-01-01T21:35:26.000Z } ]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;これで無事にNode.jsとMySQLの接続が確立され、予め登録していたtest_userテーブルの中身が表示（Read）されました。&lt;/p&gt;
+&lt;h2 id=&#34;create-insert文&#34;&gt;Create（INSERT文）&lt;/h2&gt;
+&lt;p&gt;次にデータ作成のCreateにあたるINSERT文を使ってみましょう。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;参考: &lt;a href=&#34;http://www.dbonline.jp/mysql/insert/index1.html&#34;&gt;http://www.dbonline.jp/mysql/insert/index1.html&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;app.jsの16行目を以下に書き換えましょう。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;let sql = `insert into nobidb.test_user (name) values (&amp;quot;sugawara&amp;quot;)`;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;INSERT文の基本は「&lt;code&gt;insert into DB名.テーブル名 (カラム名1, カラム名2) values (値, 値)&lt;/code&gt;」という形になります。
+今回の文では「&lt;code&gt;nobidb&lt;/code&gt;データベースの&lt;code&gt;test_user&lt;/code&gt;テーブルの&lt;code&gt;name&lt;/code&gt;カラムに&lt;code&gt;sugawara&lt;/code&gt;という文字列を入れてデータを作成する」という意味になります。&lt;/p&gt;
+&lt;p&gt;それでは実行してみましょう。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ node app.js
+test_userテーブル: OkPacket {
+fieldCount: 0,
+affectedRows: 1,
+insertId: 31,
+serverStatus: 2,
+warningCount: 0,
+message: &#39;&#39;,
+protocol41: true,
+changedRows: 0 }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;クライアントなどで確認してもしっかり行が追加されていることが分かります。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/068/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;update-update文&#34;&gt;Update（UPDATE文）&lt;/h2&gt;
+&lt;p&gt;次にデータ更新のUpdateにあたるUPDATE文を使ってみましょう。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;参考: &lt;a href=&#34;http://www.dbonline.jp/mysql/insert/index7.html&#34;&gt;http://www.dbonline.jp/mysql/insert/index7.html&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;app.jsの16行目を以下に書き換えましょう。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;let sql = `update dsdb.test_user set name=&amp;quot;すがわら&amp;quot; where id = 31`;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;UPDATE文の基本は「&lt;code&gt;update DB名.テーブル名 set カラム名1=更新内容1 カラム名2=更新内容2 where 条件&lt;/code&gt;」という形になります。
+今回の文では「&lt;code&gt;nobidb&lt;/code&gt;データベースの&lt;code&gt;test_user&lt;/code&gt;テーブルの、idが31の&lt;code&gt;name&lt;/code&gt;カラムを&lt;code&gt;すがわら&lt;/code&gt;という文字列にデータ更新する」という意味になります。&lt;/p&gt;
+&lt;p&gt;それでは実行してみましょう。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ node app.js
+test_userテーブル: OkPacket {
+fieldCount: 0,
+affectedRows: 1,
+insertId: 0,
+serverStatus: 2,
+warningCount: 0,
+message: &#39;(Rows matched: 1 Changed: 1 Warnings: 0&#39;,
+protocol41: true,
+changedRows: 1 }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;クライアントなどで確認してもid31の行のnameがすがわらに更新されているのが分かります。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/068/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;delete-delete文&#34;&gt;Delete（DELETE文）&lt;/h2&gt;
+&lt;p&gt;最後にデータ削除のDeleteにあたるDELETE文を使ってみましょう。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;参考: &lt;a href=&#34;http://www.dbonline.jp/mysql/insert/index10.html&#34;&gt;http://www.dbonline.jp/mysql/insert/index10.html&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;app.jsの16行目を以下に書き換えましょう。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;let sql = `delete from dsdb.test_user where id = 31`;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;DELETE文の基本は「&lt;code&gt;delete from DB名.テーブル名 where 条件&lt;/code&gt;」という形になります。
+今回の文では「&lt;code&gt;nobidb&lt;/code&gt;データベースの&lt;code&gt;test_user&lt;/code&gt;テーブルの、idが31の行を削除する」という意味になります。&lt;/p&gt;
+&lt;p&gt;それでは実行してみましょう。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ node app.js
+test_userテーブル: OkPacket {
+fieldCount: 0,
+affectedRows: 1,
+insertId: 0,
+serverStatus: 2,
+warningCount: 0,
+message: &#39;&#39;,
+protocol41: true,
+changedRows: 0 }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;クライアントなどで確認してもid31の行が削除されているのが分かります。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/068/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;ここまでで、Node.jsからMySQLにアクセスしてCRUDをする操作の紹介をしました。&lt;/p&gt;
+&lt;h2 id=&#34;tips-node-mysql2&#34;&gt;Tips: node-mysql2&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;http://qiita.com/n0bisuke/items/4e59d02f90bb66451011&#34;&gt;Node.jsからMySQL接続のメモ(とnode-mysql2)&lt;/a&gt;にもあるように&lt;a href=&#34;https://github.com/sidorares/node-mysql2&#34;&gt;node-mysql2&lt;/a&gt;というモジュールもありますので、ベンチマークが気になり始めたら利用を試みるのも良いかもしれません。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ npm i mysql2 --save
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;でインストールして&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;const mysql = require(&#39;mysql&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;の読み込み箇所を&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;const mysql = require(&#39;mysql2&#39;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;に修正するだけで使えるので移行も楽そうです。&lt;/p&gt;
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+&lt;p&gt;Node.jsからMySQLにアクセスする方法を紹介しました。
+基礎的な内容になるので、初めてチャレンジする方は参考にして下さい。&lt;/p&gt;
+&lt;p&gt;SQL直書きだと脆弱性が&amp;hellip;&amp;hellip;とかの話はありそうですがそれはまた別の機会で書けたらと思います。&lt;/p&gt;
+&lt;p&gt;それでは。&lt;/p&gt;</description></item><item><title>Node.jsでファイル監視を行うchokidarを使ってみよう</title><link>https://dotstud.io/blog/nodejs-npm-chokidar-fswatch/</link><pubDate>Mon, 26 Dec 2016 14:00:27 +0900</pubDate><guid>https://dotstud.io/blog/nodejs-npm-chokidar-fswatch/</guid><description>
+&lt;p&gt;こんにちは、dotstudio代表の&lt;a href=&#34;http://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/nodejs-npm-readline-sync/&#34;&gt;Node.jsでコマンドラインツール作るときに使いやすいreadline-sync&lt;/a&gt;に続いて、Node.jsのモジュール紹介です。&lt;/p&gt;
+&lt;p&gt;Gitなどを用いて開発を行っていると「ファイルの変更を検知して何かを実行したい」という場面があります。
+今日はそんな場面で活用できるファイル監視を行うモジュールを紹介します。&lt;/p&gt;
+&lt;h2 id=&#34;執筆時点のマシンスペック&#34;&gt;執筆時点のマシンスペック&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;macOS Sierra (v10.12)&lt;/li&gt;
+&lt;li&gt;Node.js v6.6.0&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;何か不具合があったときに参照してください。&lt;/p&gt;
+&lt;h2 id=&#34;インストール&#34;&gt;インストール&lt;/h2&gt;
+&lt;p&gt;URL: &lt;a href=&#34;https://github.com/paulmillr/chokidar&#34;&gt;chokidar&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;npm init&lt;/code&gt;で&lt;code&gt;package.json&lt;/code&gt;を作成してから進めます。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;npm init --yes
+npm i --save chokidar
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;サンプルを動かしてみる&#34;&gt;サンプルを動かしてみる&lt;/h2&gt;
+&lt;h3 id=&#34;ファイル監視&#34;&gt;ファイル監視&lt;/h3&gt;
+&lt;p&gt;app.jsを作成します。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;const chokidar = require(&#39;chokidar&#39;);
+// One-liner for current directory, ignores .dotfiles
+chokidar.watch(&#39;.&#39;, {ignored: /[\/\\]\./}).on(&#39;all&#39;, (event, path) =&amp;gt; {
+console.log(event, path);
+});
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;app.jsを保存したらアプリケーションを起動しましょう。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;node app
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;これで、nodeコマンドを実行したディレクトリ以下のファイルを監視しはじめます。&lt;/p&gt;
+&lt;p&gt;先ほど実行した&lt;code&gt;npm init --yes&lt;/code&gt;で&lt;code&gt;package.json&lt;/code&gt;が作成されます。&lt;code&gt;app.js&lt;/code&gt;を実行したまま&lt;code&gt;package.json&lt;/code&gt;を編集してみましょう。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/1e9ddbebcda4037874c803f91d6a8b66.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;このように、変更があったファイルを検知してくれます。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;・
+・
+・
+change package.json
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+&lt;p&gt;chokidarを使ってファイル監視して「特定のファイルが更新されたら〇〇する」というトリガーを簡単に作れます。&lt;/p&gt;
+&lt;p&gt;プロジェクト管理などで活用してみてください。&lt;/p&gt;
+&lt;p&gt;それでは。&lt;/p&gt;</description></item><item><title>GR-COTTONで見た目も可愛く電子工作！部屋の温度をブラウザからチェックしてみよう</title><link>https://dotstud.io/blog/milkcocoa-grcotton-realtime-temperature/</link><pubDate>Thu, 03 Nov 2016 10:00:00 +0900</pubDate><guid>https://dotstud.io/blog/milkcocoa-grcotton-realtime-temperature/</guid><description>
+&lt;p&gt;こんにちは！　dotstudioのエディターのうららです。先日、バックエンドサービス「Milkcocoa」を題材にしたLT大会「 &lt;strong&gt;&lt;a href=&#34;http://mlkcca.connpass.com/event/34936/&#34;&gt;紅白Milkcocoa合戦&lt;/a&gt;&lt;/strong&gt; 」に参加してきました。&lt;/p&gt;
+&lt;p&gt;そこで発表した &lt;strong&gt;Webサイト上から部屋の温度がわかる&lt;/strong&gt; という仕組みが何かしらに役に立つ気がするので本記事にまとめておこうと思います。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;こんな人におすすめ&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;部屋の気温をブラウザ上からチェックできるようにしたり、データとして貯めたい人（ペットを飼ってる人や観葉植物を育てている人におすすめ）&lt;/li&gt;
+&lt;li&gt;電子工作には興味があるけれど、せっかくなら見た目が可愛いアイテムで挑戦したい人&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;全体の構成&#34;&gt;全体の構成&lt;/h2&gt;
+&lt;p&gt;マイコンボード「GR-COTTON」でセンサーの値を取得し、バックエンドサービス「Milkcocoa」を使いブラウザ側にデータを送ります。&lt;/p&gt;
+&lt;p&gt;MacとGR-COTTONをUSB接続し、Node.jsを経由してMilkcocoaにデータを送ります。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;h3 id=&#34;milkcocoa&#34;&gt;Milkcocoa&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/01_milkcocoa.png&#34; alt=&#34;&#34; /&gt;
+&lt;a href=&#34;https://mlkcca.com&#34;&gt;milkcocoa&lt;/a&gt;とは、&lt;strong&gt;JavaScriptのソースコードを1行挿入するだけで、リアルタイム通信ができるようになる&lt;/strong&gt; サービスです。リアルタイム通信にはバックエンドの構築が必要ですが、そこの手間が省けます。&lt;/p&gt;
+&lt;h3 id=&#34;gr-cotton&#34;&gt;GR-COTTON&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/02_cotton.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;こちらが今回使うマイコンボード「&lt;a href=&#34;http://gadget.renesas.com/ja/product/cotton.html&#34;&gt;GR-COTTON&lt;/a&gt;」です。ルネサスエレクトロニクスが企画する「&lt;a href=&#34;http://gadget.renesas.com/ja/&#34;&gt;がじぇっとるねさす&lt;/a&gt;（通称がじぇるね）」が作っています。&lt;/p&gt;
+&lt;p&gt;最初からタッチセンサーや気温センサー、フルカラーLEDを搭載しています。しかもその &lt;strong&gt;タッチセンサーが星型&lt;/strong&gt; で、基盤も白をベースにしているので、見た目がものすごく可愛いんです！　&lt;/p&gt;
+&lt;h2 id=&#34;作り方&#34;&gt;作り方&lt;/h2&gt;
+&lt;p&gt;では早速作ってみましょう！　大きく分けると次の4つの作業をします。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Milkcocoaの登録をする&lt;/li&gt;
+&lt;li&gt;GR-COTTONのチュートリアル1〜10をおこなう&lt;/li&gt;
+&lt;li&gt;app.jsをビルドする&lt;/li&gt;
+&lt;li&gt;Webサイトを作る（HTMLのみでOK）&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;1-milkcocoaの登録をする&#34;&gt;1. Milkcocoaの登録をする&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/04_milkcocoa.png&#34; alt=&#34;&#34; /&gt;
+&lt;a href=&#34;https://mlkcca.com/&#34;&gt;トップページ&lt;/a&gt;からログインして、「新しいアプリを作る」をクリックします。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/05_milkcocoa.png&#34; alt=&#34;&#34; /&gt;
+アプリ名は自分で好きなものを登録します。ここでは「GR-COTTON」にしました。&lt;/p&gt;
+&lt;p&gt;これだけでMilkcocoa側の準備はOKです。&lt;/p&gt;
+&lt;h3 id=&#34;2-gr-cottonのチュートリアル1-10をおこなう&#34;&gt;2. GR-COTTONのチュートリアル1〜10をおこなう&lt;/h3&gt;
+&lt;p&gt;がじぇっとるねさすが提供している、こちらの&lt;a href=&#34;http://gadget.renesas.com/ja/product/cotton_sp1.html&#34;&gt;チュートリアル&lt;/a&gt;を参考に、1〜10まで進めてください。&lt;/p&gt;
+&lt;h3 id=&#34;3-node-jsのプログラムを用意する&#34;&gt;3. Node.jsのプログラムを用意する&lt;/h3&gt;
+&lt;p&gt;シリアル通信でCOTTONとMilkcocoaの橋渡しをするプログラムを用意します。以下のapp.jsをプログラムに記入して実行してみてください。Node.jsで作成しています。&lt;/p&gt;
+&lt;h4 id=&#34;app-js&#34;&gt;app.js&lt;/h4&gt;
+&lt;pre&gt;&lt;code&gt;// Milkcocoaの設定
+const MilkCocoa = require(&#39;milkcocoa&#39;);
+const milkcocoa = new MilkCocoa(&#39;your api key&#39;);
+const ds = milkcocoa.dataStore(&#39;status&#39;);
+// シリアル通信の設定
+const SerialPort = require(&#39;serialport&#39;);
+const portName = &#39;COM6&#39;; // IDE for GRとかで調べる
+const serial = new SerialPort(portName, {
+baudrate: 9600,
+flowcontrol: false,
+parser: SerialPort.parsers.readline(&amp;quot;\n&amp;quot;)
+});
+serial.on(&#39;open&#39;, () =&amp;gt; {
+console.log(&#39;open&#39;);
+});
+// シリアル通信でデータを受信したに呼び出される関数を定義
+serial.on(&#39;data&#39;, (input) =&amp;gt; {
+console.log(input);
+ds.send({message: input});
+});
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;ターミナルを開いて、以下のコマンドでインストールします。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;npm init
+npm i serialport milkcocoa
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;app.jsを動かしたいときは、以下のコマンドを使います。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;node app.js
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;4-webサイトを作る-htmlのみでok&#34;&gt;4. Webサイトを作る（HTMLのみでOK）&lt;/h3&gt;
+&lt;p&gt;最後はフロント側を作ります！&lt;/p&gt;
+&lt;h4 id=&#34;index-html&#34;&gt;index.html&lt;/h4&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;!doctype html&amp;gt;
+&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;
+&amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
+&amp;lt;title&amp;gt;フロント&amp;lt;/title&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+&amp;lt;div id=&amp;quot;log&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+&amp;lt;script src=&amp;quot;https://code.jquery.com/jquery-2.2.4.min.js&amp;quot; integrity=&amp;quot;sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=&amp;quot; crossorigin=&amp;quot;anonymous&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script src=&#39;https://cdn.mlkcca.com/v2.0.0/milkcocoa.js&#39;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script&amp;gt;
+window.onload = () =&amp;gt; {
+// Milkcocoa
+const milkcocoa = new MilkCocoa(&#39;your api key&#39;);
+const ds = milkcocoa.dataStore(&#39;status&#39;);
+// Milkcocoaからデータが送られてきた時のコールバック
+ds.on(&#39;send&#39;, (data) =&amp;gt; {
+console.log(data.value);
+// ここでhtmlのDOMを操作する
+})
+}
+&amp;lt;/script&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/07_milkcocoa.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;14行目の&lt;code&gt;your api key&lt;/code&gt;には、先ほど登録したMilkcocoaのこの箇所の文字列を入れます。&lt;/p&gt;
+&lt;p&gt;これで、&lt;code&gt;node app.js&lt;/code&gt;を打つと、コンソールに気温がリアルタイムで表示されるようになります！ ちなみに、&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;!doctype html&amp;gt;
+&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;
+&amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
+&amp;lt;title&amp;gt;うららフロント&amp;lt;/title&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+// ここに書き込める
+&amp;lt;div id=&amp;quot;log&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+&amp;lt;script src=&amp;quot;https://code.jquery.com/jquery-2.2.4.min.js&amp;quot; integrity=&amp;quot;sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=&amp;quot; crossorigin=&amp;quot;anonymous&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script src=&#39;https://cdn.mlkcca.com/v2.0.0/milkcocoa.js&#39;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script&amp;gt;
+window.onload = () =&amp;gt; {
+const milkcocoa = new MilkCocoa(&#39;your api key&#39;);
+const ds = milkcocoa.dataStore(&#39;status&#39;);
+ds.on(&#39;send&#39;, (data) =&amp;gt; {
+console.log(data.value);
+})
+}
+&amp;lt;/script&amp;gt;
+// ここに書き込める
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;// ここに書き込める&lt;/code&gt; にHTMLなどを書くと、フロント側をいじることができます。&lt;/p&gt;
+&lt;h4 id=&#34;わたしが作ったフロント側のソースコード-cotton-html&#34;&gt;わたしが作ったフロント側のソースコード cotton.html&lt;/h4&gt;
+&lt;p&gt;完全に余談ですが、私が作ったフロント側のソースコードも載せておきます。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;!doctype html&amp;gt;
+&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;
+&amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
+&amp;lt;title&amp;gt;部屋の温度なう&amp;lt;/title&amp;gt;
+&amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;http://fonts.googleapis.com/earlyaccess/notosansjp.css&amp;quot;&amp;gt; // googleフォントを入れてみた
+&amp;lt;link rel=&amp;quot;stylesheet&amp;quot; type=&amp;quot;text/css&amp;quot; href=&amp;quot;cotton.css&amp;quot;&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+&amp;lt;div id=&amp;quot;welcome&amp;quot;&amp;gt;Temperature Now&amp;lt;/div&amp;gt;
+&amp;lt;div id=&amp;quot;log&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+&amp;lt;marquee&amp;gt;あなたは10573人目の訪問者です！&amp;lt;/marquee&amp;gt; // 文字が流れます
+&amp;lt;div id=&amp;quot;you&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;br&amp;gt;
+&amp;lt;center&amp;gt;&amp;lt;table border=&amp;quot;0&amp;quot; cellspacing=&amp;quot;0&amp;quot; cellpadding=&amp;quot;0&amp;quot;&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td align=&amp;quot;center&amp;quot;&amp;gt;&amp;lt;a href=&amp;quot;http://www.rays-counter.com/&amp;quot;&amp;gt;&amp;lt;img src=&amp;quot;http://www.rays-counter.com/d350_f6_022/578cc94f09357/&amp;quot; alt=&amp;quot;アクセスカウンター&amp;quot; border=&amp;quot;0&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td align=&amp;quot;center&amp;quot; style=&amp;quot;font-size:xx-small&amp;quot;&amp;gt;&amp;lt;img src=&amp;quot;http://www.rays-counter.com/images/counter_01.gif&amp;quot; border=&amp;quot;0&amp;quot;&amp;gt;&amp;lt;img src=&amp;quot;http://www.rays-counter.com/images/counter_02.gif&amp;quot; border=&amp;quot;0&amp;quot;&amp;gt;&amp;lt;img src=&amp;quot;http://www.rays-counter.com/images/counter_03.gif&amp;quot; border=&amp;quot;0&amp;quot;&amp;gt;&amp;lt;img src=&amp;quot;http://www.rays-counter.com/images/counter_04.gif&amp;quot; border=&amp;quot;0&amp;quot;&amp;gt;&amp;lt;img src=&amp;quot;http://www.rays-counter.com/images/counter_05.gif&amp;quot; border=&amp;quot;0&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/center&amp;gt; // アクセスカウンターです、フリーのを使いました
+&amp;lt;script src=&amp;quot;https://code.jquery.com/jquery-2.2.4.min.js&amp;quot; integrity=&amp;quot;sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=&amp;quot; crossorigin=&amp;quot;anonymous&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script src=&#39;https://cdn.mlkcca.com/v2.0.0/milkcocoa.js&#39;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script&amp;gt;
+$(document).ready(function(){
+// Milkcocoa
+const milkcocoa = new MilkCocoa(&#39;yieldiq29oxas.mlkcca.com&#39;);
+const ds = milkcocoa.dataStore(&#39;status&#39;);
+// Milkcocoaからデータが送られてきた時のコールバック
+ds.on(&#39;send&#39;, (data) =&amp;gt; {
+console.log(data.value);
+const temp=data.value.message;
+if (temp&amp;gt;29){
+$(&#39;#log&#39;).css(&#39;color&#39;, &#39;red&#39;);
+$(&#39;#you&#39;).text(&#39;あついね！&#39;) // 29度以上になると「あついね！」というコメントが表示されます
+}
+else if (temp&amp;lt;27){
+$(&#39;#log&#39;).css(&#39;color&#39;, &#39;blue&#39;);
+$(&#39;#you&#39;).text(&#39;さむいね！&#39;)　// 27度以下になると「さむいね！」というコメントが表示されます
+}
+else {
+$(&#39;#log&#39;).css(&#39;color&#39;, &#39;#eebbcb&#39;);
+$(&#39;#you&#39;).text(&#39;ちょうどいいね！&#39;) // 27&amp;amp;28度になると「ちょうどいいね！」というコメントが表示されます
+}
+$(&#39;#log&#39;).text(&#39;今の温度は&#39;+data.value.message+&#39;度☆&#39;); // 今の温度が表示されます
+// ここでhtmlのDOMを操作する
+// milkcocoa と push でカウンター（javascript）
+})
+　});
+&amp;lt;/script&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;style-css&#34;&gt;style.css&lt;/h4&gt;
+&lt;pre&gt;&lt;code&gt;body {
+font-family: &#39;Noto Sans Japanese&#39;, sans-serif;
+}
+#log {
+font-size: 30px;
+text-align: center;
+}
+#welcome {
+font-size: 50px;
+text-align: center;
+color: darkblue
+}
+#you {
+text-align: center;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h4 id=&#34;見た目&#34;&gt;見た目&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/08_website.png&#34; alt=&#34;&#34; /&gt;
+このような感じの見た目になります。1990年代のサイトを目指しました。全然可愛くないですね。アクセスカウンタは無料で配布されていた「&lt;a href=&#34;http://www.rays-counter.com/&#34;&gt;無料アクセスカウンター&lt;/a&gt;」を使っています。&lt;/p&gt;
+&lt;p&gt;ということで、Webサイトの見た目はこのように自分でアレンジできます。HTMLの技術が少し必要になりますが、自由にいじって自分好みのサイトにしてみてください。（CSSもあればなおよしですね）&lt;/p&gt;
+&lt;p&gt;この状態ではサーバーにアップされていないのでローカル環境でないとサイトを見られませんが、これをアップすれば家の外からでもスマホやPCなどで室温を確認することができます。&lt;/p&gt;
+&lt;h2 id=&#34;注意点&#34;&gt;注意点&lt;/h2&gt;
+&lt;p&gt;ここからは私が詰んだ箇所を紹介します。全部で3つあります。&lt;/p&gt;
+&lt;h3 id=&#34;gr-cottonのジャンパを配線する&#34;&gt;GR-COTTONのジャンパを配線する&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/09_jumper.png&#34; alt=&#34;&#34; /&gt;
+通常はこのパーツを反対側に刺さないといけないです。チュートリアルにも載っていますが見落とすと操作できなくなります。&lt;/p&gt;
+&lt;h3 id=&#34;ケーブルは純正のものを使う&#34;&gt;ケーブルは純正のものを使う&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/10_cable.png&#34; alt=&#34;&#34; /&gt;
+コンビニで売っているモバイルバッテリーに付属しているようなケーブルだと、認識されないのです……。&lt;/p&gt;
+&lt;p&gt;データ通信が可能なタイプを用意しましょう。（GR-COTTONには純正のケーブルが付属していません）&lt;/p&gt;
+&lt;h3 id=&#34;kurumiwriterにチェックを入れる&#34;&gt;KurumiWriterにチェックを入れる&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/11_notfound.png&#34; alt=&#34;&#34; /&gt;
+ケーブルを純正にしたのにPCからUSBドライバが表示されない、ということがありました。&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;FTDIの仕様上USBポートが開いた/閉じたときでDTR(COTTONのリセット)がハイ/ロウが排他的になります。KurumiWriterでその設定ができますがデフォルト(チェックなし)ではポートが開いたときDTRがロウになります。 &lt;a href=&#34;https://t.co/aWANpSdJka&#34;&gt;https://t.co/aWANpSdJka&lt;/a&gt;&lt;/p&gt; Renesas_FUN (@Renesas_FUN) &lt;a href=&#34;https://twitter.com/Renesas_FUN/status/750323606601609216&#34;&gt;2016年7月5日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;これをTwitterでつぶやいたところ、がじぇっとるねさすさんの公式アカウントからご回答いただきました。KurumiWriterのチェックボックスにチェックをいれていなかったことが原因でした……。&lt;/p&gt;
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+&lt;p&gt;自分が詰んだところの余談が長くなってしまったのですが、部屋の温度をGR-COTTONで取得してブラウザに表示する方法を紹介しました。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/06_code.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;余談ですが、今回使った app.jsとhtmlは、知り合いの元組み込みエンジニアいわたんさん（&lt;a href=&#34;twitter.com/iwata_n&#34;&gt;@iwata_n&lt;/a&gt;）にお願いして作ってもらいました。いわたんさんありがとうございます！&lt;/p&gt;
+&lt;script async class=&#34;speakerdeck-embed&#34; data-id=&#34;aa68f3d1934d480f9a3a26a6062ffa9b&#34; data-ratio=&#34;1.33333333333333&#34; src=&#34;//speakerdeck.com/assets/embed.js&#34;&gt;&lt;/script&gt;
+&lt;p&gt;また、当日発表したプレゼン資料はこちらから見られます。&lt;/p&gt;
+&lt;p&gt;みなさんぜひ試してみてください！&lt;/p&gt;</description></item><item><title>【connpass × のびすけ対談】サービスの立ち上げから運営まで。「connpass」の歴史を聞いてみました</title><link>https://dotstud.io/blog/connpass-n0bisuke-interview-vol2/</link><pubDate>Wed, 02 Nov 2016 10:30:00 +0900</pubDate><guid>https://dotstud.io/blog/connpass-n0bisuke-interview-vol2/</guid><description>
+&lt;p&gt;こんにちは、dotstudioエディターのうらら（@uraranbon）です。&lt;/p&gt;
+&lt;p&gt;今や10人に1人は社長と言われるほど起業が身近になった現代。しかし、夢や希望を詰めて作られたサービスの大方は、思うように成長せずに消えていってしまいます。&lt;/p&gt;
+&lt;p&gt;そんな中、イベントの募集を助けるWebサービス「connpass」は、2011年にリリースされてから5年で85,000人のユーザーを集め、connpassを利用し2015年〜2016年の1年間で6,000人の集客したという人もいます。&lt;/p&gt;
+&lt;p&gt;サービスを向上させる秘訣はあるのでしょうか。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/blog/connpass-n0bisuke-interview-vol1/&#34;&gt;【connpass × のびすけ対談】勉強会あるある！イベントのドタキャンにどう対処する？&lt;/a&gt;に続き、connpassを運営する株式会社ビープラウドの代表・佐藤氏に話を伺ってきました。&lt;/p&gt;
+&lt;div class=&#34;person-intro&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34;/&gt;
+&lt;div class=&#34;person-info&#34;&gt;
+&lt;strong&gt;人物紹介：佐藤治夫 氏&lt;/strong&gt;
+&lt;p&gt;株式会社ビープラウド代表。&lt;br /&gt;2011年からイベントサイト「connpass」を運営する傍ら、自身も積極的に勉強会やイベント活動をおこなっている。&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;話を伺ってきたのは、エンジニア向けのイベントを積極的に主催しているdotstudio代表/エンジニアのびすけです。よく「connpass」を使って集客をしています。&lt;/p&gt;
+&lt;div class=&#34;person-intro&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; /&gt;
+&lt;div class=&#34;person-info&#34;&gt;
+&lt;strong&gt;人物紹介：菅原のびすけ&lt;/strong&gt;
+&lt;p&gt;dotstudio代表。&lt;br /&gt;1989年生まれのバックエンドエンジニア。 &lt;a href=&#34;http://iotlt.connpass.com&#34; target=&#34;_blank&#34;&gt;IoTLT&lt;/a&gt;、Swift愛好会、NodeBotsハンズオンなど、幅広いイベントを開催している。&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;もともとはイベントから生まれたサービスだった&#34;&gt;もともとはイベントから生まれたサービスだった&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/037/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293920&#34; /&gt;&lt;span&gt;
+今日はありがとうございます。そもそも、なぜこういったイベントサービスを始めようと思ったんですか？&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;今はイベントサイトって結構ありますけど、もともとはリクルートさんが運営する&lt;a href=&#34;https://atnd.org/&#34;&gt;ATND&lt;/a&gt;しかありませんでした。そのときの技術が好きだった人たちが集まっていたんですけど、少しシンプルだったんです。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;そんなときに、&amp;rdquo;Django Dash&amp;rdquo;という「2~3日でサービスを1つ立ち上げよう」みたいなイベントがありました。そこで、イベントサイトならこういう機能がほしい、あれほしいっていうのを簡単に話していたんです。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;そのときはそれで終わってたんですけど、弊社でサービスを作りましょうかという話が持ち上がったときに、「途中までこういうのを作ったことがありますよ」と再浮上したのがきっかけです。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;&amp;nbsp;
+&lt;img src=&#34;https://dotstud.io/img/blog/037/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;あとは、もともと僕が「BPStudy」という勉強会をずっと続けていたので、そこでエンジニアの人たちのコミュニティを広げたいとか、経験を高めたくなり、2011年に「ちゃんとサービスを始めよう」となりました。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293920&#34; /&gt;&lt;span&gt;へえ、もともとはイベントがきっかけだったんですね。オープンしてからすぐにイベントって集まったんですか？&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;いや、最初はそんなに多くなかったですね。弊社がPython系のコミュニティと繋がっていて、そのイベントの人たちが使ってくれて広まりました。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;イベント参加者だった人が「自分でやってみよう」というときに&lt;strong&gt;自分が参加したことのあるサイトを選ぶ&lt;/strong&gt;といった感じで広まったと思います。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293920&#34; /&gt;&lt;span&gt;余談ですが、その頃からPyCon主催の鈴木たかのりさんもいらっしゃったんですか？&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;そうですね。たかのりさんは、2011年にconnpassがオープンしてからすぐくらい、2012年あたりですね。有料決済みたいなのや、参加枠みたいな機能、アーリーバード枠とか。PyConの要望で追加した機能もあるんです。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;h2 id=&#34;ブレイクポイントはサービス開始2年後に&#34;&gt;ブレイクポイントはサービス開始2年後に&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/037/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293920&#34; /&gt;&lt;span&gt;connpassを始めた2011年から、何かブレイクポイントありますか？&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;2013年にありました。「IT勉強会に特化した」っていう部分ですね。もともとは「どういうイベントが対象」かっていうのを絞っていなくて。そこを、「IT勉強会といえばconnpass」と思ってもらえるようにしました。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293920&#34; /&gt;&lt;span&gt;具体的にはどのへんで伝えたんですか？&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;タイトルですね。ログインしているとわからないんですけど、トップページにこういう画面があって……&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;&amp;nbsp;
+&lt;img src=&#34;https://dotstud.io/img/blog/037/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293920&#34; /&gt;&lt;span&gt;あ、上部の「エンジニアをつなぐ〜」というやつですね。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;ここから、より絞られたユーザーが集まってきたと思います。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;h2 id=&#34;サービスを-技術的チャレンジができる広告塔-に&#34;&gt;サービスを「技術的チャレンジができる広告塔」に&lt;/h2&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293920&#34; /&gt;&lt;span&gt;開発は何人くらいでおこなうんですか？&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;2人とか3人とかですね。今は専任ですが、状況に応じて受託開発をしたり、connpassをやってもらったりしています。いろんな案件を経験すれば、バランス良くスキルやノウハウが身につきますし、「こっちでノウハウを使おう」という流用もできるので。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/037/07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293920&#34; /&gt;&lt;span&gt;意外と少ない印象です。ちなみに、connpassって中の人にとってはどういう位置付けなのでしょう？&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;位置づけですか。ひとつは&lt;strong&gt;広告塔として&lt;/strong&gt;ですね。connpassがあることによって、「あ〜、connpassやってる会社ですか」って思ってもらえています。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;ふたつめは、&lt;strong&gt;技術的チャレンジがしやすい&lt;/strong&gt;っていうところですかね。結構Dockerとかを使って、サイトに導入していこうかなとは思っています。そういうデプロイのところは効率化しようかなと。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;connpassの特徴として、落ちない、不具合が少ないっていうのがありますが、それもやっぱり、不具合がおこりにくい、落ちないサイトってどういうサイトなの？っていうのをconnpassで実践してるからですね。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;みっつめは&lt;strong&gt;知見を得られる場所&lt;/strong&gt;ですね。運営・企画サポートまでを自分たちで回しているっていうことで、知見を得られているかなと思っています。ざっくりとした位置付けはこの3点ですね。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;h2 id=&#34;connpass開発で試行錯誤して活用した-匠メソッド&#34;&gt;connpass開発で試行錯誤して活用した「匠メソッド」&lt;/h2&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293920&#34; /&gt;&lt;span&gt;エンジニアの理想じゃないですか。ちなみに、サイトの企画〜運営までのナレッジは、具体的にどんなことを学んだんですか？&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;&lt;strong&gt;アイデア出しから形に落とし込むまでの要求開発方法&lt;/strong&gt;ですね。サービス企画ってやったことがないと、最終的にどう落とし込んでいくのかってスキルが必要だと思うんですよ。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;自分は「絶対いい！」とか思っている機能を、他の人が「いやぁ……」とかいうと、揉めますよね。みんな熱意があるからそうなるんですけど、喧嘩っぽくなっちゃったり、諦めて妥協したりする人が出て、&lt;strong&gt;結局3ヶ月とか4ヶ月とかかかることも&lt;/strong&gt;あります。みんなが納得する状態まで持っていくのは、意外に難しい。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;そこを「匠メソッド」という要求開発方法を使っていて。それを使ってアイデア出しから形にするまでを2~3日でまとめるんです。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;以前登壇した資料に詳しく書いていますが、現状に対する「こうした機能がほしい」というのが出ても、全部作るわけにはいかないじゃないですか。それを、「どうやって、何を基準に決めるの？」という部分を決めていますね。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;&amp;nbsp;
+&lt;center&gt;&lt;iframe src=&#34;//www.slideshare.net/slideshow/embed_code/key/4vBwrvIJjIx1eL&#34; width=&#34;595&#34; height=&#34;485&#34; frameborder=&#34;0&#34; marginwidth=&#34;0&#34; marginheight=&#34;0&#34; scrolling=&#34;no&#34; style=&#34;border:1px solid #CCC; border-width:1px; margin-bottom:5px; max-width: 100%;&#34; allowfullscreen&gt; &lt;/iframe&gt; &lt;div style=&#34;margin-bottom:5px&#34;&gt; &lt;strong&gt; &lt;a href=&#34;//www.slideshare.net/ssuserafaef6/bpstudy88-connpass-42735511&#34; title=&#34;BPStudy#88 connpassにおける戦略決定&#34;&gt;BPStudy#88 connpassにおける戦略決定&lt;/a&gt; &lt;/strong&gt; from &lt;strong&gt;&lt;a href=&#34;//www.slideshare.net/ssuserafaef6&#34;&gt;Haruo Sato&lt;/a&gt;&lt;/strong&gt; &lt;/div&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;まず、&lt;strong&gt;「誰に対してどういう価値があるか」&lt;/strong&gt;を出して、要求分析ツリーというツリーの形にします。そして、経営者目線でどこからやっていくかを話していくんです。そうすると、機能じゃなくて戦略的な話ができる。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;誰も幸せにならない、「絶対これがいい」と言い張る人がたまにいますよね。でも、それをあきらめられる。ロジカルに考えられます。あっさりと「これやろう、これは没、没にぶら下がっているのは全部やらないよね」みたいになります。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293920&#34; /&gt;&lt;span&gt;みんなが経営者目線を意識するんですね。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/037/08.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;そうですね。みんなが納得感のある落とし所をconnpassを通じてやっていて、それを受託開発もやっています。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;そういうふうに、サイトの企画から開発、運営までをエンジニアでやっているので、お客さんが「こういうサイト作りたいです」って言ったときにもそれを実践していますね。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_sato.png&#34; alt=&#34;person_sato&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293918&#34; /&gt;&lt;span&gt;connpassのノウハウを生かして、効果の高いものを最小限のちからで。ただ「開発しますよ」という感じではなくて、そういう話ができるようにはなってきたかなって思いますね。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;&lt;div class=&#34;box_tweet&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/036/person_n0bi.png&#34; alt=&#34;n0bisuke&#34; width=“80&#34; height=“80&#34; class=&#34;alignnone size-full wp-image-293920&#34; /&gt;&lt;span&gt;僕も匠メソッド試してみようかな。&lt;/span&gt;
+&lt;/div&gt;
+&amp;nbsp;&lt;/p&gt;
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;connpassの歴史をさっくりと伺いました。もともとはイベントから生まれ、その後は会社と一緒に成長してきたサービスでした。&lt;/p&gt;
+&lt;p&gt;せっかく作り上げたサービスを、できることなら成長させたいですよね。そのためにはサービスに関わる人全てが「経営者目線を意識」するのも効果的のようです。&lt;/p&gt;
+&lt;p&gt;これからのconnpassがどのような展開を迎えるのか、今後の活躍にも注目ですね！&lt;/p&gt;</description></item></channel></rss>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Nodejs on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/nodejs/</link><description>Recent content in Nodejs on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Wed, 13 Feb 2019 12:50:00 +0900</lastBuildDate><atom:link href="/series/nodejs/" rel="self" type="application/rss+xml"/><item><title>【どんと来い、列車遅延】 勤怠メールをサクッと送れるオレオレツールを作ってみた</title><link>https://dotstud.io/blog/pokio-nodered-keikyu-chien/</link><pubDate>Wed, 13 Feb 2019 12:50:00 +0900</pubDate><guid>https://dotstud.io/blog/pokio-nodered-keikyu-chien/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>nodejs on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/nodejs/</link><description>Recent content in nodejs on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Wed, 13 Feb 2019 12:50:00 +0900</lastBuildDate><atom:link href="/series/nodejs/" rel="self" type="application/rss+xml"/><item><title>【どんと来い、列車遅延】 勤怠メールをサクッと送れるオレオレツールを作ってみた</title><link>https://dotstud.io/blog/pokio-nodered-keikyu-chien/</link><pubDate>Wed, 13 Feb 2019 12:50:00 +0900</pubDate><guid>https://dotstud.io/blog/pokio-nodered-keikyu-chien/</guid><description>
 &lt;p&gt;こんにちは、&lt;a href=&#34;https://dotstud.io/members/pokio&#34;&gt;ポキオ&lt;/a&gt;です。&lt;/p&gt;
 &lt;p&gt;急いでるときに限って、いつも使ってる通勤列車が遅延してたりして、あたふたすることってありますよね？&lt;/p&gt;
 &lt;p&gt;そんなときに、勤務先などにサクッとメールを送れるオレオレツールを作ってみました。&lt;/p&gt;
@@ -8,9 +8,9 @@
 &lt;p&gt;Node-REDはその名の通り、&lt;strong&gt;Node.js&lt;/strong&gt;上で動作するツールです。普段使っているPCなどNode.jsが動作している環境であればNode−REDを動かすことができますが、今回は外出先からでもアクセスできるツールを簡単に作成したかったので、&lt;u&gt;Node-REDをサービスとして提供している&lt;strong&gt;enebular&lt;/strong&gt;&lt;/u&gt;を使ってみようと思います。&lt;/p&gt;
 &lt;h2 id=&#34;node-redでツールを作ってみる&#34;&gt;Node-REDでツールを作ってみる&lt;/h2&gt;
 &lt;p&gt;はじめに、今回作ったツールがこちら。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/243/1.png&#34; alt=&#34;1&#34;&gt;
-&lt;/center&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/243/1.png&#34; alt=&#34;1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
 &lt;p&gt;このツールの機能は、以下の3つです。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;外出先からでもアクセスできるWebページを作る（念の為、BASIC認証を設けておく）&lt;/li&gt;
@@ -21,24 +21,24 @@
 &lt;h2 id=&#34;node-redでwebページを作る&#34;&gt;Node-REDでWebページを作る&lt;/h2&gt;
 &lt;p&gt;Node-REDで用意されているノードのなかに、HTTPリクエストを受ける&lt;strong&gt;&lt;code&gt;HTTP In&lt;/code&gt;&lt;/strong&gt;ノードと、それに対するレスポンスを返す&lt;strong&gt;&lt;code&gt;HTTP Response&lt;/code&gt;&lt;/strong&gt;ノードがあります。&lt;/p&gt;
 &lt;p&gt;この&lt;code&gt;HTTP In&lt;/code&gt;ノードを作るとHTTPのエンドポイントができます。このノードと&lt;code&gt;HTTP Response&lt;/code&gt;ノードを下の絵のようにつなぎ、レスポンスとなるソースを返すようにすれば、Webページができます。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/243/2.png&#34; alt=&#34;2&#34;&gt;
-&lt;/center&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/243/2.png&#34; alt=&#34;2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
 &lt;p&gt;上の例では、静的な&lt;code&gt;Hello, world!&lt;/code&gt;という文字列を返すだけですが、&lt;strong&gt;&lt;code&gt;HTTP Response&lt;/code&gt;&lt;/strong&gt;ノードで返す情報を動的に変化させたり、Webページ上で動作させるスクリプトを記述してレスポンスとして返せば、よりリッチなWebページをNode-REDで作成することができます。
 &lt;/p&gt;
 &lt;p&gt;次にBASIC認証ですが、Node-REDに対して追加でモジュールをインストールすることで、簡単に機能を追加することができます。&lt;/p&gt;
 &lt;p&gt;Node-REDの設定メニューから、[Settings] &amp;gt; [Palette] &amp;gt; [Install]と進み、&lt;strong&gt;&lt;code&gt;node-red-contrib-httpauth&lt;/code&gt;&lt;/strong&gt;を探します。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/243/3.png&#34; alt=&#34;3&#34;&gt;
-&lt;/center&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/243/3.png&#34; alt=&#34;3&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
 &lt;p&gt;これをインストールすることで、BASIC認証が行えるノードを追加できます。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/243/4.png&#34; alt=&#34;4&#34;&gt;
-&lt;/center&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/243/4.png&#34; alt=&#34;4&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
 &lt;p&gt;使い方は至ってシンプルで、先程の&lt;code&gt;HTTP In&lt;/code&gt;ノードの後ろにBASIC認証のノードをつけて、BASIC認証で使うユーザー名とパスワードをノードの設定で指定するだけです。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/243/5.png&#34; alt=&#34;5&#34;&gt;
-&lt;/center&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/243/5.png&#34; alt=&#34;5&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
 &lt;p&gt;実際に、この状態でエンドポイントにアクセスすると、確かにBASIC認証がワークしています。&lt;/p&gt;
 &lt;h2 id=&#34;勤怠メールを送れるようにする&#34;&gt;勤怠メールを送れるようにする&lt;/h2&gt;
 &lt;p&gt;ここまでで、&lt;code&gt;Hello, world!&lt;/code&gt;が表示できるWebページができました。ここからは&lt;u&gt;&lt;code&gt;HTTP Response&lt;/code&gt;ノードで返すHTMLをよしなに編集して、勤怠メールを作成できるようにします。&lt;/u&gt;&lt;/p&gt;
@@ -49,19 +49,19 @@
 &lt;li&gt;&lt;strong&gt;mailtoスキーム&lt;/strong&gt;を使って、メーラーを起動してメールを送れるようにする&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;遅刻の理由も、必ずしも電車遅延だけではないので、体調不良や保育園関係の理由も選択できるようにしました。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/243/6.png&#34; alt=&#34;6&#34;&gt;
-&lt;/center&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/243/6.png&#34; alt=&#34;6&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
 &lt;p&gt;遅刻の理由を選択すると、メール本文が変わるようになっています。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/243/7.png&#34; alt=&#34;7&#34;&gt;
-&lt;/center&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/243/7.png&#34; alt=&#34;7&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;&lt;code&gt;勤怠メールを送る&lt;/code&gt;&lt;/strong&gt;を押すとメーラーが起動し、ツールで指定した文言をそのままメールとして送ることができます。&lt;/p&gt;
 &lt;h2 id=&#34;遅延証明書情報を取得する&#34;&gt;遅延証明書情報を取得する&lt;/h2&gt;
 &lt;p&gt;ツール上で表示する京浜急行の運行情報は、&lt;a href=&#34;https://delay.keikyu.co.jp/delay/&#34;&gt;京急線遅延証明書の発行&lt;/a&gt;のページから取得します。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/243/8.png&#34; alt=&#34;8&#34;&gt;
-&lt;/center&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/243/8.png&#34; alt=&#34;8&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
 &lt;p&gt;その日に発行されている遅延証明書のリスト化し、その遅延証明書ページへのリンクをメール本文に貼り付けるか選択できるようになっています。&lt;/p&gt;
 &lt;p&gt;ただし、下記のような問題があるため、泥臭いワークアラウンドを入れています。&lt;/p&gt;
 &lt;ul&gt;
@@ -73,9 +73,9 @@
 &lt;pre&gt;&lt;code class=&#34;language-JSON&#34;&gt;[{&amp;quot;id&amp;quot;:&amp;quot;7cbe5b40.a0b054&amp;quot;,&amp;quot;type&amp;quot;:&amp;quot;tab&amp;quot;,&amp;quot;label&amp;quot;:&amp;quot;Flow 1&amp;quot;,&amp;quot;disabled&amp;quot;:false,&amp;quot;info&amp;quot;:&amp;quot;&amp;quot;},{&amp;quot;id&amp;quot;:&amp;quot;a45bf2b.b54621&amp;quot;,&amp;quot;type&amp;quot;:&amp;quot;http request&amp;quot;,&amp;quot;z&amp;quot;:&amp;quot;7cbe5b40.a0b054&amp;quot;,&amp;quot;name&amp;quot;:&amp;quot;遅延証明書ページ取得&amp;quot;,&amp;quot;method&amp;quot;:&amp;quot;GET&amp;quot;,&amp;quot;ret&amp;quot;:&amp;quot;txt&amp;quot;,&amp;quot;url&amp;quot;:&amp;quot;https://delay.keikyu.co.jp/delay/&amp;quot;,&amp;quot;tls&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;x&amp;quot;:360,&amp;quot;y&amp;quot;:180,&amp;quot;wires&amp;quot;:[[&amp;quot;89f0f7a0.a8bda8&amp;quot;]]},{&amp;quot;id&amp;quot;:&amp;quot;3a7ae4dc.fc9f5c&amp;quot;,&amp;quot;type&amp;quot;:&amp;quot;debug&amp;quot;,&amp;quot;z&amp;quot;:&amp;quot;7cbe5b40.a0b054&amp;quot;,&amp;quot;name&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;active&amp;quot;:true,&amp;quot;tosidebar&amp;quot;:true,&amp;quot;console&amp;quot;:false,&amp;quot;tostatus&amp;quot;:false,&amp;quot;complete&amp;quot;:&amp;quot;delayData&amp;quot;,&amp;quot;x&amp;quot;:600,&amp;quot;y&amp;quot;:220,&amp;quot;wires&amp;quot;:[]},{&amp;quot;id&amp;quot;:&amp;quot;89f0f7a0.a8bda8&amp;quot;,&amp;quot;type&amp;quot;:&amp;quot;function&amp;quot;,&amp;quot;z&amp;quot;:&amp;quot;7cbe5b40.a0b054&amp;quot;,&amp;quot;name&amp;quot;:&amp;quot;情報をパース&amp;quot;,&amp;quot;func&amp;quot;:&amp;quot;let table = msg.payload.split(&#39;&amp;lt;tbody&amp;gt;&#39;)[1];\ntable = table.split(&#39;&amp;lt;/tbody&amp;gt;&#39;)[0];\n\nlet rows = table.split(&#39;\\n&#39;).join(&#39;&#39;);\nrows = rows.split(&#39;&amp;lt;tr&amp;gt;&#39;).join(&#39;&#39;).split(&#39;&amp;lt;/tr&amp;gt;&#39;);\n\nlet data = {};\nlet dateOffset = 0;\ndata.date = rows[0 + 3 * dateOffset].split(&#39;&amp;lt;/td&amp;gt;&#39;)[0].replace(&#39;&amp;lt;tr style=\&amp;quot;background-color:#ADD8E6;\&amp;quot;&amp;gt;&#39;,&#39;&#39;).replace(&#39;&amp;lt;td rowspan=3&amp;gt;&#39;,&#39;&#39;).replace(&#39;&amp;lt;br/&amp;gt;&#39;,&#39;&#39;);\n\nlet morningData = rows[0 + 3 * dateOffset].split(&#39;&amp;lt;/td&amp;gt;&#39;).join(&#39;&#39;).split(&#39;&amp;lt;td&amp;gt;&#39;).slice(1);\nlet dayData = rows[1 + 3 * dateOffset].split(&#39;&amp;lt;/td&amp;gt;&#39;).join(&#39;&#39;).split(&#39;&amp;lt;td&amp;gt;&#39;).slice(1);\nlet nightData = rows[2 + 3 * dateOffset].split(&#39;&amp;lt;/td&amp;gt;&#39;).join(&#39;&#39;).split(&#39;&amp;lt;td&amp;gt;&#39;).slice(1);\nlet dataTitles = [&#39;品川～横浜：上り&#39;,&#39;品川～横浜：下り&#39;,&#39;横浜以南：上り&#39;,&#39;横浜以南：下り&#39;,&#39;空港線内：上り&#39;,&#39;空港線内：下り&#39;];\n\ndata.morningTitle = morningData[0];\ndata.dayTitle = dayData[0];\ndata.nightTitle = nightData[0];\n\nmorningData = morningData.slice(1);\ndayData = dayData.slice(1);\nnightData = nightData.slice(1);\n\ndata.morningData = [];\ndata.dayData = [];\ndata.nightData = [];\ndata.allData = [];\n\nfor(let i = 0; i &amp;lt; 6; i++){\n if(morningData[i] !== &#39;-&#39;){\n let detail = morningData[i].split(&#39;&amp;gt;&#39;)[1].split(&#39;&amp;lt;&#39;)[0];\n let link = &#39;https://delay.keikyu.co.jp&#39; + morningData[i].split(&#39;\&amp;quot;&#39;)[1];\n data.morningData.push({zone : dataTitles[i], detail : detail, link : link});\n data.allData.push({title : data.morningTitle + &#39; - &#39; + dataTitles[i] + &#39; - &#39; + detail, link : link});\n }\n \n if(dayData[i] !== &#39;-&#39;){\n let detail = dayData[i].split(&#39;&amp;gt;&#39;)[1].split(&#39;&amp;lt;&#39;)[0];\n let link = &#39;https://delay.keikyu.co.jp&#39; + dayData[i].split(&#39;\&amp;quot;&#39;)[1];\n data.dayData.push({zone : dataTitles[i], detail : detail, link : link});\n data.allData.push({title : data.dayTitle + &#39; - &#39; + dataTitles[i] + &#39; - &#39; + detail, link : link});\n }\n \n if(nightData[i] !== &#39;-&#39;){\n let detail = nightData[i].split(&#39;&amp;gt;&#39;)[1].split(&#39;&amp;lt;&#39;)[0];\n let link = &#39;https://delay.keikyu.co.jp&#39; + nightData[i].split(&#39;\&amp;quot;&#39;)[1];\n data.nightData.push({zone : dataTitles[i], detail : detail, link : link});\n data.allData.push({title : data.nightTitle + &#39; - &#39; + dataTitles[i] + &#39; - &#39; + detail, link : link});\n }\n}\n\nmsg.delayData = data;\nreturn msg;&amp;quot;,&amp;quot;outputs&amp;quot;:1,&amp;quot;noerr&amp;quot;:0,&amp;quot;x&amp;quot;:340,&amp;quot;y&amp;quot;:220,&amp;quot;wires&amp;quot;:[[&amp;quot;e0512d8a.0fe7f&amp;quot;,&amp;quot;3a7ae4dc.fc9f5c&amp;quot;]]},{&amp;quot;id&amp;quot;:&amp;quot;5c37249e.aecf1c&amp;quot;,&amp;quot;type&amp;quot;:&amp;quot;http in&amp;quot;,&amp;quot;z&amp;quot;:&amp;quot;7cbe5b40.a0b054&amp;quot;,&amp;quot;name&amp;quot;:&amp;quot;HTTPリクエスト&amp;quot;,&amp;quot;url&amp;quot;:&amp;quot;/&amp;quot;,&amp;quot;method&amp;quot;:&amp;quot;get&amp;quot;,&amp;quot;upload&amp;quot;:false,&amp;quot;swaggerDoc&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;x&amp;quot;:120,&amp;quot;y&amp;quot;:180,&amp;quot;wires&amp;quot;:[[&amp;quot;b83cd390.27959&amp;quot;]]},{&amp;quot;id&amp;quot;:&amp;quot;bbc86a41.f453e8&amp;quot;,&amp;quot;type&amp;quot;:&amp;quot;http response&amp;quot;,&amp;quot;z&amp;quot;:&amp;quot;7cbe5b40.a0b054&amp;quot;,&amp;quot;name&amp;quot;:&amp;quot;HTTPレスポンス&amp;quot;,&amp;quot;statusCode&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;headers&amp;quot;:{},&amp;quot;x&amp;quot;:610,&amp;quot;y&amp;quot;:180,&amp;quot;wires&amp;quot;:[]},{&amp;quot;id&amp;quot;:&amp;quot;e0512d8a.0fe7f&amp;quot;,&amp;quot;type&amp;quot;:&amp;quot;function&amp;quot;,&amp;quot;z&amp;quot;:&amp;quot;7cbe5b40.a0b054&amp;quot;,&amp;quot;name&amp;quot;:&amp;quot;パースした情報を整形&amp;quot;,&amp;quot;func&amp;quot;:&amp;quot;let delayBody = &#39;&#39;;\n\ndelayBody += &#39;&amp;lt;h1&amp;gt;&#39; + msg.delayData.date + &#39;&amp;lt;/h1&amp;gt;\\n&#39;;\n\ndelayBody += &#39;&amp;lt;h2&amp;gt;&#39; + msg.delayData.morningTitle + &#39;&amp;lt;/h2&amp;gt;\\n&#39;;\ndelayBody += &#39;&amp;lt;ul&amp;gt;&#39;;\n\nif(msg.delayData.morningData.length === 0){\n delayBody += &#39;&amp;lt;li&amp;gt;&#39;;\n delayBody += &#39;遅延情報なし&#39;;\n delayBody += &#39;&amp;lt;/li&amp;gt;&#39;;\n}else{\n msg.delayData.morningData.forEach(function(data){\n delayBody += &#39;&amp;lt;li&amp;gt;&#39;;\n delayBody += &#39;&amp;lt;a href=\&amp;quot;&#39; + data.link + &#39;\&amp;quot; target=\&amp;quot;_blank\&amp;quot;&amp;gt;&#39;;\n delayBody += data.zone + &#39; (&#39; + data.detail + &#39;)&#39;; \n delayBody += &#39;&amp;lt;/a&amp;gt;&#39;;\n delayBody += &#39;&amp;lt;/li&amp;gt;&#39;;\n });\n}\n\ndelayBody += &#39;&amp;lt;/ul&amp;gt;&#39;;\ndelayBody += &#39;&amp;lt;h2&amp;gt;&#39; + msg.delayData.dayTitle + &#39;&amp;lt;/h2&amp;gt;\\n&#39;;\ndelayBody += &#39;&amp;lt;ul&amp;gt;&#39;;\n\nif(msg.delayData.dayData.length === 0){\n delayBody += &#39;&amp;lt;li&amp;gt;&#39;;\n delayBody += &#39;遅延情報なし&#39;;\n delayBody += &#39;&amp;lt;/li&amp;gt;&#39;;\n}else{\n msg.delayData.dayData.forEach(function(data){\n delayBody += &#39;&amp;lt;li&amp;gt;&#39;;\n delayBody += &#39;&amp;lt;a href=\&amp;quot;&#39; + data.link + &#39;\&amp;quot; target=\&amp;quot;_blank\&amp;quot;&amp;gt;&#39;;\n delayBody += data.zone + &#39; (&#39; + data.detail + &#39;)&#39;; \n delayBody += &#39;&amp;lt;/a&amp;gt;&#39;;\n delayBody += &#39;&amp;lt;/li&amp;gt;&#39;;\n });\n}\n\ndelayBody += &#39;&amp;lt;/ul&amp;gt;&#39;;\ndelayBody += &#39;&amp;lt;h2&amp;gt;&#39; + msg.delayData.nightTitle + &#39;&amp;lt;/h2&amp;gt;\\n&#39;;\ndelayBody += &#39;&amp;lt;ul&amp;gt;&#39;;\n\nif(msg.delayData.nightData.length === 0){\n delayBody += &#39;&amp;lt;li&amp;gt;&#39;;\n delayBody += &#39;遅延情報なし&#39;;\n delayBody += &#39;&amp;lt;/li&amp;gt;&#39;;\n}else{\n msg.delayData.nightData.forEach(function(data){\n delayBody += &#39;&amp;lt;li&amp;gt;&#39;;\n delayBody += &#39;&amp;lt;a href=\&amp;quot;&#39; + data.link + &#39;\&amp;quot; target=\&amp;quot;_blank\&amp;quot;&amp;gt;&#39;;\n delayBody += data.zone + &#39; (&#39; + data.detail + &#39;)&#39;; \n delayBody += &#39;&amp;lt;/a&amp;gt;&#39;;\n delayBody += &#39;&amp;lt;/li&amp;gt;&#39;;\n });\n}\n\ndelayBody += &#39;&amp;lt;/ul&amp;gt;&#39;;\nmsg.delayBody = delayBody;\nreturn msg;&amp;quot;,&amp;quot;outputs&amp;quot;:1,&amp;quot;noerr&amp;quot;:0,&amp;quot;x&amp;quot;:360,&amp;quot;y&amp;quot;:260,&amp;quot;wires&amp;quot;:[[&amp;quot;5f89b7b8.249788&amp;quot;]]},{&amp;quot;id&amp;quot;:&amp;quot;6e8b7f2.3c2238&amp;quot;,&amp;quot;type&amp;quot;:&amp;quot;function&amp;quot;,&amp;quot;z&amp;quot;:&amp;quot;7cbe5b40.a0b054&amp;quot;,&amp;quot;name&amp;quot;:&amp;quot;ページの要素を結合&amp;quot;,&amp;quot;func&amp;quot;:&amp;quot;let bodyHeader = &#39;&amp;lt;html&amp;gt;&amp;lt;header&amp;gt;&amp;lt;meta name=\&amp;quot;viewport\&amp;quot; content=\&amp;quot;width=device-width, initial-scale=1, shrink-to-fit=no\&amp;quot;&amp;gt;&amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; href=\&amp;quot;https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css\&amp;quot; integrity=\&amp;quot;sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS\&amp;quot; crossorigin=\&amp;quot;anonymous\&amp;quot;&amp;gt;&amp;lt;/header&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div class=\&amp;quot;container\&amp;quot;&amp;gt;&amp;lt;div class=\&amp;quot;row\&amp;quot;&amp;gt;&amp;lt;div class=\&amp;quot;col-sm my-2\&amp;quot;&amp;gt;&#39;;\nlet bootstrap = &#39;&amp;lt;script src=\&amp;quot;https://code.jquery.com/jquery-3.3.1.slim.min.js\&amp;quot; integrity=\&amp;quot;sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo\&amp;quot; crossorigin=\&amp;quot;anonymous\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;&amp;lt;script src=\&amp;quot;https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js\&amp;quot; integrity=\&amp;quot;sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut\&amp;quot; crossorigin=\&amp;quot;anonymous\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;&amp;lt;script src=\&amp;quot;https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js\&amp;quot; integrity=\&amp;quot;sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k\&amp;quot; crossorigin=\&amp;quot;anonymous\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;&#39;;\nlet bodyFooter = &#39;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&#39;;\n\nmsg.payload = bodyHeader + msg.delayBody + msg.mailBody + msg.scriptBody + bootstrap + bodyFooter;\nreturn msg;&amp;quot;,&amp;quot;outputs&amp;quot;:1,&amp;quot;noerr&amp;quot;:0,&amp;quot;x&amp;quot;:360,&amp;quot;y&amp;quot;:380,&amp;quot;wires&amp;quot;:[[&amp;quot;bbc86a41.f453e8&amp;quot;]]},{&amp;quot;id&amp;quot;:&amp;quot;5f89b7b8.249788&amp;quot;,&amp;quot;type&amp;quot;:&amp;quot;function&amp;quot;,&amp;quot;z&amp;quot;:&amp;quot;7cbe5b40.a0b054&amp;quot;,&amp;quot;name&amp;quot;:&amp;quot;メール送信部分&amp;quot;,&amp;quot;func&amp;quot;:&amp;quot;let mailBody = &#39;&#39;;\n\nmailBody += &#39;&amp;lt;h1&amp;gt;勤怠メールを作成&amp;lt;/h1&amp;gt;&#39;;\n\nmailBody += &#39;&amp;lt;label for=\&amp;quot;reason\&amp;quot;&amp;gt;遅延理由を選択する&amp;lt;/label&amp;gt;&#39;;\nmailBody += &#39;&amp;lt;select class=\&amp;quot;custom-select\&amp;quot; name=\&amp;quot;reason\&amp;quot; id=\&amp;quot;reason\&amp;quot; onchange=\&amp;quot;updateMessage()\&amp;quot;&amp;gt;&#39;;\nmailBody += &#39;&amp;lt;option value=\&amp;quot;電車遅延のため\&amp;quot; selected&amp;gt;電車遅延&amp;lt;/option&amp;gt;&#39;;\nmailBody += &#39;&amp;lt;option value=\&amp;quot;腹痛のため\&amp;quot;&amp;gt;体調不良（腹痛）&amp;lt;/option&amp;gt;&#39;;\nmailBody += &#39;&amp;lt;option value=\&amp;quot;頭痛のため\&amp;quot;&amp;gt;体調不良（頭痛）&amp;lt;/option&amp;gt;&#39;;\nmailBody += &#39;&amp;lt;option value=\&amp;quot;体調不良のため\&amp;quot;&amp;gt;体調不良（理由なし）&amp;lt;/option&amp;gt;&#39;;\nmailBody += &#39;&amp;lt;option value=\&amp;quot;保育園登園に時間がかかったため\&amp;quot;&amp;gt;保育園関係&amp;lt;/option&amp;gt;&#39;;\nmailBody += &#39;&amp;lt;option value=\&amp;quot;家事都合のため\&amp;quot;&amp;gt;家事都合&amp;lt;/option&amp;gt;&#39;;\nmailBody += &#39;&amp;lt;option value=\&amp;quot;私用のため\&amp;quot;&amp;gt;私用&amp;lt;/option&amp;gt;&#39;;\nmailBody += &#39;&amp;lt;/select&amp;gt;&#39;;\n\nmailBody += &#39;&amp;lt;label for=\&amp;quot;chien\&amp;quot;&amp;gt;遅延証明書へのリンクを貼る&amp;lt;/label&amp;gt;&#39;;\nmailBody += &#39;&amp;lt;select class=\&amp;quot;custom-select\&amp;quot; name=\&amp;quot;chien\&amp;quot; id=\&amp;quot;chien\&amp;quot; onchange=\&amp;quot;updateMessage()\&amp;quot;&amp;gt;&#39;;\nmailBody += &#39;&amp;lt;option value=\&amp;quot;\&amp;quot; selected&amp;gt;なし&amp;lt;/option&amp;gt;&#39;;\n\nmsg.delayData.allData.forEach(function(value){\n mailBody += &#39;&amp;lt;option value=\&amp;quot;&#39; + value.link + &#39;\&amp;quot;&amp;gt;&#39; + value.title + &#39;&amp;lt;/option&amp;gt;&#39;;\n});\n\nmailBody += &#39;&amp;lt;/select&amp;gt;&#39;;\n\nmailBody += &#39;&amp;lt;label for=\&amp;quot;message\&amp;quot;&amp;gt;メール本文&amp;lt;/label&amp;gt;&#39;;\nmailBody += &#39;&amp;lt;textarea class=\&amp;quot;form-control\&amp;quot; id=\&amp;quot;message\&amp;quot; rows=\&amp;quot;5\&amp;quot;&amp;gt;&amp;lt;/textarea&amp;gt;&#39;;\nmailBody += &#39;&amp;lt;br&amp;gt;&amp;lt;button type=\&amp;quot;button\&amp;quot; class=\&amp;quot;btn btn-primary btn-block\&amp;quot; onclick=\&amp;quot;sendMessage()\&amp;quot;&amp;gt;勤怠メールを送る&amp;lt;/button&amp;gt;&#39;;\n\nmsg.mailBody = mailBody;\nreturn msg;&amp;quot;,&amp;quot;outputs&amp;quot;:1,&amp;quot;noerr&amp;quot;:0,&amp;quot;x&amp;quot;:340,&amp;quot;y&amp;quot;:300,&amp;quot;wires&amp;quot;:[[&amp;quot;a41aa11e.86e04&amp;quot;]]},{&amp;quot;id&amp;quot;:&amp;quot;a41aa11e.86e04&amp;quot;,&amp;quot;type&amp;quot;:&amp;quot;function&amp;quot;,&amp;quot;z&amp;quot;:&amp;quot;7cbe5b40.a0b054&amp;quot;,&amp;quot;name&amp;quot;:&amp;quot;スクリプト部分&amp;quot;,&amp;quot;func&amp;quot;:&amp;quot;let name = global.get(&#39;name&#39;);\nlet address = global.get(&#39;address&#39;);\n\nlet scriptBody = &#39;&amp;lt;script&amp;gt;&#39;;\nscriptBody += &#39;let reasonSelect = document.getElementById(\&amp;quot;reason\&amp;quot;); let chienSelect = document.getElementById(\&amp;quot;chien\&amp;quot;); let textArea = document.getElementById(\&amp;quot;message\&amp;quot;); function updateMessage() { let reasonIndex = reasonSelect.selectedIndex; let chienIndex = chienSelect.selectedIndex; let message = \&amp;quot;\&amp;quot;; message += \&amp;quot;&#39; + name + &#39;です。\\\\n\\\\n\&amp;quot;; message += \&amp;quot;大変申し訳ありませんが、\&amp;quot;; message += reasonSelect.options[reasonIndex].value; message += \&amp;quot;出社が遅れます。\\\\n\&amp;quot;; message += \&amp;quot;何卒宜しくお願いします。\&amp;quot;; if (!chienSelect.options[chienIndex].value) { textArea.value = message; return; } let request = new XMLHttpRequest(); request.onload = function () { message += \&amp;quot;\\\\n\\\\n遅延証明書はこちらです。\\\\n\&amp;quot;; message += request.responseText; textArea.value = message; }; request.open(\&amp;quot;GET\&amp;quot;, \&amp;quot;./encode/\&amp;quot; + encodeURIComponent(chienSelect.options[chienIndex].value.trim()), false, \&amp;quot;USER_NAME\&amp;quot;, \&amp;quot;PASSWORD\&amp;quot;); request.send(); } function sendMessage() { window.open(\&amp;quot;mailto:&#39; + address + &#39;?body=\&amp;quot; + encodeURIComponent(textArea.value)); } updateMessage();&#39;;\nscriptBody += &#39;&amp;lt;/script&amp;gt;&#39;;\n\nmsg.scriptBody = scriptBody;\nreturn msg;&amp;quot;,&amp;quot;outputs&amp;quot;:1,&amp;quot;noerr&amp;quot;:0,&amp;quot;x&amp;quot;:340,&amp;quot;y&amp;quot;:340,&amp;quot;wires&amp;quot;:[[&amp;quot;6e8b7f2.3c2238&amp;quot;]]},{&amp;quot;id&amp;quot;:&amp;quot;867b9e9b.bb5b8&amp;quot;,&amp;quot;type&amp;quot;:&amp;quot;http in&amp;quot;,&amp;quot;z&amp;quot;:&amp;quot;7cbe5b40.a0b054&amp;quot;,&amp;quot;name&amp;quot;:&amp;quot;HTTPリクエスト&amp;quot;,&amp;quot;url&amp;quot;:&amp;quot;/encode/:url&amp;quot;,&amp;quot;method&amp;quot;:&amp;quot;get&amp;quot;,&amp;quot;upload&amp;quot;:false,&amp;quot;swaggerDoc&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;x&amp;quot;:120,&amp;quot;y&amp;quot;:480,&amp;quot;wires&amp;quot;:[[&amp;quot;eb246d76.1afeb&amp;quot;,&amp;quot;fdb9da8c.f0ebf8&amp;quot;]]},{&amp;quot;id&amp;quot;:&amp;quot;55421d41.0dc1b4&amp;quot;,&amp;quot;type&amp;quot;:&amp;quot;http response&amp;quot;,&amp;quot;z&amp;quot;:&amp;quot;7cbe5b40.a0b054&amp;quot;,&amp;quot;name&amp;quot;:&amp;quot;HTTPレスポンス&amp;quot;,&amp;quot;statusCode&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;headers&amp;quot;:{},&amp;quot;x&amp;quot;:610,&amp;quot;y&amp;quot;:480,&amp;quot;wires&amp;quot;:[]},{&amp;quot;id&amp;quot;:&amp;quot;303db0f1.b72bf&amp;quot;,&amp;quot;type&amp;quot;:&amp;quot;http request&amp;quot;,&amp;quot;z&amp;quot;:&amp;quot;7cbe5b40.a0b054&amp;quot;,&amp;quot;name&amp;quot;:&amp;quot;APIを叩く&amp;quot;,&amp;quot;method&amp;quot;:&amp;quot;GET&amp;quot;,&amp;quot;ret&amp;quot;:&amp;quot;txt&amp;quot;,&amp;quot;url&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;tls&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;x&amp;quot;:330,&amp;quot;y&amp;quot;:520,&amp;quot;wires&amp;quot;:[[&amp;quot;55421d41.0dc1b4&amp;quot;]]},{&amp;quot;id&amp;quot;:&amp;quot;808e61ff.edc38&amp;quot;,&amp;quot;type&amp;quot;:&amp;quot;function&amp;quot;,&amp;quot;z&amp;quot;:&amp;quot;7cbe5b40.a0b054&amp;quot;,&amp;quot;name&amp;quot;:&amp;quot;URL変換&amp;quot;,&amp;quot;func&amp;quot;:&amp;quot;msg.url = &#39;https://is.gd/create.php?format=simple&amp;amp;url=&#39; + encodeURIComponent(msg.req.params.url);\nreturn msg;&amp;quot;,&amp;quot;outputs&amp;quot;:1,&amp;quot;noerr&amp;quot;:0,&amp;quot;x&amp;quot;:320,&amp;quot;y&amp;quot;:480,&amp;quot;wires&amp;quot;:[[&amp;quot;303db0f1.b72bf&amp;quot;]]},{&amp;quot;id&amp;quot;:&amp;quot;eb246d76.1afeb&amp;quot;,&amp;quot;type&amp;quot;:&amp;quot;debug&amp;quot;,&amp;quot;z&amp;quot;:&amp;quot;7cbe5b40.a0b054&amp;quot;,&amp;quot;name&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;active&amp;quot;:true,&amp;quot;tosidebar&amp;quot;:true,&amp;quot;console&amp;quot;:false,&amp;quot;tostatus&amp;quot;:false,&amp;quot;complete&amp;quot;:&amp;quot;true&amp;quot;,&amp;quot;x&amp;quot;:310,&amp;quot;y&amp;quot;:560,&amp;quot;wires&amp;quot;:[]},{&amp;quot;id&amp;quot;:&amp;quot;b475750f.2c9468&amp;quot;,&amp;quot;type&amp;quot;:&amp;quot;comment&amp;quot;,&amp;quot;z&amp;quot;:&amp;quot;7cbe5b40.a0b054&amp;quot;,&amp;quot;name&amp;quot;:&amp;quot;ページへのアクセス&amp;quot;,&amp;quot;info&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;x&amp;quot;:130,&amp;quot;y&amp;quot;:140,&amp;quot;wires&amp;quot;:[]},{&amp;quot;id&amp;quot;:&amp;quot;b61cb0ab.67446&amp;quot;,&amp;quot;type&amp;quot;:&amp;quot;comment&amp;quot;,&amp;quot;z&amp;quot;:&amp;quot;7cbe5b40.a0b054&amp;quot;,&amp;quot;name&amp;quot;:&amp;quot;URL短縮&amp;quot;,&amp;quot;info&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;x&amp;quot;:100,&amp;quot;y&amp;quot;:440,&amp;quot;wires&amp;quot;:[]},{&amp;quot;id&amp;quot;:&amp;quot;892cd0e6.0c4ae&amp;quot;,&amp;quot;type&amp;quot;:&amp;quot;comment&amp;quot;,&amp;quot;z&amp;quot;:&amp;quot;7cbe5b40.a0b054&amp;quot;,&amp;quot;name&amp;quot;:&amp;quot;定数の宣言&amp;quot;,&amp;quot;info&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;x&amp;quot;:100,&amp;quot;y&amp;quot;:40,&amp;quot;wires&amp;quot;:[]},{&amp;quot;id&amp;quot;:&amp;quot;92da441f.e87958&amp;quot;,&amp;quot;type&amp;quot;:&amp;quot;inject&amp;quot;,&amp;quot;z&amp;quot;:&amp;quot;7cbe5b40.a0b054&amp;quot;,&amp;quot;name&amp;quot;:&amp;quot;起動時&amp;quot;,&amp;quot;topic&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;payload&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;payloadType&amp;quot;:&amp;quot;date&amp;quot;,&amp;quot;repeat&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;crontab&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;once&amp;quot;:true,&amp;quot;onceDelay&amp;quot;:0.1,&amp;quot;x&amp;quot;:100,&amp;quot;y&amp;quot;:80,&amp;quot;wires&amp;quot;:[[&amp;quot;7e9e582f.c0d258&amp;quot;]]},{&amp;quot;id&amp;quot;:&amp;quot;7e9e582f.c0d258&amp;quot;,&amp;quot;type&amp;quot;:&amp;quot;function&amp;quot;,&amp;quot;z&amp;quot;:&amp;quot;7cbe5b40.a0b054&amp;quot;,&amp;quot;name&amp;quot;:&amp;quot;差出人、宛先の設定&amp;quot;,&amp;quot;func&amp;quot;:&amp;quot;global.set(&#39;name&#39;, &#39;ポキオ&#39;);\nglobal.set(&#39;address&#39;, &#39;example@example.com&#39;);\nreturn msg;&amp;quot;,&amp;quot;outputs&amp;quot;:1,&amp;quot;noerr&amp;quot;:0,&amp;quot;x&amp;quot;:360,&amp;quot;y&amp;quot;:80,&amp;quot;wires&amp;quot;:[[]]},{&amp;quot;id&amp;quot;:&amp;quot;b83cd390.27959&amp;quot;,&amp;quot;type&amp;quot;:&amp;quot;node-red-contrib-httpauth&amp;quot;,&amp;quot;z&amp;quot;:&amp;quot;7cbe5b40.a0b054&amp;quot;,&amp;quot;name&amp;quot;:&amp;quot;BASIC認証&amp;quot;,&amp;quot;file&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;cred&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;authType&amp;quot;:&amp;quot;Basic&amp;quot;,&amp;quot;realm&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;username&amp;quot;:&amp;quot;USER_NAME&amp;quot;,&amp;quot;password&amp;quot;:&amp;quot;PASSWORD&amp;quot;,&amp;quot;hashed&amp;quot;:false,&amp;quot;x&amp;quot;:110,&amp;quot;y&amp;quot;:220,&amp;quot;wires&amp;quot;:[[&amp;quot;a45bf2b.b54621&amp;quot;]]},{&amp;quot;id&amp;quot;:&amp;quot;fdb9da8c.f0ebf8&amp;quot;,&amp;quot;type&amp;quot;:&amp;quot;node-red-contrib-httpauth&amp;quot;,&amp;quot;z&amp;quot;:&amp;quot;7cbe5b40.a0b054&amp;quot;,&amp;quot;name&amp;quot;:&amp;quot;BASIC認証&amp;quot;,&amp;quot;file&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;cred&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;authType&amp;quot;:&amp;quot;Basic&amp;quot;,&amp;quot;realm&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;username&amp;quot;:&amp;quot;USER_NAME&amp;quot;,&amp;quot;password&amp;quot;:&amp;quot;PASSWORD&amp;quot;,&amp;quot;hashed&amp;quot;:false,&amp;quot;x&amp;quot;:110,&amp;quot;y&amp;quot;:520,&amp;quot;wires&amp;quot;:[[&amp;quot;808e61ff.edc38&amp;quot;]]}]
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;フローエディターは、こんな感じになっています。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/243/9.png&#34; alt=&#34;9&#34;&gt;
-&lt;/center&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/243/9.png&#34; alt=&#34;9&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
 &lt;h2 id=&#34;herokuにデプロイして本格運用&#34;&gt;Herokuにデプロイして本格運用&lt;/h2&gt;
 &lt;p&gt;今回は、enebularが提供してるNode-REDの仕組みを利用して、フローを設計してみました。&lt;/p&gt;
 &lt;p&gt;フロー設計時にはテンポラリのエンドポイントURLが付与されるので、作りながら実際のWebページの挙動を試すことができます。&lt;/p&gt;
@@ -102,7 +102,7 @@ VuePressで作成したサイトをGitLab CIを使ってGitLab Pagesにデプロ
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/section&gt;
-&lt;/section&gt;
+&lt;p&gt;&lt;/section&gt;&lt;/p&gt;
 &lt;p&gt;無料で使えて便利なのですが、&lt;u&gt;キャッシュが強くて中々更新されないといった現象&lt;/u&gt;があります。&lt;/p&gt;
 &lt;p&gt;調べてみるとCloudflareのAPIでキャッシュクリアが出来るみたいだったのでNode.jsで叩きつつデプロイ時のCIタスクに乗せてみました。&lt;/p&gt;
 &lt;h2 id=&#34;今回の環境&#34;&gt;今回の環境&lt;/h2&gt;
@@ -294,7 +294,7 @@ VuePressで作成したサイトをGitLab CIを使ってGitLab Pagesにデプロ
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/section&gt;
-&lt;/section&gt;
+&lt;p&gt;&lt;/section&gt;&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;package.json&lt;/code&gt;に&lt;code&gt;ci:purge_cache&lt;/code&gt;を追加して&lt;code&gt;purge_cache.js&lt;/code&gt;を実行するスクリプトを追加します。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;(省略)
 &amp;quot;scripts&amp;quot;: {
@@ -750,7 +750,7 @@ Circle CIを使ってHugoのビルドをしてGitHub Pagesにデプロイする�
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/section&gt;
-&lt;/section&gt;
+&lt;p&gt;&lt;/section&gt;&lt;/p&gt;
 &lt;p&gt;気持ち的にHugoブログもVuePressに移行したいと思っている感じですね。&lt;/p&gt;
 &lt;h2 id=&#34;gitlab-pagesの基本&#34;&gt;GitLab Pagesの基本&lt;/h2&gt;
 &lt;p&gt;GitLab PagesはGitLabで利用できる無料ホスティング環境です。&lt;/p&gt;
@@ -1248,7 +1248,7 @@ nodebrewを使ったNode.jsのインストール方法をまとめました。
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/section&gt;
-&lt;/section&gt;
+&lt;p&gt;&lt;/section&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;筆者PC: mac OS HighSierra バージョン10.13.6&lt;br /&gt;&lt;/li&gt;
 &lt;li&gt;Node.js: v10.10.0&lt;/li&gt;
@@ -1269,9 +1269,9 @@ nodebrewを使ったNode.jsのインストール方法をまとめました。
 &lt;h2 id=&#34;arduino-unoとトンピーちゃんを連携&#34;&gt;Arduino Unoとトンピーちゃんを連携&lt;/h2&gt;
 &lt;h3 id=&#34;回路を作成&#34;&gt;回路を作成&lt;/h3&gt;
 &lt;p&gt;Arduino Unoから直接ON/OFFを制御しようとすると、電流が少なく回路を開/閉できませんでした。そこでArduino Unoとトンピーちゃんの間に&lt;strong&gt;FETを挿入&lt;/strong&gt;します。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/230/fet.png&#34; alt=&#34;fet&#34;&gt;
-&lt;/center&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/230/fet.png&#34; alt=&#34;fet&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
 &lt;p&gt;FETは、電圧の加え方の違いによって「Pチャネル」と「Nチャネル」の2種類に分かれます。今回はNチャネルのFETを利用します。&lt;/p&gt;
 &lt;p&gt;また、回路の「+側」にFETを繋ぐことを「ハイサイド（スイッチ）」、-側に繋ぐことを「ローサイド（スイッチ）」と呼称します。今回はNチャネルなので、ローサイドにFETを繋ぎます。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/d32c3f6f4b1de908ceced242cc2ba7f4.png&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/p&gt;
@@ -1527,9 +1527,9 @@ dotstudioブログでは、初めましてですね。&lt;/p&gt;
 &lt;p&gt;年末に自分の中で話題になっていた、&lt;u&gt;&lt;strong&gt;Moddable SDK&lt;/strong&gt;&lt;/u&gt;というものをようやく触ってみました。&lt;/p&gt;
 &lt;h2 id=&#34;moddable-sdk-xs&#34;&gt;Moddable SDK &amp;amp; XS&lt;/h2&gt;
 &lt;h3 id=&#34;moddable-sdk&#34;&gt;Moddable SDK&lt;/h3&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/237/1.png&#34; alt=&#34;1&#34;&gt;
-&lt;/center&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/237/1.png&#34; alt=&#34;1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
 &lt;p&gt;Moddable SDK は、&lt;strong&gt;JavaScript コードを ESP32 や ESP8266 といったマイコン上で動作させるためのビルド環境やライブラリー群&lt;/strong&gt;のこと、、、だと思います。&lt;/p&gt;
 &lt;p&gt;これは Moddable 社から提供されていますが、&lt;u&gt;下記 GitHub リポジトリで公開されているので、無料で手に入れられます。&lt;/u&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&#34;https://github.com/Moddable-OpenSource/moddable&#34;&gt;https://github.com/Moddable-OpenSource/moddable&lt;/a&gt;&lt;/p&gt;
@@ -1537,9 +1537,9 @@ dotstudioブログでは、初めましてですね。&lt;/p&gt;
 &lt;p&gt;XS は、&lt;strong&gt;Moddable SDK で生成される JavaScript ランタイム環境&lt;/strong&gt; （ドキュメントには &lt;strong&gt;virtual machine&lt;/strong&gt; と記載）で、なんと &lt;a href=&#34;https://github.com/Moddable-OpenSource/moddable#modern-software-development-for-microcontrollers&#34;&gt;ES2018 に 99% 以上準拠&lt;/a&gt;しているらしいです。すごいですね！&lt;/p&gt;
 &lt;p&gt;※一部準拠していない部分は、注意事項として&lt;strong&gt;&lt;a href=&#34;https://github.com/Moddable-OpenSource/moddable/blob/public/documentation/xs/XS%20Conformance.md#caveat&#34;&gt;こちら&lt;/a&gt;&lt;/strong&gt;に記載されています。&lt;/p&gt;
 &lt;p&gt;これは&lt;a href=&#34;http://www.moddable.com/XS7-TC-39.php&#34;&gt;公式ドキュメント&lt;/a&gt;にある画像です。「XS は一番小さい」って意味でしょうね。シャレてます。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/237/2.png&#34; alt=&#34;2&#34;&gt;
-&lt;/center&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/237/2.png&#34; alt=&#34;2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
 &lt;p&gt;ざっくりとした理解ですが、Moddable SDK のビルドツールで、自分が書いた JavaScript や C のソースコードと組み込みのクラスが含まれた XS を、一つのバイナリーにビルドし、マイコンに書き込んでいるようです。&lt;/p&gt;
 &lt;p&gt;これまで JavaScript でのマイコン制御というと、以前から ホスト PC とマイコンをシリアル接続し、ホストPC上の Node.js と Johnny-Five を使ってマイコンを制御する方法があり、最近では obniz の制御をネットワークを介して JavaScript などから行う方法がありますが、いずれもマイコンの外に JavaScript の実行環境を用意する必要があります。&lt;/p&gt;
 &lt;p&gt;一方で、Moddable SDK では、&lt;u&gt;JavaScript 実行環境である XS がマイコン上で動作することができます。&lt;/u&gt;&lt;/p&gt;
@@ -1743,9 +1743,9 @@ ES2017 で入った &lt;code&gt;String.prototype.padStart&lt;/code&gt; も正常
 &lt;p&gt;先ほど実行したコマンド &lt;code&gt;mcconfig -m -p esp32&lt;/code&gt; にデバッグ オプション &lt;code&gt;-d&lt;/code&gt; を追加すると、デバッグ ビルドを実行し、デバッグ ツールである &lt;code&gt;xsbug&lt;/code&gt; が自動で起動します。&lt;/p&gt;
 &lt;p&gt;この &lt;code&gt;xsbug&lt;/code&gt; は JavaScript コードにブレークポイントの設定や、ステップ実行、変数の内容などを表示することが
 でき、結構本格的なデバッグツールです。&lt;/p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/237/3.png&#34; alt=&#34;3&#34;&gt;
-&lt;/center&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/237/3.png&#34; alt=&#34;3&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
 &lt;p&gt;今は独自の GUI ツールとして提供されているようですが、そのうち&lt;strong&gt;VSCode から拡張機能として利用できるようになると嬉しいですね。&lt;/strong&gt;&lt;/p&gt;
 &lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
 &lt;p&gt;いかがだったでしょうか。
@@ -1874,7 +1874,7 @@ index.html
 &lt;p&gt;僕も昨日知ったばかりですが今の所すごく良い印象です。&lt;/p&gt;
 &lt;p&gt;ぜひ使ってみてください。&lt;/p&gt;</description></item><item><title>NodeSchoolでNode.jsの学習を始めよう！#2 - 問題1〜3の解答と解説</title><link>https://dotstud.io/blog/node-school-1-3/</link><pubDate>Fri, 18 May 2018 10:00:00 +0900</pubDate><guid>https://dotstud.io/blog/node-school-1-3/</guid><description>
 &lt;p&gt;こんにちは、ちゃんとくです！&lt;/p&gt;
-&lt;p&gt;前回の記事で、&lt;strong&gt;NodeSchoolの概要と基本の解き方&lt;/strong&gt;を紹介しました。
+&lt;p&gt;前回の記事で、&lt;strong&gt;NodeSchoolの概要と基本の解き方&lt;/strong&gt;を紹介しました。&lt;/p&gt;
 &lt;section class=&#34;link&#34; id=&#34;156&#34;&gt;
 &lt;div class=&#34;link_content&#34;&gt;
 &lt;a href=&#34;https://dotstud.io/blog/node-school-before-learn/&#34;&gt;&lt;/a&gt;
@@ -1894,14 +1894,13 @@ NodeSchoolでNode.jsの学習を進めていきましょう！意外とつまづ
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/section&gt;
-&lt;/section&gt;
-&lt;/p&gt;
+&lt;p&gt;&lt;/section&gt;&lt;/p&gt;
 &lt;p&gt;今回はカリキュラム「&lt;strong&gt;learnyounode&lt;/strong&gt;」の問題1〜3の解答を解説付きで紹介したいと思います！&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;font size=2&gt;※筆者はMacユーザのため、基本的にMacに沿った説明になっています。Windows向けの説明も書いていますが、わからないときは適宜調べてみてください。&lt;/font&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2 id=&#34;はじめに&#34;&gt;はじめに&lt;/h2&gt;
-&lt;p&gt;さっそく問題を解いていきましょう。インストール方法や基本の解き方は前回記事をチェック！
+&lt;p&gt;さっそく問題を解いていきましょう。インストール方法や基本の解き方は前回記事をチェック！&lt;/p&gt;
 &lt;section class=&#34;link&#34; id=&#34;156&#34;&gt;
 &lt;div class=&#34;link_content&#34;&gt;
 &lt;a href=&#34;https://dotstud.io/blog/node-school-before-learn/&#34;&gt;&lt;/a&gt;
@@ -1921,8 +1920,7 @@ NodeSchoolでNode.jsの学習を進めていきましょう！意外とつまづ
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/section&gt;
-&lt;/section&gt;
-&lt;/p&gt;
+&lt;p&gt;&lt;/section&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;$ cd /your/working/directory
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;まずは解答用のファイルを作成するディレクトリに移動します。パスはご自身のものに置き換えてください。&lt;/p&gt;
@@ -1930,11 +1928,10 @@ NodeSchoolでNode.jsの学習を進めていきましょう！意外とつまづ
 &lt;pre&gt;&lt;code&gt;$ learnyounode
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;「&lt;strong&gt;learnyounode&lt;/strong&gt;」コマンドでNodeSchoolのカリキュラムを起動します。&lt;/p&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/157/1.png&#34; alt=&#34;1&#34;&gt;
-&lt;/center&gt;
-こんな画面が立ち上がりましたか？カーソルキーで問題を選択します。1問目の「&lt;strong&gt;こんにちは世界&lt;/strong&gt;」からやっていきましょう！&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/157/1.png&#34; alt=&#34;1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;こんな画面が立ち上がりましたか？カーソルキーで問題を選択します。1問目の「&lt;strong&gt;こんにちは世界&lt;/strong&gt;」からやっていきましょう！&lt;/p&gt;
 &lt;h2 id=&#34;問題1-こんにちは世界&#34;&gt;問題1「こんにちは世界」&lt;/h2&gt;
 &lt;p&gt;&lt;center&gt;
 &lt;div class=&#34;question&#34;&gt;
@@ -1949,16 +1946,14 @@ NodeSchoolでNode.jsの学習を進めていきましょう！意外とつまづ
 &lt;p&gt;Node.jsのアプリを作るためには .jsという拡張子を持つファイルを新規に作ってJavaScriptを書くだけです。&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;とあるので、&lt;code&gt;.js&lt;/code&gt;という拡張子のファイルを作りましょう。&lt;/p&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/157/2.png&#34; alt=&#34;2&#34;&gt;
-&lt;/center&gt;
-今回は1.jsというファイルを作ったので、エディタでファイルを開き、編集していきます。（操作がよくわからないという方は&lt;a href=&#34;https://dotstud.io/blog/node-school-before-learn/&#34;&gt;前回記事&lt;/a&gt;を確認！）&lt;/p&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/157/3.png&#34; alt=&#34;3&#34;&gt;
-&lt;/center&gt;
-さらにヒントを読んでいくと、&lt;code&gt;console.log(&amp;quot;text&amp;quot;)&lt;/code&gt;と書くとコンソールに出力できます、とありますね。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/157/2.png&#34; alt=&#34;2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;今回は1.jsというファイルを作ったので、エディタでファイルを開き、編集していきます。（操作がよくわからないという方は&lt;a href=&#34;https://dotstud.io/blog/node-school-before-learn/&#34;&gt;前回記事&lt;/a&gt;を確認！）&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/157/3.png&#34; alt=&#34;3&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;さらにヒントを読んでいくと、&lt;code&gt;console.log(&amp;quot;text&amp;quot;)&lt;/code&gt;と書くとコンソールに出力できます、とありますね。&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;console.log()&lt;/code&gt;は「&lt;strong&gt;渡したものをコンソールに表示してね&lt;/strong&gt;」という命令です。関数の&lt;code&gt;()&lt;/code&gt;に入れたものは「&lt;strong&gt;引数&lt;/strong&gt;」と呼ばれ、関数に渡されます。&lt;/p&gt;
 &lt;p&gt;上記は&lt;code&gt;console.log()&lt;/code&gt;というメソッドに、&lt;code&gt;&amp;quot;text&amp;quot;&lt;/code&gt;という引数を渡している状態です。&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;&amp;quot;&amp;quot;&lt;/code&gt;（または&lt;code&gt;&#39;&#39;&lt;/code&gt;）は、型が「&lt;strong&gt;文字列&lt;/strong&gt;」であることを表しています（その他の型は今後登場します）。&lt;/p&gt;
@@ -1970,11 +1965,10 @@ NodeSchoolでNode.jsの学習を進めていきましょう！意外とつまづ
 &lt;pre&gt;&lt;code&gt;$ node 1.js
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Node.jsでファイルを実行して試してみます。&lt;/p&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/157/4.png&#34; alt=&#34;4&#34;&gt;
-&lt;/center&gt;
-こんにちは世界、と表示されました。これで良さそうですね！&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/157/4.png&#34; alt=&#34;4&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;こんにちは世界、と表示されました。これで良さそうですね！&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;$ learnyounode verify 1.js
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;上記コマンドを実行して答え合わせをします。正解したら次の問題へ進みましょう！&lt;/p&gt;
@@ -1997,11 +1991,10 @@ NodeSchoolでNode.jsの学習を進めていきましょう！意外とつまづ
 &lt;pre&gt;&lt;code&gt;$ node 2.js &amp;quot;hello&amp;quot;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;プログラムに&lt;code&gt;&amp;quot;hello&amp;quot;&lt;/code&gt;という文字列を渡してみます。&lt;/p&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/157/5.png&#34; alt=&#34;5&#34;&gt;
-&lt;/center&gt;
-こんな感じの答えが返ってきました。&lt;code&gt;[]&lt;/code&gt;は「&lt;strong&gt;配列&lt;/strong&gt;」を表していて、&lt;code&gt;,&lt;/code&gt;で区切られた3つの要素が入っています。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/157/5.png&#34; alt=&#34;5&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;こんな感じの答えが返ってきました。&lt;code&gt;[]&lt;/code&gt;は「&lt;strong&gt;配列&lt;/strong&gt;」を表していて、&lt;code&gt;,&lt;/code&gt;で区切られた3つの要素が入っています。&lt;/p&gt;
 &lt;p&gt;1つ目の要素の&lt;code&gt;/Users/yuka/.nodebrew/node/v9.3.0/bin/node&lt;/code&gt;は皆さんのNode.jsがインストールされているパス、2つ目の要素の&lt;code&gt;/Users/yuka/workspace/nodeschool/learnyounode/2.js&lt;/code&gt;は今実行したファイルのパス、3つ目の要素には&lt;strong&gt;渡したコマンドライン引数&lt;/strong&gt;が入っています。&lt;/p&gt;
 &lt;p&gt;コマンドライン引数を表示させるには、&lt;strong&gt;&lt;code&gt;process.argv&lt;/code&gt;の3つ目の要素&lt;/strong&gt;を取り出してあげると良さそうです！&lt;/p&gt;
 &lt;p&gt;試しにこんなプログラムを書いてみましょう。&lt;/p&gt;
@@ -2009,11 +2002,10 @@ NodeSchoolでNode.jsの学習を進めていきましょう！意外とつまづ
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;配列の中身の位置を指定して取り出すには、&lt;code&gt;[]&lt;/code&gt;を使います。配列の序列は0から始まるので、3つ目の要素は「0,1,2」で「2」となります。&lt;/p&gt;
 &lt;p&gt;このファイルに、先ほどと同様&lt;code&gt;&amp;quot;hello&amp;quot;&lt;/code&gt;を渡してみます。&lt;/p&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/157/6.png&#34; alt=&#34;6&#34;&gt;
-&lt;/center&gt;
-コマンドライン引数だけを表示することができました！&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/157/6.png&#34; alt=&#34;6&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;コマンドライン引数だけを表示することができました！&lt;/p&gt;
 &lt;p&gt;では&lt;strong&gt;いくつかの引数を渡して足し算するプログラム&lt;/strong&gt;を書いてみます。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;console.log(process.argv[2]+process.argv[3]);
 &lt;/code&gt;&lt;/pre&gt;
@@ -2021,11 +2013,10 @@ NodeSchoolでNode.jsの学習を進めていきましょう！意外とつまづ
 &lt;pre&gt;&lt;code&gt;$ node 2.js 1 1
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;実行して試してみます。&lt;/p&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/157/7.png&#34; alt=&#34;7&#34;&gt;
-&lt;/center&gt;
-「2」となって欲しいところ、「11」となってしまいました。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/157/7.png&#34; alt=&#34;7&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;「2」となって欲しいところ、「11」となってしまいました。&lt;/p&gt;
 &lt;p&gt;これは、「1」という文字列と「1」という文字列をくっつけた結果になってしまっています（ちょっとわからない、という人は&lt;code&gt;$ node 2.js &amp;quot;hel&amp;quot; &amp;quot;lo&amp;quot;&lt;/code&gt;など実行してみてください）。&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;process.argv&lt;/code&gt;の要素は全て文字列になるので、プログラムには「&lt;strong&gt;これは数字だよ！&lt;/strong&gt;」と教えてあげないと、わかってくれないんですね。&lt;/p&gt;
 &lt;p&gt;ヒントを読んでみると、数字に変換する方法が書いてあります。&lt;/p&gt;
@@ -2070,19 +2061,17 @@ color: #696969;
 console.log(fs.readFileSync(process.argv[2]));
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;&lt;code&gt;3.js&lt;/code&gt;というファイルを作って、上記のようなプログラムで&lt;code&gt;fs&lt;/code&gt;の機能を試してみましょう。ヒントによると&lt;code&gt;fs.readFileSync()&lt;/code&gt;の引数には読み込むファイルのパスを指定するので、コマンドライン引数で渡すようにしてみます。&lt;/p&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/157/8.png&#34; alt=&#34;8&#34;&gt;
-&lt;/center&gt;
-読み込みを試す用に、&lt;code&gt;sample.txt&lt;/code&gt;というテキストファイルを作ってみました。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/157/8.png&#34; alt=&#34;8&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;読み込みを試す用に、&lt;code&gt;sample.txt&lt;/code&gt;というテキストファイルを作ってみました。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;$ node 3.js ./sample.txt
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;実行して試してみます（&lt;code&gt;./&lt;/code&gt;は現在の位置です）。&lt;/p&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/157/9.png&#34; alt=&#34;9&#34;&gt;
-&lt;/center&gt;
-こんな結果が出ました。「なんじゃこりゃ！」ですね&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/157/9.png&#34; alt=&#34;9&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;こんな結果が出ました。「なんじゃこりゃ！」ですね&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;readFileSync()&lt;/code&gt;は「Bufferオブジェクト」という形式でファイルの中身を返します。これを文字列に変換するには、&lt;code&gt;toString()&lt;/code&gt;という関数を使います。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;var fs = require(&#39;fs&#39;);
 var buf = fs.readFileSync(process.argv[2]);
@@ -2090,11 +2079,10 @@ var text = buf.toString();
 console.log(text);
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;取り出したものを変換してから&lt;code&gt;console.log()&lt;/code&gt;してみましょう。&lt;/p&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/157/10.png&#34; alt=&#34;10&#34;&gt;
-&lt;/center&gt;
-文字列として取り出すことができました！&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/157/10.png&#34; alt=&#34;10&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;文字列として取り出すことができました！&lt;/p&gt;
 &lt;h3 id=&#34;改行を数える&#34;&gt;改行を数える&lt;/h3&gt;
 &lt;p&gt;改行を数えるには、ヒントのように&lt;code&gt;split()&lt;/code&gt;を使ってみます。&lt;/p&gt;
 &lt;blockquote&gt;
@@ -2108,11 +2096,10 @@ var array = text.split(&#39;\n&#39;);
 console.log(array);
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;実行してみます。&lt;/p&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/157/11.png&#34; alt=&#34;11&#34;&gt;
-&lt;/center&gt;
-ファイルの中身を&lt;code&gt;\n&lt;/code&gt;で区切ることができました！&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/157/11.png&#34; alt=&#34;11&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;ファイルの中身を&lt;code&gt;\n&lt;/code&gt;で区切ることができました！&lt;/p&gt;
 &lt;p&gt;ただし、ヒントにあるように、最後に意図しない&lt;code&gt;&#39;&#39;&lt;/code&gt;が入っていますね。これはファイルの最後には改行が入るようになっているためです。&lt;/p&gt;
 &lt;p&gt;なので、改行の数を数えるには「要素の数 - 1」をしてあげればよさそうです。&lt;/p&gt;
 &lt;p&gt;「こんな関数使いたい！」というときは「JavaScript 配列 要素 数える」などと検索してみましょう。配列の要素を数えるためには、&lt;code&gt;Array.length&lt;/code&gt;というプロパティを使います。&lt;/p&gt;
@@ -2124,11 +2111,10 @@ var n_num = array.length - 1;
 console.log(n_num);
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;上記のように、&lt;code&gt;配列.length&lt;/code&gt;で要素数を数え、最後の改行分の1を引いてみます。&lt;/p&gt;
-&lt;p&gt;
-&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/157/12.png&#34; alt=&#34;12&#34;&gt;
-&lt;/center&gt;
-意図した数字になりました！&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/157/12.png&#34; alt=&#34;12&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;意図した数字になりました！&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;$ learnyounode verify 3.js&lt;/code&gt;で答え合わせです。&lt;/p&gt;
 &lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
 &lt;p&gt;これで「learnyounode」の1〜3問目は終了です。&lt;strong&gt;お疲れ様でした！&lt;/strong&gt;&lt;/p&gt;
@@ -2151,7 +2137,7 @@ NodeSchoolは&lt;strong&gt;JavaScriptに関するいろいろな授業を集め�
 &lt;h2 id=&#34;nodeschoolを始める前に&#34;&gt;NodeSchoolを始める前に&lt;/h2&gt;
 &lt;h3 id=&#34;コマンドラインインタフェース-cli-の操作&#34;&gt;コマンドラインインタフェース（CLI）の操作&lt;/h3&gt;
 &lt;p&gt;NodeSchoolは、自身のPCのコマンドライン上（コマンドラインインタフェース、CLI）で進めるツールです。学習を始めるにあたって、基本の操作を覚えておきましょう！&lt;/p&gt;
-&lt;p&gt;（↓長くなっちゃったので別記事にしました）
+&lt;p&gt;（↓長くなっちゃったので別記事にしました）&lt;/p&gt;
 &lt;section class=&#34;link&#34; id=&#34;158&#34;&gt;
 &lt;div class=&#34;link_content&#34;&gt;
 &lt;a href=&#34;https://dotstud.io/blog/how-to-use-cli/&#34;&gt;&lt;/a&gt;
@@ -2171,8 +2157,7 @@ Macユーザ向けコマンドラインインタフェースの使い方！実�
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/section&gt;
-&lt;/section&gt;
-&lt;/p&gt;
+&lt;p&gt;&lt;/section&gt;&lt;/p&gt;
 &lt;!-- [![](/img/blog/156/link4.png)](/blog/how-to-use-cliwindows) --&gt;
 &lt;h3 id=&#34;node-jsのインストール&#34;&gt;Node.jsのインストール&lt;/h3&gt;
 &lt;p&gt;NodeSchoolはNode.jsで動きます。NodeSchoolを動かすために、自身のPCにNode.js環境を準備をします。&lt;/p&gt;
@@ -2185,7 +2170,7 @@ Macユーザ向けコマンドラインインタフェースの使い方！実�
 &lt;/blockquote&gt;
 &lt;p&gt;&lt;a href=&#34;https://nodejs.org/ja/&#34;&gt;Node.js公式サイト&lt;/a&gt;からインストーラを使ってインストールしてもよいのですが、Node.jsはバージョンアップが多いので、&lt;u&gt;Node.jsのバージョンを管理できるツールと一緒にインストールするのがオススメ&lt;/u&gt;です。&lt;/p&gt;
 &lt;p&gt;バージョン管理ツールには「nodebrew」や「nvm」、Windowsの方は「nodist」などがあります。&lt;/p&gt;
-&lt;p&gt;「nodebrew」を使ったインストール方法をまとめたので、こちらを参考にインストールしてみてください！
+&lt;p&gt;「nodebrew」を使ったインストール方法をまとめたので、こちらを参考にインストールしてみてください！&lt;/p&gt;
 &lt;section class=&#34;link&#34; id=&#34;136&#34;&gt;
 &lt;div class=&#34;link_content&#34;&gt;
 &lt;a href=&#34;https://dotstud.io/blog/nodejs-install-use-nodebrew/&#34;&gt;&lt;/a&gt;
@@ -2205,8 +2190,7 @@ nodebrewを使ったNode.jsのインストール方法をまとめました。
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/section&gt;
-&lt;/section&gt;
-&lt;/p&gt;
+&lt;p&gt;&lt;/section&gt;&lt;/p&gt;
 &lt;h2 id=&#34;nodeschoolのインストール&#34;&gt;NodeSchoolのインストール&lt;/h2&gt;
 &lt;p&gt;さて、Node.js環境の準備ができたら、&lt;strong&gt;いよいよNodeSchoolをインストール&lt;/strong&gt;しましょう。&lt;/p&gt;
 &lt;p&gt;NodeSchoolは「npm」というパッケージ管理ツールで配布されているので、npmコマンドでインストールします（Node.jsと一緒にインストールされるのでとりあえず深く考えなくてOK）。&lt;/p&gt;
@@ -2364,7 +2348,7 @@ Node.jsでGoogle SpreadSheetsにアクセスする方法をチュートリアル
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/section&gt;
-&lt;/section&gt;
+&lt;p&gt;&lt;/section&gt;&lt;/p&gt;
 &lt;h2 id=&#34;gmail-apiの有効化とクライアントシークレットの取得&#34;&gt;Gmail APIの有効化とクライアントシークレットの取得&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&#34;https://console.developers.google.com/start/api?id=gmail&amp;amp;hl=ja&#34;&gt;こちらのリンク&lt;/a&gt;からウィザード開始します。ログインしているGoogleアカウントが利用するGmailのアカウントになるので複数のGoogleやG Suiteのアカウントを持っている人は注意しましょう。&lt;/p&gt;
 &lt;p&gt;チェックをして進みます。&lt;/p&gt;
@@ -3014,7 +2998,7 @@ Node.jsによるNode.jsのためのサイトづくり！テーマを当ててお
 &lt;/div&gt;
 &lt;/div&gt;
 &lt;/section&gt;
-&lt;/section&gt;
+&lt;p&gt;&lt;/section&gt;&lt;/p&gt;
 &lt;p&gt;今回はルートを追加してブログ記事以外のページを作ってみます。&lt;/p&gt;
 &lt;h2 id=&#34;今回やること&#34;&gt;今回やること&lt;/h2&gt;
 &lt;p&gt;現在はコマンドで記事を追加すると&lt;code&gt;サイトURL/:YYYY/:MM/:DD&lt;/code&gt;という記事が作成されるようになっています。&lt;/p&gt;

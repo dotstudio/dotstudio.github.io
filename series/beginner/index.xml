@@ -1,4 +1,588 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Beginner on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/beginner/</link><description>Recent content in Beginner on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Mon, 27 Mar 2017 12:30:54 +0900</lastBuildDate><atom:link href="/series/beginner/" rel="self" type="application/rss+xml"/><item><title>【初心者必見】電子パーツ買うならここ！アキバ電気街徹底ガイド</title><link>https://dotstud.io/blog/akihabara-guide-for-beginners/</link><pubDate>Mon, 27 Mar 2017 12:30:54 +0900</pubDate><guid>https://dotstud.io/blog/akihabara-guide-for-beginners/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>beginner on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/beginner/</link><description>Recent content in beginner on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Thu, 21 Mar 2019 00:00:00 +0000</lastBuildDate><atom:link href="/series/beginner/" rel="self" type="application/rss+xml"/><item><title>MPU9250で回転角度を検知する</title><link>https://dotstud.io/blog/detect-rotation-angle-with-mpu9250/</link><pubDate>Thu, 21 Mar 2019 00:00:00 +0000</pubDate><guid>https://dotstud.io/blog/detect-rotation-angle-with-mpu9250/</guid><description>
+&lt;p&gt;はじめまして。ライターとして起用していただきました、ありか(&lt;a href=&#34;https://twitter.com/hakase0617&#34;&gt;@hakase0617&lt;/a&gt;)です。&lt;/p&gt;
+&lt;p&gt;秋田高専で高専ロボコンを5年間やっていました。
+ロボコン界隈には卒業後も関わり続けているため、そういった若きエンジニアの手助けができたらと思っています！&lt;/p&gt;
+&lt;p&gt;マネジメントや教育に興味があり、その一環でIoT、AIの勉強をしています。
+将来的にはエンジニアを育成したり、一緒にお仕事ができたりしたら楽しそうだなって思います。&lt;/p&gt;
+&lt;h2 id=&#34;9軸センサとは&#34;&gt;9軸センサとは&lt;/h2&gt;
+&lt;p&gt;早速ですが、今日はMPU9250というセンサを紹介します。
+これは「9軸センサ」と呼ばれるものです。&lt;/p&gt;
+&lt;p&gt;え、9軸ってx,y,zとあとは何！？&lt;/p&gt;
+&lt;p&gt;これは&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;加速度センサ　x,y,z&lt;/li&gt;
+&lt;li&gt;角速度センサ　x,y,z&lt;/li&gt;
+&lt;li&gt;地磁気センサ　x,y,z&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;の3軸ずつ、合わせて9軸というものです。
+まずは各センサの紹介からいきます。&lt;/p&gt;
+&lt;h2 id=&#34;加速度センサとは&#34;&gt;加速度センサとは&lt;/h2&gt;
+&lt;p&gt;加速度とは、&lt;u&gt;「どのくらいの速度が変化しているか」という指標です。&lt;/u&gt;
+車を運転しているイメージをしてください。
+アクセルを思いっきり踏んで、時速20km/hで走っていた車を時速60km/hまで加速させたとします。
+この時、体は後ろに引っ張られる感じがします。
+あの感じが加速度です。&lt;/p&gt;
+&lt;p&gt;加速度センサでは、物が動いているかどうかということも検出できます。
+加速度センサの応用例としてはカメラの手ぶれ補正やスマホの画面回転、ハードディスクの揺れ検知などが該当します。
+ロボットの姿勢制御には欠かせない技術でもあります。&lt;/p&gt;
+&lt;h2 id=&#34;角速度センサとは&#34;&gt;角速度センサとは&lt;/h2&gt;
+&lt;p&gt;角速度とは読んで字のごとく、回転角の速度です。
+ものが回っている時の速さの単位に「回転数」（rpmなど）や周波数（Hzなど）がありますが、これらは「何回回ったか」を示す指標です。
+&lt;u&gt;回っているものの「角度」に注目して速さを表す指標が角速度です。&lt;/u&gt;&lt;/p&gt;
+&lt;h2 id=&#34;地磁気センサとは&#34;&gt;地磁気センサとは&lt;/h2&gt;
+&lt;p&gt;地磁気センサでは、磁力の強さを検知出来ます。
+地球は大きな磁石ですが丸いので、地球上のどの位置にいるかで地磁気の強さは異なります。
+そのため、&lt;u&gt;地磁気の強さやら向きやらを測定すると自分がいる位置が分かり、自分が向いている方角も分かるというものです。&lt;/u&gt;&lt;/p&gt;
+&lt;h2 id=&#34;9軸センサで何が出来るか&#34;&gt;9軸センサで何が出来るか&lt;/h2&gt;
+&lt;p&gt;さて、これら3つのセンサが合体した9軸センサで、何ができるのでしょうか？&lt;/p&gt;
+&lt;p&gt;&lt;u&gt;角速度センサで「自分がどれだけ回ったのか」が分かります。&lt;/u&gt;&lt;/p&gt;
+&lt;p&gt;しかし弱点があります。
+角速度センサだけでは、今「動いている」のか「止まっている」のかは分かりません。
+そこで加速度センサの出番です。加速度センサは上記状態を把握できます。
+これらを合わせて「6軸センサ」と呼ぶのですが、&lt;u&gt;この6軸センサを使うと「回転角度」が分かります。&lt;/u&gt;&lt;/p&gt;
+&lt;p&gt;じゃあ6軸でいいじゃん、と思ってしまいますが、6軸センサには弱点があります。
+ずばり、「ドリフト」です。&lt;/p&gt;
+&lt;p&gt;角速度センサは「積分方式」で回転角度を検出します。
+どういうことかというと、「15度動いた」「20度動いた」「10度動いた」を合わせて「45度動いた」といった風に、足し算で算出します。
+しかし、みんなの敵である「誤差」という概念がここで登場します。&lt;/p&gt;
+&lt;p&gt;さっきの例で、毎回+1度の誤差が生じてしまうとします。
+すると　16度+21度+11度＝48度　となり、誤差がどんどん大きくなっていきます。
+つまり、試行回数（時間経過）とともに誤差が大きくなっていくではありませんか。&lt;/p&gt;
+&lt;p&gt;これを解決するためには、別の方法で校正を行う必要があります。
+そこで「地磁気センサ」を使います。&lt;/p&gt;
+&lt;p&gt;地磁気センサは、簡単に言うと「方位磁針」です。そのため、北を向いたまま10分経とうが1時間経とうが、&lt;u&gt;地磁気センサは「北を向いている」という状態を教えてくれます。&lt;/u&gt;&lt;/p&gt;
+&lt;p&gt;まとめると、
+　角速度センサ→何度回ったかが分かる
+　加速度センサ→回ったかが分かる
+　地磁気センサ→ドリフトを打ち消す
+といった役割を持ち、回転を検知するセンサとなります。&lt;/p&gt;
+&lt;h2 id=&#34;実際に使ってみよう&#34;&gt;実際に使ってみよう&lt;/h2&gt;
+&lt;p&gt;MPU9250を使って、実際に回転角度を測定してみましょう。
+今回は開発環境にArduinoを選定しました。
+ライブラリが公開されており、初心者である僕でもサクッと動作確認が可能な点に魅力を感じました。&lt;/p&gt;
+&lt;p&gt;今回は入門として、角速度センサのみで回転角度を検出してみます。&lt;/p&gt;
+&lt;h2 id=&#34;開発環境&#34;&gt;開発環境&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;OS:Windows10&lt;/li&gt;
+&lt;li&gt;ArduinoIDE&lt;/li&gt;
+&lt;li&gt;Arduino UNO&lt;/li&gt;
+&lt;li&gt;MPU9250&lt;/li&gt;
+&lt;li&gt;ジャンパワイヤ5本&lt;/li&gt;
+&lt;li&gt;ブレッドボード&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;スケッチ&#34;&gt;スケッチ&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&#34;language-C:Gyro&#34;&gt;#include &amp;lt;Wire.h&amp;gt;
+#define FIL 0.9 //フィルタ
+#define AVE 100 //測定回数
+#define GYRO 30 //ドリフト許容値
+int emp[6] = {};
+int data = 0; //生データ格納 1から順に加速度xyz角速度xyz
+long datasum = 0; //合計データ格納　平均算出用
+int th = 0; //閾値
+long integral = 0; //積分値
+int degree; //回転角度
+int rock; //ロック機構により導かれた初期値
+char input;
+void setup() {
+Wire.begin(); Serial.begin(115200); Wire.begin(0x68);
+Wire.beginTransmission(0x68); Wire.write(0x6B); Wire.write(0x00); Wire.endTransmission();
+Wire.beginTransmission(0x68); Wire.write(0x1C); Wire.write(0x10); Wire.endTransmission();
+Wire.beginTransmission(0x68); Wire.write(0x1B); Wire.write(0x08); Wire.endTransmission();
+Wire.beginTransmission(0x68); Wire.write(0x1A); Wire.write(0x05); Wire.endTransmission();
+Serial.print(&amp;quot;*****************\nCalibrating now\nplease turn once and press &#39;f&#39;\n&amp;quot;);
+while (1) {
+reading();
+datasum = 0;
+input = Serial.read();
+if (input == &#39;f&#39;) {
+rock = integral / 360;
+Serial.print(&amp;quot;Ready!&amp;quot;);
+Serial.print(&amp;quot;\n*******\n&amp;quot;);
+integral = 0;
+delay(500);
+break;
+}
+}
+}
+void loop() {
+reading();
+degree = abs(integral / rock);
+Serial.println(degree);
+datasum = 0;
+}
+void reading() {
+for (int i = 0; i &amp;lt; AVE; i++) {
+Wire.beginTransmission(0x68); Wire.write(0x3B); Wire.endTransmission(); Wire.requestFrom(0x68, 14);
+while (Wire.available() &amp;lt; 14);
+emp[0] = Wire.read() &amp;lt;&amp;lt; 8 | Wire.read();
+emp[1] = Wire.read() &amp;lt;&amp;lt; 8 | Wire.read();
+emp[2] = Wire.read() &amp;lt;&amp;lt; 8 | Wire.read();
+emp[3] = Wire.read() &amp;lt;&amp;lt; 8 | Wire.read();
+emp[4] = Wire.read() &amp;lt;&amp;lt; 8 | Wire.read();
+emp[5] = Wire.read() &amp;lt;&amp;lt; 8 | Wire.read();
+data = Wire.read() &amp;lt;&amp;lt; 8 | Wire.read();
+datasum += data;
+}
+datasum /= AVE;
+if (th == 0) {
+th = datasum;
+}
+if (abs(datasum - th) &amp;gt; GYRO) { //誤差が小さい場合はスルー ドリフト対策
+integral += datasum - th;
+}
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;arduinoとの接続&#34;&gt;Arduinoとの接続&lt;/h2&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;left&#34;&gt;Arduino&lt;/th&gt;
+&lt;th align=&#34;right&#34;&gt;MPU9250&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;5V&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;VCC&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;GND&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;GND&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;A2&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;INT&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;A4&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;SDA&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;A5&lt;/td&gt;
+&lt;td align=&#34;right&#34;&gt;SCL&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;実物&#34;&gt;実物&lt;/h2&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/245/1.png&#34; alt=&#34;1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;h2 id=&#34;スケッチ簡易解説&#34;&gt;スケッチ簡易解説&lt;/h2&gt;
+&lt;p&gt;今回は角速度センサのｚ軸のみを使用します。
+ｚ軸、つまり地面と鉛直な方向の回転が分かる、早い話が自分がどれだけ回ったかが分かります。&lt;/p&gt;
+&lt;p&gt;まず、角速度センサを使うにあたって、センサから返ってくる値を調べる必要があります。
+センサは「何度回ったよ」とは教えてくれません。
+「4253」「71469」みたいな無機質な値を教えてくれます。
+そのため、その値がいくつで360度に相当するのかを確認する必要があります。&lt;/p&gt;
+&lt;p&gt;どうすればいいのか、答えは「360度回せばいい」のです。そのままです。&lt;/p&gt;
+&lt;p&gt;今回はArduinoを起動した際に、まず1回転して値を取得して、それから角度検出をする、というスケッチを作りました。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-C:while&#34;&gt; while (1) {
+reading();
+datasum = 0;
+input = Serial.read();
+if (input == &#39;f&#39;) {
+rock = integral / 360;
+Serial.print(&amp;quot;Ready!&amp;quot;);
+Serial.print(&amp;quot;\n*******\n&amp;quot;);
+integral = 0;
+delay(500);
+break;
+}
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;reading()関数の中で実際に値を取得するのですが、1回転した合図として「Arduinoのシリアル通信で&amp;rsquo;f&amp;rsquo;を送ってあげた時にwhile()から抜けて角度検出モードに移行します。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-C:reading&#34;&gt;void reading() {
+for (int i = 0; i &amp;lt; AVE; i++) {
+Wire.beginTransmission(0x68); Wire.write(0x3B); Wire.endTransmission(); Wire.requestFrom(0x68, 14);
+while (Wire.available() &amp;lt; 14);
+emp[0] = Wire.read() &amp;lt;&amp;lt; 8 | Wire.read();
+emp[1] = Wire.read() &amp;lt;&amp;lt; 8 | Wire.read();
+emp[2] = Wire.read() &amp;lt;&amp;lt; 8 | Wire.read();
+emp[3] = Wire.read() &amp;lt;&amp;lt; 8 | Wire.read();
+emp[4] = Wire.read() &amp;lt;&amp;lt; 8 | Wire.read();
+emp[5] = Wire.read() &amp;lt;&amp;lt; 8 | Wire.read();
+data = Wire.read() &amp;lt;&amp;lt; 8 | Wire.read();
+datasum += data;
+}
+datasum /= AVE;
+if (th == 0) {
+th = datasum;
+}
+if (abs(datasum - th) &amp;gt; GYRO) { //誤差が小さい場合はスルー ドリフト対策
+integral += datasum - th;
+}
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;そのreading()の中では、平均を取るためにAVEで指定された回数値を格納し続けています。
+emp[]で色々格納していますが、上から
+加速度ｘ軸、ｙ軸、ｚ軸
+温度
+角速度ｘ軸、ｙ軸、ｚ軸
+という風に格納されていきます。そのため今回は角速度ｚ軸のみを取り出すためこういった書き方です。&lt;/p&gt;
+&lt;h2 id=&#34;動かしてみよう&#34;&gt;動かしてみよう&lt;/h2&gt;
+&lt;p&gt;リード線を数本接続しただけで動作確認が出来るなんて、とっても楽ですね！
+早速動かしてみます。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/245/2.png&#34; alt=&#34;2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;できました！
+角度が表示されています。&lt;/p&gt;
+&lt;h2 id=&#34;何に使えるの&#34;&gt;何に使えるの？&lt;/h2&gt;
+&lt;p&gt;今回注目したのは、自律移動ロボットの位置制御です。
+ロボットコンテストなどでは、コントローラなどを用いず自動でロボットが移動することを求められるケースが多々あります。
+その自動ロボットの位置制御には、どのような方法が用いられているのでしょうか。&lt;/p&gt;
+&lt;p&gt;おそらく一般的なものは、モータにロータリエンコーダなどを取り付けて
+「モータがどのくらい回ったか」
+を検出し、位置を割り出す方法だと思います。&lt;/p&gt;
+&lt;p&gt;ですが、この方法には弱点があります。
+例えば、移動するフィールドが平らではなかったり、滑りやすい障害物（落ち葉など）があったり、タイヤが走行中に滑ったりといった「タイヤとフィールドの関係」で誤差が生じてしまいます。&lt;/p&gt;
+&lt;p&gt;この誤差をなんとかしたい！
+そんな時に便利なのがこの9軸センサです。&lt;/p&gt;
+&lt;p&gt;自身がどれくらい動いたか、どれくらい回ったかが分かるこのセンサがあれば、たとえタイヤが空回りしてしまっても、「今いる位置」を知ることが可能なのです！&lt;/p&gt;
+&lt;h2 id=&#34;最後に&#34;&gt;最後に&lt;/h2&gt;
+&lt;p&gt;今回は9軸センサのうちたった1軸しか使っていませんが、回転を検出することができました。
+より高度なスケッチを作ることでより高度な測定が可能になるため、これからも勉強を続けていきたいです。&lt;/p&gt;
+&lt;style&gt;
+.dialogue {
+padding: 10px;
+display: table;
+}
+.image_n, .image_s {
+width: 75px;
+height: 75px;
+margin-right: 10px;
+display: table-cell;
+vertical-align: middle;
+}
+.image_n img {
+border-radius: 50%;
+border: 2px solid blue;
+}
+.image_s img {
+border-radius: 50%;
+border: 2px solid green;
+}
+.name {
+font-weight: bold;
+text-align: center;
+}
+.text {
+display: table-cell;
+padding: 0;
+vertical-align: middle;
+padding-left: 20px;
+}
+&lt;/style&gt;</description></item><item><title>初めてのArduino〜トレーニングマシンを作る編〜</title><link>https://dotstud.io/blog/jikyuryoku-aruduino-training-machine/</link><pubDate>Mon, 11 Mar 2019 23:00:00 +0900</pubDate><guid>https://dotstud.io/blog/jikyuryoku-aruduino-training-machine/</guid><description>
+&lt;p&gt;初めまして、今月からdotstudioでお世話になる&lt;a href=&#34;https://dotstud.io/members/jikyuryoku&#34;&gt;自給力&lt;/a&gt;です。&lt;/p&gt;
+&lt;p&gt;プログラミングスクール卒業後でフラフラしてたところを、のびすけしゃちょーから「記事を書いてみない？」と誘っていただきました。これから、バシバシ記事を書いていきますのでよろしくお願いします。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;コードの書き方や手順で変なところあるかもしれませんが、許してください……！&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;僕はフィットネス業界での事業を考えています！せっかくなので、フィットネスに絡めて何か作って、記事にしていきたいと思います。プログラミングはかじってはいるのですが、IoTのコーディングや電子工作は初めてなので、&lt;u&gt;初心者さん向けに自分の失敗の工程も含めてお伝えできればと思ってます。&lt;/u&gt;&lt;/p&gt;
+&lt;p&gt;そして、まず作ろうと決意したモノは……&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;
+&lt;font size=&#34;3&#34;&gt;&lt;strong&gt;「自宅でのトレーニングで回数を数えてくれるサービス」&lt;/strong&gt;です！！パチパチ〜〜！！&lt;/font&gt;
+&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;意外とスクワットとかダンベルのトレーニングしている時って回数数えるの面倒なんですよね。&lt;/p&gt;
+&lt;p&gt;そこで、勝手に回数数えてくれるサービスがあればテレビ見ながらでも回数に気を取られずにトレーニングができる！そんな思いから、サービス作ってみようと思ったわけです。&lt;/p&gt;
+&lt;h2 id=&#34;のびすけしゃちょーに相談してみる&#34;&gt;のびすけしゃちょーに相談してみる&lt;/h2&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_s&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/suga.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;自給力&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+というわけで、ダンベルを上げ下げしてる時に回数数える物作りたいっす！
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_n&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/nobi.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;のびすけ&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+いいね。じゃあどうやって数えるか考えよう。カウントの仕方としては、&lt;u&gt;赤外線センサ使うとか、腕の動きで変わる気圧を計測する&lt;/u&gt;ってやりかたもあるよ、加速度センサでy軸方向に動いた回数を、、、（etc）&lt;/b&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_s&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/suga.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;自給力&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+（おお、なんか凄そうなのが作れそうだ）&lt;br&gt;
+なるほど！！面白そうですね！！！！じゃあ加速度センサ使ってみたいです！！！&lt;br&gt;
+（理由:かっこいいから）
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_n&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/nobi.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;のびすけ&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+ま、それは難しいから最初はスイッチだな（バッサリ）
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_s&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/suga.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;自給力&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+（え、なんで他の紹介したん……）
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;そんなこんなで、iot初心者の僕は&lt;strong&gt;「磁気スイッチ」を使ったカウントマシン&lt;/strong&gt;を作ることに決まりました！！&lt;/p&gt;
+&lt;h2 id=&#34;まずは準備&#34;&gt;まずは準備&lt;/h2&gt;
+&lt;p&gt;今回使うのはArduino（写真左）と磁気スイッチ（写真真ん中と右）&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/1.png&#34; alt=&#34;1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;まず、Arduinoにコードを書き込むためにArduino IDEをインストールしましょう。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/arduinoide-setup/?fbclid=IwAR3BB5HrFh-K6cMGcnGl4rjHIA4u2OJYDDlNjLmN5IrprOn8n3zY6g-Kp8s&#34;&gt;こちらのドキュメント&lt;/a&gt;の通りにやれば簡単にインストールできます。&lt;/p&gt;
+&lt;p&gt;そして、磁気スイッチの使い方は&lt;a href=&#34;http://wiki.seeedstudio.com/Grove-Magnetic_Switch/&#34;&gt;こちら&lt;/a&gt;を参考にしました！&lt;/p&gt;
+&lt;p&gt;サイト内は英語で書かれていますが、ここでやることしては&lt;strong&gt;ArduinoのD２のピンに刺し、写真のように組み立てる&lt;/strong&gt;のだそうです。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/2.png&#34; alt=&#34;2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;h2 id=&#34;さぁ-数を数えよう&#34;&gt;さぁ、数を数えよう&lt;/h2&gt;
+&lt;p&gt;「数なんてすぐに数えられるわい」っと思ったのも束の間……。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;「あれ？何を数えるんだ？？？」&lt;/strong&gt;と、なんとも初歩的な壁にぶつかりました。&lt;/p&gt;
+&lt;p&gt;ダンベルを動かした回数を頭の中で数えるのは簡単ですが、機械に数えさせるのは訳が違う。まずは何を数えるか考えなければならないのです。&lt;/p&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_s&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/suga.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;自給力&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+のびさん、オレは何を数えるんですか？（語彙力）
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_n&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/nobi.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;のびすけ&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+まずは、センサが反応してる時にフラグを立ててみたら？&lt;br&gt;
+フラグが立った状態からフラグが無くなったときにカウントできるようにしてみる方法があるよ。
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_s&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/suga.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;自給力&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+なるほど！それですね！（フラグって何……？）
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;「フラグ」が何を指しているのかが分からなかったので、&lt;strong&gt;「Arduino フラグ」&lt;/strong&gt;でググってみました。どうやらセンサの状態を変数に入れて管理することだということが分かりました。&lt;/p&gt;
+&lt;p&gt;（参考１）&lt;a href=&#34;http://monoist.atmarkit.co.jp/mn/articles/1308/09/news001_3.html&#34;&gt;アイデア・ハック!! Arduinoで遊ぼう（2）&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;次に、「Arduino 数える」でググり、「変数でどう数えるのか」について、以下の記事を参考にしました。&lt;/p&gt;
+&lt;p&gt;（参考２）&lt;a href=&#34;https://n.mtng.org/ele/arduino/samples/variable2.html&#34;&gt;変数で回数を数える&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;やることとしては、&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;センサの状態をフラグ（変数）として認識させる&lt;/li&gt;
+&lt;li&gt;フラグがついてる状態から、なくなった状態に「+１」していく&lt;/li&gt;
+&lt;li&gt;1と2を繰り返す&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;なるほどなるほど。だいたい道筋が見えてきたので、作っていきます！&lt;/p&gt;
+&lt;h2 id=&#34;よし-作ろう&#34;&gt;よし、作ろう&lt;/h2&gt;
+&lt;p&gt;（参考１）&lt;a href=&#34;http://monoist.atmarkit.co.jp/mn/articles/1308/09/news001_3.html&#34;&gt;アイデア・ハック!! Arduinoで遊ぼう（2）&lt;/a&gt;からスイッチのon/offで数を数えるためコードがあり、アレンジをしてみました。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/3.png&#34; alt=&#34;3&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;必要なのは&lt;strong&gt;「グローバル変数の定義」「フラグの定義」「フラグからカウントする際のコード」の３つ&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;まずは&lt;strong&gt;「グローバル変数の定義」&lt;/strong&gt;です。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;int G_state = FLG_OFF;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;簡単ですね。&lt;/p&gt;
+&lt;p&gt;次に&lt;strong&gt;「フラグの定義」&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;フラグ立っている時は「1」、立っていない時は「0」と教えてあげます。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;const int FLG_ON = 1;
+const int FLG_OFF = 0;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;楽勝！&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;それでは、最後に&lt;strong&gt;「フラグからカウントする際のコード」&lt;/strong&gt;を書いてみましょう。&lt;/p&gt;
+&lt;p&gt;Void setup()の中に、&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Serial.begin(115200);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;を書き、
+void loop()の中に、&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt; int val = digitalRead(MAGNECTIC_SWITCH);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;を書きます。&lt;/p&gt;
+&lt;p&gt;これはつまり、&lt;strong&gt;センサで取得した値を変数valに入れている&lt;/strong&gt;わけです。&lt;/p&gt;
+&lt;p&gt;そして&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;if(G_state == FLG_OFF){
+count += 1;
+}
+Serial.println(count);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;と書き、コンパイルして、書き込みをしていきます。&lt;/p&gt;
+&lt;p&gt;ちょっとここでケアレスミスがあり、書き込みの際にエラーが何回か出ましたが、難なく解消。&lt;/p&gt;
+&lt;p&gt;よし！これで動く！&lt;/p&gt;
+&lt;p&gt;ツールの中のシリアルモニタを見てみましょう。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/4.png&#34; alt=&#34;4&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;な、なにーーー！！&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;なんか勝手に数が増えてる！！！！このままじゃ数字が止まらなくなる！！！（パニック状態）&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_s&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/suga.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;自給力&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+助けて！のびさんんんんんんんん！！
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_n&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/nobi.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;のびすけ&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+ん？？これ、&lt;u&gt;if( G_state == FLG_OFF )で+1&lt;/u&gt;で書かないと、めっちゃ数えるよ。
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_s&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/suga.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;自給力&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+あ、そうか……。
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;つまり、コードを日本語訳にすると、&lt;strong&gt;「G_stateの中のフラグがないときは、足していく」&lt;/strong&gt;という意味。フラグが無い状態では+1され続けてしまうんです。そりゃうまくイカンわ！！！&lt;/p&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_n&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/nobi.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;のびすけ&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+&lt;u&gt;if(G_state == FLG_OFF)の一文を消して、elseの中でフラグの判定&lt;/u&gt;した方がいいよ。
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;のびさんのご指摘の通り、&lt;strong&gt;elseの中にif文を書いてフラグがonだったら1カウントをするコード&lt;/strong&gt;に書き換えました。&lt;/p&gt;
+&lt;p&gt;よし！これでどうだ！！！書き込み開始！！&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/5.png&#34; alt=&#34;5&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_s&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/suga.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;自給力&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+あれ？？？なんで58から始まるんだ？わけわからん数字だ……。
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_n&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/nobi.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;のびすけ&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+&lt;u&gt;デフォルトの数字は、setupで数字初期化されるから、setupの定義内でcount=０&lt;/u&gt;にすればいいんじゃない？
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_s&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/suga.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;自給力&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+ほうほう。
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;center&gt;
+&lt;font size=&#34;3&#34;&gt;実際に書き換えてみると、見事解決！&lt;/font&gt;
+&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/6.png&#34; alt=&#34;6&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;h2 id=&#34;ちゃんと数えてくれるか検証&#34;&gt;ちゃんと数えてくれるか検証&lt;/h2&gt;
+&lt;p&gt;磁石をセンサに近づけて、、&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/7.png&#34; alt=&#34;7&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;離すと、、&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/8.png&#34; alt=&#34;8&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;そしてシリアルモニタを見ると&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/244/9.png&#34; alt=&#34;9&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;
+&lt;font size=&#34;3&#34;&gt;カウント「１」！！！！&lt;/font&gt;
+&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;見事成功です。&lt;/p&gt;
+&lt;p&gt;いやぁ、一口に数を数えるとは言っても奥が深いですね！今日のところはこの辺で終わりたいと思います。&lt;/p&gt;
+&lt;p&gt;続編をお楽しみに……！&lt;/p&gt;
+&lt;style&gt;
+.dialogue {
+padding: 10px;
+display: table;
+}
+.image_n, .image_s {
+width: 75px;
+height: 75px;
+margin-right: 10px;
+display: table-cell;
+vertical-align: middle;
+}
+.image_n img {
+border-radius: 50%;
+border: 2px solid blue;
+}
+.image_s img {
+border-radius: 50%;
+border: 2px solid green;
+}
+.name {
+font-weight: bold;
+text-align: center;
+}
+.text {
+display: table-cell;
+padding: 0;
+vertical-align: middle;
+padding-left: 20px;
+}
+&lt;/style&gt;</description></item><item><title>【初心者必見】電子パーツ買うならここ！アキバ電気街徹底ガイド</title><link>https://dotstud.io/blog/akihabara-guide-for-beginners/</link><pubDate>Mon, 27 Mar 2017 12:30:54 +0900</pubDate><guid>https://dotstud.io/blog/akihabara-guide-for-beginners/</guid><description>
 &lt;p&gt;こんにちは、バックエンドエンジニアのちゃんとく（&lt;a href=&#34;https://twitter.com/tokutoku393&#34;&gt;@tokutoku393&lt;/a&gt;）です。&lt;/p&gt;
 &lt;p&gt;昨年は頑張ってお風呂センサーを制作しました。
 &lt;img src=&#34;https://dotstud.io/img/blog/091/01_furo.png&#34; alt=&#34;&#34; /&gt;
