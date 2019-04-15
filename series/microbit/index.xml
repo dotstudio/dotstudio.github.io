@@ -1,4 +1,113 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>microbit on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/microbit/</link><description>Recent content in microbit on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Tue, 29 May 2018 10:40:00 +0900</lastBuildDate><atom:link href="/series/microbit/" rel="self" type="application/rss+xml"/><item><title>micro:bit同士で通信してみよう！腕の動きに合わせて光る帽子の作り方</title><link>https://dotstud.io/blog/microbit-flickering-light-hat/</link><pubDate>Tue, 29 May 2018 10:40:00 +0900</pubDate><guid>https://dotstud.io/blog/microbit-flickering-light-hat/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>microbit on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/microbit/</link><description>Recent content in microbit on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Mon, 15 Apr 2019 00:00:00 +1200</lastBuildDate><atom:link href="/series/microbit/" rel="self" type="application/rss+xml"/><item><title>光るサンドバッグ作って◯-monsterの気分を感じたい！</title><link>https://dotstud.io/blog/shining-sandbag-like-bmonster/</link><pubDate>Mon, 15 Apr 2019 00:00:00 +1200</pubDate><guid>https://dotstud.io/blog/shining-sandbag-like-bmonster/</guid><description>
+&lt;p&gt;プログラミングをしていると運動不足になりがちです。&lt;/p&gt;
+&lt;p&gt;何か作っている時のストレスもあります。（なんで動かないんだーってw）&lt;/p&gt;
+&lt;p&gt;ストレス発散したい！&lt;/p&gt;
+&lt;p&gt;手っ取り早くストレス発散して運動ができるのは何でしょう、、サンドバック殴ることですよね！
+（この辺りから、B-◯onsterっぽくしたい欲が出てきます笑）&lt;/p&gt;
+&lt;p&gt;サンドバックを買って、叩く毎に光ったり音鳴ったりしたら良い気晴らしになるんじゃないかと。&lt;/p&gt;
+&lt;p&gt;ということで、&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;光るサンドバッグを作ってB-Mons◯erに行った感じを味わいたい！！！&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;ではでは、作っていきましょう&lt;/p&gt;
+&lt;h2 id=&#34;完成物のイメージ&#34;&gt;完成物のイメージ&lt;/h2&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/248/1.png&#34; alt=&#34;1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;パンチしたら全体が光る。&lt;/em&gt;&lt;/strong&gt;
+→この記事では、加速度センサを使って音を鳴らすまで作ってみます。仕様としては以下のことができたら達成とします。&lt;/p&gt;
+&lt;p&gt;・サンドバックを叩いたら、音が出る
+・５回叩いたら、音が変わる。
+・10回叩いたら、音楽が鳴る。&lt;/p&gt;
+&lt;h2 id=&#34;必要な物&#34;&gt;必要な物&lt;/h2&gt;
+&lt;p&gt;・サンドバック
+・microbit
+・電子ブザー
+・Micro USB Micro-B
+・ワニ口クリップ&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/248/2.png&#34; alt=&#34;2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;h2 id=&#34;サンドバックを作ってみる&#34;&gt;サンドバックを作ってみる&lt;/h2&gt;
+&lt;p&gt;まずは、サンドバックを作っていきましょう。
+これを買ってみました（&lt;a href=&#34;http://urx.space/U1ry）&#34;&gt;http://urx.space/U1ry）&lt;/a&gt;
+開けけてみて思ったのですが、なかなかしっかりしてて良い感じのサンドバックです。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/248/3.png&#34; alt=&#34;3&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;中身を確認して、作っていきましょう！！！&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/248/4.png&#34; alt=&#34;4&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;水を使って土台を作るタイプなので、屋外でやりましょう（じゃないと母ちゃんに怒られますよ笑）
+＊ペットボトルたちは猫避けではなく、土台に使う水です。
+凝固剤も入っていて、なかなか本格的！&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/248/5.png&#34; alt=&#34;5&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;土台ができたら、膨らましていきましょう！
+（なんか、いかがわしい形と動きをしますが、、下ネタご了承ください）&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/248/6.png&#34; alt=&#34;6&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;良い感じに膨らんだらサンドバックは完成です
+センサに移りましょう&lt;/p&gt;
+&lt;h2 id=&#34;センサを作ってみる&#34;&gt;センサを作ってみる&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;・micro softアカウントを作ってサインイン&lt;/strong&gt;
+microbitはBBCが作ってる教育用のマイコンでして、
+マイクロソフトアカウントが必要なので、持ってない人は作りましょう。
+ここから作れます。&lt;a href=&#34;https://microbit.org/ja/guide/&#34;&gt;https://microbit.org/ja/guide/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/248/7.png&#34; alt=&#34;7&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;・make code エディターでコードを編集します。&lt;/strong&gt;
+microbitにコードを書き込むには３つの方法があります。&lt;/p&gt;
+&lt;p&gt;JSやPythonで書くこともできますが、一番簡単なのはmake code エディターのブロックで入力することです。
+このエディターを使えば、こんな感じで簡単にコードを書くことができます。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/248/8.png&#34; alt=&#34;8&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;ブロックの意味はJSを書いたことなくてもわかるかも。&lt;/p&gt;
+&lt;p&gt;マイプロジェクトから新しいプロジェクトを開いて作っていきます。&lt;/p&gt;
+&lt;p&gt;「ずっと」のブロックをここでは2つ作ります。
+　・カウントする「ずっと」
+　・音を鳴らすための「ずっと」
+＊１つにまとめるのもできると思いますが、わかり安かったので分けました。&lt;/p&gt;
+&lt;p&gt;カウントする「ずっと」の方に、accXという変数を作り、加速度Xという入力ブロックを追加します。
+そして、「もし」ブロックで、accXが500未満であればLEDが点灯し、音楽が鳴るブロックにしていきます。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/248/9.png&#34; alt=&#34;9&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;音を鳴らすための「ずっと」ブロックを作っていきます。
+まず、「最初だけ」ブロックに変数カウントを0にして置いておきます。
+そして、カウントする「ずっと」の方に「もし」ブロックを入れて5回いった時と10回いった時にLEDの点灯と音楽が鳴るようにします。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/248/10.png&#34; alt=&#34;10&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/248/11.png&#34; alt=&#34;11&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;・microbitとブザーを繋げます&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/248/12.png&#34; alt=&#34;12&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;おお、っぽくなってきました！&lt;/p&gt;
+&lt;p&gt;そして、サンドバックに貼り付ければ、、、&lt;/p&gt;
+&lt;h2 id=&#34;できました&#34;&gt;できました！！&lt;/h2&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/248/13.png&#34; alt=&#34;13&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;・デモ動画&lt;/strong&gt;
+&lt;a href=&#34;http://www.youtube.com/watch?v=it0159iWUrQ&#34;&gt;&lt;img src=&#34;http://img.youtube.com/vi/it0159iWUrQ/0.jpg&#34; alt=&#34;IMAGE ALT TEXT HERE&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;あとがき-挫折の数々&#34;&gt;[あとがき] 挫折の数々&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;・最初のイメージを捨てました&lt;/strong&gt;
+最初は単純に光るだけのサンドバックデバイスを作ろうと思っていました。でも、プロトタイプを作る際にLEDが光るだけだと、サンドバックを叩いた時にLEDの光を確認できないんですよねww&lt;/p&gt;
+&lt;p&gt;なので、一緒に音も出るように変更しました。
+そのおかげで、ゲーム性が高くなって良い感じになりました。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;・使う物を変えました&lt;/strong&gt;
+最初、microbitではなくwio nodeとグローブで作ろうとしてました。
+でも、「加速度センサ使ってプロトタイプ作るだけならmicrobitで良いんじゃね？」とのびすけしゃちょーにアドバイスもらい試しに使うことにしました。&lt;/p&gt;
+&lt;p&gt;結局、変えてみてよかったです！
+microbitはものすごく使いやすい。デプロイの仕方も編集したブロックのhexファイル（microbit用のファイル）をmicrobitのフォルダに入れるだけでできます。
+全部のプログラミングがこうなれば良いのに、、って思うぐらいプログラミングしやすかったです。&lt;/p&gt;</description></item><item><title>micro:bit同士で通信してみよう！腕の動きに合わせて光る帽子の作り方</title><link>https://dotstud.io/blog/microbit-flickering-light-hat/</link><pubDate>Tue, 29 May 2018 10:40:00 +0900</pubDate><guid>https://dotstud.io/blog/microbit-flickering-light-hat/</guid><description>
 &lt;p&gt;はじめまして、りんろくです。&lt;/p&gt;
 &lt;p&gt;マイコンボード初心者ながらmicro:bitのデザインやサイズ感がすごく好きで、四苦八苦しながらちょっとしたゲームを作ったり、LEDをチカチカさせてみたりしています！&lt;/p&gt;
 &lt;p&gt;そんな私ですが、机の上で触っているだけでなく、いつかmicro:bitを外に持ち出せるアイテムとして使えないかなあ……と漠然と思っていました。&lt;/p&gt;
