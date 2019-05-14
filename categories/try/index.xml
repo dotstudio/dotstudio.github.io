@@ -1,4 +1,136 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>try on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/categories/try/</link><description>Recent content in try on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Mon, 13 May 2019 00:00:00 +0700</lastBuildDate><atom:link href="/categories/try/" rel="self" type="application/rss+xml"/><item><title>【シンセ魔改造】仕事サボってバンド演奏しながら会社のミーティングに無理やり参加してみた【スタジオ編】</title><link>https://dotstud.io/blog/meeting-via-webrtc-piano/</link><pubDate>Mon, 13 May 2019 00:00:00 +0700</pubDate><guid>https://dotstud.io/blog/meeting-via-webrtc-piano/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>try on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/categories/try/</link><description>Recent content in try on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Tue, 14 May 2019 00:00:00 +1800</lastBuildDate><atom:link href="/categories/try/" rel="self" type="application/rss+xml"/><item><title>【シンセ魔改造】仕事サボってバンド演奏しながら会社のミーティングに無理やり参加してみた【作り方編】</title><link>https://dotstud.io/blog/howto-make-webrtc-piano/</link><pubDate>Tue, 14 May 2019 00:00:00 +1800</pubDate><guid>https://dotstud.io/blog/howto-make-webrtc-piano/</guid><description>
+&lt;p&gt;こんにちは、ものづくり担当うこです。&lt;br /&gt;
+&lt;a href=&#34;https://dotstud.io/blog/meeting-via-webrtc-piano/&#34;&gt;前回&lt;/a&gt;は、スタジオからなんとかオンラインミーティングに参加したのですが、当然ながらバレちゃいましたね……&lt;br /&gt;
+しかし、新社会人も多いこの季節、同じような境遇に陥る若人も少なくないでしょう！！&lt;br /&gt;
+というわけで、今回は市販のMIDIキーボードを使って、簡単にこの仕組みを自作する方法を解説します！&lt;/p&gt;
+&lt;h2 id=&#34;ハードウェア部分&#34;&gt;ハードウェア部分&lt;/h2&gt;
+&lt;h3 id=&#34;必要なもの&#34;&gt;必要なもの&lt;/h3&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/250/1.png&#34; alt=&#34;1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Raspberry Pi 3B+&lt;/li&gt;
+&lt;li&gt;マイクロSDカード（8GB以上）&lt;/li&gt;
+&lt;li&gt;USB-MIDIキーボード&lt;br /&gt;
+今回はKORG社のnanoKey2を使っていきますが、基本的には何でもOKです。&lt;/li&gt;
+&lt;li&gt;Raspberry Pi Camera Module&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/250/2.png&#34; alt=&#34;2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;ハードウェアは特に作成する必要がなく、カメラモジュールを基板にとりつけ、USB-MIDIキーボードを接続するだけでOKです！&lt;br /&gt;
+スタジオ編では、実際にYAMAHAのMIDIキーボードを分解して内部にRaspberry Piを組み込んだものを使用しました。余力がある方は試してみてください♪&lt;/p&gt;
+&lt;h2 id=&#34;ソフトウェアのインストールと設定&#34;&gt;ソフトウェアのインストールと設定&lt;/h2&gt;
+&lt;p&gt;ここからは、すでにRaspberry PiへのOSインストールが完了していて、SSHなどを経由してターミナル操作ができる前提で解説してゆきます。&lt;br /&gt;
+よくわからない、という方は、以下の記事の「2. ソフトウェアのインストールと設定」あたりを参照しながら、OSのインストールから始めてみてください。&lt;br /&gt;
+&lt;a href=&#34;https://dotstud.io/blog/howto-make-webrtc-pokeberu/&#34;&gt;【114106→ｱｲｼﾃﾙ】平成の最後に最新のWebRTCでポケベルをつくってみた【作り方編】 | dotstudio&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;映像のストリーミング&#34;&gt;映像のストリーミング&lt;/h3&gt;
+&lt;p&gt;まず映像ストリーミングに必要なソフトウェアをインストールします。&lt;br /&gt;
+gstreamerというストリーミングソフトウェアを使いますが、Raspberry Piへのインストールは少々複雑になります。
+以下をそのままコピペしてターミナルで実行してください。&lt;br /&gt;
+&lt;code&gt;$ sudo apt-get install libgstreamer1.0-0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly gstreamer1.0-libav gstreamer1.0-doc gstreamer1.0-tools gstreamer1.0-x gstreamer1.0-alsa gstreamer1.0-gl gstreamer1.0-gtk3 gstreamer1.0-qt5 gstreamer1.0-pulseaudio libgstreamer-plugins-base1.0-dev&lt;/code&gt;&lt;br /&gt;
+（参考：&lt;a href=&#34;https://gstreamer.freedesktop.org/documentation/installing/on-linux.html&#34;&gt;GStreamer Installing on Linux&lt;/a&gt;）&lt;/p&gt;
+&lt;p&gt;上記のインストールが完了したら、次はラズパイカメラでgstreamerを扱うライブラリをインストールします。以下のコマンドを順番に実行してください。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ cd ~/Documents
+$ git clone https://github.com/thaytan/gst-rpicamsrc.git
+$ cd gst-rpicamsrc/
+$ ./autogen.sh --prefix=/usr --libdir=/usr/lib/arm-linux-gnueabihf/
+$ make
+$ sudo make install
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;midiキーボードをpythonから扱う&#34;&gt;MIDIキーボードをPythonから扱う&lt;/h3&gt;
+&lt;p&gt;MIDIキーボードからの入力を取得できるPythonライブラリをインストールします。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$ sudo apt-get install libasound2-dev libjack-jackd2-dev&lt;/code&gt;&lt;br /&gt;
+&lt;code&gt;$ pip3 install mido python-rtmidi&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;プログラム部分の制作&#34;&gt;プログラム部分の制作&lt;/h2&gt;
+&lt;h3 id=&#34;midiキーボードの確認&#34;&gt;MIDIキーボードの確認&lt;/h3&gt;
+&lt;p&gt;必要なライブラリがインストールできたところで、まずはMIDIキーボードで2タッチ入力ができるか試してみましょう！&lt;br /&gt;
+今回は、ソースコードが少し長いので、gitリポジトリからクローンします。&lt;br /&gt;
+ディレクトリはあらかじめ適当なものを作成して移動するなどしておいてください。&lt;br /&gt;
+&lt;code&gt;$ git clone https://github.com/ukkz/skygate.git&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;このリポジトリには、今回使う「SkyWay」に関するモジュールが含まれていますので、開発者モードでインストールします。&lt;br /&gt;
+&lt;code&gt;$ pip3 install -e skygate/&lt;/code&gt;&lt;br /&gt;
+&lt;code&gt;$ sudo python3 skygate/setup.py develop&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;クローンとモジュールのインストールができたら、MIDIキーボードから2タッチ入力ができるサンプルを、Python3で実行してみましょう。&lt;br /&gt;
+このサンプルでは、外部MIDIインターフェースからのMIDIメッセージを解析して押されている鍵盤を特定し、鍵盤に割り当てられた数字をもとにして2タッチ入力変換をするものになっています。&lt;br /&gt;
+&lt;code&gt;$ python3 skygate/2touch-input-by-midi.py&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/250/3.png&#34; alt=&#34;3&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;実行すると入力待ちになります。&lt;br /&gt;
+上図を参考にして、&amp;rdquo;41128122##&amp;rdquo; と打ち込んでみてください。すると……&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;pi@raspberrypi:~ $ python3 skygate/2touch-input-by-midi.py
+たいやき
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;このように表示されましたでしょうか？&lt;br /&gt;
+&amp;ldquo;41128122&amp;rdquo; が、2タッチ入力では「たいやき」となり、また &amp;ldquo;##&amp;rdquo; が、ここでは「入力確定」の意味合いで使用するコマンドのようなものになっています。今回は、デバイス側からのメッセージ送信はこれを使って行いますのでぜひ覚えておいてください。&lt;/p&gt;
+&lt;h3 id=&#34;skywayを使ってラズパイとブラウザ間でビデオチャット&#34;&gt;SkyWayを使ってラズパイとブラウザ間でビデオチャット&lt;/h3&gt;
+&lt;p&gt;今回も、&lt;a href=&#34;https://dotstud.io/blog/howto-make-webrtc-pokeberu/&#34;&gt;以前にポケベルを作成した記事&lt;/a&gt;と同様に、通信部分で&lt;a href=&#34;https://webrtc.ecl.ntt.com&#34;&gt;SkyWay&lt;/a&gt;というWebRTCプラットホームを利用します。&lt;br /&gt;
+本来WebRTCはP2P通信なので、サーバーは必要ありません。ただし、最初のノード間の情報交換（シグナリング）がかなり大変なので、このSkyWayのシステムを使って実現します。&lt;br /&gt;
+また、WebRTCはもともとリッチなWebブラウザでしか動作しないものでしたが、ブラウザを介さずに動作させることのできる &lt;strong&gt;WebRTC Gateway&lt;/strong&gt; というものが開発されていて、無償で利用することができます。&lt;br /&gt;
+詳細は以下をご覧ください。&lt;br /&gt;
+&lt;a href=&#34;https://github.com/skyway/skyway-webrtc-gateway&#34;&gt;skyway/skyway-webrtc-gateway: &lt;em&gt;Experimental&lt;/em&gt; WebRTC Gateway for SkyWay&lt;/a&gt;&lt;/p&gt;
+&lt;h4 id=&#34;skywayのアカウント作成とapiキーの取得&#34;&gt;SkyWayのアカウント作成とAPIキーの取得&lt;/h4&gt;
+&lt;p&gt;&lt;a href=&#34;https://webrtc.ecl.ntt.com/signup.html&#34;&gt;新規登録 - SkyWay - Enterprise Cloud WebRTC Platform&lt;/a&gt;&lt;br /&gt;
+上記のページの「Community Edition」にある「無料で新規登録」のボタンから、アカウントを新規に作成しましょう。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/250/4.png&#34; alt=&#34;4&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;アカウントを作成したらログインして、上段の &amp;ldquo;Create new application&amp;rdquo; をクリックします。するとアプリケーション作成ページに飛びますので、以下のように入力します。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Application description: my midi chat client&lt;/code&gt;（一例。任意の名前でよいです）&lt;br /&gt;
+&lt;code&gt;Available domains: localhost, 127.0.0.1, ukkz.github.io&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;ukkz.github.io&amp;rdquo; は、後ほどブラウザ上からビデオチャットを利用するときのための設定なので、一通り終わったら削除しておいて構いません。&lt;br /&gt;
+入力完了したら緑色のCreateボタンをクリックして作成します。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/250/5.png&#34; alt=&#34;5&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;作成後のページはこのように表示されているかと思います。&lt;br /&gt;
+API Keyの欄に表示されている文字列をコピーしてどこかに控えておきましょう。&lt;/p&gt;
+&lt;h4 id=&#34;webrtc-gatewayの取得と起動&#34;&gt;WebRTC Gatewayの取得と起動&lt;/h4&gt;
+&lt;p&gt;Raspberry Piに戻り、以下のコマンドを実行して &amp;ldquo;WebRTC Gateway&amp;rdquo; をダウンロードします。&lt;br /&gt;
+&lt;code&gt;$ wget https://github.com/skyway/skyway-webrtc-gateway/releases/download/0.0.4/gateway_linux_arm&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;実行権限を付与してから、バックエンドで起動させます。&lt;br /&gt;
+&lt;code&gt;$ chmod +x gateway_linux_arm ; sudo ./gateway_linux_arm &amp;amp;&lt;/code&gt;&lt;/p&gt;
+&lt;h4 id=&#34;raspberry-pi-とブラウザ間で接続&#34;&gt;Raspberry Pi とブラウザ間で接続&lt;/h4&gt;
+&lt;p&gt;以下のコマンドでサンプルスクリプトを実行します。&lt;br /&gt;
+&lt;code&gt;$ python3 skygate/sample.py keyboard xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;第1引数は「ピアID」といい、接続するデバイスに固有に割り振られるIDを自分で指定します。&lt;br /&gt;
+今回は &amp;ldquo;keyboard&amp;rdquo; という値を使いましょう。&lt;br /&gt;
+第2引数は「APIキー」です。先ほど取得した、ご自身のアプリのAPIキーを入力しましょう。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Peer created as keyboard: pt-529579b6-1b69-4f81-b213-3400d039a3da&lt;/code&gt;&lt;br /&gt;
+以上のような結果が返ってきていれば、SkyWayと正常に接続しピアとして認識されています。&lt;/p&gt;
+&lt;p&gt;では次に、このRaspberry Piと通信したいPCのブラウザなどから、以下のURLを開きましょう。&lt;br /&gt;
+&lt;a href=&#34;https://ukkz.github.io/skygate/web/?apikey=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&#34;&gt;SkyWay P2P Video &amp;amp; Text Chat&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;こちらはWeb側のチャット画面となるページですが、URLは以下のようになっています。&lt;br /&gt;
+&lt;code&gt;https://ukkz.github.io/skygate/web/?apikey=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;このうち、&lt;code&gt;apikey=&lt;/code&gt;より右の部分を、ご自身で発行されたSkyWayのAPIキーに置き換えてもう一度アクセスしてみてください。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/250/6.png&#34; alt=&#34;6&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;このような感じになっているかと思います。&lt;br /&gt;
+このとき、Raspberry Pi側が正常にSkyWayに認識されていれば、左下のドロップダウンメニューに「keyboard」と表示が出ますので、その右横のcallボタンを押すと……&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/250/7.png&#34; alt=&#34;7&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;Raspberry Pi側からの映像が大きく映し出されていれば、問題なく接続されています！&lt;/p&gt;
+&lt;h3 id=&#34;ビデオチャットにmidiメッセージングを組み込もう&#34;&gt;ビデオチャットにMIDIメッセージングを組み込もう&lt;/h3&gt;
+&lt;p&gt;ここまでくれば、あとはビデオチャットとテキストチャットを結合し、さらにMIDIキーボードの2タッチ入力でテキスト入力ができるようにすれば、「キーボードを弾きながらオンラインミーティングに参加できるマシン」のできあがりです！&lt;br /&gt;
+こちらも、ソースコードが少し長くなるのでリポジトリの中にサンプルを置いておきました。これをそのまま利用してください。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;$ python3 skygate/video-and-text-by-midi.py keyboard xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;こちらのコードでは先ほどのMIDIキーボードの2タッチ入力に加え、WebRTCで着信した相手に対してその入力テキストを送り返すようになっています。&lt;br /&gt;
+これを実行すると、以下のようになります。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/250/8.png&#34; alt=&#34;8&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;2タッチ入力で「おつかれさまです！」と入力したのですが、最後だけ間違えて「おつかれさまですW」になってしまいました……　慣れないと難しいですね。&lt;br /&gt;
+このまま送信すると、ブラウザ側では以下のようになります。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/250/9.png&#34; alt=&#34;9&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;ブラウザ側からも文字列が表示されました！&lt;br /&gt;
+もちろん、返事をすることもできます。ここでは「進捗どう？」とブラウザ側から送りましたが、すでに表示されているとおり、Raspberry Pi側にもちゃんと送られていることが確認できます。&lt;/p&gt;
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;WebRTCを使うと、映像・音声のようなメディアストリームのほか、バイナリにすることができるデータならなんでも送ることができます！　また、本来はWebブラウザ同士でしか使えなかったこの技術が、SkyWayのGatewayによってRaspberry PiのようなIoTデバイスでも実現できるようになったため、さらにものづくりの幅が広がります。少し難しいところもありますが、ぜひともWebRTCによる新しい可能性を感じていただければと思います。&lt;/p&gt;</description></item><item><title>【シンセ魔改造】仕事サボってバンド演奏しながら会社のミーティングに無理やり参加してみた【スタジオ編】</title><link>https://dotstud.io/blog/meeting-via-webrtc-piano/</link><pubDate>Mon, 13 May 2019 00:00:00 +0700</pubDate><guid>https://dotstud.io/blog/meeting-via-webrtc-piano/</guid><description>
 &lt;p&gt;こんにちは、ものづくり担当うこです。&lt;/p&gt;
 &lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
 &lt;img src=&#34;https://dotstud.io/img/blog/249/1.png&#34; alt=&#34;1&#34;&gt;&lt;/p&gt;
@@ -3753,47 +3885,4 @@ padding: 5px;
 background: #eaeaea;
 opacity: 1;
 }
-&lt;/style&gt;</description></item><item><title>【あのバズマイコンを最速？レポート】極小マイコンのトリリオンノード・エンジンを使ってみた！</title><link>https://dotstud.io/blog/trillion-node-engine-sugoi/</link><pubDate>Fri, 05 Oct 2018 02:39:17 +0900</pubDate><guid>https://dotstud.io/blog/trillion-node-engine-sugoi/</guid><description>
-&lt;p&gt;こんにちは、宇宙エンジニアのたくろーどんです。&lt;/p&gt;
-&lt;p&gt;夏休みなので「何かハッカソンに出てみたい！モノづくりしたい！」と思いつつ、&lt;a href=&#34;http://www.mcpc-jp.org/&#34;&gt;MCPC（モバイルコンピューティング推進コンソーシアム）&lt;/a&gt;が主催する&lt;strong&gt;第1回ナノコン応用ハッカソン&lt;/strong&gt;に参加しました。&lt;/p&gt;
-&lt;p&gt;なんとこのハッカソンで&lt;strong&gt;これから流行りそうな凄い開発ボード&lt;/strong&gt;に出会ったので、紹介します。その名も&lt;u&gt;&lt;strong&gt;トリリオンノード・エンジン&lt;/strong&gt;&lt;/u&gt;です。&lt;/p&gt;
-&lt;h2 id=&#34;トリリオンノード-エンジン-のここが凄い&#34;&gt;「トリリオンノード・エンジン」のここが凄い！&lt;/h2&gt;
-&lt;h3 id=&#34;小さい&#34;&gt;小さい！&lt;/h3&gt;
-&lt;p&gt;特筆すべきポイントは、&lt;strong&gt;トリリオンノード・エンジンの小ささ&lt;/strong&gt;でしょう。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/212276/d8655c77-c996-4684-adb8-61f8799cbce4.jpeg&#34; alt=&#34;P_20180831_162041_vHDR_On.jpg&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;そうです、写真でわかるように&lt;strong&gt;本当に小さい&lt;/strong&gt;です。
-決して、手が大きいわけではありません。&lt;/p&gt;
-&lt;h3 id=&#34;拡張性が高い&#34;&gt;拡張性が高い！&lt;/h3&gt;
-&lt;p&gt;ハッカソンの際は、写真のようにキットが渡されました。
-&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/212276/ab86e180-f0c0-afdd-c320-baa25fa92140.jpeg&#34; alt=&#34;P_20180831_100142_vHDR_On.jpg&#34; /&gt;
-トリリオンノード・エンジンは、&lt;strong&gt;リーフ&lt;/strong&gt;というパーツで構成され、そのリーフの1つ1つに&lt;strong&gt;センサモジュールやBLE（Bluetooth）、Wi-Fi&lt;/strong&gt;といった機能を持っています。それを&lt;u&gt;&lt;strong&gt;重ねていくことで簡単に機能を拡張することができる&lt;/strong&gt;&lt;/u&gt;仕組みです。&lt;/p&gt;
-&lt;p&gt;プログラムは&lt;strong&gt;Arduino IDE&lt;/strong&gt;で書きます。これは、Arduinoを触ったことがある人にやさしいですね。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/212276/0c71d1f5-486a-a6c7-d408-1aafa14afcdf.jpeg&#34; alt=&#34;P_20180831_100406_vHDR_On.jpg&#34; /&gt;
-評価用キットなので、すべてのリーフが入っているわけではありません。今後は、もっとリーフが増えるようです。例えば、&lt;strong&gt;Groveセンサ用のリーフ&lt;/strong&gt;も予定されているそうです。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/212276/725d14ea-0149-83c4-87bd-cdade631bf64.jpeg&#34; alt=&#34;P_20181001_002408_vHDR_On.jpg&#34; /&gt;
-Arduinoシールドのリーフもあります。プロトタイプをつくる際に役立ちますね。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/212276/6bd3b78b-ca6c-7bce-83bd-cb8a76319c44.jpeg&#34; alt=&#34;P_20181001_002538_vHDR_On.jpg&#34; /&gt;
-「29TH Leaf」というリーフを使えば基板に直接実装できます。これもArduino互換リーフの一つです。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/212276/371ec114-1346-7596-1d0e-f2c12fa5d0e1.jpeg&#34; alt=&#34;P_20181001_002505_vHDR_On.jpg&#34; /&gt;
-電源はUSB給電だけなく、&lt;strong&gt;専用のリーフで単3電池やボタン電池駆動&lt;/strong&gt;させることができます。実装には一手間かかるので、専用のリーフがあるのはとてもありがたいですね。&lt;/p&gt;
-&lt;p&gt;例えば&lt;strong&gt;ウェアラブルなものをつくりたい&lt;/strong&gt;と思ったときに、必要な電圧にもよりますが電源回路を実装する必要がなくなります。&lt;/p&gt;
-&lt;p&gt;重ねるだけでなく、横方向につなげるリーフもあります。発想の幅が広がりますね。&lt;/p&gt;
-&lt;h2 id=&#34;試してみた&#34;&gt;試してみた&lt;/h2&gt;
-&lt;p&gt;加速度センサとLEDテープを組み合わせてLチカさせてみました。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/212276/44f0d940-e547-66b5-bc20-020f64550d0d.gif&#34; alt=&#34;84472b66eb294f495cb1060bfda8c512.gif&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;ハッカソンでは、犬につけてコミュニケーションを加速させることを目的としたウェアラブルデバイスを考えました（完成には程遠かったですが……）。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/212276/973f6f0e-7487-ba0d-2aef-e2f245826ef9.jpeg&#34; alt=&#34;42142867_568541853564424_1201723650328231936_n.jpg&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;このサイズだから出来ることを考えてみると、様々なところに応用できそう&lt;/strong&gt;ですね。&lt;/p&gt;
-&lt;h2 id=&#34;そして平成最後の夏-twitterでバズった&#34;&gt;そして平成最後の夏、Twitterでバズった&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;「トリリオンノード・エンジンが凄い！」といったことをつぶやいてみたら、バズりました&lt;/strong&gt;。
-小型で使いやすそうなマイコンに対する関心の高さがうかがえます。&lt;/p&gt;
-&lt;p&gt;&lt;center&gt;
-&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;今日つかったマイコン、やばやばなほど小さいんだけど、BLEも照度センサ、加速度センサ、温度センサ、スタックしていけばwifiモジュールもつくし、ボタン電池で駆動できて、Arduinoで開発できる。拡張も自由自在。スタックするだけでなく、横につなげてウェアラブルも可能。凄すぎるん😳😳😳 &lt;a href=&#34;https://t.co/DGqssgNkCF&#34;&gt;pic.twitter.com/DGqssgNkCF&lt;/a&gt;&lt;/p&gt; たくろーどん (@takudooon) &lt;a href=&#34;https://twitter.com/takudooon/status/1035474814696222722?ref_src=twsrc%5Etfw&#34;&gt;2018年8月31日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
-&lt;/center&gt;&lt;/p&gt;
-&lt;p&gt;そしてバズったら&lt;strong&gt;「トリリオンノード・エンジンの普及に貢献した」としてハッカソンで特別賞を貰いました&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/212276/aa12c34d-e3f2-a9df-92b8-f4eccb6befb9.jpeg&#34; alt=&#34;IMG_20181001_011537_066.jpg&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;人生、何が起こるかわからないですね。&lt;/p&gt;
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-&lt;p&gt;まだまだドキュメントの整備や使用例はこれからのようです。
-来年から販売予定だそうなので、目が離せませんね！&lt;/p&gt;</description></item></channel></rss>
+&lt;/style&gt;</description></item></channel></rss>
