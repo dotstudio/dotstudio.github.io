@@ -1715,15 +1715,13 @@ VuePressで作成したサイトをGitLab CIを使ってGitLab Pagesにデプロ
 &lt;p&gt;&lt;strong&gt;&lt;code&gt;&amp;lt;MY DOMAIN&amp;gt;&lt;/code&gt;、&lt;code&gt;&amp;lt;MY EMAIL&amp;gt;&lt;/code&gt;、&lt;code&gt;&amp;lt;MY API KEY&amp;gt;&lt;/code&gt;の箇所を適宜変更して実行して下さい。&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;それぞれ、自分が管理しているドメイン、登録しているメールアドレス、先ほど取得したAPIキーです。&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;実行例&lt;/li&gt;
-&lt;/ul&gt;
+&lt;li&gt;&lt;p&gt;実行例&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;curl -s -X GET &amp;quot;https://api.cloudflare.com/client/v4/zones?name=dotstud.io&amp;quot; \
 -H &amp;quot;X-Auth-Email: hogehoge@gmail.com&amp;quot; \
 -H &amp;quot;X-Auth-Key: xxxxxxxxxxxxxxxx&amp;quot; \
 -H &amp;quot;Content-Type: application/json&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;ul&gt;
-&lt;li&gt;ZONE ID&lt;/li&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;ZONE ID&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;コマンドを実行してエラーがなければ、JSONがかえってきます。ここのidの値がZONE IDになります。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;{&amp;quot;result&amp;quot;:[{&amp;quot;id&amp;quot;:&amp;quot;yyyyyyyyyyyyyyyyyyyy&amp;quot;,&amp;quot;name&amp;quot;:&amp;quot;dotstud.io&amp;quot;,&amp;quot;status&amp;quot;:&amp;quot;active&amp;quot;,&amp;quot;paused&amp;quot;:false,&amp;quot;type&amp;quot;:&amp;quot;full&amp;quot;, (......以下省略)
@@ -1736,14 +1734,14 @@ VuePressで作成したサイトをGitLab CIを使ってGitLab Pagesにデプロ
 &lt;p&gt;&lt;strong&gt;&lt;code&gt;&amp;lt;ZONE ID&amp;gt;&lt;/code&gt;、&lt;code&gt;&amp;lt;MY EMAIL&amp;gt;&lt;/code&gt;、&lt;code&gt;&amp;lt;MY API KEY&amp;gt;&lt;/code&gt;、&lt;code&gt;&amp;lt;TARGET&amp;gt;&lt;/code&gt;の箇所を適宜変更して実行して下さい。&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;&amp;lt;ZONE ID&amp;gt;&lt;/code&gt;はSTEP1で取得したZONE IDで、&lt;code&gt;&amp;lt;TARGET&amp;gt;&lt;/code&gt;はキャッシュクリアさせたいドメインやファイル名の指定です。最初にAPI利用なしでCloudflareのサイト上でキャッシュクリアをした時に指定したときと同様の指定ができます。&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;実行例&lt;/li&gt;
-&lt;/ul&gt;
+&lt;li&gt;&lt;p&gt;実行例&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;curl -X DELETE &amp;quot;https://api.cloudflare.com/client/v4/zones/yyyyyyyyyyyyyyyyyyyy/purge_cache&amp;quot; \
 -H &amp;quot;Content-Type:application/json&amp;quot; \
 -H &amp;quot;X-Auth-Key: xxxxxxxxxxxxxxxx&amp;quot; \
 -H &amp;quot;X-Auth-Email: hogehoge@gmail.com&amp;quot; \
 --data &#39;{&amp;quot;files&amp;quot;:[&amp;quot;https://hogehoge.dotstud.io/&amp;quot;]}&#39;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
 &lt;p&gt;成功すると以下のようなレスポンスがあり、キャッシュがクリアされます。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;{&amp;quot;result&amp;quot;:{&amp;quot;id&amp;quot;:&amp;quot;yyyyyyyyyyyyyyyyyyyy&amp;quot;},&amp;quot;success&amp;quot;:true,&amp;quot;errors&amp;quot;:[],&amp;quot;messages&amp;quot;:[]}%
 &lt;/code&gt;&lt;/pre&gt;
@@ -1943,19 +1941,17 @@ Google Cloud PlatformのAPI認証情報からダウンロードできます。&l
 &lt;hr /&gt;
 &lt;p&gt;次にNode.jsでアクセストークンなどの情報を取得します。(Node.jsやnpmが動く環境は用意されているものとします。)&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;アクセストークンを取得するフォルダを用意して以下のモジュールをインストールします。&lt;/li&gt;
-&lt;/ul&gt;
+&lt;li&gt;&lt;p&gt;アクセストークンを取得するフォルダを用意して以下のモジュールをインストールします。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;npm install googleapis@27 --save
-&lt;/code&gt;&lt;/pre&gt;
-&lt;ul&gt;
-&lt;li&gt;credentials.jsonも同じフォルダに移動させます。&lt;/li&gt;
-&lt;li&gt;index.jsを作成します。公式サイトのままではスコープがReadOnlyになっているのでアップロードできるスコープに変更します。それ以外は全く同じです。&lt;/li&gt;
-&lt;/ul&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;credentials.jsonも同じフォルダに移動させます。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;index.jsを作成します。公式サイトのままではスコープがReadOnlyになっているのでアップロードできるスコープに変更します。それ以外は全く同じです。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;[変更前]
 const SCOPES = [&#39;https://www.googleapis.com/auth/drive.metadata.readonly&#39;];
 [変更後]
 const SCOPES = [&#39;https://www.googleapis.com/auth/drive&#39;];
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
 &lt;p&gt;スコープについて詳しくは&lt;a href=&#34;https://developers.google.com/drive/api/v2/about-auth&#34;&gt;About Authorization&lt;/a&gt;を参照ください。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;準備は整ったのでNode.jsを実行します。&lt;/li&gt;
@@ -2004,18 +2000,15 @@ refresh_token=[リフレッシュトークン]&amp;amp;client_id=[クライア�
 &lt;p&gt;※&lt;a href=&#34;https://github.com/NearMugi/NefrySample/tree/master/GoogleAPI/%23createLibrary/googleAPI/PostDrive&#34;&gt;プログラムソース&lt;/a&gt;のうち主要な部分を抜粋しています。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;&lt;strong&gt;リフレッシュトークン・クライアントID・クライアントシークレットは個人情報なので、直接プログラムソースに記載するのではなくNefryBTのDataStoreに登録します。&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;POSTするデータを設定します。&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
+&lt;li&gt;&lt;p&gt;POSTするデータを設定します。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt; String postData = &amp;quot;&amp;quot;;
 postData += &amp;quot;refresh_token=&amp;quot; + refresh_token;
 postData += &amp;quot;&amp;amp;client_id=&amp;quot; + client_id;
 postData += &amp;quot;&amp;amp;client_secret=&amp;quot; + client_secret;
 postData += &amp;quot;&amp;amp;grant_type=&amp;quot; + String(&amp;quot;refresh_token&amp;quot;);
-&lt;/code&gt;&lt;/pre&gt;
-&lt;ul&gt;
-&lt;li&gt;ヘッダーを設定します。
-データの長さはPOSTするデータ(postData)から算出します。&lt;/li&gt;
-&lt;/ul&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;ヘッダーを設定します。
+データの長さはPOSTするデータ(postData)から算出します。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt; String postHeader = &amp;quot;&amp;quot;;
 postHeader += (&amp;quot;POST &amp;quot; + token_uri + &amp;quot; HTTP/1.1\r\n&amp;quot;);
 postHeader += (&amp;quot;Host: &amp;quot; + String(host) + &amp;quot;:&amp;quot; + String(httpsPort) + &amp;quot;\r\n&amp;quot;);
@@ -2024,10 +2017,8 @@ postHeader += (&amp;quot;Content-Type: application/x-www-form-urlencoded\r\n&amp
 postHeader += (&amp;quot;Content-Length: &amp;quot;);
 postHeader += (postData.length());
 postHeader += (&amp;quot;\r\n\r\n&amp;quot;);
-&lt;/code&gt;&lt;/pre&gt;
-&lt;ul&gt;
-&lt;li&gt;POSTリクエストを投げてレスポンスを取得します。更にレスポンスからアクセストークンを取得します。&lt;/li&gt;
-&lt;/ul&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;POSTリクエストを投げてレスポンスを取得します。更にレスポンスからアクセストークンを取得します。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt; String result = postRequest(host, postHeader, postData);
 //取得したjsonデータからAccessTokenを取得する
 const int BUFFER_SIZE = JSON_OBJECT_SIZE(4) + JSON_ARRAY_SIZE(1);
@@ -2039,11 +2030,9 @@ const char* tmp = root[&amp;quot;access_token&amp;quot;];
 token = tmp;
 return token;
 }
-&lt;/code&gt;&lt;/pre&gt;
-&lt;ul&gt;
-&lt;li&gt;POSTリクエストを行っているソース(&lt;code&gt;postRequest&lt;/code&gt;)です。正常に処理が終わればレスポンスを返します。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt; String postRequest(const char* server, String header, String data) {
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;POSTリクエストを行っているソース(&lt;code&gt;postRequest&lt;/code&gt;)です。正常に処理が終わればレスポンスを返します。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;String postRequest(const char* server, String header, String data) {
 String result = &amp;quot;&amp;quot;;
 // Use WiFiClientSecure class to create TLS connection
 WiFiClientSecure client;
@@ -2074,7 +2063,8 @@ result += line;
 Serial.println(&amp;quot;closing connection&amp;quot;);
 return result;
 }
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
 &lt;p&gt;だいたいこんな感じで無事アクセストークンを取得できました。&lt;/p&gt;
 &lt;h3 id=&#34;手順3-http-postリクエストでデータをアップロードする&#34;&gt;[手順3] http POSTリクエストでデータをアップロードする&lt;/h3&gt;
 &lt;p&gt;いよいよデータをアップロードしてみます。今回はテキストファイルとJpegファイルのアップロード方法を紹介します。
@@ -2124,9 +2114,8 @@ Content-Type: image/jpeg
 &lt;li&gt;上記1.のあとPOSTリクエスト全体のサイズが分かるのでヘッダー(&lt;code&gt;POST https://&lt;/code&gt;部分)を設定します。&lt;/li&gt;
 &lt;li&gt;上記1.と2.をPOSTします。&lt;/li&gt;
 &lt;li&gt;データの中身をPOSTします。&lt;/li&gt;
-&lt;li&gt;最後の&amp;rsquo;&amp;ndash;foo_bar_baz&amp;ndash;&amp;lsquo;をPOSTします。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code&gt; void postDrive_Text(String _fileName, String _textData, String _comment) {
+&lt;li&gt;&lt;p&gt;最後の&amp;rsquo;&amp;ndash;foo_bar_baz&amp;ndash;&amp;lsquo;をPOSTします。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;void postDrive_Text(String _fileName, String _textData, String _comment) {
 uint8_t DataSize = _textData.length();
 uint8_t postData[DataSize];
 for (int i = 0; i &amp;lt; DataSize; i++) {
@@ -2169,7 +2158,8 @@ Serial.println(line);
 result += line;
 }
 }
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ol&gt;
 &lt;h3 id=&#34;実際にテキストファイルをアップロードしている様子&#34;&gt;実際にテキストファイルをアップロードしている様子&lt;/h3&gt;
 &lt;p&gt;１. アップロード先のフォルダを作成しておきます。親フォルダIDは「&lt;code&gt;https://drive.google.com/drive/folders/***&lt;/code&gt;」の***の部分です。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/237144/c32ed96f-9dc4-59cb-0eef-c1091b088397.png&#34; alt=&#34;GoogleDrive_Text_0.PNG&#34; /&gt;&lt;/p&gt;

@@ -13,10 +13,10 @@ XAMPや<a href=https://www.npmjs.com/package/koko>koko</a>など他の方法で�
 cd milkcocoa-nefry-handson
 </code></pre><p>step1ブランチにチェックアウトします。</p><pre><code>git checkout step1
 </code></pre><p>チェックアウトしたらサーバーを起動させてみましょう。</p><pre><code>python -m SimpleHTTPServer
-</code></pre><p><a href=http://localhost:8000>http://localhost:8000</a> にブラウザでアクセスすると↑のGIFのような状態になると思います。</p><p>POWERボタンを押すとLEDが光ります。この記事ではこのサイトをWeb LEDと呼んでいきます。</p><h3 id=step2-ドット絵とweb-ledを繋げてみよう>STEP2：ドット絵とWeb LEDを繋げてみよう</h3><h4 id=milkcocoa-sdkを読み込む>Milkcocoa SDKを読み込む</h4><p>milkcocoa-nefry-handsonディレクトリの中には</p><ul><li>app.js</li><li>index.html</li><li>readme.md</li><li>style.css</li></ul><p>の4つのファイルがあります。まずはindex.htmlを編集します。</p><ul><li>index.html</li></ul><pre><code>&lt;script src=&quot;https://cdn.mlkcca.com/v0.6.0/milkcocoa.js&quot;&gt;&lt;/script&gt;
-</code></pre><p>この行をapp.jsの読み込み直前に記述しましょう。</p><h4 id=milkcocoaのコードを追記>Milkcocoaのコードを追記</h4><p>app.jsの末尾に追記しましょう。</p><ul><li>app.js</li></ul><pre><code>const milkcocoa = new MilkCocoa(`dogi9jz8c16.mlkcca.com`);
+</code></pre><p><a href=http://localhost:8000>http://localhost:8000</a> にブラウザでアクセスすると↑のGIFのような状態になると思います。</p><p>POWERボタンを押すとLEDが光ります。この記事ではこのサイトをWeb LEDと呼んでいきます。</p><h3 id=step2-ドット絵とweb-ledを繋げてみよう>STEP2：ドット絵とWeb LEDを繋げてみよう</h3><h4 id=milkcocoa-sdkを読み込む>Milkcocoa SDKを読み込む</h4><p>milkcocoa-nefry-handsonディレクトリの中には</p><ul><li>app.js</li><li>index.html</li><li>readme.md</li><li>style.css</li></ul><p>の4つのファイルがあります。まずはindex.htmlを編集します。</p><ul><li><p>index.html</p><pre><code>&lt;script src=&quot;https://cdn.mlkcca.com/v0.6.0/milkcocoa.js&quot;&gt;&lt;/script&gt;
+</code></pre></li></ul><p>この行をapp.jsの読み込み直前に記述しましょう。</p><h4 id=milkcocoaのコードを追記>Milkcocoaのコードを追記</h4><p>app.jsの末尾に追記しましょう。</p><ul><li><p>app.js</p><pre><code>const milkcocoa = new MilkCocoa(`dogi9jz8c16.mlkcca.com`);
 const dot_ds = milkcocoa.dataStore('dots');
-</code></pre><p><strong>dogi9jz8c16</strong> の部分がドット絵のApp ID、<strong>dots</strong> がドット絵のデータストア名になります。</p><p>また以下を追記します。</p><pre><code>let flag = 0;
+</code></pre></li></ul><p><strong>dogi9jz8c16</strong> の部分がドット絵のApp ID、<strong>dots</strong> がドット絵のデータストア名になります。</p><p>また以下を追記します。</p><pre><code>let flag = 0;
 dot_ds.on('push',(pushed) =&gt; {
 	//ドット絵に色が塗られると実行される部分
     addClass(pushed.value.color);

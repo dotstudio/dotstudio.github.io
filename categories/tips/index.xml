@@ -68,15 +68,13 @@ VuePressで作成したサイトをGitLab CIを使ってGitLab Pagesにデプロ
 &lt;p&gt;&lt;strong&gt;&lt;code&gt;&amp;lt;MY DOMAIN&amp;gt;&lt;/code&gt;、&lt;code&gt;&amp;lt;MY EMAIL&amp;gt;&lt;/code&gt;、&lt;code&gt;&amp;lt;MY API KEY&amp;gt;&lt;/code&gt;の箇所を適宜変更して実行して下さい。&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;それぞれ、自分が管理しているドメイン、登録しているメールアドレス、先ほど取得したAPIキーです。&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;実行例&lt;/li&gt;
-&lt;/ul&gt;
+&lt;li&gt;&lt;p&gt;実行例&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;curl -s -X GET &amp;quot;https://api.cloudflare.com/client/v4/zones?name=dotstud.io&amp;quot; \
 -H &amp;quot;X-Auth-Email: hogehoge@gmail.com&amp;quot; \
 -H &amp;quot;X-Auth-Key: xxxxxxxxxxxxxxxx&amp;quot; \
 -H &amp;quot;Content-Type: application/json&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;ul&gt;
-&lt;li&gt;ZONE ID&lt;/li&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;ZONE ID&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;コマンドを実行してエラーがなければ、JSONがかえってきます。ここのidの値がZONE IDになります。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;{&amp;quot;result&amp;quot;:[{&amp;quot;id&amp;quot;:&amp;quot;yyyyyyyyyyyyyyyyyyyy&amp;quot;,&amp;quot;name&amp;quot;:&amp;quot;dotstud.io&amp;quot;,&amp;quot;status&amp;quot;:&amp;quot;active&amp;quot;,&amp;quot;paused&amp;quot;:false,&amp;quot;type&amp;quot;:&amp;quot;full&amp;quot;, (......以下省略)
@@ -89,14 +87,14 @@ VuePressで作成したサイトをGitLab CIを使ってGitLab Pagesにデプロ
 &lt;p&gt;&lt;strong&gt;&lt;code&gt;&amp;lt;ZONE ID&amp;gt;&lt;/code&gt;、&lt;code&gt;&amp;lt;MY EMAIL&amp;gt;&lt;/code&gt;、&lt;code&gt;&amp;lt;MY API KEY&amp;gt;&lt;/code&gt;、&lt;code&gt;&amp;lt;TARGET&amp;gt;&lt;/code&gt;の箇所を適宜変更して実行して下さい。&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;&amp;lt;ZONE ID&amp;gt;&lt;/code&gt;はSTEP1で取得したZONE IDで、&lt;code&gt;&amp;lt;TARGET&amp;gt;&lt;/code&gt;はキャッシュクリアさせたいドメインやファイル名の指定です。最初にAPI利用なしでCloudflareのサイト上でキャッシュクリアをした時に指定したときと同様の指定ができます。&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;実行例&lt;/li&gt;
-&lt;/ul&gt;
+&lt;li&gt;&lt;p&gt;実行例&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;curl -X DELETE &amp;quot;https://api.cloudflare.com/client/v4/zones/yyyyyyyyyyyyyyyyyyyy/purge_cache&amp;quot; \
 -H &amp;quot;Content-Type:application/json&amp;quot; \
 -H &amp;quot;X-Auth-Key: xxxxxxxxxxxxxxxx&amp;quot; \
 -H &amp;quot;X-Auth-Email: hogehoge@gmail.com&amp;quot; \
 --data &#39;{&amp;quot;files&amp;quot;:[&amp;quot;https://hogehoge.dotstud.io/&amp;quot;]}&#39;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ul&gt;
 &lt;p&gt;成功すると以下のようなレスポンスがあり、キャッシュがクリアされます。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;{&amp;quot;result&amp;quot;:{&amp;quot;id&amp;quot;:&amp;quot;yyyyyyyyyyyyyyyyyyyy&amp;quot;},&amp;quot;success&amp;quot;:true,&amp;quot;errors&amp;quot;:[],&amp;quot;messages&amp;quot;:[]}%
 &lt;/code&gt;&lt;/pre&gt;
