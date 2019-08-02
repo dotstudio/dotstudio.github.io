@@ -1,4 +1,157 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blogs on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/blog/</link><description>Recent content in Blogs on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Tue, 14 May 2019 00:00:00 +1800</lastBuildDate><atom:link href="/blog/" rel="self" type="application/rss+xml"/><item><title>【シンセ魔改造】仕事サボってバンド演奏しながら会社のミーティングに無理やり参加してみた【作り方編】</title><link>https://dotstud.io/blog/howto-make-webrtc-piano/</link><pubDate>Tue, 14 May 2019 00:00:00 +1800</pubDate><guid>https://dotstud.io/blog/howto-make-webrtc-piano/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Blogs on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/blog/</link><description>Recent content in Blogs on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Sat, 03 Aug 2019 00:00:00 +0900</lastBuildDate><atom:link href="/blog/" rel="self" type="application/rss+xml"/><item><title>今年の夏休みは最新技術で工作しよう！　〜Webブラウザから操作できる「SkyWayロボット」の作り方〜</title><link>https://dotstud.io/blog/lets-make-webrtc-robot/</link><pubDate>Sat, 03 Aug 2019 00:00:00 +0900</pubDate><guid>https://dotstud.io/blog/lets-make-webrtc-robot/</guid><description>
+&lt;p&gt;こんにちは、ものづくり担当のうこ(&lt;a href=&#34;https://twitter.com/harmoniko&#34;&gt;@harmoniko&lt;/a&gt;)です。&lt;br /&gt;
+連日猛暑が続きますが、暑さに負けず、ものづくりやってますかー？&lt;br /&gt;
+今回は、WebRTCを用いたサービスの1つである&lt;a href=&#34;https://webrtc.ecl.ntt.com/&#34;&gt;SkyWay&lt;/a&gt;を利用した、遠隔操作可能でカメラの映像も見れちゃうロボットの作り方を解説します。&lt;br /&gt;
+少し難しいところもありますが、ぜひチャレンジしてみてください！&lt;/p&gt;
+&lt;h2 id=&#34;必要な部品&#34;&gt;必要な部品&lt;/h2&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/251/1.png&#34; alt=&#34;1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;こちらのパーツ類をそれぞれ購入して揃えましょう。1〜4番はタミヤの製品です。5〜7番はホームセンター等で入手できます。右下の小さい部品は以下を参照してください。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/251/2.png&#34; alt=&#34;2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;8番の銅線の長さは、9番のラズパイ用カメラのフラットケーブルと同じくらいの長さでよいです。10番はWaveShareという会社の製品で、1500〜2000円前後で通販などでも入手できます。12番のセメント抵抗は、秋葉原のパーツ屋さんなどでないと入手しにくいかもしれません。13番のマイクロSDカードは4GB以上のものであれば何でもかまいません。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/251/3.png&#34; alt=&#34;3&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;製作に必要な工具類がこちらです。はんだごてはあってもなくても作れますが、100円ショップでも手に入るのでできるだけあったほうがいいでしょう。&lt;/p&gt;
+&lt;h2 id=&#34;組み立て&#34;&gt;組み立て&lt;/h2&gt;
+&lt;h3 id=&#34;車体本体&#34;&gt;車体本体&lt;/h3&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/251/4.png&#34; alt=&#34;4&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;部品のうち、1〜3番は中に説明書が入っているため、まずそれを読みながらそれぞれ組み立てます。1番のボールキャスターは「高さ35mm」で作成、3番のツインモーターギヤボックスは「低速タイプ」で作成してください。ギヤボックスは、小さな輪っかのようなものが部品として余りますので、2つは捨てずに置いておいてください。後ほど「スペーサー」として利用します。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/251/5.png&#34; alt=&#34;5&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;モーターを一度ギヤボックスから抜き、8番の銅線をそれぞれモーター端子に接続します。はんだごてがない場合は、多めに皮膜をむいてよく巻きつけるようにしましょう。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/251/6.png&#34; alt=&#34;6&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;モーターをギヤボックスに戻し、タイヤをギヤボックスのシャフトに差し込みます。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/251/7.png&#34; alt=&#34;7&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;4番のユニバーサルプレートセットを取り出し、一番大きな部材の短辺に近い一部分（上図参考、端から穴一つぶん空けて内側）をニッパで切り取って複数の穴を連結させます。これをスリットと呼びます。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/251/8.png&#34; alt=&#34;8&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;先ほど切り取ったスリットの上あたりに、スリットを隠さないようにして、ユニバーサルプレートセット内にある「軸受け」を付属のネジとナットを使って上図のように固定してください。本来は、これはシャフトを通したりするのに使うパーツですが、今回はカメラを設置するためのパーツとして転用しています。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/251/9.png&#34; alt=&#34;9&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;ユニバーサルプレートの軸受けをつけていない面に、タイヤをつけたギヤボックスとボールキャスターをネジとナットで固定します。ネジの位置は上図をよく見て同じ位置に留めてください。ボールキャスターはネジ穴が4つありますが、留めるのは2点だけで問題ありません。&lt;/p&gt;
+&lt;h3 id=&#34;電源とraspberry-piの取り付け&#34;&gt;電源とRaspberry Piの取り付け&lt;/h3&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/251/10.png&#34; alt=&#34;10&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;5〜7番をまとめて1つにして、バッテリーボックスを作ります。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/251/11.png&#34; alt=&#34;11&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;12番のセメント抵抗2本の脚部分を短めに切り、10番のMotor Driver HATの「MA1」端子と「MB1」端子にそれぞれ片方の脚ずつ挿入します（図はMA1のみ挿入しているところです）。マイナスドライバーを使って端子を締め込み、外れないよう固定します。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/251/12.png&#34; alt=&#34;12&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;次に11番のRaspberry Pi 3 B+（以下ラズパイ）を手に持ち、マイクロSDカードスロットがある短辺をこちらに向けます。その状態で、両端にあるネジ穴にギヤボックスの余り部品であるネジと、あらかじめ確保しておいたスペーサーを図のように差し込みます。固い場合があるので、その際はドライバーで回しながら差し込んでください。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/251/13.png&#34; alt=&#34;13&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;車体本体に、ネジ2つがついたラズパイを設置します。図を参考にして、ユニバーサルプレート先端部分が穴2つぶんのスペースが空くようにラズパイを置き、ネジをプレートの穴にはめ込んでください。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/251/14.png&#34; alt=&#34;14&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;9番のラズパイ用カメラのケーブルを、ユニバーサルプレートの下からスリットに入れて上に通し、そのままラズパイ本体のカメラコネクタに接続します。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/251/15.png&#34; alt=&#34;15&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;セメント抵抗をつけたMotor Driver HATを、ラズパイの上に設置します。GPIOピンがずれないようにうまくドッキングしてください。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/251/16.png&#34; alt=&#34;16&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;左右のモーターからそれぞれ銅線を1本ずつ、ユニバーサルプレートの穴を通してオモテ側に2本引っ張って持ってきます。その2本をそれぞれ、Motor Driver HATの「MA2」端子と「MB2」端子に挿入し、マイナスドライバーでネジを締めて固定してください。なお、1つのモーターからは2本の銅線が出ていますが、ここではどちらを使ってもかまいません。左右各々から1本ずつ接続してください。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/251/17.png&#34; alt=&#34;17&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;左右の各モーターの残りの銅線2本をユニバーサルプレート下から上に通し、今度はセメント抵抗の脚部分に接続します。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/251/18.png&#34; alt=&#34;18&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;ここも、基本的にははんだづけしたほうがよいですが、しない場合は銅線をよく巻きつけてください。金属用ボンドなどをあとで上から塗り保護するのもよいです。&lt;/p&gt;
+&lt;h3 id=&#34;マイクロsdカードのセットアップ&#34;&gt;マイクロSDカードのセットアップ&lt;/h3&gt;
+&lt;h4 id=&#34;osインストール&#34;&gt;OSインストール&lt;/h4&gt;
+&lt;p&gt;まず、以下のURLからセットアップ済みのRaspberry Pi用OSイメージをダウンロードしてください。&lt;br /&gt;
+およそ3GBありますので、ディスク容量と通信量にこ注意ください。&lt;br /&gt;
+&lt;a href=&#34;https://drive.google.com/file/d/1O6UqWZHVknEJ0g2E5wjEJZhn59DFqfsU/view?usp=sharing&#34;&gt;SkyWayRobot.iso&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;こちらのイメージは、ユーザー名が「pi」、パスワードが「raspverry」となっています。&lt;br /&gt;
+SSH接続される際の参考にしてください。&lt;/p&gt;
+&lt;p&gt;ダウンロードができたら、以下のサイトを参考にしてマイクロSDカードにダウンロードしたOSイメージをインストールしてください。&lt;br /&gt;
+Windowsの場合：&lt;a href=&#34;https://www.1ft-seabass.jp/memo/2018/07/23/raspbian-install-201807-memo/&#34;&gt;最近のRaspberry Piイメージ（Raspbian）をインストールするメモ - 1ft-seabass.jp.MEMO&lt;/a&gt; の「SDカードのフォーマット」から「初期設定」直前まで&lt;br /&gt;
+Macの場合：&lt;a href=&#34;https://qiita.com/shippokun/items/9070fc58f69d8c063e44&#34;&gt;MacでRaspberryPi入門 - Qiita&lt;/a&gt; の「2.microSDカードに書き込み」の部分&lt;/p&gt;
+&lt;p&gt;OSをインストールしているあいだ、次のSkyWayセットアップを行なっておいてください。&lt;/p&gt;
+&lt;h4 id=&#34;skywayのセットアップ&#34;&gt;SkyWayのセットアップ&lt;/h4&gt;
+&lt;p&gt;次に、SkyWayにユーザー登録をして、APIキーを発行します。&lt;br /&gt;
+&lt;a href=&#34;https://webrtc.ecl.ntt.com/signup.html&#34;&gt;新規登録 - SkyWay - Enterprise Cloud WebRTC Platform&lt;/a&gt;&lt;br /&gt;
+上記のページの「Community Edition」にある「無料で新規登録」のボタンから、アカウントを新規に作成しましょう。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/251/19.png&#34; alt=&#34;19&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;アカウントを作成したらログインして、上段の “Create new application” をクリックします。するとアプリケーション作成ページに飛びますので、以下のように入力します。　　&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Application description: My WebRTC Robot（一例。任意の名前でよいです）
+Available domains: localhost, 127.0.0.1, ukkz.github.io
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;“ukkz.github.io” は、後ほどWeb上のロボットコントローラーからアクセスする際に必要なので、最初は必ず入れておいてください。&lt;br /&gt;
+入力完了したら緑色のCreateボタンをクリックして作成します。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/251/20.png&#34; alt=&#34;20&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;作成後のページはこのように表示されているかと思います。&lt;br /&gt;
+API Keyの欄に表示されている文字列をコピーしてどこかに控えておきましょう。&lt;/p&gt;
+&lt;h4 id=&#34;環境設定&#34;&gt;環境設定&lt;/h4&gt;
+&lt;p&gt;OSのインストールが完了すると、「boot」という外付けディスクがPCに認識されていると思います。そのディスクを開くと色々なファイルが入っていますが、その中から「wifi_passwd_list.conf」と、「robot.json」があることを確認してください。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/251/21.png&#34; alt=&#34;21&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;まず最初に「wifi_passwd_list.conf」を開き、自宅などのWiFiのSSIDとパスワードを入力します。こうすることでWiFiに自動で接続することができます。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/251/22.png&#34; alt=&#34;22&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;次に「robot.json」を開きます。この中の&lt;code&gt;&amp;quot;YOUR_SKYWAY_APIKEY&amp;quot;&lt;/code&gt;となっている部分に、先ほど取得したご自身のAPIキーをペーストしてください。また、&lt;code&gt;&amp;quot;robot-NEW&amp;quot;&lt;/code&gt;となっているところはこのロボットを識別するための「ピアID」となります。ここは好きな名前をいれましょう。&lt;/p&gt;
+&lt;p&gt;今回は必要ありませんが、このラズパイと同じLAN内でもしSSH接続をする場合は、&lt;br /&gt;
+&lt;code&gt;ssh pi@ピアID.local&lt;/code&gt;&lt;br /&gt;
+とするとそのままアクセスすることができます。&lt;br /&gt;
+また上述したとおり、パスワードは「raspverry」に設定しています。&lt;/p&gt;
+&lt;p&gt;この「robot.json」の他の項目として&lt;code&gt;&amp;quot;reverse&amp;quot;&lt;/code&gt;と書かれた部分があります。ここを&lt;code&gt;false&lt;/code&gt;から&lt;code&gt;true&lt;/code&gt;にすると、モーターの回転方向が逆転します。銅線の接続方法によっては最初から逆回転をするようになっている場合があるので、完成後にコントローラからロボットを操作した際に操作と逆方向に進んでしまったりする場合は、こちらのパラメータを変更してみてください。&lt;/p&gt;
+&lt;p&gt;以上まで終了したら、マイクロSDカードをPCから取り外します。&lt;/p&gt;
+&lt;h3 id=&#34;仕上げ&#34;&gt;仕上げ&lt;/h3&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/251/23.png&#34; alt=&#34;23&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;ペンチやピンセットなどを使って、マイクロSDカードをラズパイのスロットに挿入します。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/251/24.png&#34; alt=&#34;24&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;カメラがだらんと垂れた状態になっているので、厚めの両面テープを使い、ユニバーサルプレート先端の「軸受けパーツ」に上図のように固定します。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/251/25.png&#34; alt=&#34;25&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;電池ボックスをロボット後部の空いた部分に載せ、輪ゴムや髪留め用のゴムなどで落ちないよう簡単に固定します。最後に電池スナップから伸びる赤と黒の線を、それぞれ「VIN」端子と「GND」端子に接続すれば完成です！&lt;/p&gt;
+&lt;h2 id=&#34;試してみよう&#34;&gt;試してみよう&lt;/h2&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/251/26.png&#34; alt=&#34;26&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;電源スイッチを入れて、30秒ほど待ってみましょう。モーターが動いてロボットが軽く前後に移動するような動作を行なうのが確認できたら、SkyWayへの接続が完了しています。何も起こらない場合は、環境設定のところで入力したWiFiの情報が間違っていないか、APIキーがちゃんと入力されているか確認しましょう。&lt;/p&gt;
+&lt;p&gt;SkyWayへの接続ができているようであれば、以下のURLをまずコピーして、お使いのブラウザのアドレスバーにペーストしてください。&lt;br /&gt;
+&lt;code&gt;https://ukkz.github.io/skyway-robot/?apikey=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;ペーストできたら、ページを表示する前に、このアドレスの「?apikey=」に続く文字列をご自身で取得したAPIキーに書き換えてからこのURLにアクセスしてください。すると次のような画面が出ます。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/251/27.png&#34; alt=&#34;27&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;この画面では「No robots connected」と表示されていますが、うまく接続できている場合は環境設定のところで書いたロボットの「ピアID」が表示されています。それをクリックすると映像を受信し、パソコンなら十字キー、スマホであれば画面タッチでロボットを操作することができます。&lt;/p&gt;
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;いかがでしたでしょうか？&lt;br /&gt;
+今回は、最初からプログラムを書くとやはり難易度が高くなってしまうので、ロボットをOSイメージとして配布してみました。もし余力のある方は、ホームフォルダにある&lt;code&gt;app.js&lt;/code&gt;がロボットの本体ですので、ぜひご自身で色々とさわってみてくださいね。&lt;/p&gt;</description></item><item><title>【シンセ魔改造】仕事サボってバンド演奏しながら会社のミーティングに無理やり参加してみた【作り方編】</title><link>https://dotstud.io/blog/howto-make-webrtc-piano/</link><pubDate>Tue, 14 May 2019 00:00:00 +1800</pubDate><guid>https://dotstud.io/blog/howto-make-webrtc-piano/</guid><description>
 &lt;p&gt;こんにちは、ものづくり担当うこです。&lt;br /&gt;
 &lt;a href=&#34;https://dotstud.io/blog/meeting-via-webrtc-piano/&#34;&gt;前回&lt;/a&gt;は、スタジオからなんとかオンラインミーティングに参加したのですが、当然ながらバレちゃいましたね……&lt;br /&gt;
 しかし、新社会人も多いこの季節、同じような境遇に陥る若人も少なくないでしょう！！&lt;br /&gt;
@@ -3216,238 +3369,4 @@ padding: 5px;
 background: #eaeaea;
 opacity: 1;
 }
-&lt;/style&gt;</description></item><item><title>Moddable SDKを使ってJavaScriptでIoT開発してみた</title><link>https://dotstud.io/blog/developed-iot-using-moddable/</link><pubDate>Thu, 24 Jan 2019 00:51:35 +0900</pubDate><guid>https://dotstud.io/blog/developed-iot-using-moddable/</guid><description>
-&lt;p&gt;どうも。&lt;a href=&#34;https://dotstud.io/members/horihiro&#34;&gt;ほりひろ&lt;/a&gt; です。
-dotstudioブログでは、初めましてですね。&lt;/p&gt;
-&lt;p&gt;JavaScript や IoT が好きな、でも実は半田付けも抵抗値の計算もろくにできないレベルの週末プログラマーです。
-普段は某クラウドベンダーのサポートエンジニアをしています。
-よろしくお願いします。&lt;/p&gt;
-&lt;p&gt;Twitterアカウントは&lt;a href=&#34;https://twitter.com/hori__hiro&#34;&gt;こちら&lt;/a&gt;です。&lt;/p&gt;
-&lt;p&gt;年末に自分の中で話題になっていた、&lt;u&gt;&lt;strong&gt;Moddable SDK&lt;/strong&gt;&lt;/u&gt;というものをようやく触ってみました。&lt;/p&gt;
-&lt;h2 id=&#34;moddable-sdk-xs&#34;&gt;Moddable SDK &amp;amp; XS&lt;/h2&gt;
-&lt;h3 id=&#34;moddable-sdk&#34;&gt;Moddable SDK&lt;/h3&gt;
-&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/237/1.png&#34; alt=&#34;1&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
-&lt;p&gt;Moddable SDK は、&lt;strong&gt;JavaScript コードを ESP32 や ESP8266 といったマイコン上で動作させるためのビルド環境やライブラリー群&lt;/strong&gt;のこと、、、だと思います。&lt;/p&gt;
-&lt;p&gt;これは Moddable 社から提供されていますが、&lt;u&gt;下記 GitHub リポジトリで公開されているので、無料で手に入れられます。&lt;/u&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/Moddable-OpenSource/moddable&#34;&gt;https://github.com/Moddable-OpenSource/moddable&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&#34;xs&#34;&gt;XS&lt;/h3&gt;
-&lt;p&gt;XS は、&lt;strong&gt;Moddable SDK で生成される JavaScript ランタイム環境&lt;/strong&gt; （ドキュメントには &lt;strong&gt;virtual machine&lt;/strong&gt; と記載）で、なんと &lt;a href=&#34;https://github.com/Moddable-OpenSource/moddable#modern-software-development-for-microcontrollers&#34;&gt;ES2018 に 99% 以上準拠&lt;/a&gt;しているらしいです。すごいですね！&lt;/p&gt;
-&lt;p&gt;※一部準拠していない部分は、注意事項として&lt;strong&gt;&lt;a href=&#34;https://github.com/Moddable-OpenSource/moddable/blob/public/documentation/xs/XS%20Conformance.md#caveat&#34;&gt;こちら&lt;/a&gt;&lt;/strong&gt;に記載されています。&lt;/p&gt;
-&lt;p&gt;これは&lt;a href=&#34;http://www.moddable.com/XS7-TC-39.php&#34;&gt;公式ドキュメント&lt;/a&gt;にある画像です。「XS は一番小さい」って意味でしょうね。シャレてます。&lt;/p&gt;
-&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/237/2.png&#34; alt=&#34;2&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
-&lt;p&gt;ざっくりとした理解ですが、Moddable SDK のビルドツールで、自分が書いた JavaScript や C のソースコードと組み込みのクラスが含まれた XS を、一つのバイナリーにビルドし、マイコンに書き込んでいるようです。&lt;/p&gt;
-&lt;p&gt;これまで JavaScript でのマイコン制御というと、以前から ホスト PC とマイコンをシリアル接続し、ホストPC上の Node.js と Johnny-Five を使ってマイコンを制御する方法があり、最近では obniz の制御をネットワークを介して JavaScript などから行う方法がありますが、いずれもマイコンの外に JavaScript の実行環境を用意する必要があります。&lt;/p&gt;
-&lt;p&gt;一方で、Moddable SDK では、&lt;u&gt;JavaScript 実行環境である XS がマイコン上で動作することができます。&lt;/u&gt;&lt;/p&gt;
-&lt;p&gt;この点は、&lt;strong&gt;これまでの実行環境とは大きく違うところですね！&lt;/strong&gt;&lt;/p&gt;
-&lt;h2 id=&#34;開発環境の構築&#34;&gt;開発環境の構築&lt;/h2&gt;
-&lt;p&gt;基本的に、公式のリポジトリに記載された &lt;a href=&#34;https://github.com/Moddable-OpenSource/moddable/blob/public/documentation/Moddable%20SDK%20-%20Getting%20Started.md&#34;&gt;構築手順&lt;/a&gt;通りに実施することで、ビルド ツールなどの環境が構築できます。&lt;/p&gt;
-&lt;p&gt;構築手順は macOS/Linux/Windows の各プラットフォーム向けにまとまっており、それぞれが、下記の 3 つのパートに分かれて記載されています。&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;code&gt;mcconfig&lt;/code&gt; や &lt;code&gt;xsbug&lt;/code&gt; などの開発ツールのビルド&lt;/li&gt;
-&lt;li&gt;ESP8266 向けの開発環境の構築&lt;/li&gt;
-&lt;li&gt;ESP32 向けの開発環境の構築&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;いずれのプラットフォームでも 1. は必須ですが、2. と 3. は手持ちのボードに合わせて、どちらかを実施するだけでよいです。&lt;/p&gt;
-&lt;p&gt;私は Windows 用の環境構築をしましたが、Windows 向けの開発環境構築では、&lt;u&gt;&lt;strong&gt;Windows ネイティブのコマンドを使用することをお勧めします。&lt;/strong&gt;&lt;/u&gt;
-WSL から &lt;code&gt;git clone&lt;/code&gt; などをすると、&lt;a href=&#34;https://github.com/Moddable-OpenSource/moddable/issues/110&#34;&gt;&lt;strong&gt;開発ツールがビルドできない&lt;/strong&gt;&lt;/a&gt;ようで、これに丸一日ハマりました。&lt;/p&gt;
-&lt;p&gt;あと、ビルドツールの実行は、必ず&lt;code&gt;開発者コマンドプロンプト for VS2017&lt;/code&gt; を起動し、そのコマンドプロンプトの中でしましょう。&lt;/p&gt;
-&lt;h2 id=&#34;サンプル-コード&#34;&gt;サンプル コード&lt;/h2&gt;
-&lt;p&gt;マイコンのサンプルと言えば Lチカですが、手元に LED がなかったので、とりあえず ESP32 上での非同期実行を試してみます。&lt;/p&gt;
-&lt;h3 id=&#34;ファイルの用意&#34;&gt;ファイルの用意&lt;/h3&gt;
-&lt;p&gt;プロジェクト ディレクトリに下記のような構造で、ファイルを作ります。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;.
-├── esp
-│ ├── console.c
-│ └── console.js
-├── main.js
-└── manifest.json
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&#34;main-js&#34;&gt;main.js&lt;/h3&gt;
-&lt;p&gt;1 秒おきに &lt;code&gt;1&lt;/code&gt; から &lt;code&gt;10&lt;/code&gt; の数字を、1.5 秒おきに &lt;code&gt;a&lt;/code&gt; から &lt;code&gt;z&lt;/code&gt; の文字を、シリアル コンソールに出力するプログラムです。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-js:main.js&#34;&gt;import Timer from &#39;timer&#39;;
-import console from &amp;quot;console&amp;quot;;
-const a = &#39;a&#39;;
-const z = &#39;z&#39;;
-let c = a;
-let i = 0;
-Timer.repeat(() =&amp;gt; {
-console.log(`${String(Date.now()).padStart(15)}:${i}`);
-i = (i &amp;gt;= 10) ? 0 : i + 1;
-}, 1000);
-Timer.repeat(() =&amp;gt; {
-console.log(`${String(Date.now()).padStart(15)}:${c}`);
-c = (c &amp;gt;= z) ? a : String.fromCharCode(c.charCodeAt(0) + 1);
-}, 1500);
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Web ブラウザーや Node.js なら、定期的な処理を書くなら &lt;code&gt;setInterval&lt;/code&gt; を使うところだと思いますが、Moddable SDK / XS では、グローバルに &lt;code&gt;setInterval&lt;/code&gt; が定義されていません。&lt;/p&gt;
-&lt;p&gt;代わりに、&lt;code&gt;Timer&lt;/code&gt; オブジェクトの &lt;code&gt;repeat&lt;/code&gt; メソッドを使って、同じ処理が似たような感じで書くことができます。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-js:browser&amp;amp;nodejs&#34;&gt;setInterval(() =&amp;gt; {
-:
-}, 1000);
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code class=&#34;language-js:XS&#34;&gt;import Timer from &#39;timer&#39;;
-Timer.repeat(() =&amp;gt; {
-:
-}, 1000);
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&#34;console-js-console-c&#34;&gt;console.js /console.c&lt;/h3&gt;
-&lt;p&gt;実は XS では &lt;code&gt;console&lt;/code&gt; オブジェクトもないので、とりあえず、下記の JS ファイルと C ファイルで、シリアルコンソールに 1 行出力できるメソッドを定義しておきます。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-c:esp/console.js&#34;&gt;class Console @ &amp;quot;xs_console_destructor&amp;quot; {
-constructor() {
-}
-static log() @ &amp;quot;xs_console_log&amp;quot;
-}
-Object.freeze(Console.prototype);
-export default Console;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;JS ファイルはタダのラッパーで、処理本体は C ファイルで定義しています。
-JS ファイル内で &lt;code&gt;@ ～&lt;/code&gt; と書くと、C ファイルで宣言した関数とバインディングされます。
-これは、XS 独自の実装のようです。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-c:esp/console.c&#34;&gt;#include &amp;quot;xsAll.h&amp;quot;
-#include &amp;quot;xs.h&amp;quot;
-void xs_console_destructor(void)
-{
-}
-void xs_console_log(xsMachine *the)
-{
-int argc = xsToInteger(xsArgc), i;
-for (i = 0; i &amp;lt; argc; i++) {
-char *str = xsToString(xsArg(i));
-do {
-uint8_t c = c_read8(str);
-if (!c) {
-ESP_putc(&#39;\n&#39;);
-break;
-}
-ESP_putc(c);
-str++;
-} while (1);
-}
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&#34;manifest-json&#34;&gt;manifest.json&lt;/h3&gt;
-&lt;p&gt;最後は manifest ファイルです。
-正直言うと、ここはあまり把握できていません :sweat:&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;include&lt;/code&gt; で Moddable SDK で用意されている manifest を、ベースの manifest として読み込み、全プラットフォーム共通のモジュールとして &lt;code&gt;main&lt;/code&gt;(.js) を、&lt;code&gt;esp32&lt;/code&gt; 向けには、&lt;code&gt;./esp/console&lt;/code&gt;(.js) をロードする設定を書いています。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-json:manifest.json&#34;&gt;{
-&amp;quot;include&amp;quot;: &amp;quot;$(MODDABLE)/examples/manifest_base.json&amp;quot;,
-&amp;quot;modules&amp;quot;: {
-&amp;quot;*&amp;quot;: [
-&amp;quot;./main&amp;quot;,
-]
-},
-&amp;quot;platforms&amp;quot;: {
-&amp;quot;esp32&amp;quot;: {
-&amp;quot;modules&amp;quot;: {
-&amp;quot;*&amp;quot;: [
-&amp;quot;./esp/console&amp;quot;,
-],
-}
-}
-},
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;上の &lt;code&gt;manifest.json&lt;/code&gt; では &lt;code&gt;Timer&lt;/code&gt; クラスをロードしていませんが、&lt;code&gt;main.js&lt;/code&gt; では問題なく import することができます。
-これは、Moddable SDK に含まれるベースの manifest でロード設定がされているためです。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-json:$(MODDABLE)/examples/manifest_base.json(抜粋)&#34;&gt;{
-:
-(略)
-:
-&amp;quot;platforms&amp;quot;: {
-:
-(略)
-:
-&amp;quot;esp32&amp;quot;: {
-&amp;quot;include&amp;quot;: &amp;quot;$(BUILD)/devices/esp32/manifest.json&amp;quot;
-},
-}
-:
-(略)
-:
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code class=&#34;language-json:$(BUILD)/devices/esp32/manifest.json(抜粋)&#34;&gt;{
-:
-(略)
-:
-&amp;quot;modules&amp;quot;: {
-&amp;quot;*&amp;quot;: [
-&amp;quot;$(MODULES)/base/time/*&amp;quot;,
-&amp;quot;$(MODULES)/base/time/esp/*&amp;quot;,
-&amp;quot;$(MODULES)/base/timer/*&amp;quot;,
-&amp;quot;$(MODULES)/base/timer/mc/*&amp;quot;,
-]
-},
-&amp;quot;preload&amp;quot;: [
-&amp;quot;time&amp;quot;,
-&amp;quot;timer&amp;quot;,
-],
-:
-(略)
-:
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;ちなみに manifest についてツイートしたところ、公式アカウントからも返事がありました。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;ドキュメントは定期的にメンテナンスされそうです。&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;en&#34; dir=&#34;ltr&#34;&gt;The manifest documentation (&lt;a href=&#34;https://t.co/HTYtMXR33N&#34;&gt;https://t.co/HTYtMXR33N&lt;/a&gt;) is a good place to start, but we&amp;#39;ll put a document with more details together soon. If you have any specific questions, we&amp;#39;d be happy to answer those as well.&lt;/p&gt; Moddable (@moddabletech) &lt;a href=&#34;https://twitter.com/moddabletech/status/1086084032008413184?ref_src=twsrc%5Etfw&#34;&gt;2019年1月18日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
-&lt;h2 id=&#34;実行してみる&#34;&gt;実行してみる&lt;/h2&gt;
-&lt;p&gt;&lt;code&gt;manifest.json&lt;/code&gt; があるディレクトリで、&lt;code&gt;mcconfig&lt;/code&gt; コマンドを実行します。
-大抵は、XS のビルドから始まるので、書き込みが完了するまでだいぶ時間がかかると思います。&lt;/p&gt;
-&lt;p&gt;書き込みが完了すると、シリアルモニターに自動的に接続し、&lt;code&gt;console.log&lt;/code&gt; の出力内容が表示されます。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;&amp;gt; mcconfig -m -p esp32
-rm: cannot remove &#39;/root/Projects/moddable/build/tmp/esp32/release/xsProj/sdkconfig&#39;: No such file or directory
-# Running GENCONFIG...
-fatal: Not a git repository (or any of the parent directories): .git
-including /root/esp32/esp-idf/components/bootloader/Makefile.projbuild...
-:
-(略)
-:
-MONITOR
---- idf_monitor on /dev/ttyUSB0 115200 ---
---- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H ---
-ets Jun 8 2016 00:22:57
-rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
-configsip: 0, SPIWP:0xee
-clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
-mode:DIO, clock div:2
-load:0x3fff0018,len:4
-load:0x3fff001c,len:636
-load:0x40078000,len:6192
-load:0x40080000,len:5152
-0x40080000: _iram_start at /root/esp32/esp-idf/components/freertos/xtensa_vectors.S:1685
-entry 0x40080264
-0x40080264: _Level5Vector at ??:?
-1010:1
-1510:a
-2010:2
-3010:3
-3011:b
-4010:4
-4510:c
-5010:5
-6010:6
-:
-(略)
-:
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;指定した時間間隔で、コールバック関数が実行されています！
-ES2017 で入った &lt;code&gt;String.prototype.padStart&lt;/code&gt; も正常に動作しているようです。&lt;/p&gt;
-&lt;p&gt;なお、マイコンには時計がないので、&lt;code&gt;Date.now()&lt;/code&gt; は起動時からの時間を返します。&lt;/p&gt;
-&lt;h3 id=&#34;デバッグ実行&#34;&gt;デバッグ実行&lt;/h3&gt;
-&lt;p&gt;先ほど実行したコマンド &lt;code&gt;mcconfig -m -p esp32&lt;/code&gt; にデバッグ オプション &lt;code&gt;-d&lt;/code&gt; を追加すると、デバッグ ビルドを実行し、デバッグ ツールである &lt;code&gt;xsbug&lt;/code&gt; が自動で起動します。&lt;/p&gt;
-&lt;p&gt;この &lt;code&gt;xsbug&lt;/code&gt; は JavaScript コードにブレークポイントの設定や、ステップ実行、変数の内容などを表示することが
-でき、結構本格的なデバッグツールです。&lt;/p&gt;
-&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
-&lt;img src=&#34;https://dotstud.io/img/blog/237/3.png&#34; alt=&#34;3&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
-&lt;p&gt;今は独自の GUI ツールとして提供されているようですが、そのうち&lt;strong&gt;VSCode から拡張機能として利用できるようになると嬉しいですね。&lt;/strong&gt;&lt;/p&gt;
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-&lt;p&gt;いかがだったでしょうか。
-Moddable SDK を使うことで、JavaScript で書いたコードを、ESP8266/32 で動作させることができました。&lt;/p&gt;
-&lt;p&gt;&lt;u&gt;Web フロントエンドや Node.js など、JavaScript を書くエンジニア人口は多いでしょうから、そういった方々も気軽にマイコン開発ができるようになりますね。&lt;/u&gt;&lt;/p&gt;
-&lt;p&gt;あとは、manifest ファイルに関するドキュメントの整備がすすんだり、もう少し簡単に環境構築ができれば、格段に開発しやすくなるのではないでしょうか。&lt;/p&gt;</description></item></channel></rss>
+&lt;/style&gt;</description></item></channel></rss>
