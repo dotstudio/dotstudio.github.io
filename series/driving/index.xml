@@ -1,70 +1,405 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>driving on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/driving/</link><description>Recent content in driving on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Tue, 28 Aug 2018 14:55:44 +0900</lastBuildDate><atom:link href="/series/driving/" rel="self" type="application/rss+xml"/><item><title>【ソレノイド詳細解説】IoTの力でスマホを振るとソレノイドがシュコシュコ動く仕組みを作ってみる</title><link>https://dotstud.io/blog/control-solenoid-nefrybt-nodered/</link><pubDate>Tue, 28 Aug 2018 14:55:44 +0900</pubDate><guid>https://dotstud.io/blog/control-solenoid-nefrybt-nodered/</guid><description>&lt;p>こんにちは、&lt;a href="https://dotstud.io/members/takudooon/">たくろーどん&lt;/a>です。&lt;/p>
-&lt;p>&lt;a href="https://dotstud.io/series/driving/">これまでの記事&lt;/a>では、電子工作に使えそうな駆動部品を紹介してきました。サーボモータ、ステッピングモータときたら……次に使ってみたいのは&lt;strong>ソレノイド&lt;/strong>ですよね！&lt;/p>
-&lt;p>ということで、ソレノイドをNefry BTで使えるようにしていきたいと思います。&lt;/p>
-&lt;p>そして、最終的には&lt;strong>スマートフォンをシェイクするとソレノイドをシュコシュコ動かせる&lt;/strong>ようにしてみたいと思います。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>&lt;!-- raw HTML omitted -->&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;h2 id="heading">ソレノイドのしくみ&lt;/h2>
-&lt;p>ソレノイドとは&lt;!-- raw HTML omitted -->&lt;strong>銅線（コイル）に電流を流すことにより磁界を発生させ、磁性体の可動鉄芯を吸い寄せる（吸引）電気部品&lt;/strong>&lt;!-- raw HTML omitted -->のことです。電流を流している間は常に吸い寄せられていますが、電流を切ると吸引力はなくなります。&lt;/p>
-&lt;p>下記に、その仕組みを簡単に示しました。&lt;/p>
-&lt;p>&lt;img src="https://qiita-image-store.s3.amazonaws.com/0/212276/2854b315-e58b-63f0-cd49-87d761625053.png" alt="仕組み.png">&lt;/p>
-&lt;p>また、この動作を応用して&lt;/p>
-&lt;ul>
-&lt;li>プル（吸引）ソレノイド&lt;/li>
-&lt;li>プッシュ（押し）ソレノイド：プッシュバーを装着した「吸引=押し」動作&lt;/li>
-&lt;li>自己保持ソレノイド：永久磁石を組込むことによりそれぞれの動作を保持&lt;/li>
-&lt;/ul>
-&lt;p>といった種類があります。&lt;/p>
-&lt;h2 id="heading-1">ソレノイドを使ってみる&lt;/h2>
-&lt;p>まずは簡単な例として、Nefry BTについているスイッチを押すとソレノイドが動くようにしてみます。&lt;/p>
-&lt;h3 id="heading-2">用意するもの&lt;/h3>
-&lt;ul>
-&lt;li>&lt;a href="http://akizukidenshi.com/catalog/g/gI-02414/">NchパワーMOSFET 2SK2232&lt;/a>：スイッチングのために使用(FETはトランジスタと違って電圧でトリガーとなる)&lt;/li>
-&lt;li>&lt;a href="http://akizukidenshi.com/catalog/g/gP-10761/">ソレノイド 5V ZHO-0420S-05A4.5A プッシュ型&lt;/a>&lt;/li>
-&lt;li>整流ダイオード：逆起電力(ソレノイドへの電力供給停止後、ソレノイドの棒が元に戻るときに発生する起電力)を防止するため(マイコンの破壊を防止する)&lt;/li>
-&lt;/ul>
-&lt;h3 id="heading-3">回路&lt;/h3>
-&lt;p>※&lt;strong>ソレノイドに極性(+、-)はありません&lt;/strong>！なので、安心して配線しましょう！&lt;/p>
-&lt;p>&lt;img src="https://qiita-image-store.s3.amazonaws.com/0/212276/255b91a2-7e2b-b5c9-6168-4cb604a35da2.png" alt="回路図.png">&lt;/p>
-&lt;h3 id="heading-4">プログラム&lt;/h3>
-&lt;p>「&lt;a href="https://dotstud.io/docs/nefrybt-arduino-ide-setup/">NefryBTの環境構築&lt;/a>」を参考に、Nefry BTに下記のプログラムを書き込みます。&lt;/p>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-c++" data-lang="c++">&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">include&lt;/span>&lt;span style="color:#75715e">&amp;lt;Nefry.h&amp;gt;&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>
-&lt;span style="color:#66d9ef">void&lt;/span> &lt;span style="color:#a6e22e">setup&lt;/span>() {
-Serial.print(&lt;span style="color:#ae81ff">115200&lt;/span>);
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>driving on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/driving/</link><description>Recent content in driving on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Tue, 28 Aug 2018 14:55:44 +0900</lastBuildDate><atom:link href="/series/driving/" rel="self" type="application/rss+xml"/><item><title>【ソレノイド詳細解説】IoTの力でスマホを振るとソレノイドがシュコシュコ動く仕組みを作ってみる</title><link>https://dotstud.io/blog/control-solenoid-nefrybt-nodered/</link><pubDate>Tue, 28 Aug 2018 14:55:44 +0900</pubDate><guid>https://dotstud.io/blog/control-solenoid-nefrybt-nodered/</guid><description>
+&lt;p&gt;こんにちは、&lt;a href=&#34;https://dotstud.io/members/takudooon/&#34;&gt;たくろーどん&lt;/a&gt;です。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/series/driving/&#34;&gt;これまでの記事&lt;/a&gt;では、電子工作に使えそうな駆動部品を紹介してきました。サーボモータ、ステッピングモータときたら……次に使ってみたいのは&lt;strong&gt;ソレノイド&lt;/strong&gt;ですよね！&lt;/p&gt;
+&lt;p&gt;ということで、ソレノイドをNefry BTで使えるようにしていきたいと思います。&lt;/p&gt;
+&lt;p&gt;そして、最終的には&lt;strong&gt;スマートフォンをシェイクするとソレノイドをシュコシュコ動かせる&lt;/strong&gt;ようにしてみたいと思います。&lt;/p&gt;
+&lt;section class=&#34;link&#34; id=&#34;187&#34;&gt;
+&lt;/section&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;section class=&#34;link&#34; id=&#34;189&#34;&gt;
+&lt;/section&gt;
+&lt;h2 id=&#34;ソレノイドのしくみ&#34;&gt;ソレノイドのしくみ&lt;/h2&gt;
+&lt;p&gt;ソレノイドとは&lt;u&gt;&lt;strong&gt;銅線（コイル）に電流を流すことにより磁界を発生させ、磁性体の可動鉄芯を吸い寄せる（吸引）電気部品&lt;/strong&gt;&lt;/u&gt;のことです。電流を流している間は常に吸い寄せられていますが、電流を切ると吸引力はなくなります。&lt;/p&gt;
+&lt;p&gt;下記に、その仕組みを簡単に示しました。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/212276/2854b315-e58b-63f0-cd49-87d761625053.png&#34; alt=&#34;仕組み.png&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;また、この動作を応用して&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;プル（吸引）ソレノイド&lt;/li&gt;
+&lt;li&gt;プッシュ（押し）ソレノイド：プッシュバーを装着した「吸引=押し」動作&lt;/li&gt;
+&lt;li&gt;自己保持ソレノイド：永久磁石を組込むことによりそれぞれの動作を保持&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;といった種類があります。&lt;/p&gt;
+&lt;h2 id=&#34;ソレノイドを使ってみる&#34;&gt;ソレノイドを使ってみる&lt;/h2&gt;
+&lt;p&gt;まずは簡単な例として、Nefry BTについているスイッチを押すとソレノイドが動くようにしてみます。&lt;/p&gt;
+&lt;h3 id=&#34;用意するもの&#34;&gt;用意するもの&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gI-02414/&#34;&gt;NchパワーMOSFET 2SK2232&lt;/a&gt;：スイッチングのために使用(FETはトランジスタと違って電圧でトリガーとなる)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://akizukidenshi.com/catalog/g/gP-10761/&#34;&gt;ソレノイド 5V ZHO-0420S-05A4.5A プッシュ型&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;整流ダイオード：逆起電力(ソレノイドへの電力供給停止後、ソレノイドの棒が元に戻るときに発生する起電力)を防止するため(マイコンの破壊を防止する)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;回路&#34;&gt;回路&lt;/h3&gt;
+&lt;p&gt;※&lt;strong&gt;ソレノイドに極性(+、-)はありません&lt;/strong&gt;！なので、安心して配線しましょう！&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/212276/255b91a2-7e2b-b5c9-6168-4cb604a35da2.png&#34; alt=&#34;回路図.png&#34; /&gt;&lt;/p&gt;
+&lt;h3 id=&#34;プログラム&#34;&gt;プログラム&lt;/h3&gt;
+&lt;p&gt;「&lt;a href=&#34;https://dotstud.io/docs/nefrybt-arduino-ide-setup/&#34;&gt;NefryBTの環境構築&lt;/a&gt;」を参考に、Nefry BTに下記のプログラムを書き込みます。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;#include&amp;lt;Nefry.h&amp;gt;
+void setup() {
+Serial.print(115200);
 pinMode(D4, OUTPUT);
 }
-&lt;span style="color:#75715e">//FET:電圧閾値0.8～2.0V　今回使っているトランジスタの場合は！
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#66d9ef">void&lt;/span> &lt;span style="color:#a6e22e">loop&lt;/span>() {
+//FET:電圧閾値0.8～2.0V　今回使っているトランジスタの場合は！
+void loop() {
 digitalWrite(D4,LOW);
-&lt;span style="color:#66d9ef">if&lt;/span>(Nefry.readSW()){
+if(Nefry.readSW()){
 digitalWrite(D4,HIGH);
 }
 }
-&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="heading-5">動かしてみると&lt;/h3>
-&lt;p>Nefry BTのスイッチを押すと、シュコシュコします。&lt;/p>
-&lt;p>&lt;a href="https://gyazo.com/25c5ea02c0fc0e3ab327f3aff4719f28">&lt;img src="https://i.gyazo.com/25c5ea02c0fc0e3ab327f3aff4719f28.gif" alt="Image from Gyazo">&lt;/a>&lt;/p>
-&lt;h2 id="iot">IoTでソレノイドをシュコシュコする&lt;/h2>
-&lt;p>それでは、スマートフォンをシェイクするとソレノイドをシュコシュコ動かせるようにしていきたいと思います。ここでは、スマートフォンの加速度を利用します（スマートフォンの加速度の利用する方法は&lt;a href="https://qiita.com/minwinmin/items/af1d8ba68d0ec3f52fa9">こちら&lt;/a>に少しまとめてあります）。&lt;/p>
-&lt;h3 id="node-red">Node-Redのフローを作る&lt;/h3>
-&lt;p>&lt;a href="https://nodered.org/">Node-RED&lt;/a>で下記のようなフローを作成します。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;p>Node-REDの詳細は前回の記事をご覧ください。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;h3 id="nefry-bt">Nefry BTにプログラムを書き込む&lt;/h3>
-&lt;p>Nefry BTに書き込むプログラムはこちらです。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;pre>&lt;code> IPAddress endpoint;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;動かしてみると&#34;&gt;動かしてみると&lt;/h3&gt;
+&lt;p&gt;Nefry BTのスイッチを押すと、シュコシュコします。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://gyazo.com/25c5ea02c0fc0e3ab327f3aff4719f28&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/25c5ea02c0fc0e3ab327f3aff4719f28.gif&#34; alt=&#34;Image from Gyazo&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;iotでソレノイドをシュコシュコする&#34;&gt;IoTでソレノイドをシュコシュコする&lt;/h2&gt;
+&lt;p&gt;それでは、スマートフォンをシェイクするとソレノイドをシュコシュコ動かせるようにしていきたいと思います。ここでは、スマートフォンの加速度を利用します（スマートフォンの加速度の利用する方法は&lt;a href=&#34;https://qiita.com/minwinmin/items/af1d8ba68d0ec3f52fa9&#34;&gt;こちら&lt;/a&gt;に少しまとめてあります）。&lt;/p&gt;
+&lt;h3 id=&#34;node-redのフローを作る&#34;&gt;Node-Redのフローを作る&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&#34;https://nodered.org/&#34;&gt;Node-RED&lt;/a&gt;で下記のようなフローを作成します。&lt;/p&gt;
+&lt;p&gt;&lt;img width=&#34;929&#34; alt=&#34;node-redのフロー.png&#34; src=&#34;https://qiita-image-store.s3.amazonaws.com/0/212276/29ef7cc8-9340-c1b2-4c82-0deac26eccc9.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Node-REDの詳細は前回の記事をご覧ください。&lt;/p&gt;
+&lt;section class=&#34;link&#34; id=&#34;187&#34;&gt;
+&lt;/section&gt;
+&lt;div class=&#34;accbox&#34;&gt;
+&lt;label for=&#34;label1&#34;&gt;クリックしてコードを表示&lt;/labe&gt;
+&lt;input type=&#34;checkbox&#34; id=&#34;label1&#34; class=&#34;cssacc&#34; /&gt;
+&lt;div class=&#34;accshow&#34;&gt;
+&lt;pre&gt;
+&lt;code class=&#34;hljs hljs-line-numbers&#34;&gt;
+[
+{
+&#34;id&#34;: &#34;2c912723.4f0338&#34;,
+&#34;type&#34;: &#34;http in&#34;,
+&#34;z&#34;: &#34;57519a9b.8fba94&#34;,
+&#34;name&#34;: &#34;&#34;,
+&#34;url&#34;: &#34;sensor4&#34;,
+&#34;method&#34;: &#34;get&#34;,
+&#34;upload&#34;: false,
+&#34;swaggerDoc&#34;: &#34;&#34;,
+&#34;x&#34;: 70,
+&#34;y&#34;: 100,
+&#34;wires&#34;: [
+[
+&#34;94c3393a.020d68&#34;
+]
+]
+},
+{
+&#34;id&#34;: &#34;94c3393a.020d68&#34;,
+&#34;type&#34;: &#34;template&#34;,
+&#34;z&#34;: &#34;57519a9b.8fba94&#34;,
+&#34;name&#34;: &#34;HTML&#34;,
+&#34;field&#34;: &#34;payload&#34;,
+&#34;fieldType&#34;: &#34;msg&#34;,
+&#34;format&#34;: &#34;html&#34;,
+&#34;syntax&#34;: &#34;mustache&#34;,
+&#34;template&#34;: &#34;&amp;lt;!DOCTYPE html&amp;gt;\n&amp;lt;html lang=\&#34;ja\&#34;&amp;gt;\n&amp;lt;head&amp;gt;\n&amp;lt;meta charset=\&#34;utf-8\&#34;&amp;gt;\n&amp;lt;meta name=\&#34;viewport\&#34; content=\&#34;width=device-width,initial-scale=1\&#34;&amp;gt;\n&amp;lt;title&amp;gt;加速度検出&amp;lt;/title&amp;gt;\n&amp;lt;/head&amp;gt;\n \n&amp;lt;body&amp;gt;\n&amp;lt;div id=\&#34;datatxt\&#34;&amp;gt;データの表示&amp;lt;/div&amp;gt; \n \n&amp;lt;script&amp;gt;\n var encrypted = \&#34;{{{req.connection.encrypted}}}\&#34;;\n if (encrypted === \&#34;true\&#34;) {\n var wsUri = \&#34;wss://{{{req.hostname}}}:{{{req.connection.localPort}}}/accl1\&#34;;\n }\n else {\n var wsUri = \&#34;ws://{{{req.hostname}}}:{{{req.connection.localPort}}}/accl1\&#34;;\n }\n var ws = new WebSocket(wsUri);\n\n var accx = null;\n var accy = null;\n var accz = null;\n\n function sendMessage() {\n // 画面書き換え\n var txt = \&#34;wsUri:\&#34; + wsUri + \&#34;&amp;lt;br&amp;gt;\&#34;;\n txt += \&#34;x:\&#34; + accx + \&#34;&amp;lt;br&amp;gt;\&#34;;\n txt += \&#34;y:\&#34; + accy + \&#34;&amp;lt;br&amp;gt;\&#34;;\n txt += \&#34;z:\&#34; + accz + \&#34;&amp;lt;br&amp;gt;\&#34;;\n\n var datatxt = document.getElementById(\&#34;datatxt\&#34;);\n datatxt.innerHTML = txt;\n\n // WebSocket送信\n var payload = {\n &#39;accx&#39;: accx,\n &#39;accy&#39;: accy,\n &#39;accz&#39;: accz,\n };\n ws.send(JSON.stringify(payload));\n }\n\n function handleMotionEvent(evt) {\n //加速度\n accx = evt.acceleration.x;\n accy = evt.acceleration.y;\n accz = evt.acceleration.z;\n }\n\n window.addEventListener(\&#34;devicemotion\&#34;, handleMotionEvent, true); //情報変更ごとにイベント発生\n window.setInterval(sendMessage, 500); // 500msごとにイベント発生\n\n&amp;lt;/script&amp;gt;\n&amp;lt;/body&amp;gt;\n&amp;lt;/html&amp;gt;&#34;,
+&#34;output&#34;: &#34;str&#34;,
+&#34;x&#34;: 317.00000762939453,
+&#34;y&#34;: 100.00000286102295,
+&#34;wires&#34;: [
+[
+&#34;c9b732b9.d5df9&#34;
+]
+]
+},
+{
+&#34;id&#34;: &#34;c9b732b9.d5df9&#34;,
+&#34;type&#34;: &#34;http response&#34;,
+&#34;z&#34;: &#34;57519a9b.8fba94&#34;,
+&#34;name&#34;: &#34;&#34;,
+&#34;statusCode&#34;: &#34;&#34;,
+&#34;headers&#34;: {},
+&#34;x&#34;: 541.0000152587891,
+&#34;y&#34;: 100.00000190734863,
+&#34;wires&#34;: []
+},
+{
+&#34;id&#34;: &#34;af4fa6f9.139f88&#34;,
+&#34;type&#34;: &#34;websocket in&#34;,
+&#34;z&#34;: &#34;57519a9b.8fba94&#34;,
+&#34;name&#34;: &#34;&#34;,
+&#34;server&#34;: &#34;250c9625.e420aa&#34;,
+&#34;client&#34;: &#34;&#34;,
+&#34;x&#34;: 60,
+&#34;y&#34;: 220,
+&#34;wires&#34;: [
+[
+&#34;1c16e58e.096d5a&#34;
+]
+]
+},
+{
+&#34;id&#34;: &#34;1c16e58e.096d5a&#34;,
+&#34;type&#34;: &#34;json&#34;,
+&#34;z&#34;: &#34;57519a9b.8fba94&#34;,
+&#34;name&#34;: &#34;加速度をjson形式に変換&#34;,
+&#34;property&#34;: &#34;payload&#34;,
+&#34;action&#34;: &#34;&#34;,
+&#34;pretty&#34;: false,
+&#34;x&#34;: 310,
+&#34;y&#34;: 320,
+&#34;wires&#34;: [
+[
+&#34;b50a0d6c.0c67a&#34;,
+&#34;10eecadd.b9fbe5&#34;,
+&#34;1c843637.566a8a&#34;
+]
+]
+},
+{
+&#34;id&#34;: &#34;b50a0d6c.0c67a&#34;,
+&#34;type&#34;: &#34;switch&#34;,
+&#34;z&#34;: &#34;57519a9b.8fba94&#34;,
+&#34;name&#34;: &#34;加速度判定&#34;,
+&#34;property&#34;: &#34;payload.accz&#34;,
+&#34;propertyType&#34;: &#34;msg&#34;,
+&#34;rules&#34;: [
+{
+&#34;t&#34;: &#34;gt&#34;,
+&#34;v&#34;: &#34;10&#34;,
+&#34;vt&#34;: &#34;num&#34;
+},
+{
+&#34;t&#34;: &#34;btwn&#34;,
+&#34;v&#34;: &#34;6&#34;,
+&#34;vt&#34;: &#34;num&#34;,
+&#34;v2&#34;: &#34;10&#34;,
+&#34;v2t&#34;: &#34;num&#34;
+},
+{
+&#34;t&#34;: &#34;lte&#34;,
+&#34;v&#34;: &#34;5&#34;,
+&#34;vt&#34;: &#34;num&#34;
+}
+],
+&#34;checkall&#34;: &#34;true&#34;,
+&#34;repair&#34;: false,
+&#34;outputs&#34;: 3,
+&#34;x&#34;: 533.0000152587891,
+&#34;y&#34;: 312.0000088214874,
+&#34;wires&#34;: [
+[
+&#34;326dd035.413f1&#34;
+],
+[
+&#34;dddabb62.392ea8&#34;
+],
+[
+&#34;7c53f99b.cba9e8&#34;
+]
+]
+},
+{
+&#34;id&#34;: &#34;ec7a3c72.a1361&#34;,
+&#34;type&#34;: &#34;debug&#34;,
+&#34;z&#34;: &#34;57519a9b.8fba94&#34;,
+&#34;name&#34;: &#34;&#34;,
+&#34;active&#34;: true,
+&#34;tosidebar&#34;: true,
+&#34;console&#34;: false,
+&#34;tostatus&#34;: false,
+&#34;complete&#34;: &#34;payload&#34;,
+&#34;x&#34;: 1110,
+&#34;y&#34;: 320,
+&#34;wires&#34;: []
+},
+{
+&#34;id&#34;: &#34;d1c70b54.eb01d8&#34;,
+&#34;type&#34;: &#34;comment&#34;,
+&#34;z&#34;: &#34;57519a9b.8fba94&#34;,
+&#34;name&#34;: &#34;加速度を出力&#34;,
+&#34;info&#34;: &#34;&#34;,
+&#34;x&#34;: 70,
+&#34;y&#34;: 60,
+&#34;wires&#34;: []
+},
+{
+&#34;id&#34;: &#34;10eecadd.b9fbe5&#34;,
+&#34;type&#34;: &#34;mqtt out&#34;,
+&#34;z&#34;: &#34;57519a9b.8fba94&#34;,
+&#34;name&#34;: &#34;/NefryBT/SOLE&#34;,
+&#34;topic&#34;: &#34;/NefryBT/SOLE&#34;,
+&#34;qos&#34;: &#34;&#34;,
+&#34;retain&#34;: &#34;&#34;,
+&#34;broker&#34;: &#34;f9299578.86bcb8&#34;,
+&#34;x&#34;: 470.0000915527344,
+&#34;y&#34;: 530.0000152587891,
+&#34;wires&#34;: []
+},
+{
+&#34;id&#34;: &#34;1c843637.566a8a&#34;,
+&#34;type&#34;: &#34;debug&#34;,
+&#34;z&#34;: &#34;57519a9b.8fba94&#34;,
+&#34;name&#34;: &#34;&#34;,
+&#34;active&#34;: false,
+&#34;tosidebar&#34;: true,
+&#34;console&#34;: false,
+&#34;tostatus&#34;: false,
+&#34;complete&#34;: &#34;payload&#34;,
+&#34;x&#34;: 311.00004959106445,
+&#34;y&#34;: 583.0000152587891,
+&#34;wires&#34;: []
+},
+{
+&#34;id&#34;: &#34;326dd035.413f1&#34;,
+&#34;type&#34;: &#34;change&#34;,
+&#34;z&#34;: &#34;57519a9b.8fba94&#34;,
+&#34;name&#34;: &#34;accz &amp;gt; 10 のときの文字列「large」&#34;,
+&#34;rules&#34;: [
+{
+&#34;t&#34;: &#34;set&#34;,
+&#34;p&#34;: &#34;payload&#34;,
+&#34;pt&#34;: &#34;msg&#34;,
+&#34;to&#34;: &#34;large&#34;,
+&#34;tot&#34;: &#34;str&#34;
+}
+],
+&#34;action&#34;: &#34;&#34;,
+&#34;property&#34;: &#34;&#34;,
+&#34;from&#34;: &#34;&#34;,
+&#34;to&#34;: &#34;&#34;,
+&#34;reg&#34;: false,
+&#34;x&#34;: 818.000020980835,
+&#34;y&#34;: 274.00000762939453,
+&#34;wires&#34;: [
+[
+&#34;ec7a3c72.a1361&#34;
+]
+]
+},
+{
+&#34;id&#34;: &#34;dddabb62.392ea8&#34;,
+&#34;type&#34;: &#34;change&#34;,
+&#34;z&#34;: &#34;57519a9b.8fba94&#34;,
+&#34;name&#34;: &#34;accz:6~10 のときの文字列「medium」&#34;,
+&#34;rules&#34;: [
+{
+&#34;t&#34;: &#34;set&#34;,
+&#34;p&#34;: &#34;payload&#34;,
+&#34;pt&#34;: &#34;msg&#34;,
+&#34;to&#34;: &#34;medium&#34;,
+&#34;tot&#34;: &#34;str&#34;
+}
+],
+&#34;action&#34;: &#34;&#34;,
+&#34;property&#34;: &#34;&#34;,
+&#34;from&#34;: &#34;&#34;,
+&#34;to&#34;: &#34;&#34;,
+&#34;reg&#34;: false,
+&#34;x&#34;: 840,
+&#34;y&#34;: 320,
+&#34;wires&#34;: [
+[
+&#34;ec7a3c72.a1361&#34;
+]
+]
+},
+{
+&#34;id&#34;: &#34;7c53f99b.cba9e8&#34;,
+&#34;type&#34;: &#34;change&#34;,
+&#34;z&#34;: &#34;57519a9b.8fba94&#34;,
+&#34;name&#34;: &#34;accz &amp;lt;= 5 のときの文字列「small」&#34;,
+&#34;rules&#34;: [
+{
+&#34;t&#34;: &#34;set&#34;,
+&#34;p&#34;: &#34;payload&#34;,
+&#34;pt&#34;: &#34;msg&#34;,
+&#34;to&#34;: &#34;small&#34;,
+&#34;tot&#34;: &#34;str&#34;
+}
+],
+&#34;action&#34;: &#34;&#34;,
+&#34;property&#34;: &#34;&#34;,
+&#34;from&#34;: &#34;&#34;,
+&#34;to&#34;: &#34;&#34;,
+&#34;reg&#34;: false,
+&#34;x&#34;: 820,
+&#34;y&#34;: 360,
+&#34;wires&#34;: [
+[
+&#34;ec7a3c72.a1361&#34;
+]
+]
+},
+{
+&#34;id&#34;: &#34;53d3ea65.523574&#34;,
+&#34;type&#34;: &#34;comment&#34;,
+&#34;z&#34;: &#34;57519a9b.8fba94&#34;,
+&#34;name&#34;: &#34;加速度を受信して橋渡し&#34;,
+&#34;info&#34;: &#34;&#34;,
+&#34;x&#34;: 110,
+&#34;y&#34;: 180,
+&#34;wires&#34;: []
+},
+{
+&#34;id&#34;: &#34;422cdf71.4a17e&#34;,
+&#34;type&#34;: &#34;comment&#34;,
+&#34;z&#34;: &#34;57519a9b.8fba94&#34;,
+&#34;name&#34;: &#34;MQTTで加速度をjson形式で送信&#34;,
+&#34;info&#34;: &#34;&#34;,
+&#34;x&#34;: 520.0000152587891,
+&#34;y&#34;: 490.00001430511475,
+&#34;wires&#34;: []
+},
+{
+&#34;id&#34;: &#34;d24b4e1f.58b25&#34;,
+&#34;type&#34;: &#34;comment&#34;,
+&#34;z&#34;: &#34;57519a9b.8fba94&#34;,
+&#34;name&#34;: &#34;デバック画面に加速度の具合を表示させる部分&#34;,
+&#34;info&#34;: &#34;&#34;,
+&#34;x&#34;: 641.0000152587891,
+&#34;y&#34;: 226.00000667572021,
+&#34;wires&#34;: []
+},
+{
+&#34;id&#34;: &#34;250c9625.e420aa&#34;,
+&#34;type&#34;: &#34;websocket-listener&#34;,
+&#34;z&#34;: &#34;&#34;,
+&#34;path&#34;: &#34;/accl1&#34;,
+&#34;wholemsg&#34;: &#34;false&#34;
+},
+{
+&#34;id&#34;: &#34;f9299578.86bcb8&#34;,
+&#34;type&#34;: &#34;mqtt-broker&#34;,
+&#34;z&#34;: &#34;&#34;,
+&#34;name&#34;: &#34;&#34;,
+&#34;broker&#34;: &#34;http://test.mosquitto.org/&#34;,
+&#34;port&#34;: &#34;1883&#34;,
+&#34;clientid&#34;: &#34;&#34;,
+&#34;usetls&#34;: false,
+&#34;compatmode&#34;: true,
+&#34;keepalive&#34;: &#34;60&#34;,
+&#34;cleansession&#34;: true,
+&#34;birthTopic&#34;: &#34;&#34;,
+&#34;birthQos&#34;: &#34;0&#34;,
+&#34;birthPayload&#34;: &#34;&#34;,
+&#34;closeTopic&#34;: &#34;&#34;,
+&#34;closeQos&#34;: &#34;0&#34;,
+&#34;closePayload&#34;: &#34;&#34;,
+&#34;willTopic&#34;: &#34;&#34;,
+&#34;willQos&#34;: &#34;0&#34;,
+&#34;willPayload&#34;: &#34;&#34;
+}
+]
+&lt;/code&gt;
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3 id=&#34;nefry-btにプログラムを書き込む&#34;&gt;Nefry BTにプログラムを書き込む&lt;/h3&gt;
+&lt;p&gt;Nefry BTに書き込むプログラムはこちらです。&lt;/p&gt;
+&lt;div class=&#34;accbox&#34;&gt;
+&lt;label for=&#34;label2&#34;&gt;クリックしてコードを表示&lt;/labe&gt;
+&lt;input type=&#34;checkbox&#34; id=&#34;label2&#34; class=&#34;cssacc&#34; /&gt;
+&lt;div class=&#34;accshow&#34;&gt;
+&lt;pre&gt;
+&lt;code class=&#34;language-c++ hljs cpp&#34;&gt;
+#include &amp;lt;Nefry.h&amp;gt;
+#include &amp;lt;WiFiClient.h&amp;gt;
+#include &amp;lt;PubSubClient.h&amp;gt;
+#include &amp;lt;ArduinoJson.h&amp;gt;
+IPAddress endpoint;
 const int port = 1883;
 const char *pubTopic;
 const char *subTopic;
 const char *deviceName;
-const char *mqtt_server = &amp;quot;test.mosquitto.org&amp;quot;;
+const char *mqtt_server = &#34;test.mosquitto.org&#34;;
 WiFiClient httpsClient;
 PubSubClient mqttClient(httpsClient);
 void setup() {
@@ -72,25 +407,25 @@ void setup() {
 pinMode(D4, OUTPUT);
 //// NefryBT設定 ////////////////////////////////////////
 // NefryBT
-subTopic = &amp;quot;/NefryBT/SOLE&amp;quot;;
-deviceName = &amp;quot;NefryBT_SOLE&amp;quot;; // 複数台で利用する場合は必ずかぶらないように変更する
+subTopic = &#34;/NefryBT/SOLE&#34;;
+deviceName = &#34;NefryBT_SOLE&#34;; // 複数台で利用する場合は必ずかぶらないように変更する
 Serial.begin(115200);
 mqttClient.setServer(mqtt_server, port);
 mqttClient.setCallback(mqttCallback);
 connectMQTT();
 }
 void connectMQTT() {
-Serial.println(&amp;quot;connectMQTT&amp;quot;);
+Serial.println(&#34;connectMQTT&#34;);
 Serial.println(deviceName);
 while (!mqttClient.connected()) {
-Serial.print(&amp;quot;.&amp;quot;);
+Serial.print(&#34;.&#34;);
 if (mqttClient.connect(deviceName)) {
-Serial.println(&amp;quot;Connected.&amp;quot;);
+Serial.println(&#34;Connected.&#34;);
 int qos = 0;
 mqttClient.subscribe(subTopic, qos);
-Serial.println(&amp;quot;Subscribed.&amp;quot;);
+Serial.println(&#34;Subscribed.&#34;);
 } else {
-Serial.print(&amp;quot;Failed. Error state=&amp;quot;);
+Serial.print(&#34;Failed. Error state=&#34;);
 Serial.print(mqttClient.state());
 // Wait 5 seconds before retrying
 delay(5000);
@@ -99,41 +434,41 @@ delay(5000);
 }
 char pubMessage[128];
 void mqttCallback (char* topic, byte* payload, unsigned int length) {
-String str = &amp;quot;&amp;quot;;
-Serial.print(&amp;quot;Received. topic=&amp;quot;);
+String str = &#34;&#34;;
+Serial.print(&#34;Received. topic=&#34;);
 Serial.println(topic);
-for (int i = 0; i &amp;lt; length; i++) {
+for (int i = 0; i &lt; length; i++) {
 Serial.print((char)payload[i]);
 str += (char)payload[i];
 }
-Serial.print(&amp;quot;\n&amp;quot;);
-StaticJsonBuffer&amp;lt;200&amp;gt; jsonBuffer;
-JsonObject&amp;amp; root = jsonBuffer.parseObject(str);
+Serial.print(&#34;\n&#34;);
+StaticJsonBuffer&lt;200&gt; jsonBuffer;
+JsonObject&amp; root = jsonBuffer.parseObject(str);
 // パースが成功かどうか判断
 if (!root.success()) {
-Serial.println(&amp;quot;parseObject() failed&amp;quot;);
+Serial.println(&#34;parseObject() failed&#34;);
 return;
 }
 //z軸方向の加速度を取り出している
-const char* message = root[&amp;quot;message&amp;quot;];
-int accz = root[&amp;quot;accz&amp;quot;];
-Serial.print(&amp;quot;accz = &amp;quot;);
+const char* message = root[&#34;message&#34;];
+int accz = root[&#34;accz&#34;];
+Serial.print(&#34;accz = &#34;);
 Serial.println(accz);
 //加速度に応じてソレノイドのシュコシュコ速度が変化
-if(accz &amp;gt;= 10 || accz &amp;lt;= -10){
-Serial.println(&amp;quot;シュコシュコシュコ&amp;quot;);
+if(accz &gt;= 10 || accz &lt;= -10){
+Serial.println(&#34;シュコシュコシュコ&#34;);
 digitalWrite(D4,LOW);
 delay(50);
 digitalWrite(D4,HIGH);
 delay(50);
-}else if(10 &amp;gt; accz &amp;gt;= 6 || -10 &amp;lt; accz &amp;lt;= 6){
-Serial.println(&amp;quot;シュコシュコ&amp;quot;);
+}else if(10 &gt; accz &gt;= 6 || -10 &lt; accz &lt;= 6){
+Serial.println(&#34;シュコシュコ&#34;);
 digitalWrite(D4,LOW);
 delay(200);
 digitalWrite(D4,HIGH);
 delay(200);
 }else{
-Serial.println(&amp;quot;シュコ&amp;quot;);
+Serial.println(&#34;シュコ&#34;);
 digitalWrite(D4,LOW);
 delay(500);
 digitalWrite(D4,HIGH);
@@ -150,242 +485,285 @@ mqttClient.loop();
 void loop() {
 mqttLoop();
 }
-&amp;lt;/code&amp;gt;
-&amp;lt;/pre&amp;gt;
-&amp;lt;/div&amp;gt;
-&lt;/code>&lt;/pre>
-&lt;!-- raw HTML omitted -->
-&lt;h3 id="heading-6">動かしてみると&lt;/h3>
-&lt;p>シリアルモニタを見てみると、スマートフォンの加速度の変化に応じて値が表示されます。&lt;/p>
-&lt;p>&lt;img src="https://qiita-image-store.s3.amazonaws.com/0/212276/7fb2accc-5f35-bc31-7366-04d7e0c2de99.gif" alt="ソレノイド＿シュコシュコ事案.gif">&lt;/p>
-&lt;p>下記のようにスマートフォンをシェイクすると、ソレノイドの挙動が変化してます（音をよく聞くと、ソレノイドが早く動いたり遅く動いたりしているのがわかります)。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;p>無事、&lt;strong>スマートフォンをシェイクするとソレノイドをシュコシュコ動かすデバイス&lt;/strong>ができました！&lt;/p>
-&lt;h2 id="heading-7">ソレノイドを使った機構の例&lt;/h2>
-&lt;p>ソレノイドはシンプルな動作をしますが、何かをつくるときの機構として使うことができます。動画ではソレノイドを上下させることでクラッピーに拍手させています。工夫次第では面白い機構が作れるでしょう。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;h2 id="heading-8">おわりに&lt;/h2>
-&lt;p>発想は自分次第です。
-ソレノイドを使って面白いデバイスをつくってみてください！&lt;/p>
-&lt;h2 id="heading-9">参考&lt;/h2>
-&lt;p>&lt;a href="http://www.takaha.co.jp/technological/action.html">ソレノイドの動作説明&lt;/a>: ソレノイドの製造・販売で有名なタカハ機工株式会社より&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted --></description></item><item><title>【詳細解説】ステッピングモータの仕組みを理解しよう！解説とNefry BTでステッピングモータを使う方法</title><link>https://dotstud.io/blog/stepper-motor-nefrybt-control/</link><pubDate>Mon, 23 Jul 2018 10:00:00 +0900</pubDate><guid>https://dotstud.io/blog/stepper-motor-nefrybt-control/</guid><description>&lt;p>モータの種類にはいろいろあります。前回は回転角度を調整できる&lt;a href="https://dotstud.io/blog/nefry-servo-handson-takudooon/">サーボモータ&lt;/a>について紹介しました。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>今回は、&lt;strong>ロボットアームや3Dプリンタの制御に使われるステッピングモータ&lt;/strong>について説明し、Nefry BTで制御に挑戦してみたいと思います。&lt;/p>
-&lt;h2 id="heading">ステッピングモータとは？&lt;/h2>
-&lt;p>ステッピングモータは、DCモータ（Direct-current motor、直流電動機）とは異なり、&lt;strong>電力信号を与えることで正確に回転を制御&lt;/strong>できます。&lt;/p>
-&lt;p>例えばステッピングモータの使われている3Dプリンタでは、正確に回転を制御できているからこそ3Dプリントが実現しているとも言えます。&lt;/p>
-&lt;p>各モータの特徴をまとめると下記のようになります。&lt;/p>
-&lt;ul>
-&lt;li>DCモータ: 電力を与えるとずっと回転する&lt;/li>
-&lt;li>サーボモータ: ある信号に対応してある角度の範囲で回転する&lt;/li>
-&lt;li>ステッピングモータ: 回転範囲に制限はなく、電力信号を与えることで正確に回転し続ける&lt;/li>
-&lt;/ul>
-&lt;h3 id="heading-1">ステッピングモータの種類〈１〉&lt;/h3>
-&lt;p>ステッピングモータには3種類あります。&lt;/p>
-&lt;ul>
-&lt;li>&lt;strong>PM型&lt;/strong>（Permanent Magnet Type、永久磁石）
-&lt;ul>
-&lt;li>回転子として円周上にN極とS極の交互に着磁した磁性体を使用する。安価だが、着磁間隔を細かくすることに限界があり、ステップ角度は小さくできない。&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>&lt;strong>VR型&lt;/strong>（Variable Reluctance Type、歯車状鉄心形）
-&lt;ul>
-&lt;li>回転子として歯車状の鉄心を使用する。ステップ角度を小さくできるが、トルクがやや低い。&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>&lt;strong>HB型&lt;/strong>（Hybrid Type、複合形）
-&lt;ul>
-&lt;li>PM型とVR型の特徴をもつ構造をしている。&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;p>※回転子（ローター）…モーターとして回転する軸のこと。&lt;/p>
-&lt;h3 id="heading-2">ステッピングモータの仕組み&lt;/h3>
-&lt;p>PM型のステッピングモータの仕組みを簡単に説明したいと思います。&lt;/p>
-&lt;p>まず、下記の図のようにPM型のステッピングモータは&lt;strong>中心の永久磁石からなる回転子&lt;/strong>と&lt;strong>外側のコイルから構成されている固定子&lt;/strong>から構成されています。コイルに電流を流すことで磁力が発生し、この磁力を利用して回転子を回転させていきます。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;ol>
-&lt;li>コイル1に電流を流すと固定子と回転子のN極とS極が引き合う。&lt;/li>
-&lt;li>さらにコイル2に電流を流すと、両方の固定子が磁化して回転子を引きつける。つまり45°回転する。&lt;/li>
-&lt;li>コイル1の電流を切ると、さらに45°回転する。&lt;/li>
-&lt;li>コイル3にコイル1に流した電流と逆方向の電流を流すと、さらに45°回転する。&lt;/li>
-&lt;li>コイル2の電流を切ると、さらに45°回転する。&lt;/li>
-&lt;/ol>
-&lt;p>上記と同様の動作を繰り返すと回転子が回転します。&lt;/p>
-&lt;p>また、動画にすると下記のようなイメージです。
-&lt;img src="https://dotstud.io/img/blog/189/2.gif" alt="">
-&lt;strong>制御信号（ステップと呼びます）を与えると回転する&lt;/strong>イメージです。また、&lt;strong>1ステップあたりの回転角度を基本ステップ角度&lt;/strong>と呼びます。&lt;/p>
-&lt;h3 id="heading-3">ステッピングモータの種類〈２〉&lt;/h3>
-&lt;p>先ほど述べたようにステッピングモータの種類には3種類あります。そして、&lt;strong>さらに2種類&lt;/strong>あります。ただし、この2種類とはステッピングモータ内部にあるコイルへの電流の流し方の違いによるものです。&lt;/p>
-&lt;ul>
-&lt;li>&lt;strong>ユニポーラ型&lt;/strong>（単極性）
-&lt;ul>
-&lt;li>相電流の切り替えのとき、1つのコイルに対して一定方向の電流しか流さない。&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;li>&lt;strong>バイポーラ型&lt;/strong>（双極性）
-&lt;ul>
-&lt;li>相電流の切り替えのたび、電流の方向が変わる。&lt;/li>
-&lt;/ul>
-&lt;/li>
-&lt;/ul>
-&lt;p>※ステッピングモータの仕組みで説明したように磁極を変えるため内部のコイルをスイッチングする必要がある。その磁極をどのように変更するかというイメージ。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;h3 id="heading-4">励磁（れいじ）方式&lt;/h3>
-&lt;p>励磁方式とは、簡単に言えば「どのようにコイルに電流を流し、ステッピングモータを回転させるか」です。つまり、どのコイル（どのピン）に電圧をどの順番で印加していくかということです。&lt;/p>
-&lt;p>これは、制御するときに方式を選ぶことができます（プログラムで書くことができます）。ライブラリを使って制御するとわかりにくい部分かもしれません。&lt;/p>
-&lt;p>大まかに3つの励磁方式があるので、それぞれ紹介したいと思います。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>&lt;!-- raw HTML omitted -->&lt;/p>
-&lt;h4 id="-1">■ 1相励磁&lt;/h4>
-&lt;p>&lt;code>A→B→A'→B'&lt;/code>の順に電流を流します（つまり励磁します）。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>このようにパルスを与えるたびに決められてステップ角だけ回転します。励磁の順を&lt;code>A'→B'→A→B&lt;/code>とすると逆回転します。&lt;/p>
-&lt;p>1相励磁は最も単純な方式ですが、トルクが弱く高速回転には向いていません。また、安定性が良くないため実用的ではありません｡&lt;/p>
-&lt;p>&lt;!-- raw HTML omitted -->&lt;/p>
-&lt;h4 id="-2">■ 2相励磁&lt;/h4>
-&lt;p>次の相と1パルスずつずらして同時に励磁する方式です。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>パルス幅が1相励磁の2倍となり、1相励磁に比べて回転が安定して、大きなトルクが得られますが消費電力も2倍になります｡&lt;/p>
-&lt;p>&lt;!-- raw HTML omitted -->&lt;/p>
-&lt;h4 id="-1-2">■ 1-2相励磁&lt;/h4>
-&lt;p>1相励磁と2相励磁を交互に繰り返す方式です。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>各相のパルス幅が3となり、次の相とは2パルスだけずらして励磁されます。1パルスごとに回転する角度が1相励磁と2相励磁に比べて半分になり、細かいモータ制御ができます。&lt;strong>基本的にこの励磁方式で制御すれば間違いない&lt;/strong>でしょう。&lt;/p>
-&lt;h2 id="nefry-bt">Nefry BTでステッピングモータを制御しよう！&lt;/h2>
-&lt;h3 id="heading-5">ステッピングモータを購入&lt;/h3>
-&lt;p>今回は、Amazonで&lt;a href="https://www.amazon.co.jp/gp/product/B010RYH74U/ref=oh_aui_detailpage_o03_s00?ie=UTF8&amp;amp;psc=1">こちらのステッピングモータ&lt;/a>を購入して使いました。ステッピングモータとドライバが5セット入っており、それでいて価格が約1000円という激安です。ちょっと試してみるには良い商品かと思います。&lt;/p>
-&lt;h4 id="-28byj-48-stepper-motor">■ 28BYJ-48 Stepper Motor&lt;/h4>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>&lt;!-- raw HTML omitted -->&lt;/p>
-&lt;h4 id="-uln2003-driver">■ ULN2003 driver&lt;/h4>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;h3 id="heading-6">それぞれの仕様&lt;/h3>
-&lt;h4 id="-28byj-48-stepper-motor-1">■ 28BYJ-48 Stepper Motor&lt;/h4>
-&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th>概要&lt;/th>
-&lt;th>仕様&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td>種類&lt;/td>
-&lt;td>ユニポーラ型&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>結線&lt;/td>
-&lt;td>5線式&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>電圧&lt;/td>
-&lt;td>5-12V（直流電圧）&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>周波数&lt;/td>
-&lt;td>100 Hz&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>ステップモード&lt;/td>
-&lt;td>ハーフステップモード（推奨）（8ステップの信号で制御）&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>ステップ角&lt;/td>
-&lt;td>ハーフステップモード：64ステップで5.625°回転&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td>ギア比&lt;/td>
-&lt;td>64:1&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
-&lt;p>※ギア比…2つの歯車（ギア）の歯数の比率のこと。自転車をイメージすると良い。&lt;!-- raw HTML omitted -->
-※ハーフステップモード…ステップ角が基本ステップ角度の1/2の角度で駆動する方式。&lt;/p>
-&lt;p>&lt;!-- raw HTML omitted -->&lt;/p>
-&lt;h4 id="-uln2003-driver-1">■ ULN2003 driver&lt;/h4>
-&lt;p>ステッピングモータを使う際には、&lt;strong>ステッピングモータ用のドライバ&lt;/strong>を使用します。マイコンボードの信号だけでは制御できないので、制御を補助するためのものです。&lt;/p>
-&lt;p>1-2相励磁で制御する場合は、下記のような信号の組み合わせになります。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>（参照：http://eeshop.unl.edu/pdf/Stepper+Driver.pdf ）&lt;/p>
-&lt;p>このステッピングモータでは8ステップで1つの動作を表しています。つまり、8ステップ×8ステップ=64ステップで5.625°回転します。よって1回転するには360°÷5.625°×64=4096ステップで1回転します。&lt;/p>
-&lt;h3 id="heading-7">回路&lt;/h3>
-&lt;p>Nefry BTとステッピングモータの回路は下記のようになります。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>今回、使用するステッピングモータは5~12Vの間で動作します。また、Nefry BTとステッピングモータの電源は分けて使います。&lt;/p>
-&lt;h3 id="heading-8">プログラム（ライブラリあり）&lt;/h3>
-&lt;p>プログラムは下記の通りです。&lt;/p>
-&lt;p>Nefry BT上のスイッチを押すとステッピングモータが180°回転するというものです。今回は、ステッピングモータを回転させるため「Stepper.h」ライブラリを使いました。&lt;/p>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-c++" data-lang="c++">&lt;span style="color:#75715e">// ステッピングモータとNefry BTを制御するためのライブラリをinclude
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">include&lt;/span> &lt;span style="color:#75715e">&amp;lt;Stepper.h&amp;gt;&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">include&lt;/span> &lt;span style="color:#75715e">&amp;lt;Nefry.h&amp;gt;&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>
-&lt;span style="color:#75715e">/*
-&lt;/span>&lt;span style="color:#75715e">・フルステップ方式で2相励磁の場合は1つの動作で4ステップ
-&lt;/span>&lt;span style="color:#75715e">・8回繰り返す（4×8 = 32ステップ）で11.25度回転
-&lt;/span>&lt;span style="color:#75715e">・つまり、360度回転しようとするとき360/11.25 = 32ステップ
-&lt;/span>&lt;span style="color:#75715e">・ギア比を考慮して32×64 = 2048ステップ
-&lt;/span>&lt;span style="color:#75715e">・よって、ハフルステップ方式で2相励磁の場合、2048ステップで1回転
-&lt;/span>&lt;span style="color:#75715e">*/&lt;/span>
-&lt;span style="color:#75715e">/*
-&lt;/span>&lt;span style="color:#75715e">・ハーフステップ方式で1-2相励磁の場合は1つの動作で8ステップ
-&lt;/span>&lt;span style="color:#75715e">・8回繰り返す（8×8 = 64ステップ）と5.625度回転
-&lt;/span>&lt;span style="color:#75715e">・つまり、360度回転しようとすると360/5.625 = 64ステップ
-&lt;/span>&lt;span style="color:#75715e">・ギア比を考慮して64×64 = 4096ステップ
-&lt;/span>&lt;span style="color:#75715e">・よって、ハーフステップ方式で1-2相励磁の場合、4096ステップで1回転
-&lt;/span>&lt;span style="color:#75715e">*/&lt;/span>
-&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">define MOTOR_1 D2 &lt;/span>&lt;span style="color:#75715e">// blue
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">define MOTOR_2 D3 &lt;/span>&lt;span style="color:#75715e">// pink
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">define MOTOR_3 D4 &lt;/span>&lt;span style="color:#75715e">// yellow
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">define MOTOR_4 D5 &lt;/span>&lt;span style="color:#75715e">// orange
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>
-&lt;span style="color:#75715e">// ステッピングモータが1回転するのに必要なステップ数を定義
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">define MOTOR_STEPS 2048&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>
-Stepper &lt;span style="color:#a6e22e">myStepper&lt;/span>(MOTOR_STEPS, MOTOR_1, MOTOR_2, MOTOR_3, MOTOR_4);
-&lt;span style="color:#66d9ef">void&lt;/span> &lt;span style="color:#a6e22e">setup&lt;/span>() {
-&lt;span style="color:#75715e">// setspeed()関数でrpm（1分あたりの回転数）を設定
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#75715e">// 例：10rpm=10回転/分
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> myStepper.setSpeed(&lt;span style="color:#ae81ff">10&lt;/span>);&lt;span style="color:#75715e">//10回転/分
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>}
-&lt;span style="color:#66d9ef">void&lt;/span> &lt;span style="color:#a6e22e">loop&lt;/span>() {
-&lt;span style="color:#66d9ef">if&lt;/span>(Nefry.readSW()){
-&lt;span style="color:#75715e">// 1024ステップ回転、つまり180°回転
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> myStepper.step(&lt;span style="color:#ae81ff">1024&lt;/span>);
+&lt;/code&gt;
+&lt;/pre&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;h3 id=&#34;動かしてみると-1&#34;&gt;動かしてみると&lt;/h3&gt;
+&lt;p&gt;シリアルモニタを見てみると、スマートフォンの加速度の変化に応じて値が表示されます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/212276/7fb2accc-5f35-bc31-7366-04d7e0c2de99.gif&#34; alt=&#34;ソレノイド＿シュコシュコ事案.gif&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;下記のようにスマートフォンをシェイクすると、ソレノイドの挙動が変化してます（音をよく聞くと、ソレノイドが早く動いたり遅く動いたりしているのがわかります)。&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;ソレノイド探求です。&lt;br&gt;スマホの加速度に応じてソレノイドのシュコシュコ具合が変化します。&lt;br&gt; &lt;a href=&#34;https://t.co/6qugBugDOU&#34;&gt;https://t.co/6qugBugDOU&lt;/a&gt; &lt;a href=&#34;https://twitter.com/YouTube?ref_src=twsrc%5Etfw&#34;&gt;@YouTube&lt;/a&gt;さんから&lt;/p&gt; たくろーどん (@takudooon) &lt;a href=&#34;https://twitter.com/takudooon/status/1027809093992378369?ref_src=twsrc%5Etfw&#34;&gt;2018年8月10日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;無事、&lt;strong&gt;スマートフォンをシェイクするとソレノイドをシュコシュコ動かすデバイス&lt;/strong&gt;ができました！&lt;/p&gt;
+&lt;h2 id=&#34;ソレノイドを使った機構の例&#34;&gt;ソレノイドを使った機構の例&lt;/h2&gt;
+&lt;p&gt;ソレノイドはシンプルな動作をしますが、何かをつくるときの機構として使うことができます。動画ではソレノイドを上下させることでクラッピーに拍手させています。工夫次第では面白い機構が作れるでしょう。&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;ソレノイドを用いた機構 &lt;a href=&#34;https://t.co/Y3KeMOUg1z&#34;&gt;https://t.co/Y3KeMOUg1z&lt;/a&gt; &lt;a href=&#34;https://twitter.com/YouTube?ref_src=twsrc%5Etfw&#34;&gt;@YouTube&lt;/a&gt;さんから&lt;/p&gt; たくろーどん (@takudooon) &lt;a href=&#34;https://twitter.com/takudooon/status/1027545863197843456?ref_src=twsrc%5Etfw&#34;&gt;2018年8月9日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+&lt;p&gt;発想は自分次第です。
+ソレノイドを使って面白いデバイスをつくってみてください！&lt;/p&gt;
+&lt;h2 id=&#34;参考&#34;&gt;参考&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.takaha.co.jp/technological/action.html&#34;&gt;ソレノイドの動作説明&lt;/a&gt;: ソレノイドの製造・販売で有名なタカハ機工株式会社より&lt;/p&gt;
+&lt;style&gt;
+.accbox {
+margin: 2em 0;
+padding: 0;
+max-width: 710px;
 }
-&lt;span style="color:#75715e">// 静止時の負荷がないので電流を止める
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> stopMotor();
+.accbox label {
+display: block;
+margin: 1.5px 0;
+padding : 11px 12px;
+color :#ffffff;
+font-weight: bold;
+background :#2f2f2f;
+cursor :pointer;
+transition: all 0.5s;
 }
-&lt;span style="color:#75715e">// モーターへの電流を止める
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#66d9ef">void&lt;/span> &lt;span style="color:#a6e22e">stopMotor&lt;/span>() {
+.accbox label:hover {
+background :#A4A4A4;
+}
+.accbox input {
+display: none;
+}
+.accbox .accshow {
+height: 0;
+padding: 0;
+overflow: hidden;
+opacity: 0;
+transition: 0.8s;
+}
+.cssacc:checked + .accshow {
+height: auto;
+padding: 5px;
+background: #eaeaea;
+opacity: 1;
+}
+&lt;/style&gt;</description></item><item><title>【詳細解説】ステッピングモータの仕組みを理解しよう！解説とNefry BTでステッピングモータを使う方法</title><link>https://dotstud.io/blog/stepper-motor-nefrybt-control/</link><pubDate>Mon, 23 Jul 2018 10:00:00 +0900</pubDate><guid>https://dotstud.io/blog/stepper-motor-nefrybt-control/</guid><description>
+&lt;p&gt;モータの種類にはいろいろあります。前回は回転角度を調整できる&lt;a href=&#34;https://dotstud.io/blog/nefry-servo-handson-takudooon/&#34;&gt;サーボモータ&lt;/a&gt;について紹介しました。&lt;/p&gt;
+&lt;section class=&#34;link&#34; id=&#34;187&#34;&gt;
+&lt;/section&gt;
+&lt;p&gt;今回は、&lt;strong&gt;ロボットアームや3Dプリンタの制御に使われるステッピングモータ&lt;/strong&gt;について説明し、Nefry BTで制御に挑戦してみたいと思います。&lt;/p&gt;
+&lt;h2 id=&#34;ステッピングモータとは&#34;&gt;ステッピングモータとは？&lt;/h2&gt;
+&lt;p&gt;ステッピングモータは、DCモータ（Direct-current motor、直流電動機）とは異なり、&lt;strong&gt;電力信号を与えることで正確に回転を制御&lt;/strong&gt;できます。&lt;/p&gt;
+&lt;p&gt;例えばステッピングモータの使われている3Dプリンタでは、正確に回転を制御できているからこそ3Dプリントが実現しているとも言えます。&lt;/p&gt;
+&lt;p&gt;各モータの特徴をまとめると下記のようになります。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;DCモータ: 電力を与えるとずっと回転する&lt;/li&gt;
+&lt;li&gt;サーボモータ: ある信号に対応してある角度の範囲で回転する&lt;/li&gt;
+&lt;li&gt;ステッピングモータ: 回転範囲に制限はなく、電力信号を与えることで正確に回転し続ける&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;ステッピングモータの種類-１&#34;&gt;ステッピングモータの種類〈１〉&lt;/h3&gt;
+&lt;p&gt;ステッピングモータには3種類あります。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;PM型&lt;/strong&gt;（Permanent Magnet Type、永久磁石）
+&lt;ul&gt;
+&lt;li&gt;回転子として円周上にN極とS極の交互に着磁した磁性体を使用する。安価だが、着磁間隔を細かくすることに限界があり、ステップ角度は小さくできない。&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;VR型&lt;/strong&gt;（Variable Reluctance Type、歯車状鉄心形）
+&lt;ul&gt;
+&lt;li&gt;回転子として歯車状の鉄心を使用する。ステップ角度を小さくできるが、トルクがやや低い。&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;HB型&lt;/strong&gt;（Hybrid Type、複合形）
+&lt;ul&gt;
+&lt;li&gt;PM型とVR型の特徴をもつ構造をしている。&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;※回転子（ローター）…モーターとして回転する軸のこと。&lt;/p&gt;
+&lt;h3 id=&#34;ステッピングモータの仕組み&#34;&gt;ステッピングモータの仕組み&lt;/h3&gt;
+&lt;p&gt;PM型のステッピングモータの仕組みを簡単に説明したいと思います。&lt;/p&gt;
+&lt;p&gt;まず、下記の図のようにPM型のステッピングモータは&lt;strong&gt;中心の永久磁石からなる回転子&lt;/strong&gt;と&lt;strong&gt;外側のコイルから構成されている固定子&lt;/strong&gt;から構成されています。コイルに電流を流すことで磁力が発生し、この磁力を利用して回転子を回転させていきます。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/189/1.png&#34; alt=&#34;1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;コイル1に電流を流すと固定子と回転子のN極とS極が引き合う。&lt;/li&gt;
+&lt;li&gt;さらにコイル2に電流を流すと、両方の固定子が磁化して回転子を引きつける。つまり45°回転する。&lt;/li&gt;
+&lt;li&gt;コイル1の電流を切ると、さらに45°回転する。&lt;/li&gt;
+&lt;li&gt;コイル3にコイル1に流した電流と逆方向の電流を流すと、さらに45°回転する。&lt;/li&gt;
+&lt;li&gt;コイル2の電流を切ると、さらに45°回転する。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;上記と同様の動作を繰り返すと回転子が回転します。&lt;/p&gt;
+&lt;p&gt;また、動画にすると下記のようなイメージです。
+&lt;img src=&#34;https://dotstud.io/img/blog/189/2.gif&#34; alt=&#34;&#34; /&gt;
+&lt;strong&gt;制御信号（ステップと呼びます）を与えると回転する&lt;/strong&gt;イメージです。また、&lt;strong&gt;1ステップあたりの回転角度を基本ステップ角度&lt;/strong&gt;と呼びます。&lt;/p&gt;
+&lt;h3 id=&#34;ステッピングモータの種類-２&#34;&gt;ステッピングモータの種類〈２〉&lt;/h3&gt;
+&lt;p&gt;先ほど述べたようにステッピングモータの種類には3種類あります。そして、&lt;strong&gt;さらに2種類&lt;/strong&gt;あります。ただし、この2種類とはステッピングモータ内部にあるコイルへの電流の流し方の違いによるものです。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;ユニポーラ型&lt;/strong&gt;（単極性）
+&lt;ul&gt;
+&lt;li&gt;相電流の切り替えのとき、1つのコイルに対して一定方向の電流しか流さない。&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;バイポーラ型&lt;/strong&gt;（双極性）
+&lt;ul&gt;
+&lt;li&gt;相電流の切り替えのたび、電流の方向が変わる。&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;※ステッピングモータの仕組みで説明したように磁極を変えるため内部のコイルをスイッチングする必要がある。その磁極をどのように変更するかというイメージ。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/189/3.png&#34; alt=&#34;3&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;h3 id=&#34;励磁-れいじ-方式&#34;&gt;励磁（れいじ）方式&lt;/h3&gt;
+&lt;p&gt;励磁方式とは、簡単に言えば「どのようにコイルに電流を流し、ステッピングモータを回転させるか」です。つまり、どのコイル（どのピン）に電圧をどの順番で印加していくかということです。&lt;/p&gt;
+&lt;p&gt;これは、制御するときに方式を選ぶことができます（プログラムで書くことができます）。ライブラリを使って制御するとわかりにくい部分かもしれません。&lt;/p&gt;
+&lt;p&gt;大まかに3つの励磁方式があるので、それぞれ紹介したいと思います。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/189/4.png&#34; alt=&#34;4&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;1相励磁&#34;&gt;■ 1相励磁&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;A→B→A&#39;→B&#39;&lt;/code&gt;の順に電流を流します（つまり励磁します）。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/189/5.png&#34; alt=&#34;5&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;このようにパルスを与えるたびに決められてステップ角だけ回転します。励磁の順を&lt;code&gt;A&#39;→B&#39;→A→B&lt;/code&gt;とすると逆回転します。&lt;/p&gt;
+&lt;p&gt;1相励磁は最も単純な方式ですが、トルクが弱く高速回転には向いていません。また、安定性が良くないため実用的ではありません｡&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;2相励磁&#34;&gt;■ 2相励磁&lt;/h4&gt;
+&lt;p&gt;次の相と1パルスずつずらして同時に励磁する方式です。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/189/6.png&#34; alt=&#34;6&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;パルス幅が1相励磁の2倍となり、1相励磁に比べて回転が安定して、大きなトルクが得られますが消費電力も2倍になります｡&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;1-2相励磁&#34;&gt;■ 1-2相励磁&lt;/h4&gt;
+&lt;p&gt;1相励磁と2相励磁を交互に繰り返す方式です。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/189/7.png&#34; alt=&#34;7&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;各相のパルス幅が3となり、次の相とは2パルスだけずらして励磁されます。1パルスごとに回転する角度が1相励磁と2相励磁に比べて半分になり、細かいモータ制御ができます。&lt;strong&gt;基本的にこの励磁方式で制御すれば間違いない&lt;/strong&gt;でしょう。&lt;/p&gt;
+&lt;h2 id=&#34;nefry-btでステッピングモータを制御しよう&#34;&gt;Nefry BTでステッピングモータを制御しよう！&lt;/h2&gt;
+&lt;h3 id=&#34;ステッピングモータを購入&#34;&gt;ステッピングモータを購入&lt;/h3&gt;
+&lt;p&gt;今回は、Amazonで&lt;a href=&#34;https://www.amazon.co.jp/gp/product/B010RYH74U/ref=oh_aui_detailpage_o03_s00?ie=UTF8&amp;amp;psc=1&#34;&gt;こちらのステッピングモータ&lt;/a&gt;を購入して使いました。ステッピングモータとドライバが5セット入っており、それでいて価格が約1000円という激安です。ちょっと試してみるには良い商品かと思います。&lt;/p&gt;
+&lt;h4 id=&#34;28byj-48-stepper-motor&#34;&gt;■ 28BYJ-48 Stepper Motor&lt;/h4&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/189/8.png&#34; alt=&#34;8&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;uln2003-driver&#34;&gt;■ ULN2003 driver&lt;/h4&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/189/9.png&#34; alt=&#34;9&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;h3 id=&#34;それぞれの仕様&#34;&gt;それぞれの仕様&lt;/h3&gt;
+&lt;h4 id=&#34;28byj-48-stepper-motor-1&#34;&gt;■ 28BYJ-48 Stepper Motor&lt;/h4&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;概要&lt;/th&gt;
+&lt;th&gt;仕様&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;種類&lt;/td&gt;
+&lt;td&gt;ユニポーラ型&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;結線&lt;/td&gt;
+&lt;td&gt;5線式&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;電圧&lt;/td&gt;
+&lt;td&gt;5-12V（直流電圧）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;周波数&lt;/td&gt;
+&lt;td&gt;100 Hz&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ステップモード&lt;/td&gt;
+&lt;td&gt;ハーフステップモード（推奨）（8ステップの信号で制御）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ステップ角&lt;/td&gt;
+&lt;td&gt;ハーフステップモード：64ステップで5.625°回転&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ギア比&lt;/td&gt;
+&lt;td&gt;64:1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;※ギア比…2つの歯車（ギア）の歯数の比率のこと。自転車をイメージすると良い。&lt;br /&gt;
+※ハーフステップモード…ステップ角が基本ステップ角度の1/2の角度で駆動する方式。&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;uln2003-driver-1&#34;&gt;■ ULN2003 driver&lt;/h4&gt;
+&lt;p&gt;ステッピングモータを使う際には、&lt;strong&gt;ステッピングモータ用のドライバ&lt;/strong&gt;を使用します。マイコンボードの信号だけでは制御できないので、制御を補助するためのものです。&lt;/p&gt;
+&lt;p&gt;1-2相励磁で制御する場合は、下記のような信号の組み合わせになります。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/189/10.png&#34; alt=&#34;10&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;（参照：&lt;a href=&#34;http://eeshop.unl.edu/pdf/Stepper+Driver.pdf&#34;&gt;http://eeshop.unl.edu/pdf/Stepper+Driver.pdf&lt;/a&gt; ）&lt;/p&gt;
+&lt;p&gt;このステッピングモータでは8ステップで1つの動作を表しています。つまり、8ステップ×8ステップ=64ステップで5.625°回転します。よって1回転するには360°÷5.625°×64=4096ステップで1回転します。&lt;/p&gt;
+&lt;h3 id=&#34;回路&#34;&gt;回路&lt;/h3&gt;
+&lt;p&gt;Nefry BTとステッピングモータの回路は下記のようになります。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/189/11.png&#34; alt=&#34;11&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;今回、使用するステッピングモータは5~12Vの間で動作します。また、Nefry BTとステッピングモータの電源は分けて使います。&lt;/p&gt;
+&lt;h3 id=&#34;プログラム-ライブラリあり&#34;&gt;プログラム（ライブラリあり）&lt;/h3&gt;
+&lt;p&gt;プログラムは下記の通りです。&lt;/p&gt;
+&lt;p&gt;Nefry BT上のスイッチを押すとステッピングモータが180°回転するというものです。今回は、ステッピングモータを回転させるため「Stepper.h」ライブラリを使いました。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;// ステッピングモータとNefry BTを制御するためのライブラリをinclude
+#include &amp;lt;Stepper.h&amp;gt;
+#include &amp;lt;Nefry.h&amp;gt;
+/*
+・フルステップ方式で2相励磁の場合は1つの動作で4ステップ
+・8回繰り返す（4×8 = 32ステップ）で11.25度回転
+・つまり、360度回転しようとするとき360/11.25 = 32ステップ
+・ギア比を考慮して32×64 = 2048ステップ
+・よって、ハフルステップ方式で2相励磁の場合、2048ステップで1回転
+*/
+/*
+・ハーフステップ方式で1-2相励磁の場合は1つの動作で8ステップ
+・8回繰り返す（8×8 = 64ステップ）と5.625度回転
+・つまり、360度回転しようとすると360/5.625 = 64ステップ
+・ギア比を考慮して64×64 = 4096ステップ
+・よって、ハーフステップ方式で1-2相励磁の場合、4096ステップで1回転
+*/
+#define MOTOR_1 D2 // blue
+#define MOTOR_2 D3 // pink
+#define MOTOR_3 D4 // yellow
+#define MOTOR_4 D5 // orange
+// ステッピングモータが1回転するのに必要なステップ数を定義
+#define MOTOR_STEPS 2048
+Stepper myStepper(MOTOR_STEPS, MOTOR_1, MOTOR_2, MOTOR_3, MOTOR_4);
+void setup() {
+// setspeed()関数でrpm（1分あたりの回転数）を設定
+// 例：10rpm=10回転/分
+myStepper.setSpeed(10);//10回転/分
+}
+void loop() {
+if(Nefry.readSW()){
+// 1024ステップ回転、つまり180°回転
+myStepper.step(1024);
+}
+// 静止時の負荷がないので電流を止める
+stopMotor();
+}
+// モーターへの電流を止める
+void stopMotor() {
 digitalWrite(MOTOR_1, LOW);
 digitalWrite(MOTOR_2, LOW);
 digitalWrite(MOTOR_3, LOW);
 digitalWrite(MOTOR_4, LOW);
 }
-&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="heading-9">動かしてみると&lt;/h3>
-&lt;p>実際に動かしてみると、180°回転していることがわかります。
-&lt;img src="https://dotstud.io/img/blog/189/12.gif" alt="">&lt;/p>
-&lt;h3 id="heading-10">プログラム（ライブラリなし）&lt;/h3>
-&lt;p>ステッピングモータの仕組みを理解する場合、ライブラリなしの方がわかりやすいかと思います。&lt;/p>
-&lt;p>下記はライブラリを使わずに励磁方式を変えてステッピングモータを制御したプログラムです。先ほど示した励磁方式の図を見ながら理解すると、良くわかるかと思います。&lt;/p>
-&lt;p>今回、使用するドライバには各相に対応してLEDが点灯するので、どの相に電圧を印加したかわかりやすいですね。&lt;/p>
-&lt;p>&lt;!-- raw HTML omitted -->&lt;/p>
-&lt;h4 id="-1-1">■ 1相励磁&lt;/h4>
-&lt;pre>&lt;code>#include&amp;lt;Nefry.h&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;動かしてみると&#34;&gt;動かしてみると&lt;/h3&gt;
+&lt;p&gt;実際に動かしてみると、180°回転していることがわかります。
+&lt;img src=&#34;https://dotstud.io/img/blog/189/12.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;h3 id=&#34;プログラム-ライブラリなし&#34;&gt;プログラム（ライブラリなし）&lt;/h3&gt;
+&lt;p&gt;ステッピングモータの仕組みを理解する場合、ライブラリなしの方がわかりやすいかと思います。&lt;/p&gt;
+&lt;p&gt;下記はライブラリを使わずに励磁方式を変えてステッピングモータを制御したプログラムです。先ほど示した励磁方式の図を見ながら理解すると、良くわかるかと思います。&lt;/p&gt;
+&lt;p&gt;今回、使用するドライバには各相に対応してLEDが点灯するので、どの相に電圧を印加したかわかりやすいですね。&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;1相励磁-1&#34;&gt;■ 1相励磁&lt;/h4&gt;
+&lt;pre&gt;&lt;code&gt;#include&amp;lt;Nefry.h&amp;gt;
 // 任意のピンを設定してください。基本、デジタルピンでOKです。都合上A2,A3を使っています。
 #define PIN1 A2
 #define PIN2 A3
@@ -424,249 +802,259 @@ digitalWrite(PIN3, 0);
 digitalWrite(PIN4, 0);
 delay(sleep_time);
 }
-&lt;/code>&lt;/pre>&lt;p>&lt;img src="https://dotstud.io/img/blog/189/13.gif" alt="">&lt;/p>
-&lt;p>&lt;!-- raw HTML omitted -->&lt;/p>
-&lt;h4 id="-2-1">■ 2相励磁&lt;/h4>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-c++" data-lang="c++">&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">include&lt;/span>&lt;span style="color:#75715e">&amp;lt;Nefry.h&amp;gt;&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>
-&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">define PIN1 A2&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">define PIN2 A3&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">define PIN3 D3&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">define PIN4 D4&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>
-&lt;span style="color:#66d9ef">void&lt;/span> &lt;span style="color:#a6e22e">setup&lt;/span>()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/189/13.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;2相励磁-1&#34;&gt;■ 2相励磁&lt;/h4&gt;
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;#include&amp;lt;Nefry.h&amp;gt;
+#define PIN1 A2
+#define PIN2 A3
+#define PIN3 D3
+#define PIN4 D4
+void setup()
 {
-Serial.begin(&lt;span style="color:#ae81ff">115200&lt;/span>);
+Serial.begin(115200);
 pinMode(PIN1, OUTPUT);
 pinMode(PIN2, OUTPUT);
 pinMode(PIN3, OUTPUT);
 pinMode(PIN4, OUTPUT);
 }
-&lt;span style="color:#66d9ef">void&lt;/span> &lt;span style="color:#a6e22e">loop&lt;/span>()
+void loop()
 {
-&lt;span style="color:#66d9ef">int&lt;/span> sleep_time &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">5&lt;/span>;
-digitalWrite(PIN1, &lt;span style="color:#ae81ff">1&lt;/span>);
-digitalWrite(PIN2, &lt;span style="color:#ae81ff">1&lt;/span>);
-digitalWrite(PIN3, &lt;span style="color:#ae81ff">0&lt;/span>);
-digitalWrite(PIN4, &lt;span style="color:#ae81ff">0&lt;/span>);
+int sleep_time = 5;
+digitalWrite(PIN1, 1);
+digitalWrite(PIN2, 1);
+digitalWrite(PIN3, 0);
+digitalWrite(PIN4, 0);
 delay(sleep_time);
-digitalWrite(PIN1, &lt;span style="color:#ae81ff">0&lt;/span>);
-digitalWrite(PIN2, &lt;span style="color:#ae81ff">1&lt;/span>);
-digitalWrite(PIN3, &lt;span style="color:#ae81ff">1&lt;/span>);
-digitalWrite(PIN4, &lt;span style="color:#ae81ff">0&lt;/span>);
+digitalWrite(PIN1, 0);
+digitalWrite(PIN2, 1);
+digitalWrite(PIN3, 1);
+digitalWrite(PIN4, 0);
 delay(sleep_time);
-digitalWrite(PIN1, &lt;span style="color:#ae81ff">0&lt;/span>);
-digitalWrite(PIN2, &lt;span style="color:#ae81ff">0&lt;/span>);
-digitalWrite(PIN3, &lt;span style="color:#ae81ff">1&lt;/span>);
-digitalWrite(PIN4, &lt;span style="color:#ae81ff">1&lt;/span>);
+digitalWrite(PIN1, 0);
+digitalWrite(PIN2, 0);
+digitalWrite(PIN3, 1);
+digitalWrite(PIN4, 1);
 delay(sleep_time);
-digitalWrite(PIN1, &lt;span style="color:#ae81ff">1&lt;/span>);
-digitalWrite(PIN2, &lt;span style="color:#ae81ff">0&lt;/span>);
-digitalWrite(PIN3, &lt;span style="color:#ae81ff">0&lt;/span>);
-digitalWrite(PIN4, &lt;span style="color:#ae81ff">1&lt;/span>);
+digitalWrite(PIN1, 1);
+digitalWrite(PIN2, 0);
+digitalWrite(PIN3, 0);
+digitalWrite(PIN4, 1);
 delay(sleep_time);
-&lt;span style="color:#75715e">// 電流を流し続けると発熱するのでいったん止める
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> digitalWrite(PIN1, &lt;span style="color:#ae81ff">0&lt;/span>);
-digitalWrite(PIN2, &lt;span style="color:#ae81ff">0&lt;/span>);
-digitalWrite(PIN3, &lt;span style="color:#ae81ff">0&lt;/span>);
-digitalWrite(PIN4, &lt;span style="color:#ae81ff">0&lt;/span>);
+// 電流を流し続けると発熱するのでいったん止める
+digitalWrite(PIN1, 0);
+digitalWrite(PIN2, 0);
+digitalWrite(PIN3, 0);
+digitalWrite(PIN4, 0);
 delay(sleep_time);
 }
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;img src="https://dotstud.io/img/blog/189/14.gif" alt="">&lt;/p>
-&lt;p>&lt;!-- raw HTML omitted -->&lt;/p>
-&lt;h4 id="-1-2-1">■ 1-2相励磁&lt;/h4>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-c++" data-lang="c++">&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">include&lt;/span>&lt;span style="color:#75715e">&amp;lt;Nefry.h&amp;gt;&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>
-&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">define PIN1 A2&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">define PIN2 A3&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">define PIN3 D3&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">define PIN4 D4&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>
-&lt;span style="color:#66d9ef">void&lt;/span> &lt;span style="color:#a6e22e">setup&lt;/span>()
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/189/14.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;1-2相励磁-1&#34;&gt;■ 1-2相励磁&lt;/h4&gt;
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;#include&amp;lt;Nefry.h&amp;gt;
+#define PIN1 A2
+#define PIN2 A3
+#define PIN3 D3
+#define PIN4 D4
+void setup()
 {
-Serial.begin(&lt;span style="color:#ae81ff">115200&lt;/span>);
+Serial.begin(115200);
 pinMode(PIN1, OUTPUT);
 pinMode(PIN2, OUTPUT);
 pinMode(PIN3, OUTPUT);
 pinMode(PIN4, OUTPUT);
 }
-&lt;span style="color:#66d9ef">void&lt;/span> &lt;span style="color:#a6e22e">loop&lt;/span>()
+void loop()
 {
-&lt;span style="color:#66d9ef">int&lt;/span> sleep_time &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">5&lt;/span>;
-digitalWrite(PIN1, &lt;span style="color:#ae81ff">1&lt;/span>);
-digitalWrite(PIN2, &lt;span style="color:#ae81ff">0&lt;/span>);
-digitalWrite(PIN3, &lt;span style="color:#ae81ff">0&lt;/span>);
-digitalWrite(PIN4, &lt;span style="color:#ae81ff">0&lt;/span>);
+int sleep_time = 5;
+digitalWrite(PIN1, 1);
+digitalWrite(PIN2, 0);
+digitalWrite(PIN3, 0);
+digitalWrite(PIN4, 0);
 delay(sleep_time);
-digitalWrite(PIN1, &lt;span style="color:#ae81ff">1&lt;/span>);
-digitalWrite(PIN2, &lt;span style="color:#ae81ff">1&lt;/span>);
-digitalWrite(PIN3, &lt;span style="color:#ae81ff">0&lt;/span>);
-digitalWrite(PIN4, &lt;span style="color:#ae81ff">0&lt;/span>);
+digitalWrite(PIN1, 1);
+digitalWrite(PIN2, 1);
+digitalWrite(PIN3, 0);
+digitalWrite(PIN4, 0);
 delay(sleep_time);
-digitalWrite(PIN1, &lt;span style="color:#ae81ff">0&lt;/span>);
-digitalWrite(PIN2, &lt;span style="color:#ae81ff">1&lt;/span>);
-digitalWrite(PIN3, &lt;span style="color:#ae81ff">0&lt;/span>);
-digitalWrite(PIN4, &lt;span style="color:#ae81ff">0&lt;/span>);
+digitalWrite(PIN1, 0);
+digitalWrite(PIN2, 1);
+digitalWrite(PIN3, 0);
+digitalWrite(PIN4, 0);
 delay(sleep_time);
-digitalWrite(PIN1, &lt;span style="color:#ae81ff">0&lt;/span>);
-digitalWrite(PIN2, &lt;span style="color:#ae81ff">1&lt;/span>);
-digitalWrite(PIN3, &lt;span style="color:#ae81ff">1&lt;/span>);
-digitalWrite(PIN4, &lt;span style="color:#ae81ff">0&lt;/span>);
+digitalWrite(PIN1, 0);
+digitalWrite(PIN2, 1);
+digitalWrite(PIN3, 1);
+digitalWrite(PIN4, 0);
 delay(sleep_time);
-digitalWrite(PIN1, &lt;span style="color:#ae81ff">0&lt;/span>);
-digitalWrite(PIN2, &lt;span style="color:#ae81ff">0&lt;/span>);
-digitalWrite(PIN3, &lt;span style="color:#ae81ff">1&lt;/span>);
-digitalWrite(PIN4, &lt;span style="color:#ae81ff">0&lt;/span>);
+digitalWrite(PIN1, 0);
+digitalWrite(PIN2, 0);
+digitalWrite(PIN3, 1);
+digitalWrite(PIN4, 0);
 delay(sleep_time);
-digitalWrite(PIN1, &lt;span style="color:#ae81ff">0&lt;/span>);
-digitalWrite(PIN2, &lt;span style="color:#ae81ff">0&lt;/span>);
-digitalWrite(PIN3, &lt;span style="color:#ae81ff">1&lt;/span>);
-digitalWrite(PIN4, &lt;span style="color:#ae81ff">1&lt;/span>);
+digitalWrite(PIN1, 0);
+digitalWrite(PIN2, 0);
+digitalWrite(PIN3, 1);
+digitalWrite(PIN4, 1);
 delay(sleep_time);
-digitalWrite(PIN1, &lt;span style="color:#ae81ff">0&lt;/span>);
-digitalWrite(PIN2, &lt;span style="color:#ae81ff">0&lt;/span>);
-digitalWrite(PIN3, &lt;span style="color:#ae81ff">0&lt;/span>);
-digitalWrite(PIN4, &lt;span style="color:#ae81ff">1&lt;/span>);
+digitalWrite(PIN1, 0);
+digitalWrite(PIN2, 0);
+digitalWrite(PIN3, 0);
+digitalWrite(PIN4, 1);
 delay(sleep_time);
-digitalWrite(PIN1, &lt;span style="color:#ae81ff">1&lt;/span>);
-digitalWrite(PIN2, &lt;span style="color:#ae81ff">0&lt;/span>);
-digitalWrite(PIN3, &lt;span style="color:#ae81ff">0&lt;/span>);
-digitalWrite(PIN4, &lt;span style="color:#ae81ff">1&lt;/span>);
+digitalWrite(PIN1, 1);
+digitalWrite(PIN2, 0);
+digitalWrite(PIN3, 0);
+digitalWrite(PIN4, 1);
 delay(sleep_time);
-&lt;span style="color:#75715e">//電流を流し続けると発熱するのでいったん止める
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> digitalWrite(PIN1, &lt;span style="color:#ae81ff">0&lt;/span>);
-digitalWrite(PIN2, &lt;span style="color:#ae81ff">0&lt;/span>);
-digitalWrite(PIN3, &lt;span style="color:#ae81ff">0&lt;/span>);
-digitalWrite(PIN4, &lt;span style="color:#ae81ff">0&lt;/span>);
+//電流を流し続けると発熱するのでいったん止める
+digitalWrite(PIN1, 0);
+digitalWrite(PIN2, 0);
+digitalWrite(PIN3, 0);
+digitalWrite(PIN4, 0);
 delay(sleep_time);
 }
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;img src="https://dotstud.io/img/blog/189/15.gif" alt="">&lt;/p>
-&lt;h2 id="-xy">作例: xy軸ステージ&lt;/h2>
-&lt;p>ステッピングモータを使えば、3Dプリンタの軸に使われているような可動式のステージを自作することも可能です。&lt;/p>
-&lt;p>たとえば、下記が自作したxy軸の2軸ステージです。また、これはNode-REDで遠隔制御できるようにしています。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;h2 id="heading-11">おわりに&lt;/h2>
-&lt;p>モータの世界はまだまだ奥深いのですが、今回はここまでです。&lt;/p>
-&lt;p>ステッピングモータが使えれば、さらにモノづくりの幅が広がることでしょう。また、IoT向きの開発ボードNefry BTを使えば、**遠隔制御できる「何か」**を割と簡単に作ることができます。&lt;/p>
-&lt;h2 id="heading-12">参考サイト&lt;/h2>
-&lt;ul>
-&lt;li>&lt;a href="https://42bots.com/tutorials/28byj-48-stepper-motor-with-uln2003-driver-and-arduino-uno/">28BYJ-48 Stepper Motor with ULN2003 driver and Arduino Uno | 42 Bots&lt;/a>&lt;/li>
-&lt;li>&lt;a href="https://toshiba.semicon-storage.com/jp/design-support/e-learning/stepping_motor/chap3/1274646.html">励磁モードまとめ | TOSHIBA e-ラーニング&lt;/a>&lt;/li>
-&lt;/ul></description></item><item><title>PWM制御をマスターしよう！Node-REDでサーボモータを遠隔制御する方法＆初ハンズオンレポート</title><link>https://dotstud.io/blog/nefry-servo-handson-takudooon/</link><pubDate>Thu, 12 Jul 2018 10:00:00 +0900</pubDate><guid>https://dotstud.io/blog/nefry-servo-handson-takudooon/</guid><description>&lt;h2 id="heading">暑さ本番、いよいよ大好きな生ビールの季節がやってまいりました！&lt;/h2>
-&lt;p>みなさまいかがお過ごしでしょうか？どうも、宇宙エンジニアの&lt;a href="https://dotstud.io/members/takudooon">たくろーどん&lt;/a>です。毎日、暑いですね。&lt;/p>
-&lt;p>さて先日、&lt;strong>初めてハンズオンイベント&lt;strong>を企画・実施してみました！題して、「&lt;/strong>【IoT】PWM制御をマスター！Nefry BT+Node-REDでサーボモータを遠隔制御&lt;/strong>&lt;a href="https://dotstudio.connpass.com/event/91695/">&lt;/a>」！&lt;/p>
-&lt;p>「モノづくりをしたい！」「こんなものをつくりたい！」と思っても「&lt;strong>こういう技術がつかえる&lt;/strong>」ということを知らないと、なかなかモノづくりが進みません。&lt;/p>
-&lt;p>なので、動くものを作りたいときに便利な&lt;!-- raw HTML omitted -->&lt;strong>サーボモータとその制御方法であるPWM制御&lt;/strong>をマスターし、&lt;strong>PCからサーボモータを遠隔制御をしよう&lt;/strong>&lt;!-- raw HTML omitted -->というのがハンズオンの目論見です。&lt;/p>
-&lt;p>では、ちらっとハンズオンの内容を振り返ってみたいと思います。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;h2 id="pwm">PWM制御を用いたプログラムの書き方&lt;/h2>
-&lt;h3 id="pwm-1">PWM制御について&lt;/h3>
-&lt;p>&lt;a href="https://dotstud.io/docs/pulse-width-modulation/">PWM制御の大まかな説明&lt;/a>は以前、ドキュメントに書きました。ようするに、PWM制御は「&lt;strong>パルスのオン・オフ繰り返し切り替えることで出力される電力を制御&lt;/strong>」するという意味です。&lt;/p>
-&lt;p>でも結局のところ、「&lt;strong>PWM制御ってどんなイメージやねん！&lt;/strong>」と多くの方が思うでしょう。&lt;/p>
-&lt;p>なので、これがわかりやすいのではないかという説明を思いつきました。それが、下記の動画です。
-&lt;img src="https://dotstud.io/img/blog/187/2.gif" alt="">&lt;/p>
-&lt;p>例えば、自宅から最寄りの駅まで走らなければならない状況を考えます。まるで、小学校の算数にでてくるたかしくんの問題を彷彿させますね。知らんけど。&lt;/p>
-&lt;ul>
-&lt;li>100%の力で走れば5分で駅につく ≒ 100%出力されるので、5V出力される&lt;/li>
-&lt;li>全力で走って途中で歩くと9分で駅に着く（全体的に80%の力で走る） ≒ 80%出力されるので、4V出力される&lt;/li>
-&lt;li>全力で走って途中で歩くと10分で駅に着く（全体的に50%の力で走る） ≒ 50%出力されるので、2.5V出力される&lt;/li>
-&lt;li>全力で走って途中で歩くと15分で駅に着く（全体的に10%の力で走る） ≒ 10%出力されるので、0.5V出力される&lt;/li>
-&lt;/ul>
-&lt;p>というようなイメージです。自宅から駅まで走る場合は走る速さの具合によって、到着時間が伸びます。しかし、電圧の場合は実行電圧（実際に出力される電圧）は下がっていきます。&lt;/p>
-&lt;h3 id="esp32">ESP32開発ボードでのプログラムについて&lt;/h3>
-&lt;p>&lt;a href="https://dotstud.io/docs/nefrybt">Nefry BT&lt;/a>のようなESP32を搭載しているような開発ボードでPWM制御する場合は、ledc関数を使います。&lt;strong>ESP32ではArduinoでつかうようなanalogWrite関数が実装されていない&lt;/strong>とのことなので注意しましょう（ただし、今後変更される可能性があります）。&lt;/p>
-&lt;p>例えば、下記のようなプログラムになります。&lt;/p>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-c++" data-lang="c++">
-&lt;span style="color:#75715e">//基本Iotは2.4GHz帯を使うこと
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">include&lt;/span>&lt;span style="color:#75715e">&amp;lt;Nefry.h&amp;gt;&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">include&lt;/span>&lt;span style="color:#75715e">&amp;#34;esp32-hal-ledc.h&amp;#34;&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>
-&lt;span style="color:#75715e">//PWM信号の周波数をPWMをつくっているクロック周波数で割ったもの
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75715e">//ledcSetupでPWMの範囲を8bitに設定したとき、0～255　10bitのときは0～1023となる、2進数の話
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">define PWM_BITWIDTH 16&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>
-&lt;span style="color:#75715e">//わかりやすいように角度に変換する関数/////////////////////
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#66d9ef">int&lt;/span> &lt;span style="color:#a6e22e">deg2pw&lt;/span>(&lt;span style="color:#66d9ef">int&lt;/span> deg, &lt;span style="color:#66d9ef">int&lt;/span> bit){
-&lt;span style="color:#66d9ef">double&lt;/span> ms &lt;span style="color:#f92672">=&lt;/span> ((&lt;span style="color:#66d9ef">double&lt;/span>) deg &lt;span style="color:#f92672">-&lt;/span> &lt;span style="color:#ae81ff">90.0&lt;/span>) &lt;span style="color:#f92672">*&lt;/span> &lt;span style="color:#ae81ff">0.95&lt;/span> &lt;span style="color:#f92672">/&lt;/span> &lt;span style="color:#ae81ff">90.0&lt;/span> &lt;span style="color:#f92672">+&lt;/span> &lt;span style="color:#ae81ff">1.45&lt;/span>;
-&lt;span style="color:#66d9ef">return&lt;/span> (&lt;span style="color:#66d9ef">int&lt;/span>) (ms &lt;span style="color:#f92672">/&lt;/span> &lt;span style="color:#ae81ff">20.0&lt;/span> &lt;span style="color:#f92672">*&lt;/span> pow(&lt;span style="color:#ae81ff">2&lt;/span>, bit));
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/189/15.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;作例-xy軸ステージ&#34;&gt;作例: xy軸ステージ&lt;/h2&gt;
+&lt;p&gt;ステッピングモータを使えば、3Dプリンタの軸に使われているような可動式のステージを自作することも可能です。&lt;/p&gt;
+&lt;p&gt;たとえば、下記が自作したxy軸の2軸ステージです。また、これはNode-REDで遠隔制御できるようにしています。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/189/16.png&#34; alt=&#34;16&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+&lt;p&gt;モータの世界はまだまだ奥深いのですが、今回はここまでです。&lt;/p&gt;
+&lt;p&gt;ステッピングモータが使えれば、さらにモノづくりの幅が広がることでしょう。また、IoT向きの開発ボードNefry BTを使えば、&lt;strong&gt;遠隔制御できる「何か」&lt;/strong&gt;を割と簡単に作ることができます。&lt;/p&gt;
+&lt;h2 id=&#34;参考サイト&#34;&gt;参考サイト&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://42bots.com/tutorials/28byj-48-stepper-motor-with-uln2003-driver-and-arduino-uno/&#34;&gt;28BYJ-48 Stepper Motor with ULN2003 driver and Arduino Uno | 42 Bots&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://toshiba.semicon-storage.com/jp/design-support/e-learning/stepping_motor/chap3/1274646.html&#34;&gt;励磁モードまとめ | TOSHIBA e-ラーニング&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>PWM制御をマスターしよう！Node-REDでサーボモータを遠隔制御する方法＆初ハンズオンレポート</title><link>https://dotstud.io/blog/nefry-servo-handson-takudooon/</link><pubDate>Thu, 12 Jul 2018 10:00:00 +0900</pubDate><guid>https://dotstud.io/blog/nefry-servo-handson-takudooon/</guid><description>
+&lt;h2 id=&#34;暑さ本番-いよいよ大好きな生ビールの季節がやってまいりました&#34;&gt;暑さ本番、いよいよ大好きな生ビールの季節がやってまいりました！&lt;/h2&gt;
+&lt;p&gt;みなさまいかがお過ごしでしょうか？どうも、宇宙エンジニアの&lt;a href=&#34;https://dotstud.io/members/takudooon&#34;&gt;たくろーどん&lt;/a&gt;です。毎日、暑いですね。&lt;/p&gt;
+&lt;p&gt;さて先日、&lt;strong&gt;初めてハンズオンイベント&lt;/strong&gt;を企画・実施してみました！題して、「&lt;a href=&#34;https://dotstudio.connpass.com/event/91695/&#34;&gt;&lt;strong&gt;【IoT】PWM制御をマスター！Nefry BT+Node-REDでサーボモータを遠隔制御&lt;/strong&gt;&lt;/a&gt;」！&lt;/p&gt;
+&lt;p&gt;「モノづくりをしたい！」「こんなものをつくりたい！」と思っても「&lt;strong&gt;こういう技術がつかえる&lt;/strong&gt;」ということを知らないと、なかなかモノづくりが進みません。&lt;/p&gt;
+&lt;p&gt;なので、動くものを作りたいときに便利な&lt;u&gt;&lt;strong&gt;サーボモータとその制御方法であるPWM制御&lt;/strong&gt;をマスターし、&lt;strong&gt;PCからサーボモータを遠隔制御をしよう&lt;/strong&gt;&lt;/u&gt;というのがハンズオンの目論見です。&lt;/p&gt;
+&lt;p&gt;では、ちらっとハンズオンの内容を振り返ってみたいと思います。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/187/1.png&#34; alt=&#34;1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;h2 id=&#34;pwm制御を用いたプログラムの書き方&#34;&gt;PWM制御を用いたプログラムの書き方&lt;/h2&gt;
+&lt;h3 id=&#34;pwm制御について&#34;&gt;PWM制御について&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/pulse-width-modulation/&#34;&gt;PWM制御の大まかな説明&lt;/a&gt;は以前、ドキュメントに書きました。ようするに、PWM制御は「&lt;strong&gt;パルスのオン・オフ繰り返し切り替えることで出力される電力を制御&lt;/strong&gt;」するという意味です。&lt;/p&gt;
+&lt;p&gt;でも結局のところ、「&lt;strong&gt;PWM制御ってどんなイメージやねん！&lt;/strong&gt;」と多くの方が思うでしょう。&lt;/p&gt;
+&lt;p&gt;なので、これがわかりやすいのではないかという説明を思いつきました。それが、下記の動画です。
+&lt;img src=&#34;https://dotstud.io/img/blog/187/2.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;例えば、自宅から最寄りの駅まで走らなければならない状況を考えます。まるで、小学校の算数にでてくるたかしくんの問題を彷彿させますね。知らんけど。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;100%の力で走れば5分で駅につく ≒ 100%出力されるので、5V出力される&lt;/li&gt;
+&lt;li&gt;全力で走って途中で歩くと9分で駅に着く（全体的に80%の力で走る） ≒ 80%出力されるので、4V出力される&lt;/li&gt;
+&lt;li&gt;全力で走って途中で歩くと10分で駅に着く（全体的に50%の力で走る） ≒ 50%出力されるので、2.5V出力される&lt;/li&gt;
+&lt;li&gt;全力で走って途中で歩くと15分で駅に着く（全体的に10%の力で走る） ≒ 10%出力されるので、0.5V出力される&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;というようなイメージです。自宅から駅まで走る場合は走る速さの具合によって、到着時間が伸びます。しかし、電圧の場合は実行電圧（実際に出力される電圧）は下がっていきます。&lt;/p&gt;
+&lt;h3 id=&#34;esp32開発ボードでのプログラムについて&#34;&gt;ESP32開発ボードでのプログラムについて&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/nefrybt&#34;&gt;Nefry BT&lt;/a&gt;のようなESP32を搭載しているような開発ボードでPWM制御する場合は、ledc関数を使います。&lt;strong&gt;ESP32ではArduinoでつかうようなanalogWrite関数が実装されていない&lt;/strong&gt;とのことなので注意しましょう（ただし、今後変更される可能性があります）。&lt;/p&gt;
+&lt;p&gt;例えば、下記のようなプログラムになります。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;
+//基本Iotは2.4GHz帯を使うこと
+#include&amp;lt;Nefry.h&amp;gt;
+#include&amp;quot;esp32-hal-ledc.h&amp;quot;
+//PWM信号の周波数をPWMをつくっているクロック周波数で割ったもの
+//ledcSetupでPWMの範囲を8bitに設定したとき、0～255　10bitのときは0～1023となる、2進数の話
+#define PWM_BITWIDTH 16
+//わかりやすいように角度に変換する関数/////////////////////
+int deg2pw(int deg, int bit){
+double ms = ((double) deg - 90.0) * 0.95 / 90.0 + 1.45;
+return (int) (ms / 20.0 * pow(2, bit));
 }
-&lt;span style="color:#75715e">//////////////////////////////////////////////////////////
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>
-&lt;span style="color:#66d9ef">void&lt;/span> &lt;span style="color:#a6e22e">setup&lt;/span>() {
-Serial.begin(&lt;span style="color:#ae81ff">115200&lt;/span>);
-&lt;span style="color:#75715e">//ledcSetup(チャンネル数(0～),周波数(たとえばPWMサイクル20mHzなら50Hzになるという意味(SG90の場合))、分解能は任意(ただし限度はある))
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> ledcSetup(&lt;span style="color:#ae81ff">0&lt;/span>,&lt;span style="color:#ae81ff">50&lt;/span>,PWM_BITWIDTH);
-ledcAttachPin(&lt;span style="color:#960050;background-color:#1e0010">ピ&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">ン&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">番&lt;/span>&lt;span style="color:#960050;background-color:#1e0010">号&lt;/span>,&lt;span style="color:#ae81ff">0&lt;/span>);&lt;span style="color:#75715e">//left_motor
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> Nefry.enableSW();
+//////////////////////////////////////////////////////////
+void setup() {
+Serial.begin(115200);
+//ledcSetup(チャンネル数(0～),周波数(たとえばPWMサイクル20mHzなら50Hzになるという意味(SG90の場合))、分解能は任意(ただし限度はある))
+ledcSetup(0,50,PWM_BITWIDTH);
+ledcAttachPin(ピン番号,0);//left_motor
+Nefry.enableSW();
 }
-&lt;span style="color:#66d9ef">void&lt;/span> &lt;span style="color:#a6e22e">loop&lt;/span>(){
-&lt;span style="color:#66d9ef">if&lt;/span>((Nefry.readSW())){
-ledcWrite(&lt;span style="color:#ae81ff">0&lt;/span>,deg2pw(&lt;span style="color:#ae81ff">90&lt;/span>, PWM_BITWIDTH));
-delay(&lt;span style="color:#ae81ff">800&lt;/span>);
-ledcWrite(&lt;span style="color:#ae81ff">0&lt;/span>,deg2pw(&lt;span style="color:#ae81ff">0&lt;/span>, PWM_BITWIDTH));
+void loop(){
+if((Nefry.readSW())){
+ledcWrite(0,deg2pw(90, PWM_BITWIDTH));
+delay(800);
+ledcWrite(0,deg2pw(0, PWM_BITWIDTH));
 }
 }
-&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="heading-1">プログラムの書き方&lt;/h3>
-&lt;p>プログラムを詳しく見てましょう。&lt;/p>
-&lt;p>ledc関数を使うため、ライブラリ「esp32-hal-ledc.h」を最初にインクルードします。&lt;/p>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-c++" data-lang="c++">&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">include&lt;/span>&lt;span style="color:#75715e">&amp;#34;esp32-hal-ledc.h&amp;#34;&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>ライブラリ「esp32-hal-ledc.h」を使うときの主な関数は以下に示すものです。&lt;/p>
-&lt;ol>
-&lt;li>ledcSetup（チャンネル,周波数,分解能）&lt;/li>
-&lt;li>ledcAttachPin（ピン番号,チャンネル）：チャンネルはピン番号の識別番号です&lt;/li>
-&lt;li>ledcWrite（チャンネル,パルス幅）：設定した角度になるように与えるべきパルス幅を算出する関数&lt;/li>
-&lt;/ol>
-&lt;p>実際の記述は以下のようになります。&lt;/p>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-c++" data-lang="c++">&lt;span style="color:#66d9ef">void&lt;/span> &lt;span style="color:#a6e22e">setup&lt;/span>() {
-Serial.begin(&lt;span style="color:#ae81ff">115200&lt;/span>);
-ledcSetup(&lt;span style="color:#ae81ff">0&lt;/span>,&lt;span style="color:#ae81ff">50&lt;/span>,PWM_BITWIDTH);
-ledcAttachPin(A2,&lt;span style="color:#ae81ff">0&lt;/span>);&lt;span style="color:#75715e">//left_motor
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> Nefry.enableSW();
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;プログラムの書き方&#34;&gt;プログラムの書き方&lt;/h3&gt;
+&lt;p&gt;プログラムを詳しく見てましょう。&lt;/p&gt;
+&lt;p&gt;ledc関数を使うため、ライブラリ「esp32-hal-ledc.h」を最初にインクルードします。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;#include&amp;quot;esp32-hal-ledc.h&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;ライブラリ「esp32-hal-ledc.h」を使うときの主な関数は以下に示すものです。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;ledcSetup（チャンネル,周波数,分解能）&lt;/li&gt;
+&lt;li&gt;ledcAttachPin（ピン番号,チャンネル）：チャンネルはピン番号の識別番号です&lt;/li&gt;
+&lt;li&gt;ledcWrite（チャンネル,パルス幅）：設定した角度になるように与えるべきパルス幅を算出する関数&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;実際の記述は以下のようになります。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;void setup() {
+Serial.begin(115200);
+ledcSetup(0,50,PWM_BITWIDTH);
+ledcAttachPin(A2,0);//left_motor
+Nefry.enableSW();
 }
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>分解能は&lt;strong>どれだけ細かく制御するのか&lt;/strong>を表しているイメージです。これは&lt;strong>ビット数&lt;/strong>で表します。&lt;/p>
-&lt;p>例えば、分解能を&lt;strong>8ビットとするれば0〜255バイト&lt;/strong>（2の8乗）、&lt;strong>10ビットなら0〜1023バイト&lt;/strong>（2の10乗）となります。&lt;/p>
-&lt;p>これを、どのようにPWM制御に使えるのか説明します。PWM制御とは一定電圧の入力から&lt;strong>パルス列のオンとオフの一定周期を作り、オンの時間幅を変化させる電力制御方式&lt;/strong>のことです。つまり、&lt;strong>実効電圧を変化させる&lt;/strong>ことができます。&lt;/p>
-&lt;p>なので、例えば、最大5[V]の出力を考えたとき、&lt;/p>
-&lt;ul>
-&lt;li>&lt;strong>分解能8ビットだと0→0[V]、127→2.5[V]、255→5[V]&lt;/strong>&lt;/li>
-&lt;li>&lt;strong>分解能10ビットだと0→0[V]、511→2.5[V]、1023→5[V]&lt;/strong>&lt;/li>
-&lt;/ul>
-&lt;p>と表せます。分解能が大きい方が、細かい制御ができることがわかるかと思います。&lt;/p>
-&lt;h2 id="node-redmqtt">Node-RED×MQTTでサーボモータを遠隔制御&lt;/h2>
-&lt;h3 id="node-red">Node-REDとは&lt;/h3>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>&lt;a href="https://nodered.jp/">Node-RED&lt;/a>はハードウェアデバイス/APIおよびオンラインサービスを接続するためのツールです。ウェブ上で、フローチャートのように直感的にプログラムをつくることができます。そして、最終的に自分が欲しい仕組みを作り上げるというものです。&lt;/p>
-&lt;p>Node-REDを使うには大まかに2パターンあります。&lt;/p>
-&lt;ul>
-&lt;li>自分のPC上でローカルで動かす（今回はこちらで進めていきます）&lt;/li>
-&lt;li>外部のサービスを利用する（IBMクラウドやenebularなど）&lt;/li>
-&lt;/ul>
-&lt;p>導入方法は、&lt;a href="https://qiita.com/minwinmin/private/6c13d2c912d0d7e8e197">こちら&lt;/a>で説明していますので参考にしてください。&lt;/p>
-&lt;p>また、後ほどNode-REDにフローのコードを貼り付ける必要があるので簡単に貼り付け方法を説明します。&lt;/p>
-&lt;p>まずフローのコードをコピーし、Node-REDを立ち上げたら右上のメニュー（3本線）をクリックします。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>すると上記のような画面があらわれます。「読み込み」をクリックして、あらわれた画面にコピーしたコードを貼り付ければ完了です。&lt;/p>
-&lt;h3 id="mqtt">MQTTとは&lt;/h3>
-&lt;p>MQTTとは、&lt;strong>多数のデバイスの間で短いメッセージを頻繁に送受信する&lt;/strong>ことを想定した通信プロトコルです。つまりインフラのようなもの、もしくはメッセージを送受信するので土管のようなものをイメージすると良いかと思います。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>MQTTは先ほど説明したような仕組みの名前です。なので、実際にメッセージを送受信するためにはMQTTブローカーが必要です。イメージは下記の画像のようになります。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>MQTTブローカーを用意するには、いくつか方法があります（&lt;a href="http://acro-engineer.hatenablog.com/entry/2015/06/19/120000">こちらのサイト&lt;/a>にまとめられています）。今回、ハンズオンでつかったの以下の2パターンです。&lt;/p>
-&lt;ul>
-&lt;li>&lt;strong>ローカルホストでMQTTブローカーをたてる&lt;/strong>&lt;/li>
-&lt;li>&lt;a href="https://github.com/mcollina/mosca">Mosca&lt;/a>を利用する -&amp;gt; MQTT brokerのためのライブラリ（IBMクラウドのような外部サービスでNode-REDを使う場合、うまくいきませんでした）&lt;/li>
-&lt;li>&lt;strong>&lt;a href="https://test.mosquitto.org/">mosquitto&lt;/a>のテストサーバーを利用する&lt;/strong>&lt;/li>
-&lt;li>これから記載するプログラムはこちらを使っています。&lt;/li>
-&lt;/ul>
-&lt;h3 id="node-red-1">Node-REDのフローのコード&lt;/h3>
-&lt;p>下記のNode-REDのフローのコードを、Node-REDにコピーして使いましょう。&lt;/p>
-&lt;pre>&lt;code>[
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;分解能は&lt;strong&gt;どれだけ細かく制御するのか&lt;/strong&gt;を表しているイメージです。これは&lt;strong&gt;ビット数&lt;/strong&gt;で表します。&lt;/p&gt;
+&lt;p&gt;例えば、分解能を&lt;strong&gt;8ビットとするれば0〜255バイト&lt;/strong&gt;（2の8乗）、&lt;strong&gt;10ビットなら0〜1023バイト&lt;/strong&gt;（2の10乗）となります。&lt;/p&gt;
+&lt;p&gt;これを、どのようにPWM制御に使えるのか説明します。PWM制御とは一定電圧の入力から&lt;strong&gt;パルス列のオンとオフの一定周期を作り、オンの時間幅を変化させる電力制御方式&lt;/strong&gt;のことです。つまり、&lt;strong&gt;実効電圧を変化させる&lt;/strong&gt;ことができます。&lt;/p&gt;
+&lt;p&gt;なので、例えば、最大5[V]の出力を考えたとき、&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;分解能8ビットだと0→0[V]、127→2.5[V]、255→5[V]&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;分解能10ビットだと0→0[V]、511→2.5[V]、1023→5[V]&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;と表せます。分解能が大きい方が、細かい制御ができることがわかるかと思います。&lt;/p&gt;
+&lt;h2 id=&#34;node-red-mqttでサーボモータを遠隔制御&#34;&gt;Node-RED×MQTTでサーボモータを遠隔制御&lt;/h2&gt;
+&lt;h3 id=&#34;node-redとは&#34;&gt;Node-REDとは&lt;/h3&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/187/9.png&#34; alt=&#34;9&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://nodered.jp/&#34;&gt;Node-RED&lt;/a&gt;はハードウェアデバイス/APIおよびオンラインサービスを接続するためのツールです。ウェブ上で、フローチャートのように直感的にプログラムをつくることができます。そして、最終的に自分が欲しい仕組みを作り上げるというものです。&lt;/p&gt;
+&lt;p&gt;Node-REDを使うには大まかに2パターンあります。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;自分のPC上でローカルで動かす（今回はこちらで進めていきます）&lt;/li&gt;
+&lt;li&gt;外部のサービスを利用する（IBMクラウドやenebularなど）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;導入方法は、&lt;a href=&#34;https://qiita.com/minwinmin/private/6c13d2c912d0d7e8e197&#34;&gt;こちら&lt;/a&gt;で説明していますので参考にしてください。&lt;/p&gt;
+&lt;p&gt;また、後ほどNode-REDにフローのコードを貼り付ける必要があるので簡単に貼り付け方法を説明します。&lt;/p&gt;
+&lt;p&gt;まずフローのコードをコピーし、Node-REDを立ち上げたら右上のメニュー（3本線）をクリックします。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/187/10.png&#34; alt=&#34;10&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;すると上記のような画面があらわれます。「読み込み」をクリックして、あらわれた画面にコピーしたコードを貼り付ければ完了です。&lt;/p&gt;
+&lt;h3 id=&#34;mqttとは&#34;&gt;MQTTとは&lt;/h3&gt;
+&lt;p&gt;MQTTとは、&lt;strong&gt;多数のデバイスの間で短いメッセージを頻繁に送受信する&lt;/strong&gt;ことを想定した通信プロトコルです。つまりインフラのようなもの、もしくはメッセージを送受信するので土管のようなものをイメージすると良いかと思います。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/187/3.png&#34; alt=&#34;3&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;MQTTは先ほど説明したような仕組みの名前です。なので、実際にメッセージを送受信するためにはMQTTブローカーが必要です。イメージは下記の画像のようになります。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/187/4.png&#34; alt=&#34;4&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;MQTTブローカーを用意するには、いくつか方法があります（&lt;a href=&#34;http://acro-engineer.hatenablog.com/entry/2015/06/19/120000&#34;&gt;こちらのサイト&lt;/a&gt;にまとめられています）。今回、ハンズオンでつかったの以下の2パターンです。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;ローカルホストでMQTTブローカーをたてる&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/mcollina/mosca&#34;&gt;Mosca&lt;/a&gt;を利用する -&amp;gt; MQTT brokerのためのライブラリ（IBMクラウドのような外部サービスでNode-REDを使う場合、うまくいきませんでした）&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;&lt;a href=&#34;https://test.mosquitto.org/&#34;&gt;mosquitto&lt;/a&gt;のテストサーバーを利用する&lt;/strong&gt;
+&lt;ul&gt;
+&lt;li&gt;これから記載するプログラムはこちらを使っています。&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;node-redのフローのコード&#34;&gt;Node-REDのフローのコード&lt;/h3&gt;
+&lt;p&gt;下記のNode-REDのフローのコードを、Node-REDにコピーして使いましょう。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[
 {
 &amp;quot;id&amp;quot;: &amp;quot;7878093f.d68778&amp;quot;,
 &amp;quot;type&amp;quot;: &amp;quot;debug&amp;quot;,
@@ -835,137 +1223,132 @@ ledcAttachPin(A2,&lt;span style="color:#ae81ff">0&lt;/span>);&lt;span style="col
 &amp;quot;willPayload&amp;quot;: &amp;quot;&amp;quot;
 }
 ]
-&lt;/code>&lt;/pre>&lt;h3 id="nefry-bt">Nefry BTのプログラム&lt;/h3>
-&lt;p>下記がNefry BT側のプログラムになります。&lt;/p>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-c++" data-lang="c++">&lt;span style="color:#75715e">//Nefryがwifiにつながっているか確認、2.4Ghzにつなごう
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75715e">//できたtest.mosquitto.orgで使える！
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">include&lt;/span> &lt;span style="color:#75715e">&amp;lt;Nefry.h&amp;gt;&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">include&lt;/span> &lt;span style="color:#75715e">&amp;lt;WiFiClient.h&amp;gt;&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">include&lt;/span> &lt;span style="color:#75715e">&amp;lt;PubSubClient.h&amp;gt;&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">include&lt;/span> &lt;span style="color:#75715e">&amp;lt;ArduinoJson.h&amp;gt;&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">include&lt;/span>&lt;span style="color:#75715e">&amp;#34;esp32-hal-ledc.h&amp;#34;&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">define URL &amp;#34;mosquitto.org&amp;#34;&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>
-&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">define PWM_BITWIDTH 16&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>
-&lt;span style="color:#66d9ef">int&lt;/span> &lt;span style="color:#a6e22e">deg2pw&lt;/span>(&lt;span style="color:#66d9ef">int&lt;/span> deg, &lt;span style="color:#66d9ef">int&lt;/span> bit){
-&lt;span style="color:#66d9ef">double&lt;/span> ms &lt;span style="color:#f92672">=&lt;/span> ((&lt;span style="color:#66d9ef">double&lt;/span>) deg &lt;span style="color:#f92672">-&lt;/span> &lt;span style="color:#ae81ff">90.0&lt;/span>) &lt;span style="color:#f92672">*&lt;/span> &lt;span style="color:#ae81ff">0.95&lt;/span> &lt;span style="color:#f92672">/&lt;/span> &lt;span style="color:#ae81ff">90.0&lt;/span> &lt;span style="color:#f92672">+&lt;/span> &lt;span style="color:#ae81ff">1.45&lt;/span>;
-&lt;span style="color:#66d9ef">return&lt;/span> (&lt;span style="color:#66d9ef">int&lt;/span>) (ms &lt;span style="color:#f92672">/&lt;/span> &lt;span style="color:#ae81ff">20.0&lt;/span> &lt;span style="color:#f92672">*&lt;/span> pow(&lt;span style="color:#ae81ff">2&lt;/span>, bit));
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;nefry-btのプログラム&#34;&gt;Nefry BTのプログラム&lt;/h3&gt;
+&lt;p&gt;下記がNefry BT側のプログラムになります。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;//Nefryがwifiにつながっているか確認、2.4Ghzにつなごう
+//できたtest.mosquitto.orgで使える！
+#include &amp;lt;Nefry.h&amp;gt;
+#include &amp;lt;WiFiClient.h&amp;gt;
+#include &amp;lt;PubSubClient.h&amp;gt;
+#include &amp;lt;ArduinoJson.h&amp;gt;
+#include&amp;quot;esp32-hal-ledc.h&amp;quot;
+#define URL &amp;quot;mosquitto.org&amp;quot;
+#define PWM_BITWIDTH 16
+int deg2pw(int deg, int bit){
+double ms = ((double) deg - 90.0) * 0.95 / 90.0 + 1.45;
+return (int) (ms / 20.0 * pow(2, bit));
 }
 IPAddress endpoint;
-&lt;span style="color:#66d9ef">const&lt;/span> &lt;span style="color:#66d9ef">int&lt;/span> port &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">1883&lt;/span>;
-&lt;span style="color:#66d9ef">const&lt;/span> &lt;span style="color:#66d9ef">char&lt;/span> &lt;span style="color:#f92672">*&lt;/span>pubTopic;
-&lt;span style="color:#66d9ef">const&lt;/span> &lt;span style="color:#66d9ef">char&lt;/span> &lt;span style="color:#f92672">*&lt;/span>subTopic;
-&lt;span style="color:#66d9ef">const&lt;/span> &lt;span style="color:#66d9ef">char&lt;/span> &lt;span style="color:#f92672">*&lt;/span>deviceName;
-&lt;span style="color:#66d9ef">const&lt;/span> &lt;span style="color:#66d9ef">char&lt;/span> &lt;span style="color:#f92672">*&lt;/span>mqtt_server &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">test.mosquitto.org&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>;
+const int port = 1883;
+const char *pubTopic;
+const char *subTopic;
+const char *deviceName;
+const char *mqtt_server = &amp;quot;test.mosquitto.org&amp;quot;;
 WiFiClient httpsClient;
-PubSubClient &lt;span style="color:#a6e22e">mqttClient&lt;/span>(httpsClient);
-&lt;span style="color:#66d9ef">void&lt;/span> &lt;span style="color:#a6e22e">setup&lt;/span>() {
-ledcSetup(&lt;span style="color:#ae81ff">0&lt;/span>,&lt;span style="color:#ae81ff">50&lt;/span>,PWM_BITWIDTH);
-ledcAttachPin(A2,&lt;span style="color:#ae81ff">0&lt;/span>);
-&lt;span style="color:#75715e">//// NefryBT設定画面まわり ////////////////////////////////////////
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>
-&lt;span style="color:#75715e">// NefryBT
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> pubTopic &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/pub/NefryBT/SAMPLE&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>;
-subTopic &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/sub/NefryBT/SAMPLE&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>;
-deviceName &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">NefryBT_SAMPLE&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>; &lt;span style="color:#75715e">// 複数台で利用する場合は必ずかぶらないように変更する
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#75715e">// ローカルホストでMQTTブローカーを立てている場合は、パソコンのIPAddress型に収納。配列っぽく入れる。ここはその都度確認すること
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#75715e">//endpoint指定部
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> endpoint[&lt;span style="color:#ae81ff">0&lt;/span>] &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">192&lt;/span>;
-endpoint[&lt;span style="color:#ae81ff">1&lt;/span>] &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">168&lt;/span>;
-endpoint[&lt;span style="color:#ae81ff">2&lt;/span>] &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">43&lt;/span>;
-endpoint[&lt;span style="color:#ae81ff">3&lt;/span>] &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">105&lt;/span>;
-&lt;span style="color:#75715e">//// 以下通常処理 ////////////////////////////////////////
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>
-Serial.begin(&lt;span style="color:#ae81ff">115200&lt;/span>);
-&lt;span style="color:#75715e">//mqttClient.setServer()関数でMQTTブローカーを指定する
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> mqttClient.setServer(mqtt_server, port);
+PubSubClient mqttClient(httpsClient);
+void setup() {
+ledcSetup(0,50,PWM_BITWIDTH);
+ledcAttachPin(A2,0);
+//// NefryBT設定画面まわり ////////////////////////////////////////
+// NefryBT
+pubTopic = &amp;quot;/pub/NefryBT/SAMPLE&amp;quot;;
+subTopic = &amp;quot;/sub/NefryBT/SAMPLE&amp;quot;;
+deviceName = &amp;quot;NefryBT_SAMPLE&amp;quot;; // 複数台で利用する場合は必ずかぶらないように変更する
+// ローカルホストでMQTTブローカーを立てている場合は、パソコンのIPAddress型に収納。配列っぽく入れる。ここはその都度確認すること
+//endpoint指定部
+endpoint[0] = 192;
+endpoint[1] = 168;
+endpoint[2] = 43;
+endpoint[3] = 105;
+//// 以下通常処理 ////////////////////////////////////////
+Serial.begin(115200);
+//mqttClient.setServer()関数でMQTTブローカーを指定する
+mqttClient.setServer(mqtt_server, port);
 mqttClient.setCallback(mqttCallback);
 connectMQTT();
 }
-&lt;span style="color:#75715e">//MQTTがちゃんと動いているか、つながっているかを判断
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#66d9ef">void&lt;/span> &lt;span style="color:#a6e22e">connectMQTT&lt;/span>() {
-Serial.println(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">connectMQTT&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
+//MQTTがちゃんと動いているか、つながっているかを判断
+void connectMQTT() {
+Serial.println(&amp;quot;connectMQTT&amp;quot;);
 Serial.println(deviceName);
-&lt;span style="color:#66d9ef">while&lt;/span> (&lt;span style="color:#f92672">!&lt;/span>mqttClient.connected()) {
-Serial.print(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">.&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
-&lt;span style="color:#66d9ef">if&lt;/span> (mqttClient.connect(deviceName)) {
-Serial.println(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">Connected.&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
-&lt;span style="color:#66d9ef">int&lt;/span> qos &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">0&lt;/span>;
+while (!mqttClient.connected()) {
+Serial.print(&amp;quot;.&amp;quot;);
+if (mqttClient.connect(deviceName)) {
+Serial.println(&amp;quot;Connected.&amp;quot;);
+int qos = 0;
 mqttClient.subscribe(subTopic, qos);
-Serial.println(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">Subscribed.&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
-} &lt;span style="color:#66d9ef">else&lt;/span> {
-Serial.print(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">Failed. Error state=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
+Serial.println(&amp;quot;Subscribed.&amp;quot;);
+} else {
+Serial.print(&amp;quot;Failed. Error state=&amp;quot;);
 Serial.print(mqttClient.state());
-&lt;span style="color:#75715e">// Wait 5 seconds before retrying
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> delay(&lt;span style="color:#ae81ff">5000&lt;/span>);
+// Wait 5 seconds before retrying
+delay(5000);
 }
 }
 }
-&lt;span style="color:#75715e">///////////////////////////////////////////////////////
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>
-&lt;span style="color:#66d9ef">char&lt;/span> pubMessage[&lt;span style="color:#ae81ff">128&lt;/span>];
-&lt;span style="color:#66d9ef">void&lt;/span> &lt;span style="color:#a6e22e">mqttCallback&lt;/span> (&lt;span style="color:#66d9ef">char&lt;/span>&lt;span style="color:#f92672">*&lt;/span> topic, byte&lt;span style="color:#f92672">*&lt;/span> payload, &lt;span style="color:#66d9ef">unsigned&lt;/span> &lt;span style="color:#66d9ef">int&lt;/span> length) {
-String str &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>;
-Serial.print(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">Received. topic=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
+///////////////////////////////////////////////////////
+char pubMessage[128];
+void mqttCallback (char* topic, byte* payload, unsigned int length) {
+String str = &amp;quot;&amp;quot;;
+Serial.print(&amp;quot;Received. topic=&amp;quot;);
 Serial.println(topic);
-&lt;span style="color:#66d9ef">for&lt;/span> (&lt;span style="color:#66d9ef">int&lt;/span> i &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">0&lt;/span>; i &lt;span style="color:#f92672">&amp;lt;&lt;/span> length; i&lt;span style="color:#f92672">+&lt;/span>&lt;span style="color:#f92672">+&lt;/span>) {
-Serial.print((&lt;span style="color:#66d9ef">char&lt;/span>)payload[i]);
-str &lt;span style="color:#f92672">+&lt;/span>&lt;span style="color:#f92672">=&lt;/span> (&lt;span style="color:#66d9ef">char&lt;/span>)payload[i];
+for (int i = 0; i &amp;lt; length; i++) {
+Serial.print((char)payload[i]);
+str += (char)payload[i];
 }
-Serial.print(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#ae81ff">\n&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
-StaticJsonBuffer&lt;span style="color:#f92672">&amp;lt;&lt;/span>&lt;span style="color:#ae81ff">200&lt;/span>&lt;span style="color:#f92672">&amp;gt;&lt;/span> jsonBuffer;
-JsonObject&lt;span style="color:#f92672">&amp;amp;&lt;/span> root &lt;span style="color:#f92672">=&lt;/span> jsonBuffer.parseObject(str);
-&lt;span style="color:#75715e">// 読み取った文字列をパース
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#66d9ef">if&lt;/span> (&lt;span style="color:#f92672">!&lt;/span>root.success()) {
-Serial.println(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">parseObject() failed&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
-&lt;span style="color:#66d9ef">return&lt;/span>;
+Serial.print(&amp;quot;\n&amp;quot;);
+StaticJsonBuffer&amp;lt;200&amp;gt; jsonBuffer;
+JsonObject&amp;amp; root = jsonBuffer.parseObject(str);
+// 読み取った文字列をパース
+if (!root.success()) {
+Serial.println(&amp;quot;parseObject() failed&amp;quot;);
+return;
 }
-&lt;span style="color:#75715e">//Node-REDから文字列を読み取ってくる部分//////
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#66d9ef">const&lt;/span> &lt;span style="color:#66d9ef">char&lt;/span>&lt;span style="color:#f92672">*&lt;/span> message &lt;span style="color:#f92672">=&lt;/span> root[&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">message&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>];
-&lt;span style="color:#66d9ef">int&lt;/span> motor &lt;span style="color:#f92672">=&lt;/span> root[&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">motor&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>];
-&lt;span style="color:#75715e">////////////////////////////////////////////
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> Serial.print(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">motor = &lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
+//Node-REDから文字列を読み取ってくる部分//////
+const char* message = root[&amp;quot;message&amp;quot;];
+int motor = root[&amp;quot;motor&amp;quot;];
+////////////////////////////////////////////
+Serial.print(&amp;quot;motor = &amp;quot;);
 Serial.println(motor);
-&lt;span style="color:#75715e">///サーボモータを動かす処理//////////////////
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#66d9ef">if&lt;/span>( motor &lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">1&lt;/span> ){
-&lt;span style="color:#66d9ef">for&lt;/span>(&lt;span style="color:#66d9ef">int&lt;/span> i&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">90&lt;/span>; i&lt;span style="color:#f92672">&amp;lt;&lt;/span>&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">115&lt;/span>; i&lt;span style="color:#f92672">+&lt;/span>&lt;span style="color:#f92672">+&lt;/span>){
-ledcWrite(&lt;span style="color:#ae81ff">0&lt;/span>,deg2pw(i, PWM_BITWIDTH));
+///サーボモータを動かす処理//////////////////
+if( motor == 1 ){
+for(int i=90; i&amp;lt;=115; i++){
+ledcWrite(0,deg2pw(i, PWM_BITWIDTH));
 }
-delay(&lt;span style="color:#ae81ff">800&lt;/span>);
-ledcWrite(&lt;span style="color:#ae81ff">0&lt;/span>,deg2pw(&lt;span style="color:#ae81ff">90&lt;/span>, PWM_BITWIDTH));
-} &lt;span style="color:#66d9ef">else&lt;/span> {
-&lt;span style="color:#66d9ef">for&lt;/span>(&lt;span style="color:#66d9ef">int&lt;/span> i&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">90&lt;/span>; i&lt;span style="color:#f92672">&amp;gt;&lt;/span>&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">65&lt;/span>; &lt;span style="color:#f92672">-&lt;/span>&lt;span style="color:#f92672">-&lt;/span>i){&lt;span style="color:#75715e">//0～180°の位置で考える、90度が基準点としてそこからどう動くかを考える
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> ledcWrite(&lt;span style="color:#ae81ff">0&lt;/span>,deg2pw(i, PWM_BITWIDTH));
+delay(800);
+ledcWrite(0,deg2pw(90, PWM_BITWIDTH));
+} else {
+for(int i=90; i&amp;gt;=65; --i){//0～180°の位置で考える、90度が基準点としてそこからどう動くかを考える
+ledcWrite(0,deg2pw(i, PWM_BITWIDTH));
 }
-delay(&lt;span style="color:#ae81ff">800&lt;/span>);
-ledcWrite(&lt;span style="color:#ae81ff">0&lt;/span>,deg2pw(&lt;span style="color:#ae81ff">90&lt;/span>, PWM_BITWIDTH));
+delay(800);
+ledcWrite(0,deg2pw(90, PWM_BITWIDTH));
 }
-Nefry.ndelay(&lt;span style="color:#ae81ff">1000&lt;/span>);
+Nefry.ndelay(1000);
 }
-&lt;span style="color:#75715e">//////////////////////////////////////////////
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>
-&lt;span style="color:#75715e">//mqttを動かしている部分///////////////////////
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#66d9ef">void&lt;/span> &lt;span style="color:#a6e22e">mqttLoop&lt;/span>() {
-&lt;span style="color:#66d9ef">if&lt;/span> (&lt;span style="color:#f92672">!&lt;/span>mqttClient.connected()) {
+//////////////////////////////////////////////
+//mqttを動かしている部分///////////////////////
+void mqttLoop() {
+if (!mqttClient.connected()) {
 connectMQTT();
 }
 mqttClient.loop();
 }
-&lt;span style="color:#66d9ef">void&lt;/span> &lt;span style="color:#a6e22e">loop&lt;/span>() {
+void loop() {
 mqttLoop();
 }
-&lt;span style="color:#75715e">//////////////////////////////////////////////
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>
-&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="heading-2">動作させてみると……&lt;/h3>
-&lt;p>このように、PC上から遠隔でサーボモータを制御できるようになります。
-&lt;img src="https://dotstud.io/img/blog/187/5.gif" alt="">&lt;/p>
-&lt;h2 id="node-redmqttui">Node-RED×MQTTでサーボモータをUI（ブラウザ）から制御&lt;/h2>
-&lt;p>先ほどのプログラムはNode-RED上のボタンを押すとある角度回転するというものでした。次はそれを発展させて、&lt;strong>ブラウザから操作して角度を遠隔で制御&lt;/strong>してみます。&lt;/p>
-&lt;p>ハンズオンでは、製作途中にタイムアップしてしまいました。少し難易度高めです。&lt;/p>
-&lt;h3 id="node-red-2">Node-REDのフローのコード&lt;/h3>
-&lt;p>下記のNode-REDのフローのコードをNode-REDにコピーして使いましょう。&lt;/p>
-&lt;pre>&lt;code>[
+//////////////////////////////////////////////
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;動作させてみると&#34;&gt;動作させてみると……&lt;/h3&gt;
+&lt;p&gt;このように、PC上から遠隔でサーボモータを制御できるようになります。
+&lt;img src=&#34;https://dotstud.io/img/blog/187/5.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;node-red-mqttでサーボモータをui-ブラウザ-から制御&#34;&gt;Node-RED×MQTTでサーボモータをUI（ブラウザ）から制御&lt;/h2&gt;
+&lt;p&gt;先ほどのプログラムはNode-RED上のボタンを押すとある角度回転するというものでした。次はそれを発展させて、&lt;strong&gt;ブラウザから操作して角度を遠隔で制御&lt;/strong&gt;してみます。&lt;/p&gt;
+&lt;p&gt;ハンズオンでは、製作途中にタイムアップしてしまいました。少し難易度高めです。&lt;/p&gt;
+&lt;h3 id=&#34;node-redのフローのコード-1&#34;&gt;Node-REDのフローのコード&lt;/h3&gt;
+&lt;p&gt;下記のNode-REDのフローのコードをNode-REDにコピーして使いましょう。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;[
 {
 &amp;quot;id&amp;quot;: &amp;quot;f2dc1b0b.520f98&amp;quot;,
 &amp;quot;type&amp;quot;: &amp;quot;mqtt out&amp;quot;,
@@ -1001,130 +1384,129 @@ mqttLoop();
 &amp;quot;willPayload&amp;quot;: &amp;quot;&amp;quot;
 }
 ]
-&lt;/code>&lt;/pre>&lt;h3 id="nefry-bt-1">Nefry BTのプログラム&lt;/h3>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-c++" data-lang="c++">
-&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">include&lt;/span> &lt;span style="color:#75715e">&amp;lt;Nefry.h&amp;gt;&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">include&lt;/span> &lt;span style="color:#75715e">&amp;lt;WiFiClient.h&amp;gt;&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">include&lt;/span> &lt;span style="color:#75715e">&amp;lt;PubSubClient.h&amp;gt;&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">include&lt;/span> &lt;span style="color:#75715e">&amp;lt;ArduinoJson.h&amp;gt;&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75715e">//esp32でPWMを使えるようにするためのライブラリー//
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">include&lt;/span>&lt;span style="color:#75715e">&amp;#34;esp32-hal-ledc.h&amp;#34;&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75715e">//////////////////////////////////////////////
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>
-&lt;span style="color:#75715e">//分解能//////////////////////////////////////
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">define PWM_BITWIDTH 16&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75715e">//////////////////////////////////////////////
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>
-&lt;span style="color:#75715e">//PWM制御：周波数-&amp;gt;角度に変換(プログラムするときにわかりやすい)//
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#66d9ef">int&lt;/span> &lt;span style="color:#a6e22e">deg2pw&lt;/span>(&lt;span style="color:#66d9ef">int&lt;/span> deg, &lt;span style="color:#66d9ef">int&lt;/span> bit){
-&lt;span style="color:#66d9ef">double&lt;/span> ms &lt;span style="color:#f92672">=&lt;/span> ((&lt;span style="color:#66d9ef">double&lt;/span>) deg &lt;span style="color:#f92672">-&lt;/span> &lt;span style="color:#ae81ff">90.0&lt;/span>) &lt;span style="color:#f92672">*&lt;/span> &lt;span style="color:#ae81ff">0.95&lt;/span> &lt;span style="color:#f92672">/&lt;/span> &lt;span style="color:#ae81ff">90.0&lt;/span> &lt;span style="color:#f92672">+&lt;/span> &lt;span style="color:#ae81ff">1.45&lt;/span>;
-&lt;span style="color:#66d9ef">return&lt;/span> (&lt;span style="color:#66d9ef">int&lt;/span>) (ms &lt;span style="color:#f92672">/&lt;/span> &lt;span style="color:#ae81ff">20.0&lt;/span> &lt;span style="color:#f92672">*&lt;/span> pow(&lt;span style="color:#ae81ff">2&lt;/span>, bit));
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;nefry-btのプログラム-1&#34;&gt;Nefry BTのプログラム&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;
+#include &amp;lt;Nefry.h&amp;gt;
+#include &amp;lt;WiFiClient.h&amp;gt;
+#include &amp;lt;PubSubClient.h&amp;gt;
+#include &amp;lt;ArduinoJson.h&amp;gt;
+//esp32でPWMを使えるようにするためのライブラリー//
+#include&amp;quot;esp32-hal-ledc.h&amp;quot;
+//////////////////////////////////////////////
+//分解能//////////////////////////////////////
+#define PWM_BITWIDTH 16
+//////////////////////////////////////////////
+//PWM制御：周波数-&amp;gt;角度に変換(プログラムするときにわかりやすい)//
+int deg2pw(int deg, int bit){
+double ms = ((double) deg - 90.0) * 0.95 / 90.0 + 1.45;
+return (int) (ms / 20.0 * pow(2, bit));
 }
-&lt;span style="color:#75715e">////////////////////////////////////////////////////////////
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>
+////////////////////////////////////////////////////////////
 IPAddress endpoint;
-&lt;span style="color:#66d9ef">const&lt;/span> &lt;span style="color:#66d9ef">int&lt;/span> port &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">1883&lt;/span>;
-&lt;span style="color:#66d9ef">const&lt;/span> &lt;span style="color:#66d9ef">char&lt;/span> &lt;span style="color:#f92672">*&lt;/span>pubTopic;
-&lt;span style="color:#66d9ef">const&lt;/span> &lt;span style="color:#66d9ef">char&lt;/span> &lt;span style="color:#f92672">*&lt;/span>subTopic;
-&lt;span style="color:#66d9ef">const&lt;/span> &lt;span style="color:#66d9ef">char&lt;/span> &lt;span style="color:#f92672">*&lt;/span>deviceName;
-&lt;span style="color:#66d9ef">const&lt;/span> &lt;span style="color:#66d9ef">char&lt;/span> &lt;span style="color:#f92672">*&lt;/span>mqtt_server &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">test.mosquitto.org&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>;
+const int port = 1883;
+const char *pubTopic;
+const char *subTopic;
+const char *deviceName;
+const char *mqtt_server = &amp;quot;test.mosquitto.org&amp;quot;;
 WiFiClient httpsClient;
-PubSubClient &lt;span style="color:#a6e22e">mqttClient&lt;/span>(httpsClient);
-&lt;span style="color:#66d9ef">void&lt;/span> &lt;span style="color:#a6e22e">setup&lt;/span>() {
-ledcSetup(&lt;span style="color:#ae81ff">0&lt;/span>,&lt;span style="color:#ae81ff">50&lt;/span>,PWM_BITWIDTH);
-ledcAttachPin(A1,&lt;span style="color:#ae81ff">0&lt;/span>);
-&lt;span style="color:#75715e">//// NefryBT設定 ////////////////////////////////////////
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>
-&lt;span style="color:#75715e">// NefryBT
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> pubTopic &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/pub/NefryBT/SAMPLE&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>;
-subTopic &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/sub/NefryBT/SAMPLE&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>;
-deviceName &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">NefryBT_SAMPLE&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>; &lt;span style="color:#75715e">// 複数台で利用する場合は必ずかぶらないように変更する
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#75715e">// ローカルホストならパソコンのIPAddress型に収納。配列っぽく入れる。ここはその都度確認すること
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#75715e">//mosquittoのテストサーバーを使うときは下記のednpointは気にしなくて大丈夫です
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> endpoint[&lt;span style="color:#ae81ff">0&lt;/span>] &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">192&lt;/span>;
-endpoint[&lt;span style="color:#ae81ff">1&lt;/span>] &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">168&lt;/span>;
-endpoint[&lt;span style="color:#ae81ff">2&lt;/span>] &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">1&lt;/span>;
-endpoint[&lt;span style="color:#ae81ff">3&lt;/span>] &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">1&lt;/span>;
-&lt;span style="color:#75715e">////////////////////////////////////////////
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>
-Serial.begin(&lt;span style="color:#ae81ff">115200&lt;/span>);
+PubSubClient mqttClient(httpsClient);
+void setup() {
+ledcSetup(0,50,PWM_BITWIDTH);
+ledcAttachPin(A1,0);
+//// NefryBT設定 ////////////////////////////////////////
+// NefryBT
+pubTopic = &amp;quot;/pub/NefryBT/SAMPLE&amp;quot;;
+subTopic = &amp;quot;/sub/NefryBT/SAMPLE&amp;quot;;
+deviceName = &amp;quot;NefryBT_SAMPLE&amp;quot;; // 複数台で利用する場合は必ずかぶらないように変更する
+// ローカルホストならパソコンのIPAddress型に収納。配列っぽく入れる。ここはその都度確認すること
+//mosquittoのテストサーバーを使うときは下記のednpointは気にしなくて大丈夫です
+endpoint[0] = 192;
+endpoint[1] = 168;
+endpoint[2] = 1;
+endpoint[3] = 1;
+////////////////////////////////////////////
+Serial.begin(115200);
 mqttClient.setServer(mqtt_server, port);
 mqttClient.setCallback(mqttCallback);
 connectMQTT();
 }
-&lt;span style="color:#66d9ef">void&lt;/span> &lt;span style="color:#a6e22e">connectMQTT&lt;/span>() {
-Serial.println(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">connectMQTT&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
+void connectMQTT() {
+Serial.println(&amp;quot;connectMQTT&amp;quot;);
 Serial.println(deviceName);
-&lt;span style="color:#66d9ef">while&lt;/span> (&lt;span style="color:#f92672">!&lt;/span>mqttClient.connected()) {
-Serial.print(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">.&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
-&lt;span style="color:#66d9ef">if&lt;/span> (mqttClient.connect(deviceName)) {
-Serial.println(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">Connected.&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
-&lt;span style="color:#66d9ef">int&lt;/span> qos &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">0&lt;/span>;
+while (!mqttClient.connected()) {
+Serial.print(&amp;quot;.&amp;quot;);
+if (mqttClient.connect(deviceName)) {
+Serial.println(&amp;quot;Connected.&amp;quot;);
+int qos = 0;
 mqttClient.subscribe(subTopic, qos);
-Serial.println(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">Subscribed.&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
-} &lt;span style="color:#66d9ef">else&lt;/span> {
-Serial.print(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">Failed. Error state=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
+Serial.println(&amp;quot;Subscribed.&amp;quot;);
+} else {
+Serial.print(&amp;quot;Failed. Error state=&amp;quot;);
 Serial.print(mqttClient.state());
-&lt;span style="color:#75715e">// Wait 5 seconds before retrying
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> delay(&lt;span style="color:#ae81ff">5000&lt;/span>);
+// Wait 5 seconds before retrying
+delay(5000);
 }
 }
 }
-&lt;span style="color:#66d9ef">char&lt;/span> pubMessage[&lt;span style="color:#ae81ff">128&lt;/span>];
-&lt;span style="color:#66d9ef">void&lt;/span> &lt;span style="color:#a6e22e">mqttCallback&lt;/span> (&lt;span style="color:#66d9ef">char&lt;/span>&lt;span style="color:#f92672">*&lt;/span> topic, byte&lt;span style="color:#f92672">*&lt;/span> payload, &lt;span style="color:#66d9ef">unsigned&lt;/span> &lt;span style="color:#66d9ef">int&lt;/span> length) {
-String str &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>;
-Serial.print(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">Received. topic=&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
+char pubMessage[128];
+void mqttCallback (char* topic, byte* payload, unsigned int length) {
+String str = &amp;quot;&amp;quot;;
+Serial.print(&amp;quot;Received. topic=&amp;quot;);
 Serial.println(topic);
-&lt;span style="color:#66d9ef">for&lt;/span> (&lt;span style="color:#66d9ef">int&lt;/span> i &lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">0&lt;/span>; i &lt;span style="color:#f92672">&amp;lt;&lt;/span> length; i&lt;span style="color:#f92672">+&lt;/span>&lt;span style="color:#f92672">+&lt;/span>) {
-Serial.print((&lt;span style="color:#66d9ef">char&lt;/span>)payload[i]);
-str &lt;span style="color:#f92672">+&lt;/span>&lt;span style="color:#f92672">=&lt;/span> (&lt;span style="color:#66d9ef">char&lt;/span>)payload[i];
+for (int i = 0; i &amp;lt; length; i++) {
+Serial.print((char)payload[i]);
+str += (char)payload[i];
 }
-Serial.print(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#ae81ff">\n&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
-StaticJsonBuffer&lt;span style="color:#f92672">&amp;lt;&lt;/span>&lt;span style="color:#ae81ff">200&lt;/span>&lt;span style="color:#f92672">&amp;gt;&lt;/span> jsonBuffer;
-JsonObject&lt;span style="color:#f92672">&amp;amp;&lt;/span> root &lt;span style="color:#f92672">=&lt;/span> jsonBuffer.parseObject(str);
-&lt;span style="color:#75715e">// パースが成功かどうか判断
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#66d9ef">if&lt;/span> (&lt;span style="color:#f92672">!&lt;/span>root.success()) {
-Serial.println(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">parseObject() failed&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
-&lt;span style="color:#66d9ef">return&lt;/span>;
+Serial.print(&amp;quot;\n&amp;quot;);
+StaticJsonBuffer&amp;lt;200&amp;gt; jsonBuffer;
+JsonObject&amp;amp; root = jsonBuffer.parseObject(str);
+// パースが成功かどうか判断
+if (!root.success()) {
+Serial.println(&amp;quot;parseObject() failed&amp;quot;);
+return;
 }
-&lt;span style="color:#66d9ef">const&lt;/span> &lt;span style="color:#66d9ef">char&lt;/span>&lt;span style="color:#f92672">*&lt;/span> message &lt;span style="color:#f92672">=&lt;/span> root[&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">message&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>];
-&lt;span style="color:#66d9ef">int&lt;/span> takudooon &lt;span style="color:#f92672">=&lt;/span> root[&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">takudooon&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>];
-Serial.print(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">takudooon = &lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
+const char* message = root[&amp;quot;message&amp;quot;];
+int takudooon = root[&amp;quot;takudooon&amp;quot;];
+Serial.print(&amp;quot;takudooon = &amp;quot;);
 Serial.println(takudooon);
-&lt;span style="color:#66d9ef">if&lt;/span>( takudooon &lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#f92672">=&lt;/span> &lt;span style="color:#ae81ff">1&lt;/span> ){
-&lt;span style="color:#66d9ef">for&lt;/span>(&lt;span style="color:#66d9ef">int&lt;/span> i&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">90&lt;/span>; i&lt;span style="color:#f92672">&amp;lt;&lt;/span>&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">115&lt;/span>; i&lt;span style="color:#f92672">+&lt;/span>&lt;span style="color:#f92672">+&lt;/span>){
-ledcWrite(&lt;span style="color:#ae81ff">0&lt;/span>,deg2pw(i, PWM_BITWIDTH));
+if( takudooon == 1 ){
+for(int i=90; i&amp;lt;=115; i++){
+ledcWrite(0,deg2pw(i, PWM_BITWIDTH));
 }
-delay(&lt;span style="color:#ae81ff">800&lt;/span>);
-ledcWrite(&lt;span style="color:#ae81ff">0&lt;/span>,deg2pw(&lt;span style="color:#ae81ff">90&lt;/span>, PWM_BITWIDTH));
-} &lt;span style="color:#66d9ef">else&lt;/span> {
-&lt;span style="color:#66d9ef">for&lt;/span>(&lt;span style="color:#66d9ef">int&lt;/span> i&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">90&lt;/span>; i&lt;span style="color:#f92672">&amp;gt;&lt;/span>&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">65&lt;/span>; &lt;span style="color:#f92672">-&lt;/span>&lt;span style="color:#f92672">-&lt;/span>i){&lt;span style="color:#75715e">//0～180°の位置で考える、90度が基準点としてそこからどう動くかを考える
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> ledcWrite(&lt;span style="color:#ae81ff">0&lt;/span>,deg2pw(i, PWM_BITWIDTH));
+delay(800);
+ledcWrite(0,deg2pw(90, PWM_BITWIDTH));
+} else {
+for(int i=90; i&amp;gt;=65; --i){//0～180°の位置で考える、90度が基準点としてそこからどう動くかを考える
+ledcWrite(0,deg2pw(i, PWM_BITWIDTH));
 }
-delay(&lt;span style="color:#ae81ff">800&lt;/span>);
-ledcWrite(&lt;span style="color:#ae81ff">0&lt;/span>,deg2pw(&lt;span style="color:#ae81ff">90&lt;/span>, PWM_BITWIDTH));
+delay(800);
+ledcWrite(0,deg2pw(90, PWM_BITWIDTH));
 }
-Nefry.ndelay(&lt;span style="color:#ae81ff">1000&lt;/span>);
+Nefry.ndelay(1000);
 }
-&lt;span style="color:#66d9ef">void&lt;/span> &lt;span style="color:#a6e22e">mqttLoop&lt;/span>() {
-&lt;span style="color:#66d9ef">if&lt;/span> (&lt;span style="color:#f92672">!&lt;/span>mqttClient.connected()) {
+void mqttLoop() {
+if (!mqttClient.connected()) {
 connectMQTT();
 }
 mqttClient.loop();
 }
-&lt;span style="color:#66d9ef">void&lt;/span> &lt;span style="color:#a6e22e">loop&lt;/span>() {
+void loop() {
 mqttLoop();
 }
-&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="heading-3">操作画面を用意&lt;/h3>
-&lt;p>それぞれのプログラムが準備できたら、Node-REDの画面から、&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>URLの「&lt;code>http://localhost:1880&lt;/code>」を「&lt;code>http://localhost:1880/ui&lt;/code>」と記述すると以下のような操作画面があらわれます。ここから、直感的にサーボモータの角度を遠隔制御できるようになります。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;h3 id="heading-4">実際に動かすと……&lt;/h3>
-&lt;p>このようになります。
-&lt;img src="https://dotstud.io/img/blog/187/8.gif" alt="">&lt;/p>
-&lt;h2 id="heading-5">おわりに&lt;/h2>
-&lt;p>いろいろな技術を知ることでモノづくりの幅が増え、作ってみたいものを自由に作れるようになってもらえればな、と思います。&lt;/p>
-&lt;p>では！&lt;/p></description></item></channel></rss>
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;操作画面を用意&#34;&gt;操作画面を用意&lt;/h3&gt;
+&lt;p&gt;それぞれのプログラムが準備できたら、Node-REDの画面から、&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/187/6.png&#34; alt=&#34;6&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;URLの「&lt;code&gt;http://localhost:1880&lt;/code&gt;」を「&lt;code&gt;http://localhost:1880/ui&lt;/code&gt;」と記述すると以下のような操作画面があらわれます。ここから、直感的にサーボモータの角度を遠隔制御できるようになります。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/187/7.png&#34; alt=&#34;7&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;h3 id=&#34;実際に動かすと&#34;&gt;実際に動かすと……&lt;/h3&gt;
+&lt;p&gt;このようになります。
+&lt;img src=&#34;https://dotstud.io/img/blog/187/8.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+&lt;p&gt;いろいろな技術を知ることでモノづくりの幅が増え、作ってみたいものを自由に作れるようになってもらえればな、と思います。&lt;/p&gt;
+&lt;p&gt;では！&lt;/p&gt;</description></item></channel></rss>

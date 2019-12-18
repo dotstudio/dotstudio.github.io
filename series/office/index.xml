@@ -1,93 +1,141 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>office on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/office/</link><description>Recent content in office on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Tue, 17 Jul 2018 10:00:00 +0900</lastBuildDate><atom:link href="/series/office/" rel="self" type="application/rss+xml"/><item><title>営業撃退！？押した人が誰かわかる「インターホン・改」を作ってみた</title><link>https://dotstud.io/blog/no-more-sales-intercom/</link><pubDate>Tue, 17 Jul 2018 10:00:00 +0900</pubDate><guid>https://dotstud.io/blog/no-more-sales-intercom/</guid><description>&lt;p>こんにちは、&lt;a href="https://dotstud.io/members/tomato">佐々木さん&lt;/a>です。一度はとまとというあだ名を授かりましたが、いろいろ審議ののちあだ名を得られず佐々木さんになりました。&lt;/p>
-&lt;p>ところでdotstudioには、オフィスハックの大先輩・&lt;a href="https://dotstud.io/members/ukok">うこ&lt;/a>さんが作ったインターホンがあります。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>今回はこのインターホンを改良して、&lt;strong>しつこい訪問営業を撃退できるインターホン&lt;/strong>を作ってみます。&lt;/p>
-&lt;h2 id="heading">無茶振りは突然に&lt;/h2>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>ということで時間がないのでさっそく作りましょう！&lt;/p>
-&lt;h2 id="heading-1">インターホン改の製作イメージ&lt;/h2>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>来客がどんな用件か見分けるために、&lt;strong>最初からボタンを複数用意し、それぞれ音を変えて判別する&lt;/strong>ようにしてみました。&lt;/p>
-&lt;p>また前回はBluetooth接続のスピーカーを利用していましたが、通信が切れやすい問題があったので今回は&lt;strong>有線でスピーカーを繋ぎます&lt;/strong>。&lt;/p>
-&lt;p>ボタンとなるセンサは扉の外側に、インターホンの本体となるRaspberry Piは扉の内側に設置します。&lt;/p>
-&lt;h2 id="heading-2">使ったもの&lt;/h2>
-&lt;h3 id="raspberry-pi-3-model-b">Raspberry Pi 3 Model B&lt;/h3>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>前回に引き続き、ボードはRaspberry Pi（通称ラズパイ）を使います。ラズパイには&lt;strong>スピーカーのコネクタを直接刺すことができる&lt;/strong>ので便利ですね！&lt;/p>
-&lt;h3 id="heading-3">タッチセンサ&lt;/h3>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>タッチセンサは、今回安く大量に調達した&lt;a href="https://www.amazon.co.jp/HiLetgo%C2%AE-10%E5%80%8B%E3%82%BB%E3%83%83%E3%83%88-TTP223-%E9%9D%99%E9%9B%BB%E5%AE%B9%E9%87%8F%E5%BC%8F%E3%82%BF%E3%83%83%E3%83%81%E3%82%B9%E3%82%A4%E3%83%83%E3%83%81-%E3%83%87%E3%82%B8%E3%82%BF%E3%83%AB%E3%82%BF%E3%83%83%E3%83%81%E3%82%BB%E3%83%B3%E3%82%B5%E3%83%BC%E3%83%A2%E3%82%B8%E3%83%A5%E3%83%BC%E3%83%AB/dp/B010RYGET4/ref=sr_1_63?m=A1XEAMF1H64GNM&amp;amp;s=merchant-items&amp;amp;ie=UTF8&amp;amp;qid=1531481468&amp;amp;sr=1-63">中国製のタッチセンサ&lt;/a>を使います（&lt;a href="https://www.amazon.co.jp/s/ref=sr_pg_3?me=A1XEAMF1H64GNM&amp;amp;rh=i%3Amerchant-items&amp;amp;page=3&amp;amp;ie=UTF8&amp;amp;qid=1531481449">HiLetgo JP&lt;/a>というストア、安く大量購入できて面白いです）。&lt;/p>
-&lt;h3 id="heading-4">適当なスピーカー&lt;/h3>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>インターホンの音を鳴らすため、適当なスピーカーを用意します。&lt;/p>
-&lt;p>このスピーカーはあきばお〜さんで&lt;strong>なんと300円&lt;/strong>でした！（普通に使えてます！）&lt;/p>
-&lt;h3 id="heading-5">その他&lt;/h3>
-&lt;ul>
-&lt;li>ダンボール（加工が楽なので採用しました。）&lt;/li>
-&lt;li>音源（それぞれのボタン向けに音源を用意します。それっぽいと雰囲気が出ます。）&lt;/li>
-&lt;li>配線用のジャンパ&lt;/li>
-&lt;/ul>
-&lt;h2 id="heading-6">作っていく&lt;/h2>
-&lt;h3 id="heading-7">配線&lt;/h3>
-&lt;p>下図のようにラズパイとセンサを接続していきます。図のスイッチはタッチセンサに置き換えて見てください。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>それぞれ繋いでいるGPIOは下記です。&lt;/p>
-&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th align="center">役割&lt;/th>
-&lt;th align="center">GPIO&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td align="center">電源&lt;/td>
-&lt;td align="center">3.3V&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td align="center">GND&lt;/td>
-&lt;td align="center">GND&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td align="center">タッチセンサ&lt;/td>
-&lt;td align="center">23&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td align="center">タッチセンサ&lt;/td>
-&lt;td align="center">24&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td align="center">タッチセンサ&lt;/td>
-&lt;td align="center">25&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
-&lt;ul>
-&lt;li>タッチセンサのGNDは、それぞれラズパイのGNDに接続します。&lt;/li>
-&lt;li>タッチセンサのVccをラズパイの3.3Vに接続します。&lt;/li>
-&lt;li>タッチセンサのinputをラズパイの23、24、25にそれぞれ繋ぎます。&lt;/li>
-&lt;li>最後にスピーカーをイヤホンの部分に繋ぎます。&lt;/li>
-&lt;/ul>
-&lt;p>以上で回路は完成です。&lt;/p>
-&lt;h3 id="heading-8">プログラム&lt;/h3>
-&lt;p>ラズパイ上で動かすプログラムはこんな感じです。&lt;/p>
-&lt;pre>&lt;code>#!/usr/bin/python
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>office on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/office/</link><description>Recent content in office on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Tue, 17 Jul 2018 10:00:00 +0900</lastBuildDate><atom:link href="/series/office/" rel="self" type="application/rss+xml"/><item><title>営業撃退！？押した人が誰かわかる「インターホン・改」を作ってみた</title><link>https://dotstud.io/blog/no-more-sales-intercom/</link><pubDate>Tue, 17 Jul 2018 10:00:00 +0900</pubDate><guid>https://dotstud.io/blog/no-more-sales-intercom/</guid><description>
+&lt;p&gt;こんにちは、&lt;a href=&#34;https://dotstud.io/members/tomato&#34;&gt;佐々木さん&lt;/a&gt;です。一度はとまとというあだ名を授かりましたが、いろいろ審議ののちあだ名を得られず佐々木さんになりました。&lt;/p&gt;
+&lt;p&gt;ところでdotstudioには、オフィスハックの大先輩・&lt;a href=&#34;https://dotstud.io/members/ukok&#34;&gt;うこ&lt;/a&gt;さんが作ったインターホンがあります。&lt;/p&gt;
+&lt;section class=&#34;link&#34; id=&#34;133&#34;&gt;
+&lt;/section&gt;
+&lt;p&gt;今回はこのインターホンを改良して、&lt;strong&gt;しつこい訪問営業を撃退できるインターホン&lt;/strong&gt;を作ってみます。&lt;/p&gt;
+&lt;h2 id=&#34;無茶振りは突然に&#34;&gt;無茶振りは突然に&lt;/h2&gt;
+&lt;p&gt;&lt;center&gt;〜ある日の夕方、dotstudioオフィスにて〜&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/188/1.png&#34; alt=&#34;1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;（ぽんっ）&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/188/2.png&#34; alt=&#34;2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;（あっ、dotstudioしゃちょーの&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;さんだ！）&lt;/center&gt;&lt;/p&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_n&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/188/nobi.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;のびすけ&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+佐々木さん、電子工作得意だよね？営業の訪問が多くて困ってるんだけど、&lt;b&gt;営業を撃退できるインターホン作れない？&lt;/b&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_s&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/188/sasaki.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;佐々木さん&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+（無茶振りだ……）
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_n&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/188/nobi.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;のびすけ&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+じゃあ1週間後までによろしく！
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_s&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/188/sasaki.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;佐々木さん&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+（かなり無茶振りだ……）
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;ということで時間がないのでさっそく作りましょう！&lt;/p&gt;
+&lt;h2 id=&#34;インターホン改の製作イメージ&#34;&gt;インターホン改の製作イメージ&lt;/h2&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/188/architecture.png&#34; alt=&#34;architecture&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;来客がどんな用件か見分けるために、&lt;strong&gt;最初からボタンを複数用意し、それぞれ音を変えて判別する&lt;/strong&gt;ようにしてみました。&lt;/p&gt;
+&lt;p&gt;また前回はBluetooth接続のスピーカーを利用していましたが、通信が切れやすい問題があったので今回は&lt;strong&gt;有線でスピーカーを繋ぎます&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;ボタンとなるセンサは扉の外側に、インターホンの本体となるRaspberry Piは扉の内側に設置します。&lt;/p&gt;
+&lt;h2 id=&#34;使ったもの&#34;&gt;使ったもの&lt;/h2&gt;
+&lt;h3 id=&#34;raspberry-pi-3-model-b&#34;&gt;Raspberry Pi 3 Model B&lt;/h3&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/188/raspi.png&#34; alt=&#34;raspi&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;前回に引き続き、ボードはRaspberry Pi（通称ラズパイ）を使います。ラズパイには&lt;strong&gt;スピーカーのコネクタを直接刺すことができる&lt;/strong&gt;ので便利ですね！&lt;/p&gt;
+&lt;h3 id=&#34;タッチセンサ&#34;&gt;タッチセンサ&lt;/h3&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/188/touch.png&#34; alt=&#34;touch&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;タッチセンサは、今回安く大量に調達した&lt;a href=&#34;https://www.amazon.co.jp/HiLetgo%C2%AE-10%E5%80%8B%E3%82%BB%E3%83%83%E3%83%88-TTP223-%E9%9D%99%E9%9B%BB%E5%AE%B9%E9%87%8F%E5%BC%8F%E3%82%BF%E3%83%83%E3%83%81%E3%82%B9%E3%82%A4%E3%83%83%E3%83%81-%E3%83%87%E3%82%B8%E3%82%BF%E3%83%AB%E3%82%BF%E3%83%83%E3%83%81%E3%82%BB%E3%83%B3%E3%82%B5%E3%83%BC%E3%83%A2%E3%82%B8%E3%83%A5%E3%83%BC%E3%83%AB/dp/B010RYGET4/ref=sr_1_63?m=A1XEAMF1H64GNM&amp;amp;s=merchant-items&amp;amp;ie=UTF8&amp;amp;qid=1531481468&amp;amp;sr=1-63&#34;&gt;中国製のタッチセンサ&lt;/a&gt;を使います（&lt;a href=&#34;https://www.amazon.co.jp/s/ref=sr_pg_3?me=A1XEAMF1H64GNM&amp;amp;rh=i%3Amerchant-items&amp;amp;page=3&amp;amp;ie=UTF8&amp;amp;qid=1531481449&#34;&gt;HiLetgo JP&lt;/a&gt;というストア、安く大量購入できて面白いです）。&lt;/p&gt;
+&lt;h3 id=&#34;適当なスピーカー&#34;&gt;適当なスピーカー&lt;/h3&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/188/speaker.png&#34; alt=&#34;speaker&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;インターホンの音を鳴らすため、適当なスピーカーを用意します。&lt;/p&gt;
+&lt;p&gt;このスピーカーはあきばお〜さんで&lt;strong&gt;なんと300円&lt;/strong&gt;でした！（普通に使えてます！）&lt;/p&gt;
+&lt;h3 id=&#34;その他&#34;&gt;その他&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;ダンボール（加工が楽なので採用しました。）&lt;/li&gt;
+&lt;li&gt;音源（それぞれのボタン向けに音源を用意します。それっぽいと雰囲気が出ます。）&lt;/li&gt;
+&lt;li&gt;配線用のジャンパ&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;作っていく&#34;&gt;作っていく&lt;/h2&gt;
+&lt;h3 id=&#34;配線&#34;&gt;配線&lt;/h3&gt;
+&lt;p&gt;下図のようにラズパイとセンサを接続していきます。図のスイッチはタッチセンサに置き換えて見てください。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/188/circuit.png&#34; alt=&#34;circuit&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;それぞれ繋いでいるGPIOは下記です。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;center&#34;&gt;役割&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;GPIO&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;電源&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;3.3V&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;GND&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;GND&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;タッチセンサ&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;23&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;タッチセンサ&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;24&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;タッチセンサ&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;25&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;タッチセンサのGNDは、それぞれラズパイのGNDに接続します。&lt;/li&gt;
+&lt;li&gt;タッチセンサのVccをラズパイの3.3Vに接続します。&lt;/li&gt;
+&lt;li&gt;タッチセンサのinputをラズパイの23、24、25にそれぞれ繋ぎます。&lt;/li&gt;
+&lt;li&gt;最後にスピーカーをイヤホンの部分に繋ぎます。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;以上で回路は完成です。&lt;/p&gt;
+&lt;h3 id=&#34;プログラム&#34;&gt;プログラム&lt;/h3&gt;
+&lt;p&gt;ラズパイ上で動かすプログラムはこんな感じです。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;#!/usr/bin/python
 import RPi.GPIO as GPIO
 import subprocess
 from time import sleep
@@ -111,96 +159,173 @@ subprocess.call(&amp;quot;mpg321 -g 20 /home/pi/hometools/sounds/piyo.mp3&amp;qu
 else:
 sleep(0.01)
 GPIO.cleanup()
-&lt;/code>&lt;/pre>&lt;h3 id="heading-9">外装&lt;/h3>
-&lt;p>こんな感じでダンボールを加工して、用途に合わせた表示を作ります（1番右は前回使ったGroveのタッチセンサを流用）。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;h2 id="heading-10">試してみる&lt;/h2>
-&lt;!-- raw HTML omitted -->
-&lt;p>タッチしたセンサによって3種の音を流すことができました！これで完成です！&lt;/p>
-&lt;h2 id="heading-11">のびすけさんにご報告&lt;/h2>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>&lt;!-- raw HTML omitted -->「じゃーん！こちらです！」&lt;!-- raw HTML omitted -->&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>「まず左右のpadding違うし！上下のpaddingも違うし！そもそも字汚いしあれやこれやくどくどくど………」&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>「はい……。すいません……。」&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;p>一流のオフィスハッカーになる道のりはまだまだ遠そうです……。&lt;/p>
-&lt;p>&lt;!-- raw HTML omitted -->&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted --></description></item><item><title>ClovaとNefryBT（ESP32）を連携させてみよう</title><link>https://dotstud.io/blog/clova-ifttt-nefrybt-arduino/</link><pubDate>Tue, 10 Jul 2018 10:00:00 +0900</pubDate><guid>https://dotstud.io/blog/clova-ifttt-nefrybt-arduino/</guid><description>&lt;p>こんにちは、代表の&lt;a href="https://twitter.com/n0bisuke">n0bisuke&lt;/a>です。&lt;/p>
-&lt;p>LINEのスマートスピーカーClova（正式にはAIアシスタントの名前）が&lt;a href="http://clova-blog.line.me/ja/archives/7990256.html">IFTTTに対応&lt;/a>したのでNefry BT（ESP32）と連携してみました。（実は結構前から対応してたんだけど試せてなかった）&lt;/p>
-&lt;p>先日作った勤怠システムについては以下の記事をご参照ください。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>ちなみにこの勤怠システムは割と運用できてます。今の所は。&lt;/p>
-&lt;h2 id="clova">Clovaって？&lt;/h2>
-&lt;p>ClovaはLINEが開発したAIアシスタントです。Clova FriendsやClova Friends mini、Clova Waveなどの対応スマートスピーカー端末が販売されています。&lt;/p>
-&lt;ul>
-&lt;li>公式サイト: &lt;a href="https://clova.line.me/">https://clova.line.me/&lt;/a>&lt;/li>
-&lt;/ul>
-&lt;p>GoogleのGoogle アシスタント（Google Home）やAmazonのAlexa（Amazon Echo）などと同じ並びの立ち位置という認識で大丈夫です。&lt;/p>
-&lt;p>LINEといえばスタンプやキャラクターが特徴的ですが、Clova Friendsに関してもLINEが提供しているということもあり、 &lt;strong>キャラクターをベースにしたデバイスが特徴的です&lt;/strong>。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;p>─ ちなみにこの写真は先日のLINE CONFERENCE 2018で発表があったミニオンズモデル&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;p>この記事の執筆時点（2018年7月7日）ではまだ開発用SDKは公開されていませんが、IFTTTに対応したというリリースが出ているのでIFTTT経由で色々なサービスと接続することが出来ます。&lt;/p>
-&lt;h2 id="clova-1">出勤するとClovaがしゃべる&lt;/h2>
-&lt;p>今回作ったものはこんな感じです。&lt;/p>
-&lt;p>試してるのはアルバイトの佐々木さんです。ドヤ顔は素です。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;p>先日作った勤怠システムと連携してキーパッドのボタンを押して出勤登録するとClovaに通知がいきます。&lt;/p>
-&lt;h2 id="nefry-btclova">Nefry BTとClovaを連携してみよう&lt;/h2>
-&lt;p>IFTTTのWebhookを用いてNefry BTからPOSTリクエストを送り、Clova側に通知させます。&lt;/p>
-&lt;p>イメージはこんな感じです。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;h3 id="ifttt">IFTTTでアプレットの登録&lt;/h3>
-&lt;p>アプレットとは連携させるサービスとサービスの組み合わせのことを指します。&lt;/p>
-&lt;p>IFTTTのユーザー登録などを完了したら&lt;a href="https://ifttt.com/create">アプレット作成&lt;/a>のページから新規のアプレットを作成します。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>まず&lt;code>this&lt;/code>を押すとトリガーとなるサービスを選択します。&lt;/p>
-&lt;p>&lt;img src="https://dotstud.io/img/blog/185/4.gif" alt="">
-Webhookを選択しましょう。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>任意のEvent Nameを指定します。&lt;code>clova_things&lt;/code>としました。&lt;/p>
-&lt;p>次に&lt;code>that&lt;/code>を押してアウトプットとなるサービスを選択します。
-&lt;img src="https://dotstud.io/img/blog/185/6.gif" alt="">
-clovaを選択しましょう。&lt;/p>
-&lt;p>メッセージ内容の箇所に&lt;code>Value1&lt;/code>を指定します。これはNefry BTから受け取る1つ目の値を指します。
-&lt;img src="https://i.gyazo.com/d868fea0c1d1738593a1f82d26ffbde2.png" alt="">
-&lt;code>Create action&lt;/code>のボタンを押して次のページで&lt;code>Finish&lt;/code>で完了です。&lt;/p>
-&lt;h3 id="curl">curlで試してみる&lt;/h3>
-&lt;p>&lt;a href="https://ifttt.com/services/maker_webhooks/settings">IFTTTのWebhooksの設定画面&lt;/a>を見てAPI KEYを確認しましょう。&lt;/p>
-&lt;p>&lt;code>https://maker.ifttt.com/use/xxxxxxxxx&lt;/code>というURLが表示されていると思いますが、&lt;code>xxxxxxxxx&lt;/code>の箇所がAPI KEYになります。&lt;/p>
-&lt;p>curlでは以下のように試せます。&lt;/p>
-&lt;pre>&lt;code>$ curl -X POST -H &amp;quot;Content-Type: application/json&amp;quot; -d '{&amp;quot;value1&amp;quot;:&amp;quot;てすと&amp;quot;}' https://maker.ifttt.com/trigger/clova_things/with/key/xxxxxxxxx
-&lt;/code>&lt;/pre>&lt;p>リクエストするURLはこのような形です。&lt;/p>
-&lt;blockquote>
-&lt;p>&lt;code>https://maker.ifttt.com/trigger/{{Event Name}}/with/key/{{API KEY}}&lt;/code>&lt;/p>
-&lt;/blockquote>
-&lt;p>Event Nameは今回の場合は任意の名前として&lt;code>clova_things&lt;/code>としていて、API KEYは&lt;code>xxxxxxxxx&lt;/code>の部分です。&lt;/p>
-&lt;h3 id="nefry-bt">Nefry BT側のコード&lt;/h3>
-&lt;p>勤怠システムの記事のコードとほぼ同様です。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>適宜読み替えてください。&lt;/p>
-&lt;pre>&lt;code>#include &amp;lt;WiFiClientSecure.h&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;外装&#34;&gt;外装&lt;/h3&gt;
+&lt;p&gt;こんな感じでダンボールを加工して、用途に合わせた表示を作ります（1番右は前回使ったGroveのタッチセンサを流用）。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/188/gawa.png&#34; alt=&#34;gawa&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;h2 id=&#34;試してみる&#34;&gt;試してみる&lt;/h2&gt;
+&lt;p&gt;&lt;center&gt;
+&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/unn1wIqbkKI&#34; frameborder=&#34;0&#34; allow=&#34;autoplay; encrypted-media&#34; allowfullscreen&gt;&lt;/iframe&gt;
+&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;タッチしたセンサによって3種の音を流すことができました！これで完成です！&lt;/p&gt;
+&lt;h2 id=&#34;のびすけさんにご報告&#34;&gt;のびすけさんにご報告&lt;/h2&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_s&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/188/sasaki.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;佐々木さん&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+のびすけさん、インターホン完成しました！
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_n&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/188/nobi.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;のびすけ&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+おうおう。
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/188/3.png&#34; alt=&#34;3&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;font size=&#34;4&#34;&gt;「じゃーん！こちらです！」&lt;/font&gt;
+&lt;/center&gt;&lt;/p&gt;
+&lt;div class=&#34;parent&#34;&gt;
+&lt;div class=&#34;dialogue&#34;&gt;
+&lt;div class=&#34;image_n&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/188/nobi.png&#34; /&gt;
+&lt;section class=&#34;name&#34;&gt;のびすけ&lt;/section&gt;
+&lt;/div&gt;
+&lt;div class=&#34;text&#34;&gt;
+見た目が……ださい……。
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/188/4.png&#34; alt=&#34;4&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;「まず左右のpadding違うし！上下のpaddingも違うし！そもそも字汚いしあれやこれやくどくどくど………」
+&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/188/5.png&#34; alt=&#34;5&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;「はい……。すいません……。」
+&lt;/center&gt;
+&lt;br /&gt;&lt;/p&gt;
+&lt;p&gt;一流のオフィスハッカーになる道のりはまだまだ遠そうです……。&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;
+&lt;center&gt;
+〜Fin〜
+&lt;/center&gt;&lt;/p&gt;
+&lt;style&gt;
+.dialogue {
+padding: 10px;
+display: table;
+}
+.image_n, .image_s {
+width: 75px;
+height: 75px;
+margin-right: 10px;
+display: table-cell;
+vertical-align: middle;
+}
+.image_n img {
+border-radius: 50%;
+border: 2px solid blue;
+}
+.image_s img {
+border-radius: 50%;
+border: 2px solid green;
+}
+.name {
+font-weight: bold;
+text-align: center;
+}
+.text {
+display: table-cell;
+padding: 0;
+vertical-align: middle;
+padding-left: 20px;
+}
+&lt;/style&gt;</description></item><item><title>ClovaとNefryBT（ESP32）を連携させてみよう</title><link>https://dotstud.io/blog/clova-ifttt-nefrybt-arduino/</link><pubDate>Tue, 10 Jul 2018 10:00:00 +0900</pubDate><guid>https://dotstud.io/blog/clova-ifttt-nefrybt-arduino/</guid><description>
+&lt;p&gt;こんにちは、代表の&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
+&lt;p&gt;LINEのスマートスピーカーClova（正式にはAIアシスタントの名前）が&lt;a href=&#34;http://clova-blog.line.me/ja/archives/7990256.html&#34;&gt;IFTTTに対応&lt;/a&gt;したのでNefry BT（ESP32）と連携してみました。（実は結構前から対応してたんだけど試せてなかった）&lt;/p&gt;
+&lt;p&gt;先日作った勤怠システムについては以下の記事をご参照ください。&lt;/p&gt;
+&lt;section class=&#34;link&#34; id=&#34;183&#34;&gt;
+&lt;/section&gt;
+&lt;p&gt;ちなみにこの勤怠システムは割と運用できてます。今の所は。&lt;/p&gt;
+&lt;h2 id=&#34;clovaって&#34;&gt;Clovaって？&lt;/h2&gt;
+&lt;p&gt;ClovaはLINEが開発したAIアシスタントです。Clova FriendsやClova Friends mini、Clova Waveなどの対応スマートスピーカー端末が販売されています。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;公式サイト: &lt;a href=&#34;https://clova.line.me/&#34;&gt;https://clova.line.me/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;GoogleのGoogle アシスタント（Google Home）やAmazonのAlexa（Amazon Echo）などと同じ並びの立ち位置という認識で大丈夫です。&lt;/p&gt;
+&lt;p&gt;LINEといえばスタンプやキャラクターが特徴的ですが、Clova Friendsに関してもLINEが提供しているということもあり、 &lt;strong&gt;キャラクターをベースにしたデバイスが特徴的です&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/185/1.png&#34; alt=&#34;1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;─ ちなみにこの写真は先日のLINE CONFERENCE 2018で発表があったミニオンズモデル&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;この記事の執筆時点（2018年7月7日）ではまだ開発用SDKは公開されていませんが、IFTTTに対応したというリリースが出ているのでIFTTT経由で色々なサービスと接続することが出来ます。&lt;/p&gt;
+&lt;h2 id=&#34;出勤するとclovaがしゃべる&#34;&gt;出勤するとClovaがしゃべる&lt;/h2&gt;
+&lt;p&gt;今回作ったものはこんな感じです。&lt;/p&gt;
+&lt;p&gt;試してるのはアルバイトの佐々木さんです。ドヤ顔は素です。&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;instagram-media&#34; data-instgrm-captioned data-instgrm-permalink=&#34;https://www.instagram.com/p/Bk4KrVtl1qU/&#34; data-instgrm-version=&#34;8&#34; style=&#34; background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);&#34;&gt;&lt;div style=&#34;padding:8px;&#34;&gt; &lt;div style=&#34; background:#F8F8F8; line-height:0; margin-top:40px; padding:28.194444444444443% 0; text-align:center; width:100%;&#34;&gt; &lt;div style=&#34; background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;&#34;&gt;&lt;/div&gt;&lt;/div&gt; &lt;p style=&#34; margin:8px 0 0 0; padding:0 4px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/Bk4KrVtl1qU/&#34; style=&#34; color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;&#34; target=&#34;\_blank&#34;&gt;Nefryとclovaをつないでみた。 #nefry #clova&lt;/a&gt;&lt;/p&gt; &lt;p style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;&#34;&gt;&lt;a href=&#34;https://www.instagram.com/n0bisuke/&#34; style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px;&#34; target=&#34;\_blank&#34;&gt; n0bisuke&lt;/a&gt;さん(@n0bisuke)がシェアした投稿 - &lt;time style=&#34; font-family:Arial,sans-serif; font-size:14px; line-height:17px;&#34; datetime=&#34;2018-07-06T05:00:48+00:00&#34;&gt;2018年 7月月5日午後10時00分PDT&lt;/time&gt;&lt;/p&gt;&lt;/div&gt;&lt;/blockquote&gt; &lt;script async defer src=&#34;//www.instagram.com/embed.js&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;先日作った勤怠システムと連携してキーパッドのボタンを押して出勤登録するとClovaに通知がいきます。&lt;/p&gt;
+&lt;h2 id=&#34;nefry-btとclovaを連携してみよう&#34;&gt;Nefry BTとClovaを連携してみよう&lt;/h2&gt;
+&lt;p&gt;IFTTTのWebhookを用いてNefry BTからPOSTリクエストを送り、Clova側に通知させます。&lt;/p&gt;
+&lt;p&gt;イメージはこんな感じです。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/185/2.png&#34; alt=&#34;2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;h3 id=&#34;iftttでアプレットの登録&#34;&gt;IFTTTでアプレットの登録&lt;/h3&gt;
+&lt;p&gt;アプレットとは連携させるサービスとサービスの組み合わせのことを指します。&lt;/p&gt;
+&lt;p&gt;IFTTTのユーザー登録などを完了したら&lt;a href=&#34;https://ifttt.com/create&#34;&gt;アプレット作成&lt;/a&gt;のページから新規のアプレットを作成します。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/185/3.png&#34; alt=&#34;3&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;まず&lt;code&gt;this&lt;/code&gt;を押すとトリガーとなるサービスを選択します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/185/4.gif&#34; alt=&#34;&#34; /&gt;
+Webhookを選択しましょう。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/185/5.png&#34; alt=&#34;5&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;任意のEvent Nameを指定します。&lt;code&gt;clova_things&lt;/code&gt;としました。&lt;/p&gt;
+&lt;p&gt;次に&lt;code&gt;that&lt;/code&gt;を押してアウトプットとなるサービスを選択します。
+&lt;img src=&#34;https://dotstud.io/img/blog/185/6.gif&#34; alt=&#34;&#34; /&gt;
+clovaを選択しましょう。&lt;/p&gt;
+&lt;p&gt;メッセージ内容の箇所に&lt;code&gt;Value1&lt;/code&gt;を指定します。これはNefry BTから受け取る1つ目の値を指します。
+&lt;img src=&#34;https://i.gyazo.com/d868fea0c1d1738593a1f82d26ffbde2.png&#34; alt=&#34;&#34; /&gt;
+&lt;code&gt;Create action&lt;/code&gt;のボタンを押して次のページで&lt;code&gt;Finish&lt;/code&gt;で完了です。&lt;/p&gt;
+&lt;h3 id=&#34;curlで試してみる&#34;&gt;curlで試してみる&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&#34;https://ifttt.com/services/maker_webhooks/settings&#34;&gt;IFTTTのWebhooksの設定画面&lt;/a&gt;を見てAPI KEYを確認しましょう。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;https://maker.ifttt.com/use/xxxxxxxxx&lt;/code&gt;というURLが表示されていると思いますが、&lt;code&gt;xxxxxxxxx&lt;/code&gt;の箇所がAPI KEYになります。&lt;/p&gt;
+&lt;p&gt;curlでは以下のように試せます。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;$ curl -X POST -H &amp;quot;Content-Type: application/json&amp;quot; -d &#39;{&amp;quot;value1&amp;quot;:&amp;quot;てすと&amp;quot;}&#39; https://maker.ifttt.com/trigger/clova_things/with/key/xxxxxxxxx
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;リクエストするURLはこのような形です。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;code&gt;https://maker.ifttt.com/trigger/{{Event Name}}/with/key/{{API KEY}}&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Event Nameは今回の場合は任意の名前として&lt;code&gt;clova_things&lt;/code&gt;としていて、API KEYは&lt;code&gt;xxxxxxxxx&lt;/code&gt;の部分です。&lt;/p&gt;
+&lt;h3 id=&#34;nefry-bt側のコード&#34;&gt;Nefry BT側のコード&lt;/h3&gt;
+&lt;p&gt;勤怠システムの記事のコードとほぼ同様です。&lt;/p&gt;
+&lt;section class=&#34;link&#34; id=&#34;183&#34;&gt;
+&lt;/section&gt;
+&lt;p&gt;適宜読み替えてください。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;WiFiClientSecure.h&amp;gt;
 WiFiClientSecure client;
 const int HTTP_PORT = 443;
 //途中省略
@@ -234,174 +359,213 @@ return;
 }
 // Read all the lines of the reply from server and print them to Serial
 while(client.available()) {
-String line = client.readStringUntil('\r');
+String line = client.readStringUntil(&#39;\r&#39;);
 Serial.print(line);
 }
 Serial.println();
 Serial.println(&amp;quot;closing connection&amp;quot;);
 }
-&lt;/code>&lt;/pre>&lt;p>全体コードは&lt;a href="https://gist.github.com/n0bisuke/d2fab404e5073e936339a6c3442c1e4c#file-kintai-ino-L94-L133">こちら&lt;/a>です。&lt;/p>
-&lt;h2 id="heading">試し方と使う際の注意点&lt;/h2>
-&lt;p>さて完成したら試してみます。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;p>キーパッドを押すとClovaに通知がいき、**「通知を読み上げて」**とClovaに話かけてあげると読み上げてくれます。&lt;/p>
-&lt;p>&lt;strong>はじめはWebhooksで通知するとそのままClovaが喋ってくれると思ったのですがそうではないので注意です。&lt;/strong>&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;p>通知が来た時点で何も喋ってくれないのは分かりにくいですね。現時点だと「通知を読み上げて」と言わないと読み上げてくれないので注意ですね。&lt;/p>
-&lt;h2 id="heading-1">まとめ&lt;/h2>
-&lt;p>Nefry BTをClovaを繋げることが出来ました。&lt;/p>
-&lt;p>IFTTTに繋がると実質何とでも繋げられるので嬉しいですね。&lt;/p>
-&lt;p>人間が「通知を読み上げて」と言わなくても喋ってくれるように機能追加してくれることに期待です。&lt;/p></description></item><item><title>最新の超軽量ドローン「Tello」でオフィスの日常を撮影してみた</title><link>https://dotstud.io/blog/toy-drone-tello-using/</link><pubDate>Fri, 06 Jul 2018 09:00:00 +0900</pubDate><guid>https://dotstud.io/blog/toy-drone-tello-using/</guid><description>&lt;p>こんにちは、&lt;a href="https://dotstud.io/members/kiki/">きき&lt;/a>です。&lt;/p>
-&lt;p>現役大学生でプログラミングを勉強中の新人アルバイトです。先月からdotstudioで働くことになりました〜。パチパチ（拍手）。どうぞよろしくお願いします。&lt;/p>
-&lt;p>働くことになったのはいいものの、実際、IoTについて詳しく知りません。&lt;strong>まずはIoTの魅力を知ることが大事なのでは……！！&lt;/strong>&lt;/p>
-&lt;p>ということで、今話題の**超軽量トイドローン「Tello」**で遊んでみました、わーい。&lt;/p>
-&lt;h2 id="heading">トイドローンってなに？&lt;/h2>
-&lt;p>はじめに、ドローンには様々な種類があります。ざっくり下記の3タイプに分けることができます。&lt;/p>
-&lt;ul>
-&lt;li>大型ドローン：きれいな映像で空撮をするためなどに使用する業務用&lt;/li>
-&lt;li>中型ドローン：業務用までとはいかないけど、もう少し本格的に遊んでみたい人用&lt;/li>
-&lt;li>小型ドローン：200g以下の、大きさも価格もお手軽な飛ばして遊ぶ用&lt;/li>
-&lt;/ul>
-&lt;p>200g以上のドローンになると、日本国内で使用する場合&lt;!-- raw HTML omitted -->ドローン航空法を守らなければいけません&lt;!-- raw HTML omitted -->。これからご紹介するトイドローン「Tello」は、&lt;strong>小型ドローン&lt;/strong>の一種になるので、周囲に迷惑をかけないように注意できれば&lt;strong>基本的にはいろんなところで飛ばすことができます&lt;/strong>。&lt;/p>
-&lt;h2 id="tello">なぜそんなに注目を浴びているのか「Tello（テッロ）」&lt;/h2>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>2018年4月に発売され、発売前から話題を呼んでいた小型のトイドローン&lt;a href="https://store.dji.com/jp/product/tello">「&lt;strong>Tello（テッロ）&lt;/strong>」&lt;/a>。&lt;!-- raw HTML omitted -->世界最大手のドローンメーカー「DJI」と「Intel」から技術供給を受け、「Ryze Tech」が開発した最新ドローン&lt;!-- raw HTML omitted -->です。&lt;/p>
-&lt;p>私としましては、なんかもう字面だけで**とにかく最先端技術を駆使していることだけは分かるぞ……**といった状況です。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;h3 id="heading-1">安い！速い！軽い！&lt;/h3>
-&lt;p>重さは、バッテリーとプロペラガードを含めて&lt;strong>約80g&lt;/strong>のみ。「80g 目安」で調べると&lt;!-- raw HTML omitted -->食パン（5枚きり）1枚分ぐらいの重さ&lt;!-- raw HTML omitted -->だそうです。&lt;/p>
-&lt;p>大きさは、&lt;strong>98 x 92.5 x 41 mm&lt;/strong>ほど。私の手のひらに乗せてちょっとはみ出すなぁといった大きさです。&lt;/p>
-&lt;p>Telloの最大飛行距離は&lt;strong>100m&lt;/strong>で、最大飛行時間は&lt;strong>13分&lt;/strong>です。最大飛行高度は&lt;strong>10m&lt;/strong>で、大体ビルの3,4階と同じ高さぐらい。最高速度は8m/s。風力の階級でいうと、「&lt;strong>レベル5の疾風&lt;/strong>」になるとのこと。&lt;/p>
-&lt;p>こちら気になるお値段、&lt;strong>税込12,800円&lt;/strong>！&lt;/p>
-&lt;p>トイドローンの相場はどのくらいなんだろうか、と気になるあなたへ。amazon売れ筋ランキング「ドローン・マルチコプター」部門Best10を調べてみたところ、&lt;strong>平均金額は10,490円&lt;/strong>でした（2018/6/19時点)。しかも、ランキング1位はTello！すごいー！&lt;/p>
-&lt;h3 id="scratch">Scratch（スクラッチ）でプログラミングができる&lt;/h3>
-&lt;p>子供向けに開発された初心者でも使いやすいプログラミング言語**「Scratch（スクラッチ）」**で、Telloを操作することもできるよう。&lt;/p>
-&lt;p>子どもと一緒に遊んで、プログラミング学習にも役立ちますね。&lt;/p>
-&lt;h2 id="heading-2">ついに……開封のとき！&lt;/h2>
-&lt;p>本体と、バッテリーを購入しました。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>&lt;strong>鮮やかなオレンジ色&lt;/strong>がこちらのワクワク度をよりいっそう高めてくれますね。DJIとIntelのロゴの並びがかっこいい。&lt;/p>
-&lt;p>ではでは、Tello、はじめましての儀……！&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;ul>
-&lt;li>説明書&lt;/li>
-&lt;li>予備プロペラ4本&lt;/li>
-&lt;li>バッテリー&lt;/li>
-&lt;li>プロペラを外す時に使用する小さいやつ&lt;/li>
-&lt;/ul>
-&lt;p>説明書には日本語で書かれているページもあります、ありがたい……！&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>この物怖じしないたたずまい、さすがです。&lt;/p>
-&lt;h2 id="heading-3">初期設定・アプリのダウンロード方法&lt;/h2>
-&lt;h3 id="heading-4">まずは充電をしよう&lt;/h3>
-&lt;p>「早速飛ばすぞ〜！」と意気揚々にTelloの電源をつけてたものの、&lt;strong>なんと……充電がない……！？&lt;/strong>&lt;/p>
-&lt;p>はじめにバッテリーの充電が必要なのですね、待ち遠しすぎる。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;ul>
-&lt;li>赤・緑・黄色（点滅）：電源がつき、準備中&lt;/li>
-&lt;li>青（早い点滅）：充電エラー&lt;/li>
-&lt;li>青（遅い点滅）：充電中&lt;/li>
-&lt;li>青（点灯）：充電完了&lt;/li>
-&lt;li>赤（遅い点滅）：ローバッテリー&lt;/li>
-&lt;li>赤（早い点滅）：バッテリー切れ間近&lt;/li>
-&lt;li>赤（点灯）：エラー&lt;/li>
-&lt;/ul>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>青の点灯に見せかけて、ゆっくり点滅しているので充電中です。その間にTello操縦用のアプリをダウンロードしましょう〜！&lt;/p>
-&lt;h3 id="heading-5">アプリのダウンロード&lt;/h3>
-&lt;p>Telloを飛ばすときは、専用のアプリをダウンロードする必要があります。説明書にバーコードリーダーがあるので、そちらからダウンロード。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>スタイリッシュなアイコンですね。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>起動すると、鮮やかなオレンジが再び私のワクワク度を高めます。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>接続方法を寧に書いてくれていますね。&lt;/p>
-&lt;p>①Telloの電源を入れる&lt;!-- raw HTML omitted -->
-②「Telloに接続をする」という青いボタンを押す&lt;!-- raw HTML omitted -->
-③Wi-Fiに接続する&lt;!-- raw HTML omitted -->&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>接続されると左上に「Tello」と表示されます。&lt;/p>
-&lt;p>ちなみに、「Dotstudio_NO_Denki_ON_OFF」ってなんやねんと思った方は&lt;a href="https://dotstud.io/blog/switch-servo-remote-controll/">下記&lt;/a>の記事をお読みください。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;h2 id="heading-6">基本の操作方法&lt;/h2>
-&lt;p>広い場所にTelloをおき、準備は万端。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>（バッテリーがないのは、充電前の写真だからです……)&lt;/p>
-&lt;p>左上のボタンをおすと、離陸できます。**「離陸しますか？」**という言葉に、胸の鼓動はMAXドキドキです。&lt;/p>
-&lt;p>右のハンドルを操作すると、&lt;strong>前進・後進・左右の移動&lt;/strong>、左のハンドルを操作すると、&lt;strong>上昇・下降・左右の旋回&lt;/strong>ができます。&lt;/p>
-&lt;h2 id="tello-1">Tello、行ってくるのだ！（離陸）&lt;/h2>
-&lt;p>「&lt;strong>離陸しますか？&lt;/strong>」の下のボタンをスライドさせるとブオオオオオオンンンンと音を立ててTelloが舞い上がります。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;p>ホバリングの安定性が高いのが一目でわかりますね。&lt;/p>
-&lt;h2 id="heading-7">仕事っぷりを監視してみる&lt;/h2>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>操作画面の右上の一番右端の丸いボタンを押すと、Telloの正面カメラで録画が始まります。&lt;/p>
-&lt;h3 id="heading-8">しゃちょーの仕事っぷりを監視！&lt;/h3>
-&lt;p>画質がきれいでブレ補正もされているので、しゃちょーののびすけさんも楽しそうですね。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;h3 id="heading-9">ちゃんとくさんの仕事っぷりを監視！&lt;/h3>
-&lt;p>操作もしやすいので、ちゃんとくさんの仕事っぷりを見守ることもできます。微笑みが最高です。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;p>また、Telloではただ上下左右に飛行するだけではありません。自動で円を描きながら動画撮影を行う「Circle」や、上下にバウンスする「Bounce Mode」など、より高度な技術を駆使できる&lt;strong>インテリジェントフライトモード&lt;/strong>が搭載されています。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>操作画面の左上の右から二番目のTelloのボタンを押すとインテリジェントフライトモードができます。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;h2 id="tello-2">Tello、戻ってくるのだ！（着陸）&lt;/h2>
-&lt;p>一通りオフィスの中を飛び回ったということで、Telloを着陸させます。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>こちらも操作画面の一番左上のボタンを押すと、通常の着陸を行うための「&lt;strong>タップして着陸&lt;/strong>」ボタンと、手のひらに舞い戻る「&lt;strong>手のひら着陸&lt;/strong>」のボタンを選ぶことができます。&lt;/p>
-&lt;p>せっかくなので、我が手のひらへと降り立たせてみました。ボタンを押した後、5秒後にTelloの下に手のひらを差し出します。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;p>手が巻き込まれてすごいことにならないか緊張してしまいましたが、すんなりと降り立ってくれました。にやにやが止まりません。&lt;/p>
-&lt;h2 id="heading-10">おわりに&lt;/h2>
-&lt;p>こうして、私の初めてのドローン体験が終わりました！&lt;strong>想像の5倍簡単に操作ができて、想像の10倍楽しんでいる私がいましたね&lt;/strong>。&lt;/p>
-&lt;p>日々のデスクワークで肩こりがひどくなった時は、Telloを飛ばして気分転換でもしようかなと思います。&lt;/p>
-&lt;p>&lt;!-- raw HTML omitted -->高画質な動画撮影やインテリジェントフライトモードでテクニカルな飛行もできる&lt;!-- raw HTML omitted -->ので、広い公園などで飛ばしても盛り上がること間違いなしではないでしょうか。&lt;/p>
-&lt;p>ぜひみなさんも遊んでみてください〜！&lt;/p></description></item><item><title>NefryBTとキーボードで作る簡易勤怠管理システム</title><link>https://dotstud.io/blog/keyboard-kintai-system-diy/</link><pubDate>Thu, 05 Jul 2018 10:00:00 +0900</pubDate><guid>https://dotstud.io/blog/keyboard-kintai-system-diy/</guid><description>&lt;p>こんにちは、代表の&lt;a href="https://dotstud.io/members/n0bisuke">n0bisuke&lt;/a>です。&lt;/p>
-&lt;p>今日はとある電子工作向けキーパッドを手に入れたので、&lt;strong>Nefry BTで簡易的な勤怠管理システム&lt;/strong>を作ってみました。ちなみにオチとかないです。&lt;/p>
-&lt;h2 id="heading">使うもの&lt;/h2>
-&lt;h3 id="--44">マトリックスフィルムボタンキーボード メンブレン式キーボード 4*4&lt;/h3>
-&lt;p>HiLetgoというストアから出品されています。眺めていて使ってみたいなぁという欲求が湧いたのでポチりました。&lt;/p>
-&lt;p>ちなみに5個セットなので、あと4個なにか作れます。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;h2 id="arduino-uno">Arduino Unoで動かしてみる&lt;/h2>
-&lt;p>AmazonのページにはArduino対応と書いているのでどうやら使えるらしい。&lt;/p>
-&lt;p>&lt;a href="https://techtutorialsx.com/2017/03/18/esp8266-interfacing-with-a-4x4-matrix-keypad/">ESP8266: Interfacing with a 4×4 Matrix Keypad
-&lt;/a>という記事があったので参考にArduinoで動かしてみました。&lt;/p>
-&lt;h3 id="heading-1">配線&lt;/h3>
-&lt;p>&lt;img src="https://i.gyazo.com/3c3b4883c69f25b562906e38f853beb4.png" alt="">&lt;/p>
-&lt;p>Arduino Unoとあとで紹介するNefry BTでの配線はこんな感じです。&lt;/p>
-&lt;h3 id="heading-2">プログラム&lt;/h3>
-&lt;p>&lt;a href="Chris--A/Keypad">こちらのライブラリ&lt;/a>をインストールしましょう。&lt;/p>
-&lt;p>ライブラリマネージャからもインストールできます。&lt;/p>
-&lt;p>&lt;img src="https://i.gyazo.com/d1d90cb4712729faac8272bcf3274767.png" alt="">&lt;/p>
-&lt;pre>&lt;code>#include &amp;lt;Keypad.h&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;全体コードは&lt;a href=&#34;https://gist.github.com/n0bisuke/d2fab404e5073e936339a6c3442c1e4c#file-kintai-ino-L94-L133&#34;&gt;こちら&lt;/a&gt;です。&lt;/p&gt;
+&lt;h2 id=&#34;試し方と使う際の注意点&#34;&gt;試し方と使う際の注意点&lt;/h2&gt;
+&lt;p&gt;さて完成したら試してみます。&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;instagram-media&#34; data-instgrm-captioned data-instgrm-permalink=&#34;https://www.instagram.com/p/Bk4KrVtl1qU/&#34; data-instgrm-version=&#34;8&#34; style=&#34; background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);&#34;&gt;&lt;div style=&#34;padding:8px;&#34;&gt; &lt;div style=&#34; background:#F8F8F8; line-height:0; margin-top:40px; padding:28.194444444444443% 0; text-align:center; width:100%;&#34;&gt; &lt;div style=&#34; background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;&#34;&gt;&lt;/div&gt;&lt;/div&gt; &lt;p style=&#34; margin:8px 0 0 0; padding:0 4px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/Bk4KrVtl1qU/&#34; style=&#34; color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;&#34; target=\_blank&#34;&gt;Nefryとclovaをつないでみた。 #nefry #clova&lt;/a&gt;&lt;/p&gt; &lt;p style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;&#34;&gt;&lt;a href=&#34;https://www.instagram.com/n0bisuke/&#34; style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px;&#34; target=&#34;\_blank&#34;&gt; n0bisuke&lt;/a&gt;さん(@n0bisuke)がシェアした投稿 - &lt;time style=&#34; font-family:Arial,sans-serif; font-size:14px; line-height:17px;&#34; datetime=&#34;2018-07-06T05:00:48+00:00&#34;&gt;2018年 7月月5日午後10時00分PDT&lt;/time&gt;&lt;/p&gt;&lt;/div&gt;&lt;/blockquote&gt; &lt;script async defer src=&#34;//www.instagram.com/embed.js&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;キーパッドを押すとClovaに通知がいき、&lt;strong&gt;「通知を読み上げて」&lt;/strong&gt;とClovaに話かけてあげると読み上げてくれます。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;はじめはWebhooksで通知するとそのままClovaが喋ってくれると思ったのですがそうではないので注意です。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;
+&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;clovaのifttt試してみてるけどぜんぜん喋ってくれない… なんだろう&lt;/p&gt; のびすけ / sugawara (@n0bisuke) &lt;a href=&#34;https://twitter.com/n0bisuke/status/1015057186026737664?ref_src=twsrc%5Etfw&#34;&gt;2018年7月6日&lt;/a&gt;&lt;/blockquote&gt;
+&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
+&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;通知が来た時点で何も喋ってくれないのは分かりにくいですね。現時点だと「通知を読み上げて」と言わないと読み上げてくれないので注意ですね。&lt;/p&gt;
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;Nefry BTをClovaを繋げることが出来ました。&lt;/p&gt;
+&lt;p&gt;IFTTTに繋がると実質何とでも繋げられるので嬉しいですね。&lt;/p&gt;
+&lt;p&gt;人間が「通知を読み上げて」と言わなくても喋ってくれるように機能追加してくれることに期待です。&lt;/p&gt;</description></item><item><title>最新の超軽量ドローン「Tello」でオフィスの日常を撮影してみた</title><link>https://dotstud.io/blog/toy-drone-tello-using/</link><pubDate>Fri, 06 Jul 2018 09:00:00 +0900</pubDate><guid>https://dotstud.io/blog/toy-drone-tello-using/</guid><description>
+&lt;p&gt;こんにちは、&lt;a href=&#34;https://dotstud.io/members/kiki/&#34;&gt;きき&lt;/a&gt;です。&lt;/p&gt;
+&lt;p&gt;現役大学生でプログラミングを勉強中の新人アルバイトです。先月からdotstudioで働くことになりました〜。パチパチ（拍手）。どうぞよろしくお願いします。&lt;/p&gt;
+&lt;p&gt;働くことになったのはいいものの、実際、IoTについて詳しく知りません。&lt;strong&gt;まずはIoTの魅力を知ることが大事なのでは……！！&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;ということで、今話題の&lt;strong&gt;超軽量トイドローン「Tello」&lt;/strong&gt;で遊んでみました、わーい。&lt;/p&gt;
+&lt;h2 id=&#34;トイドローンってなに&#34;&gt;トイドローンってなに？&lt;/h2&gt;
+&lt;p&gt;はじめに、ドローンには様々な種類があります。ざっくり下記の3タイプに分けることができます。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;大型ドローン：きれいな映像で空撮をするためなどに使用する業務用&lt;/li&gt;
+&lt;li&gt;中型ドローン：業務用までとはいかないけど、もう少し本格的に遊んでみたい人用&lt;/li&gt;
+&lt;li&gt;小型ドローン：200g以下の、大きさも価格もお手軽な飛ばして遊ぶ用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;200g以上のドローンになると、日本国内で使用する場合&lt;u&gt;ドローン航空法を守らなければいけません&lt;/u&gt;。これからご紹介するトイドローン「Tello」は、&lt;strong&gt;小型ドローン&lt;/strong&gt;の一種になるので、周囲に迷惑をかけないように注意できれば&lt;strong&gt;基本的にはいろんなところで飛ばすことができます&lt;/strong&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;なぜそんなに注目を浴びているのか-tello-テッロ&#34;&gt;なぜそんなに注目を浴びているのか「Tello（テッロ）」&lt;/h2&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/184/1.png&#34; alt=&#34;1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;2018年4月に発売され、発売前から話題を呼んでいた小型のトイドローン&lt;a href=&#34;https://store.dji.com/jp/product/tello&#34;&gt;「&lt;strong&gt;Tello（テッロ）&lt;/strong&gt;」&lt;/a&gt;。&lt;u&gt;世界最大手のドローンメーカー「DJI」と「Intel」から技術供給を受け、「Ryze Tech」が開発した最新ドローン&lt;/u&gt;です。&lt;/p&gt;
+&lt;p&gt;私としましては、なんかもう字面だけで&lt;strong&gt;とにかく最先端技術を駆使していることだけは分かるぞ……&lt;/strong&gt;といった状況です。&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;
+&lt;iframe style=&#34;width:120px;height:240px;&#34; marginwidth=&#34;0&#34; marginheight=&#34;0&#34; scrolling=&#34;no&#34; frameborder=&#34;0&#34; src=&#34;//rcm-fe.amazon-adsystem.com/e/cm?lt1=_blank&amp;bc1=000000&amp;IS2=1&amp;bg1=FFFFFF&amp;fc1=000000&amp;lc1=0000FF&amp;t=dotstudio-22&amp;o=9&amp;p=8&amp;l=as4&amp;m=amazon&amp;f=ifr&amp;ref=as_ss_li_til&amp;asins=B07979Q4YS&amp;linkId=9a759523844b965881171386d87bfa73&#34;&gt;&lt;/iframe&gt;
+&lt;br /&gt;Amazonやヨドバシなどの家電量販店で購入することができます！
+&lt;/center&gt;&lt;/p&gt;
+&lt;h3 id=&#34;安い-速い-軽い&#34;&gt;安い！速い！軽い！&lt;/h3&gt;
+&lt;p&gt;重さは、バッテリーとプロペラガードを含めて&lt;strong&gt;約80g&lt;/strong&gt;のみ。「80g 目安」で調べると&lt;u&gt;食パン（5枚きり）1枚分ぐらいの重さ&lt;/u&gt;だそうです。&lt;/p&gt;
+&lt;p&gt;大きさは、&lt;strong&gt;98 x 92.5 x 41 mm&lt;/strong&gt;ほど。私の手のひらに乗せてちょっとはみ出すなぁといった大きさです。&lt;/p&gt;
+&lt;p&gt;Telloの最大飛行距離は&lt;strong&gt;100m&lt;/strong&gt;で、最大飛行時間は&lt;strong&gt;13分&lt;/strong&gt;です。最大飛行高度は&lt;strong&gt;10m&lt;/strong&gt;で、大体ビルの3,4階と同じ高さぐらい。最高速度は8m/s。風力の階級でいうと、「&lt;strong&gt;レベル5の疾風&lt;/strong&gt;」になるとのこと。&lt;/p&gt;
+&lt;p&gt;こちら気になるお値段、&lt;strong&gt;税込12,800円&lt;/strong&gt;！&lt;/p&gt;
+&lt;p&gt;トイドローンの相場はどのくらいなんだろうか、と気になるあなたへ。amazon売れ筋ランキング「ドローン・マルチコプター」部門Best10を調べてみたところ、&lt;strong&gt;平均金額は10,490円&lt;/strong&gt;でした（2018/6/19時点)。しかも、ランキング1位はTello！すごいー！&lt;/p&gt;
+&lt;h3 id=&#34;scratch-スクラッチ-でプログラミングができる&#34;&gt;Scratch（スクラッチ）でプログラミングができる&lt;/h3&gt;
+&lt;p&gt;子供向けに開発された初心者でも使いやすいプログラミング言語&lt;strong&gt;「Scratch（スクラッチ）」&lt;/strong&gt;で、Telloを操作することもできるよう。&lt;/p&gt;
+&lt;p&gt;子どもと一緒に遊んで、プログラミング学習にも役立ちますね。&lt;/p&gt;
+&lt;h2 id=&#34;ついに-開封のとき&#34;&gt;ついに……開封のとき！&lt;/h2&gt;
+&lt;p&gt;本体と、バッテリーを購入しました。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/184/2.png&#34; alt=&#34;2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;鮮やかなオレンジ色&lt;/strong&gt;がこちらのワクワク度をよりいっそう高めてくれますね。DJIとIntelのロゴの並びがかっこいい。&lt;/p&gt;
+&lt;p&gt;ではでは、Tello、はじめましての儀……！&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/184/4.png&#34; alt=&#34;4&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/184/5.png&#34; alt=&#34;5&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;説明書&lt;/li&gt;
+&lt;li&gt;予備プロペラ4本&lt;/li&gt;
+&lt;li&gt;バッテリー&lt;/li&gt;
+&lt;li&gt;プロペラを外す時に使用する小さいやつ&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;説明書には日本語で書かれているページもあります、ありがたい……！&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/184/6.png&#34; alt=&#34;6&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;この物怖じしないたたずまい、さすがです。&lt;/p&gt;
+&lt;h2 id=&#34;初期設定-アプリのダウンロード方法&#34;&gt;初期設定・アプリのダウンロード方法&lt;/h2&gt;
+&lt;h3 id=&#34;まずは充電をしよう&#34;&gt;まずは充電をしよう&lt;/h3&gt;
+&lt;p&gt;「早速飛ばすぞ〜！」と意気揚々にTelloの電源をつけてたものの、&lt;strong&gt;なんと……充電がない……！？&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;はじめにバッテリーの充電が必要なのですね、待ち遠しすぎる。&lt;/p&gt;
+&lt;p&gt;&lt;br/&gt;&lt;/p&gt;
+&lt;h4 id=&#34;ライトの意味&#34;&gt;■ ライトの意味&lt;/h4&gt;
+&lt;p&gt;何種類かパターンがあるので、ざっと以下にまとめてみました。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;赤・緑・黄色（点滅）：電源がつき、準備中&lt;/li&gt;
+&lt;li&gt;青（早い点滅）：充電エラー&lt;/li&gt;
+&lt;li&gt;青（遅い点滅）：充電中&lt;/li&gt;
+&lt;li&gt;青（点灯）：充電完了&lt;/li&gt;
+&lt;li&gt;赤（遅い点滅）：ローバッテリー&lt;/li&gt;
+&lt;li&gt;赤（早い点滅）：バッテリー切れ間近&lt;/li&gt;
+&lt;li&gt;赤（点灯）：エラー&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/184/7.png&#34; alt=&#34;7&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;青の点灯に見せかけて、ゆっくり点滅しているので充電中です。その間にTello操縦用のアプリをダウンロードしましょう〜！&lt;/p&gt;
+&lt;h3 id=&#34;アプリのダウンロード&#34;&gt;アプリのダウンロード&lt;/h3&gt;
+&lt;p&gt;Telloを飛ばすときは、専用のアプリをダウンロードする必要があります。説明書にバーコードリーダーがあるので、そちらからダウンロード。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/184/8.png&#34; alt=&#34;8&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;スタイリッシュなアイコンですね。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/184/9.png&#34; alt=&#34;9&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;起動すると、鮮やかなオレンジが再び私のワクワク度を高めます。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/184/10.png&#34; alt=&#34;10&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;接続方法を寧に書いてくれていますね。&lt;/p&gt;
+&lt;p&gt;①Telloの電源を入れる&lt;br /&gt;
+②「Telloに接続をする」という青いボタンを押す&lt;br /&gt;
+③Wi-Fiに接続する&lt;br /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/184/11.png&#34; alt=&#34;11&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;接続されると左上に「Tello」と表示されます。&lt;/p&gt;
+&lt;p&gt;ちなみに、「Dotstudio_NO_Denki_ON_OFF」ってなんやねんと思った方は&lt;a href=&#34;https://dotstud.io/blog/switch-servo-remote-controll/&#34;&gt;下記&lt;/a&gt;の記事をお読みください。&lt;/p&gt;
+&lt;section class=&#34;link&#34; id=&#34;155&#34;&gt;
+&lt;/section&gt;
+&lt;h2 id=&#34;基本の操作方法&#34;&gt;基本の操作方法&lt;/h2&gt;
+&lt;p&gt;広い場所にTelloをおき、準備は万端。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/184/12.png&#34; alt=&#34;12&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;（バッテリーがないのは、充電前の写真だからです……)&lt;/p&gt;
+&lt;p&gt;左上のボタンをおすと、離陸できます。&lt;strong&gt;「離陸しますか？」&lt;/strong&gt;という言葉に、胸の鼓動はMAXドキドキです。&lt;/p&gt;
+&lt;p&gt;右のハンドルを操作すると、&lt;strong&gt;前進・後進・左右の移動&lt;/strong&gt;、左のハンドルを操作すると、&lt;strong&gt;上昇・下降・左右の旋回&lt;/strong&gt;ができます。&lt;/p&gt;
+&lt;h2 id=&#34;tello-行ってくるのだ-離陸&#34;&gt;Tello、行ってくるのだ！（離陸）&lt;/h2&gt;
+&lt;p&gt;「&lt;strong&gt;離陸しますか？&lt;/strong&gt;」の下のボタンをスライドさせるとブオオオオオオンンンンと音を立ててTelloが舞い上がります。&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;
+&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/C0us56bdMw0&#34; frameborder=&#34;0&#34; allow=&#34;autoplay; encrypted-media&#34; allowfullscreen&gt;&lt;/iframe&gt;
+&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;ホバリングの安定性が高いのが一目でわかりますね。&lt;/p&gt;
+&lt;h2 id=&#34;仕事っぷりを監視してみる&#34;&gt;仕事っぷりを監視してみる&lt;/h2&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/184/camera.png&#34; alt=&#34;camera&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;操作画面の右上の一番右端の丸いボタンを押すと、Telloの正面カメラで録画が始まります。&lt;/p&gt;
+&lt;h3 id=&#34;しゃちょーの仕事っぷりを監視&#34;&gt;しゃちょーの仕事っぷりを監視！&lt;/h3&gt;
+&lt;p&gt;画質がきれいでブレ補正もされているので、しゃちょーののびすけさんも楽しそうですね。&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;
+&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/dHQkEVG4AZ4&#34; frameborder=&#34;0&#34; allow=&#34;autoplay; encrypted-media&#34; allowfullscreen&gt;&lt;/iframe&gt;
+&lt;/center&gt;&lt;/p&gt;
+&lt;h3 id=&#34;ちゃんとくさんの仕事っぷりを監視&#34;&gt;ちゃんとくさんの仕事っぷりを監視！&lt;/h3&gt;
+&lt;p&gt;操作もしやすいので、ちゃんとくさんの仕事っぷりを見守ることもできます。微笑みが最高です。&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;
+&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/k5fzCduOUIU&#34; frameborder=&#34;0&#34; allow=&#34;autoplay; encrypted-media&#34; allowfullscreen&gt;&lt;/iframe&gt;
+&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;また、Telloではただ上下左右に飛行するだけではありません。自動で円を描きながら動画撮影を行う「Circle」や、上下にバウンスする「Bounce Mode」など、より高度な技術を駆使できる&lt;strong&gt;インテリジェントフライトモード&lt;/strong&gt;が搭載されています。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/184/intelli.png&#34; alt=&#34;intelli&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;操作画面の左上の右から二番目のTelloのボタンを押すとインテリジェントフライトモードができます。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/184/13.png&#34; alt=&#34;13&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/184/14.png&#34; alt=&#34;14&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;h2 id=&#34;tello-戻ってくるのだ-着陸&#34;&gt;Tello、戻ってくるのだ！（着陸）&lt;/h2&gt;
+&lt;p&gt;一通りオフィスの中を飛び回ったということで、Telloを着陸させます。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/184/land.png&#34; alt=&#34;land&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;こちらも操作画面の一番左上のボタンを押すと、通常の着陸を行うための「&lt;strong&gt;タップして着陸&lt;/strong&gt;」ボタンと、手のひらに舞い戻る「&lt;strong&gt;手のひら着陸&lt;/strong&gt;」のボタンを選ぶことができます。&lt;/p&gt;
+&lt;p&gt;せっかくなので、我が手のひらへと降り立たせてみました。ボタンを押した後、5秒後にTelloの下に手のひらを差し出します。&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;
+&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/yJXizM3anfQ&#34; frameborder=&#34;0&#34; allow=&#34;autoplay; encrypted-media&#34; allowfullscreen&gt;&lt;/iframe&gt;
+&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;手が巻き込まれてすごいことにならないか緊張してしまいましたが、すんなりと降り立ってくれました。にやにやが止まりません。&lt;/p&gt;
+&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
+&lt;p&gt;こうして、私の初めてのドローン体験が終わりました！&lt;strong&gt;想像の5倍簡単に操作ができて、想像の10倍楽しんでいる私がいましたね&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;日々のデスクワークで肩こりがひどくなった時は、Telloを飛ばして気分転換でもしようかなと思います。&lt;/p&gt;
+&lt;p&gt;&lt;u&gt;高画質な動画撮影やインテリジェントフライトモードでテクニカルな飛行もできる&lt;/u&gt;ので、広い公園などで飛ばしても盛り上がること間違いなしではないでしょうか。&lt;/p&gt;
+&lt;p&gt;ぜひみなさんも遊んでみてください〜！&lt;/p&gt;</description></item><item><title>NefryBTとキーボードで作る簡易勤怠管理システム</title><link>https://dotstud.io/blog/keyboard-kintai-system-diy/</link><pubDate>Thu, 05 Jul 2018 10:00:00 +0900</pubDate><guid>https://dotstud.io/blog/keyboard-kintai-system-diy/</guid><description>
+&lt;p&gt;こんにちは、代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
+&lt;p&gt;今日はとある電子工作向けキーパッドを手に入れたので、&lt;strong&gt;Nefry BTで簡易的な勤怠管理システム&lt;/strong&gt;を作ってみました。ちなみにオチとかないです。&lt;/p&gt;
+&lt;h2 id=&#34;使うもの&#34;&gt;使うもの&lt;/h2&gt;
+&lt;h3 id=&#34;マトリックスフィルムボタンキーボード-メンブレン式キーボード-4-4&#34;&gt;マトリックスフィルムボタンキーボード メンブレン式キーボード 4*4&lt;/h3&gt;
+&lt;p&gt;HiLetgoというストアから出品されています。眺めていて使ってみたいなぁという欲求が湧いたのでポチりました。&lt;/p&gt;
+&lt;p&gt;ちなみに5個セットなので、あと4個なにか作れます。&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;
+&lt;iframe style=&#34;width:120px;height:240px;&#34; marginwidth=&#34;0&#34; marginheight=&#34;0&#34; scrolling=&#34;no&#34; frameborder=&#34;0&#34; src=&#34;//rcm-fe.amazon-adsystem.com/e/cm?lt1=\å_blank&amp;bc1=000000&amp;IS2=1&amp;bg1=FFFFFF&amp;fc1=000000&amp;lc1=0000FF&amp;t=n0bisuke-22&amp;o=9&amp;p=8&amp;l=as4&amp;m=amazon&amp;f=ifr&amp;ref=as_ss_li_til&amp;asins=B010Q17I8E&amp;linkId=9116436de3640fbe22f359a3eb280f43&#34;&gt;&lt;/iframe&gt;
+&lt;/center&gt;&lt;/p&gt;
+&lt;h2 id=&#34;arduino-unoで動かしてみる&#34;&gt;Arduino Unoで動かしてみる&lt;/h2&gt;
+&lt;p&gt;AmazonのページにはArduino対応と書いているのでどうやら使えるらしい。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://techtutorialsx.com/2017/03/18/esp8266-interfacing-with-a-4x4-matrix-keypad/&#34;&gt;ESP8266: Interfacing with a 4×4 Matrix Keypad
+&lt;/a&gt;という記事があったので参考にArduinoで動かしてみました。&lt;/p&gt;
+&lt;h3 id=&#34;配線&#34;&gt;配線&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/3c3b4883c69f25b562906e38f853beb4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Arduino Unoとあとで紹介するNefry BTでの配線はこんな感じです。&lt;/p&gt;
+&lt;h3 id=&#34;プログラム&#34;&gt;プログラム&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&#34;Chris--A/Keypad&#34;&gt;こちらのライブラリ&lt;/a&gt;をインストールしましょう。&lt;/p&gt;
+&lt;p&gt;ライブラリマネージャからもインストールできます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/d1d90cb4712729faac8272bcf3274767.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Keypad.h&amp;gt;
 const byte n_rows = 4;
 const byte n_cols = 4;
 char keys[n_rows][n_cols] = {
-{'1','2','3','A'},
-{'4','5','6','B'},
-{'7','8','9','C'},
-{'*','0','#','D'}
+{&#39;1&#39;,&#39;2&#39;,&#39;3&#39;,&#39;A&#39;},
+{&#39;4&#39;,&#39;5&#39;,&#39;6&#39;,&#39;B&#39;},
+{&#39;7&#39;,&#39;8&#39;,&#39;9&#39;,&#39;C&#39;},
+{&#39;*&#39;,&#39;0&#39;,&#39;#&#39;,&#39;D&#39;}
 };
 byte colPins[n_rows] = {3, 2, 1, 0};
 byte rowPins[n_cols] = {7, 6, 5, 4};
@@ -416,21 +580,22 @@ Serial.print(&amp;quot;Key pressed: &amp;quot;);
 Serial.println(myKey);
 }
 }
-&lt;/code>&lt;/pre>&lt;h3 id="heading-3">実行&lt;/h3>
-&lt;!-- raw HTML omitted -->
-&lt;h2 id="nefry-bt">Nefry BTで動作させて勤怠システムに&lt;/h2>
-&lt;p>出退勤の記録を付ける電子工作は、&lt;strong>今まで何度か作りはしたものの導入まで至っていなかった&lt;/strong>です。&lt;/p>
-&lt;p>&lt;strong>作り込もうとして力を入れすぎて力尽きる問題&lt;/strong>が大きいと思っています。&lt;/p>
-&lt;p>ということで&lt;!-- raw HTML omitted -->実装がシンプルな勤怠システムをとりあえず導入&lt;!-- raw HTML omitted -->してみました。&lt;/p>
-&lt;h3 id="heading-4">ボタン入力式&lt;/h3>
-&lt;p>仕様は&lt;strong>数字を押して選択し、Aボタンで出勤記録、Bボタンで退勤記録&lt;/strong>です。&lt;/p>
-&lt;p>ディスプレイには登録している名前が出ます。&lt;/p>
-&lt;p>多分そのうちSuica連携とかBLEデバイス連携とか指紋とか声門とかそういうのも試してみる気はするのですが、 &lt;strong>ボタン入力とHTTP通信だけの実装のシンプルさ&lt;/strong>がとりあえず始めるには重要な気がしました。&lt;/p>
-&lt;p>制作時間1時間程度。HTTP POST周りで少し手こずってました。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;h3 id="heading-5">実装&lt;/h3>
-&lt;p>&lt;a href="https://dotstud.io/docs/nefrybt-http-post/">Nefry BTでのHTTP POST&lt;/a>も合わせて読むとコード理解が進みます。&lt;/p>
-&lt;pre>&lt;code>#include &amp;lt;Keypad.h&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;実行&#34;&gt;実行&lt;/h3&gt;
+&lt;p&gt;&lt;blockquote class=&#34;instagram-media&#34; data-instgrm-captioned data-instgrm-permalink=&#34;https://www.instagram.com/p/BkzAcUMB-3K/&#34; data-instgrm-version=&#34;8&#34; style=&#34; background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);&#34;&gt;&lt;div style=&#34;padding:8px;&#34;&gt; &lt;div style=&#34; background:#F8F8F8; line-height:0; margin-top:40px; padding:28.194444444444443% 0; text-align:center; width:100%;&#34;&gt; &lt;div style=&#34; background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;&#34;&gt;&lt;/div&gt;&lt;/div&gt; &lt;p style=&#34; margin:8px 0 0 0; padding:0 4px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/BkzAcUMB-3K/&#34; style=&#34; color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;&#34; target=&#34;_blank&#34;&gt;電子工作用のキーボード使ってみたけどハマることなく試せた 勤怠記録とかオフィスハックの何かに使いたい #dotstudio&lt;/a&gt;&lt;/p&gt; &lt;p style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;&#34;&gt;&lt;a href=&#34;https://www.instagram.com/n0bisuke/&#34; style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px;&#34; target=&#34;_blank&#34;&gt; n0bisuke&lt;/a&gt;さん(@n0bisuke)がシェアした投稿 - &lt;time style=&#34; font-family:Arial,sans-serif; font-size:14px; line-height:17px;&#34; datetime=&#34;2018-07-04T04:53:24+00:00&#34;&gt;2018年 7月月3日午後9時53分PDT&lt;/time&gt;&lt;/p&gt;&lt;/div&gt;&lt;/blockquote&gt; &lt;script async defer src=&#34;//www.instagram.com/embed.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+&lt;h2 id=&#34;nefry-btで動作させて勤怠システムに&#34;&gt;Nefry BTで動作させて勤怠システムに&lt;/h2&gt;
+&lt;p&gt;出退勤の記録を付ける電子工作は、&lt;strong&gt;今まで何度か作りはしたものの導入まで至っていなかった&lt;/strong&gt;です。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;作り込もうとして力を入れすぎて力尽きる問題&lt;/strong&gt;が大きいと思っています。&lt;/p&gt;
+&lt;p&gt;ということで&lt;u&gt;実装がシンプルな勤怠システムをとりあえず導入&lt;/u&gt;してみました。&lt;/p&gt;
+&lt;h3 id=&#34;ボタン入力式&#34;&gt;ボタン入力式&lt;/h3&gt;
+&lt;p&gt;仕様は&lt;strong&gt;数字を押して選択し、Aボタンで出勤記録、Bボタンで退勤記録&lt;/strong&gt;です。&lt;/p&gt;
+&lt;p&gt;ディスプレイには登録している名前が出ます。&lt;/p&gt;
+&lt;p&gt;多分そのうちSuica連携とかBLEデバイス連携とか指紋とか声門とかそういうのも試してみる気はするのですが、 &lt;strong&gt;ボタン入力とHTTP通信だけの実装のシンプルさ&lt;/strong&gt;がとりあえず始めるには重要な気がしました。&lt;/p&gt;
+&lt;p&gt;制作時間1時間程度。HTTP POST周りで少し手こずってました。&lt;/p&gt;
+&lt;p&gt;&lt;blockquote class=&#34;instagram-media&#34; data-instgrm-captioned data-instgrm-permalink=&#34;https://www.instagram.com/p/Bkz8a0ihnYF/&#34; data-instgrm-version=&#34;8&#34; style=&#34; background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);&#34;&gt;&lt;div style=&#34;padding:8px;&#34;&gt; &lt;div style=&#34; background:#F8F8F8; line-height:0; margin-top:40px; padding:28.194444444444443% 0; text-align:center; width:100%;&#34;&gt; &lt;div style=&#34; background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;&#34;&gt;&lt;/div&gt;&lt;/div&gt; &lt;p style=&#34; margin:8px 0 0 0; padding:0 4px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/Bkz8a0ihnYF/&#34; style=&#34; color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;&#34; target=&#34;_blank&#34;&gt;Nefryとつないでみた。キーの押し心地がよい&lt;/a&gt;&lt;/p&gt; &lt;p style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;&#34;&gt;&lt;a href=&#34;https://www.instagram.com/n0bisuke/&#34; style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px;&#34; target=&#34;_blank&#34;&gt; n0bisuke&lt;/a&gt;さん(@n0bisuke)がシェアした投稿 - &lt;time style=&#34; font-family:Arial,sans-serif; font-size:14px; line-height:17px;&#34; datetime=&#34;2018-07-04T13:35:59+00:00&#34;&gt;2018年 7月月4日午前6時35分PDT&lt;/time&gt;&lt;/p&gt;&lt;/div&gt;&lt;/blockquote&gt; &lt;script async defer src=&#34;//www.instagram.com/embed.js&#34;&gt;&lt;/script&gt;&lt;/p&gt;
+&lt;h3 id=&#34;実装&#34;&gt;実装&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&#34;https://dotstud.io/docs/nefrybt-http-post/&#34;&gt;Nefry BTでのHTTP POST&lt;/a&gt;も合わせて読むとコード理解が進みます。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;#include &amp;lt;Keypad.h&amp;gt;
 #include &amp;lt;NefryDisplay.h&amp;gt;
 #include &amp;lt;WiFiClientSecure.h&amp;gt;
 WiFiClientSecure client;
@@ -442,10 +607,10 @@ const char* HOST = &amp;quot;xxxxxxxxxx.hipchat.com&amp;quot;;
 const byte n_rows = 4;
 const byte n_cols = 4;
 char keys[n_rows][n_cols] = {
-{'1','2','3','A'},
-{'4','5','6','B'},
-{'7','8','9','C'},
-{'*','0','#','D'}
+{&#39;1&#39;,&#39;2&#39;,&#39;3&#39;,&#39;A&#39;},
+{&#39;4&#39;,&#39;5&#39;,&#39;6&#39;,&#39;B&#39;},
+{&#39;7&#39;,&#39;8&#39;,&#39;9&#39;,&#39;C&#39;},
+{&#39;*&#39;,&#39;0&#39;,&#39;#&#39;,&#39;D&#39;}
 };
 byte colPins[n_rows] = {D3, D2, D1, D0};
 byte rowPins[n_cols] = {D7, D6, D5, D4};
@@ -527,7 +692,7 @@ return;
 }
 // Read all the lines of the reply from server and print them to Serial
 while(client.available()) {
-String line = client.readStringUntil('\r');
+String line = client.readStringUntil(&#39;\r&#39;);
 Serial.print(line);
 }
 Serial.println();
@@ -537,7 +702,7 @@ String StrPerEncord(const char* c_str) {
 uint16_t i = 0;
 String str_ret = &amp;quot;&amp;quot;;
 char c1[3], c2[3], c3[3];
-while (c_str[i] != '\0') {
+while (c_str[i] != &#39;\0&#39;) {
 if (c_str[i] &amp;gt;= 0xC2 &amp;amp;&amp;amp; c_str[i] &amp;lt;= 0xD1) { //2バイト文字
 sprintf(c1, &amp;quot;%2x&amp;quot;, c_str[i]);
 sprintf(c2, &amp;quot;%2x&amp;quot;, c_str[i + 1]);
@@ -564,7 +729,7 @@ param.replace(&amp;quot;\&amp;quot;&amp;quot;, &amp;quot;%22&amp;quot;);
 param.replace(&amp;quot;#&amp;quot;, &amp;quot;%23&amp;quot;);
 param.replace(&amp;quot;$&amp;quot;, &amp;quot;%24&amp;quot;);
 param.replace(&amp;quot;&amp;amp;&amp;quot;, &amp;quot;%26&amp;quot;);
-param.replace(&amp;quot;'&amp;quot;, &amp;quot;%27&amp;quot;);
+param.replace(&amp;quot;&#39;&amp;quot;, &amp;quot;%27&amp;quot;);
 param.replace(&amp;quot;(&amp;quot;, &amp;quot;%28&amp;quot;);
 param.replace(&amp;quot;)&amp;quot;, &amp;quot;%29&amp;quot;);
 param.replace(&amp;quot;*&amp;quot;, &amp;quot;%2A&amp;quot;);
@@ -581,433 +746,525 @@ param.replace(&amp;quot;[&amp;quot;, &amp;quot;%5B&amp;quot;);
 param.replace(&amp;quot;\\&amp;quot;, &amp;quot;%5C&amp;quot;);
 param.replace(&amp;quot;]&amp;quot;, &amp;quot;%5D&amp;quot;);
 param.replace(&amp;quot;^&amp;quot;, &amp;quot;%5E&amp;quot;);
-param.replace(&amp;quot;'&amp;quot;, &amp;quot;%60&amp;quot;);
+param.replace(&amp;quot;&#39;&amp;quot;, &amp;quot;%60&amp;quot;);
 param.replace(&amp;quot;{&amp;quot;, &amp;quot;%7B&amp;quot;);
 param.replace(&amp;quot;|&amp;quot;, &amp;quot;%7C&amp;quot;);
 param.replace(&amp;quot;}&amp;quot;, &amp;quot;%7D&amp;quot;);
 return param;
 }
-&lt;/code>&lt;/pre>&lt;h2 id="heading-6">まとめ&lt;/h2>
-&lt;p>&lt;strong>運用1日目ですが問題ないです（謎）&lt;/strong>&lt;/p>
-&lt;p>実際にはシートに記録したりした方が良いと思いますが今後検討です！&lt;/p>
-&lt;p>&lt;img src="https://i.gyazo.com/fcc920005a4a691f37081c936f6968d1.png" alt="">&lt;/p>
-&lt;p>HipChatの部分はうちの社内がHipChatだからというだけですが、LINEだったりSlackだったりも同様のやり方で連携できます。&lt;/p>
-&lt;p>思ったより簡単に試せたなぁという印象なのでみなさんもぜひ試してみてください。&lt;/p></description></item><item><title>オフィス改善！物理スイッチの照明を遠隔操作でON／OFFしよう！</title><link>https://dotstud.io/blog/switch-servo-remote-controll/</link><pubDate>Wed, 28 Mar 2018 14:00:26 +0900</pubDate><guid>https://dotstud.io/blog/switch-servo-remote-controll/</guid><description>&lt;h2 id="heading">お仕事は突然やってくる&lt;/h2>
-&lt;p>こんにちは、宇宙エンジニアのたくろーどんです。&lt;/p>
-&lt;p>ある日、dotstudioのオフィスにて……。&lt;/p>
-&lt;p>※上司：ちゃんとく ／ &lt;del>下僕&lt;/del>部下：たくろーどん&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>そんなこんなで突然、ズボラなちゃんとくさんのために&lt;strong>電気を遠隔でON/OFFできる装置&lt;/strong>をつくることになりました。&lt;/p>
-&lt;p>下記のようなイメージで、&lt;strong>電気の物理スイッチを遠隔操作できるリモコン&lt;/strong>を目指して作ってみます。&lt;/p>
-&lt;p>&lt;img src="https://dotstud.io/img/blog/155/1.png" alt="">&lt;/p>
-&lt;h2 id="heading-1">実装&lt;/h2>
-&lt;p>まず、物理スイッチを押す機構にはサーボモータを使います。&lt;/p>
-&lt;p>サーボモータは簡単に角度の制御ができるので、スイッチをON/OFFと切り替えて押すことに適しています。&lt;/p>
-&lt;p>サーボモータについては、dotstudioドキュメントの「&lt;a href="https://dotstud.io/docs/pulse-width-modulation/">&lt;strong>PWM制御&lt;/strong>&lt;/a>（サーボモータの仕組み）」や「&lt;a href="https://codeiq.jp/magazine/2018/02/57076/">&lt;strong>遠隔消臭装置をつくって「気の利くナイスガイ」になろう！〜基本実装編〜│codeIQ&lt;/strong>&lt;/a>」の記事などを参考にしてください。&lt;/p>
-&lt;p>実際に、スイッチが押せるようにサーボモータを取り付けてみます。サーボモータの取り付けも&lt;strong>グルーガン職人&lt;/strong>の手にかかれば一瞬です。&lt;/p>
-&lt;p>※グルーガン（のりを温めて接着できる装置）は100均で手に入る最強アイテムです。
-&lt;img src="https://dotstud.io/img/blog/155/2.png" alt="">
-見た目の改善はあとで考えていきましょう。&lt;strong>とりあえず動くことが大事&lt;/strong>です。&lt;/p>
-&lt;p>ちなみに回路図はこのようになっています。
-&lt;img src="https://dotstud.io/img/blog/155/3.png" alt="">
-今回はサーボモータを4つ繋げているので、&lt;!-- raw HTML omitted -->Nefry BTからの電源供給が足りず、Nefry BTが再起動してしまうこと&lt;!-- raw HTML omitted -->があります。そこで&lt;strong>サーボモータとNefry BTの電源は分ける&lt;/strong>ことによって安定性を高めています。&lt;/p>
-&lt;p>では、次にプログラムです。&lt;/p>
-&lt;h2 id="heading-2">プログラム&lt;/h2>
-&lt;p>今回は、&lt;strong>Nefry BTのWebコンソール画面&lt;/strong>から遠隔操作できるようにしたいと思います。&lt;/p>
-&lt;p>Nefry BTのWebコンソール画面へは、&lt;!-- raw HTML omitted -->Nefry BT自身のWi-Fiにつないでアドホックモードにするほか、Wi-Fi設定をして外部からアクセス&lt;!-- raw HTML omitted -->することができます。詳細は「&lt;a href="https://dotstud.io/docs/nefrybt-wifi-setup/">&lt;strong>Nefry BTのWi-Fiセットアップ&lt;/strong>&lt;/a>」を参照してください。&lt;/p>
-&lt;p>Webコンソール画面には、&lt;strong>Nefry.getWebServer()関数&lt;/strong>を使って機能追加することができます。少し試してみましょう。&lt;/p>
-&lt;p>以下のようにプログラムを書くと……&lt;/p>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-c++" data-lang="c++">&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">include&lt;/span> &lt;span style="color:#75715e">&amp;lt;Nefry.h&amp;gt;&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#66d9ef">void&lt;/span> &lt;span style="color:#a6e22e">setup&lt;/span>() {
-&lt;span style="color:#75715e">// on()の第一引数でURLを決める
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> Nefry.getWebServer()&lt;span style="color:#f92672">-&lt;/span>&lt;span style="color:#f92672">&amp;gt;&lt;/span>on(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/welcome&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>, [&lt;span style="color:#f92672">&amp;amp;&lt;/span>]() {
-String content &lt;span style="color:#f92672">=&lt;/span> F(
-&lt;span style="color:#75715e">// 表示するページをHTMLで記述する
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">UTF-8&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;title&amp;gt;Nefry Welcome&amp;lt;/title&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;Nefry Welcome!&amp;lt;/h1&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;a href=&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
-Nefry.getWebServer()&lt;span style="color:#f92672">-&lt;/span>&lt;span style="color:#f92672">&amp;gt;&lt;/span>send(&lt;span style="color:#ae81ff">200&lt;/span>, &lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">text/html&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>, content);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;運用1日目ですが問題ないです（謎）&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;実際にはシートに記録したりした方が良いと思いますが今後検討です！&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/fcc920005a4a691f37081c936f6968d1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;HipChatの部分はうちの社内がHipChatだからというだけですが、LINEだったりSlackだったりも同様のやり方で連携できます。&lt;/p&gt;
+&lt;p&gt;思ったより簡単に試せたなぁという印象なのでみなさんもぜひ試してみてください。&lt;/p&gt;</description></item><item><title>オフィス改善！物理スイッチの照明を遠隔操作でON／OFFしよう！</title><link>https://dotstud.io/blog/switch-servo-remote-controll/</link><pubDate>Wed, 28 Mar 2018 14:00:26 +0900</pubDate><guid>https://dotstud.io/blog/switch-servo-remote-controll/</guid><description>
+&lt;h2 id=&#34;お仕事は突然やってくる&#34;&gt;お仕事は突然やってくる&lt;/h2&gt;
+&lt;p&gt;こんにちは、宇宙エンジニアのたくろーどんです。&lt;/p&gt;
+&lt;p&gt;ある日、dotstudioのオフィスにて……。&lt;/p&gt;
+&lt;p&gt;※上司：ちゃんとく ／ &lt;del&gt;下僕&lt;/del&gt;部下：たくろーどん&lt;/p&gt;
+&lt;div class=&#34;talk-box&#34;&gt;
+&lt;p class=&#34;speaker&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/members/chantoku/author.png&#34; /&gt;
+&lt;/p&gt;
+&lt;p&gt;
+ちゃんとく「デスクから動くのがめんどくさい……。」
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;talk-box&#34;&gt;
+&lt;p class=&#34;speaker&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/members/takudooon/author.png&#34; /&gt;
+&lt;/p&gt;
+&lt;p&gt;
+たくろーどん「そうですねぇ。（おなかすいた）」
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;talk-box&#34;&gt;
+&lt;p class=&#34;speaker&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/members/chantoku/author.png&#34; /&gt;
+&lt;/p&gt;
+&lt;p&gt;
+ちゃんとく「なんか&lt;b&gt;電気のONとOFFを遠隔で操作できるデバイス&lt;/b&gt;つくってよ！」
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;talk-box&#34;&gt;
+&lt;p class=&#34;speaker&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/members/takudooon/author.png&#34; /&gt;
+&lt;/p&gt;
+&lt;p&gt;
+たくろーどん「あっ、はい。かしこまりましたでございます。（きょうのごはんはカレーにしよう）」
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;そんなこんなで突然、ズボラなちゃんとくさんのために&lt;strong&gt;電気を遠隔でON/OFFできる装置&lt;/strong&gt;をつくることになりました。&lt;/p&gt;
+&lt;p&gt;下記のようなイメージで、&lt;strong&gt;電気の物理スイッチを遠隔操作できるリモコン&lt;/strong&gt;を目指して作ってみます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/155/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;実装&#34;&gt;実装&lt;/h2&gt;
+&lt;p&gt;まず、物理スイッチを押す機構にはサーボモータを使います。&lt;/p&gt;
+&lt;p&gt;サーボモータは簡単に角度の制御ができるので、スイッチをON/OFFと切り替えて押すことに適しています。&lt;/p&gt;
+&lt;p&gt;サーボモータについては、dotstudioドキュメントの「&lt;a href=&#34;https://dotstud.io/docs/pulse-width-modulation/&#34;&gt;&lt;strong&gt;PWM制御&lt;/strong&gt;&lt;/a&gt;（サーボモータの仕組み）」や「&lt;a href=&#34;https://codeiq.jp/magazine/2018/02/57076/&#34;&gt;&lt;strong&gt;遠隔消臭装置をつくって「気の利くナイスガイ」になろう！〜基本実装編〜│codeIQ&lt;/strong&gt;&lt;/a&gt;」の記事などを参考にしてください。&lt;/p&gt;
+&lt;p&gt;実際に、スイッチが押せるようにサーボモータを取り付けてみます。サーボモータの取り付けも&lt;strong&gt;グルーガン職人&lt;/strong&gt;の手にかかれば一瞬です。&lt;/p&gt;
+&lt;p&gt;※グルーガン（のりを温めて接着できる装置）は100均で手に入る最強アイテムです。
+&lt;img src=&#34;https://dotstud.io/img/blog/155/2.png&#34; alt=&#34;&#34; /&gt;
+見た目の改善はあとで考えていきましょう。&lt;strong&gt;とりあえず動くことが大事&lt;/strong&gt;です。&lt;/p&gt;
+&lt;p&gt;ちなみに回路図はこのようになっています。
+&lt;img src=&#34;https://dotstud.io/img/blog/155/3.png&#34; alt=&#34;&#34; /&gt;
+今回はサーボモータを4つ繋げているので、&lt;u&gt;Nefry BTからの電源供給が足りず、Nefry BTが再起動してしまうこと&lt;/u&gt;があります。そこで&lt;strong&gt;サーボモータとNefry BTの電源は分ける&lt;/strong&gt;ことによって安定性を高めています。&lt;/p&gt;
+&lt;p&gt;では、次にプログラムです。&lt;/p&gt;
+&lt;h2 id=&#34;プログラム&#34;&gt;プログラム&lt;/h2&gt;
+&lt;p&gt;今回は、&lt;strong&gt;Nefry BTのWebコンソール画面&lt;/strong&gt;から遠隔操作できるようにしたいと思います。&lt;/p&gt;
+&lt;p&gt;Nefry BTのWebコンソール画面へは、&lt;u&gt;Nefry BT自身のWi-Fiにつないでアドホックモードにするほか、Wi-Fi設定をして外部からアクセス&lt;/u&gt;することができます。詳細は「&lt;a href=&#34;https://dotstud.io/docs/nefrybt-wifi-setup/&#34;&gt;&lt;strong&gt;Nefry BTのWi-Fiセットアップ&lt;/strong&gt;&lt;/a&gt;」を参照してください。&lt;/p&gt;
+&lt;p&gt;Webコンソール画面には、&lt;strong&gt;Nefry.getWebServer()関数&lt;/strong&gt;を使って機能追加することができます。少し試してみましょう。&lt;/p&gt;
+&lt;p&gt;以下のようにプログラムを書くと……&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;#include &amp;lt;Nefry.h&amp;gt;
+void setup() {
+// on()の第一引数でURLを決める
+Nefry.getWebServer()-&amp;gt;on(&amp;quot;/welcome&amp;quot;, [&amp;amp;]() {
+String content = F(
+// 表示するページをHTMLで記述する
+&amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+&amp;quot;&amp;lt;title&amp;gt;Nefry Welcome&amp;lt;/title&amp;gt;&amp;quot;
+&amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;Nefry Welcome!&amp;lt;/h1&amp;gt;&amp;quot;
+&amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
 });
-&lt;span style="color:#75715e">// setIndexLink(&amp;#39;表示したいページ名&amp;#39;, &amp;#39;指定したURL&amp;#39;)でTOPページに表示される名前を決める
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> Nefry.setIndexLink(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">welcomePage&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>,&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/welcome&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
+// setIndexLink(&#39;表示したいページ名&#39;, &#39;指定したURL&#39;)でTOPページに表示される名前を決める
+Nefry.setIndexLink(&amp;quot;welcomePage&amp;quot;,&amp;quot;/welcome&amp;quot;);
 }
-&lt;span style="color:#66d9ef">void&lt;/span> &lt;span style="color:#a6e22e">loop&lt;/span>() {
+void loop() {
 }
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>Nefry BTのコンソール画面に「welcomePage」と追加され、クリックすると、「Nefry Welcome」と作成したHTMLページが表示されます。&lt;/p>
-&lt;p>&lt;img src="https://dotstud.io/img/blog/155/4.png" alt="">
-これを応用して、&lt;strong>「Light_on」というHTMLページにアクセスしたらサーボモータが回転する&lt;/strong>ようにしてみます。&lt;/p>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-c++" data-lang="c++">&lt;span style="color:#75715e">// /onというURLのページを作成
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>Nefry.getWebServer()&lt;span style="color:#f92672">-&lt;/span>&lt;span style="color:#f92672">&amp;gt;&lt;/span>on(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/on&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>, [&lt;span style="color:#f92672">&amp;amp;&lt;/span>]() {
-String content &lt;span style="color:#f92672">=&lt;/span> F(
-&lt;span style="color:#75715e">// ページのHTMLを記述
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">UTF-8&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;On&amp;lt;/h1&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;a href=&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Nefry BTのコンソール画面に「welcomePage」と追加され、クリックすると、「Nefry Welcome」と作成したHTMLページが表示されます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/155/4.png&#34; alt=&#34;&#34; /&gt;
+これを応用して、&lt;strong&gt;「Light_on」というHTMLページにアクセスしたらサーボモータが回転する&lt;/strong&gt;ようにしてみます。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;// /onというURLのページを作成
+Nefry.getWebServer()-&amp;gt;on(&amp;quot;/on&amp;quot;, [&amp;amp;]() {
+String content = F(
+// ページのHTMLを記述
+&amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+&amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+&amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;On&amp;lt;/h1&amp;gt;&amp;quot;
+&amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;
 );
-&lt;span style="color:#75715e">// サーボモータを回転させる
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> &lt;span style="color:#66d9ef">for&lt;/span>(&lt;span style="color:#66d9ef">int&lt;/span> i&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">90&lt;/span>; i&lt;span style="color:#f92672">&amp;lt;&lt;/span>&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">115&lt;/span>; i&lt;span style="color:#f92672">+&lt;/span>&lt;span style="color:#f92672">+&lt;/span>){
-ledcWrite(&lt;span style="color:#ae81ff">0&lt;/span>,deg2pw(i, PWM_BITWIDTH));
+// サーボモータを回転させる
+for(int i=90; i&amp;lt;=115; i++){
+ledcWrite(0,deg2pw(i, PWM_BITWIDTH));
 }
-delay(&lt;span style="color:#ae81ff">800&lt;/span>);
-ledcWrite(&lt;span style="color:#ae81ff">0&lt;/span>,deg2pw(&lt;span style="color:#ae81ff">90&lt;/span>, PWM_BITWIDTH));
-Nefry.getWebServer()&lt;span style="color:#f92672">-&lt;/span>&lt;span style="color:#f92672">&amp;gt;&lt;/span>send(&lt;span style="color:#ae81ff">200&lt;/span>, &lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">text/html&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>, content);
+delay(800);
+ledcWrite(0,deg2pw(90, PWM_BITWIDTH));
+Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
 });
-&lt;span style="color:#75715e">// TOPページに「Ligth_on」と表示する
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>Nefry.setIndexLink(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">Light_on&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>,&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/on&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>上記のプログラムを4つのサーボモータそれぞれに割り当て、最終的なプログラムの全体はこのようになります。&lt;/p>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-c++" data-lang="c++">&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">include&lt;/span> &lt;span style="color:#75715e">&amp;lt;Nefry.h&amp;gt;&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">include&lt;/span>&lt;span style="color:#75715e">&amp;#34;esp32-hal-ledc.h&amp;#34;&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>&lt;span style="color:#75715e">#&lt;/span>&lt;span style="color:#75715e">define PWM_BITWIDTH 16&lt;/span>&lt;span style="color:#75715e">
-&lt;/span>&lt;span style="color:#75715e">&lt;/span>
-&lt;span style="color:#66d9ef">int&lt;/span> &lt;span style="color:#a6e22e">deg2pw&lt;/span>(&lt;span style="color:#66d9ef">int&lt;/span> deg, &lt;span style="color:#66d9ef">int&lt;/span> bit){
-&lt;span style="color:#66d9ef">double&lt;/span> ms &lt;span style="color:#f92672">=&lt;/span> ((&lt;span style="color:#66d9ef">double&lt;/span>) deg &lt;span style="color:#f92672">-&lt;/span> &lt;span style="color:#ae81ff">90.0&lt;/span>) &lt;span style="color:#f92672">*&lt;/span> &lt;span style="color:#ae81ff">0.95&lt;/span> &lt;span style="color:#f92672">/&lt;/span> &lt;span style="color:#ae81ff">90.0&lt;/span> &lt;span style="color:#f92672">+&lt;/span> &lt;span style="color:#ae81ff">1.45&lt;/span>;
-&lt;span style="color:#66d9ef">return&lt;/span> (&lt;span style="color:#66d9ef">int&lt;/span>) (ms &lt;span style="color:#f92672">/&lt;/span> &lt;span style="color:#ae81ff">20.0&lt;/span> &lt;span style="color:#f92672">*&lt;/span> pow(&lt;span style="color:#ae81ff">2&lt;/span>, bit));
+// TOPページに「Ligth_on」と表示する
+Nefry.setIndexLink(&amp;quot;Light_on&amp;quot;,&amp;quot;/on&amp;quot;);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;上記のプログラムを4つのサーボモータそれぞれに割り当て、最終的なプログラムの全体はこのようになります。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-c++&#34;&gt;#include &amp;lt;Nefry.h&amp;gt;
+#include&amp;quot;esp32-hal-ledc.h&amp;quot;
+#define PWM_BITWIDTH 16
+int deg2pw(int deg, int bit){
+double ms = ((double) deg - 90.0) * 0.95 / 90.0 + 1.45;
+return (int) (ms / 20.0 * pow(2, bit));
 }
-&lt;span style="color:#66d9ef">void&lt;/span> &lt;span style="color:#a6e22e">setup&lt;/span>() {
-Serial.begin(&lt;span style="color:#ae81ff">115200&lt;/span>);
-ledcSetup(&lt;span style="color:#ae81ff">0&lt;/span>,&lt;span style="color:#ae81ff">50&lt;/span>,PWM_BITWIDTH);
-ledcSetup(&lt;span style="color:#ae81ff">1&lt;/span>,&lt;span style="color:#ae81ff">50&lt;/span>,PWM_BITWIDTH);
-ledcSetup(&lt;span style="color:#ae81ff">2&lt;/span>,&lt;span style="color:#ae81ff">50&lt;/span>,PWM_BITWIDTH);
-ledcSetup(&lt;span style="color:#ae81ff">3&lt;/span>,&lt;span style="color:#ae81ff">50&lt;/span>,PWM_BITWIDTH);
-ledcAttachPin(A0,&lt;span style="color:#ae81ff">0&lt;/span>);
-ledcAttachPin(A1,&lt;span style="color:#ae81ff">1&lt;/span>);
-ledcAttachPin(D0,&lt;span style="color:#ae81ff">2&lt;/span>);
-ledcAttachPin(D1,&lt;span style="color:#ae81ff">3&lt;/span>);
-Nefry.getWebServer()&lt;span style="color:#f92672">-&lt;/span>&lt;span style="color:#f92672">&amp;gt;&lt;/span>on(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/on&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>, [&lt;span style="color:#f92672">&amp;amp;&lt;/span>]() {
-String content &lt;span style="color:#f92672">=&lt;/span> F(
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">UTF-8&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;On&amp;lt;/h1&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;a href=&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
-&lt;span style="color:#66d9ef">for&lt;/span>(&lt;span style="color:#66d9ef">int&lt;/span> i&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">90&lt;/span>; i&lt;span style="color:#f92672">&amp;lt;&lt;/span>&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">115&lt;/span>; i&lt;span style="color:#f92672">+&lt;/span>&lt;span style="color:#f92672">+&lt;/span>){
-ledcWrite(&lt;span style="color:#ae81ff">0&lt;/span>,deg2pw(i, PWM_BITWIDTH));
+void setup() {
+Serial.begin(115200);
+ledcSetup(0,50,PWM_BITWIDTH);
+ledcSetup(1,50,PWM_BITWIDTH);
+ledcSetup(2,50,PWM_BITWIDTH);
+ledcSetup(3,50,PWM_BITWIDTH);
+ledcAttachPin(A0,0);
+ledcAttachPin(A1,1);
+ledcAttachPin(D0,2);
+ledcAttachPin(D1,3);
+Nefry.getWebServer()-&amp;gt;on(&amp;quot;/on&amp;quot;, [&amp;amp;]() {
+String content = F(
+&amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+&amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+&amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;On&amp;lt;/h1&amp;gt;&amp;quot;
+&amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+for(int i=90; i&amp;lt;=115; i++){
+ledcWrite(0,deg2pw(i, PWM_BITWIDTH));
 }
-delay(&lt;span style="color:#ae81ff">800&lt;/span>);
-ledcWrite(&lt;span style="color:#ae81ff">0&lt;/span>,deg2pw(&lt;span style="color:#ae81ff">90&lt;/span>, PWM_BITWIDTH));
-Nefry.getWebServer()&lt;span style="color:#f92672">-&lt;/span>&lt;span style="color:#f92672">&amp;gt;&lt;/span>send(&lt;span style="color:#ae81ff">200&lt;/span>, &lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">text/html&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>, content);
+delay(800);
+ledcWrite(0,deg2pw(90, PWM_BITWIDTH));
+Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
 });
-Nefry.setIndexLink(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">Light_on&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>,&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/on&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
-Nefry.getWebServer()&lt;span style="color:#f92672">-&lt;/span>&lt;span style="color:#f92672">&amp;gt;&lt;/span>on(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/off&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>, [&lt;span style="color:#f92672">&amp;amp;&lt;/span>]() {
-String content &lt;span style="color:#f92672">=&lt;/span> F(
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">UTF-8&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;off&amp;lt;/h1&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;a href=&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
-&lt;span style="color:#66d9ef">for&lt;/span>(&lt;span style="color:#66d9ef">int&lt;/span> i&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">90&lt;/span>; i&lt;span style="color:#f92672">&amp;gt;&lt;/span>&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">65&lt;/span>; &lt;span style="color:#f92672">-&lt;/span>&lt;span style="color:#f92672">-&lt;/span>i){
-ledcWrite(&lt;span style="color:#ae81ff">0&lt;/span>,deg2pw(i, PWM_BITWIDTH));
+Nefry.setIndexLink(&amp;quot;Light_on&amp;quot;,&amp;quot;/on&amp;quot;);
+Nefry.getWebServer()-&amp;gt;on(&amp;quot;/off&amp;quot;, [&amp;amp;]() {
+String content = F(
+&amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+&amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+&amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;off&amp;lt;/h1&amp;gt;&amp;quot;
+&amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+for(int i=90; i&amp;gt;=65; --i){
+ledcWrite(0,deg2pw(i, PWM_BITWIDTH));
 }
-delay(&lt;span style="color:#ae81ff">800&lt;/span>);
-ledcWrite(&lt;span style="color:#ae81ff">0&lt;/span>,deg2pw(&lt;span style="color:#ae81ff">90&lt;/span>, PWM_BITWIDTH));
-Nefry.getWebServer()&lt;span style="color:#f92672">-&lt;/span>&lt;span style="color:#f92672">&amp;gt;&lt;/span>send(&lt;span style="color:#ae81ff">200&lt;/span>, &lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">text/html&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>, content);
+delay(800);
+ledcWrite(0,deg2pw(90, PWM_BITWIDTH));
+Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
 });
-Nefry.setIndexLink(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">Light_off&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>,&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/off&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
-&lt;span style="color:#75715e">//////////////////////////////////////////////////////////////
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> Nefry.getWebServer()&lt;span style="color:#f92672">-&lt;/span>&lt;span style="color:#f92672">&amp;gt;&lt;/span>on(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/on2&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>, [&lt;span style="color:#f92672">&amp;amp;&lt;/span>]() {
-String content &lt;span style="color:#f92672">=&lt;/span> F(
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">UTF-8&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;On&amp;lt;/h1&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;a href=&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
-&lt;span style="color:#66d9ef">for&lt;/span>(&lt;span style="color:#66d9ef">int&lt;/span> i&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">90&lt;/span>; i&lt;span style="color:#f92672">&amp;lt;&lt;/span>&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">115&lt;/span>; i&lt;span style="color:#f92672">+&lt;/span>&lt;span style="color:#f92672">+&lt;/span>){
-ledcWrite(&lt;span style="color:#ae81ff">1&lt;/span>,deg2pw(i, PWM_BITWIDTH));
+Nefry.setIndexLink(&amp;quot;Light_off&amp;quot;,&amp;quot;/off&amp;quot;);
+//////////////////////////////////////////////////////////////
+Nefry.getWebServer()-&amp;gt;on(&amp;quot;/on2&amp;quot;, [&amp;amp;]() {
+String content = F(
+&amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+&amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+&amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;On&amp;lt;/h1&amp;gt;&amp;quot;
+&amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+for(int i=90; i&amp;lt;=115; i++){
+ledcWrite(1,deg2pw(i, PWM_BITWIDTH));
 }
-delay(&lt;span style="color:#ae81ff">800&lt;/span>);
-ledcWrite(&lt;span style="color:#ae81ff">1&lt;/span>,deg2pw(&lt;span style="color:#ae81ff">90&lt;/span>, PWM_BITWIDTH));
-Nefry.getWebServer()&lt;span style="color:#f92672">-&lt;/span>&lt;span style="color:#f92672">&amp;gt;&lt;/span>send(&lt;span style="color:#ae81ff">200&lt;/span>, &lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">text/html&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>, content);
+delay(800);
+ledcWrite(1,deg2pw(90, PWM_BITWIDTH));
+Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
 });
-Nefry.setIndexLink(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">Light_on_2&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>,&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/on2&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
-Nefry.getWebServer()&lt;span style="color:#f92672">-&lt;/span>&lt;span style="color:#f92672">&amp;gt;&lt;/span>on(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/off2&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>, [&lt;span style="color:#f92672">&amp;amp;&lt;/span>]() {
-String content &lt;span style="color:#f92672">=&lt;/span> F(
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">UTF-8&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;off&amp;lt;/h1&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;a href=&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
-&lt;span style="color:#66d9ef">for&lt;/span>(&lt;span style="color:#66d9ef">int&lt;/span> i&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">90&lt;/span>; i&lt;span style="color:#f92672">&amp;gt;&lt;/span>&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">65&lt;/span>; &lt;span style="color:#f92672">-&lt;/span>&lt;span style="color:#f92672">-&lt;/span>i){
-ledcWrite(&lt;span style="color:#ae81ff">1&lt;/span>,deg2pw(i, PWM_BITWIDTH));
+Nefry.setIndexLink(&amp;quot;Light_on_2&amp;quot;,&amp;quot;/on2&amp;quot;);
+Nefry.getWebServer()-&amp;gt;on(&amp;quot;/off2&amp;quot;, [&amp;amp;]() {
+String content = F(
+&amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+&amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+&amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;off&amp;lt;/h1&amp;gt;&amp;quot;
+&amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+for(int i=90; i&amp;gt;=65; --i){
+ledcWrite(1,deg2pw(i, PWM_BITWIDTH));
 }
-delay(&lt;span style="color:#ae81ff">800&lt;/span>);
-ledcWrite(&lt;span style="color:#ae81ff">1&lt;/span>,deg2pw(&lt;span style="color:#ae81ff">90&lt;/span>, PWM_BITWIDTH));
-Nefry.getWebServer()&lt;span style="color:#f92672">-&lt;/span>&lt;span style="color:#f92672">&amp;gt;&lt;/span>send(&lt;span style="color:#ae81ff">200&lt;/span>, &lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">text/html&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>, content);
+delay(800);
+ledcWrite(1,deg2pw(90, PWM_BITWIDTH));
+Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
 });
-Nefry.setIndexLink(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">Light_off_2&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>,&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/off2&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
-&lt;span style="color:#75715e">//////////////////////////////////////////////////////////////
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> Nefry.getWebServer()&lt;span style="color:#f92672">-&lt;/span>&lt;span style="color:#f92672">&amp;gt;&lt;/span>on(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/on3&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>, [&lt;span style="color:#f92672">&amp;amp;&lt;/span>]() {
-String content &lt;span style="color:#f92672">=&lt;/span> F(
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">UTF-8&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;On&amp;lt;/h1&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;a href=&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
-&lt;span style="color:#66d9ef">for&lt;/span>(&lt;span style="color:#66d9ef">int&lt;/span> i&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">90&lt;/span>; i&lt;span style="color:#f92672">&amp;lt;&lt;/span>&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">115&lt;/span>; i&lt;span style="color:#f92672">+&lt;/span>&lt;span style="color:#f92672">+&lt;/span>){
-ledcWrite(&lt;span style="color:#ae81ff">2&lt;/span>,deg2pw(i, PWM_BITWIDTH));
+Nefry.setIndexLink(&amp;quot;Light_off_2&amp;quot;,&amp;quot;/off2&amp;quot;);
+//////////////////////////////////////////////////////////////
+Nefry.getWebServer()-&amp;gt;on(&amp;quot;/on3&amp;quot;, [&amp;amp;]() {
+String content = F(
+&amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+&amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+&amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;On&amp;lt;/h1&amp;gt;&amp;quot;
+&amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+for(int i=90; i&amp;lt;=115; i++){
+ledcWrite(2,deg2pw(i, PWM_BITWIDTH));
 }
-delay(&lt;span style="color:#ae81ff">800&lt;/span>);
-ledcWrite(&lt;span style="color:#ae81ff">2&lt;/span>,deg2pw(&lt;span style="color:#ae81ff">90&lt;/span>, PWM_BITWIDTH));
-Nefry.getWebServer()&lt;span style="color:#f92672">-&lt;/span>&lt;span style="color:#f92672">&amp;gt;&lt;/span>send(&lt;span style="color:#ae81ff">200&lt;/span>, &lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">text/html&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>, content);
+delay(800);
+ledcWrite(2,deg2pw(90, PWM_BITWIDTH));
+Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
 });
-Nefry.setIndexLink(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">Light_on_3&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>,&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/on3&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
-Nefry.getWebServer()&lt;span style="color:#f92672">-&lt;/span>&lt;span style="color:#f92672">&amp;gt;&lt;/span>on(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/off3&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>, [&lt;span style="color:#f92672">&amp;amp;&lt;/span>]() {
-String content &lt;span style="color:#f92672">=&lt;/span> F(
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">UTF-8&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;off&amp;lt;/h1&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;a href=&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
-&lt;span style="color:#66d9ef">for&lt;/span>(&lt;span style="color:#66d9ef">int&lt;/span> i&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">90&lt;/span>; i&lt;span style="color:#f92672">&amp;gt;&lt;/span>&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">65&lt;/span>; &lt;span style="color:#f92672">-&lt;/span>&lt;span style="color:#f92672">-&lt;/span>i){
-ledcWrite(&lt;span style="color:#ae81ff">2&lt;/span>,deg2pw(i, PWM_BITWIDTH));
+Nefry.setIndexLink(&amp;quot;Light_on_3&amp;quot;,&amp;quot;/on3&amp;quot;);
+Nefry.getWebServer()-&amp;gt;on(&amp;quot;/off3&amp;quot;, [&amp;amp;]() {
+String content = F(
+&amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+&amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+&amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;off&amp;lt;/h1&amp;gt;&amp;quot;
+&amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+for(int i=90; i&amp;gt;=65; --i){
+ledcWrite(2,deg2pw(i, PWM_BITWIDTH));
 }
-delay(&lt;span style="color:#ae81ff">800&lt;/span>);
-ledcWrite(&lt;span style="color:#ae81ff">2&lt;/span>,deg2pw(&lt;span style="color:#ae81ff">90&lt;/span>, PWM_BITWIDTH));
-Nefry.getWebServer()&lt;span style="color:#f92672">-&lt;/span>&lt;span style="color:#f92672">&amp;gt;&lt;/span>send(&lt;span style="color:#ae81ff">200&lt;/span>, &lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">text/html&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>, content);
+delay(800);
+ledcWrite(2,deg2pw(90, PWM_BITWIDTH));
+Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
 });
-Nefry.setIndexLink(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">Light_off_3&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>,&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/off3&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
-&lt;span style="color:#75715e">//////////////////////////////////////////////////////////////
-&lt;/span>&lt;span style="color:#75715e">&lt;/span> Nefry.getWebServer()&lt;span style="color:#f92672">-&lt;/span>&lt;span style="color:#f92672">&amp;gt;&lt;/span>on(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/on4&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>, [&lt;span style="color:#f92672">&amp;amp;&lt;/span>]() {
-String content &lt;span style="color:#f92672">=&lt;/span> F(
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">UTF-8&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;On&amp;lt;/h1&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;a href=&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
-&lt;span style="color:#66d9ef">for&lt;/span>(&lt;span style="color:#66d9ef">int&lt;/span> i&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">90&lt;/span>; i&lt;span style="color:#f92672">&amp;lt;&lt;/span>&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">125&lt;/span>; i&lt;span style="color:#f92672">+&lt;/span>&lt;span style="color:#f92672">+&lt;/span>){
-ledcWrite(&lt;span style="color:#ae81ff">3&lt;/span>,deg2pw(i, PWM_BITWIDTH));
+Nefry.setIndexLink(&amp;quot;Light_off_3&amp;quot;,&amp;quot;/off3&amp;quot;);
+//////////////////////////////////////////////////////////////
+Nefry.getWebServer()-&amp;gt;on(&amp;quot;/on4&amp;quot;, [&amp;amp;]() {
+String content = F(
+&amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+&amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+&amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;On&amp;lt;/h1&amp;gt;&amp;quot;
+&amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+for(int i=90; i&amp;lt;=125; i++){
+ledcWrite(3,deg2pw(i, PWM_BITWIDTH));
 }
-delay(&lt;span style="color:#ae81ff">800&lt;/span>);
-ledcWrite(&lt;span style="color:#ae81ff">3&lt;/span>,deg2pw(&lt;span style="color:#ae81ff">90&lt;/span>, PWM_BITWIDTH));
-Nefry.getWebServer()&lt;span style="color:#f92672">-&lt;/span>&lt;span style="color:#f92672">&amp;gt;&lt;/span>send(&lt;span style="color:#ae81ff">200&lt;/span>, &lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">text/html&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>, content);
+delay(800);
+ledcWrite(3,deg2pw(90, PWM_BITWIDTH));
+Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
 });
-Nefry.setIndexLink(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">Light_on_4&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>,&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/on4&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
-Nefry.getWebServer()&lt;span style="color:#f92672">-&lt;/span>&lt;span style="color:#f92672">&amp;gt;&lt;/span>on(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/off4&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>, [&lt;span style="color:#f92672">&amp;amp;&lt;/span>]() {
-String content &lt;span style="color:#f92672">=&lt;/span> F(
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">UTF-8&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;off&amp;lt;/h1&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>
-&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;lt;a href=&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/&lt;/span>&lt;span style="color:#ae81ff">\&amp;#34;&lt;/span>&lt;span style="color:#e6db74">&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
-&lt;span style="color:#66d9ef">for&lt;/span>(&lt;span style="color:#66d9ef">int&lt;/span> i&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">90&lt;/span>; i&lt;span style="color:#f92672">&amp;gt;&lt;/span>&lt;span style="color:#f92672">=&lt;/span>&lt;span style="color:#ae81ff">65&lt;/span>; &lt;span style="color:#f92672">-&lt;/span>&lt;span style="color:#f92672">-&lt;/span>i){
-ledcWrite(&lt;span style="color:#ae81ff">3&lt;/span>,deg2pw(i, PWM_BITWIDTH));
+Nefry.setIndexLink(&amp;quot;Light_on_4&amp;quot;,&amp;quot;/on4&amp;quot;);
+Nefry.getWebServer()-&amp;gt;on(&amp;quot;/off4&amp;quot;, [&amp;amp;]() {
+String content = F(
+&amp;quot;&amp;lt;!DOCTYPE HTML&amp;gt;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;&amp;quot;
+&amp;quot;&amp;lt;title&amp;gt;NefryLight Switch&amp;lt;/title&amp;gt;&amp;quot;
+&amp;quot;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;&amp;lt;div&amp;gt;&amp;lt;h1&amp;gt;off&amp;lt;/h1&amp;gt;&amp;quot;
+&amp;quot;&amp;lt;a href=\&amp;quot;/\&amp;quot;&amp;gt;Back to top&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+for(int i=90; i&amp;gt;=65; --i){
+ledcWrite(3,deg2pw(i, PWM_BITWIDTH));
 }
-delay(&lt;span style="color:#ae81ff">800&lt;/span>);
-ledcWrite(&lt;span style="color:#ae81ff">3&lt;/span>,deg2pw(&lt;span style="color:#ae81ff">90&lt;/span>, PWM_BITWIDTH));
-Nefry.getWebServer()&lt;span style="color:#f92672">-&lt;/span>&lt;span style="color:#f92672">&amp;gt;&lt;/span>send(&lt;span style="color:#ae81ff">200&lt;/span>, &lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">text/html&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>, content);
+delay(800);
+ledcWrite(3,deg2pw(90, PWM_BITWIDTH));
+Nefry.getWebServer()-&amp;gt;send(200, &amp;quot;text/html&amp;quot;, content);
 });
-Nefry.setIndexLink(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">Light_off_4&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>,&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">/off4&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>);
+Nefry.setIndexLink(&amp;quot;Light_off_4&amp;quot;,&amp;quot;/off4&amp;quot;);
 }
-&lt;span style="color:#66d9ef">void&lt;/span> &lt;span style="color:#a6e22e">loop&lt;/span>() {
+void loop() {
 }
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;img src="https://dotstud.io/img/blog/155/5.png" alt="">&lt;/p>
-&lt;p>これで、Nefry BTのコンソール画面から遠隔でサーボモータを制御できるようになりました。
-また、&lt;strong>Nefry.getWebServer()関数を使うことで、HTMLを書く要領でコンソール画面をカスタマイズ&lt;/strong>することができます。&lt;/p>
-&lt;h2 id="heading-3">試してみる&lt;/h2>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>&lt;img src="https://dotstud.io/img/blog/155/7.gif" alt="">&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>&lt;img src="https://dotstud.io/img/blog/155/6.png" alt="">&lt;/p>
-&lt;p>※Nefry BTのSSIDは変更することができる。「&lt;a href="https://dotstud.io/docs/nefrybt-change-ssid/">&lt;strong>Nefry BTのSSIDを変更する&lt;/strong>&lt;/a>」を参照。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;h2 id="heading-4">終わりに&lt;/h2>
-&lt;p>このようにdotstudioではお仕事が急にやってくるので柔軟な対応が求められます。&lt;!-- raw HTML omitted -->ヘマをすると何がおこるかわからないので、今回は首の皮一枚つながりました。&lt;!-- raw HTML omitted -->&lt;/p>
-&lt;p>遠隔でデバイスを操作するには、今回のようにNefry BTのコンソール画面を応用する他にも、スマホアプリから操作できるようになる「&lt;a href="https://www.blynk.cc/">&lt;strong>Blynk&lt;/strong>&lt;/a>」を使ったり、リアルタイム通信を簡単に実現できる「&lt;a href="https://mlkcca.com/">&lt;strong>Milkcocoa&lt;/strong>&lt;/a>」を使ったりと、いろいろな方法があります。&lt;/p>
-&lt;p>ぜひみなさんも試してみてはいかがでしょうか？&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted --></description></item><item><title>放置されていた3Dプリンタ「Trinus」で初めての3Dプリントに挑戦</title><link>https://dotstud.io/blog/3d-printer-trinus-usage/</link><pubDate>Thu, 22 Feb 2018 03:00:43 +0900</pubDate><guid>https://dotstud.io/blog/3d-printer-trinus-usage/</guid><description>&lt;p>こんにちは、たくろーどんです。大学で&lt;a href="https://dotstud.io/docs/nefrybt">NefryBT&lt;/a>を使った工作をしていたら、いつのまにかdotstudioでアルバイトすることになっていました。宇宙工学を勉強しています。以後よろしくお願いします。&lt;/p>
-&lt;p>=&amp;gt; 参考: &lt;a href="https://qiita.com/minwinmin/items/d1f296b8a9cd1a2c22f6">研究室のみんなとNefry BTを使ってはじめてIoTデバイスをつくってみた&lt;/a>&lt;/p>
-&lt;p>今回は、dotstudioに放置されていた3Dプリンタ「Trinus（トライナス）」を使って初めての3Dプリントに挑戦してみます。
-&lt;img src="https://dotstud.io/img/blog/149/lead.png" alt="">
-これで哲学的なものを錬成していきましょう。&lt;/p>
-&lt;h2 id="3d">3Dプリントを始める前に&lt;/h2>
-&lt;h3 id="3d-1">3Dプリンタとは？&lt;/h3>
-&lt;p>3Dプリンタとは、その名の通り&lt;strong>3Dのデータを出力できる&lt;/strong>プリンタです。
-&lt;img src="https://dotstud.io/img/blog/149/3dprint.png" alt="">
-プリンタによりますが、金属、アルミ、ゴムなどさまざまな素材で出力できるため広い分野で活躍しています。&lt;/p>
-&lt;p>現在は業務用から一般向けまでさまざまな種類の3Dプリンタが販売されていますが、今回はdotstudioに放置されていた「Trinus（トライナス）」を使ってみます。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;p>3万円代とお手頃価格で、樹脂に加えて木材やアルミも利用でき、別売りのヘッドをつけることでレーザ彫刻機にもなる優れものです。&lt;/p>
-&lt;h3 id="3d3d">3Dプリントには3Dデータが必要&lt;/h3>
-&lt;p>&lt;strong>3Dプリントをするためには3Dデータが必要です&lt;/strong>。3Dデータをモデリング（作成すること）方法はいくつかありますが、今回は3D CADソフトを使っています。&lt;/p>
-&lt;p>&lt;img src="https://dotstud.io/img/blog/149/inventor.png" alt="">
-僕はAutodeskの「&lt;a href="https://www.autodesk.co.jp/products/inventor/overview">&lt;strong>Inventor&lt;/strong>&lt;/a>」を使ってデータを作成しました。有料ソフトですが、なんと&lt;strong>学生だと3年間無料で&lt;/strong>つかえます！&lt;/p>
-&lt;p>Inventorは本格的な機械設計向きなので、簡単に試したい人は同じくAutodeskの「&lt;a href="https://www.autodesk.co.jp/products/fusion-360/overview">&lt;strong>fusion360&lt;/strong>&lt;/a>」の方がとっつきやすいかと思います。こちらも個人利用の場合は無料です。&lt;/p>
-&lt;p>3D CADソフトは他にも&lt;a href="https://www.rs-online.com/designspark/mechanical-software-jp">DesignSpark Mechanical&lt;/a>や&lt;a href="https://www.freecadweb.org/?lang=ja">FreeCAD&lt;/a>などいくつかあるので、自分が使いやすいと思ったものを使うと良いでしょう。&lt;/p>
-&lt;p>さらにもう一つ。
-プログラマーのためにGithubがあるなら、&lt;strong>メカ系エンジニアのために&lt;a href="https://grabcad.com/">GrabcCAD&lt;/a>というものがあります&lt;/strong>。
-&lt;img src="https://dotstud.io/img/blog/149/grabccad.png" alt="">&lt;/p>
-&lt;p>ここで、世界中のエンジニアが製作した様々なモデリングを閲覧したり使用したりできます。もし複雑なパーツをモデリングすることが難しければ、GrabCADを参考にしてみるのも手だと思います。&lt;/p>
-&lt;h3 id="trinus">Trinusの組み立て&lt;/h3>
-&lt;p>Trinusの組み立てに関しては説明書をご覧ください。
-また、日本語の公式サイトもあります。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;h3 id="trinuspango">Trinus用ソフト「Pango」をインストール&lt;/h3>
-&lt;p>Trinusで3Dプリントするには、モデリングしたものを扱う専用ソフト「Pango」が必要です。&lt;/p>
-&lt;p>&lt;a href="http://trinusjapan.com/softwaredownload/">こちらのリンク&lt;/a>からインストールしてください。&lt;/p>
-&lt;h2 id="3d-2">3Dプリントに挑戦！&lt;/h2>
-&lt;h3 id="heading">プリンタ側の準備&lt;/h3>
-&lt;p>詳しくは&lt;a href="http://trinusjapan.com/firstprint/">公式サイト&lt;/a>にのっているので、要点だけ説明します。&lt;/p>
-&lt;p>&lt;img src="https://dotstud.io/img/blog/149/printer.png" alt="">&lt;/p>
-&lt;p>まず、Trinusの電源をいれるため、コンセントにつなげましょう。電源がつくと「ビッ」という音がします。&lt;/p>
-&lt;h3 id="pango">Pangoにデータを取り込む&lt;/h3>
-&lt;p>パソコンからデータ（stlファイル）をPangoで開きましょう。&lt;/p>
-&lt;p>&lt;img src="https://dotstud.io/img/blog/149/1.png" alt="">
-①のように「書き出し」から「CAD形式」を選択し、stl形式で保存します。&lt;strong>サイズがモデリングと一致&lt;/strong>しているかしっかりと確認してください。&lt;/p>
-&lt;p>&lt;img src="https://dotstud.io/img/blog/149/2.png" alt="">
-Pangoでstlファイルを開くと&lt;strong>何故かサイズが10分の1&lt;/strong>になってしまうので（dotstudioだけで起こる現象なのか不明）、元のサイズに戻します。③と④のように比率（Ratio）を10に変えます。Amountは寸法を意味していて、単位はmmです。&lt;/p>
-&lt;p>&lt;img src="https://dotstud.io/img/blog/149/3.png" alt="">
-必要があれば3Dプリントしやすいようにモデルの向きを変えましょう。&lt;strong>どのような向きで出力するか&lt;/strong>、これがとても大事です！印刷中に思いがけない失敗を引き起こすことになります。&lt;/p>
-&lt;p>⑤のように赤丸部をクリックすると回転軸の表示が出ます。そして、回転したい軸にマウスポインタを持っていきます。⑥のように回転する軸が強調されます。マウスで操作する場合はホイールを動かすことで回転させることができます。パソコンにあるタッチパッドの場合は2本の指で、上下になぞるように動かすと回転します（Windowsの場合）。&lt;/p>
-&lt;h3 id="heading-1">印刷のシミュレーション&lt;/h3>
-&lt;p>実際にどのように印刷が進められるかPango上で確認することもできます。Pangoの上部にある「View」から「Layer」をクリックしてください。
-&lt;img src="https://dotstud.io/img/blog/149/4.png" alt="">
-すると自分がモデリングしたもの以外に格子状のモデリング（濃いピンクの部分）が追加されています。これは「&lt;strong>ラフト&lt;/strong>」と呼ばれ、3Dプリンタの印刷面と出力するものの間に積層される荒い土台のことです。&lt;/p>
-&lt;p>これがあると出力した後に製作物を外しやすく、最終的には除去してゴミとして捨てることができます。&lt;/p>
-&lt;h3 id="trinus-1">データをTrinusに移す&lt;/h3>
-&lt;p>&lt;img src="https://dotstud.io/img/blog/149/5.png" alt="">
-データをSDカードに「pcode」形式で保存します。図の赤丸部をクリックし、SDカードにデータをpcode形式で保存します。この形式は、Torinusで出力するために必要な形式です。&lt;/p>
-&lt;p>&lt;img src="https://dotstud.io/img/blog/149/6.png" alt="">
-SDカードをTorinusに接続し、TorinusとパソコンをUSB接続します。&lt;/p>
-&lt;h3 id="heading-2">出力設定を調整&lt;/h3>
-&lt;p>&lt;img src="https://dotstud.io/img/blog/149/7.png" alt="">
-Pango上部の「Preference」から「Setting」を選択します。ここでは、出力するスピードや厚みなどを設定することができます。&lt;strong>設定はあまりいじる必要はない&lt;/strong>ので、眺めおきましょう！（ただし今回は試行錯誤の結果、Thickness: 0.2mm、Print Speed: 40mm/sとしています）&lt;/p>
-&lt;h3 id="heading-3">【重要】出力位置の初期位置を調整&lt;/h3>
-&lt;p>&lt;img src="https://dotstud.io/img/blog/149/8.png" alt="">
-TorinusとパソコンをUSB接続した状態でPango上部の「View」から「Console」をクリックします。上のような画像が出たら、さらに「Console」をクリックします。　&lt;/p>
-&lt;p>そうすると下記のような設定画面があらわれます。&lt;strong>この画面で行う設定が非常に重要です&lt;/strong>。
-&lt;img src="https://dotstud.io/img/blog/149/9.png" alt="">
-&lt;strong>まず「Home」をクリック&lt;/strong>します。これで、3Dプリンタのノズル（フィラメントが出る部分）が初期位置に戻ります。&lt;/p>
-&lt;p>&lt;img src="https://dotstud.io/img/blog/149/10.png" alt="">
-ここで&lt;strong>z軸の距離（ノズルから出力される面の高さ、画像でいう赤い矢印部分）を確認&lt;/strong>してください。その距離が初期位置で広すぎると上手く出力されません。なので、目視でその距離を縮めましょう。「Offset」をクリックすると&lt;strong>z軸方向の距離を上下&lt;/strong>することができます。&lt;/p>
-&lt;h3 id="heading-4">出力を開始！&lt;/h3>
-&lt;p>&lt;img src="https://dotstud.io/img/blog/149/9.png" alt="">
-位置設定が終わったら、「&lt;strong>Heat E」をクリック&lt;/strong>し3Dプリンタのノズルを温めます。どれくらい温まっているかは、Console画面の左下に示す数字（分数部分）で表されます。最後に右のSDカードのイラスト部分をクリックし、保存したpcodeファイルを指定します。3Dプリンタのノズルが十分に温まれば自動で出力が始まります！&lt;/p>
-&lt;h3 id="heading-5">出力直後にやるべきこと&lt;/h3>
-&lt;p>出力が始まるとその直後に、&lt;strong>ノズルから溶け出たフィラメント&lt;/strong>が垂れてきます。&lt;strong>垂れて固まったフィラメントは出力の邪魔になることもあるので、ピンセットで取り除きましょう&lt;/strong>。下記の図の赤丸で囲った部分がその例です。
-&lt;img src="https://dotstud.io/img/blog/149/11.png" alt="">&lt;/p>
-&lt;p>あとは見守りながら完成するまで放置しましょう。&lt;/p>
-&lt;h2 id="heading-6">はじめての出力&lt;/h2>
-&lt;p>プリンタとデータをセットして出力されるのを待ちます……。&lt;/p>
-&lt;p>&lt;img src="https://qiita-image-store.s3.amazonaws.com/0/212276/c7659ea8-e54a-f50a-400a-183218006215.gif" alt="出力.gif">&lt;/p>
-&lt;p>完成しました。
-&lt;img src="https://dotstud.io/img/blog/149/%E5%AE%8C%E6%88%901.png" alt="">&lt;/p>
-&lt;p>哲学的なゴミです。特に用途はありません。
-&lt;img src="https://dotstud.io/img/blog/149/%E5%AE%8C%E6%88%902.png" alt="">&lt;/p>
-&lt;h2 id="3d-3">3Dプリンタを使うときに注意すること&lt;/h2>
-&lt;p>セットアップの説明でも述べましたが、3Dプリンターを使ってみて注意した方が良い点をもう一度まとめます。&lt;/p>
-&lt;ul>
-&lt;li>Pango上でモデリングのサイズを要チェック&lt;/li>
-&lt;li>モデリングしたものをどの向きで出力するか&lt;/li>
-&lt;li>初期位置の設定を正確に！（特にz軸方向）&lt;/li>
-&lt;li>出力直後に溶け出したフィラメントを必ず除去&lt;/li>
-&lt;/ul>
-&lt;p>3Dプリンタは複雑なものを簡単に出力できるイメージですが、実際に使ってみると経験やコツがいります。やはり、どんな道具も使いこなせるようになるには時間が必要なようです。&lt;/p>
-&lt;p>まだまだ3Dプリンターを使う上で学ぶことが多いと感じたので、継続して使っていきたいと思います。&lt;/p>
-&lt;p>それではまた。&lt;/p></description></item><item><title>オフィス移転したらインターホンがなかったのでRaspbeerry Piでカメラ付きインターホン作ってみた</title><link>https://dotstud.io/blog/office-new-door-notification/</link><pubDate>Mon, 20 Nov 2017 00:00:00 +0000</pubDate><guid>https://dotstud.io/blog/office-new-door-notification/</guid><description>&lt;p>こんにちは、dotstudioモノづくり担当・うこです。&lt;/p>
-&lt;p>dotstudioは&lt;a href="https://dotstud.io/blog/office-relocation-for-akihabara/">&lt;strong>めでたく新オフィスに移転したのですが&lt;/strong>&lt;/a>、インターホンがついておらず不便なんですよね。&lt;/p>
-&lt;p>&lt;img src="https://dotstud.io/img/blog/133/10.png" alt="">
-代表・のびすけ「&lt;strong>うこ先生、これRaspberry Piでインターホン作れない？&lt;/strong>」&lt;/p>
-&lt;p>&lt;img src="https://dotstud.io/img/blog/133/1.png" alt="">
-僕「&lt;strong>秒でいけます&lt;/strong>」&lt;/p>
-&lt;p>ということで作ってみました！&lt;/p>
-&lt;h2 id="heading">全体の構成&lt;/h2>
-&lt;p>今回は&lt;strong>ボタンを押したら室内のスピーカに音がなる機能&lt;/strong>に加えて、&lt;strong>押した人の姿が見えるカメラ機能&lt;/strong>も搭載してみました。&lt;/p>
-&lt;p>全体の構成はこんな感じです。
-&lt;img src="https://qiita-image-store.s3.amazonaws.com/0/116011/a7707b67-176f-8dc6-cf32-8323a56e860c.png" alt="いんたーほん.png" title="いんたーほん.png">&lt;/p>
-&lt;p>Raspberry Pi 3（以下ラズパイ）をベースにして、Grove接続されたタッチセンサに触れると室内のBluetoothスピーカー（今回はBASE EGG）から音が流れる仕組みを作ります。&lt;/p>
-&lt;p>さらに、ラズパイカメラをドアの外に出して、外の様子がオフィス内のモニタから見られるようにします。&lt;/p>
-&lt;h3 id="heading-1">使ったもの&lt;/h3>
-&lt;ul>
-&lt;li>Raspberry Pi 3&lt;/li>
-&lt;li>Raspberry Pi カメラモジュール&lt;/li>
-&lt;li>Grove タッチセンサ&lt;/li>
-&lt;li>Bluetoothオーディオトランスミッタ&lt;/li>
-&lt;li>Bluetoothスピーカー（今回はBASS EGG）&lt;/li>
-&lt;li>スピーカー（100円）&lt;/li>
-&lt;li>オーディオ分岐プラグ（100円）&lt;/li>
-&lt;li>マグネット付きプラスチックケース（100円）&lt;/li>
-&lt;/ul>
-&lt;h2 id="heading-2">呼び鈴の製作&lt;/h2>
-&lt;h3 id="heading-3">ハードウェア部分&lt;/h3>
-&lt;p>まずはじめに、&lt;strong>来客者がボタンを押すと室内で音が鳴って訪問を知らせるようにする機能&lt;/strong>を作ります。&lt;/p>
-&lt;p>&lt;img src="https://dotstud.io/img/blog/133/12.png" alt="">
-ラズパイはマグネット付きのプラスチックケースに入れて、金属製のドアの内側に貼り付けます。ケースはケーブルが引き出せるように適宜加工します。&lt;/p>
-&lt;p>次にGroveタッチセンサですが、そのままだとラズパイに接続できないためジャンパワイヤを3本用意します。接続するピンは以下のとおりです。&lt;/p>
-&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th align="left">タッチセンサのピン&lt;/th>
-&lt;th align="left">ラズパイGPIO&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td align="left">VCC&lt;/td>
-&lt;td align="left">3.3V&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td align="left">GND&lt;/td>
-&lt;td align="left">Ground&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td align="left">NC&lt;/td>
-&lt;td align="left">&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td align="left">SIG&lt;/td>
-&lt;td align="left">24&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
-&lt;p>ラズパイGPIOのピン番号と位置については、以下の公式ページにある2番目の図を参照してください。&lt;/p>
-&lt;p>参考：&lt;a href="https://www.raspberrypi.org/documentation/usage/gpio-plus-and-raspi2/">GPIO: MODELS A+, B+, RASPBERRY PI 2 B AND RASPBERRY PI 3 B&lt;/a>&lt;/p>
-&lt;p>次に、100円程度で売られているオーディオ出力分岐器をラズパイのオーディオ出力に接続し、さらにBluetoothのオーディオトランスミッタと小型のスピーカーに接続します。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;p>オーディオトランスミッタは室内に来客を知らせるスピーカーを鳴らす用、小型スピーカーはドアの外に出して来客者に「呼び鈴が鳴った」ことを知らせる用です。USB接続のアンプ付きスピーカーなどで大きな音が出せるのならそれで代用することができます。&lt;/p>
-&lt;p>&lt;img src="https://dotstud.io/img/blog/133/5.png" alt="">
-最後に電源を近くのコンセントからUSBアダプタ経由で接続してハードウェア部分は完了です！&lt;/p>
-&lt;h3 id="heading-4">ソフトウェア部分&lt;/h3>
-&lt;p>まず、適当なインターフォンの音となるmp3を用意しましょう。簡単なピンポン音でも、ネタのような効果音でもいいです。dotstudioでは、「ファミマ入店音」が好評だったため採用しました。&lt;/p>
-&lt;p>mp3が用意できたら、&lt;code>/home/pi&lt;/code>などのディレクトリに&lt;code>sounds&lt;/code>というフォルダを作ってその中にmp3を入れましょう。&lt;/p>
-&lt;p>次に、&lt;code>sudo apt-get install mpg321&lt;/code>を実行し、サウンド再生用のソフトウェア「mpg321」をインストールします。&lt;code>mpg321 sounds/サウンド.mp3&lt;/code>などと実行して、スピーカーから音が出ていればOKです。もしここで音が小さい場合は、&lt;code>alsamixer&lt;/code>コマンドを実行すると音量調整ができますので、矢印キーで大きくしておきます。&lt;/p>
-&lt;p>音の再生が確認できたら、以下のPythonプログラムを&lt;code>sounds&lt;/code>ディレクトリと同じ場所に保存して実行します。タッチセンサを触ると同時に、音が鳴ってターミナル上に'Ping-pon!&amp;lsquo;と表示されれば成功です。&lt;/p>
-&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-/home/pi/interphone.py" data-lang="/home/pi/interphone.py">&lt;span style="color:#75715e">#!/usr/bin/python&lt;/span>
-&lt;span style="color:#f92672">import&lt;/span> RPi.GPIO &lt;span style="color:#f92672">as&lt;/span> GPIO
-&lt;span style="color:#f92672">import&lt;/span> glob
-&lt;span style="color:#f92672">import&lt;/span> subprocess
-&lt;span style="color:#f92672">from&lt;/span> time &lt;span style="color:#f92672">import&lt;/span> sleep
-&lt;span style="color:#f92672">from&lt;/span> random &lt;span style="color:#f92672">import&lt;/span> shuffle
-GPIO&lt;span style="color:#f92672">.&lt;/span>setmode(GPIO&lt;span style="color:#f92672">.&lt;/span>BCM)
-GPIO&lt;span style="color:#f92672">.&lt;/span>setup(&lt;span style="color:#ae81ff">24&lt;/span>, GPIO&lt;span style="color:#f92672">.&lt;/span>IN)
-&lt;span style="color:#75715e"># mp3が保存されているディレクトリは適宜変更してください&lt;/span>
-soundlist &lt;span style="color:#f92672">=&lt;/span> glob&lt;span style="color:#f92672">.&lt;/span>glob(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">./sounds/*.mp3&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>)
-&lt;span style="color:#66d9ef">while&lt;/span> True:
-&lt;span style="color:#66d9ef">if&lt;/span> GPIO&lt;span style="color:#f92672">.&lt;/span>input(&lt;span style="color:#ae81ff">24&lt;/span>) &lt;span style="color:#f92672">==&lt;/span> GPIO&lt;span style="color:#f92672">.&lt;/span>HIGH:
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/155/5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;これで、Nefry BTのコンソール画面から遠隔でサーボモータを制御できるようになりました。
+また、&lt;strong&gt;Nefry.getWebServer()関数を使うことで、HTMLを書く要領でコンソール画面をカスタマイズ&lt;/strong&gt;することができます。&lt;/p&gt;
+&lt;h2 id=&#34;試してみる&#34;&gt;試してみる&lt;/h2&gt;
+&lt;div class=&#34;talk-box&#34;&gt;
+&lt;p class=&#34;speaker&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/members/takudooon/author.png&#34; /&gt;
+&lt;/p&gt;
+&lt;p&gt;
+たくろーどん「ちゃんとくさん、遠隔操作できる仕組みが完成しました！早速試してみてください。」
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;talk-box&#34;&gt;
+&lt;p class=&#34;speaker&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/members/chantoku/author.png&#34; /&gt;
+&lt;/p&gt;
+&lt;p&gt;
+ちゃんとく「やった！さっそくデスクからポチっとな」
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/155/7.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;div class=&#34;talk-box&#34;&gt;
+&lt;p class=&#34;speaker&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/members/takudooon/author.png&#34; /&gt;
+&lt;/p&gt;
+&lt;p&gt;
+たくろーどん「おぉ、これで遠隔で電気のON/OFF操作は完璧ですね！」
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;talk-box&#34;&gt;
+&lt;p class=&#34;speaker&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/members/chantoku/author.png&#34; /&gt;
+&lt;/p&gt;
+&lt;p&gt;
+ちゃんとく「便利になったけど、&lt;b&gt;SSIDの命名センスがすごい&lt;/b&gt;」
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/155/6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;※Nefry BTのSSIDは変更することができる。「&lt;a href=&#34;https://dotstud.io/docs/nefrybt-change-ssid/&#34;&gt;&lt;strong&gt;Nefry BTのSSIDを変更する&lt;/strong&gt;&lt;/a&gt;」を参照。&lt;/p&gt;
+&lt;div class=&#34;talk-box&#34;&gt;
+&lt;p class=&#34;speaker&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/members/takudooon/author.png&#34; /&gt;
+&lt;/p&gt;
+&lt;p&gt;
+たくろーどん「満足してもらえたようで嬉しいです。」
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;h2 id=&#34;終わりに&#34;&gt;終わりに&lt;/h2&gt;
+&lt;p&gt;このようにdotstudioではお仕事が急にやってくるので柔軟な対応が求められます。&lt;u&gt;ヘマをすると何がおこるかわからないので、今回は首の皮一枚つながりました。&lt;/u&gt;&lt;/p&gt;
+&lt;p&gt;遠隔でデバイスを操作するには、今回のようにNefry BTのコンソール画面を応用する他にも、スマホアプリから操作できるようになる「&lt;a href=&#34;https://www.blynk.cc/&#34;&gt;&lt;strong&gt;Blynk&lt;/strong&gt;&lt;/a&gt;」を使ったり、リアルタイム通信を簡単に実現できる「&lt;a href=&#34;https://mlkcca.com/&#34;&gt;&lt;strong&gt;Milkcocoa&lt;/strong&gt;&lt;/a&gt;」を使ったりと、いろいろな方法があります。&lt;/p&gt;
+&lt;p&gt;ぜひみなさんも試してみてはいかがでしょうか？&lt;/p&gt;
+&lt;style&gt;
+div.talk-box p {
+display: table-cell;
+vertical-align: middle;
+margin: 0;
+}
+.speaker {
+width: 70px;
+height: 70px;
+margin-right: 10px;
+padding-right: 10px;
+}
+.speaker img {
+border-radius: 50%;
+}
+&lt;/style&gt;</description></item><item><title>放置されていた3Dプリンタ「Trinus」で初めての3Dプリントに挑戦</title><link>https://dotstud.io/blog/3d-printer-trinus-usage/</link><pubDate>Thu, 22 Feb 2018 03:00:43 +0900</pubDate><guid>https://dotstud.io/blog/3d-printer-trinus-usage/</guid><description>
+&lt;p&gt;こんにちは、たくろーどんです。大学で&lt;a href=&#34;https://dotstud.io/docs/nefrybt&#34;&gt;NefryBT&lt;/a&gt;を使った工作をしていたら、いつのまにかdotstudioでアルバイトすることになっていました。宇宙工学を勉強しています。以後よろしくお願いします。&lt;/p&gt;
+&lt;p&gt;=&amp;gt; 参考: &lt;a href=&#34;https://qiita.com/minwinmin/items/d1f296b8a9cd1a2c22f6&#34;&gt;研究室のみんなとNefry BTを使ってはじめてIoTデバイスをつくってみた&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;今回は、dotstudioに放置されていた3Dプリンタ「Trinus（トライナス）」を使って初めての3Dプリントに挑戦してみます。
+&lt;img src=&#34;https://dotstud.io/img/blog/149/lead.png&#34; alt=&#34;&#34; /&gt;
+これで哲学的なものを錬成していきましょう。&lt;/p&gt;
+&lt;h2 id=&#34;3dプリントを始める前に&#34;&gt;3Dプリントを始める前に&lt;/h2&gt;
+&lt;h3 id=&#34;3dプリンタとは&#34;&gt;3Dプリンタとは？&lt;/h3&gt;
+&lt;p&gt;3Dプリンタとは、その名の通り&lt;strong&gt;3Dのデータを出力できる&lt;/strong&gt;プリンタです。
+&lt;img src=&#34;https://dotstud.io/img/blog/149/3dprint.png&#34; alt=&#34;&#34; /&gt;
+プリンタによりますが、金属、アルミ、ゴムなどさまざまな素材で出力できるため広い分野で活躍しています。&lt;/p&gt;
+&lt;p&gt;現在は業務用から一般向けまでさまざまな種類の3Dプリンタが販売されていますが、今回はdotstudioに放置されていた「Trinus（トライナス）」を使ってみます。&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;
+&lt;a href=&#34;http://www.trinus3d.com/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/trinus.png&#34; alt=&#34;&#34; /&gt;
+Trinus - Kodama, Inc.&lt;/a&gt;
+&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;3万円代とお手頃価格で、樹脂に加えて木材やアルミも利用でき、別売りのヘッドをつけることでレーザ彫刻機にもなる優れものです。&lt;/p&gt;
+&lt;h3 id=&#34;3dプリントには3dデータが必要&#34;&gt;3Dプリントには3Dデータが必要&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;3Dプリントをするためには3Dデータが必要です&lt;/strong&gt;。3Dデータをモデリング（作成すること）方法はいくつかありますが、今回は3D CADソフトを使っています。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/inventor.png&#34; alt=&#34;&#34; /&gt;
+僕はAutodeskの「&lt;a href=&#34;https://www.autodesk.co.jp/products/inventor/overview&#34;&gt;&lt;strong&gt;Inventor&lt;/strong&gt;&lt;/a&gt;」を使ってデータを作成しました。有料ソフトですが、なんと&lt;strong&gt;学生だと3年間無料で&lt;/strong&gt;つかえます！&lt;/p&gt;
+&lt;p&gt;Inventorは本格的な機械設計向きなので、簡単に試したい人は同じくAutodeskの「&lt;a href=&#34;https://www.autodesk.co.jp/products/fusion-360/overview&#34;&gt;&lt;strong&gt;fusion360&lt;/strong&gt;&lt;/a&gt;」の方がとっつきやすいかと思います。こちらも個人利用の場合は無料です。&lt;/p&gt;
+&lt;p&gt;3D CADソフトは他にも&lt;a href=&#34;https://www.rs-online.com/designspark/mechanical-software-jp&#34;&gt;DesignSpark Mechanical&lt;/a&gt;や&lt;a href=&#34;https://www.freecadweb.org/?lang=ja&#34;&gt;FreeCAD&lt;/a&gt;などいくつかあるので、自分が使いやすいと思ったものを使うと良いでしょう。&lt;/p&gt;
+&lt;p&gt;さらにもう一つ。
+プログラマーのためにGithubがあるなら、&lt;strong&gt;メカ系エンジニアのために&lt;a href=&#34;https://grabcad.com/&#34;&gt;GrabcCAD&lt;/a&gt;というものがあります&lt;/strong&gt;。
+&lt;img src=&#34;https://dotstud.io/img/blog/149/grabccad.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;ここで、世界中のエンジニアが製作した様々なモデリングを閲覧したり使用したりできます。もし複雑なパーツをモデリングすることが難しければ、GrabCADを参考にしてみるのも手だと思います。&lt;/p&gt;
+&lt;h3 id=&#34;trinusの組み立て&#34;&gt;Trinusの組み立て&lt;/h3&gt;
+&lt;p&gt;Trinusの組み立てに関しては説明書をご覧ください。
+また、日本語の公式サイトもあります。&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;
+&lt;a href=&#34;http://www.trinusjapan.com/&#34;&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/community.png&#34; alt=&#34;&#34; /&gt;
+http://trinusjapan.com/&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;trinus用ソフト-pango-をインストール&#34;&gt;Trinus用ソフト「Pango」をインストール&lt;/h3&gt;
+&lt;p&gt;Trinusで3Dプリントするには、モデリングしたものを扱う専用ソフト「Pango」が必要です。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://trinusjapan.com/softwaredownload/&#34;&gt;こちらのリンク&lt;/a&gt;からインストールしてください。&lt;/p&gt;
+&lt;h2 id=&#34;3dプリントに挑戦&#34;&gt;3Dプリントに挑戦！&lt;/h2&gt;
+&lt;h3 id=&#34;プリンタ側の準備&#34;&gt;プリンタ側の準備&lt;/h3&gt;
+&lt;p&gt;詳しくは&lt;a href=&#34;http://trinusjapan.com/firstprint/&#34;&gt;公式サイト&lt;/a&gt;にのっているので、要点だけ説明します。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/printer.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;まず、Trinusの電源をいれるため、コンセントにつなげましょう。電源がつくと「ビッ」という音がします。&lt;/p&gt;
+&lt;h3 id=&#34;pangoにデータを取り込む&#34;&gt;Pangoにデータを取り込む&lt;/h3&gt;
+&lt;p&gt;パソコンからデータ（stlファイル）をPangoで開きましょう。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/1.png&#34; alt=&#34;&#34; /&gt;
+①のように「書き出し」から「CAD形式」を選択し、stl形式で保存します。&lt;strong&gt;サイズがモデリングと一致&lt;/strong&gt;しているかしっかりと確認してください。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/2.png&#34; alt=&#34;&#34; /&gt;
+Pangoでstlファイルを開くと&lt;strong&gt;何故かサイズが10分の1&lt;/strong&gt;になってしまうので（dotstudioだけで起こる現象なのか不明）、元のサイズに戻します。③と④のように比率（Ratio）を10に変えます。Amountは寸法を意味していて、単位はmmです。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/3.png&#34; alt=&#34;&#34; /&gt;
+必要があれば3Dプリントしやすいようにモデルの向きを変えましょう。&lt;strong&gt;どのような向きで出力するか&lt;/strong&gt;、これがとても大事です！印刷中に思いがけない失敗を引き起こすことになります。&lt;/p&gt;
+&lt;p&gt;⑤のように赤丸部をクリックすると回転軸の表示が出ます。そして、回転したい軸にマウスポインタを持っていきます。⑥のように回転する軸が強調されます。マウスで操作する場合はホイールを動かすことで回転させることができます。パソコンにあるタッチパッドの場合は2本の指で、上下になぞるように動かすと回転します（Windowsの場合）。&lt;/p&gt;
+&lt;h3 id=&#34;印刷のシミュレーション&#34;&gt;印刷のシミュレーション&lt;/h3&gt;
+&lt;p&gt;実際にどのように印刷が進められるかPango上で確認することもできます。Pangoの上部にある「View」から「Layer」をクリックしてください。
+&lt;img src=&#34;https://dotstud.io/img/blog/149/4.png&#34; alt=&#34;&#34; /&gt;
+すると自分がモデリングしたもの以外に格子状のモデリング（濃いピンクの部分）が追加されています。これは「&lt;strong&gt;ラフト&lt;/strong&gt;」と呼ばれ、3Dプリンタの印刷面と出力するものの間に積層される荒い土台のことです。&lt;/p&gt;
+&lt;p&gt;これがあると出力した後に製作物を外しやすく、最終的には除去してゴミとして捨てることができます。&lt;/p&gt;
+&lt;h3 id=&#34;データをtrinusに移す&#34;&gt;データをTrinusに移す&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/5.png&#34; alt=&#34;&#34; /&gt;
+データをSDカードに「pcode」形式で保存します。図の赤丸部をクリックし、SDカードにデータをpcode形式で保存します。この形式は、Torinusで出力するために必要な形式です。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/6.png&#34; alt=&#34;&#34; /&gt;
+SDカードをTorinusに接続し、TorinusとパソコンをUSB接続します。&lt;/p&gt;
+&lt;h3 id=&#34;出力設定を調整&#34;&gt;出力設定を調整&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/7.png&#34; alt=&#34;&#34; /&gt;
+Pango上部の「Preference」から「Setting」を選択します。ここでは、出力するスピードや厚みなどを設定することができます。&lt;strong&gt;設定はあまりいじる必要はない&lt;/strong&gt;ので、眺めおきましょう！（ただし今回は試行錯誤の結果、Thickness: 0.2mm、Print Speed: 40mm/sとしています）&lt;/p&gt;
+&lt;h3 id=&#34;重要-出力位置の初期位置を調整&#34;&gt;【重要】出力位置の初期位置を調整&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/8.png&#34; alt=&#34;&#34; /&gt;
+TorinusとパソコンをUSB接続した状態でPango上部の「View」から「Console」をクリックします。上のような画像が出たら、さらに「Console」をクリックします。　&lt;/p&gt;
+&lt;p&gt;そうすると下記のような設定画面があらわれます。&lt;strong&gt;この画面で行う設定が非常に重要です&lt;/strong&gt;。
+&lt;img src=&#34;https://dotstud.io/img/blog/149/9.png&#34; alt=&#34;&#34; /&gt;
+&lt;strong&gt;まず「Home」をクリック&lt;/strong&gt;します。これで、3Dプリンタのノズル（フィラメントが出る部分）が初期位置に戻ります。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/10.png&#34; alt=&#34;&#34; /&gt;
+ここで&lt;strong&gt;z軸の距離（ノズルから出力される面の高さ、画像でいう赤い矢印部分）を確認&lt;/strong&gt;してください。その距離が初期位置で広すぎると上手く出力されません。なので、目視でその距離を縮めましょう。「Offset」をクリックすると&lt;strong&gt;z軸方向の距離を上下&lt;/strong&gt;することができます。&lt;/p&gt;
+&lt;h3 id=&#34;出力を開始&#34;&gt;出力を開始！&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/149/9.png&#34; alt=&#34;&#34; /&gt;
+位置設定が終わったら、「&lt;strong&gt;Heat E」をクリック&lt;/strong&gt;し3Dプリンタのノズルを温めます。どれくらい温まっているかは、Console画面の左下に示す数字（分数部分）で表されます。最後に右のSDカードのイラスト部分をクリックし、保存したpcodeファイルを指定します。3Dプリンタのノズルが十分に温まれば自動で出力が始まります！&lt;/p&gt;
+&lt;h3 id=&#34;出力直後にやるべきこと&#34;&gt;出力直後にやるべきこと&lt;/h3&gt;
+&lt;p&gt;出力が始まるとその直後に、&lt;strong&gt;ノズルから溶け出たフィラメント&lt;/strong&gt;が垂れてきます。&lt;strong&gt;垂れて固まったフィラメントは出力の邪魔になることもあるので、ピンセットで取り除きましょう&lt;/strong&gt;。下記の図の赤丸で囲った部分がその例です。
+&lt;img src=&#34;https://dotstud.io/img/blog/149/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;あとは見守りながら完成するまで放置しましょう。&lt;/p&gt;
+&lt;h2 id=&#34;はじめての出力&#34;&gt;はじめての出力&lt;/h2&gt;
+&lt;p&gt;プリンタとデータをセットして出力されるのを待ちます……。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/212276/c7659ea8-e54a-f50a-400a-183218006215.gif&#34; alt=&#34;出力.gif&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;完成しました。
+&lt;img src=&#34;https://dotstud.io/img/blog/149/完成1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;哲学的なゴミです。特に用途はありません。
+&lt;img src=&#34;https://dotstud.io/img/blog/149/完成2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
+&lt;h2 id=&#34;3dプリンタを使うときに注意すること&#34;&gt;3Dプリンタを使うときに注意すること&lt;/h2&gt;
+&lt;p&gt;セットアップの説明でも述べましたが、3Dプリンターを使ってみて注意した方が良い点をもう一度まとめます。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Pango上でモデリングのサイズを要チェック&lt;/li&gt;
+&lt;li&gt;モデリングしたものをどの向きで出力するか&lt;/li&gt;
+&lt;li&gt;初期位置の設定を正確に！（特にz軸方向）&lt;/li&gt;
+&lt;li&gt;出力直後に溶け出したフィラメントを必ず除去&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;3Dプリンタは複雑なものを簡単に出力できるイメージですが、実際に使ってみると経験やコツがいります。やはり、どんな道具も使いこなせるようになるには時間が必要なようです。&lt;/p&gt;
+&lt;p&gt;まだまだ3Dプリンターを使う上で学ぶことが多いと感じたので、継続して使っていきたいと思います。&lt;/p&gt;
+&lt;p&gt;それではまた。&lt;/p&gt;</description></item><item><title>オフィス移転したらインターホンがなかったのでRaspbeerry Piでカメラ付きインターホン作ってみた</title><link>https://dotstud.io/blog/office-new-door-notification/</link><pubDate>Mon, 20 Nov 2017 00:00:00 +0000</pubDate><guid>https://dotstud.io/blog/office-new-door-notification/</guid><description>
+&lt;p&gt;こんにちは、dotstudioモノづくり担当・うこです。&lt;/p&gt;
+&lt;p&gt;dotstudioは&lt;a href=&#34;https://dotstud.io/blog/office-relocation-for-akihabara/&#34;&gt;&lt;strong&gt;めでたく新オフィスに移転したのですが&lt;/strong&gt;&lt;/a&gt;、インターホンがついておらず不便なんですよね。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/133/10.png&#34; alt=&#34;&#34; /&gt;
+代表・のびすけ「&lt;strong&gt;うこ先生、これRaspberry Piでインターホン作れない？&lt;/strong&gt;」&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/133/1.png&#34; alt=&#34;&#34; /&gt;
+僕「&lt;strong&gt;秒でいけます&lt;/strong&gt;」&lt;/p&gt;
+&lt;p&gt;ということで作ってみました！&lt;/p&gt;
+&lt;h2 id=&#34;全体の構成&#34;&gt;全体の構成&lt;/h2&gt;
+&lt;p&gt;今回は&lt;strong&gt;ボタンを押したら室内のスピーカに音がなる機能&lt;/strong&gt;に加えて、&lt;strong&gt;押した人の姿が見えるカメラ機能&lt;/strong&gt;も搭載してみました。&lt;/p&gt;
+&lt;p&gt;全体の構成はこんな感じです。
+&lt;img src=&#34;https://qiita-image-store.s3.amazonaws.com/0/116011/a7707b67-176f-8dc6-cf32-8323a56e860c.png&#34; alt=&#34;いんたーほん.png&#34; title=&#34;いんたーほん.png&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;Raspberry Pi 3（以下ラズパイ）をベースにして、Grove接続されたタッチセンサに触れると室内のBluetoothスピーカー（今回はBASE EGG）から音が流れる仕組みを作ります。&lt;/p&gt;
+&lt;p&gt;さらに、ラズパイカメラをドアの外に出して、外の様子がオフィス内のモニタから見られるようにします。&lt;/p&gt;
+&lt;h3 id=&#34;使ったもの&#34;&gt;使ったもの&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Raspberry Pi 3&lt;/li&gt;
+&lt;li&gt;Raspberry Pi カメラモジュール&lt;/li&gt;
+&lt;li&gt;Grove タッチセンサ&lt;/li&gt;
+&lt;li&gt;Bluetoothオーディオトランスミッタ&lt;/li&gt;
+&lt;li&gt;Bluetoothスピーカー（今回はBASS EGG）&lt;/li&gt;
+&lt;li&gt;スピーカー（100円）&lt;/li&gt;
+&lt;li&gt;オーディオ分岐プラグ（100円）&lt;/li&gt;
+&lt;li&gt;マグネット付きプラスチックケース（100円）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;呼び鈴の製作&#34;&gt;呼び鈴の製作&lt;/h2&gt;
+&lt;h3 id=&#34;ハードウェア部分&#34;&gt;ハードウェア部分&lt;/h3&gt;
+&lt;p&gt;まずはじめに、&lt;strong&gt;来客者がボタンを押すと室内で音が鳴って訪問を知らせるようにする機能&lt;/strong&gt;を作ります。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/133/12.png&#34; alt=&#34;&#34; /&gt;
+ラズパイはマグネット付きのプラスチックケースに入れて、金属製のドアの内側に貼り付けます。ケースはケーブルが引き出せるように適宜加工します。&lt;/p&gt;
+&lt;p&gt;次にGroveタッチセンサですが、そのままだとラズパイに接続できないためジャンパワイヤを3本用意します。接続するピンは以下のとおりです。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;left&#34;&gt;タッチセンサのピン&lt;/th&gt;
+&lt;th align=&#34;left&#34;&gt;ラズパイGPIO&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;VCC&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;3.3V&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;GND&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;Ground&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;NC&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;left&#34;&gt;SIG&lt;/td&gt;
+&lt;td align=&#34;left&#34;&gt;24&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;ラズパイGPIOのピン番号と位置については、以下の公式ページにある2番目の図を参照してください。&lt;/p&gt;
+&lt;p&gt;参考：&lt;a href=&#34;https://www.raspberrypi.org/documentation/usage/gpio-plus-and-raspi2/&#34;&gt;GPIO: MODELS A+, B+, RASPBERRY PI 2 B AND RASPBERRY PI 3 B&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;次に、100円程度で売られているオーディオ出力分岐器をラズパイのオーディオ出力に接続し、さらにBluetoothのオーディオトランスミッタと小型のスピーカーに接続します。
+&lt;center&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/133/11.png&#34; alt=&#34;&#34; /&gt;
+実証の結果、「押した人にも音が鳴ったことがわかる」ことが必要とわかった
+&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;オーディオトランスミッタは室内に来客を知らせるスピーカーを鳴らす用、小型スピーカーはドアの外に出して来客者に「呼び鈴が鳴った」ことを知らせる用です。USB接続のアンプ付きスピーカーなどで大きな音が出せるのならそれで代用することができます。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/133/5.png&#34; alt=&#34;&#34; /&gt;
+最後に電源を近くのコンセントからUSBアダプタ経由で接続してハードウェア部分は完了です！&lt;/p&gt;
+&lt;h3 id=&#34;ソフトウェア部分&#34;&gt;ソフトウェア部分&lt;/h3&gt;
+&lt;p&gt;まず、適当なインターフォンの音となるmp3を用意しましょう。簡単なピンポン音でも、ネタのような効果音でもいいです。dotstudioでは、「ファミマ入店音」が好評だったため採用しました。&lt;/p&gt;
+&lt;p&gt;mp3が用意できたら、&lt;code&gt;/home/pi&lt;/code&gt;などのディレクトリに&lt;code&gt;sounds&lt;/code&gt;というフォルダを作ってその中にmp3を入れましょう。&lt;/p&gt;
+&lt;p&gt;次に、&lt;code&gt;sudo apt-get install mpg321&lt;/code&gt;を実行し、サウンド再生用のソフトウェア「mpg321」をインストールします。&lt;code&gt;mpg321 sounds/サウンド.mp3&lt;/code&gt;などと実行して、スピーカーから音が出ていればOKです。もしここで音が小さい場合は、&lt;code&gt;alsamixer&lt;/code&gt;コマンドを実行すると音量調整ができますので、矢印キーで大きくしておきます。&lt;/p&gt;
+&lt;p&gt;音の再生が確認できたら、以下のPythonプログラムを&lt;code&gt;sounds&lt;/code&gt;ディレクトリと同じ場所に保存して実行します。タッチセンサを触ると同時に、音が鳴ってターミナル上に&amp;rsquo;Ping-pon!&amp;lsquo;と表示されれば成功です。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-/home/pi/interphone.py&#34;&gt;#!/usr/bin/python
+import RPi.GPIO as GPIO
+import glob
+import subprocess
+from time import sleep
+from random import shuffle
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(24, GPIO.IN)
+# mp3が保存されているディレクトリは適宜変更してください
+soundlist = glob.glob(&amp;quot;./sounds/*.mp3&amp;quot;)
+while True:
+if GPIO.input(24) == GPIO.HIGH:
 shuffle(soundlist)
-&lt;span style="color:#66d9ef">print&lt;/span>(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#39;&lt;/span>&lt;span style="color:#e6db74">Ping-pon!&lt;/span>&lt;span style="color:#e6db74">&amp;#39;&lt;/span>)
-subprocess&lt;span style="color:#f92672">.&lt;/span>call(&lt;span style="color:#e6db74">&lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#e6db74">mpg321 -q &lt;/span>&lt;span style="color:#e6db74">&amp;#34;&lt;/span>&lt;span style="color:#f92672">+&lt;/span>soundlist[&lt;span style="color:#ae81ff">0&lt;/span>], shell&lt;span style="color:#f92672">=&lt;/span>True)
-&lt;span style="color:#66d9ef">else&lt;/span>:
-sleep(&lt;span style="color:#ae81ff">0.01&lt;/span>)
-&lt;/code>&lt;/pre>&lt;/div>&lt;p>最後に、再起動しても動くように、&lt;code>/etc/rc.local&lt;/code>ファイルの末尾に&lt;code>/usr/bin/python /home/pi/interphone.py &amp;amp;&lt;/code>と追記しておきましょう。
-ちなみにですが、上記のコードでは&lt;code>sounds&lt;/code>ディレクトリ内に複数のmp3が入っているとランダムで再生されるような仕組みにしています。&lt;/p>
-&lt;h2 id="heading-5">監視カメラ部分の製作&lt;/h2>
-&lt;p>監視カメラはラズパイ専用カメラを使用します。接続はとても簡単で、HDMI端子とオーディオ端子の間にある細長い端子にケーブルを差し込むだけです。&lt;code>sudo raspi-config&lt;/code>コマンドで、カメラを使うことができるように設定を変更しておきましょう。&lt;code>raspistill -p&lt;/code>コマンドを実行し、特にエラーが出なければ正常に接続されています。&lt;/p>
-&lt;p>今回はカメラと呼び鈴部分は連動させず、カメラは&lt;a href="https://github.com/ccrisan/motioneye/wiki">motionEye&lt;/a>というオープンソースウェアを使って単独で動作させます。
-motionEyeのインストールは以下を参考にしました。&lt;/p>
-&lt;p>参考：&lt;a href="https://qiita.com/mt08/items/96207abfba91954b50d4">らずぱい motionEye (Web UIベースのカメラサーバ) - Qiita&lt;/a>&lt;/p>
-&lt;p>こちらのページにも書かれていますが、ラズパイのカメラモジュールを使用するので、以下のコマンドを実行しておくのを忘れないようにしましょう。
-&lt;code>grep bcm2835-v4l2 /etc/modules || echo bcm2835-v4l2 | sudo tee -a /etc/modules&lt;/code>&lt;/p>
-&lt;p>&lt;img src="https://dotstud.io/img/blog/133/4.png" alt="">
+print(&#39;Ping-pon!&#39;)
+subprocess.call(&amp;quot;mpg321 -q &amp;quot;+soundlist[0], shell=True)
+else:
+sleep(0.01)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;最後に、再起動しても動くように、&lt;code&gt;/etc/rc.local&lt;/code&gt;ファイルの末尾に&lt;code&gt;/usr/bin/python /home/pi/interphone.py &amp;amp;&lt;/code&gt;と追記しておきましょう。
+ちなみにですが、上記のコードでは&lt;code&gt;sounds&lt;/code&gt;ディレクトリ内に複数のmp3が入っているとランダムで再生されるような仕組みにしています。&lt;/p&gt;
+&lt;h2 id=&#34;監視カメラ部分の製作&#34;&gt;監視カメラ部分の製作&lt;/h2&gt;
+&lt;p&gt;監視カメラはラズパイ専用カメラを使用します。接続はとても簡単で、HDMI端子とオーディオ端子の間にある細長い端子にケーブルを差し込むだけです。&lt;code&gt;sudo raspi-config&lt;/code&gt;コマンドで、カメラを使うことができるように設定を変更しておきましょう。&lt;code&gt;raspistill -p&lt;/code&gt;コマンドを実行し、特にエラーが出なければ正常に接続されています。&lt;/p&gt;
+&lt;p&gt;今回はカメラと呼び鈴部分は連動させず、カメラは&lt;a href=&#34;https://github.com/ccrisan/motioneye/wiki&#34;&gt;motionEye&lt;/a&gt;というオープンソースウェアを使って単独で動作させます。
+motionEyeのインストールは以下を参考にしました。&lt;/p&gt;
+&lt;p&gt;参考：&lt;a href=&#34;https://qiita.com/mt08/items/96207abfba91954b50d4&#34;&gt;らずぱい motionEye (Web UIベースのカメラサーバ) - Qiita&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;こちらのページにも書かれていますが、ラズパイのカメラモジュールを使用するので、以下のコマンドを実行しておくのを忘れないようにしましょう。
+&lt;code&gt;grep bcm2835-v4l2 /etc/modules || echo bcm2835-v4l2 | sudo tee -a /etc/modules&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/133/4.png&#34; alt=&#34;&#34; /&gt;
 インストールが完了して、室内に常設してあるPCのブラウザからアクセスしてみました。
 ばっちりドアの外が撮影されていますね！
-1秒おきに更新されていますが、python上で動作しているためか、少々重たいようです。&lt;/p>
-&lt;h2 id="heading-6">試してみる&lt;/h2>
-&lt;p>&lt;img src="https://dotstud.io/img/blog/133/7.png" alt="">
-インターホンを押すと……&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;p>入店っぽい音が流れます！&lt;/p>
-&lt;p>&lt;img src="https://dotstud.io/img/blog/133/13.png" alt="">
-旧スタイルに比べるとだいぶ未来になりました。&lt;/p>
-&lt;h2 id="heading-7">まとめ&lt;/h2>
-&lt;p>今回は数時間ほどでこのシステムを作ることができました。カメラと呼び鈴が独立してしまっていますが、可能ならば「呼び鈴を押した瞬間の画像を保存してhipchatにアップロード」するような仕組みを作ってみたいです。
-&lt;img src="https://dotstud.io/img/blog/133/3.png" alt="">
-次は何をつくってやろうか……。&lt;/p></description></item></channel></rss>
+1秒おきに更新されていますが、python上で動作しているためか、少々重たいようです。&lt;/p&gt;
+&lt;h2 id=&#34;試してみる&#34;&gt;試してみる&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/133/7.png&#34; alt=&#34;&#34; /&gt;
+インターホンを押すと……&lt;/p&gt;
+&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/4W4pJ0bZVGY&#34; frameborder=&#34;0&#34; gesture=&#34;media&#34; allowfullscreen&gt;&lt;/iframe&gt;
+&lt;p&gt;入店っぽい音が流れます！&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/133/13.png&#34; alt=&#34;&#34; /&gt;
+旧スタイルに比べるとだいぶ未来になりました。&lt;/p&gt;
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;今回は数時間ほどでこのシステムを作ることができました。カメラと呼び鈴が独立してしまっていますが、可能ならば「呼び鈴を押した瞬間の画像を保存してhipchatにアップロード」するような仕組みを作ってみたいです。
+&lt;img src=&#34;https://dotstud.io/img/blog/133/3.png&#34; alt=&#34;&#34; /&gt;
+次は何をつくってやろうか……。&lt;/p&gt;</description></item></channel></rss>

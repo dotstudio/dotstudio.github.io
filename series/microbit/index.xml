@@ -1,391 +1,454 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>microbit on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/microbit/</link><description>Recent content in microbit on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Sun, 14 Apr 2019 00:00:00 +0000</lastBuildDate><atom:link href="/series/microbit/" rel="self" type="application/rss+xml"/><item><title>光るサンドバッグ作って◯-monsterの気分を感じたい！</title><link>https://dotstud.io/blog/shining-sandbag-like-bmonster/</link><pubDate>Sun, 14 Apr 2019 00:00:00 +0000</pubDate><guid>https://dotstud.io/blog/shining-sandbag-like-bmonster/</guid><description>&lt;p>プログラミングをしていると運動不足になりがちです。&lt;/p>
-&lt;p>何か作っている時のストレスもあります。（なんで動かないんだーってw）&lt;/p>
-&lt;p>ストレス発散したい！&lt;/p>
-&lt;p>手っ取り早くストレス発散して運動ができるのは何でしょう、、サンドバック殴ることですよね！&lt;br>
-（この辺りから、B-◯onsterっぽくしたい欲が出てきます笑）&lt;/p>
-&lt;p>サンドバックを買って、叩く毎に光ったり音鳴ったりしたら良い気晴らしになるんじゃないかと。&lt;/p>
-&lt;p>ということで、&lt;/p>
-&lt;p>&lt;strong>光るサンドバッグを作ってB-Mons◯erに行った感じを味わいたい！！！&lt;/strong>&lt;/p>
-&lt;p>ではでは、作っていきましょう&lt;/p>
-&lt;h2 id="heading">完成物のイメージ&lt;/h2>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>&lt;em>&lt;strong>パンチしたら全体が光る。&lt;/strong>&lt;/em>
-→この記事では、加速度センサを使って音を鳴らすまで作ってみます。仕様としては以下のことができたら達成とします。&lt;/p>
-&lt;p>・サンドバックを叩いたら、音が出る&lt;br>
-・５回叩いたら、音が変わる。&lt;br>
-・10回叩いたら、音楽が鳴る。&lt;/p>
-&lt;h2 id="heading-1">必要な物&lt;/h2>
-&lt;p>・サンドバック&lt;br>
-・microbit&lt;br>
-・電子ブザー&lt;br>
-・Micro USB Micro-B&lt;br>
-・ワニ口クリップ&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;h2 id="heading-2">サンドバックを作ってみる&lt;/h2>
-&lt;p>まずは、サンドバックを作っていきましょう。&lt;br>
-これを買ってみました（http://urx.space/U1ry）&lt;br>
-開けけてみて思ったのですが、なかなかしっかりしてて良い感じのサンドバックです。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>中身を確認して、作っていきましょう！！！&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>水を使って土台を作るタイプなので、屋外でやりましょう（じゃないと母ちゃんに怒られますよ笑）&lt;br>
-＊ペットボトルたちは猫避けではなく、土台に使う水です。&lt;br>
-凝固剤も入っていて、なかなか本格的！&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>土台ができたら、膨らましていきましょう！&lt;br>
-（なんか、いかがわしい形と動きをしますが、、下ネタご了承ください）&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>良い感じに膨らんだらサンドバックは完成です&lt;br>
-センサに移りましょう&lt;/p>
-&lt;h2 id="heading-3">センサを作ってみる&lt;/h2>
-&lt;p>&lt;strong>・micro softアカウントを作ってサインイン&lt;/strong>
-microbitはBBCが作ってる教育用のマイコンでして、&lt;br>
-マイクロソフトアカウントが必要なので、持ってない人は作りましょう。&lt;br>
-ここから作れます。https://microbit.org/ja/guide/&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>&lt;strong>・make code エディターでコードを編集します。&lt;/strong>
-microbitにコードを書き込むには３つの方法があります。&lt;/p>
-&lt;p>JSやPythonで書くこともできますが、一番簡単なのはmake code エディターのブロックで入力することです。&lt;br>
-このエディターを使えば、こんな感じで簡単にコードを書くことができます。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>ブロックの意味はJSを書いたことなくてもわかるかも。&lt;/p>
-&lt;p>マイプロジェクトから新しいプロジェクトを開いて作っていきます。&lt;/p>
-&lt;p>「ずっと」のブロックをここでは2つ作ります。&lt;br>
-　・カウントする「ずっと」&lt;br>
-　・音を鳴らすための「ずっと」&lt;br>
-＊１つにまとめるのもできると思いますが、わかり安かったので分けました。&lt;/p>
-&lt;p>カウントする「ずっと」の方に、accXという変数を作り、加速度Xという入力ブロックを追加します。&lt;br>
-そして、「もし」ブロックで、accXが500未満であればLEDが点灯し、音楽が鳴るブロックにしていきます。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>音を鳴らすための「ずっと」ブロックを作っていきます。&lt;br>
-まず、「最初だけ」ブロックに変数カウントを0にして置いておきます。&lt;br>
-そして、カウントする「ずっと」の方に「もし」ブロックを入れて5回いった時と10回いった時にLEDの点灯と音楽が鳴るようにします。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>&lt;strong>・microbitとブザーを繋げます&lt;/strong>&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>おお、っぽくなってきました！&lt;/p>
-&lt;p>そして、サンドバックに貼り付ければ、、、&lt;/p>
-&lt;h2 id="heading-4">できました！！&lt;/h2>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>&lt;strong>・デモ動画&lt;/strong>
-&lt;a href="http://www.youtube.com/watch?v=it0159iWUrQ">&lt;img src="http://img.youtube.com/vi/it0159iWUrQ/0.jpg" alt="IMAGE ALT TEXT HERE">&lt;/a>&lt;/p>
-&lt;h2 id="-">[あとがき] 挫折の数々&lt;/h2>
-&lt;p>&lt;strong>・最初のイメージを捨てました&lt;/strong>
-最初は単純に光るだけのサンドバックデバイスを作ろうと思っていました。でも、プロトタイプを作る際にLEDが光るだけだと、サンドバックを叩いた時にLEDの光を確認できないんですよねww&lt;/p>
-&lt;p>なので、一緒に音も出るように変更しました。&lt;br>
-そのおかげで、ゲーム性が高くなって良い感じになりました。&lt;/p>
-&lt;p>&lt;strong>・使う物を変えました&lt;/strong>
-最初、microbitではなくwio nodeとグローブで作ろうとしてました。&lt;br>
-でも、「加速度センサ使ってプロトタイプ作るだけならmicrobitで良いんじゃね？」とのびすけしゃちょーにアドバイスもらい試しに使うことにしました。&lt;/p>
-&lt;p>結局、変えてみてよかったです！&lt;br>
-microbitはものすごく使いやすい。デプロイの仕方も編集したブロックのhexファイル（microbit用のファイル）をmicrobitのフォルダに入れるだけでできます。&lt;br>
-全部のプログラミングがこうなれば良いのに、、って思うぐらいプログラミングしやすかったです。&lt;/p></description></item><item><title>micro:bit同士で通信してみよう！腕の動きに合わせて光る帽子の作り方</title><link>https://dotstud.io/blog/microbit-flickering-light-hat/</link><pubDate>Tue, 29 May 2018 10:40:00 +0900</pubDate><guid>https://dotstud.io/blog/microbit-flickering-light-hat/</guid><description>&lt;p>はじめまして、りんろくです。&lt;/p>
-&lt;p>マイコンボード初心者ながらmicro:bitのデザインやサイズ感がすごく好きで、四苦八苦しながらちょっとしたゲームを作ったり、LEDをチカチカさせてみたりしています！&lt;/p>
-&lt;p>そんな私ですが、机の上で触っているだけでなく、いつかmicro:bitを外に持ち出せるアイテムとして使えないかなあ……と漠然と思っていました。&lt;/p>
-&lt;p>ぼーっとmicro:bitのことを考えていたある日、音楽をやっている知り合いから、数日後のライブに出演するという連絡とともに、&lt;/p>
-&lt;p>「ステージから発見できるぐらいの&lt;strong>ちょっと&lt;/strong>目立つアイテムを身につけてきてよ！」&lt;/p>
-&lt;p>とのお達しが。&lt;/p>
-&lt;p>これはmicro:bitを実戦投入するしかない！この機を逃してはならない！と思いついた私は、その瞬間から動き出しました。&lt;/p>
-&lt;p>ということで今回はmicro:bitのチュートリアルも兼ねて、micro:bitを2台使用し、&lt;strong>腕の動きに合わせて光り方を変える帽子を作っていきたい&lt;/strong>と思います！&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;h2 id="microbit">micro:bitとは&lt;/h2>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>今回使用する&lt;a href="http://microbit.org/ja/guide/">micro:bit&lt;/a>はイギリス発の教育用マイコンボードです。イギリスで11歳と12歳の小学生に無料配布されたことが話題になりました。&lt;/p>
-&lt;p>micro:bitには、温度計や加速度センサーを初めとした&lt;a href="http://microbit.org/ja/guide/features/">様々な機能&lt;/a>が搭載されており、簡単に制御することができます。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>また、micro:bitの特徴の一つとして、様々な機能やイベントを表したブロックを配置することによってプログラムを作成する&lt;strong>ブロックコーディングを採用していること&lt;/strong>が挙げられます（JavaScriptやPythonを用いてコーディングすることも可能です）。&lt;/p>
-&lt;p>概要や基本の操作方法はこちらの記事でも紹介しています。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;h3 id="microbit-1">micro:bitのここが良い！&lt;/h3>
-&lt;p>先に言及した通り、micro:bitはイギリスでは無料配布された有名なマイコンボードです。しかしながら日本では未だ広く知られているとは言えません。ではなぜ私はmicro:bitを使うのか、なぜ紹介記事を書いているのか。&lt;/p>
-&lt;p>それにはもちろん理由があります。&lt;/p>
-&lt;p>&lt;!-- raw HTML omitted -->&lt;/p>
-&lt;h4 id="-">■ とにかく安い！&lt;/h4>
-&lt;p>ArduinoやRaspberry Piといった、現在の主流と言えるマイコンボードが3000円〜6000円程度の価格設定であるのに対し、&lt;strong>micro:bitは2000円前後で買えます！&lt;/strong> とりあえず買ってからどう使うか考えましょう！&lt;/p>
-&lt;p>&lt;!-- raw HTML omitted -->&lt;/p>
-&lt;h4 id="-web">■ Webコーディングのため環境構築不要！&lt;/h4>
-&lt;p>多くのマイコンボードは、プログラミングする際に制御用ソフトウェアのインストールなどの手順を踏む必要があります。&lt;/p>
-&lt;p>しかしながら！&lt;/p>
-&lt;p>Webコーディングの場合、ネット環境さえあればWebページにアクセスするだけでプログラムを作り始めることができるのです！&lt;/p>
-&lt;p>&lt;!-- raw HTML omitted -->&lt;/p>
-&lt;h4 id="-led">■ LEDがいっぱいある！&lt;/h4>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>LEDが25個搭載されており、自分の好きなマークや文字列を表現することができます！また、光らせたいLEDを自分で選択するほか、いくつかのマークは初めから用意されているため簡単に制御できます！&lt;/p>
-&lt;p>&lt;!-- raw HTML omitted -->
-以上3点のポイントが、私がmicro:bitを愛する理由です。&lt;/p>
-&lt;p>そうなのです。とにかく「&lt;strong>ハードルが低い&lt;/strong>」という点においてmicro:bitは非常に優秀なのです！&lt;/p>
-&lt;p>この記事は、micro:bitの諸機能のうち、最も難しい（ように思われるであろう）通信機能に焦点を当てています。&lt;/p>
-&lt;p>私もmicro:bitを購入して、様々なプログラムについて触れたあと、通信機能だけが難解であるように感じました。しかし実際にプログラムを作成してみると、そんなことはないのです。&lt;/p>
-&lt;p>この記事を読み終わり、自分の手で通信機能を制御したとき、きっとmicro:bitが「触れやすい」マイコンボードであると感じるはずです。&lt;/p>
-&lt;h2 id="heading">全体の流れ&lt;/h2>
-&lt;p>今回は送信用、受信用としてmicro:bit2台を準備します。&lt;/p>
-&lt;p>送信側のmicro:bitは手に持ち、腕を振った際の振動を検知、2種類の信号を送信します。それに対して受信側のmicro:bitは頭（帽子）に装着し、受け取った信号に合わせて光り方を変えます。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;h3 id="heading-1">使ったもの&lt;/h3>
-&lt;ul>
-&lt;li>micro:bit 2台（送信用・受信用）&lt;/li>
-&lt;li>バッテリー付属型ケース（&lt;a href="https://www.switch-science.com/catalog/3177/">micro:bit用 bat:bitバッテリーケース&lt;/a>）&lt;/li>
-&lt;li>保護用ケース（&lt;a href="https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-56JT">MI:pro Case for micro:bit&lt;/a>）&lt;/li>
-&lt;li>単3電池ホルダー（&lt;a href="https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-55YE">単3形×2本&lt;/a>）&lt;/li>
-&lt;li>micro:bitを貼り付けるための帽子&lt;/li>
-&lt;/ul>
-&lt;p>手首につける側のmicro:bitは余計なコード類が邪魔にならないよう、バッテリーが一体型のケース&lt;a href="https://www.switch-science.com/catalog/3177/">&lt;strong>bat:bit&lt;/strong>&lt;/a>を利用します。&lt;/p>
-&lt;p>帽子に貼り付ける側は、micro:bitの保護のために&lt;a href="https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-56JT">&lt;strong>MI:pro Case for micro:bit&lt;/strong>&lt;/a>というケースを利用しました。バッテリー付属型のbat:bitは背面が電池ケースになっていて帽子への貼り付けが難しいと感じたため、&lt;strong>取り外し可能な単3電池ホルダーから給電を行うこちらのケース&lt;/strong>を採用しました。&lt;/p>
-&lt;p>重量の分散もできて一石二鳥といった感じです。&lt;/p>
-&lt;h2 id="2microbit">2つのmicro:bitで通信する方法&lt;/h2>
-&lt;p>手に持ったmicro:bitを送信側とし、帽子にくっつけたmicro:bitを受信側として細かい仕様を決めていきます！&lt;/p>
-&lt;p>micro:bitでは2つの通信機能が用意されています。&lt;/p>
-&lt;h3 id="radio">標準搭載の無線（radio）&lt;/h3>
-&lt;p>この無線機能はmicro:bit同士の通信を想定したものとなっており、基本的にPCや他デバイスへの信号の送受信はできません。
-グループを設定するだけで通信を開始できるため、他の通信方式と比較して利用しやすいというメリットがあります。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>無線機能に関して用意されているブロックはピンク色に統一されています。&lt;/p>
-&lt;h3 id="blebluetooth-low-eenergy">BLE（Bluetooth Low Eenergy）&lt;/h3>
-&lt;p>BLEではBluetooth対応のPCやスマートフォンとの通信が可能で、音楽の再生・停止などの特殊なコマンドを使用することができます。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>ブロックコーディングの場合、BLEのブロックは拡張機能として実装されているため、パッケージの追加を行う必要があります。&lt;/p>
-&lt;p>また、&lt;strong>無線機能とBLEを同時に利用することはできない&lt;/strong>ため、注意が必要です。&lt;/p>
-&lt;p>&lt;!-- raw HTML omitted -->
-各通信機能について簡単にまとめると以下のようになります。&lt;/p>
-&lt;table>
-&lt;thead>
-&lt;tr>
-&lt;th align="center">&lt;/th>
-&lt;th align="center">通信先&lt;/th>
-&lt;th align="center">その他の特徴&lt;/th>
-&lt;/tr>
-&lt;/thead>
-&lt;tbody>
-&lt;tr>
-&lt;td align="center">無線通信&lt;/td>
-&lt;td align="center">micro:bitのみ&lt;/td>
-&lt;td align="center">通信するための設定が簡単&lt;/td>
-&lt;/tr>
-&lt;tr>
-&lt;td align="center">BLE&lt;/td>
-&lt;td align="center">PC、スマートフォンなどのBluetooth対応デバイス&lt;/td>
-&lt;td align="center">特殊な命令を送信できる&lt;/td>
-&lt;/tr>
-&lt;/tbody>
-&lt;/table>
-&lt;p>ということで、今回は2台のmicro:bit間のみでの通信を想定しているため、&lt;strong>無線通信を採用&lt;/strong>します！&lt;/p>
-&lt;h2 id="heading-2">制作&lt;/h2>
-&lt;p>今回はブロックコーディングを利用してプログラムを作成します。ブロックコーディングでは、様々な役割を持ったブロックをドラッグ＆ドロップで配置し、プログラムを作成していきます。&lt;/p>
-&lt;h3 id="javascript">JavaScriptブロックコーディング&lt;/h3>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>今回は、送信側の揺れ方（腕の振り方）によって受信側のアイコン表示を変更したいので、右に傾いたときは大きなハートを表示して、左に傾いたときには小さなハートを表示するようなプログラムを作成します。&lt;/p>
-&lt;p>それでは送信側と受信側、それぞれのコードを&lt;a href="https://makecode.microbit.org/#">JavaScriptブロックエディタ&lt;/a>で作っていきましょう！&lt;/p>
-&lt;h3 id="heading-3">送信側を右に傾けたときのコード&lt;/h3>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>送信側のmicro:bitは、本体が右に傾いているか、左に傾いているかを検知して、それに応じた信号を無線通信によって送信します。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>初めに無線のグループ設定をします。「入力」タブから&lt;code>最初だけ&lt;/code>ブロックを配置し、「無線」タブより&lt;code>無線のグループを設定&lt;/code>ブロックを&lt;code>最初だけ&lt;/code>の下に繋げるようにドラッグ&amp;amp;ドロップして配置します。これにより、同じグループに登録されたmicro:bitと通信を行うことができるようになります。&lt;/p>
-&lt;p>続いて、送信側のプログラムでは右に揺れた場合と左に揺れた場合で異なる信号を送信する必要があるので、&lt;code>右に傾けたとき&lt;/code>と&lt;code>左に傾けたとき&lt;/code>のブロックをそれぞれ配置し、送信する信号について考えます。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>「入力」のタブより&lt;code>ゆさぶられたとき&lt;/code>ブロックを取り出し、『ゆさぶられた』ボタンをクリックして、&lt;code>右に傾けたとき&lt;/code>に変更します。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>「無線」タブより&lt;code>無線で文字列を送信&lt;/code>ブロックを繋げます。このブロックでは、送信したい文字列を右側のフォームに直接入力することができます。信号を受信したとき、送信側のmicro:bitが右に傾いたことがわかればよいので、送信する文字列は&amp;quot;right&amp;quot;とします。&lt;/p>
-&lt;p>また、きちんと右に傾いたことを検知し、文字列の送信が行われたかどうかを確認する必要があるので、信号の送信後100ミリ秒だけチェックマークを表示するよう設定します。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>「基本」タブより&lt;code>アイコンを表示&lt;/code>、&lt;code>一時停止（ミリ秒）&lt;/code>、&lt;code>表示を消す&lt;/code>の3ブロックを取り出し、順に配置します。アイコンを表示ブロックも右側のアイコン部分をクリックすることで光り方を変更することができます。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>ということで右に傾けたときのプログラムが完成しました。&lt;/p>
-&lt;h3 id="heading-4">送信側を左に傾けたときのコード&lt;/h3>
-&lt;p>同じようにして左に傾けたときのプログラムも作る……と見せかけて、ブロックエディタでもコピー＆ペーストができるので利用します。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>右クリック（Macなら二本指でトラックパッドをクリック）から「複製する」を選択しましょう。&lt;/p>
-&lt;p>あとはこれまでやってきたことの復習です。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>『右に傾けた』ボタンをクリックして&lt;code>左に傾けたとき&lt;/code>ブロックに変更、今度は左に傾けたときのプログラムなので、&lt;code>無線で文字列を送信&lt;/code>ブロックの文字列を&amp;quot;right&amp;quot;から&amp;quot;left&amp;quot;に書き換えます。&lt;/p>
-&lt;p>これにて送信側のコードは完成です！&lt;/p>
-&lt;p>あとは頑張って書いたコードをダウンロードしてmicro:bitに送りましょう！&lt;/p>
-&lt;h3 id="microbit-2">micro:bitに送信側のプログラムを書き込む&lt;/h3>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>エディタの左下にあるファイル名フォームに名前を入力しますが、ここで注意！　今回は送信側と受信側、2つのプログラムを作成するため、&lt;strong>どちらが送信側及び受信側であるか判別できるように&lt;/strong>名前をつける必要があります。&lt;/p>
-&lt;p>「sender」など、わかりやすい名前をつけてダウンロードボタンをクリックします。&lt;/p>
-&lt;p>続いてUSBケーブルでmicro:bitをコンピュータに接続します。接続が完了すると、Macであればファインダーに、Windowsであればエクスプローラに「MICROBIT」という名前でドライブとして表示されます。&lt;/p>
-&lt;p>ダウンロードしたhexファイルを「MICROBIT」にドラッグ&amp;amp;ドロップすることで書き込みが始まり、背面のLEDが点滅します。点滅が終わったら書き込みが完了し、プログラムが実行状態になります。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;h3 id="heading-5">受信側のコード&lt;/h3>
-&lt;p>さてさて、次は受信側です。受信側ではどのような機能を実装しなければならないか、今一度確認しましょう。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>受け取った信号が右に傾けたことを示すものであった場合、大きなハートをLEDに表示して、左に傾けたことを示すものであった場合は小さなハートをLEDに表示します。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>これまで配置したブロックを削除し、新しくプログラムを作成する際は、画面左上の「プロジェクト」より「新しいプロジェクト」を選択します。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>というわけで、全てのブロックがリセットされました。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>それでは、送信側と同じように無線のグループ設定を行います。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>まずは「無線」タブより、&lt;code>無線で受信したとき receivedString&lt;/code>ブロックを配置します。このブロックは、「無線で信号が送られてきたとき、下に繋がっているブロックを実行する」という通常の働きのほかに、&lt;strong>受信した信号の中身をreceivedStringという変数に入れる&lt;/strong>、という働きをします。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>次に「論理」タブから&lt;code>もし　真　なら　でなければ&lt;/code>ブロックを取り出します。このブロックは条件を設定し、場合によって分岐させるブロックです。&lt;/p>
-&lt;ul>
-&lt;li>もし「受信した文字列」が「&amp;ldquo;right&amp;rdquo;」&lt;/li>
-&lt;li>なら「大きなハートを表示」&lt;/li>
-&lt;li>でなければ「小さなハートを表示」&lt;/li>
-&lt;/ul>
-&lt;p>今回は、上記のような条件分岐を作成します。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>条件式として&lt;code>0 = 0&lt;/code>ブロックを利用します。このブロックは左右に数字同士あるいは文字列同士を繋げることができ、その内容を比較します。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>受信した文字列は&lt;code>receivedString&lt;/code>という変数の中に一時的に保存されているので、ここでは変数&lt;code>receivedString&lt;/code>と、&amp;ldquo;right&amp;quot;という文字列を比較します。&lt;/p>
-&lt;p>&lt;code>receivedString&lt;/code>ブロックは「変数」タブの中から取り出しましょう。&amp;ldquo;right&amp;quot;は「高度なブロック」タブを開き、「文字列」タブの中から空白の文字列を取り出します。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>「文字列」ブロックの中に&amp;quot;right&amp;quot;と入力して条件式に組み込みましょう。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>続いてLEDの光り方の設定です。受信した信号が&amp;quot;right&amp;quot;のとき大きなハートを表示して、それ以外のときは小さなハートを表示するよう設定すればよいので、このようになります。&lt;/p>
-&lt;p>これにて受信側のプログラムも完成です。送信側と同じように「receiver」など判別可能な名前をつけてダウンロードし、受信側のmicro:bitに取り込みましょう。&lt;/p>
-&lt;h2 id="microbit-3">ケースに入れてmicro:bitを保護&lt;/h2>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>受信側のmicro:bitを直で帽子に貼り付けるとショートする可能性があるので、保護ケースとして&lt;a href="https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-56JT">MI:pro Case for micro:bit&lt;/a>を使用します。&lt;/p>
-&lt;p>組み立て方法については&lt;a href="https://www.youtube.com/watch?time_continue=128&amp;amp;v=HYfLv07PGrE">公式動画&lt;/a>がYouTubeにアップロードされているのでここでは割愛します。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>送信側micro:bitも同じく損傷対策として一体型ケースの&lt;a href="https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-57F3">bat:bit&lt;/a>を装着しました。こちらも&lt;a href="https://www.youtube.com/watch?v=hF2uFlwebSA">公式の組み立て解説動画&lt;/a>がYouTubeにアップロードされています。&lt;/p>
-&lt;p>私の場合は一体型ケースを装着したmicro:bitをそのまま持って振りましたが、リストバンドに貼り付けるなどしてもよいかもしれません。&lt;/p>
-&lt;h2 id="heading-6">実際に動かしてみる&lt;/h2>
-&lt;p>受信側micro:bitを帽子にクリップして送信側を左右に傾けてみます。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;h2 id="heading-7">まとめ&lt;/h2>
-&lt;p>非常にシンプルなプログラムではありましたが、radio通信の設定が非常に簡単で使いやすく、スムーズに通信できたのでmicro:bit愛が深まりました。次はBluetooth Low Energyによる通信を試して、micro:bitをより身近なものにしていきたいですね！&lt;/p></description></item><item><title>子供も大人もmicro:bit！基本の操作と初めてのプログラミング</title><link>https://dotstud.io/blog/microbit-getting-started-pokio/</link><pubDate>Mon, 14 May 2018 10:00:00 +0900</pubDate><guid>https://dotstud.io/blog/microbit-getting-started-pokio/</guid><description>&lt;p>こんにちは、ポキオ（&lt;a href="https://twitter.com/pokiiio">@pokiiio&lt;/a>）です。&lt;/p>
-&lt;p>今回は巷で人気なマイコンボードの&lt;strong>micro:bit&lt;/strong>をプログラミングをしてみようと思います。&lt;/p>
-&lt;p>「 &lt;em>&lt;strong>えっ、プログラミングって難しいんでしょ？&lt;/strong>&lt;/em> 」って思われるかも知れません。&lt;/p>
-&lt;p>プログラミングと聞くと、&lt;/p>
-&lt;ul>
-&lt;li>必要なソフトのダウンロードが面倒&lt;/li>
-&lt;li>ソフトやドライバーのインストールが面倒&lt;/li>
-&lt;li>プログラミングの知識が必要そう&lt;/li>
-&lt;/ul>
-&lt;p>と想像してしまいがちですが、&lt;!-- raw HTML omitted -->micro:bitなら簡単にできてしまうんです！&lt;!-- raw HTML omitted -->&lt;/p>
-&lt;p>micro:bitの故郷であるイギリスでは、11歳・12歳の小学生に教育目的で無償で配布されていて、プログラミングの知識がなくても簡単に始められるマイコンボードになっています。&lt;/p>
-&lt;p>小学生だけでなく、普段プログラミングをしない&lt;strong>大人でもハマること間違い無しのmicro:bit&lt;/strong>を、サクッと触ってみましょう！&lt;/p>
-&lt;h2 id="microbit">micro:bitとは？&lt;/h2>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>micro:bitはBBC（英国放送協会）が開発したシングルボードコンピュータで、日本国内でも2000円前後で購入可能です。&lt;em>&lt;strong>お父さんのお小遣いでも買えそうですね！&lt;/strong>&lt;/em>&lt;/p>
-&lt;p>教育目的と謳っていますが、侮ることなかれ。思った以上に高性能です。&lt;/p>
-&lt;ul>
-&lt;li>CPU：ARM Cortex-M0&lt;/li>
-&lt;li>インターフェイス：Bluetooth Low Energy（BLE）、USB&lt;/li>
-&lt;li>入出力：3つのI/Oリング、20ピンのエッジコネクター、25個の赤色LED、2個のボタン&lt;/li>
-&lt;li>センサー：光、温度、加速度、磁力&lt;/li>
-&lt;/ul>
-&lt;p>スマホなどにも採用されている、低消費電力な通信方式であるBLEに最初から対応しているので、スマホと通信したり、micro:bit同士で通信を行ったりということも可能です。&lt;/p>
-&lt;p>また、端子（I/Oリング）はミノムシクリップを挟んで通電できるようになっているので、半田ごて不要で電子工作が楽しめます。また、LEDはマトリックス上に配置されていて、それをつかって文字やマークを表示させることも可能です。&lt;/p>
-&lt;p>入出力も豊富で拡張性が高い上に、各種センサー類も最初からついているので、micro:bitを買えば色々楽しめてしまうのです！&lt;/p>
-&lt;h2 id="microbit-1">micro:bitを触ってみよう！&lt;/h2>
-&lt;p>micro:bitにはデフォルトでサンプルプログラムが入っています。まずはそれを実行してみましょう！&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>サンプルプログラムでは、下記のように、ボタンを使ったり、マトリックスLEDを光らせたり、micro:bitを傾けたり、micro:bitの主な機能を試すことが出来ます。&lt;/p>
-&lt;ul>
-&lt;li>マトリックスLEDが点滅した後「HELLO」と表示される&lt;/li>
-&lt;li>Aボタンを押すように促されるので、Aボタンを押す&lt;/li>
-&lt;li>Bボタンも押すように促されるので、Bボタンを押す&lt;/li>
-&lt;li>「SHAKE!」micro:bitを振る&lt;/li>
-&lt;li>「CHASE THE DOT!」micro:bitを傾けて点滅するドットを追う&lt;/li>
-&lt;li>「NOW GET CODING!」と表示されてチュートリアル終了&lt;/li>
-&lt;/ul>
-&lt;p>このサンプルプログラムですが、&lt;a href="https://support.microbit.org/support/solutions/articles/19000021613-reset-the-micro-bit-to-factory-defaults">このページ&lt;/a>からダウンロード可能なので、いつでもMiro:bitを初期化することができます。&lt;/p>
-&lt;h2 id="microbit-2">micro:bitのプログラミングをしてみよう！&lt;/h2>
-&lt;p>次に、実際にプログラミングして、micro:bitを動かしてみます！&lt;/p>
-&lt;p>micro:bitのプログラミング方法は主に3つです。&lt;/p>
-&lt;ul>
-&lt;li>JavaScript Block Editor&lt;/li>
-&lt;li>Python Editor&lt;/li>
-&lt;li>スマホアプリ&lt;/li>
-&lt;/ul>
-&lt;p>今回は、環境構築不要で、ブラウザだけで簡単にプログラミングができる、&lt;strong>JavaScript Block Editor&lt;/strong> を使ってみようと思います。&lt;/p>
-&lt;h3 id="heading">エディターを開いてみる&lt;/h3>
-&lt;p>一般的なエディターは、ソフトをダウンロードして必要なものをインストールするなど、準備に時間がかかることがありますが、 &lt;strong>JavaScript Block Editor&lt;/strong> はウェブブラウザでサイトにアクセスするだけでプログラミングが開始できます！&lt;/p>
-&lt;p>実際にアクセスして、エディターを開いてみましょう。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>&lt;a href="https://makecode.microbit.org/#lang=ja">このサイト&lt;/a>にアクセスすると、すぐに準備が完了します。&lt;/p>
-&lt;p>エディターは大きく3つのパートに分かれています。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>まず、一番左側にあるのがエミュレーターです。エディターでプログラミングをすると、このエミュレーターで自動的にプログラムが実行され、プログラムの動作イメージを確認することができます。&lt;/p>
-&lt;p>LEDの光らせ方の確認はもちろん、マウスでエミュレーターをドラッグすると傾きを変えられたり、音を出すプログラムを書いたときは、その音の確認もエディター上で可能です。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>次に、エディター中央にあるのがブロックの一覧です。誰でもプログラミングができるように、Micro:bitに命令ができる処理の塊が、ブロックという単位で表現されています。これらのブロックをつなげることで、シンプルなものから複雑なものまで、知識不要でプログラミングができるエディターなのです。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>エディターの右側にあるエリアは、そのブロックを配置してプログラミングする場所です。初めから存在する &lt;strong>「最初だけ」&lt;/strong> と &lt;strong>「ずっと」&lt;/strong> というブロックに、他のブロックをつなげていくことでプログラミングができます。&lt;/p>
-&lt;p>この &lt;strong>「最初だけ」&lt;/strong> は、一度だけ実行させたいブロックをつなげていき、 &lt;strong>「ずっと」&lt;/strong> は繰り返し実行させたいブロックをつなげます。&lt;/p>
-&lt;h3 id="heading-1">エディターでプログラミングしてみよう&lt;/h3>
-&lt;p>それでは、簡単なプログラミングをしてみましょう。micro:bitのLEDにハートマークを表示させてみましょう。&lt;/p>
-&lt;p>まずエディターのメニューの[基本]から[アイコンを表示]というブロックを探します。&lt;/p>
-&lt;p>このブロックをプログラミングエリアの &lt;strong>「最初だけ」&lt;/strong> のブロックにドラッグ・アンド・ドロップして、ブロックとブロックをつなげます。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>アイコンを表示するという処理を、micro:bit起動時に一度だけ実行します。これにより、好きなアイコンをmicro:bitで表示できます。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>ブロック同士が正しくつながると、エミュレーター上でハートマークが表示されているはずです。&lt;/p>
-&lt;p>デフォルトのアイコンはハートマークになっていますが、[アイコンを表示]のブロックのプルダウンメニューを開くと様々なアイコンを選択でき、それを表示することもできます。&lt;/p>
-&lt;p>プログラミングはこれで終了です。&lt;/p>
-&lt;h3 id="microbit-3">作成したプログラムをmicro:bitで動かしてみよう&lt;/h3>
-&lt;p>エディター下部の &lt;strong>「題名未設定」&lt;/strong> と書かれているところに、プログラム名を自由に入力し、[ダウンロード]をクリックします。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>すると、拡張子が.hexなファイルが自動でダウンロードされます。ファイル名には、さきほどのプログラム名が含まれます。このファイルをmicro:bitに転送します。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>micro:bitをパソコンとUSB接続すると、 &lt;strong>MICROBIT&lt;/strong> というドライブとして認識されます。ダウンロードしてきた.hexファイルを、このドライブ直下にコピーすることでプログラムの書き込みが行えます。&lt;/p>
-&lt;!-- raw HTML omitted -->
-&lt;!-- raw HTML omitted -->
-&lt;p>書き込みが完了すると、自動でmicro:bitが再起動します。すると、ハートマークを表示するプログラムが実行されます。&lt;/p>
-&lt;p>今回紹介したのはブロックを積み重ねることによってプログラムする方法でしたが、それを&lt;strong>JavaScriptコードと相互変換&lt;/strong>したり、&lt;strong>最初からJavaScriptやPythonを使ってプログラミング&lt;/strong>することも可能です。&lt;/p>
-&lt;p>&lt;!-- raw HTML omitted -->自分のレベルに応じたプログラミング方法も選べるのも、micro:bitの魅力の一つ&lt;!-- raw HTML omitted -->です。&lt;/p>
-&lt;h2 id="heading-2">まとめ&lt;/h2>
-&lt;p>今回は、簡単なプログラムの作成と実行をしてみました。&lt;/p>
-&lt;p>micro:bitには、LED以外にボタンや種々のセンサー、またGPIOもあります。それらを使えば、「&lt;strong>ボタンを押すとLEDで表示させているマークを変える&lt;/strong>」「&lt;strong>micro:bitを振ったら文字を表示する&lt;/strong>」などの、すこし凝ったプログラミングも可能です。&lt;/p>
-&lt;p>また、スピーカーを端子に接続して音を鳴らしたり、モーターとモータードライバーを接続してラジコンを作ることだって可能で、無限の楽しみ方ができます。&lt;/p>
-&lt;p>次回はmicro:bitにスピーカーを接続して、音を鳴らしてみましょう！&lt;/p></description></item></channel></rss>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>microbit on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/microbit/</link><description>Recent content in microbit on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Sun, 14 Apr 2019 00:00:00 +0000</lastBuildDate><atom:link href="/series/microbit/" rel="self" type="application/rss+xml"/><item><title>光るサンドバッグ作って◯-monsterの気分を感じたい！</title><link>https://dotstud.io/blog/shining-sandbag-like-bmonster/</link><pubDate>Sun, 14 Apr 2019 00:00:00 +0000</pubDate><guid>https://dotstud.io/blog/shining-sandbag-like-bmonster/</guid><description>
+&lt;p&gt;プログラミングをしていると運動不足になりがちです。&lt;/p&gt;
+&lt;p&gt;何か作っている時のストレスもあります。（なんで動かないんだーってw）&lt;/p&gt;
+&lt;p&gt;ストレス発散したい！&lt;/p&gt;
+&lt;p&gt;手っ取り早くストレス発散して運動ができるのは何でしょう、、サンドバック殴ることですよね！&lt;br /&gt;
+（この辺りから、B-◯onsterっぽくしたい欲が出てきます笑）&lt;/p&gt;
+&lt;p&gt;サンドバックを買って、叩く毎に光ったり音鳴ったりしたら良い気晴らしになるんじゃないかと。&lt;/p&gt;
+&lt;p&gt;ということで、&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;光るサンドバッグを作ってB-Mons◯erに行った感じを味わいたい！！！&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;ではでは、作っていきましょう&lt;/p&gt;
+&lt;h2 id=&#34;完成物のイメージ&#34;&gt;完成物のイメージ&lt;/h2&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/248/1.png&#34; alt=&#34;1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;パンチしたら全体が光る。&lt;/em&gt;&lt;/strong&gt;
+→この記事では、加速度センサを使って音を鳴らすまで作ってみます。仕様としては以下のことができたら達成とします。&lt;/p&gt;
+&lt;p&gt;・サンドバックを叩いたら、音が出る&lt;br /&gt;
+・５回叩いたら、音が変わる。&lt;br /&gt;
+・10回叩いたら、音楽が鳴る。&lt;/p&gt;
+&lt;h2 id=&#34;必要な物&#34;&gt;必要な物&lt;/h2&gt;
+&lt;p&gt;・サンドバック&lt;br /&gt;
+・microbit&lt;br /&gt;
+・電子ブザー&lt;br /&gt;
+・Micro USB Micro-B&lt;br /&gt;
+・ワニ口クリップ&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/248/2.png&#34; alt=&#34;2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;h2 id=&#34;サンドバックを作ってみる&#34;&gt;サンドバックを作ってみる&lt;/h2&gt;
+&lt;p&gt;まずは、サンドバックを作っていきましょう。&lt;br /&gt;
+これを買ってみました（&lt;a href=&#34;http://urx.space/U1ry）&#34;&gt;http://urx.space/U1ry）&lt;/a&gt;&lt;br /&gt;
+開けけてみて思ったのですが、なかなかしっかりしてて良い感じのサンドバックです。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/248/3.png&#34; alt=&#34;3&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;中身を確認して、作っていきましょう！！！&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/248/4.png&#34; alt=&#34;4&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;水を使って土台を作るタイプなので、屋外でやりましょう（じゃないと母ちゃんに怒られますよ笑）&lt;br /&gt;
+＊ペットボトルたちは猫避けではなく、土台に使う水です。&lt;br /&gt;
+凝固剤も入っていて、なかなか本格的！&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/248/5.png&#34; alt=&#34;5&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;土台ができたら、膨らましていきましょう！&lt;br /&gt;
+（なんか、いかがわしい形と動きをしますが、、下ネタご了承ください）&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/248/6.png&#34; alt=&#34;6&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;良い感じに膨らんだらサンドバックは完成です&lt;br /&gt;
+センサに移りましょう&lt;/p&gt;
+&lt;h2 id=&#34;センサを作ってみる&#34;&gt;センサを作ってみる&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;・micro softアカウントを作ってサインイン&lt;/strong&gt;
+microbitはBBCが作ってる教育用のマイコンでして、&lt;br /&gt;
+マイクロソフトアカウントが必要なので、持ってない人は作りましょう。&lt;br /&gt;
+ここから作れます。&lt;a href=&#34;https://microbit.org/ja/guide/&#34;&gt;https://microbit.org/ja/guide/&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/248/7.png&#34; alt=&#34;7&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;・make code エディターでコードを編集します。&lt;/strong&gt;
+microbitにコードを書き込むには３つの方法があります。&lt;/p&gt;
+&lt;p&gt;JSやPythonで書くこともできますが、一番簡単なのはmake code エディターのブロックで入力することです。&lt;br /&gt;
+このエディターを使えば、こんな感じで簡単にコードを書くことができます。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/248/8.png&#34; alt=&#34;8&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;ブロックの意味はJSを書いたことなくてもわかるかも。&lt;/p&gt;
+&lt;p&gt;マイプロジェクトから新しいプロジェクトを開いて作っていきます。&lt;/p&gt;
+&lt;p&gt;「ずっと」のブロックをここでは2つ作ります。&lt;br /&gt;
+　・カウントする「ずっと」&lt;br /&gt;
+　・音を鳴らすための「ずっと」&lt;br /&gt;
+＊１つにまとめるのもできると思いますが、わかり安かったので分けました。&lt;/p&gt;
+&lt;p&gt;カウントする「ずっと」の方に、accXという変数を作り、加速度Xという入力ブロックを追加します。&lt;br /&gt;
+そして、「もし」ブロックで、accXが500未満であればLEDが点灯し、音楽が鳴るブロックにしていきます。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/248/9.png&#34; alt=&#34;9&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;音を鳴らすための「ずっと」ブロックを作っていきます。&lt;br /&gt;
+まず、「最初だけ」ブロックに変数カウントを0にして置いておきます。&lt;br /&gt;
+そして、カウントする「ずっと」の方に「もし」ブロックを入れて5回いった時と10回いった時にLEDの点灯と音楽が鳴るようにします。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/248/10.png&#34; alt=&#34;10&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/248/11.png&#34; alt=&#34;11&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;・microbitとブザーを繋げます&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/248/12.png&#34; alt=&#34;12&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;おお、っぽくなってきました！&lt;/p&gt;
+&lt;p&gt;そして、サンドバックに貼り付ければ、、、&lt;/p&gt;
+&lt;h2 id=&#34;できました&#34;&gt;できました！！&lt;/h2&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/248/13.png&#34; alt=&#34;13&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;・デモ動画&lt;/strong&gt;
+&lt;a href=&#34;http://www.youtube.com/watch?v=it0159iWUrQ&#34;&gt;&lt;img src=&#34;http://img.youtube.com/vi/it0159iWUrQ/0.jpg&#34; alt=&#34;IMAGE ALT TEXT HERE&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;あとがき-挫折の数々&#34;&gt;[あとがき] 挫折の数々&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;・最初のイメージを捨てました&lt;/strong&gt;
+最初は単純に光るだけのサンドバックデバイスを作ろうと思っていました。でも、プロトタイプを作る際にLEDが光るだけだと、サンドバックを叩いた時にLEDの光を確認できないんですよねww&lt;/p&gt;
+&lt;p&gt;なので、一緒に音も出るように変更しました。&lt;br /&gt;
+そのおかげで、ゲーム性が高くなって良い感じになりました。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;・使う物を変えました&lt;/strong&gt;
+最初、microbitではなくwio nodeとグローブで作ろうとしてました。&lt;br /&gt;
+でも、「加速度センサ使ってプロトタイプ作るだけならmicrobitで良いんじゃね？」とのびすけしゃちょーにアドバイスもらい試しに使うことにしました。&lt;/p&gt;
+&lt;p&gt;結局、変えてみてよかったです！&lt;br /&gt;
+microbitはものすごく使いやすい。デプロイの仕方も編集したブロックのhexファイル（microbit用のファイル）をmicrobitのフォルダに入れるだけでできます。&lt;br /&gt;
+全部のプログラミングがこうなれば良いのに、、って思うぐらいプログラミングしやすかったです。&lt;/p&gt;</description></item><item><title>micro:bit同士で通信してみよう！腕の動きに合わせて光る帽子の作り方</title><link>https://dotstud.io/blog/microbit-flickering-light-hat/</link><pubDate>Tue, 29 May 2018 10:40:00 +0900</pubDate><guid>https://dotstud.io/blog/microbit-flickering-light-hat/</guid><description>
+&lt;p&gt;はじめまして、りんろくです。&lt;/p&gt;
+&lt;p&gt;マイコンボード初心者ながらmicro:bitのデザインやサイズ感がすごく好きで、四苦八苦しながらちょっとしたゲームを作ったり、LEDをチカチカさせてみたりしています！&lt;/p&gt;
+&lt;p&gt;そんな私ですが、机の上で触っているだけでなく、いつかmicro:bitを外に持ち出せるアイテムとして使えないかなあ……と漠然と思っていました。&lt;/p&gt;
+&lt;p&gt;ぼーっとmicro:bitのことを考えていたある日、音楽をやっている知り合いから、数日後のライブに出演するという連絡とともに、&lt;/p&gt;
+&lt;p&gt;「ステージから発見できるぐらいの&lt;strong&gt;ちょっと&lt;/strong&gt;目立つアイテムを身につけてきてよ！」&lt;/p&gt;
+&lt;p&gt;とのお達しが。&lt;/p&gt;
+&lt;p&gt;これはmicro:bitを実戦投入するしかない！この機を逃してはならない！と思いついた私は、その瞬間から動き出しました。&lt;/p&gt;
+&lt;p&gt;ということで今回はmicro:bitのチュートリアルも兼ねて、micro:bitを2台使用し、&lt;strong&gt;腕の動きに合わせて光り方を変える帽子を作っていきたい&lt;/strong&gt;と思います！&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/1.png&#34; alt=&#34;1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;h2 id=&#34;micro-bitとは&#34;&gt;micro:bitとは&lt;/h2&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/2.png&#34; alt=&#34;2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;今回使用する&lt;a href=&#34;http://microbit.org/ja/guide/&#34;&gt;micro:bit&lt;/a&gt;はイギリス発の教育用マイコンボードです。イギリスで11歳と12歳の小学生に無料配布されたことが話題になりました。&lt;/p&gt;
+&lt;p&gt;micro:bitには、温度計や加速度センサーを初めとした&lt;a href=&#34;http://microbit.org/ja/guide/features/&#34;&gt;様々な機能&lt;/a&gt;が搭載されており、簡単に制御することができます。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/3.png&#34; alt=&#34;3&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;また、micro:bitの特徴の一つとして、様々な機能やイベントを表したブロックを配置することによってプログラムを作成する&lt;strong&gt;ブロックコーディングを採用していること&lt;/strong&gt;が挙げられます（JavaScriptやPythonを用いてコーディングすることも可能です）。&lt;/p&gt;
+&lt;p&gt;概要や基本の操作方法はこちらの記事でも紹介しています。&lt;/p&gt;
+&lt;section class=&#34;link&#34; id=&#34;165&#34;&gt;
+&lt;/section&gt;
+&lt;h3 id=&#34;micro-bitのここが良い&#34;&gt;micro:bitのここが良い！&lt;/h3&gt;
+&lt;p&gt;先に言及した通り、micro:bitはイギリスでは無料配布された有名なマイコンボードです。しかしながら日本では未だ広く知られているとは言えません。ではなぜ私はmicro:bitを使うのか、なぜ紹介記事を書いているのか。&lt;/p&gt;
+&lt;p&gt;それにはもちろん理由があります。&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;とにかく安い&#34;&gt;■ とにかく安い！&lt;/h4&gt;
+&lt;p&gt;ArduinoやRaspberry Piといった、現在の主流と言えるマイコンボードが3000円〜6000円程度の価格設定であるのに対し、&lt;strong&gt;micro:bitは2000円前後で買えます！&lt;/strong&gt; とりあえず買ってからどう使うか考えましょう！&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;webコーディングのため環境構築不要&#34;&gt;■ Webコーディングのため環境構築不要！&lt;/h4&gt;
+&lt;p&gt;多くのマイコンボードは、プログラミングする際に制御用ソフトウェアのインストールなどの手順を踏む必要があります。&lt;/p&gt;
+&lt;p&gt;しかしながら！&lt;/p&gt;
+&lt;p&gt;Webコーディングの場合、ネット環境さえあればWebページにアクセスするだけでプログラムを作り始めることができるのです！&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;ledがいっぱいある&#34;&gt;■ LEDがいっぱいある！&lt;/h4&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/4.png&#34; alt=&#34;4&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;LEDが25個搭載されており、自分の好きなマークや文字列を表現することができます！また、光らせたいLEDを自分で選択するほか、いくつかのマークは初めから用意されているため簡単に制御できます！&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;
+以上3点のポイントが、私がmicro:bitを愛する理由です。&lt;/p&gt;
+&lt;p&gt;そうなのです。とにかく「&lt;strong&gt;ハードルが低い&lt;/strong&gt;」という点においてmicro:bitは非常に優秀なのです！&lt;/p&gt;
+&lt;p&gt;この記事は、micro:bitの諸機能のうち、最も難しい（ように思われるであろう）通信機能に焦点を当てています。&lt;/p&gt;
+&lt;p&gt;私もmicro:bitを購入して、様々なプログラムについて触れたあと、通信機能だけが難解であるように感じました。しかし実際にプログラムを作成してみると、そんなことはないのです。&lt;/p&gt;
+&lt;p&gt;この記事を読み終わり、自分の手で通信機能を制御したとき、きっとmicro:bitが「触れやすい」マイコンボードであると感じるはずです。&lt;/p&gt;
+&lt;h2 id=&#34;全体の流れ&#34;&gt;全体の流れ&lt;/h2&gt;
+&lt;p&gt;今回は送信用、受信用としてmicro:bit2台を準備します。&lt;/p&gt;
+&lt;p&gt;送信側のmicro:bitは手に持ち、腕を振った際の振動を検知、2種類の信号を送信します。それに対して受信側のmicro:bitは頭（帽子）に装着し、受け取った信号に合わせて光り方を変えます。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/5.png&#34; alt=&#34;5&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;h3 id=&#34;使ったもの&#34;&gt;使ったもの&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;micro:bit 2台（送信用・受信用）&lt;/li&gt;
+&lt;li&gt;バッテリー付属型ケース（&lt;a href=&#34;https://www.switch-science.com/catalog/3177/&#34;&gt;micro:bit用 bat:bitバッテリーケース&lt;/a&gt;）&lt;/li&gt;
+&lt;li&gt;保護用ケース（&lt;a href=&#34;https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-56JT&#34;&gt;MI:pro Case for micro:bit&lt;/a&gt;）&lt;/li&gt;
+&lt;li&gt;単3電池ホルダー（&lt;a href=&#34;https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-55YE&#34;&gt;単3形×2本&lt;/a&gt;）&lt;/li&gt;
+&lt;li&gt;micro:bitを貼り付けるための帽子&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;手首につける側のmicro:bitは余計なコード類が邪魔にならないよう、バッテリーが一体型のケース&lt;a href=&#34;https://www.switch-science.com/catalog/3177/&#34;&gt;&lt;strong&gt;bat:bit&lt;/strong&gt;&lt;/a&gt;を利用します。&lt;/p&gt;
+&lt;p&gt;帽子に貼り付ける側は、micro:bitの保護のために&lt;a href=&#34;https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-56JT&#34;&gt;&lt;strong&gt;MI:pro Case for micro:bit&lt;/strong&gt;&lt;/a&gt;というケースを利用しました。バッテリー付属型のbat:bitは背面が電池ケースになっていて帽子への貼り付けが難しいと感じたため、&lt;strong&gt;取り外し可能な単3電池ホルダーから給電を行うこちらのケース&lt;/strong&gt;を採用しました。&lt;/p&gt;
+&lt;p&gt;重量の分散もできて一石二鳥といった感じです。&lt;/p&gt;
+&lt;h2 id=&#34;2つのmicro-bitで通信する方法&#34;&gt;2つのmicro:bitで通信する方法&lt;/h2&gt;
+&lt;p&gt;手に持ったmicro:bitを送信側とし、帽子にくっつけたmicro:bitを受信側として細かい仕様を決めていきます！&lt;/p&gt;
+&lt;p&gt;micro:bitでは2つの通信機能が用意されています。&lt;/p&gt;
+&lt;h3 id=&#34;標準搭載の無線-radio&#34;&gt;標準搭載の無線（radio）&lt;/h3&gt;
+&lt;p&gt;この無線機能はmicro:bit同士の通信を想定したものとなっており、基本的にPCや他デバイスへの信号の送受信はできません。
+グループを設定するだけで通信を開始できるため、他の通信方式と比較して利用しやすいというメリットがあります。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/6.png&#34; alt=&#34;6&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;無線機能に関して用意されているブロックはピンク色に統一されています。&lt;/p&gt;
+&lt;h3 id=&#34;ble-bluetooth-low-eenergy&#34;&gt;BLE（Bluetooth Low Eenergy）&lt;/h3&gt;
+&lt;p&gt;BLEではBluetooth対応のPCやスマートフォンとの通信が可能で、音楽の再生・停止などの特殊なコマンドを使用することができます。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/7.png&#34; alt=&#34;7&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;ブロックコーディングの場合、BLEのブロックは拡張機能として実装されているため、パッケージの追加を行う必要があります。&lt;/p&gt;
+&lt;p&gt;また、&lt;strong&gt;無線機能とBLEを同時に利用することはできない&lt;/strong&gt;ため、注意が必要です。&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt;
+各通信機能について簡単にまとめると以下のようになります。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th align=&#34;center&#34;&gt;&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;通信先&lt;/th&gt;
+&lt;th align=&#34;center&#34;&gt;その他の特徴&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;無線通信&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;micro:bitのみ&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;通信するための設定が簡単&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td align=&#34;center&#34;&gt;BLE&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;PC、スマートフォンなどのBluetooth対応デバイス&lt;/td&gt;
+&lt;td align=&#34;center&#34;&gt;特殊な命令を送信できる&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;ということで、今回は2台のmicro:bit間のみでの通信を想定しているため、&lt;strong&gt;無線通信を採用&lt;/strong&gt;します！&lt;/p&gt;
+&lt;h2 id=&#34;制作&#34;&gt;制作&lt;/h2&gt;
+&lt;p&gt;今回はブロックコーディングを利用してプログラムを作成します。ブロックコーディングでは、様々な役割を持ったブロックをドラッグ＆ドロップで配置し、プログラムを作成していきます。&lt;/p&gt;
+&lt;h3 id=&#34;javascriptブロックコーディング&#34;&gt;JavaScriptブロックコーディング&lt;/h3&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/8.png&#34; alt=&#34;8&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;今回は、送信側の揺れ方（腕の振り方）によって受信側のアイコン表示を変更したいので、右に傾いたときは大きなハートを表示して、左に傾いたときには小さなハートを表示するようなプログラムを作成します。&lt;/p&gt;
+&lt;p&gt;それでは送信側と受信側、それぞれのコードを&lt;a href=&#34;https://makecode.microbit.org/#&#34;&gt;JavaScriptブロックエディタ&lt;/a&gt;で作っていきましょう！&lt;/p&gt;
+&lt;h3 id=&#34;送信側を右に傾けたときのコード&#34;&gt;送信側を右に傾けたときのコード&lt;/h3&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/9.png&#34; alt=&#34;9&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;送信側のmicro:bitは、本体が右に傾いているか、左に傾いているかを検知して、それに応じた信号を無線通信によって送信します。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/10.png&#34; alt=&#34;10&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;初めに無線のグループ設定をします。「入力」タブから&lt;code&gt;最初だけ&lt;/code&gt;ブロックを配置し、「無線」タブより&lt;code&gt;無線のグループを設定&lt;/code&gt;ブロックを&lt;code&gt;最初だけ&lt;/code&gt;の下に繋げるようにドラッグ&amp;amp;ドロップして配置します。これにより、同じグループに登録されたmicro:bitと通信を行うことができるようになります。&lt;/p&gt;
+&lt;p&gt;続いて、送信側のプログラムでは右に揺れた場合と左に揺れた場合で異なる信号を送信する必要があるので、&lt;code&gt;右に傾けたとき&lt;/code&gt;と&lt;code&gt;左に傾けたとき&lt;/code&gt;のブロックをそれぞれ配置し、送信する信号について考えます。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/11.png&#34; alt=&#34;11&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;「入力」のタブより&lt;code&gt;ゆさぶられたとき&lt;/code&gt;ブロックを取り出し、『ゆさぶられた』ボタンをクリックして、&lt;code&gt;右に傾けたとき&lt;/code&gt;に変更します。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/12.png&#34; alt=&#34;12&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;「無線」タブより&lt;code&gt;無線で文字列を送信&lt;/code&gt;ブロックを繋げます。このブロックでは、送信したい文字列を右側のフォームに直接入力することができます。信号を受信したとき、送信側のmicro:bitが右に傾いたことがわかればよいので、送信する文字列は&amp;rdquo;right&amp;rdquo;とします。&lt;/p&gt;
+&lt;p&gt;また、きちんと右に傾いたことを検知し、文字列の送信が行われたかどうかを確認する必要があるので、信号の送信後100ミリ秒だけチェックマークを表示するよう設定します。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/13.png&#34; alt=&#34;13&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;「基本」タブより&lt;code&gt;アイコンを表示&lt;/code&gt;、&lt;code&gt;一時停止（ミリ秒）&lt;/code&gt;、&lt;code&gt;表示を消す&lt;/code&gt;の3ブロックを取り出し、順に配置します。アイコンを表示ブロックも右側のアイコン部分をクリックすることで光り方を変更することができます。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/14.png&#34; alt=&#34;14&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;ということで右に傾けたときのプログラムが完成しました。&lt;/p&gt;
+&lt;h3 id=&#34;送信側を左に傾けたときのコード&#34;&gt;送信側を左に傾けたときのコード&lt;/h3&gt;
+&lt;p&gt;同じようにして左に傾けたときのプログラムも作る……と見せかけて、ブロックエディタでもコピー＆ペーストができるので利用します。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/15.png&#34; alt=&#34;15&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;右クリック（Macなら二本指でトラックパッドをクリック）から「複製する」を選択しましょう。&lt;/p&gt;
+&lt;p&gt;あとはこれまでやってきたことの復習です。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/16.png&#34; alt=&#34;16&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;『右に傾けた』ボタンをクリックして&lt;code&gt;左に傾けたとき&lt;/code&gt;ブロックに変更、今度は左に傾けたときのプログラムなので、&lt;code&gt;無線で文字列を送信&lt;/code&gt;ブロックの文字列を&amp;rdquo;right&amp;rdquo;から&amp;rdquo;left&amp;rdquo;に書き換えます。&lt;/p&gt;
+&lt;p&gt;これにて送信側のコードは完成です！&lt;/p&gt;
+&lt;p&gt;あとは頑張って書いたコードをダウンロードしてmicro:bitに送りましょう！&lt;/p&gt;
+&lt;h3 id=&#34;micro-bitに送信側のプログラムを書き込む&#34;&gt;micro:bitに送信側のプログラムを書き込む&lt;/h3&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/17.png&#34; alt=&#34;17&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;エディタの左下にあるファイル名フォームに名前を入力しますが、ここで注意！　今回は送信側と受信側、2つのプログラムを作成するため、&lt;strong&gt;どちらが送信側及び受信側であるか判別できるように&lt;/strong&gt;名前をつける必要があります。&lt;/p&gt;
+&lt;p&gt;「sender」など、わかりやすい名前をつけてダウンロードボタンをクリックします。&lt;/p&gt;
+&lt;p&gt;続いてUSBケーブルでmicro:bitをコンピュータに接続します。接続が完了すると、Macであればファインダーに、Windowsであればエクスプローラに「MICROBIT」という名前でドライブとして表示されます。&lt;/p&gt;
+&lt;p&gt;ダウンロードしたhexファイルを「MICROBIT」にドラッグ&amp;amp;ドロップすることで書き込みが始まり、背面のLEDが点滅します。点滅が終わったら書き込みが完了し、プログラムが実行状態になります。&lt;/p&gt;
+&lt;p&gt;&lt;font size=&#34;2&#34;&gt;
+注意：micro:bitは&lt;strong&gt;プログラムの保存機能を持たないため、一度書き込んだプログラムを取り出すことはできません&lt;/strong&gt;。
+&lt;/font&gt;&lt;/p&gt;
+&lt;h3 id=&#34;受信側のコード&#34;&gt;受信側のコード&lt;/h3&gt;
+&lt;p&gt;さてさて、次は受信側です。受信側ではどのような機能を実装しなければならないか、今一度確認しましょう。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/18.png&#34; alt=&#34;18&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;受け取った信号が右に傾けたことを示すものであった場合、大きなハートをLEDに表示して、左に傾けたことを示すものであった場合は小さなハートをLEDに表示します。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/19.png&#34; alt=&#34;19&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;これまで配置したブロックを削除し、新しくプログラムを作成する際は、画面左上の「プロジェクト」より「新しいプロジェクト」を選択します。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/20.png&#34; alt=&#34;20&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;というわけで、全てのブロックがリセットされました。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/21.png&#34; alt=&#34;21&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;それでは、送信側と同じように無線のグループ設定を行います。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/22.png&#34; alt=&#34;22&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;まずは「無線」タブより、&lt;code&gt;無線で受信したとき receivedString&lt;/code&gt;ブロックを配置します。このブロックは、「無線で信号が送られてきたとき、下に繋がっているブロックを実行する」という通常の働きのほかに、&lt;strong&gt;受信した信号の中身をreceivedStringという変数に入れる&lt;/strong&gt;、という働きをします。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/23.png&#34; alt=&#34;23&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;次に「論理」タブから&lt;code&gt;もし　真　なら　でなければ&lt;/code&gt;ブロックを取り出します。このブロックは条件を設定し、場合によって分岐させるブロックです。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;もし「受信した文字列」が「&amp;rdquo;right&amp;rdquo;」&lt;/li&gt;
+&lt;li&gt;なら「大きなハートを表示」&lt;/li&gt;
+&lt;li&gt;でなければ「小さなハートを表示」&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;今回は、上記のような条件分岐を作成します。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/24.png&#34; alt=&#34;24&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;条件式として&lt;code&gt;0 = 0&lt;/code&gt;ブロックを利用します。このブロックは左右に数字同士あるいは文字列同士を繋げることができ、その内容を比較します。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/25.png&#34; alt=&#34;25&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;受信した文字列は&lt;code&gt;receivedString&lt;/code&gt;という変数の中に一時的に保存されているので、ここでは変数&lt;code&gt;receivedString&lt;/code&gt;と、&amp;rdquo;right&amp;rdquo;という文字列を比較します。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;receivedString&lt;/code&gt;ブロックは「変数」タブの中から取り出しましょう。&amp;rdquo;right&amp;rdquo;は「高度なブロック」タブを開き、「文字列」タブの中から空白の文字列を取り出します。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/26.png&#34; alt=&#34;26&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;「文字列」ブロックの中に&amp;rdquo;right&amp;rdquo;と入力して条件式に組み込みましょう。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/27.png&#34; alt=&#34;27&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;続いてLEDの光り方の設定です。受信した信号が&amp;rdquo;right&amp;rdquo;のとき大きなハートを表示して、それ以外のときは小さなハートを表示するよう設定すればよいので、このようになります。&lt;/p&gt;
+&lt;p&gt;これにて受信側のプログラムも完成です。送信側と同じように「receiver」など判別可能な名前をつけてダウンロードし、受信側のmicro:bitに取り込みましょう。&lt;/p&gt;
+&lt;h2 id=&#34;ケースに入れてmicro-bitを保護&#34;&gt;ケースに入れてmicro:bitを保護&lt;/h2&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/28.png&#34; alt=&#34;28&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;受信側のmicro:bitを直で帽子に貼り付けるとショートする可能性があるので、保護ケースとして&lt;a href=&#34;https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-56JT&#34;&gt;MI:pro Case for micro:bit&lt;/a&gt;を使用します。&lt;/p&gt;
+&lt;p&gt;組み立て方法については&lt;a href=&#34;https://www.youtube.com/watch?time_continue=128&amp;amp;v=HYfLv07PGrE&#34;&gt;公式動画&lt;/a&gt;がYouTubeにアップロードされているのでここでは割愛します。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/166/29.png&#34; alt=&#34;29&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;送信側micro:bitも同じく損傷対策として一体型ケースの&lt;a href=&#34;https://www.sengoku.co.jp/mod/sgk_cart/detail.php?code=EEHD-57F3&#34;&gt;bat:bit&lt;/a&gt;を装着しました。こちらも&lt;a href=&#34;https://www.youtube.com/watch?v=hF2uFlwebSA&#34;&gt;公式の組み立て解説動画&lt;/a&gt;がYouTubeにアップロードされています。&lt;/p&gt;
+&lt;p&gt;私の場合は一体型ケースを装着したmicro:bitをそのまま持って振りましたが、リストバンドに貼り付けるなどしてもよいかもしれません。&lt;/p&gt;
+&lt;h2 id=&#34;実際に動かしてみる&#34;&gt;実際に動かしてみる&lt;/h2&gt;
+&lt;p&gt;受信側micro:bitを帽子にクリップして送信側を左右に傾けてみます。
+&lt;center&gt;
+&lt;iframe width=&#34;560&#34; height=&#34;315&#34; src=&#34;https://www.youtube.com/embed/H3X1HQ2n8XE&#34; frameborder=&#34;0&#34; allow=&#34;autoplay; encrypted-media&#34; allowfullscreen&gt;&lt;/iframe&gt;
+&lt;/center&gt;
+右に傾けると大きなハート、左に傾けると小さなハートを表示させることができました！&lt;/p&gt;
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;非常にシンプルなプログラムではありましたが、radio通信の設定が非常に簡単で使いやすく、スムーズに通信できたのでmicro:bit愛が深まりました。次はBluetooth Low Energyによる通信を試して、micro:bitをより身近なものにしていきたいですね！&lt;/p&gt;</description></item><item><title>子供も大人もmicro:bit！基本の操作と初めてのプログラミング</title><link>https://dotstud.io/blog/microbit-getting-started-pokio/</link><pubDate>Mon, 14 May 2018 10:00:00 +0900</pubDate><guid>https://dotstud.io/blog/microbit-getting-started-pokio/</guid><description>
+&lt;p&gt;こんにちは、ポキオ（&lt;a href=&#34;https://twitter.com/pokiiio&#34;&gt;@pokiiio&lt;/a&gt;）です。&lt;/p&gt;
+&lt;p&gt;今回は巷で人気なマイコンボードの&lt;strong&gt;micro:bit&lt;/strong&gt;をプログラミングをしてみようと思います。&lt;/p&gt;
+&lt;p&gt;「 &lt;strong&gt;&lt;em&gt;えっ、プログラミングって難しいんでしょ？&lt;/em&gt;&lt;/strong&gt; 」って思われるかも知れません。&lt;/p&gt;
+&lt;p&gt;プログラミングと聞くと、&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;必要なソフトのダウンロードが面倒&lt;/li&gt;
+&lt;li&gt;ソフトやドライバーのインストールが面倒&lt;/li&gt;
+&lt;li&gt;プログラミングの知識が必要そう&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;と想像してしまいがちですが、&lt;u&gt;micro:bitなら簡単にできてしまうんです！&lt;/u&gt;&lt;/p&gt;
+&lt;p&gt;micro:bitの故郷であるイギリスでは、11歳・12歳の小学生に教育目的で無償で配布されていて、プログラミングの知識がなくても簡単に始められるマイコンボードになっています。&lt;/p&gt;
+&lt;p&gt;小学生だけでなく、普段プログラミングをしない&lt;strong&gt;大人でもハマること間違い無しのmicro:bit&lt;/strong&gt;を、サクッと触ってみましょう！&lt;/p&gt;
+&lt;h2 id=&#34;micro-bitとは&#34;&gt;micro:bitとは？&lt;/h2&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/165/microbit.png&#34; alt=&#34;microbit&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;micro:bitはBBC（英国放送協会）が開発したシングルボードコンピュータで、日本国内でも2000円前後で購入可能です。&lt;strong&gt;&lt;em&gt;お父さんのお小遣いでも買えそうですね！&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;教育目的と謳っていますが、侮ることなかれ。思った以上に高性能です。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;CPU：ARM Cortex-M0&lt;/li&gt;
+&lt;li&gt;インターフェイス：Bluetooth Low Energy（BLE）、USB&lt;/li&gt;
+&lt;li&gt;入出力：3つのI/Oリング、20ピンのエッジコネクター、25個の赤色LED、2個のボタン&lt;/li&gt;
+&lt;li&gt;センサー：光、温度、加速度、磁力&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;スマホなどにも採用されている、低消費電力な通信方式であるBLEに最初から対応しているので、スマホと通信したり、micro:bit同士で通信を行ったりということも可能です。&lt;/p&gt;
+&lt;p&gt;また、端子（I/Oリング）はミノムシクリップを挟んで通電できるようになっているので、半田ごて不要で電子工作が楽しめます。また、LEDはマトリックス上に配置されていて、それをつかって文字やマークを表示させることも可能です。&lt;/p&gt;
+&lt;p&gt;入出力も豊富で拡張性が高い上に、各種センサー類も最初からついているので、micro:bitを買えば色々楽しめてしまうのです！&lt;/p&gt;
+&lt;h2 id=&#34;micro-bitを触ってみよう&#34;&gt;micro:bitを触ってみよう！&lt;/h2&gt;
+&lt;p&gt;micro:bitにはデフォルトでサンプルプログラムが入っています。まずはそれを実行してみましょう！&lt;/p&gt;
+&lt;p&gt;&lt;font size=&#34;2&#34;&gt;
+（モバイルバッテリーをUSB接続をしたり、別売りのバッテリーモジュールを使って給電をしたりする方法がありますが、今回は&lt;strong&gt;PCとUSB接続することでPCから給電&lt;/strong&gt;してみます。）
+&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/165/setup.png&#34; alt=&#34;setup&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;サンプルプログラムでは、下記のように、ボタンを使ったり、マトリックスLEDを光らせたり、micro:bitを傾けたり、micro:bitの主な機能を試すことが出来ます。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;マトリックスLEDが点滅した後「HELLO」と表示される&lt;/li&gt;
+&lt;li&gt;Aボタンを押すように促されるので、Aボタンを押す&lt;/li&gt;
+&lt;li&gt;Bボタンも押すように促されるので、Bボタンを押す&lt;/li&gt;
+&lt;li&gt;「SHAKE!」micro:bitを振る&lt;/li&gt;
+&lt;li&gt;「CHASE THE DOT!」micro:bitを傾けて点滅するドットを追う&lt;/li&gt;
+&lt;li&gt;「NOW GET CODING!」と表示されてチュートリアル終了&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;このサンプルプログラムですが、&lt;a href=&#34;https://support.microbit.org/support/solutions/articles/19000021613-reset-the-micro-bit-to-factory-defaults&#34;&gt;このページ&lt;/a&gt;からダウンロード可能なので、いつでもMiro:bitを初期化することができます。&lt;/p&gt;
+&lt;h2 id=&#34;micro-bitのプログラミングをしてみよう&#34;&gt;micro:bitのプログラミングをしてみよう！&lt;/h2&gt;
+&lt;p&gt;次に、実際にプログラミングして、micro:bitを動かしてみます！&lt;/p&gt;
+&lt;p&gt;micro:bitのプログラミング方法は主に3つです。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;JavaScript Block Editor&lt;/li&gt;
+&lt;li&gt;Python Editor&lt;/li&gt;
+&lt;li&gt;スマホアプリ&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;今回は、環境構築不要で、ブラウザだけで簡単にプログラミングができる、&lt;strong&gt;JavaScript Block Editor&lt;/strong&gt; を使ってみようと思います。&lt;/p&gt;
+&lt;h3 id=&#34;エディターを開いてみる&#34;&gt;エディターを開いてみる&lt;/h3&gt;
+&lt;p&gt;一般的なエディターは、ソフトをダウンロードして必要なものをインストールするなど、準備に時間がかかることがありますが、 &lt;strong&gt;JavaScript Block Editor&lt;/strong&gt; はウェブブラウザでサイトにアクセスするだけでプログラミングが開始できます！&lt;/p&gt;
+&lt;p&gt;実際にアクセスして、エディターを開いてみましょう。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/165/top.png&#34; alt=&#34;top&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://makecode.microbit.org/#lang=ja&#34;&gt;このサイト&lt;/a&gt;にアクセスすると、すぐに準備が完了します。&lt;/p&gt;
+&lt;p&gt;エディターは大きく3つのパートに分かれています。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/165/emulator.png&#34; alt=&#34;emulator&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;まず、一番左側にあるのがエミュレーターです。エディターでプログラミングをすると、このエミュレーターで自動的にプログラムが実行され、プログラムの動作イメージを確認することができます。&lt;/p&gt;
+&lt;p&gt;LEDの光らせ方の確認はもちろん、マウスでエミュレーターをドラッグすると傾きを変えられたり、音を出すプログラムを書いたときは、その音の確認もエディター上で可能です。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/165/menu.png&#34; alt=&#34;menu&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;次に、エディター中央にあるのがブロックの一覧です。誰でもプログラミングができるように、Micro:bitに命令ができる処理の塊が、ブロックという単位で表現されています。これらのブロックをつなげることで、シンプルなものから複雑なものまで、知識不要でプログラミングができるエディターなのです。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/165/editor.png&#34; alt=&#34;editor&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;エディターの右側にあるエリアは、そのブロックを配置してプログラミングする場所です。初めから存在する &lt;strong&gt;「最初だけ」&lt;/strong&gt; と &lt;strong&gt;「ずっと」&lt;/strong&gt; というブロックに、他のブロックをつなげていくことでプログラミングができます。&lt;/p&gt;
+&lt;p&gt;この &lt;strong&gt;「最初だけ」&lt;/strong&gt; は、一度だけ実行させたいブロックをつなげていき、 &lt;strong&gt;「ずっと」&lt;/strong&gt; は繰り返し実行させたいブロックをつなげます。&lt;/p&gt;
+&lt;h3 id=&#34;エディターでプログラミングしてみよう&#34;&gt;エディターでプログラミングしてみよう&lt;/h3&gt;
+&lt;p&gt;それでは、簡単なプログラミングをしてみましょう。micro:bitのLEDにハートマークを表示させてみましょう。&lt;/p&gt;
+&lt;p&gt;まずエディターのメニューの[基本]から[アイコンを表示]というブロックを探します。&lt;/p&gt;
+&lt;p&gt;このブロックをプログラミングエリアの &lt;strong&gt;「最初だけ」&lt;/strong&gt; のブロックにドラッグ・アンド・ドロップして、ブロックとブロックをつなげます。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/165/heart1.png&#34; alt=&#34;heart1&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;アイコンを表示するという処理を、micro:bit起動時に一度だけ実行します。これにより、好きなアイコンをmicro:bitで表示できます。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/165/heart2.png&#34; alt=&#34;heart2&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;ブロック同士が正しくつながると、エミュレーター上でハートマークが表示されているはずです。&lt;/p&gt;
+&lt;p&gt;デフォルトのアイコンはハートマークになっていますが、[アイコンを表示]のブロックのプルダウンメニューを開くと様々なアイコンを選択でき、それを表示することもできます。&lt;/p&gt;
+&lt;p&gt;プログラミングはこれで終了です。&lt;/p&gt;
+&lt;h3 id=&#34;作成したプログラムをmicro-bitで動かしてみよう&#34;&gt;作成したプログラムをmicro:bitで動かしてみよう&lt;/h3&gt;
+&lt;p&gt;エディター下部の &lt;strong&gt;「題名未設定」&lt;/strong&gt; と書かれているところに、プログラム名を自由に入力し、[ダウンロード]をクリックします。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/165/heart3.png&#34; alt=&#34;heart3&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;すると、拡張子が.hexなファイルが自動でダウンロードされます。ファイル名には、さきほどのプログラム名が含まれます。このファイルをmicro:bitに転送します。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/165/heart4.png&#34; alt=&#34;heart4&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;micro:bitをパソコンとUSB接続すると、 &lt;strong&gt;MICROBIT&lt;/strong&gt; というドライブとして認識されます。ダウンロードしてきた.hexファイルを、このドライブ直下にコピーすることでプログラムの書き込みが行えます。&lt;/p&gt;
+&lt;p&gt;&lt;center style=&#34;color: #585858; font-size: 95%; padding-bottom: 10px;&#34;&gt;
+&lt;img src=&#34;https://dotstud.io/img/blog/165/heart5.png&#34; alt=&#34;heart5&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;書き込みが完了すると、自動でmicro:bitが再起動します。すると、ハートマークを表示するプログラムが実行されます。&lt;/p&gt;
+&lt;p&gt;今回紹介したのはブロックを積み重ねることによってプログラムする方法でしたが、それを&lt;strong&gt;JavaScriptコードと相互変換&lt;/strong&gt;したり、&lt;strong&gt;最初からJavaScriptやPythonを使ってプログラミング&lt;/strong&gt;することも可能です。&lt;/p&gt;
+&lt;p&gt;&lt;u&gt;自分のレベルに応じたプログラミング方法も選べるのも、micro:bitの魅力の一つ&lt;/u&gt;です。&lt;/p&gt;
+&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
+&lt;p&gt;今回は、簡単なプログラムの作成と実行をしてみました。&lt;/p&gt;
+&lt;p&gt;micro:bitには、LED以外にボタンや種々のセンサー、またGPIOもあります。それらを使えば、「&lt;strong&gt;ボタンを押すとLEDで表示させているマークを変える&lt;/strong&gt;」「&lt;strong&gt;micro:bitを振ったら文字を表示する&lt;/strong&gt;」などの、すこし凝ったプログラミングも可能です。&lt;/p&gt;
+&lt;p&gt;また、スピーカーを端子に接続して音を鳴らしたり、モーターとモータードライバーを接続してラジコンを作ることだって可能で、無限の楽しみ方ができます。&lt;/p&gt;
+&lt;p&gt;次回はmicro:bitにスピーカーを接続して、音を鳴らしてみましょう！&lt;/p&gt;</description></item></channel></rss>
