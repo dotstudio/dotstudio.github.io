@@ -1,132 +1,128 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>bot on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/tags/bot/</link><description>Recent content in bot on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Fri, 07 Oct 2016 10:00:57 +0900</lastBuildDate><atom:link href="/tags/bot/" rel="self" type="application/rss+xml"/><item><title>ノンプログラミングで今話題のLINE Botを開発できる「hachidori」を試してみた</title><link>https://dotstud.io/blog/line-bot-with-hachidori/</link><pubDate>Fri, 07 Oct 2016 10:00:57 +0900</pubDate><guid>https://dotstud.io/blog/line-bot-with-hachidori/</guid><description>
-&lt;p&gt;こんにちは、dotstudioエディターのうららです。
-2016/09/29にLINE Developer Day 2016が開催され、IFTTTやGitHubと連携できる「&lt;a href=&#34;https://notify-bot.line.me/en/&#34;&gt;LINE Notify&lt;/a&gt;」や&lt;a href=&#34;https://linecorp.com/ja/pr/news/ja/2016/1516&#34;&gt;新たなMessenger API&lt;/a&gt;が公開されるなどLINE Botが今まさに話題の渦中にいます。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;http://developers.linecorp.com/blog/ja/?p=3779&#34;&gt;LINE Developer Day 2016 結果報告（LINE Engineers&amp;rsquo; Blog）&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;そんなLINE Botをノンプログラミングで扱える「 &lt;strong&gt;hachidori&lt;/strong&gt; 」というサービスが登場していたので、サクッと触ってみました。&lt;/p&gt;
-&lt;p&gt;結論から言うと（途中詰まるところもありましたが）とても簡単にチャットボットを作れました。詰まった&amp;amp;チュートリアルをするなど使い方に慣れるまでを含めて3時間程度かかりましたが、 &lt;strong&gt;一度慣れてしまえば30分ほどで1つの簡単なボットを作れそうな肌感&lt;/strong&gt; です。&lt;/p&gt;
-&lt;h2 id=&#34;hachidoriについて&#34;&gt;hachidoriについて&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/01_hachidori.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://hachidori.io&#34;&gt;https://hachidori.io&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;2016/10/03に&lt;a href=&#34;http://prtimes.jp/main/html/rd/p/000000004.000019280.html&#34;&gt;プレスリリース&lt;/a&gt;が出されたばかりの新しいチャットボットツールです。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/02_hachidori.png&#34; alt=&#34;&#34; /&gt;
-2016/10/06日現在、LINE BotとFacebook messengerに対応していますが、今後はKik.やTelegram、Slack、WeChatといったメッセンジャーに対応しそうな気配があります。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/03_hachidori.png&#34; alt=&#34;&#34; /&gt;
-&lt;strong&gt;2016年10月末までなら無料プランが提供&lt;/strong&gt; されています。11月からは月額980円からの提供となりそうです。&lt;/p&gt;
-&lt;h2 id=&#34;作ってみた&#34;&gt;作ってみた&lt;/h2&gt;
-&lt;!-- ![](/img/blog/031/04.png)
-アカウントを登録して
-![](/img/blog/031/05.png)
-新規作成を選びます。 --&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/06.png&#34; alt=&#34;&#34; /&gt;
-早速&lt;a href=&#34;https://hachidori.io&#34;&gt;トップページ&lt;/a&gt;からアカウント登録をして、Botを作ってみようと思います。LINEとFacebookを選べるので、今回はLINEを選びます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/07.png&#34; alt=&#34;&#34; /&gt;
-Botの名前とアイコン写真を選びます。これは &lt;strong&gt;実際のLINEには反映されません&lt;/strong&gt;。hachidori側で管理しやすくするためのものかと思います。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/08.png&#34; alt=&#34;&#34; /&gt;
-Botを作るには、&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;LINE Business Centerに登録する&lt;/li&gt;
-&lt;li&gt;LINE DevelopersのChannelsにアクセスする&lt;/li&gt;
-&lt;li&gt;ChannelのIDやアクセストークンを取得する&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;といったように「何をすればいいのか」を明記してくれているので、指示に沿って進めます。まずはLINE Business Centerに登録しましょうっ。&lt;/p&gt;
-&lt;h3 id=&#34;line-business-centerに登録&#34;&gt;LINE Business Centerに登録&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/09_LINEAPI.png&#34; alt=&#34;&#34; /&gt;
-こちらがLINE Business Center。ついにMessenger APIとご対面です。（すでに登録されている方は読み飛ばしてください）&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/10_LINEAPI.png&#34; alt=&#34;&#34; /&gt;
-ちなみに、Messenger APIは &lt;strong&gt;結構無料で使えそう&lt;/strong&gt; です。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/11_LINEAPI.png&#34; alt=&#34;&#34; /&gt;
-LINE Business Centerに登録していなかったので登録しました。ちなみに &lt;strong&gt;ここで登録した名前と画像がbotにそのまま使われます&lt;/strong&gt; 。上記の写真では自分の名前と画像を登録しましたが、実際にLINE上で試すときに &lt;strong&gt;自分と会話している&lt;/strong&gt; 状態になるので、作りたいボットに沿ったアイコンなどを登録をオススメします。&lt;/p&gt;
-&lt;!-- ![](/img/blog/031/12_LINEAPI.png)
-登録できました。これでLINE Developersが使えます。 --&gt;
-&lt;h3 id=&#34;line-developersでidなどの情報を取得&#34;&gt;LINE DevelopersでIDなどの情報を取得&lt;/h3&gt;
-&lt;!-- ![](/img/blog/031/13_LINEAPI.png) --&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/14_LINEAPI.png&#34; alt=&#34;&#34; /&gt;
-指示によると、LINE DevelopersにてChannelのIDやアクセストークンが必要とのことなので取得します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/15_hachidori.png&#34; alt=&#34;&#34; /&gt;
-これをhachidori側に入力します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/16_done.png&#34; alt=&#34;&#34; /&gt;
-ひとまず枠は完成です。&lt;/p&gt;
-&lt;h3 id=&#34;サーバーの登録&#34;&gt;サーバーの登録&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/17.png&#34; alt=&#34;&#34; /&gt;
-サーバー登録もします。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/18.png&#34; alt=&#34;&#34; /&gt;
-こちらも指示に従えばOKです。&lt;/p&gt;
-&lt;h3 id=&#34;中身を作っていく&#34;&gt;中身を作っていく&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/19.png&#34; alt=&#34;&#34; /&gt;
-最初からチュートリアルが入っています。&lt;/p&gt;
-&lt;!-- ![](/img/blog/031/20.png)
-ここを押すと、実際に手を動かしながら学べるので時間がある方は挑戦をオススメします。（チュートリアルはエラーが多かったのですが一通りの使い方が学べた） --&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/21.png&#34; alt=&#34;&#34; /&gt;
-これを削除して作ってみます。&lt;/p&gt;
-&lt;p&gt;私は料理が得意ではないこともあり、いつも夕ごはん何作るかを悩みます。せっかくなので、オススメのメニューを提案してくれる「&lt;strong&gt;夕ごはんBot&lt;/strong&gt;」を作りたいと思います。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/22.png&#34; alt=&#34;&#34; /&gt;
-まずは特定の言葉に対して反応する方法がこちら。「こんばんは」という言葉に反応して、「こんばんは、（ユーザー名）さん！　お腹が空きましたね〜」と返すようにできます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/23.png&#34; alt=&#34;&#34; /&gt;
-ユーザー側のコメントをオフにすると、何を発言しても次の展開へ進められます。相槌などがくると想定して無理やり「何が食べたいですか？」へ進めます。&lt;/p&gt;
-&lt;p&gt;また、Botが何を返すかも選ぶことができます。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;通常テキスト&lt;/li&gt;
-&lt;li&gt;イメージボタン&lt;/li&gt;
-&lt;li&gt;画像/動画/ファイル&lt;/li&gt;
-&lt;li&gt;カルーセル&lt;/li&gt;
-&lt;li&gt;ボタン&lt;/li&gt;
-&lt;li&gt;二択&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;今回は二択を選択しました。「何が食べたいですか？」という質問に対して、「温かいもの」「冷たいもの」の二択を出します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/24.png&#34; alt=&#34;&#34; /&gt;
-「アクションを返す」では、選択肢をタップすると何をするかを指定できます。ここでは「温かいもの」「冷たいもの」と発言するようにしました。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/25.png&#34; alt=&#34;&#34; /&gt;
-このように、ボタンをタップすると単語が自動で発言されます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/26.png&#34; alt=&#34;&#34; /&gt;
-選択肢によって、ルートが変わります。それぞれに沿った内容を作ります。ここでは「温かいもの」「冷たいもの」それぞれの内容を作りました。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/27.png&#34; alt=&#34;&#34; /&gt;
-「温かいもの」の中身を作ってみます。「汁物」か「汁物じゃないか」を選びます。&lt;/p&gt;
-&lt;p&gt;&lt;center&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;「汁物」の対義語って何ですか&lt;/p&gt; うらら (@uraranbon) &lt;a href=&#34;https://twitter.com/uraranbon/status/783577602376110080&#34;&gt;2016年10月5日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/p&gt;
-&lt;p&gt;心の叫び（※クラスタリングがおかしい）&lt;/center&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/28.png&#34; alt=&#34;&#34; /&gt;
-また選択肢を作ります。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/29.png&#34; alt=&#34;&#34; /&gt;
-画像を入れる際は画像リンクを登録します。&lt;/p&gt;
-&lt;h2 id=&#34;完成した&#34;&gt;完成した&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/30.png&#34; alt=&#34;&#34; /&gt;
-これを繰り返してこんなものを作ってみました！　サクッとしか触っていないのでこれくらいしか作っていませんが、一通りできあがりました！&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/31.png&#34; alt=&#34;&#34; /&gt;
-「こんばんは」と発言すると始まります。ボタンも表示されます。このように、画像でサジェストしてくれます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/32.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;「冷たくて汁物ではないもの」だと「寿司」を提案してくれます。ちなみに今のところ、&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;温かい汁物　　　　　　：&lt;strong&gt;うどん&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;温かい汁物じゃないもの：&lt;strong&gt;麻婆豆腐&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;冷たい汁物　　　　　　：&lt;strong&gt;冷や汁&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;冷たい汁物じゃないもの：&lt;strong&gt;寿司&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;しかオススメしない仕様となっています。まだまだ簡単な内容ですが、このように一通りのBot開発ができました。詰んだところも含めると、合わせて3時間くらいでしょうか。&lt;/p&gt;
-&lt;h2 id=&#34;詰んだところ-既読されるが反応がない&#34;&gt;詰んだところ（既読されるが反応がない）&lt;/h2&gt;
-&lt;p&gt;せっかくなので詰んだところの紹介もします。（同じところで詰んだ人の参考になると嬉しいです）&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/34.png&#34; alt=&#34;&#34; /&gt;
-こんな風に &lt;strong&gt;既読はされるが反応がない&lt;/strong&gt; 状態になりました。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/35.png&#34; alt=&#34;&#34; /&gt;
-いろいろ触ってみたのですが、どうやらサーバー登録の際に入力する &lt;strong&gt;Webhook URL&lt;/strong&gt; が最初入力したものからいつの間にか変わっていたのが原因でした。&lt;/p&gt;
-&lt;p&gt;いや、何か要因はあると思いますが、私にはわからんのでひとまず既読無視状態になったらここを再登録してみるのがいいと思います……。（要因がわかる方ぜひご教示ください）&lt;/p&gt;
-&lt;h2 id=&#34;他の機能もすごかった&#34;&gt;他の機能もすごかった&lt;/h2&gt;
-&lt;p&gt;Botを作る機能以外にも、&lt;strong&gt;作ったBotの分析ができる&lt;/strong&gt; 機能もありました。個人的に驚嘆したものを3つだけ紹介します。（他にもいろんな機能があります）&lt;/p&gt;
-&lt;h3 id=&#34;メッセージの予約投稿ができる&#34;&gt;メッセージの予約投稿ができる&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/36.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;1度Botへアクセスしたことのある人であれば、メッセージの予約送信ができます。これはビジネスとして運用したい人にとっては、かなり便利なんじゃないかなと……。&lt;/p&gt;
-&lt;h3 id=&#34;ユーザーの情報をリストにしてくれる&#34;&gt;ユーザーの情報をリストにしてくれる&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/37.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;Botを通して取得した電話番号やメールアドレス、住所といった情報を、リスト化できるようです……。こ、これは……すごい……。&lt;/p&gt;
-&lt;h3 id=&#34;アナリティクスがすごい&#34;&gt;アナリティクスがすごい&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/031/38.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;実際にBotがどれくらい使われたのかを確認できるアナリティクスもありました。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;日別受信数&lt;/li&gt;
-&lt;li&gt;時間別受信数&lt;/li&gt;
-&lt;li&gt;男女比&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;といったことが確認できます。「&lt;strong&gt;XX時のアクセスが多いからこの時間に予約送信してみよう&lt;/strong&gt;」「&lt;strong&gt;女性ユーザーのほうが多い、ターゲットは男性だからもっと内容を変えた方がいいかも&lt;/strong&gt;」といった分析が簡単にできちゃうんじゃないですか？！&lt;/p&gt;
-&lt;p&gt;これが10月末まで無料なのは賞賛ものですし、11月以降も割とお手軽価格なんじゃないかなと思いました。個人的にはビジネスで使う予定はありませんが、私がチャットボット担当者だったらこの機能は泣いて喜びます。&lt;/p&gt;
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-&lt;p&gt;ということでサクッと触ってみたのですが、思った以上に便利そうで椅子から転げ落ちそうです。「&lt;strong&gt;初期登録の作業はひとくせありそうだけど、簡単にボット作れそう&lt;/strong&gt;」ってことが伝わったかなと思います。&lt;/p&gt;
-&lt;p&gt;現場からは以上です。&lt;/p&gt;</description></item></channel></rss>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>bot on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/tags/bot/</link><description>Recent content in bot on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Fri, 07 Oct 2016 10:00:57 +0900</lastBuildDate><atom:link href="/tags/bot/" rel="self" type="application/rss+xml"/><item><title>ノンプログラミングで今話題のLINE Botを開発できる「hachidori」を試してみた</title><link>https://dotstud.io/blog/line-bot-with-hachidori/</link><pubDate>Fri, 07 Oct 2016 10:00:57 +0900</pubDate><guid>https://dotstud.io/blog/line-bot-with-hachidori/</guid><description>&lt;p>こんにちは、dotstudioエディターのうららです。
+2016/09/29にLINE Developer Day 2016が開催され、IFTTTやGitHubと連携できる「&lt;a href="https://notify-bot.line.me/en/">LINE Notify&lt;/a>」や&lt;a href="https://linecorp.com/ja/pr/news/ja/2016/1516">新たなMessenger API&lt;/a>が公開されるなどLINE Botが今まさに話題の渦中にいます。&lt;/p>
+&lt;p>&lt;a href="http://developers.linecorp.com/blog/ja/?p=3779">LINE Developer Day 2016 結果報告（LINE Engineers&amp;rsquo; Blog）&lt;/a>&lt;/p>
+&lt;p>そんなLINE Botをノンプログラミングで扱える「 &lt;strong>hachidori&lt;/strong> 」というサービスが登場していたので、サクッと触ってみました。&lt;/p>
+&lt;p>結論から言うと（途中詰まるところもありましたが）とても簡単にチャットボットを作れました。詰まった&amp;amp;チュートリアルをするなど使い方に慣れるまでを含めて3時間程度かかりましたが、 &lt;strong>一度慣れてしまえば30分ほどで1つの簡単なボットを作れそうな肌感&lt;/strong> です。&lt;/p>
+&lt;h2 id="hachidori">hachidoriについて&lt;/h2>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/031/01_hachidori.png" alt="">&lt;/p>
+&lt;p>&lt;a href="https://hachidori.io">https://hachidori.io&lt;/a>&lt;/p>
+&lt;p>2016/10/03に&lt;a href="http://prtimes.jp/main/html/rd/p/000000004.000019280.html">プレスリリース&lt;/a>が出されたばかりの新しいチャットボットツールです。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/031/02_hachidori.png" alt="">
+2016/10/06日現在、LINE BotとFacebook messengerに対応していますが、今後はKik.やTelegram、Slack、WeChatといったメッセンジャーに対応しそうな気配があります。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/031/03_hachidori.png" alt="">
+&lt;strong>2016年10月末までなら無料プランが提供&lt;/strong> されています。11月からは月額980円からの提供となりそうです。&lt;/p>
+&lt;h2 id="heading">作ってみた&lt;/h2>
+&lt;!-- raw HTML omitted -->
+&lt;!-- raw HTML omitted -->
+&lt;p>&lt;img src="https://dotstud.io/img/blog/031/06.png" alt="">
+早速&lt;a href="https://hachidori.io">トップページ&lt;/a>からアカウント登録をして、Botを作ってみようと思います。LINEとFacebookを選べるので、今回はLINEを選びます。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/031/07.png" alt="">
+Botの名前とアイコン写真を選びます。これは &lt;strong>実際のLINEには反映されません&lt;/strong>。hachidori側で管理しやすくするためのものかと思います。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/031/08.png" alt="">
+Botを作るには、&lt;/p>
+&lt;ul>
+&lt;li>LINE Business Centerに登録する&lt;/li>
+&lt;li>LINE DevelopersのChannelsにアクセスする&lt;/li>
+&lt;li>ChannelのIDやアクセストークンを取得する&lt;/li>
+&lt;/ul>
+&lt;p>といったように「何をすればいいのか」を明記してくれているので、指示に沿って進めます。まずはLINE Business Centerに登録しましょうっ。&lt;/p>
+&lt;h3 id="line-business-center">LINE Business Centerに登録&lt;/h3>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/031/09_LINEAPI.png" alt="">
+こちらがLINE Business Center。ついにMessenger APIとご対面です。（すでに登録されている方は読み飛ばしてください）&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/031/10_LINEAPI.png" alt="">
+ちなみに、Messenger APIは &lt;strong>結構無料で使えそう&lt;/strong> です。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/031/11_LINEAPI.png" alt="">
+LINE Business Centerに登録していなかったので登録しました。ちなみに &lt;strong>ここで登録した名前と画像がbotにそのまま使われます&lt;/strong> 。上記の写真では自分の名前と画像を登録しましたが、実際にLINE上で試すときに &lt;strong>自分と会話している&lt;/strong> 状態になるので、作りたいボットに沿ったアイコンなどを登録をオススメします。&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;!-- raw HTML omitted -->
+&lt;h3 id="line-developersid">LINE DevelopersでIDなどの情報を取得&lt;/h3>
+&lt;!-- raw HTML omitted -->
+&lt;p>&lt;img src="https://dotstud.io/img/blog/031/14_LINEAPI.png" alt="">
+指示によると、LINE DevelopersにてChannelのIDやアクセストークンが必要とのことなので取得します。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/031/15_hachidori.png" alt="">
+これをhachidori側に入力します。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/031/16_done.png" alt="">
+ひとまず枠は完成です。&lt;/p>
+&lt;h3 id="heading-1">サーバーの登録&lt;/h3>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/031/17.png" alt="">
+サーバー登録もします。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/031/18.png" alt="">
+こちらも指示に従えばOKです。&lt;/p>
+&lt;h3 id="heading-2">中身を作っていく&lt;/h3>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/031/19.png" alt="">
+最初からチュートリアルが入っています。&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;!-- raw HTML omitted -->
+&lt;p>&lt;img src="https://dotstud.io/img/blog/031/21.png" alt="">
+これを削除して作ってみます。&lt;/p>
+&lt;p>私は料理が得意ではないこともあり、いつも夕ごはん何作るかを悩みます。せっかくなので、オススメのメニューを提案してくれる「&lt;strong>夕ごはんBot&lt;/strong>」を作りたいと思います。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/031/22.png" alt="">
+まずは特定の言葉に対して反応する方法がこちら。「こんばんは」という言葉に反応して、「こんばんは、（ユーザー名）さん！　お腹が空きましたね〜」と返すようにできます。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/031/23.png" alt="">
+ユーザー側のコメントをオフにすると、何を発言しても次の展開へ進められます。相槌などがくると想定して無理やり「何が食べたいですか？」へ進めます。&lt;/p>
+&lt;p>また、Botが何を返すかも選ぶことができます。&lt;/p>
+&lt;ul>
+&lt;li>通常テキスト&lt;/li>
+&lt;li>イメージボタン&lt;/li>
+&lt;li>画像/動画/ファイル&lt;/li>
+&lt;li>カルーセル&lt;/li>
+&lt;li>ボタン&lt;/li>
+&lt;li>二択&lt;/li>
+&lt;/ul>
+&lt;p>今回は二択を選択しました。「何が食べたいですか？」という質問に対して、「温かいもの」「冷たいもの」の二択を出します。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/031/24.png" alt="">
+「アクションを返す」では、選択肢をタップすると何をするかを指定できます。ここでは「温かいもの」「冷たいもの」と発言するようにしました。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/031/25.png" alt="">
+このように、ボタンをタップすると単語が自動で発言されます。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/031/26.png" alt="">
+選択肢によって、ルートが変わります。それぞれに沿った内容を作ります。ここでは「温かいもの」「冷たいもの」それぞれの内容を作りました。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/031/27.png" alt="">
+「温かいもの」の中身を作ってみます。「汁物」か「汁物じゃないか」を選びます。&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;p>心の叫び（※クラスタリングがおかしい）&lt;!-- raw HTML omitted -->&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/031/28.png" alt="">
+また選択肢を作ります。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/031/29.png" alt="">
+画像を入れる際は画像リンクを登録します。&lt;/p>
+&lt;h2 id="heading-3">完成した&lt;/h2>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/031/30.png" alt="">
+これを繰り返してこんなものを作ってみました！　サクッとしか触っていないのでこれくらいしか作っていませんが、一通りできあがりました！&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/031/31.png" alt="">
+「こんばんは」と発言すると始まります。ボタンも表示されます。このように、画像でサジェストしてくれます。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/031/32.png" alt="">&lt;/p>
+&lt;p>「冷たくて汁物ではないもの」だと「寿司」を提案してくれます。ちなみに今のところ、&lt;/p>
+&lt;ul>
+&lt;li>温かい汁物　　　　　　：&lt;strong>うどん&lt;/strong>&lt;/li>
+&lt;li>温かい汁物じゃないもの：&lt;strong>麻婆豆腐&lt;/strong>&lt;/li>
+&lt;li>冷たい汁物　　　　　　：&lt;strong>冷や汁&lt;/strong>&lt;/li>
+&lt;li>冷たい汁物じゃないもの：&lt;strong>寿司&lt;/strong>&lt;/li>
+&lt;/ul>
+&lt;p>しかオススメしない仕様となっています。まだまだ簡単な内容ですが、このように一通りのBot開発ができました。詰んだところも含めると、合わせて3時間くらいでしょうか。&lt;/p>
+&lt;h2 id="heading-4">詰んだところ（既読されるが反応がない）&lt;/h2>
+&lt;p>せっかくなので詰んだところの紹介もします。（同じところで詰んだ人の参考になると嬉しいです）&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/031/34.png" alt="">
+こんな風に &lt;strong>既読はされるが反応がない&lt;/strong> 状態になりました。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/031/35.png" alt="">
+いろいろ触ってみたのですが、どうやらサーバー登録の際に入力する &lt;strong>Webhook URL&lt;/strong> が最初入力したものからいつの間にか変わっていたのが原因でした。&lt;/p>
+&lt;p>いや、何か要因はあると思いますが、私にはわからんのでひとまず既読無視状態になったらここを再登録してみるのがいいと思います……。（要因がわかる方ぜひご教示ください）&lt;/p>
+&lt;h2 id="heading-5">他の機能もすごかった&lt;/h2>
+&lt;p>Botを作る機能以外にも、&lt;strong>作ったBotの分析ができる&lt;/strong> 機能もありました。個人的に驚嘆したものを3つだけ紹介します。（他にもいろんな機能があります）&lt;/p>
+&lt;h3 id="heading-6">メッセージの予約投稿ができる&lt;/h3>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/031/36.png" alt="">&lt;/p>
+&lt;p>1度Botへアクセスしたことのある人であれば、メッセージの予約送信ができます。これはビジネスとして運用したい人にとっては、かなり便利なんじゃないかなと……。&lt;/p>
+&lt;h3 id="heading-7">ユーザーの情報をリストにしてくれる&lt;/h3>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/031/37.png" alt="">&lt;/p>
+&lt;p>Botを通して取得した電話番号やメールアドレス、住所といった情報を、リスト化できるようです……。こ、これは……すごい……。&lt;/p>
+&lt;h3 id="heading-8">アナリティクスがすごい&lt;/h3>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/031/38.png" alt="">&lt;/p>
+&lt;p>実際にBotがどれくらい使われたのかを確認できるアナリティクスもありました。&lt;/p>
+&lt;ul>
+&lt;li>日別受信数&lt;/li>
+&lt;li>時間別受信数&lt;/li>
+&lt;li>男女比&lt;/li>
+&lt;/ul>
+&lt;p>といったことが確認できます。「&lt;strong>XX時のアクセスが多いからこの時間に予約送信してみよう&lt;/strong>」「&lt;strong>女性ユーザーのほうが多い、ターゲットは男性だからもっと内容を変えた方がいいかも&lt;/strong>」といった分析が簡単にできちゃうんじゃないですか？！&lt;/p>
+&lt;p>これが10月末まで無料なのは賞賛ものですし、11月以降も割とお手軽価格なんじゃないかなと思いました。個人的にはビジネスで使う予定はありませんが、私がチャットボット担当者だったらこの機能は泣いて喜びます。&lt;/p>
+&lt;h2 id="heading-9">おわりに&lt;/h2>
+&lt;p>ということでサクッと触ってみたのですが、思った以上に便利そうで椅子から転げ落ちそうです。「&lt;strong>初期登録の作業はひとくせありそうだけど、簡単にボット作れそう&lt;/strong>」ってことが伝わったかなと思います。&lt;/p>
+&lt;p>現場からは以上です。&lt;/p></description></item></channel></rss>

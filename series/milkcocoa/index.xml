@@ -1,73 +1,69 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>milkcocoa on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/milkcocoa/</link><description>Recent content in milkcocoa on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Thu, 03 Nov 2016 10:00:00 +0900</lastBuildDate><atom:link href="/series/milkcocoa/" rel="self" type="application/rss+xml"/><item><title>GR-COTTONで見た目も可愛く電子工作！部屋の温度をブラウザからチェックしてみよう</title><link>https://dotstud.io/blog/milkcocoa-grcotton-realtime-temperature/</link><pubDate>Thu, 03 Nov 2016 10:00:00 +0900</pubDate><guid>https://dotstud.io/blog/milkcocoa-grcotton-realtime-temperature/</guid><description>
-&lt;p&gt;こんにちは！　dotstudioのエディターのうららです。先日、バックエンドサービス「Milkcocoa」を題材にしたLT大会「 &lt;strong&gt;&lt;a href=&#34;http://mlkcca.connpass.com/event/34936/&#34;&gt;紅白Milkcocoa合戦&lt;/a&gt;&lt;/strong&gt; 」に参加してきました。&lt;/p&gt;
-&lt;p&gt;そこで発表した &lt;strong&gt;Webサイト上から部屋の温度がわかる&lt;/strong&gt; という仕組みが何かしらに役に立つ気がするので本記事にまとめておこうと思います。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;こんな人におすすめ&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;部屋の気温をブラウザ上からチェックできるようにしたり、データとして貯めたい人（ペットを飼ってる人や観葉植物を育てている人におすすめ）&lt;/li&gt;
-&lt;li&gt;電子工作には興味があるけれど、せっかくなら見た目が可愛いアイテムで挑戦したい人&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;全体の構成&#34;&gt;全体の構成&lt;/h2&gt;
-&lt;p&gt;マイコンボード「GR-COTTON」でセンサーの値を取得し、バックエンドサービス「Milkcocoa」を使いブラウザ側にデータを送ります。&lt;/p&gt;
-&lt;p&gt;MacとGR-COTTONをUSB接続し、Node.jsを経由してMilkcocoaにデータを送ります。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;h3 id=&#34;milkcocoa&#34;&gt;Milkcocoa&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/01_milkcocoa.png&#34; alt=&#34;&#34; /&gt;
-&lt;a href=&#34;https://mlkcca.com&#34;&gt;milkcocoa&lt;/a&gt;とは、&lt;strong&gt;JavaScriptのソースコードを1行挿入するだけで、リアルタイム通信ができるようになる&lt;/strong&gt; サービスです。リアルタイム通信にはバックエンドの構築が必要ですが、そこの手間が省けます。&lt;/p&gt;
-&lt;h3 id=&#34;gr-cotton&#34;&gt;GR-COTTON&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/02_cotton.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;こちらが今回使うマイコンボード「&lt;a href=&#34;http://gadget.renesas.com/ja/product/cotton.html&#34;&gt;GR-COTTON&lt;/a&gt;」です。ルネサスエレクトロニクスが企画する「&lt;a href=&#34;http://gadget.renesas.com/ja/&#34;&gt;がじぇっとるねさす&lt;/a&gt;（通称がじぇるね）」が作っています。&lt;/p&gt;
-&lt;p&gt;最初からタッチセンサーや気温センサー、フルカラーLEDを搭載しています。しかもその &lt;strong&gt;タッチセンサーが星型&lt;/strong&gt; で、基盤も白をベースにしているので、見た目がものすごく可愛いんです！　&lt;/p&gt;
-&lt;h2 id=&#34;作り方&#34;&gt;作り方&lt;/h2&gt;
-&lt;p&gt;では早速作ってみましょう！　大きく分けると次の4つの作業をします。&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Milkcocoaの登録をする&lt;/li&gt;
-&lt;li&gt;GR-COTTONのチュートリアル1〜10をおこなう&lt;/li&gt;
-&lt;li&gt;app.jsをビルドする&lt;/li&gt;
-&lt;li&gt;Webサイトを作る（HTMLのみでOK）&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h3 id=&#34;1-milkcocoaの登録をする&#34;&gt;1. Milkcocoaの登録をする&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/04_milkcocoa.png&#34; alt=&#34;&#34; /&gt;
-&lt;a href=&#34;https://mlkcca.com/&#34;&gt;トップページ&lt;/a&gt;からログインして、「新しいアプリを作る」をクリックします。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/05_milkcocoa.png&#34; alt=&#34;&#34; /&gt;
-アプリ名は自分で好きなものを登録します。ここでは「GR-COTTON」にしました。&lt;/p&gt;
-&lt;p&gt;これだけでMilkcocoa側の準備はOKです。&lt;/p&gt;
-&lt;h3 id=&#34;2-gr-cottonのチュートリアル1-10をおこなう&#34;&gt;2. GR-COTTONのチュートリアル1〜10をおこなう&lt;/h3&gt;
-&lt;p&gt;がじぇっとるねさすが提供している、こちらの&lt;a href=&#34;http://gadget.renesas.com/ja/product/cotton_sp1.html&#34;&gt;チュートリアル&lt;/a&gt;を参考に、1〜10まで進めてください。&lt;/p&gt;
-&lt;h3 id=&#34;3-node-jsのプログラムを用意する&#34;&gt;3. Node.jsのプログラムを用意する&lt;/h3&gt;
-&lt;p&gt;シリアル通信でCOTTONとMilkcocoaの橋渡しをするプログラムを用意します。以下のapp.jsをプログラムに記入して実行してみてください。Node.jsで作成しています。&lt;/p&gt;
-&lt;h4 id=&#34;app-js&#34;&gt;app.js&lt;/h4&gt;
-&lt;pre&gt;&lt;code&gt;// Milkcocoaの設定
-const MilkCocoa = require(&#39;milkcocoa&#39;);
-const milkcocoa = new MilkCocoa(&#39;your api key&#39;);
-const ds = milkcocoa.dataStore(&#39;status&#39;);
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>milkcocoa on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/milkcocoa/</link><description>Recent content in milkcocoa on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Thu, 03 Nov 2016 10:00:00 +0900</lastBuildDate><atom:link href="/series/milkcocoa/" rel="self" type="application/rss+xml"/><item><title>GR-COTTONで見た目も可愛く電子工作！部屋の温度をブラウザからチェックしてみよう</title><link>https://dotstud.io/blog/milkcocoa-grcotton-realtime-temperature/</link><pubDate>Thu, 03 Nov 2016 10:00:00 +0900</pubDate><guid>https://dotstud.io/blog/milkcocoa-grcotton-realtime-temperature/</guid><description>&lt;p>こんにちは！　dotstudioのエディターのうららです。先日、バックエンドサービス「Milkcocoa」を題材にしたLT大会「 &lt;strong>&lt;a href="http://mlkcca.connpass.com/event/34936/">紅白Milkcocoa合戦&lt;/a>&lt;/strong> 」に参加してきました。&lt;/p>
+&lt;p>そこで発表した &lt;strong>Webサイト上から部屋の温度がわかる&lt;/strong> という仕組みが何かしらに役に立つ気がするので本記事にまとめておこうと思います。&lt;/p>
+&lt;p>&lt;strong>こんな人におすすめ&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>部屋の気温をブラウザ上からチェックできるようにしたり、データとして貯めたい人（ペットを飼ってる人や観葉植物を育てている人におすすめ）&lt;/li>
+&lt;li>電子工作には興味があるけれど、せっかくなら見た目が可愛いアイテムで挑戦したい人&lt;/li>
+&lt;/ul>
+&lt;h2 id="heading">全体の構成&lt;/h2>
+&lt;p>マイコンボード「GR-COTTON」でセンサーの値を取得し、バックエンドサービス「Milkcocoa」を使いブラウザ側にデータを送ります。&lt;/p>
+&lt;p>MacとGR-COTTONをUSB接続し、Node.jsを経由してMilkcocoaにデータを送ります。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/010/01.png" alt="">&lt;/p>
+&lt;h3 id="milkcocoa">Milkcocoa&lt;/h3>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/010/01_milkcocoa.png" alt="">
+&lt;a href="https://mlkcca.com">milkcocoa&lt;/a>とは、&lt;strong>JavaScriptのソースコードを1行挿入するだけで、リアルタイム通信ができるようになる&lt;/strong> サービスです。リアルタイム通信にはバックエンドの構築が必要ですが、そこの手間が省けます。&lt;/p>
+&lt;h3 id="gr-cotton">GR-COTTON&lt;/h3>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/010/02_cotton.png" alt="">&lt;/p>
+&lt;p>こちらが今回使うマイコンボード「&lt;a href="http://gadget.renesas.com/ja/product/cotton.html">GR-COTTON&lt;/a>」です。ルネサスエレクトロニクスが企画する「&lt;a href="http://gadget.renesas.com/ja/">がじぇっとるねさす&lt;/a>（通称がじぇるね）」が作っています。&lt;/p>
+&lt;p>最初からタッチセンサーや気温センサー、フルカラーLEDを搭載しています。しかもその &lt;strong>タッチセンサーが星型&lt;/strong> で、基盤も白をベースにしているので、見た目がものすごく可愛いんです！　&lt;/p>
+&lt;h2 id="heading-1">作り方&lt;/h2>
+&lt;p>では早速作ってみましょう！　大きく分けると次の4つの作業をします。&lt;/p>
+&lt;ol>
+&lt;li>Milkcocoaの登録をする&lt;/li>
+&lt;li>GR-COTTONのチュートリアル1〜10をおこなう&lt;/li>
+&lt;li>app.jsをビルドする&lt;/li>
+&lt;li>Webサイトを作る（HTMLのみでOK）&lt;/li>
+&lt;/ol>
+&lt;h3 id="1-milkcocoa">1. Milkcocoaの登録をする&lt;/h3>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/010/04_milkcocoa.png" alt="">
+&lt;a href="https://mlkcca.com/">トップページ&lt;/a>からログインして、「新しいアプリを作る」をクリックします。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/010/05_milkcocoa.png" alt="">
+アプリ名は自分で好きなものを登録します。ここでは「GR-COTTON」にしました。&lt;/p>
+&lt;p>これだけでMilkcocoa側の準備はOKです。&lt;/p>
+&lt;h3 id="2-gr-cotton110">2. GR-COTTONのチュートリアル1〜10をおこなう&lt;/h3>
+&lt;p>がじぇっとるねさすが提供している、こちらの&lt;a href="http://gadget.renesas.com/ja/product/cotton_sp1.html">チュートリアル&lt;/a>を参考に、1〜10まで進めてください。&lt;/p>
+&lt;h3 id="3-nodejs">3. Node.jsのプログラムを用意する&lt;/h3>
+&lt;p>シリアル通信でCOTTONとMilkcocoaの橋渡しをするプログラムを用意します。以下のapp.jsをプログラムに記入して実行してみてください。Node.jsで作成しています。&lt;/p>
+&lt;h4 id="appjs">app.js&lt;/h4>
+&lt;pre>&lt;code>// Milkcocoaの設定
+const MilkCocoa = require('milkcocoa');
+const milkcocoa = new MilkCocoa('your api key');
+const ds = milkcocoa.dataStore('status');
 // シリアル通信の設定
-const SerialPort = require(&#39;serialport&#39;);
-const portName = &#39;COM6&#39;; // IDE for GRとかで調べる
+const SerialPort = require('serialport');
+const portName = 'COM6'; // IDE for GRとかで調べる
 const serial = new SerialPort(portName, {
 baudrate: 9600,
 flowcontrol: false,
 parser: SerialPort.parsers.readline(&amp;quot;\n&amp;quot;)
 });
-serial.on(&#39;open&#39;, () =&amp;gt; {
-console.log(&#39;open&#39;);
+serial.on('open', () =&amp;gt; {
+console.log('open');
 });
 // シリアル通信でデータを受信したに呼び出される関数を定義
-serial.on(&#39;data&#39;, (input) =&amp;gt; {
+serial.on('data', (input) =&amp;gt; {
 console.log(input);
 ds.send({message: input});
 });
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;ターミナルを開いて、以下のコマンドでインストールします。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;npm init
+&lt;/code>&lt;/pre>&lt;p>ターミナルを開いて、以下のコマンドでインストールします。&lt;/p>
+&lt;pre>&lt;code>npm init
 npm i serialport milkcocoa
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;app.jsを動かしたいときは、以下のコマンドを使います。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;node app.js
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&#34;4-webサイトを作る-htmlのみでok&#34;&gt;4. Webサイトを作る（HTMLのみでOK）&lt;/h3&gt;
-&lt;p&gt;最後はフロント側を作ります！&lt;/p&gt;
-&lt;h4 id=&#34;index-html&#34;&gt;index.html&lt;/h4&gt;
-&lt;pre&gt;&lt;code&gt;&amp;lt;!doctype html&amp;gt;
+&lt;/code>&lt;/pre>&lt;p>app.jsを動かしたいときは、以下のコマンドを使います。&lt;/p>
+&lt;pre>&lt;code>node app.js
+&lt;/code>&lt;/pre>&lt;h3 id="4-webhtmlok">4. Webサイトを作る（HTMLのみでOK）&lt;/h3>
+&lt;p>最後はフロント側を作ります！&lt;/p>
+&lt;h4 id="indexhtml">index.html&lt;/h4>
+&lt;pre>&lt;code>&amp;lt;!doctype html&amp;gt;
 &amp;lt;html&amp;gt;
 &amp;lt;head&amp;gt;
 &amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
@@ -76,14 +72,14 @@ npm i serialport milkcocoa
 &amp;lt;body&amp;gt;
 &amp;lt;div id=&amp;quot;log&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
 &amp;lt;script src=&amp;quot;https://code.jquery.com/jquery-2.2.4.min.js&amp;quot; integrity=&amp;quot;sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=&amp;quot; crossorigin=&amp;quot;anonymous&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-&amp;lt;script src=&#39;https://cdn.mlkcca.com/v2.0.0/milkcocoa.js&#39;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script src='https://cdn.mlkcca.com/v2.0.0/milkcocoa.js'&amp;gt;&amp;lt;/script&amp;gt;
 &amp;lt;script&amp;gt;
 window.onload = () =&amp;gt; {
 // Milkcocoa
-const milkcocoa = new MilkCocoa(&#39;your api key&#39;);
-const ds = milkcocoa.dataStore(&#39;status&#39;);
+const milkcocoa = new MilkCocoa('your api key');
+const ds = milkcocoa.dataStore('status');
 // Milkcocoaからデータが送られてきた時のコールバック
-ds.on(&#39;send&#39;, (data) =&amp;gt; {
+ds.on('send', (data) =&amp;gt; {
 console.log(data.value);
 // ここでhtmlのDOMを操作する
 })
@@ -91,11 +87,10 @@ console.log(data.value);
 &amp;lt;/script&amp;gt;
 &amp;lt;/body&amp;gt;
 &amp;lt;/html&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/07_milkcocoa.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;14行目の&lt;code&gt;your api key&lt;/code&gt;には、先ほど登録したMilkcocoaのこの箇所の文字列を入れます。&lt;/p&gt;
-&lt;p&gt;これで、&lt;code&gt;node app.js&lt;/code&gt;を打つと、コンソールに気温がリアルタイムで表示されるようになります！ ちなみに、&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;&amp;lt;!doctype html&amp;gt;
+&lt;/code>&lt;/pre>&lt;p>&lt;img src="https://dotstud.io/img/blog/010/07_milkcocoa.png" alt="">&lt;/p>
+&lt;p>14行目の&lt;code>your api key&lt;/code>には、先ほど登録したMilkcocoaのこの箇所の文字列を入れます。&lt;/p>
+&lt;p>これで、&lt;code>node app.js&lt;/code>を打つと、コンソールに気温がリアルタイムで表示されるようになります！ ちなみに、&lt;/p>
+&lt;pre>&lt;code>&amp;lt;!doctype html&amp;gt;
 &amp;lt;html&amp;gt;
 &amp;lt;head&amp;gt;
 &amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
@@ -105,12 +100,12 @@ console.log(data.value);
 // ここに書き込める
 &amp;lt;div id=&amp;quot;log&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
 &amp;lt;script src=&amp;quot;https://code.jquery.com/jquery-2.2.4.min.js&amp;quot; integrity=&amp;quot;sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=&amp;quot; crossorigin=&amp;quot;anonymous&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-&amp;lt;script src=&#39;https://cdn.mlkcca.com/v2.0.0/milkcocoa.js&#39;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script src='https://cdn.mlkcca.com/v2.0.0/milkcocoa.js'&amp;gt;&amp;lt;/script&amp;gt;
 &amp;lt;script&amp;gt;
 window.onload = () =&amp;gt; {
-const milkcocoa = new MilkCocoa(&#39;your api key&#39;);
-const ds = milkcocoa.dataStore(&#39;status&#39;);
-ds.on(&#39;send&#39;, (data) =&amp;gt; {
+const milkcocoa = new MilkCocoa('your api key');
+const ds = milkcocoa.dataStore('status');
+ds.on('send', (data) =&amp;gt; {
 console.log(data.value);
 })
 }
@@ -118,11 +113,10 @@ console.log(data.value);
 // ここに書き込める
 &amp;lt;/body&amp;gt;
 &amp;lt;/html&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;code&gt;// ここに書き込める&lt;/code&gt; にHTMLなどを書くと、フロント側をいじることができます。&lt;/p&gt;
-&lt;h4 id=&#34;わたしが作ったフロント側のソースコード-cotton-html&#34;&gt;わたしが作ったフロント側のソースコード cotton.html&lt;/h4&gt;
-&lt;p&gt;完全に余談ですが、私が作ったフロント側のソースコードも載せておきます。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;&amp;lt;!doctype html&amp;gt;
+&lt;/code>&lt;/pre>&lt;p>&lt;code>// ここに書き込める &lt;/code> にHTMLなどを書くと、フロント側をいじることができます。&lt;/p>
+&lt;h4 id="-cottonhtml">わたしが作ったフロント側のソースコード cotton.html&lt;/h4>
+&lt;p>完全に余談ですが、私が作ったフロント側のソースコードも載せておきます。&lt;/p>
+&lt;pre>&lt;code>&amp;lt;!doctype html&amp;gt;
 &amp;lt;html&amp;gt;
 &amp;lt;head&amp;gt;
 &amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
@@ -137,29 +131,29 @@ console.log(data.value);
 &amp;lt;div id=&amp;quot;you&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;br&amp;gt;
 &amp;lt;center&amp;gt;&amp;lt;table border=&amp;quot;0&amp;quot; cellspacing=&amp;quot;0&amp;quot; cellpadding=&amp;quot;0&amp;quot;&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td align=&amp;quot;center&amp;quot;&amp;gt;&amp;lt;a href=&amp;quot;http://www.rays-counter.com/&amp;quot;&amp;gt;&amp;lt;img src=&amp;quot;http://www.rays-counter.com/d350_f6_022/578cc94f09357/&amp;quot; alt=&amp;quot;アクセスカウンター&amp;quot; border=&amp;quot;0&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td align=&amp;quot;center&amp;quot; style=&amp;quot;font-size:xx-small&amp;quot;&amp;gt;&amp;lt;img src=&amp;quot;http://www.rays-counter.com/images/counter_01.gif&amp;quot; border=&amp;quot;0&amp;quot;&amp;gt;&amp;lt;img src=&amp;quot;http://www.rays-counter.com/images/counter_02.gif&amp;quot; border=&amp;quot;0&amp;quot;&amp;gt;&amp;lt;img src=&amp;quot;http://www.rays-counter.com/images/counter_03.gif&amp;quot; border=&amp;quot;0&amp;quot;&amp;gt;&amp;lt;img src=&amp;quot;http://www.rays-counter.com/images/counter_04.gif&amp;quot; border=&amp;quot;0&amp;quot;&amp;gt;&amp;lt;img src=&amp;quot;http://www.rays-counter.com/images/counter_05.gif&amp;quot; border=&amp;quot;0&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/center&amp;gt; // アクセスカウンターです、フリーのを使いました
 &amp;lt;script src=&amp;quot;https://code.jquery.com/jquery-2.2.4.min.js&amp;quot; integrity=&amp;quot;sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=&amp;quot; crossorigin=&amp;quot;anonymous&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-&amp;lt;script src=&#39;https://cdn.mlkcca.com/v2.0.0/milkcocoa.js&#39;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script src='https://cdn.mlkcca.com/v2.0.0/milkcocoa.js'&amp;gt;&amp;lt;/script&amp;gt;
 &amp;lt;script&amp;gt;
 $(document).ready(function(){
 // Milkcocoa
-const milkcocoa = new MilkCocoa(&#39;yieldiq29oxas.mlkcca.com&#39;);
-const ds = milkcocoa.dataStore(&#39;status&#39;);
+const milkcocoa = new MilkCocoa('yieldiq29oxas.mlkcca.com');
+const ds = milkcocoa.dataStore('status');
 // Milkcocoaからデータが送られてきた時のコールバック
-ds.on(&#39;send&#39;, (data) =&amp;gt; {
+ds.on('send', (data) =&amp;gt; {
 console.log(data.value);
 const temp=data.value.message;
 if (temp&amp;gt;29){
-$(&#39;#log&#39;).css(&#39;color&#39;, &#39;red&#39;);
-$(&#39;#you&#39;).text(&#39;あついね！&#39;) // 29度以上になると「あついね！」というコメントが表示されます
+$('#log').css('color', 'red');
+$('#you').text('あついね！') // 29度以上になると「あついね！」というコメントが表示されます
 }
 else if (temp&amp;lt;27){
-$(&#39;#log&#39;).css(&#39;color&#39;, &#39;blue&#39;);
-$(&#39;#you&#39;).text(&#39;さむいね！&#39;)　// 27度以下になると「さむいね！」というコメントが表示されます
+$('#log').css('color', 'blue');
+$('#you').text('さむいね！')　// 27度以下になると「さむいね！」というコメントが表示されます
 }
 else {
-$(&#39;#log&#39;).css(&#39;color&#39;, &#39;#eebbcb&#39;);
-$(&#39;#you&#39;).text(&#39;ちょうどいいね！&#39;) // 27&amp;amp;28度になると「ちょうどいいね！」というコメントが表示されます
+$('#log').css('color', '#eebbcb');
+$('#you').text('ちょうどいいね！') // 27&amp;amp;28度になると「ちょうどいいね！」というコメントが表示されます
 }
-$(&#39;#log&#39;).text(&#39;今の温度は&#39;+data.value.message+&#39;度☆&#39;); // 今の温度が表示されます
+$('#log').text('今の温度は'+data.value.message+'度☆'); // 今の温度が表示されます
 // ここでhtmlのDOMを操作する
 // milkcocoa と push でカウンター（javascript）
 })
@@ -167,10 +161,9 @@ $(&#39;#log&#39;).text(&#39;今の温度は&#39;+data.value.message+&#39;度☆&
 &amp;lt;/script&amp;gt;
 &amp;lt;/body&amp;gt;
 &amp;lt;/html&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h4 id=&#34;style-css&#34;&gt;style.css&lt;/h4&gt;
-&lt;pre&gt;&lt;code&gt;body {
-font-family: &#39;Noto Sans Japanese&#39;, sans-serif;
+&lt;/code>&lt;/pre>&lt;h4 id="stylecss">style.css&lt;/h4>
+&lt;pre>&lt;code>body {
+font-family: 'Noto Sans Japanese', sans-serif;
 }
 #log {
 font-size: 30px;
@@ -184,140 +177,129 @@ color: darkblue
 #you {
 text-align: center;
 }
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h4 id=&#34;見た目&#34;&gt;見た目&lt;/h4&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/08_website.png&#34; alt=&#34;&#34; /&gt;
-このような感じの見た目になります。1990年代のサイトを目指しました。全然可愛くないですね。アクセスカウンタは無料で配布されていた「&lt;a href=&#34;http://www.rays-counter.com/&#34;&gt;無料アクセスカウンター&lt;/a&gt;」を使っています。&lt;/p&gt;
-&lt;p&gt;ということで、Webサイトの見た目はこのように自分でアレンジできます。HTMLの技術が少し必要になりますが、自由にいじって自分好みのサイトにしてみてください。（CSSもあればなおよしですね）&lt;/p&gt;
-&lt;p&gt;この状態ではサーバーにアップされていないのでローカル環境でないとサイトを見られませんが、これをアップすれば家の外からでもスマホやPCなどで室温を確認することができます。&lt;/p&gt;
-&lt;h2 id=&#34;注意点&#34;&gt;注意点&lt;/h2&gt;
-&lt;p&gt;ここからは私が詰んだ箇所を紹介します。全部で3つあります。&lt;/p&gt;
-&lt;h3 id=&#34;gr-cottonのジャンパを配線する&#34;&gt;GR-COTTONのジャンパを配線する&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/09_jumper.png&#34; alt=&#34;&#34; /&gt;
-通常はこのパーツを反対側に刺さないといけないです。チュートリアルにも載っていますが見落とすと操作できなくなります。&lt;/p&gt;
-&lt;h3 id=&#34;ケーブルは純正のものを使う&#34;&gt;ケーブルは純正のものを使う&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/10_cable.png&#34; alt=&#34;&#34; /&gt;
-コンビニで売っているモバイルバッテリーに付属しているようなケーブルだと、認識されないのです……。&lt;/p&gt;
-&lt;p&gt;データ通信が可能なタイプを用意しましょう。（GR-COTTONには純正のケーブルが付属していません）&lt;/p&gt;
-&lt;h3 id=&#34;kurumiwriterにチェックを入れる&#34;&gt;KurumiWriterにチェックを入れる&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/11_notfound.png&#34; alt=&#34;&#34; /&gt;
-ケーブルを純正にしたのにPCからUSBドライバが表示されない、ということがありました。&lt;/p&gt;
-&lt;p&gt;&lt;center&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;FTDIの仕様上USBポートが開いた/閉じたときでDTR(COTTONのリセット)がハイ/ロウが排他的になります。KurumiWriterでその設定ができますがデフォルト(チェックなし)ではポートが開いたときDTRがロウになります。 &lt;a href=&#34;https://t.co/aWANpSdJka&#34;&gt;https://t.co/aWANpSdJka&lt;/a&gt;&lt;/p&gt; Renesas_FUN (@Renesas_FUN) &lt;a href=&#34;https://twitter.com/Renesas_FUN/status/750323606601609216&#34;&gt;2016年7月5日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;&lt;/p&gt;
-&lt;p&gt;これをTwitterでつぶやいたところ、がじぇっとるねさすさんの公式アカウントからご回答いただきました。KurumiWriterのチェックボックスにチェックをいれていなかったことが原因でした……。&lt;/p&gt;
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-&lt;p&gt;自分が詰んだところの余談が長くなってしまったのですが、部屋の温度をGR-COTTONで取得してブラウザに表示する方法を紹介しました。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/010/06_code.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;余談ですが、今回使った app.jsとhtmlは、知り合いの元組み込みエンジニアいわたんさん（&lt;a href=&#34;twitter.com/iwata_n&#34;&gt;@iwata_n&lt;/a&gt;）にお願いして作ってもらいました。いわたんさんありがとうございます！&lt;/p&gt;
-&lt;script async class=&#34;speakerdeck-embed&#34; data-id=&#34;aa68f3d1934d480f9a3a26a6062ffa9b&#34; data-ratio=&#34;1.33333333333333&#34; src=&#34;//speakerdeck.com/assets/embed.js&#34;&gt;&lt;/script&gt;
-&lt;p&gt;また、当日発表したプレゼン資料はこちらから見られます。&lt;/p&gt;
-&lt;p&gt;みなさんぜひ試してみてください！&lt;/p&gt;</description></item><item><title>MilkcocoaとNefryでIoT体験！リモートでカラーLチカをしてみよう！</title><link>https://dotstud.io/blog/milkcocoa-nefry-iot-handson/</link><pubDate>Tue, 27 Sep 2016 10:00:27 +0900</pubDate><guid>https://dotstud.io/blog/milkcocoa-nefry-iot-handson/</guid><description>
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/caution.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;こんにちは、dotstudio代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
-&lt;p&gt;IoTな開発をしようとしても、Webやネットワーク、デバイスの知識などが必要になり、始めるまでですでに大変だという場合が多いと思います。&lt;/p&gt;
-&lt;p&gt;そんな方でも、ネットワークに接続しやすく初心者にも易しいデバイスである「Nefry」と、サーバーやネットワーク側の知識がなくてもデバイスやWebを連携できるサービス「Milkcocoa」を使うことで、手軽にIoT開発の入り口に立てます。&lt;/p&gt;
-&lt;p&gt;ということで今日はMilkcocoaとNefryを使い、&lt;strong&gt;Web上のドット絵の色とリアルなLEDを連携させてみましょう&lt;/strong&gt;！（ちなみに、この記事は&lt;a href=&#34;http://mlkcca.connpass.com/event/40292/&#34;&gt;IoT初心者向けハンズオン！ Milkcocoa Meetup vol 13 #mlkcca&lt;/a&gt;のハンズオン資料にもなっています）&lt;/p&gt;
-&lt;h2 id=&#34;今回やること-ledの色をブラウザ上から変える&#34;&gt;今回やること「LEDの色をブラウザ上から変える」&lt;/h2&gt;
-&lt;p&gt;&lt;center&gt;
-&lt;blockquote class=&#34;instagram-media&#34; data-instgrm-captioned data-instgrm-version=&#34;7&#34; style=&#34; background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px); text-align:center;&#34;&gt;&lt;div style=&#34;padding:8px;&#34;&gt; &lt;div style=&#34; background:#F8F8F8; line-height:0; margin-top:40px; padding:28.1944444444% 0; text-align:center; width:100%;&#34;&gt; &lt;div style=&#34; background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAMUExURczMzPf399fX1+bm5mzY9AMAAADiSURBVDjLvZXbEsMgCES5/P8/t9FuRVCRmU73JWlzosgSIIZURCjo/ad+EQJJB4Hv8BFt+IDpQoCx1wjOSBFhh2XssxEIYn3ulI/6MNReE07UIWJEv8UEOWDS88LY97kqyTliJKKtuYBbruAyVh5wOHiXmpi5we58Ek028czwyuQdLKPG1Bkb4NnM+VeAnfHqn1k4+GPT6uGQcvu2h2OVuIf/gWUFyy8OWEpdyZSa3aVCqpVoVvzZZ2VTnn2wU8qzVjDDetO90GSy9mVLqtgYSy231MxrY6I2gGqjrTY0L8fxCxfCBbhWrsYYAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;&#34;&gt;&lt;/div&gt;&lt;/div&gt; &lt;p style=&#34; margin:8px 0 0 0; padding:0 4px;&#34;&gt; &lt;a href=&#34;https://www.instagram.com/p/BKyHEcljEZS/&#34; style=&#34; color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;&#34; target=&#34;_blank&#34;&gt;#Nefry と #mlkcca のサンプル強化&lt;/a&gt;&lt;/p&gt; &lt;p style=&#34; color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;&#34;&gt;n0bisukeさん(@n0bisuke)が投稿した動画 - &lt;time style=&#34; font-family:Arial,sans-serif; font-size:14px; line-height:17px;&#34; datetime=&#34;2016-09-25T14:53:59+00:00&#34;&gt;2016 9月 25 7:53午前 PDT&lt;/time&gt;&lt;/p&gt;&lt;/div&gt;&lt;/blockquote&gt; &lt;script async defer src=&#34;//platform.instagram.com/en_US/embeds.js&#34;&gt;&lt;/script&gt;
-&lt;/center&gt;&lt;/p&gt;
-&lt;p&gt;今回作るものはこちら。&lt;strong&gt;Milkcocoaのドット絵で色を塗ると、NefryのLEDの色（&amp;amp;作成したWebサイト上のLED）が変わる&lt;/strong&gt; という仕組みです！　次の4ステップを通して開発していきます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;STEP1：自前のWebサイトを作る&lt;/li&gt;
-&lt;li&gt;STEP2：ドット絵とWebサイトをMilkcocoa経由で繋げる&lt;/li&gt;
-&lt;li&gt;STEP3：NefryでLチカする&lt;/li&gt;
-&lt;li&gt;STEP4：ドット絵と自前のWebサイトとNefryを繋げてLチカする&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;今回はこれにチャレンジしてみましょう。&lt;/p&gt;
-&lt;h2 id=&#34;今回使うもの-開発環境&#34;&gt;今回使うもの&amp;amp;開発環境&lt;/h2&gt;
-&lt;h3 id=&#34;milkcocoa&#34;&gt;Milkcocoa&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/01.png&#34; alt=&#34;&#34; /&gt;
-URL：&lt;a href=&#34;https://mlkcca.com/&#34;&gt;https://mlkcca.com/&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;WebとWebや、Webとモバイルアプリなどをリアルタイムに繋げるリアルタイム通信ができるIoTのバックエンドサービスです。IoTデバイス間を繋げるハブになってくれます。&lt;/p&gt;
-&lt;p&gt;余談ですが、僕がエバンジェリストをしています。&lt;/p&gt;
-&lt;h3 id=&#34;nefry&#34;&gt;Nefry&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/02.png&#34; alt=&#34;&#34; /&gt;
-URL：&lt;a href=&#34;https://dotstud.io/projects/nefry-connect-internet/&#34;&gt;https://dotstud.io/projects/nefry-connect-internet/&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;ESP8266をベースとしたArduino互換の開発ボードです。Wi-Fiの接続が簡単で、Milkcocoaとの連携もしやすいので、Web界隈の人に易しくIoTの入門におすすめです。青い基盤がversion1で、赤い基盤がversion2になります。&lt;/p&gt;
-&lt;p&gt;名古屋のメイカーである&lt;a href=&#34;https://twitter.com/wamisnet&#34;&gt;わみさん&lt;/a&gt;が制作していてdotstudioで販売しています。CodeZineの記事（&lt;a href=&#34;http://codezine.jp/article/detail/9653&#34;&gt;Arduino IDEで開発できるFRISKサイズのIoTデバイス「Nefry」&lt;/a&gt;）に概要説明がありますので参照してください。&lt;/p&gt;
-&lt;h3 id=&#34;筆者の環境&#34;&gt;筆者の環境&lt;/h3&gt;
-&lt;p&gt;僕の環境はこんな感じです。&lt;a href=&#34;https://dotstud.io/blog/macos-sierra-update-process/&#34;&gt;macOS Sierraにしたばかり&lt;/a&gt;ですが、今回の開発には問題はありませんでした。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;MacBook Pro（Retina 13-inch、 Early2015）&lt;/li&gt;
-&lt;li&gt;macOS Sierra / v10.12 ←アップデートしたばかりです（笑）&lt;/li&gt;
-&lt;li&gt;Arduino IDE v1.16.11&lt;/li&gt;
-&lt;li&gt;Nefry v2&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;事前確認&#34;&gt;事前確認&lt;/h3&gt;
-&lt;p&gt;開発にあたり必要なものがいくつかあります。問題のない方は「実際に作ってみよう」まで読み飛ばして下さい。&lt;/p&gt;
-&lt;h4 id=&#34;wi-fi環境はありますか&#34;&gt;Wi-Fi環境はありますか?&lt;/h4&gt;
-&lt;p&gt;Nefryの開発にはWi-Fiが必須になります。スマートフォンのテザリングなどでも問題ないです。&lt;/p&gt;
-&lt;h4 id=&#34;gitコマンドは使えますか&#34;&gt;gitコマンドは使えますか？&lt;/h4&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;Macの場合はターミナルでgitコマンドを打つとインストールを促されます。Mac以外の方でGitが使えない場合は&lt;a href=&#34;https://git-scm.com/&#34;&gt;公式サイト&lt;/a&gt;などの手順をもとにインストールしてください。&lt;/p&gt;
-&lt;h4 id=&#34;webサーバーを立ち上げられますか&#34;&gt;Webサーバーを立ち上げられますか？&lt;/h4&gt;
-&lt;p&gt;ブラウザからlocalhostにアクセスできる状態にできればOKです。
-XAMPや&lt;a href=&#34;https://www.npmjs.com/package/koko&#34;&gt;koko&lt;/a&gt;など他の方法でも大丈夫です。
-&lt;a href=&#34;http://qiita.com/higuma/items/b23ca9d96dac49999ab9&#34;&gt;開発用ローカルサーバを立ち上げる方法&lt;/a&gt;が参考になります。&lt;/p&gt;
-&lt;p&gt;今回はPythonのSimpleHTTPServerを使ってみます。Macの人なら特に何も設定してなくても使えるので便利です。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;python -m SimpleHTTPServer
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;サーバーの終了はCtrl+Cです。&lt;/p&gt;
-&lt;h4 id=&#34;milkcocoaのアカウント-appidはありますか-無料&#34;&gt;Milkcocoaのアカウント &amp;amp; AppIDはありますか？ (無料)&lt;/h4&gt;
-&lt;p&gt;アカウント登録がまだの場合は&lt;a href=&#34;https://mlkcca.com/&#34;&gt;公式サイト&lt;/a&gt;から、アカウント登録&amp;amp;アプリ作成をしてAppIDを取得しましょう。&lt;/p&gt;
-&lt;h4 id=&#34;nefryが手元にありますか&#34;&gt;Nefryが手元にありますか？&lt;/h4&gt;
-&lt;p&gt;持っていない場合は&lt;a href=&#34;https://dotstud.io/projects/nefry-connect-internet/&#34;&gt;こちら&lt;/a&gt;から購入できます。&lt;/p&gt;
-&lt;h4 id=&#34;arduino-ideはインストールされてますか&#34;&gt;Arduino IDEはインストールされてますか？&lt;/h4&gt;
-&lt;p&gt;こちらも持っていない場合は&lt;a href=&#34;https://www.arduino.cc/en/Main/Software&#34;&gt;公式サイト&lt;/a&gt;からDL&amp;amp;インストールしてください。&lt;/p&gt;
-&lt;h2 id=&#34;実際に作ってみよう&#34;&gt;実際に作ってみよう&lt;/h2&gt;
-&lt;p&gt;ここから実際に作っていきましょう。
-ソースコードのリポジトリは以下になります。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/n0bisuke/milkcocoa-nefry-handson&#34;&gt;https://github.com/n0bisuke/milkcocoa-nefry-handson&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;ちなみにフロント部分で利用しているWeb LEDはDenny Kuさんの&lt;a href=&#34;http://codepen.io/abalone0204/pen/RWgeJY&#34;&gt;Pure CSS Led Bulb&lt;/a&gt;をフォークして作っています。&lt;/p&gt;
-&lt;h3 id=&#34;step1-利用するwebサイト-web-led-を手元で立ち上げてみる&#34;&gt;STEP1：利用するWebサイト（Web LED）を手元で立ち上げてみる&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;git cloneしてソースコードをDLしましょう。このリポジトリにはSTEP1~4までの完成ソースコードがSTEP毎にブランチを分けて置いてあります。
-途中で分からなくなったら各ブランチに移動して確認してみましょう。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;git clone https://github.com/n0bisuke/milkcocoa-nefry-handson
+&lt;/code>&lt;/pre>&lt;h4 id="heading-2">見た目&lt;/h4>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/010/08_website.png" alt="">
+このような感じの見た目になります。1990年代のサイトを目指しました。全然可愛くないですね。アクセスカウンタは無料で配布されていた「&lt;a href="http://www.rays-counter.com/">無料アクセスカウンター&lt;/a>」を使っています。&lt;/p>
+&lt;p>ということで、Webサイトの見た目はこのように自分でアレンジできます。HTMLの技術が少し必要になりますが、自由にいじって自分好みのサイトにしてみてください。（CSSもあればなおよしですね）&lt;/p>
+&lt;p>この状態ではサーバーにアップされていないのでローカル環境でないとサイトを見られませんが、これをアップすれば家の外からでもスマホやPCなどで室温を確認することができます。&lt;/p>
+&lt;h2 id="heading-3">注意点&lt;/h2>
+&lt;p>ここからは私が詰んだ箇所を紹介します。全部で3つあります。&lt;/p>
+&lt;h3 id="gr-cotton-1">GR-COTTONのジャンパを配線する&lt;/h3>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/010/09_jumper.png" alt="">
+通常はこのパーツを反対側に刺さないといけないです。チュートリアルにも載っていますが見落とすと操作できなくなります。&lt;/p>
+&lt;h3 id="heading-4">ケーブルは純正のものを使う&lt;/h3>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/010/10_cable.png" alt="">
+コンビニで売っているモバイルバッテリーに付属しているようなケーブルだと、認識されないのです……。&lt;/p>
+&lt;p>データ通信が可能なタイプを用意しましょう。（GR-COTTONには純正のケーブルが付属していません）&lt;/p>
+&lt;h3 id="kurumiwriter">KurumiWriterにチェックを入れる&lt;/h3>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/010/11_notfound.png" alt="">
+ケーブルを純正にしたのにPCからUSBドライバが表示されない、ということがありました。&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;p>これをTwitterでつぶやいたところ、がじぇっとるねさすさんの公式アカウントからご回答いただきました。KurumiWriterのチェックボックスにチェックをいれていなかったことが原因でした……。&lt;/p>
+&lt;h2 id="heading-5">おわりに&lt;/h2>
+&lt;p>自分が詰んだところの余談が長くなってしまったのですが、部屋の温度をGR-COTTONで取得してブラウザに表示する方法を紹介しました。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/010/06_code.png" alt="">&lt;/p>
+&lt;p>余談ですが、今回使った app.jsとhtmlは、知り合いの元組み込みエンジニアいわたんさん（&lt;a href="twitter.com/iwata_n">@iwata_n&lt;/a>）にお願いして作ってもらいました。いわたんさんありがとうございます！&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;p>また、当日発表したプレゼン資料はこちらから見られます。&lt;/p>
+&lt;p>みなさんぜひ試してみてください！&lt;/p></description></item><item><title>MilkcocoaとNefryでIoT体験！リモートでカラーLチカをしてみよう！</title><link>https://dotstud.io/blog/milkcocoa-nefry-iot-handson/</link><pubDate>Tue, 27 Sep 2016 10:00:27 +0900</pubDate><guid>https://dotstud.io/blog/milkcocoa-nefry-iot-handson/</guid><description>&lt;p>&lt;img src="https://dotstud.io/img/blog/023/caution.png" alt="">&lt;/p>
+&lt;p>こんにちは、dotstudio代表の&lt;a href="https://dotstud.io/members/n0bisuke">のびすけ&lt;/a>です。&lt;/p>
+&lt;p>IoTな開発をしようとしても、Webやネットワーク、デバイスの知識などが必要になり、始めるまでですでに大変だという場合が多いと思います。&lt;/p>
+&lt;p>そんな方でも、ネットワークに接続しやすく初心者にも易しいデバイスである「Nefry」と、サーバーやネットワーク側の知識がなくてもデバイスやWebを連携できるサービス「Milkcocoa」を使うことで、手軽にIoT開発の入り口に立てます。&lt;/p>
+&lt;p>ということで今日はMilkcocoaとNefryを使い、&lt;strong>Web上のドット絵の色とリアルなLEDを連携させてみましょう&lt;/strong>！（ちなみに、この記事は&lt;a href="http://mlkcca.connpass.com/event/40292/">IoT初心者向けハンズオン！ Milkcocoa Meetup vol 13 #mlkcca&lt;/a>のハンズオン資料にもなっています）&lt;/p>
+&lt;h2 id="led">今回やること「LEDの色をブラウザ上から変える」&lt;/h2>
+&lt;!-- raw HTML omitted -->
+&lt;p>今回作るものはこちら。&lt;strong>Milkcocoaのドット絵で色を塗ると、NefryのLEDの色（&amp;amp;作成したWebサイト上のLED）が変わる&lt;/strong> という仕組みです！　次の4ステップを通して開発していきます。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/023/03.png" alt="">&lt;/p>
+&lt;ul>
+&lt;li>STEP1：自前のWebサイトを作る&lt;/li>
+&lt;li>STEP2：ドット絵とWebサイトをMilkcocoa経由で繋げる&lt;/li>
+&lt;li>STEP3：NefryでLチカする&lt;/li>
+&lt;li>STEP4：ドット絵と自前のWebサイトとNefryを繋げてLチカする&lt;/li>
+&lt;/ul>
+&lt;p>今回はこれにチャレンジしてみましょう。&lt;/p>
+&lt;h2 id="heading">今回使うもの&amp;amp;開発環境&lt;/h2>
+&lt;h3 id="milkcocoa">Milkcocoa&lt;/h3>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/023/01.png" alt="">
+URL：https://mlkcca.com/&lt;/p>
+&lt;p>WebとWebや、Webとモバイルアプリなどをリアルタイムに繋げるリアルタイム通信ができるIoTのバックエンドサービスです。IoTデバイス間を繋げるハブになってくれます。&lt;/p>
+&lt;p>余談ですが、僕がエバンジェリストをしています。&lt;/p>
+&lt;h3 id="nefry">Nefry&lt;/h3>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/023/02.png" alt="">
+URL：https://dotstud.io/projects/nefry-connect-internet/&lt;/p>
+&lt;p>ESP8266をベースとしたArduino互換の開発ボードです。Wi-Fiの接続が簡単で、Milkcocoaとの連携もしやすいので、Web界隈の人に易しくIoTの入門におすすめです。青い基盤がversion1で、赤い基盤がversion2になります。&lt;/p>
+&lt;p>名古屋のメイカーである&lt;a href="https://twitter.com/wamisnet">わみさん&lt;/a>が制作していてdotstudioで販売しています。CodeZineの記事（&lt;a href="http://codezine.jp/article/detail/9653">Arduino IDEで開発できるFRISKサイズのIoTデバイス「Nefry」&lt;/a>）に概要説明がありますので参照してください。&lt;/p>
+&lt;h3 id="heading-1">筆者の環境&lt;/h3>
+&lt;p>僕の環境はこんな感じです。&lt;a href="https://dotstud.io/blog/macos-sierra-update-process/">macOS Sierraにしたばかり&lt;/a>ですが、今回の開発には問題はありませんでした。&lt;/p>
+&lt;ul>
+&lt;li>MacBook Pro（Retina 13-inch、 Early2015）&lt;/li>
+&lt;li>macOS Sierra / v10.12 ←アップデートしたばかりです（笑）&lt;/li>
+&lt;li>Arduino IDE v1.16.11&lt;/li>
+&lt;li>Nefry v2&lt;/li>
+&lt;/ul>
+&lt;h3 id="heading-2">事前確認&lt;/h3>
+&lt;p>開発にあたり必要なものがいくつかあります。問題のない方は「実際に作ってみよう」まで読み飛ばして下さい。&lt;/p>
+&lt;h4 id="wi-fi">Wi-Fi環境はありますか?&lt;/h4>
+&lt;p>Nefryの開発にはWi-Fiが必須になります。スマートフォンのテザリングなどでも問題ないです。&lt;/p>
+&lt;h4 id="git">gitコマンドは使えますか？&lt;/h4>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/023/04.png" alt="">&lt;/p>
+&lt;p>Macの場合はターミナルでgitコマンドを打つとインストールを促されます。Mac以外の方でGitが使えない場合は&lt;a href="https://git-scm.com/">公式サイト&lt;/a>などの手順をもとにインストールしてください。&lt;/p>
+&lt;h4 id="web">Webサーバーを立ち上げられますか？&lt;/h4>
+&lt;p>ブラウザからlocalhostにアクセスできる状態にできればOKです。
+XAMPや&lt;a href="https://www.npmjs.com/package/koko">koko&lt;/a>など他の方法でも大丈夫です。
+&lt;a href="http://qiita.com/higuma/items/b23ca9d96dac49999ab9">開発用ローカルサーバを立ち上げる方法&lt;/a>が参考になります。&lt;/p>
+&lt;p>今回はPythonのSimpleHTTPServerを使ってみます。Macの人なら特に何も設定してなくても使えるので便利です。&lt;/p>
+&lt;pre>&lt;code>python -m SimpleHTTPServer
+&lt;/code>&lt;/pre>&lt;p>サーバーの終了はCtrl+Cです。&lt;/p>
+&lt;h4 id="milkcocoa--appid-">Milkcocoaのアカウント &amp;amp; AppIDはありますか？ (無料)&lt;/h4>
+&lt;p>アカウント登録がまだの場合は&lt;a href="https://mlkcca.com/">公式サイト&lt;/a>から、アカウント登録&amp;amp;アプリ作成をしてAppIDを取得しましょう。&lt;/p>
+&lt;h4 id="nefry-1">Nefryが手元にありますか？&lt;/h4>
+&lt;p>持っていない場合は&lt;a href="https://dotstud.io/projects/nefry-connect-internet/">こちら&lt;/a>から購入できます。&lt;/p>
+&lt;h4 id="arduino-ide">Arduino IDEはインストールされてますか？&lt;/h4>
+&lt;p>こちらも持っていない場合は&lt;a href="https://www.arduino.cc/en/Main/Software">公式サイト&lt;/a>からDL&amp;amp;インストールしてください。&lt;/p>
+&lt;h2 id="heading-3">実際に作ってみよう&lt;/h2>
+&lt;p>ここから実際に作っていきましょう。
+ソースコードのリポジトリは以下になります。&lt;/p>
+&lt;p>&lt;a href="https://github.com/n0bisuke/milkcocoa-nefry-handson">https://github.com/n0bisuke/milkcocoa-nefry-handson&lt;/a>&lt;/p>
+&lt;p>ちなみにフロント部分で利用しているWeb LEDはDenny Kuさんの&lt;a href="http://codepen.io/abalone0204/pen/RWgeJY">Pure CSS Led Bulb&lt;/a>をフォークして作っています。&lt;/p>
+&lt;h3 id="step1webweb-led">STEP1：利用するWebサイト（Web LED）を手元で立ち上げてみる&lt;/h3>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/023/05.png" alt="">&lt;/p>
+&lt;p>git cloneしてソースコードをDLしましょう。このリポジトリにはSTEP1~4までの完成ソースコードがSTEP毎にブランチを分けて置いてあります。
+途中で分からなくなったら各ブランチに移動して確認してみましょう。&lt;/p>
+&lt;pre>&lt;code>git clone https://github.com/n0bisuke/milkcocoa-nefry-handson
 cd milkcocoa-nefry-handson
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;step1ブランチにチェックアウトします。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;git checkout step1
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;チェックアウトしたらサーバーを起動させてみましょう。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;python -m SimpleHTTPServer
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;a href=&#34;http://localhost:8000&#34;&gt;http://localhost:8000&lt;/a&gt; にブラウザでアクセスすると↑のGIFのような状態になると思います。&lt;/p&gt;
-&lt;p&gt;POWERボタンを押すとLEDが光ります。この記事ではこのサイトをWeb LEDと呼んでいきます。&lt;/p&gt;
-&lt;h3 id=&#34;step2-ドット絵とweb-ledを繋げてみよう&#34;&gt;STEP2：ドット絵とWeb LEDを繋げてみよう&lt;/h3&gt;
-&lt;h4 id=&#34;milkcocoa-sdkを読み込む&#34;&gt;Milkcocoa SDKを読み込む&lt;/h4&gt;
-&lt;p&gt;milkcocoa-nefry-handsonディレクトリの中には&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;app.js&lt;/li&gt;
-&lt;li&gt;index.html&lt;/li&gt;
-&lt;li&gt;readme.md&lt;/li&gt;
-&lt;li&gt;style.css&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;の4つのファイルがあります。まずはindex.htmlを編集します。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;index.html&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;&amp;lt;script src=&amp;quot;https://cdn.mlkcca.com/v0.6.0/milkcocoa.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;この行をapp.jsの読み込み直前に記述しましょう。&lt;/p&gt;
-&lt;h4 id=&#34;milkcocoaのコードを追記&#34;&gt;Milkcocoaのコードを追記&lt;/h4&gt;
-&lt;p&gt;app.jsの末尾に追記しましょう。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;app.js&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;const milkcocoa = new MilkCocoa(`dogi9jz8c16.mlkcca.com`);
-const dot_ds = milkcocoa.dataStore(&#39;dots&#39;);
-&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;dogi9jz8c16&lt;/strong&gt; の部分がドット絵のApp ID、&lt;strong&gt;dots&lt;/strong&gt; がドット絵のデータストア名になります。&lt;/p&gt;
-&lt;p&gt;また以下を追記します。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;let flag = 0;
-dot_ds.on(&#39;push&#39;,(pushed) =&amp;gt; {
+&lt;/code>&lt;/pre>&lt;p>step1ブランチにチェックアウトします。&lt;/p>
+&lt;pre>&lt;code>git checkout step1
+&lt;/code>&lt;/pre>&lt;p>チェックアウトしたらサーバーを起動させてみましょう。&lt;/p>
+&lt;pre>&lt;code>python -m SimpleHTTPServer
+&lt;/code>&lt;/pre>&lt;p>http://localhost:8000 にブラウザでアクセスすると↑のGIFのような状態になると思います。&lt;/p>
+&lt;p>POWERボタンを押すとLEDが光ります。この記事ではこのサイトをWeb LEDと呼んでいきます。&lt;/p>
+&lt;h3 id="step2web-led">STEP2：ドット絵とWeb LEDを繋げてみよう&lt;/h3>
+&lt;h4 id="milkcocoa-sdk">Milkcocoa SDKを読み込む&lt;/h4>
+&lt;p>milkcocoa-nefry-handsonディレクトリの中には&lt;/p>
+&lt;ul>
+&lt;li>app.js&lt;/li>
+&lt;li>index.html&lt;/li>
+&lt;li>readme.md&lt;/li>
+&lt;li>style.css&lt;/li>
+&lt;/ul>
+&lt;p>の4つのファイルがあります。まずはindex.htmlを編集します。&lt;/p>
+&lt;ul>
+&lt;li>index.html&lt;/li>
+&lt;/ul>
+&lt;pre>&lt;code>&amp;lt;script src=&amp;quot;https://cdn.mlkcca.com/v0.6.0/milkcocoa.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&lt;/code>&lt;/pre>&lt;p>この行をapp.jsの読み込み直前に記述しましょう。&lt;/p>
+&lt;h4 id="milkcocoa-1">Milkcocoaのコードを追記&lt;/h4>
+&lt;p>app.jsの末尾に追記しましょう。&lt;/p>
+&lt;ul>
+&lt;li>app.js&lt;/li>
+&lt;/ul>
+&lt;pre>&lt;code>const milkcocoa = new MilkCocoa(`dogi9jz8c16.mlkcca.com`);
+const dot_ds = milkcocoa.dataStore('dots');
+&lt;/code>&lt;/pre>&lt;p>&lt;strong>dogi9jz8c16&lt;/strong> の部分がドット絵のApp ID、&lt;strong>dots&lt;/strong> がドット絵のデータストア名になります。&lt;/p>
+&lt;p>また以下を追記します。&lt;/p>
+&lt;pre>&lt;code>let flag = 0;
+dot_ds.on('push',(pushed) =&amp;gt; {
 //ドット絵に色が塗られると実行される部分
 addClass(pushed.value.color);
 flag = 1;
@@ -326,32 +308,30 @@ setInterval(()=&amp;gt;{
 removeClass();
 flag = 0;
 },5000);
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;code&gt;.on&lt;/code&gt;メソッドで&lt;code&gt;pushイベント&lt;/code&gt;を監視しています。ドット絵に色が塗られると、onメソッドのコールバック関数が発火してaddClass関数が実行されます。（ここの行数でいうと4行目）&lt;/p&gt;
-&lt;p&gt;ドット絵では塗られた色のカラーコードが送られて来るので色の情報をaddClass関数に渡しています。&lt;/p&gt;
-&lt;h4 id=&#34;step2の確認&#34;&gt;STEP2の確認&lt;/h4&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;STEP1と同様に &lt;a href=&#34;http://localhost:8000&#34;&gt;http://localhost:8000&lt;/a&gt; にブラウザでアクセスして動作を確認しましょう。同時に &lt;a href=&#34;https://mlkcca.com/sample.html&#34;&gt;https://mlkcca.com/sample.html&lt;/a&gt; も開いてドット絵で色を塗るとLEDの色が変わることを確認してください。&lt;/p&gt;
-&lt;p&gt;ここまでの完成ソースコードは&lt;a href=&#34;https://github.com/n0bisuke/milkcocoa-nefry-handson/tree/step2&#34;&gt;STEP2ブランチ&lt;/a&gt;にまとめてあります。&lt;/p&gt;
-&lt;h3 id=&#34;step3-nefryでlチカしてみよう&#34;&gt;STEP3：NefryでLチカしてみよう&lt;/h3&gt;
-&lt;p&gt;いよいよNefryを触ります。Nefryの関連リンクもあるので参考にしましょう。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://codezine.jp/article/detail/9653&#34;&gt;Arduino IDEで開発できるFRISKサイズのIoTデバイス「Nefry」&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://qiita.com/wamisnet/items/d07c3c22e2bf5ab628ef&#34;&gt;Nefryの情報まとめ&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h4 id=&#34;arduino-ideにnefryのボードマネージャを追加する&#34;&gt;Arduino IDEにNefryのボードマネージャを追加する&lt;/h4&gt;
-&lt;p&gt;Arduino IDEでNefryの開発ができるのですが、いくつかの設定が必要になります。Arduino IDEのメニューの &lt;strong&gt;環境設定 &amp;gt; 追加のボードマネージャのURL&lt;/strong&gt; のフォームに以下をURLを貼り付けてOKを押しましょう。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;http://wamisnet.github.io/package_nefry_index.json
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;次にArduino IDEの &lt;strong&gt;ツール &amp;gt; ボード &amp;gt;ボードマネージャ&lt;/strong&gt; からNefryを検索します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/08.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;Nefryの項目が出てくるのでインストールしましょう。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/09.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;h4 id=&#34;コードの準備&#34;&gt;コードの準備&lt;/h4&gt;
-&lt;p&gt;それではいよいよLチカです。ハローワールドですね。Nefryには最初からフルカラーLEDがついているのでカラフルなLチカが試せます。&lt;/p&gt;
-&lt;p&gt;以下がLチカのサンプルコードです。 &lt;strong&gt;新規ファイル&lt;/strong&gt; から新規のスケッチファイルを作成し、コードをとりあえずコピペしてみましょう。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+&lt;/code>&lt;/pre>&lt;p>&lt;code>.on&lt;/code>メソッドで&lt;code>pushイベント&lt;/code>を監視しています。ドット絵に色が塗られると、onメソッドのコールバック関数が発火してaddClass関数が実行されます。（ここの行数でいうと4行目）&lt;/p>
+&lt;p>ドット絵では塗られた色のカラーコードが送られて来るので色の情報をaddClass関数に渡しています。&lt;/p>
+&lt;h4 id="step2">STEP2の確認&lt;/h4>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/023/06.png" alt="">&lt;/p>
+&lt;p>STEP1と同様に http://localhost:8000 にブラウザでアクセスして動作を確認しましょう。同時に &lt;a href="https://mlkcca.com/sample.html">https://mlkcca.com/sample.html&lt;/a> も開いてドット絵で色を塗るとLEDの色が変わることを確認してください。&lt;/p>
+&lt;p>ここまでの完成ソースコードは&lt;a href="https://github.com/n0bisuke/milkcocoa-nefry-handson/tree/step2">STEP2ブランチ&lt;/a>にまとめてあります。&lt;/p>
+&lt;h3 id="step3nefryl">STEP3：NefryでLチカしてみよう&lt;/h3>
+&lt;p>いよいよNefryを触ります。Nefryの関連リンクもあるので参考にしましょう。&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="https://codezine.jp/article/detail/9653">Arduino IDEで開発できるFRISKサイズのIoTデバイス「Nefry」&lt;/a>&lt;/li>
+&lt;li>&lt;a href="http://qiita.com/wamisnet/items/d07c3c22e2bf5ab628ef">Nefryの情報まとめ&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;h4 id="arduino-idenefry">Arduino IDEにNefryのボードマネージャを追加する&lt;/h4>
+&lt;p>Arduino IDEでNefryの開発ができるのですが、いくつかの設定が必要になります。Arduino IDEのメニューの &lt;strong>環境設定 &amp;gt; 追加のボードマネージャのURL&lt;/strong> のフォームに以下をURLを貼り付けてOKを押しましょう。&lt;/p>
+&lt;pre>&lt;code>http://wamisnet.github.io/package_nefry_index.json
+&lt;/code>&lt;/pre>&lt;p>&lt;img src="https://dotstud.io/img/blog/023/07.png" alt="">&lt;/p>
+&lt;p>次にArduino IDEの &lt;strong>ツール &amp;gt; ボード &amp;gt;ボードマネージャ&lt;/strong> からNefryを検索します。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/023/08.png" alt="">&lt;/p>
+&lt;p>Nefryの項目が出てくるのでインストールしましょう。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/023/09.png" alt="">&lt;/p>
+&lt;h4 id="heading-4">コードの準備&lt;/h4>
+&lt;p>それではいよいよLチカです。ハローワールドですね。Nefryには最初からフルカラーLEDがついているのでカラフルなLチカが試せます。&lt;/p>
+&lt;p>以下がLチカのサンプルコードです。 &lt;strong>新規ファイル&lt;/strong> から新規のスケッチファイルを作成し、コードをとりあえずコピペしてみましょう。&lt;/p>
+&lt;pre>&lt;code>#include &amp;lt;Nefry.h&amp;gt;
 //フルカラーLED　ランダムにカラーが変わります。
 void setup() {
 Nefry.println(&amp;quot;フルカラーLED!&amp;quot;);
@@ -369,83 +349,82 @@ color+=&amp;quot; Blue:&amp;quot;;color+=blue;
 Nefry.println(color);//Nefry consoleで色を表示
 Nefry.ndelay(1000);//1秒待つ
 }
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Arduino開発をしたことがある人は、&lt;strong&gt;これを書いたら書き込みたくなりますが一旦待ちましょう。&lt;/strong&gt; Nefryではこのコードを直接書き込むのではなく、一旦 &lt;strong&gt;.bin&lt;/strong&gt; 形式にコンパイルしてからWebブラウザ経由で書き込みます。&lt;/p&gt;
-&lt;h4 id=&#34;ソースコードを-bin形式にコンパイル&#34;&gt;ソースコードを.bin形式にコンパイル&lt;/h4&gt;
-&lt;p&gt;まずはメニューの&lt;strong&gt;ツール &amp;gt; ボード&lt;/strong&gt;から&lt;strong&gt;Nefry&lt;/strong&gt;を選択しましょう。この時、赤い基盤のNefryの場合は&lt;strong&gt;Nefry V2&lt;/strong&gt;を選択してください。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;次にメニューの &lt;strong&gt;スケッチ &amp;gt; コンパイルしたバイナリを出力&lt;/strong&gt; を選択します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;コンパイルが開始され、プログラム的なエラーがあればここで表示されます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/12.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;特にエラーが出なければ&lt;strong&gt;arduino.bin&lt;/strong&gt;というファイルがスケッチファイル（.ino）と同じディレクトリ内にできます。&lt;/p&gt;
-&lt;h4 id=&#34;nefryとpcをwi-fi経由で接続してプログラムを書き込む&#34;&gt;NefryとPCをWi-Fi経由で接続してプログラムを書き込む&lt;/h4&gt;
-&lt;p&gt;ここからはNefryとの接続ですので &lt;strong&gt;Nefryの電源をつけましょう。&lt;/strong&gt; NefryとPCの接続はWi-Fi経由で行います。そのためNefryはWi-Fi環境さえあれば &lt;strong&gt;PCと物理的に接続しなくとも開発ができる&lt;/strong&gt; デバイスです。&lt;/p&gt;
-&lt;p&gt;ちなみにNefryは &lt;strong&gt;PCに直挿しもできますが、USBで給電しているだけ&lt;/strong&gt; です。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/13.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;まずはPCでWi-FiのSSIDを探します。Nefryが起動していると、&lt;strong&gt;Nefry_xxxx&lt;/strong&gt; というアクセスポイントが表示されるはずなので探して接続しましょう。&lt;/p&gt;
-&lt;p&gt;ちなみに、この&amp;rdquo;NefryのWi-Fi&amp;rdquo;に接続している段階ではWebサイトなどは見れないのでこのページを開いたまま進めることをオススメします。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/14.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;接続できたらブラウザで &lt;a href=&#34;http://192.168.4.1&#34;&gt;http://192.168.4.1&lt;/a&gt; にアクセスします。「Hello from Nefry!」と表示されるのNefryの管理画面が表示されます。&lt;/p&gt;
-&lt;p&gt;メニューの &lt;strong&gt;Upload Sketch&lt;/strong&gt; を選択すると、アップローダが表示されるので先ほどの &lt;strong&gt;arduino.bin&lt;/strong&gt; をアップロードします。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/15.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;これで先ほどのLチカプログラムがNefryに書き込まれます。&lt;/p&gt;
-&lt;h4 id=&#34;lチカ完成&#34;&gt;Lチカ完成&lt;/h4&gt;
-&lt;p&gt;プログラムの書き込みなどで数秒掛かるので少し待ちます。すると……&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/16.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;ランダムな色でLEDがチカチカしたかと思います。うまくいきましたか？&lt;/p&gt;
-&lt;p&gt;ここまでできたら一安心です。ソースコードの&lt;code&gt;Nefry.ndelay(1000);&lt;/code&gt;の1000の数値を変えて、同じ手順でNefryに書き込んでチカチカする間隔が変わることを試してみましょう。&lt;/p&gt;
-&lt;p&gt;ここまでの完成ソースコードは&lt;a href=&#34;https://github.com/n0bisuke/milkcocoa-nefry-handson/tree/step3&#34;&gt;STEP3ブランチ&lt;/a&gt;にまとめてあります。&lt;/p&gt;
-&lt;h3 id=&#34;step4-nefryとmilkcocoaを繋げる&#34;&gt;STEP4：NefryとMilkcocoaを繋げる&lt;/h3&gt;
-&lt;p&gt;それでは本題であるMilkcocoaとNefryを繋げてみます。&lt;/p&gt;
-&lt;h4 id=&#34;nefryをネットワークに繋げる&#34;&gt;Nefryをネットワークに繋げる&lt;/h4&gt;
-&lt;p&gt;先ほどはNefryをホストにしてPCから直接Nefryに接続しました。&lt;/p&gt;
-&lt;p&gt;この状態だとローカルLAN接続しかできず、インターネットの世界にNefryを繋げることができません。
-今度はNefry自体をネットワークに接続しましょう。作業している部屋などで、普段使っているWi-FiにNefryを接続します。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Nefry_xxxx&lt;/strong&gt; という&amp;rdquo;NefryのWi-Fi&amp;rdquo;に接続されていることを確認してください。また &lt;a href=&#34;http://192.168.4.1&#34;&gt;http://192.168.4.1&lt;/a&gt; にアクセスし、メニューの &lt;strong&gt;Setup WiFi&lt;/strong&gt; を選択すると近くのSSIDとPASSを入力する画面が表示されます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/17.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;SSID（近くにあればプルダウンで選択できます）とパスワードを入力して、セーブしましょう。ポップアップで確認がでるのでOKを選択してください。SSIDが出てこない場合はリロードしてください。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/18.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;これでNefryがネットワークに繋がりました。&lt;/p&gt;
-&lt;h4 id=&#34;nefryのip-adressを調べる&#34;&gt;NefryのIP Adressを調べる&lt;/h4&gt;
-&lt;p&gt;Nefryがネットワークに繋がるとリスタートがかかってWi-Fi接続が途切れる場合があります。一度　&lt;strong&gt;Nefry_xxxx&lt;/strong&gt;　という&amp;rdquo;NefryのWi-Fi&amp;rdquo;に繋がっているか確認してください。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/19.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;http://192.168.4.1&#34;&gt;http://192.168.4.1&lt;/a&gt; にアクセスしましょう。 &lt;strong&gt;IP Address&lt;/strong&gt;　の項目にNefryのIPアドレスが表示されています。表示されない場合はNefryを再起動して再度試してみましょう。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/20.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;これでNefryのIPが　&lt;strong&gt;192.168.43.56&lt;/strong&gt;　ということが分かりました。人によって変わるので各自の値で置き換えて見てください。IPアドレスが分かったらWi-Fiを繋ぎなおしましょう。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/21.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;繋ぎなおしてから &lt;a href=&#34;http://192.168.43.56/&#34;&gt;http://192.168.43.56/&lt;/a&gt; にアクセスすると先ほどと同様のメニュー画面になります。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/22.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;&amp;ldquo;NefryのWi-Fi&amp;rdquo;でアクセスしてた際の 192.168.4.1 ではないIPでもNefryにアクセスできたことがわかります。&lt;/p&gt;
-&lt;p&gt;これでPCとNefryの両方がネットワークに接続することができました。(僕の場合はu-sen-lan)&lt;/p&gt;
-&lt;p&gt;&amp;ldquo;NefryのWi-Fi&amp;rdquo;に繋いだままだとサイトを見に行けなかったですが、これでWebサイトなどを通常に見ることができます。&lt;/p&gt;
-&lt;h4 id=&#34;milkcocoaのkeyを取得してnefryに設定&#34;&gt;MilkcocoaのKeyを取得してNefryに設定&lt;/h4&gt;
-&lt;p&gt;PCが通常のネットワークに繋がったので、Milkcocoaのウェブサイトを見にいきましょう。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://mlkcca.com/edit/&#34;&gt;Milkcocoaの管理画面&lt;/a&gt;から &lt;strong&gt;認証 &amp;gt; 新しいAPI KeyとAPI Secretのペアを生成する&lt;/strong&gt; を選択しAPI KeyとAPI Secretを作ります。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/23.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;App ID&lt;/li&gt;
-&lt;li&gt;API Key&lt;/li&gt;
-&lt;li&gt;API Secret&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;この三つの値を後ほど使います。&lt;/p&gt;
-&lt;h4 id=&#34;コーディング&#34;&gt;コーディング&lt;/h4&gt;
-&lt;ul&gt;
-&lt;li&gt;app.jsの変更&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;app.js&lt;/strong&gt; に変更と追記をしていきます。&lt;/p&gt;
-&lt;p&gt;主に今回の変更は、ドット絵のデータとNefryに流すデータを繋げるための変更です。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;・
+&lt;/code>&lt;/pre>&lt;p>Arduino開発をしたことがある人は、&lt;strong>これを書いたら書き込みたくなりますが一旦待ちましょう。&lt;/strong> Nefryではこのコードを直接書き込むのではなく、一旦 &lt;strong>.bin&lt;/strong> 形式にコンパイルしてからWebブラウザ経由で書き込みます。&lt;/p>
+&lt;h4 id="bin">ソースコードを.bin形式にコンパイル&lt;/h4>
+&lt;p>まずはメニューの__ツール &amp;gt; ボード__から__Nefry__を選択しましょう。この時、赤い基盤のNefryの場合は__Nefry V2__を選択してください。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/023/10.png" alt="">&lt;/p>
+&lt;p>次にメニューの &lt;strong>スケッチ &amp;gt; コンパイルしたバイナリを出力&lt;/strong> を選択します。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/023/11.png" alt="">&lt;/p>
+&lt;p>コンパイルが開始され、プログラム的なエラーがあればここで表示されます。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/023/12.png" alt="">&lt;/p>
+&lt;p>特にエラーが出なければ__arduino.bin__というファイルがスケッチファイル（.ino）と同じディレクトリ内にできます。&lt;/p>
+&lt;h4 id="nefrypcwi-fi">NefryとPCをWi-Fi経由で接続してプログラムを書き込む&lt;/h4>
+&lt;p>ここからはNefryとの接続ですので &lt;strong>Nefryの電源をつけましょう。&lt;/strong> NefryとPCの接続はWi-Fi経由で行います。そのためNefryはWi-Fi環境さえあれば &lt;strong>PCと物理的に接続しなくとも開発ができる&lt;/strong> デバイスです。&lt;/p>
+&lt;p>ちなみにNefryは &lt;strong>PCに直挿しもできますが、USBで給電しているだけ&lt;/strong> です。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/023/13.png" alt="">&lt;/p>
+&lt;p>まずはPCでWi-FiのSSIDを探します。Nefryが起動していると、&lt;strong>Nefry_xxxx&lt;/strong> というアクセスポイントが表示されるはずなので探して接続しましょう。&lt;/p>
+&lt;p>ちなみに、この&amp;quot;NefryのWi-Fi&amp;quot;に接続している段階ではWebサイトなどは見れないのでこのページを開いたまま進めることをオススメします。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/023/14.png" alt="">&lt;/p>
+&lt;p>接続できたらブラウザで http://192.168.4.1 にアクセスします。「Hello from Nefry!」と表示されるのNefryの管理画面が表示されます。&lt;/p>
+&lt;p>メニューの &lt;strong>Upload Sketch&lt;/strong> を選択すると、アップローダが表示されるので先ほどの &lt;strong>arduino.bin&lt;/strong> をアップロードします。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/023/15.png" alt="">&lt;/p>
+&lt;p>これで先ほどのLチカプログラムがNefryに書き込まれます。&lt;/p>
+&lt;h4 id="l">Lチカ完成&lt;/h4>
+&lt;p>プログラムの書き込みなどで数秒掛かるので少し待ちます。すると……&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/023/16.png" alt="">&lt;/p>
+&lt;p>ランダムな色でLEDがチカチカしたかと思います。うまくいきましたか？&lt;/p>
+&lt;p>ここまでできたら一安心です。ソースコードの&lt;code>Nefry.ndelay(1000);&lt;/code>の1000の数値を変えて、同じ手順でNefryに書き込んでチカチカする間隔が変わることを試してみましょう。&lt;/p>
+&lt;p>ここまでの完成ソースコードは&lt;a href="https://github.com/n0bisuke/milkcocoa-nefry-handson/tree/step3">STEP3ブランチ&lt;/a>にまとめてあります。&lt;/p>
+&lt;h3 id="step4nefrymilkcocoa">STEP4：NefryとMilkcocoaを繋げる&lt;/h3>
+&lt;p>それでは本題であるMilkcocoaとNefryを繋げてみます。&lt;/p>
+&lt;h4 id="nefry-2">Nefryをネットワークに繋げる&lt;/h4>
+&lt;p>先ほどはNefryをホストにしてPCから直接Nefryに接続しました。&lt;/p>
+&lt;p>この状態だとローカルLAN接続しかできず、インターネットの世界にNefryを繋げることができません。
+今度はNefry自体をネットワークに接続しましょう。作業している部屋などで、普段使っているWi-FiにNefryを接続します。&lt;/p>
+&lt;p>&lt;strong>Nefry_xxxx&lt;/strong> という&amp;quot;NefryのWi-Fi&amp;quot;に接続されていることを確認してください。また http://192.168.4.1 にアクセスし、メニューの &lt;strong>Setup WiFi&lt;/strong> を選択すると近くのSSIDとPASSを入力する画面が表示されます。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/023/17.png" alt="">&lt;/p>
+&lt;p>SSID（近くにあればプルダウンで選択できます）とパスワードを入力して、セーブしましょう。ポップアップで確認がでるのでOKを選択してください。SSIDが出てこない場合はリロードしてください。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/023/18.png" alt="">&lt;/p>
+&lt;p>これでNefryがネットワークに繋がりました。&lt;/p>
+&lt;h4 id="nefryip-adress">NefryのIP Adressを調べる&lt;/h4>
+&lt;p>Nefryがネットワークに繋がるとリスタートがかかってWi-Fi接続が途切れる場合があります。一度　&lt;strong>Nefry_xxxx&lt;/strong>　という&amp;quot;NefryのWi-Fi&amp;quot;に繋がっているか確認してください。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/023/19.png" alt="">&lt;/p>
+&lt;p>http://192.168.4.1 にアクセスしましょう。 &lt;strong>IP Address&lt;/strong>　の項目にNefryのIPアドレスが表示されています。表示されない場合はNefryを再起動して再度試してみましょう。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/023/20.png" alt="">&lt;/p>
+&lt;p>これでNefryのIPが　&lt;strong>192.168.43.56&lt;/strong>　ということが分かりました。人によって変わるので各自の値で置き換えて見てください。IPアドレスが分かったらWi-Fiを繋ぎなおしましょう。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/023/21.png" alt="">&lt;/p>
+&lt;p>繋ぎなおしてから http://192.168.43.56/ にアクセスすると先ほどと同様のメニュー画面になります。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/023/22.png" alt="">&lt;/p>
+&lt;p>&amp;ldquo;NefryのWi-Fi&amp;quot;でアクセスしてた際の 192.168.4.1 ではないIPでもNefryにアクセスできたことがわかります。&lt;/p>
+&lt;p>これでPCとNefryの両方がネットワークに接続することができました。(僕の場合はu-sen-lan)&lt;/p>
+&lt;p>&amp;ldquo;NefryのWi-Fi&amp;quot;に繋いだままだとサイトを見に行けなかったですが、これでWebサイトなどを通常に見ることができます。&lt;/p>
+&lt;h4 id="milkcocoakeynefry">MilkcocoaのKeyを取得してNefryに設定&lt;/h4>
+&lt;p>PCが通常のネットワークに繋がったので、Milkcocoaのウェブサイトを見にいきましょう。&lt;/p>
+&lt;p>&lt;a href="https://mlkcca.com/edit/">Milkcocoaの管理画面&lt;/a>から &lt;strong>認証 &amp;gt; 新しいAPI KeyとAPI Secretのペアを生成する&lt;/strong> を選択しAPI KeyとAPI Secretを作ります。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/023/23.png" alt="">&lt;/p>
+&lt;ul>
+&lt;li>App ID&lt;/li>
+&lt;li>API Key&lt;/li>
+&lt;li>API Secret&lt;/li>
+&lt;/ul>
+&lt;p>この三つの値を後ほど使います。&lt;/p>
+&lt;h4 id="heading-5">コーディング&lt;/h4>
+&lt;ul>
+&lt;li>app.jsの変更&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>app.js&lt;/strong> に変更と追記をしていきます。&lt;/p>
+&lt;p>主に今回の変更は、ドット絵のデータとNefryに流すデータを繋げるための変更です。&lt;/p>
+&lt;pre>&lt;code>・
 ・(省略)
 ・
 //ドット絵側のアプリ&amp;amp;データストア
 let milkcocoa = new MilkCocoa(`dogi9jz8c16.mlkcca.com`);
-const dot_ds = milkcocoa.dataStore(&#39;dots&#39;);
+const dot_ds = milkcocoa.dataStore('dots');
 //Nefry側のアプリ&amp;amp;データストア
 milkcocoa = new MilkCocoa(`your-app-id.mlkcca.com`);
-const nefry_ds = milkcocoa.dataStore(&#39;nefry&#39;);
+const nefry_ds = milkcocoa.dataStore('nefry');
 let flag = 0, red = 0, green = 0, blue = 0;
-dot_ds.on(&#39;push&#39;,(pushed) =&amp;gt; {
+dot_ds.on('push',(pushed) =&amp;gt; {
 //ドット絵から送られてくるカラーコードをRGBに変換
 let color = pushed.value.color;
 red = parseInt(color.substr(1,2), 16);
@@ -461,14 +440,13 @@ console.log(pushed);
 ・
 ・(省略)
 ・
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;変数 &lt;strong&gt;nefry_ds&lt;/strong&gt; としてNefry側のデータストアを新たに読み込みます。&lt;strong&gt;dot_ds.on()&lt;/strong&gt; の中では&lt;strong&gt;pushed.value.color&lt;/strong&gt;にカラーコード（#ce071bのような値）が送られてくるので、RGB（206,7,27のような値）に変換して、&lt;strong&gt;nefry_ds.send()&lt;/strong&gt; でNefry側に送信しています。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Nefry側&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Milkcocoaからのデータを受け取り、LEDを光らせるコードにしましょう。&lt;/p&gt;
-&lt;p&gt;以下のスケッチを作成し、STEP3の時と同様に &lt;strong&gt;arduino.bin&lt;/strong&gt; にコンパイルして出力します。先ほどの手順と同様にNefryのメニューから &lt;strong&gt;Upload Sketch&lt;/strong&gt; を選択してアップロードしましょう。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+&lt;/code>&lt;/pre>&lt;p>変数 &lt;strong>nefry_ds&lt;/strong> としてNefry側のデータストアを新たに読み込みます。&lt;strong>dot_ds.on()&lt;/strong> の中では__pushed.value.color__にカラーコード（#ce071bのような値）が送られてくるので、RGB（206,7,27のような値）に変換して、&lt;strong>nefry_ds.send()&lt;/strong> でNefry側に送信しています。&lt;/p>
+&lt;ul>
+&lt;li>Nefry側&lt;/li>
+&lt;/ul>
+&lt;p>Milkcocoaからのデータを受け取り、LEDを光らせるコードにしましょう。&lt;/p>
+&lt;p>以下のスケッチを作成し、STEP3の時と同様に &lt;strong>arduino.bin&lt;/strong> にコンパイルして出力します。先ほどの手順と同様にNefryのメニューから &lt;strong>Upload Sketch&lt;/strong> を選択してアップロードしましょう。&lt;/p>
+&lt;pre>&lt;code>#include &amp;lt;Nefry.h&amp;gt;
 #include &amp;lt;Nefry_Milkcocoa.h&amp;gt;
 Nefry_Milkcocoa *milkcocoa;
 char *datastore;
@@ -491,84 +469,78 @@ Nefry.println( milkcocoa-&amp;gt;on( datastore, &amp;quot;send&amp;quot;, onsend
 void loop() {
 Nefry.println( milkcocoa-&amp;gt;loop(10000)? &amp;quot;Milkcocoa Connect OK&amp;quot; : &amp;quot;Milkcocoa Connect NG&amp;quot; );//10秒以内にMilkcocoaに接続できればokと表示されます。
 }
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;strong&gt;setup()&lt;/strong&gt; 内ではMilkcocoaに接続するための準備をしています。 &lt;strong&gt;milkcocoa-&amp;gt;on( datastore, &amp;ldquo;send&amp;rdquo;, onsend)&lt;/strong&gt; の部分でsendイベントの監視が有効になります。&lt;strong&gt;onsend()&lt;/strong&gt; 内がsendイベントが送られてきたときに呼び出されます。&lt;/p&gt;
-&lt;p&gt;先ほどのapp.js側では &lt;strong&gt;{r:red,g:green,b:blue}&lt;/strong&gt; という形でRGBの値を送っていましたが、Nefry側では &lt;strong&gt;elem-&amp;gt;getInt(&amp;ldquo;r&amp;rdquo;)&lt;/strong&gt; とすることでrの値を取得できます。取得した値を &lt;strong&gt;Nefry.setLed()&lt;/strong&gt; に渡してあげることでLEDの色を変えられます。&lt;/p&gt;
-&lt;h4 id=&#34;nefryにmilkcocoaのkeyを設定していく&#34;&gt;NefryにMilkcocoaのKeyを設定していく&lt;/h4&gt;
-&lt;p&gt;最後にNefryのメニュー（この時点で僕の場合は &lt;a href=&#34;http://192.168.43.56/&#34;&gt;http://192.168.43.56/&lt;/a&gt; ）から &lt;strong&gt;Setup Module&lt;/strong&gt; のメニューから、取得した以下の値を入力し保存します。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;先に上記コードをNefryに書き込まないとこのAPI Keyなどの項目が表示されませんので気をつけましょう。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/24.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;また、DataStoreの値は任意ですが今回は &lt;strong&gt;nefry&lt;/strong&gt; にします。&lt;/p&gt;
-&lt;h4 id=&#34;試してみる&#34;&gt;試してみる&lt;/h4&gt;
-&lt;p&gt;ここまでが終わるとカラーLEDの色をドット絵に同期させることができます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/023/25.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;以下の状態にしてドット絵を操作してみましょう。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;ブラウザで &lt;a href=&#34;http://localhost:8000&#34;&gt;http://localhost:8000&lt;/a&gt; にアクセス（写真のMac画面の右側）&lt;/li&gt;
-&lt;li&gt;同時に&lt;a href=&#34;https://mlkcca.com/sample.html&#34;&gt;ドット絵&lt;/a&gt;にアクセス（写真のMac画面の左側）&lt;/li&gt;
-&lt;li&gt;Nefryの電源を起動させておく（写真右側）&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;前述したとおり、NefryはPCに直挿しでも大丈夫ですが、給電のみをおこなっているため別電源で起動しても問題ないです。写真（動画）ではスタンドアロン感を出すために、あえてPCでなくモバイルバッテリーに挿しています。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.instagram.com/p/BKyHEcljEZS/&#34;&gt;最初に載せた結果&lt;/a&gt;のようになっていれば成功です！&lt;/p&gt;
-&lt;p&gt;ここまでの完成ソースコードは&lt;a href=&#34;https://github.com/n0bisuke/milkcocoa-nefry-handson/tree/step4&#34;&gt;STEP4ブランチ&lt;/a&gt;にまとめてあります。&lt;/p&gt;
-&lt;p&gt;お疲れ様でした。&lt;/p&gt;
-&lt;h2 id=&#34;ハンズオンの様子など&#34;&gt;ハンズオンの様子など&lt;/h2&gt;
-&lt;p&gt;当日は&lt;a href=&#34;https://akiba.dmm-make.com/&#34;&gt;DMM.make AKIBA&lt;/a&gt;の会場をお借りして開催しました。
-&lt;a href=&#34;http://togetter.com/li/1029940&#34;&gt;MilkcocoaとNefryをつなげたハンズオン! Milkcocoa Meetup vol13 #mlkcca&lt;/a&gt;にもまとめましたが概ねSTEP4までを1.5時間くらいで完成させられていたのでハンズオンとしてはかなりよかったと思います。&lt;/p&gt;
-&lt;p&gt;&lt;center&gt;
-&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;Nefry祭り始まるよ！😆 &lt;a href=&#34;https://twitter.com/hashtag/mlkcca?src=hash&#34;&gt;#mlkcca&lt;/a&gt; &lt;a href=&#34;https://t.co/ZrCMdMAy3R&#34;&gt;pic.twitter.com/ZrCMdMAy3R&lt;/a&gt;&lt;/p&gt; えむにわ(クオリティの低いツイート) (@m2wasabi) &lt;a href=&#34;https://twitter.com/m2wasabi/status/780717318955339776&#34;&gt;2016年9月27日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
-&lt;/center&gt;&lt;/p&gt;
-&lt;p&gt;当日はNefry開発者の&lt;a href=&#34;http://twitter.com/wamisnet&#34;&gt;わみさん&lt;/a&gt;、Milkcocoaの&lt;a href=&#34;http://twitter.com/bakuonboogie&#34;&gt;川野くん&lt;/a&gt;も参戦してくれて、かなり豪華な布陣になりました。&lt;/p&gt;
-&lt;p&gt;ちなみに、ハンズオンだと会場がNefry名のSSIDに溢れかえってしまい、自分のNefryがどれかが分からない問題があります。
-Nefryが発信するWiFiのSSIDはNefry_xxxxという形式になりますが、設定画面から名前を変更できるので、今回はあらかじめ名前を変更して配ることで対応しました。&lt;/p&gt;
-&lt;p&gt;今回のハンズオンで使った&lt;a href=&#34;https://github.com/n0bisuke/milkcocoa-nefry-handson&#34;&gt;ソースコード&lt;/a&gt;はGitHubにおいてありますのでどなたでも自由に使ってください。&lt;/p&gt;
-&lt;p&gt;無断でも大丈夫ですが使うときに&lt;a href=&#34;http://twitter.com/n0bisuke&#34;&gt;@n0bisuke&lt;/a&gt;に声かけてくれるとうれしかったりします笑&lt;/p&gt;
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-&lt;p&gt;NefryとMilkcocoaを使って、リアルタイムにWebとモノを繋げるIoTな体験ができたと思います。&lt;/p&gt;
-&lt;p&gt;IoTな開発をやろうとした際に、開発環境の構築とネットワークへの接続が課題になるケースが多いです。
-RaspberryPiやArduinoは「電子工作初心者向け」だと世間では言われていますが、RaspberryPiはOS書き込みなど初期設定の内容が重く、Arduinoはネットワーク接続に課題があるように感じています。&lt;/p&gt;
-&lt;p&gt;またWebと接続しようとした際に必要となる知識がすごく多く、知識の深さに加えて幅広さも求められます。Nefry+Milkcocoaはその課題を解決するデバイス&amp;amp;サービスだと思います。「ちょっとIoT入門してみたい」という欲求を満たしやすいです。&lt;/p&gt;
-&lt;p&gt;ぜひ、みなさんもNefryとMilkcocoaを使ってIoTに入門してみて下さい。&lt;/p&gt;
-&lt;p&gt;それでは :)&lt;/p&gt;</description></item><item><title>電子回路を簡単に学べるlittleBitsをインターネットに繋げよう！「CocoaBit」を開発中</title><link>https://dotstud.io/blog/cocoabit-littlebits-milkcocoa-nefry/</link><pubDate>Mon, 05 Sep 2016 10:41:27 +0900</pubDate><guid>https://dotstud.io/blog/cocoabit-littlebits-milkcocoa-nefry/</guid><description>
-&lt;p&gt;こんにちは、外部ライターのわみと申します。愛知県でネットワークの勉強をしている学生です。磁石で電子工作ができる「&lt;a href=&#34;http://jp.littlebits.com/&#34;&gt;littleBits&lt;/a&gt;」のモジュールとして、「&lt;strong&gt;CocoaBit&lt;/strong&gt;」というものを開発しています。&lt;/p&gt;
-&lt;p&gt;CocoaBitを使えばlittleBitsを簡単にインターネットへ接続できます。すでにlittleBitsをもっている方や、IoTに興味があるけれど「何から始めていいかわからない」「難しそう……」と思っている方はぜひご一読ください！&lt;/p&gt;
-&lt;h2 id=&#34;cocoabitって&#34;&gt;CocoaBitって？&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/09_littlebits.png&#34; alt=&#34;&#34; /&gt;
-磁石でパチパチとモジュールを繋げるだけで電子工作ができるデバイス「&lt;a href=&#34;http://jp.littlebits.com/&#34;&gt;littleBits&lt;/a&gt;」。これの拡張モジュールとして「CocoaBit」を開発しています。真ん中にがあるのがCocoaBitです。&lt;/p&gt;
-&lt;p&gt;CocoaBitは次のような特徴を持っています。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;littleBitsをインターネットに接続できる&lt;/li&gt;
-&lt;li&gt;バックエンドサービス「Milkcocoa」と簡単に連携できる&lt;/li&gt;
-&lt;li&gt;Arduinoの開発環境（ArduinoIDE）でプログラミングができる&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/01_cocoabit.png&#34; alt=&#34;&#34; /&gt;
-CocoaBitを使えばlittleBitsを簡単にインターネットと繋げられるので、データをアップロードしたり、インターネットからCocoaBitを制御したり、はたまたIFTTT連携なんかも試せたりできます。&lt;/p&gt;
-&lt;p&gt;「Nefry」というFRISKサイズのIoT向けデバイスをベースにして作っていますが、これも自分が自作しています。また、LIGブログでlittleBitsの連載をしている田中さんと共同開発をしています。私がNefryを作っていたことや、純粋に面白そう！という背景からCocoaBitが生まれました。（より詳しい背景は&lt;a href=&#34;http://www.1ft-seabass.jp/memo/2016/04/13/cocobit-first-contact/&#34;&gt;こちらの記事&lt;/a&gt;をどうぞ）&lt;/p&gt;
-&lt;h2 id=&#34;さっそくcocoabitでプログラミングしてみよう&#34;&gt;さっそくCocoaBitでプログラミングしてみよう&lt;/h2&gt;
-&lt;p&gt;ArduinoIDEを使って、CocoaBitのプログラムを作る流れを紹介します！　まずはArduinoIDEにCocoaBitをインストールするのですが、ArduinoIDEのダウンロード方法などについては&lt;a href=&#34;http://qiita.com/wamisnet/private/15062b2e7b23969797aa&#34;&gt;LIGブログ&lt;/a&gt;の記事で紹介されています。&lt;/p&gt;
-&lt;p&gt;Nefryとライブラリーが共通なのでNefryの名前が出てきますが、気にせずに読み進めてください。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/02_arduino.png&#34; alt=&#34;&#34; /&gt;
-まずは、ArduinoIDEの環境設定を開きます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/03_arduino.png&#34; alt=&#34;&#34; /&gt;
-環境設定の &lt;strong&gt;追加のボードマネージャーのURL&lt;/strong&gt; に次のURL を入力します。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;http://wamisnet.github.io/package_nefry_index.json
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/04_arduino.png&#34; alt=&#34;&#34; /&gt;
-入力が終わったら OK をクリックし、ツール内にあるボード選択のボードマネージャーをクリックします。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/05_arduino.png&#34; alt=&#34;&#34; /&gt;
-すると、ボードマネージャーの一覧の下部にNefryが追加されます。検索欄もあるのでそこに &lt;strong&gt;Nefry&lt;/strong&gt; と入力すると簡単に見つけられます。インストールをクリックすると、必要なファイルをダウンロードできます。（2016年8月現在の最新バージョンは2.0.1です）&lt;/p&gt;
-&lt;p&gt;インストールが完了すると &lt;strong&gt;INSTALLED&lt;/strong&gt; と表示されます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/08_arduino.png&#34; alt=&#34;&#34; /&gt;
-すると、ツール内にあるボードからCocoaBitが選択できるようになっているはずです！　これでボードのインストールも完了です！&lt;/p&gt;
-&lt;p&gt;ここまでで開発環境が整いましたので次はプログラムを書いていきます。&lt;/p&gt;
-&lt;h2 id=&#34;cocoabitのスイッチを押した時にledを光らせてみよう&#34;&gt;CocoaBitのスイッチを押した時にLEDを光らせてみよう&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/09_littlebits.png&#34; alt=&#34;&#34; /&gt;
-CocoaBitに写真のようにlittleBitsのボタンとLEDを繋げて、ボタンを押したらLEDが光るプログラムを書いてみましょう！　以下はプログラムの全体図です。&lt;/p&gt;
-&lt;h3 id=&#34;pushsw-ino&#34;&gt;pushSW.ino&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;void setup() {
+&lt;/code>&lt;/pre>&lt;p>&lt;strong>setup()&lt;/strong> 内ではMilkcocoaに接続するための準備をしています。 &lt;strong>milkcocoa-&amp;gt;on( datastore, &amp;ldquo;send&amp;rdquo;, onsend)&lt;/strong> の部分でsendイベントの監視が有効になります。&lt;strong>onsend()&lt;/strong> 内がsendイベントが送られてきたときに呼び出されます。&lt;/p>
+&lt;p>先ほどのapp.js側では &lt;strong>{r:red,g:green,b:blue}&lt;/strong> という形でRGBの値を送っていましたが、Nefry側では &lt;strong>elem-&amp;gt;getInt(&amp;ldquo;r&amp;rdquo;)&lt;/strong> とすることでrの値を取得できます。取得した値を &lt;strong>Nefry.setLed()&lt;/strong> に渡してあげることでLEDの色を変えられます。&lt;/p>
+&lt;h4 id="nefrymilkcocoakey">NefryにMilkcocoaのKeyを設定していく&lt;/h4>
+&lt;p>最後にNefryのメニュー（この時点で僕の場合は http://192.168.43.56/ ）から &lt;strong>Setup Module&lt;/strong> のメニューから、取得した以下の値を入力し保存します。&lt;/p>
+&lt;blockquote>
+&lt;p>先に上記コードをNefryに書き込まないとこのAPI Keyなどの項目が表示されませんので気をつけましょう。&lt;/p>
+&lt;/blockquote>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/023/24.png" alt="">&lt;/p>
+&lt;p>また、DataStoreの値は任意ですが今回は &lt;strong>nefry&lt;/strong> にします。&lt;/p>
+&lt;h4 id="heading-6">試してみる&lt;/h4>
+&lt;p>ここまでが終わるとカラーLEDの色をドット絵に同期させることができます。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/023/25.png" alt="">&lt;/p>
+&lt;p>以下の状態にしてドット絵を操作してみましょう。&lt;/p>
+&lt;ul>
+&lt;li>ブラウザで http://localhost:8000 にアクセス（写真のMac画面の右側）&lt;/li>
+&lt;li>同時に&lt;a href="https://mlkcca.com/sample.html">ドット絵&lt;/a>にアクセス（写真のMac画面の左側）&lt;/li>
+&lt;li>Nefryの電源を起動させておく（写真右側）&lt;/li>
+&lt;/ul>
+&lt;p>前述したとおり、NefryはPCに直挿しでも大丈夫ですが、給電のみをおこなっているため別電源で起動しても問題ないです。写真（動画）ではスタンドアロン感を出すために、あえてPCでなくモバイルバッテリーに挿しています。&lt;/p>
+&lt;p>&lt;a href="https://www.instagram.com/p/BKyHEcljEZS/">最初に載せた結果&lt;/a>のようになっていれば成功です！&lt;/p>
+&lt;p>ここまでの完成ソースコードは&lt;a href="https://github.com/n0bisuke/milkcocoa-nefry-handson/tree/step4">STEP4ブランチ&lt;/a>にまとめてあります。&lt;/p>
+&lt;p>お疲れ様でした。&lt;/p>
+&lt;h2 id="heading-7">ハンズオンの様子など&lt;/h2>
+&lt;p>当日は&lt;a href="https://akiba.dmm-make.com/">DMM.make AKIBA&lt;/a>の会場をお借りして開催しました。
+&lt;a href="http://togetter.com/li/1029940">MilkcocoaとNefryをつなげたハンズオン! Milkcocoa Meetup vol13 #mlkcca&lt;/a>にもまとめましたが概ねSTEP4までを1.5時間くらいで完成させられていたのでハンズオンとしてはかなりよかったと思います。&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;p>当日はNefry開発者の&lt;a href="http://twitter.com/wamisnet">わみさん&lt;/a>、Milkcocoaの&lt;a href="http://twitter.com/bakuonboogie">川野くん&lt;/a>も参戦してくれて、かなり豪華な布陣になりました。&lt;/p>
+&lt;p>ちなみに、ハンズオンだと会場がNefry名のSSIDに溢れかえってしまい、自分のNefryがどれかが分からない問題があります。
+Nefryが発信するWiFiのSSIDはNefry_xxxxという形式になりますが、設定画面から名前を変更できるので、今回はあらかじめ名前を変更して配ることで対応しました。&lt;/p>
+&lt;p>今回のハンズオンで使った&lt;a href="https://github.com/n0bisuke/milkcocoa-nefry-handson">ソースコード&lt;/a>はGitHubにおいてありますのでどなたでも自由に使ってください。&lt;/p>
+&lt;p>無断でも大丈夫ですが使うときに&lt;a href="http://twitter.com/n0bisuke">@n0bisuke&lt;/a>に声かけてくれるとうれしかったりします笑&lt;/p>
+&lt;h2 id="heading-8">まとめ&lt;/h2>
+&lt;p>NefryとMilkcocoaを使って、リアルタイムにWebとモノを繋げるIoTな体験ができたと思います。&lt;/p>
+&lt;p>IoTな開発をやろうとした際に、開発環境の構築とネットワークへの接続が課題になるケースが多いです。
+RaspberryPiやArduinoは「電子工作初心者向け」だと世間では言われていますが、RaspberryPiはOS書き込みなど初期設定の内容が重く、Arduinoはネットワーク接続に課題があるように感じています。&lt;/p>
+&lt;p>またWebと接続しようとした際に必要となる知識がすごく多く、知識の深さに加えて幅広さも求められます。Nefry+Milkcocoaはその課題を解決するデバイス&amp;amp;サービスだと思います。「ちょっとIoT入門してみたい」という欲求を満たしやすいです。&lt;/p>
+&lt;p>ぜひ、みなさんもNefryとMilkcocoaを使ってIoTに入門してみて下さい。&lt;/p>
+&lt;p>それでは :)&lt;/p></description></item><item><title>電子回路を簡単に学べるlittleBitsをインターネットに繋げよう！「CocoaBit」を開発中</title><link>https://dotstud.io/blog/cocoabit-littlebits-milkcocoa-nefry/</link><pubDate>Mon, 05 Sep 2016 10:41:27 +0900</pubDate><guid>https://dotstud.io/blog/cocoabit-littlebits-milkcocoa-nefry/</guid><description>&lt;p>こんにちは、外部ライターのわみと申します。愛知県でネットワークの勉強をしている学生です。磁石で電子工作ができる「&lt;a href="http://jp.littlebits.com/">littleBits&lt;/a>」のモジュールとして、「&lt;strong>CocoaBit&lt;/strong>」というものを開発しています。&lt;/p>
+&lt;p>CocoaBitを使えばlittleBitsを簡単にインターネットへ接続できます。すでにlittleBitsをもっている方や、IoTに興味があるけれど「何から始めていいかわからない」「難しそう……」と思っている方はぜひご一読ください！&lt;/p>
+&lt;h2 id="cocoabit">CocoaBitって？&lt;/h2>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/016/09_littlebits.png" alt="">
+磁石でパチパチとモジュールを繋げるだけで電子工作ができるデバイス「&lt;a href="http://jp.littlebits.com/">littleBits&lt;/a>」。これの拡張モジュールとして「CocoaBit」を開発しています。真ん中にがあるのがCocoaBitです。&lt;/p>
+&lt;p>CocoaBitは次のような特徴を持っています。&lt;/p>
+&lt;ul>
+&lt;li>littleBitsをインターネットに接続できる&lt;/li>
+&lt;li>バックエンドサービス「Milkcocoa」と簡単に連携できる&lt;/li>
+&lt;li>Arduinoの開発環境（ArduinoIDE）でプログラミングができる&lt;/li>
+&lt;/ul>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/016/01_cocoabit.png" alt="">
+CocoaBitを使えばlittleBitsを簡単にインターネットと繋げられるので、データをアップロードしたり、インターネットからCocoaBitを制御したり、はたまたIFTTT連携なんかも試せたりできます。&lt;/p>
+&lt;p>「Nefry」というFRISKサイズのIoT向けデバイスをベースにして作っていますが、これも自分が自作しています。また、LIGブログでlittleBitsの連載をしている田中さんと共同開発をしています。私がNefryを作っていたことや、純粋に面白そう！という背景からCocoaBitが生まれました。（より詳しい背景は&lt;a href="http://www.1ft-seabass.jp/memo/2016/04/13/cocobit-first-contact/">こちらの記事&lt;/a>をどうぞ）&lt;/p>
+&lt;h2 id="cocoabit-1">さっそくCocoaBitでプログラミングしてみよう&lt;/h2>
+&lt;p>ArduinoIDEを使って、CocoaBitのプログラムを作る流れを紹介します！　まずはArduinoIDEにCocoaBitをインストールするのですが、ArduinoIDEのダウンロード方法などについては&lt;a href="http://qiita.com/wamisnet/private/15062b2e7b23969797aa">LIGブログ&lt;/a>の記事で紹介されています。&lt;/p>
+&lt;p>Nefryとライブラリーが共通なのでNefryの名前が出てきますが、気にせずに読み進めてください。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/016/02_arduino.png" alt="">
+まずは、ArduinoIDEの環境設定を開きます。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/016/03_arduino.png" alt="">
+環境設定の &lt;strong>追加のボードマネージャーのURL&lt;/strong> に次のURL を入力します。&lt;/p>
+&lt;pre>&lt;code>http://wamisnet.github.io/package_nefry_index.json
+&lt;/code>&lt;/pre>&lt;p>&lt;img src="https://dotstud.io/img/blog/016/04_arduino.png" alt="">
+入力が終わったら OK をクリックし、ツール内にあるボード選択のボードマネージャーをクリックします。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/016/05_arduino.png" alt="">
+すると、ボードマネージャーの一覧の下部にNefryが追加されます。検索欄もあるのでそこに &lt;strong>Nefry&lt;/strong> と入力すると簡単に見つけられます。インストールをクリックすると、必要なファイルをダウンロードできます。（2016年8月現在の最新バージョンは2.0.1です）&lt;/p>
+&lt;p>インストールが完了すると &lt;strong>INSTALLED&lt;/strong> と表示されます。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/016/08_arduino.png" alt="">
+すると、ツール内にあるボードからCocoaBitが選択できるようになっているはずです！　これでボードのインストールも完了です！&lt;/p>
+&lt;p>ここまでで開発環境が整いましたので次はプログラムを書いていきます。&lt;/p>
+&lt;h2 id="cocoabitled">CocoaBitのスイッチを押した時にLEDを光らせてみよう&lt;/h2>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/016/09_littlebits.png" alt="">
+CocoaBitに写真のようにlittleBitsのボタンとLEDを繋げて、ボタンを押したらLEDが光るプログラムを書いてみましょう！　以下はプログラムの全体図です。&lt;/p>
+&lt;h3 id="pushswino">pushSW.ino&lt;/h3>
+&lt;pre>&lt;code>void setup() {
 pinMode(D0, OUTPUT); //CocoaBitのD0を出力モードにする
 }
 void loop() {
@@ -582,16 +554,14 @@ digitalWrite(D0, LOW); //LED消灯
 }
 delay(100);//0.1秒待つ
 }
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&#34;プログラムの解説&#34;&gt;プログラムの解説&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;setup()&lt;/strong&gt; の{}で囲まれている箇所は、CocoaBitが起動時に &lt;strong&gt;一度のみおこなう処理&lt;/strong&gt; です。今回はLEDを光らせるためにD0の入出力を使うので、それぞれが入力モードなのか、出力モードなのかを設定しています。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;void setup() {
+&lt;/code>&lt;/pre>&lt;h3 id="heading">プログラムの解説&lt;/h3>
+&lt;p>&lt;strong>setup()&lt;/strong> の{}で囲まれている箇所は、CocoaBitが起動時に &lt;strong>一度のみおこなう処理&lt;/strong> です。今回はLEDを光らせるためにD0の入出力を使うので、それぞれが入力モードなのか、出力モードなのかを設定しています。&lt;/p>
+&lt;pre>&lt;code>void setup() {
 pinMode(D0, OUTPUT); //CocoaBitのD0を出力モードにする
 }
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;strong&gt;loop()&lt;/strong&gt; の{}かっこで囲まれている箇所、CocoaBitが起動中に &lt;strong&gt;繰り返しおこなう処理&lt;/strong&gt; です。littleBitsのボタンの状態をanalogRead(A0)というもので取得します。このanalogReadという関数で、0v-5vの電圧の変化を0-1023の範囲でA0から取得できます。&lt;/p&gt;
-&lt;p&gt;ボタンを押すとおおよそ970程度、押していないときは7程度になります。これをif文と呼ばれる条件式で処理を分岐します。digitalWriteでピンをHIGHかLOWに変更することができますので、スイッチの状態によりHIGHかLOWに変更していきます。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;void loop() {
+&lt;/code>&lt;/pre>&lt;p>&lt;strong>loop()&lt;/strong> の{}かっこで囲まれている箇所、CocoaBitが起動中に &lt;strong>繰り返しおこなう処理&lt;/strong> です。littleBitsのボタンの状態をanalogRead(A0)というもので取得します。このanalogReadという関数で、0v-5vの電圧の変化を0-1023の範囲でA0から取得できます。&lt;/p>
+&lt;p>ボタンを押すとおおよそ970程度、押していないときは7程度になります。これをif文と呼ばれる条件式で処理を分岐します。digitalWriteでピンをHIGHかLOWに変更することができますので、スイッチの状態によりHIGHかLOWに変更していきます。&lt;/p>
+&lt;pre>&lt;code>void loop() {
 //SWを押した時にLEDが点灯する
 if (analogRead(A0) &amp;gt; 500) {//7(押してない)or970(押されてる)中間で分岐します
 //押した時
@@ -602,34 +572,33 @@ digitalWrite(D0, LOW); //LED消灯
 }
 delay(100);//0.1秒待つ
 }
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&#34;プログラムをcocoabitに書いてみよう&#34;&gt;プログラムをCocoaBitに書いてみよう&lt;/h3&gt;
-&lt;p&gt;上記のプログラムをArduinoIDEに貼り、CocoaBitで実行してみましょう。CocoaBitにプログラムを書き込んでいく流れを簡単に解説しますが、より詳しい書き込み方は&lt;a href=&#34;http://qiita.com/wamisnet/private/15062b2e7b23969797aa&#34;&gt;LIGブログ&lt;/a&gt;の記事をご覧ください。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/10_cocoabit.png&#34; alt=&#34;&#34; /&gt;
-まずは、CocoaBitを写真を参考にしてpowerモジュールに繋いでください。しばらくしてWi-Fiを検索すると &lt;strong&gt;CocoaBit-○○○○&lt;/strong&gt; という名前があると思うので、そのWi-Fiに接続してください。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/11_wifi.png&#34; alt=&#34;&#34; /&gt;
-接続すると自動的にこのページに移動します。時にうまくいかないときがあるのでその時はこちらのURLを入力してください。CocoaBitのメインページです。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;http://192.168.4.1&#34;&gt;http://192.168.4.1&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;このページから、さまざまな設定をおこなえます。プログラムを書き込むためには、CocoaBitを書き込みモードにします。（書き込みモードとは、CocoaBitのCoreプログラムだけ動作し、ユーザが書き込んだプログラムを実行しないモードです）&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/12_nefry.png&#34; alt=&#34;&#34; /&gt;
-書き込みモードに変更するには、&lt;strong&gt;setup Module&lt;/strong&gt; をクリックし、&lt;strong&gt;Write mode&lt;/strong&gt; を選択してください。すると、CocoaBitが再起動します。再起動が終わったら書き込みモードになっています。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/13_nefry.png&#34; alt=&#34;&#34; /&gt;
-CocoaBitが書き込みモードになったところでプログラムを書き込んでいきましょう。メインページの &lt;strong&gt;upload Sketch&lt;/strong&gt; をクリックしてこのページを開きます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/14_nefry.png&#34; alt=&#34;&#34; /&gt;
-開いたらページ中央にある &lt;strong&gt;参照&lt;/strong&gt; となっているボタンをクリックしてファイルを選びます。（Chromeなどブラウザによっては表示が異なることがあります）&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/15_nefry.png&#34; alt=&#34;&#34; /&gt;
-先ほどプログラムを保存した場所を開き、&lt;strong&gt;arduino.bin&lt;/strong&gt; となっているファイルを選びます。（きちんと確認してアップデートしてください。もし間違えてしまうと、最悪の場合起動しなくなります）&lt;/p&gt;
-&lt;p&gt;きちんとファイルを選べると、ファイルの場所を示す表示が出ます。あとは &lt;strong&gt;Upload&lt;/strong&gt; をクリックするだけです！　アップロードが完了すると自動的にCocoaBitが再起動してプログラムが更新されます。&lt;/p&gt;
-&lt;p&gt;これでCocoaBitのプログラムを書きかえることができました！　SWを押したときにLEDが光っているはずです。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/17_cocoabit.gif&#34; alt=&#34;&#34; /&gt;
-LEDは上手く点滅しましたか？　これでCocoaBitから出力できたので、次はCocoaBitに入力をしてみようと思います。&lt;/p&gt;
-&lt;h2 id=&#34;cocoabitにスライダーを繋いでみる&#34;&gt;CocoaBitにスライダーを繋いでみる&lt;/h2&gt;
-&lt;p&gt;それでは次はCocoaBitを入力モードにして、入力された値をWebページで表示してみようと思います。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/18_littlebits.png&#34; alt=&#34;&#34; /&gt;
-今回は入力データを手軽に変更ができるlittleBitsのスライダーを使ってみようと思います。他にもボタンモジュールや明るさセンサーモジュールを繋ぐことも可能です。写真を参考に接続してみてください。&lt;/p&gt;
-&lt;p&gt;接続できたら、プログラムを書いていきましょう。&lt;/p&gt;
-&lt;h3 id=&#34;read-ino&#34;&gt;read.ino&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+&lt;/code>&lt;/pre>&lt;h3 id="cocoabit-2">プログラムをCocoaBitに書いてみよう&lt;/h3>
+&lt;p>上記のプログラムをArduinoIDEに貼り、CocoaBitで実行してみましょう。CocoaBitにプログラムを書き込んでいく流れを簡単に解説しますが、より詳しい書き込み方は&lt;a href="http://qiita.com/wamisnet/private/15062b2e7b23969797aa">LIGブログ&lt;/a>の記事をご覧ください。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/016/10_cocoabit.png" alt="">
+まずは、CocoaBitを写真を参考にしてpowerモジュールに繋いでください。しばらくしてWi-Fiを検索すると &lt;strong>CocoaBit-○○○○&lt;/strong> という名前があると思うので、そのWi-Fiに接続してください。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/016/11_wifi.png" alt="">
+接続すると自動的にこのページに移動します。時にうまくいかないときがあるのでその時はこちらのURLを入力してください。CocoaBitのメインページです。&lt;/p>
+&lt;p>&lt;strong>http://192.168.4.1&lt;/strong>&lt;/p>
+&lt;p>このページから、さまざまな設定をおこなえます。プログラムを書き込むためには、CocoaBitを書き込みモードにします。（書き込みモードとは、CocoaBitのCoreプログラムだけ動作し、ユーザが書き込んだプログラムを実行しないモードです）&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/016/12_nefry.png" alt="">
+書き込みモードに変更するには、&lt;strong>setup Module&lt;/strong> をクリックし、&lt;strong>Write mode&lt;/strong> を選択してください。すると、CocoaBitが再起動します。再起動が終わったら書き込みモードになっています。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/016/13_nefry.png" alt="">
+CocoaBitが書き込みモードになったところでプログラムを書き込んでいきましょう。メインページの &lt;strong>upload Sketch&lt;/strong> をクリックしてこのページを開きます。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/016/14_nefry.png" alt="">
+開いたらページ中央にある &lt;strong>参照&lt;/strong> となっているボタンをクリックしてファイルを選びます。（Chromeなどブラウザによっては表示が異なることがあります）&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/016/15_nefry.png" alt="">
+先ほどプログラムを保存した場所を開き、&lt;strong>arduino.bin&lt;/strong> となっているファイルを選びます。（きちんと確認してアップデートしてください。もし間違えてしまうと、最悪の場合起動しなくなります）&lt;/p>
+&lt;p>きちんとファイルを選べると、ファイルの場所を示す表示が出ます。あとは &lt;strong>Upload&lt;/strong> をクリックするだけです！　アップロードが完了すると自動的にCocoaBitが再起動してプログラムが更新されます。&lt;/p>
+&lt;p>これでCocoaBitのプログラムを書きかえることができました！　SWを押したときにLEDが光っているはずです。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/016/17_cocoabit.gif" alt="">
+LEDは上手く点滅しましたか？　これでCocoaBitから出力できたので、次はCocoaBitに入力をしてみようと思います。&lt;/p>
+&lt;h2 id="cocoabit-3">CocoaBitにスライダーを繋いでみる&lt;/h2>
+&lt;p>それでは次はCocoaBitを入力モードにして、入力された値をWebページで表示してみようと思います。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/016/18_littlebits.png" alt="">
+今回は入力データを手軽に変更ができるlittleBitsのスライダーを使ってみようと思います。他にもボタンモジュールや明るさセンサーモジュールを繋ぐことも可能です。写真を参考に接続してみてください。&lt;/p>
+&lt;p>接続できたら、プログラムを書いていきましょう。&lt;/p>
+&lt;h3 id="readino">read.ino&lt;/h3>
+&lt;pre>&lt;code>#include &amp;lt;Nefry.h&amp;gt;
 int sensorValue;
 void setup() {
 }
@@ -640,32 +609,31 @@ Nefry.println(sensorValue);//センサーデータを表示します。
 Nefry.ndelay(500);//0.5秒待ちます
 Nefry.setLed(sensorValue/4,255,0);//Red(sensorValue/4),Green(255),Blue(0)
 }
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&#34;プログラムの解説-1&#34;&gt;プログラムの解説&lt;/h3&gt;
-&lt;p&gt;analogReadという関数で、0v-5vの電圧の変化を0-1023の範囲でA0から取得することができます。その値をNefry.print関数で表示するようにしています。そのデータはWeb Consoleで見られます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/19_nefry.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;Nefry.ndelay関数は、指定されたミリ秒処理を止めます。1000ミリ秒で1秒となります。
-Nefry.setLed関数は、CocoaBitについているLEDの光る色を指定することができ、赤・緑・青を0（消灯）から255（フル点灯）の範囲で光らせることができます。&lt;/p&gt;
-&lt;p&gt;また、例えば赤（255）と緑（255）を選ぶと黄色になるなど、光らせる色と強さの組み合わせによって色を変えられます。今回は、赤色をセンサーの入力により変更（sensorValue/4）、緑色を（255）、Blue（0）にして光らせてみます。Nefryの関数については&lt;a href=&#34;http://qiita.com/wamisnet/items/e44812eb6d6fded7af26&#34;&gt;こちら&lt;/a&gt;を参照してください。&lt;/p&gt;
-&lt;p&gt;このプログラムは、0.5秒ごとにA0ピンの状態を取得して、sensor = A0ピンの状態をweb consoleで表示、LEDの色がスライダによって緑から黄色に変化していくプログラムになります。こちらがプログラムの全体になります。&lt;/p&gt;
-&lt;h3 id=&#34;実際に動かしてみよう&#34;&gt;実際に動かしてみよう&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/20_cocoabit.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/21_nefry.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;成功するとこのように数値が変わります。&lt;/p&gt;
-&lt;p&gt;さて、最後に今のセンサーデータをMilkcocoaに送ってみようと思います。&lt;/p&gt;
-&lt;h2 id=&#34;cocoabitにmilkcocoaを繋げてみる&#34;&gt;CocoaBitにMilkcocoaを繋げてみる&lt;/h2&gt;
-&lt;p&gt;今度はセンサーの値を表示するだけではなくMilkcocoaの方に送ってみようと思います。&lt;/p&gt;
-&lt;h3 id=&#34;milkcocoaとは&#34;&gt;Milkcocoaとは？&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/22_milkcocoa.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://mlkcca.com&#34;&gt;Milkcocoa&lt;/a&gt;とは、デバイス・スマートフォン・PC間で簡単にリアルタイム通信ができるWebサービスです。リアルタイム通信では複雑なプログラミングが必要ですが、MilkcocoaではJavaScriptを1行追記するだけでデータの保存＆やり取りができるようになるんです。&lt;/p&gt;
-&lt;p&gt;さて、Milkcocoaにセンサーの値を送れるようにするため、CocoaBitにWi-Fiを教えてあげましょう。&lt;/p&gt;
-&lt;h3 id=&#34;wi-fiの設定&#34;&gt;Wi-Fiの設定&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/23_nefry.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;この項目は、一度設定すればアクセスするWi-Fiが変わらない限り再設定する必要はありません。 &lt;a href=&#34;http://192.168.4.1&#34;&gt;http://192.168.4.1&lt;/a&gt; に接続し、Setup WiFiのリンクをクリックします。&lt;/p&gt;
-&lt;p&gt;SSIDの入力欄をクリックすると、検出されたWi-Fiを選べます。Passがある場合はそちらも入力して、Saveをクリックします。Saveを押すと再起動するのでしばらく待ちましょう。&lt;/p&gt;
-&lt;p&gt;Wi-Fiの設定が完了したところでプログラムを書いていきます。&lt;/p&gt;
-&lt;h4 id=&#34;milkcocoabit-ino&#34;&gt;milkcocoabit.ino&lt;/h4&gt;
-&lt;pre&gt;&lt;code&gt;#include &amp;lt;Nefry.h&amp;gt;
+&lt;/code>&lt;/pre>&lt;h3 id="heading-1">プログラムの解説&lt;/h3>
+&lt;p>analogReadという関数で、0v-5vの電圧の変化を0-1023の範囲でA0から取得することができます。その値をNefry.print関数で表示するようにしています。そのデータはWeb Consoleで見られます。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/016/19_nefry.png" alt="">&lt;/p>
+&lt;p>Nefry.ndelay関数は、指定されたミリ秒処理を止めます。1000ミリ秒で1秒となります。
+Nefry.setLed関数は、CocoaBitについているLEDの光る色を指定することができ、赤・緑・青を0（消灯）から255（フル点灯）の範囲で光らせることができます。&lt;/p>
+&lt;p>また、例えば赤（255）と緑（255）を選ぶと黄色になるなど、光らせる色と強さの組み合わせによって色を変えられます。今回は、赤色をセンサーの入力により変更（sensorValue/4）、緑色を（255）、Blue（0）にして光らせてみます。Nefryの関数については&lt;a href="http://qiita.com/wamisnet/items/e44812eb6d6fded7af26">こちら&lt;/a>を参照してください。&lt;/p>
+&lt;p>このプログラムは、0.5秒ごとにA0ピンの状態を取得して、sensor = A0ピンの状態をweb consoleで表示、LEDの色がスライダによって緑から黄色に変化していくプログラムになります。こちらがプログラムの全体になります。&lt;/p>
+&lt;h3 id="heading-2">実際に動かしてみよう&lt;/h3>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/016/20_cocoabit.gif" alt="">&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/016/21_nefry.gif" alt="">&lt;/p>
+&lt;p>成功するとこのように数値が変わります。&lt;/p>
+&lt;p>さて、最後に今のセンサーデータをMilkcocoaに送ってみようと思います。&lt;/p>
+&lt;h2 id="cocoabitmilkcocoa">CocoaBitにMilkcocoaを繋げてみる&lt;/h2>
+&lt;p>今度はセンサーの値を表示するだけではなくMilkcocoaの方に送ってみようと思います。&lt;/p>
+&lt;h3 id="milkcocoa">Milkcocoaとは？&lt;/h3>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/016/22_milkcocoa.png" alt="">&lt;/p>
+&lt;p>&lt;a href="https://mlkcca.com">Milkcocoa&lt;/a>とは、デバイス・スマートフォン・PC間で簡単にリアルタイム通信ができるWebサービスです。リアルタイム通信では複雑なプログラミングが必要ですが、MilkcocoaではJavaScriptを1行追記するだけでデータの保存＆やり取りができるようになるんです。&lt;/p>
+&lt;p>さて、Milkcocoaにセンサーの値を送れるようにするため、CocoaBitにWi-Fiを教えてあげましょう。&lt;/p>
+&lt;h3 id="wi-fi">Wi-Fiの設定&lt;/h3>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/016/23_nefry.png" alt="">&lt;/p>
+&lt;p>この項目は、一度設定すればアクセスするWi-Fiが変わらない限り再設定する必要はありません。 http://192.168.4.1 に接続し、Setup WiFiのリンクをクリックします。&lt;/p>
+&lt;p>SSIDの入力欄をクリックすると、検出されたWi-Fiを選べます。Passがある場合はそちらも入力して、Saveをクリックします。Saveを押すと再起動するのでしばらく待ちましょう。&lt;/p>
+&lt;p>Wi-Fiの設定が完了したところでプログラムを書いていきます。&lt;/p>
+&lt;h4 id="milkcocoabitino">milkcocoabit.ino&lt;/h4>
+&lt;pre>&lt;code>#include &amp;lt;Nefry.h&amp;gt;
 #include &amp;lt;Nefry_Milkcocoa.h&amp;gt;
 Nefry_Milkcocoa *milkcocoa;
 char *datastore;
@@ -686,66 +654,61 @@ milkcocoa-&amp;gt;push(datastore, &amp;amp;elem);//Milkcocoaに送信
 Nefry.setLed(sensorValue/4,255,0);//Red(sensorValue/4),Green(255),Blue(0)
 Nefry.ndelay(2000);//2秒待つ
 }
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;実際にプログラムを書き込み、Web Consoleを確認すると &lt;strong&gt;Milkcocoa Send Data Lack&lt;/strong&gt; と表示されます。Milkcocoaに接続するために、必要な情報が足りないという意味なので、必要な情報を集める必要があります。詳しく知りたい方は&lt;a href=&#34;http://liginc.co.jp/282918&#34;&gt;こちらの記事&lt;/a&gt;をご覧ください。&lt;/p&gt;
-&lt;p&gt;MilkcocoaのサイトにアクセスしてそれぞれAPPID、APIKey、APISecretを取得します。その3つが分かったら、今度はCocoaBitのSetup ModuleでAPPID、APIKey、APISecretの入力欄に先ほどのIDとKeyを入力します。もう一つDataStoreという入力欄がありますので、そこには &lt;strong&gt;CocoaBit&lt;/strong&gt; と入力します。&lt;/p&gt;
-&lt;p&gt;入力が完了しSaveボタンをクリックすると、自動的に再起動してMilkcocoaにセンサーの値を送ってくれるはずです。うまく送れない場合、CocoaBitがインターネットに繋がっていないか、先ほどの入力が間違っていないかが原因として挙げられます。&lt;/p&gt;
-&lt;h3 id=&#34;実際に動かしてみよう-1&#34;&gt;実際に動かしてみよう&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/24_cocoabit.gif&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/25_milkcocoa.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;Milkcocoaのデータストアを確認するとlittleBitsで取得した数値が表示されているはずです。このデータを使い、Web連携をすると面白くなるのではないでしょうか。&lt;/p&gt;
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/016/01_cocoabit.png&#34; alt=&#34;&#34; /&gt;
-ということで今回はCocoaBitについてを紹介しました。CocoaBitを使えば、これくらい簡単にlittleBitsをインターネットと繋げられます。&lt;/p&gt;
-&lt;p&gt;CocoaBitはまだ開発中ではありますが、進展があればまたこちらで報告しようと思っております。応援よろしくお願いします！&lt;/p&gt;</description></item><item><title>JS1行でリアルタイム通信ができる「milkcocoa」のLT大会で登壇してきた！</title><link>https://dotstud.io/blog/milkcocoa-battle-lightning-talk/</link><pubDate>Fri, 05 Aug 2016 09:57:09 +0900</pubDate><guid>https://dotstud.io/blog/milkcocoa-battle-lightning-talk/</guid><description>
-&lt;p&gt;こんにちは！　dotstudioのエディター、うららです。非エンジニアですが、先日バックエンドサービス「&lt;a href=&#34;https://mlkcca.com/&#34;&gt;milkcocoa&lt;/a&gt;」のLT大会「&lt;strong&gt;紅白milkcocoa合戦&lt;/strong&gt;」に参加してきました！&lt;/p&gt;
-&lt;p&gt;とても刺激的なイベントだったので、当日の様子をまとめます！&lt;/p&gt;
-&lt;h2 id=&#34;男女対抗で戦う-紅白milkcocoa合戦-とは&#34;&gt;男女対抗で戦う「紅白milkcocoa合戦」とは&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/005/01_milkcocoa.png&#34; alt=&#34;&#34; /&gt;
-&lt;a href=&#34;http://mlkcca.connpass.com/event/34936/&#34;&gt;【増枠】紅白 Milkcocoa 合戦！【祭り】&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;バックエンドサービス「milkcocoa」をテーマに、男女5名ずつが紅白チームに分かれて競ったのが「紅白milkcocoa合戦」というイベント。1人5分ずつライトニングトークを繰り広げるという内容でした。&lt;/p&gt;
-&lt;p&gt;簡単にmilkcocoaの説明をすると、&lt;strong&gt;JavaScriptのソースコードを1行挿入するだけで、リアルタイム通信ができるようになる&lt;/strong&gt; という感じです。Webサービス、特にリアルタイムな通信を必要とするWebサービスではバックエンドの構築が必要不可欠。そんなとき、milkcocoaを使えばバックエンド未経験の人でも簡単にリアルタイム通信ができるようになるという代物です。&lt;/p&gt;
-&lt;h2 id=&#34;わたしが発表したもの&#34;&gt;わたしが発表したもの&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/005/02_urara.png&#34; alt=&#34;&#34; /&gt;
-私が発表したのは、がじぇるねが制作しているマイコンボード「&lt;a href=&#34;http://gadget.renesas.com/ja/product/cotton.html&#34;&gt;GR-COTTON&lt;/a&gt;」とmilkcocoaを組み合わせて、
-「&lt;strong&gt;パソコン上から部屋の温度がわかる&lt;/strong&gt;」という仕組み。私はHTMLとCSSしかできないので、1990年代風のWebサイトにしてみました。&lt;/p&gt;
-&lt;script async class=&#34;speakerdeck-embed&#34; data-id=&#34;aa68f3d1934d480f9a3a26a6062ffa9b&#34; data-ratio=&#34;1.33333333333333&#34; src=&#34;//speakerdeck.com/assets/embed.js&#34;&gt;&lt;/script&gt;
-&lt;p&gt;当日発表したプレゼン資料はこちらです。作り方も書いてあるのでぜひ試してみてください。&lt;/p&gt;
-&lt;h2 id=&#34;イベントの様子&#34;&gt;イベントの様子&lt;/h2&gt;
-&lt;p&gt;「milkcocoa合戦」では、合計で11名の方が登壇しています。せっかくなので、その中から個人的なベスト3を紹介してみます。&lt;/p&gt;
-&lt;h3 id=&#34;たみーさんの-オンラインで名刺を交換できるサービス&#34;&gt;たみーさんの「オンラインで名刺を交換できるサービス」&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/005/03_pokemon.png&#34; alt=&#34;&#34; /&gt;
-エンジニアって紙文化ないのに、未だに紙の名刺を交換するのはどうなの……？　ということでたみーさんが作ったのは「&lt;strong&gt;オンラインで名刺を交換できる&lt;/strong&gt;」サービス。&lt;strong&gt;自身をポケモンにみたてて、友達になったらくっつく&lt;/strong&gt; というめちゃくちゃかわいいものでした。&lt;/p&gt;
-&lt;h3 id=&#34;かよこさんの-笑顔が減るとソウルジェムが濁るツール&#34;&gt;かよこさんの「笑顔が減るとソウルジェムが濁るツール」&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/005/04_souljem.png&#34; alt=&#34;&#34; /&gt;
-「エンジニアになってから笑っていない」というかよこさんは、&lt;strong&gt;表情を判定し、笑顔が減るとソウルジェムが濁り、笑うと綾野剛からメッセをくれる&lt;/strong&gt; という仕組みを作りました！　ソウルジェムは、アニメ『魔法少女まどかマギカ』で登場する重要なアイテム。アイデアが素晴らしすぎますし、悩みも解決されていて尊敬の念しかありません。&lt;/p&gt;
-&lt;h3 id=&#34;うこの-webから色を変えられるランタン&#34;&gt;うこの「Webから色を変えられるランタン」&lt;/h3&gt;
-&lt;!-- ![](/img/blog/005/05_lantern.png) --&gt;
-&lt;p&gt;&lt;center&gt;&lt;blockquote class=&#34;twitter-video&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;おー！すげえ！ webから操作 &lt;a href=&#34;https://twitter.com/hashtag/mlkcca?src=hash&#34;&gt;#mlkcca&lt;/a&gt; &lt;a href=&#34;https://t.co/RP2YBn7uOk&#34;&gt;pic.twitter.com/RP2YBn7uOk&lt;/a&gt;&lt;/p&gt; タカシにヒロシ (@bakuonboogie) &lt;a href=&#34;https://twitter.com/bakuonboogie/status/755728357258436608&#34;&gt;2016年7月20日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;&lt;/p&gt;
-&lt;p&gt;dotstudioのメイカーであるうこは、100円ショップのランタンの光の色を、Webから操作できるという仕組みを作ってました。一斉にみんなで操作をしたので、ランタンが荒ぶる状態に。&lt;/p&gt;
-&lt;h3 id=&#34;ほかにもいろいろなltが繰り広げられました&#34;&gt;ほかにもいろいろなLTが繰り広げられました！&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;世界中で大人気の箱庭ゲーム『Minecraft』からスライドをめくれる仕組みをつくったいわたん（ &lt;a href=&#34;http://twitter.com/iwata_n&#34;&gt;@iwata_n&lt;/a&gt; ）さん&lt;/li&gt;
-&lt;li&gt;洗濯が終わったら通知がくるようなおうちハックに挑戦してみた、しのはら（ &lt;a href=&#34;https://twitter.com/shanonim&#34;&gt;@shanonim&lt;/a&gt; ）さん&lt;/li&gt;
-&lt;li&gt;いま一番ちゃらいらしいReact, redux, redux-sagaをつかってみたという &lt;a href=&#34;http://twitter.com/mookjp&#34;&gt;@mookjp&lt;/a&gt; さん&lt;/li&gt;
-&lt;li&gt;milkcocoaでほしかったツールを追加した「bitter-coffee」をつくりあげたもし（ &lt;a href=&#34;https://twitter.com/moshisora990&#34;&gt;@moshisora990&lt;/a&gt;）さん&lt;/li&gt;
-&lt;li&gt;麻雀用のアプリを作り、裏側にmilkcocoaを入れたというなつみ（&lt;a href=&#34;https://twitter.com/natsumi_m31&#34;&gt;@natsumi_m31&lt;/a&gt;）さん&lt;/li&gt;
-&lt;li&gt;ハムスターのために、milkcocoaで室温を管理してみたへれんさん（3時間経つと自動でエアコンが切れる部屋にいるそうな……）&lt;/li&gt;
-&lt;li&gt;マグネットで壁にくっついて、垂直に走るラジコン「うぉーるぼっとESP」を作ったという勝さん&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;結果&#34;&gt;結果&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/005/06_m2w.png&#34; alt=&#34;&#34; /&gt;
-女性陣の紅組と、男性陣の白組。どちらが勝つかは、えむにわ氏がつくった投票システムで決めました。結果、&lt;strong&gt;紅組（女性陣）の圧倒的な勝利&lt;/strong&gt; となったようです。やったー！&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/005/07_sticker.png&#34; alt=&#34;&#34; /&gt;
-勝利の記念にもらったのは、mbedステッカーと「GR-SAKURA」。&lt;/p&gt;
-&lt;p&gt;登壇だけで終わるのではなく、&lt;strong&gt;投票がおこなわれたり、景品をもらえたり&lt;/strong&gt; といった仕組みは久しぶりでした。ドキドキした。&lt;/p&gt;
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-&lt;p&gt;milkcocoaの次回開催予定は未定ですが、ほかにも &lt;strong&gt;IoTの勉強会やWebVRのイベントなどが開催予定&lt;/strong&gt; です！　特に &lt;strong&gt;Webエンジニアのみなさん&lt;/strong&gt; にとって実りのあるものがあると思うので、ぜひ参加してみてください！&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;2016年8月8日（月）&lt;a href=&#34;http://web3dj.connpass.com/event/32568/&#34;&gt;WebVR入門者の会&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;2016年8月12日（金）&lt;a href=&#34;http://iotlt.connpass.com/event/35436/&#34;&gt;IoT縛りの勉強会! IoTLT vol.18 @ Amazon&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;center&gt;&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;今日はmilkcocoa紅白合戦にご参加くださりありがとうございました😂💫登壇者の方々の発表は全部新しい視点をもらえたり笑えるところがあったり、楽しませてもらいました。ありがとうございます。また次お会いしましょう🙋🍻&lt;a href=&#34;https://twitter.com/hashtag/mlkcca?src=hash&#34;&gt;#mlkcca&lt;/a&gt; &lt;a href=&#34;https://t.co/PdUrDdivbU&#34;&gt;pic.twitter.com/PdUrDdivbU&lt;/a&gt;&lt;/p&gt; Milkcocoa girls (@milkcocoagirls) &lt;a href=&#34;https://twitter.com/milkcocoagirls/status/755757758931095556&#34;&gt;2016年7月20日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;//platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;&lt;/center&gt;
-では！&lt;/p&gt;</description></item></channel></rss>
+&lt;/code>&lt;/pre>&lt;p>実際にプログラムを書き込み、Web Consoleを確認すると &lt;strong>Milkcocoa Send Data Lack&lt;/strong> と表示されます。Milkcocoaに接続するために、必要な情報が足りないという意味なので、必要な情報を集める必要があります。詳しく知りたい方は&lt;a href="http://liginc.co.jp/282918">こちらの記事&lt;/a>をご覧ください。&lt;/p>
+&lt;p>MilkcocoaのサイトにアクセスしてそれぞれAPPID、APIKey、APISecretを取得します。その3つが分かったら、今度はCocoaBitのSetup ModuleでAPPID、APIKey、APISecretの入力欄に先ほどのIDとKeyを入力します。もう一つDataStoreという入力欄がありますので、そこには &lt;strong>CocoaBit&lt;/strong> と入力します。&lt;/p>
+&lt;p>入力が完了しSaveボタンをクリックすると、自動的に再起動してMilkcocoaにセンサーの値を送ってくれるはずです。うまく送れない場合、CocoaBitがインターネットに繋がっていないか、先ほどの入力が間違っていないかが原因として挙げられます。&lt;/p>
+&lt;h3 id="heading-3">実際に動かしてみよう&lt;/h3>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/016/24_cocoabit.gif" alt="">&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/016/25_milkcocoa.png" alt="">&lt;/p>
+&lt;p>Milkcocoaのデータストアを確認するとlittleBitsで取得した数値が表示されているはずです。このデータを使い、Web連携をすると面白くなるのではないでしょうか。&lt;/p>
+&lt;h2 id="heading-4">まとめ&lt;/h2>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/016/01_cocoabit.png" alt="">
+ということで今回はCocoaBitについてを紹介しました。CocoaBitを使えば、これくらい簡単にlittleBitsをインターネットと繋げられます。&lt;/p>
+&lt;p>CocoaBitはまだ開発中ではありますが、進展があればまたこちらで報告しようと思っております。応援よろしくお願いします！&lt;/p></description></item><item><title>JS1行でリアルタイム通信ができる「milkcocoa」のLT大会で登壇してきた！</title><link>https://dotstud.io/blog/milkcocoa-battle-lightning-talk/</link><pubDate>Fri, 05 Aug 2016 09:57:09 +0900</pubDate><guid>https://dotstud.io/blog/milkcocoa-battle-lightning-talk/</guid><description>&lt;p>こんにちは！　dotstudioのエディター、うららです。非エンジニアですが、先日バックエンドサービス「&lt;a href="https://mlkcca.com/">milkcocoa&lt;/a>」のLT大会「&lt;strong>紅白milkcocoa合戦&lt;/strong>」に参加してきました！&lt;/p>
+&lt;p>とても刺激的なイベントだったので、当日の様子をまとめます！&lt;/p>
+&lt;h2 id="milkcocoa">男女対抗で戦う「紅白milkcocoa合戦」とは&lt;/h2>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/005/01_milkcocoa.png" alt="">
+&lt;a href="http://mlkcca.connpass.com/event/34936/">【増枠】紅白 Milkcocoa 合戦！【祭り】&lt;/a>&lt;/p>
+&lt;p>バックエンドサービス「milkcocoa」をテーマに、男女5名ずつが紅白チームに分かれて競ったのが「紅白milkcocoa合戦」というイベント。1人5分ずつライトニングトークを繰り広げるという内容でした。&lt;/p>
+&lt;p>簡単にmilkcocoaの説明をすると、&lt;strong>JavaScriptのソースコードを1行挿入するだけで、リアルタイム通信ができるようになる&lt;/strong> という感じです。Webサービス、特にリアルタイムな通信を必要とするWebサービスではバックエンドの構築が必要不可欠。そんなとき、milkcocoaを使えばバックエンド未経験の人でも簡単にリアルタイム通信ができるようになるという代物です。&lt;/p>
+&lt;h2 id="heading">わたしが発表したもの&lt;/h2>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/005/02_urara.png" alt="">
+私が発表したのは、がじぇるねが制作しているマイコンボード「&lt;a href="http://gadget.renesas.com/ja/product/cotton.html">GR-COTTON&lt;/a>」とmilkcocoaを組み合わせて、
+「&lt;strong>パソコン上から部屋の温度がわかる&lt;/strong>」という仕組み。私はHTMLとCSSしかできないので、1990年代風のWebサイトにしてみました。&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;p>当日発表したプレゼン資料はこちらです。作り方も書いてあるのでぜひ試してみてください。&lt;/p>
+&lt;h2 id="heading-1">イベントの様子&lt;/h2>
+&lt;p>「milkcocoa合戦」では、合計で11名の方が登壇しています。せっかくなので、その中から個人的なベスト3を紹介してみます。&lt;/p>
+&lt;h3 id="heading-2">たみーさんの「オンラインで名刺を交換できるサービス」&lt;/h3>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/005/03_pokemon.png" alt="">
+エンジニアって紙文化ないのに、未だに紙の名刺を交換するのはどうなの……？　ということでたみーさんが作ったのは「&lt;strong>オンラインで名刺を交換できる&lt;/strong>」サービス。&lt;strong>自身をポケモンにみたてて、友達になったらくっつく&lt;/strong> というめちゃくちゃかわいいものでした。&lt;/p>
+&lt;h3 id="heading-3">かよこさんの「笑顔が減るとソウルジェムが濁るツール」&lt;/h3>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/005/04_souljem.png" alt="">
+「エンジニアになってから笑っていない」というかよこさんは、&lt;strong>表情を判定し、笑顔が減るとソウルジェムが濁り、笑うと綾野剛からメッセをくれる&lt;/strong> という仕組みを作りました！　ソウルジェムは、アニメ『魔法少女まどかマギカ』で登場する重要なアイテム。アイデアが素晴らしすぎますし、悩みも解決されていて尊敬の念しかありません。&lt;/p>
+&lt;h3 id="web">うこの「Webから色を変えられるランタン」&lt;/h3>
+&lt;!-- raw HTML omitted -->
+&lt;!-- raw HTML omitted -->
+&lt;p>dotstudioのメイカーであるうこは、100円ショップのランタンの光の色を、Webから操作できるという仕組みを作ってました。一斉にみんなで操作をしたので、ランタンが荒ぶる状態に。&lt;/p>
+&lt;h3 id="lt">ほかにもいろいろなLTが繰り広げられました！&lt;/h3>
+&lt;ul>
+&lt;li>世界中で大人気の箱庭ゲーム『Minecraft』からスライドをめくれる仕組みをつくったいわたん（ &lt;a href="http://twitter.com/iwata_n">@iwata_n&lt;/a> ）さん&lt;/li>
+&lt;li>洗濯が終わったら通知がくるようなおうちハックに挑戦してみた、しのはら（ &lt;a href="https://twitter.com/shanonim">@shanonim&lt;/a> ）さん&lt;/li>
+&lt;li>いま一番ちゃらいらしいReact, redux, redux-sagaをつかってみたという &lt;a href="http://twitter.com/mookjp">@mookjp&lt;/a> さん&lt;/li>
+&lt;li>milkcocoaでほしかったツールを追加した「bitter-coffee」をつくりあげたもし（ &lt;a href="https://twitter.com/moshisora990">@moshisora990&lt;/a>）さん&lt;/li>
+&lt;li>麻雀用のアプリを作り、裏側にmilkcocoaを入れたというなつみ（&lt;a href="https://twitter.com/natsumi_m31">@natsumi_m31&lt;/a>）さん&lt;/li>
+&lt;li>ハムスターのために、milkcocoaで室温を管理してみたへれんさん（3時間経つと自動でエアコンが切れる部屋にいるそうな……）&lt;/li>
+&lt;li>マグネットで壁にくっついて、垂直に走るラジコン「うぉーるぼっとESP」を作ったという勝さん&lt;/li>
+&lt;/ul>
+&lt;h2 id="heading-4">結果&lt;/h2>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/005/06_m2w.png" alt="">
+女性陣の紅組と、男性陣の白組。どちらが勝つかは、えむにわ氏がつくった投票システムで決めました。結果、&lt;strong>紅組（女性陣）の圧倒的な勝利&lt;/strong> となったようです。やったー！&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/005/07_sticker.png" alt="">
+勝利の記念にもらったのは、mbedステッカーと「GR-SAKURA」。&lt;/p>
+&lt;p>登壇だけで終わるのではなく、&lt;strong>投票がおこなわれたり、景品をもらえたり&lt;/strong> といった仕組みは久しぶりでした。ドキドキした。&lt;/p>
+&lt;h2 id="heading-5">おわりに&lt;/h2>
+&lt;p>milkcocoaの次回開催予定は未定ですが、ほかにも &lt;strong>IoTの勉強会やWebVRのイベントなどが開催予定&lt;/strong> です！　特に &lt;strong>Webエンジニアのみなさん&lt;/strong> にとって実りのあるものがあると思うので、ぜひ参加してみてください！&lt;/p>
+&lt;ul>
+&lt;li>2016年8月8日（月）&lt;a href="http://web3dj.connpass.com/event/32568/">WebVR入門者の会&lt;/a>&lt;/li>
+&lt;li>2016年8月12日（金）&lt;a href="http://iotlt.connpass.com/event/35436/">IoT縛りの勉強会! IoTLT vol.18 @ Amazon&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;!-- raw HTML omitted --></description></item></channel></rss>

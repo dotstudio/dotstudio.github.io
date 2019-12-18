@@ -1,64 +1,61 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>azure on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/azure/</link><description>Recent content in azure on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Mon, 03 Sep 2018 08:46:35 +0900</lastBuildDate><atom:link href="/series/azure/" rel="self" type="application/rss+xml"/><item><title>Azure WebApps on LinuxでNuxt.js&#43;Expressの環境をデプロイする</title><link>https://dotstud.io/blog/azure-webapps-nuxt-express/</link><pubDate>Mon, 03 Sep 2018 08:46:35 +0900</pubDate><guid>https://dotstud.io/blog/azure-webapps-nuxt-express/</guid><description>
-&lt;p&gt;こんにちは、代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
-&lt;p&gt;Azure WebApps on Linuxの環境にNuxt.js+Expressの環境をデプロイしたときのメモです。&lt;/p&gt;
-&lt;p&gt;けっこうハマったので備忘録として残しておきます。知り合いのMSのサポートエンジニアさんに質問したら休日にも関わらずチャットで答えてくれてマジ感謝です。&lt;/p&gt;
-&lt;p&gt;ということで手順をおさらいしつつ紹介します。&lt;/p&gt;
-&lt;p&gt;ちなみにWebApps on Dockerはこちらにまとめました。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;https://qiita.com/n0bisuke/items/412f2fcc673513866e44&#34;&gt;Azure WebAppsにNuxt.js+Expressの環境をDockerでデプロイしたときのメモ&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&#34;nuxt-js-expressのテンプレート&#34;&gt;Nuxt.js+Expressのテンプレート&lt;/h2&gt;
-&lt;p&gt;↑のDocker記事にも書いたNuxt.js+Expressのテンプレートです。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;vue init nuxt-community/express-template .
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;これでテンプレートが作成されます。&lt;/p&gt;
-&lt;h2 id=&#34;webapps-on-linuxのアプリケーションを作成&#34;&gt;WebApps on Linuxのアプリケーションを作成&lt;/h2&gt;
-&lt;p&gt;Azureのポータル画面から作成していきます。&lt;/p&gt;
-&lt;p&gt;2018年9月時点の画面なので画面は適宜読み替えてください。
-この手のサービス管理画面はよく変わります。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;OSの箇所をLinuxに選択&lt;/strong&gt;します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/d647ff415a9b33eda5cd0cd3aabe1c4e.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;ランタイムスタックはNode.jsの最新&lt;/strong&gt;にしましょう。&lt;/p&gt;
-&lt;h2 id=&#34;デプロイオプション&#34;&gt;デプロイオプション&lt;/h2&gt;
-&lt;p&gt;デプロイ方法を選びます。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;ローカルGitリポジトリ&lt;/strong&gt;を選択します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/b7ee5bf06243a6402cfd1f8f12bfc3a9.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;概要に&lt;code&gt;GitクローンURL&lt;/code&gt;が表示されます。ここに対してpushすることでデプロイできるようになります。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/701e1339df4dbf9ea0605a9ed5d717a7.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;https://&amp;lt;ユーザー名&amp;gt;@&amp;lt;アプリ名&amp;gt;.scm.azurewebsites.net:443/&amp;lt;アプリ名&amp;gt;.git&lt;/code&gt;的なURLです。&lt;/p&gt;
-&lt;p&gt;設定したユーザー名とパスワードを使ってGit Pushできます。&lt;/p&gt;
-&lt;h2 id=&#34;アプリケーション設定&#34;&gt;アプリケーション設定&lt;/h2&gt;
-&lt;h3 id=&#34;スタートアップファイル&#34;&gt;スタートアップファイル&lt;/h3&gt;
-&lt;p&gt;通常、Azure WebApps on LinuxはPM2というプロセス監視ツールを内部で使っていて、PM2で利用する&lt;code&gt;process.json&lt;/code&gt;というファイルを編集して起動スクリプトを指定します。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/wbuchwalter/azure-content/blob/master/articles/app-service-web/app-service-linux-using-nodejs-pm2.md&#34;&gt;WebAppsのドキュメント&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://pm2.keymetrics.io/docs/usage/application-declaration/&#34;&gt;pm2のドキュメント&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;通常は特定のjsファイルを指定したりするのですがNuxt.jsの場合、Nuxtコマンドで起動するので&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;node_modules/nuxt/bin/nuxt-start&lt;/code&gt;を指定します。&lt;/p&gt;
-&lt;p&gt;これでサーバーが再起動した際にNuxt.jsが起動します。&lt;/p&gt;
-&lt;h3 id=&#34;hostを-0-0-0-0-に&#34;&gt;HOSTを&lt;code&gt;0.0.0.0&lt;/code&gt;に&lt;/h3&gt;
-&lt;p&gt;また、設定でHOSTを&lt;code&gt;0.0.0.0&lt;/code&gt;に設定します。&lt;/p&gt;
-&lt;p&gt;これを指定しないと&lt;code&gt;localhost&lt;/code&gt;接続になってしまい、WebApps内部ではうまいこと動いてくれない模様です。&lt;/p&gt;
-&lt;p&gt;Keenさんの&lt;a href=&#34;https://keens.github.io/blog/2016/02/24/bind_addressnoimigayouyakuwakatta/&#34;&gt;Bind Addressの意味がようやく分かった&lt;/a&gt;の記事にもあるように&lt;code&gt;0.0.0.0&lt;/code&gt;はワイルドカードとして使えるので指定します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/00346583f202e15200e90ccea658a4ef.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;h2 id=&#34;package-jsonにpostinstallで-nuxt-build-させる&#34;&gt;package.jsonにpostinstallで&lt;code&gt;nuxt build&lt;/code&gt;させる&lt;/h2&gt;
-&lt;p&gt;まだこれでもうまくいかなかったです。&lt;/p&gt;
-&lt;p&gt;Nuxts.jsはnpm startすると&lt;code&gt;nuxt build &amp;amp;&amp;amp; nuxt start&lt;/code&gt;という形でビルド-&amp;gt;起動という順番になります。ビルドすると&lt;code&gt;.nuxt&lt;/code&gt;フォルダが作成され、その中のプログラムを使って起動します。&lt;/p&gt;
-&lt;p&gt;ということで、WebAppsにデプロイしたらデプロイ先でビルドを走らせる必要があります。通常デプロイすると&lt;code&gt;npm start&lt;/code&gt;が走り、その中で&lt;code&gt;nuxt build &amp;amp;&amp;amp; nuxt start&lt;/code&gt;が実行されるため、問題なさそうなのですが、なぜかこれだとビルドがうまくいかず&lt;code&gt;postinstall&lt;/code&gt;の箇所でビルドをさせるとうまく動いてくれました。&lt;/p&gt;
-&lt;p&gt;package.jsonのscriptsの箇所に&lt;code&gt;&amp;quot;postinstall&amp;quot;: &amp;quot;cd /home/site/wwwroot &amp;amp;&amp;amp; /opt/nodejs/9.4.0/bin/node ./node_modules/nuxt/bin/nuxt-build&amp;quot;,&lt;/code&gt;を入れてあげます。&lt;/p&gt;
-&lt;p&gt;WebApss側ではデプロイしたソースコードは&lt;code&gt;/home/site/wwwroot&lt;/code&gt;に保存されるのでそこに移動してビルドする形です。&lt;/p&gt;
-&lt;p&gt;ちなみに、&lt;code&gt;/opt/nodejs/9.4.0/bin/node ./node_modules/nuxt/bin/nuxt-build&amp;quot;&lt;/code&gt;の箇所は&lt;code&gt;npm run build&lt;/code&gt;や&lt;code&gt;nuxt build&lt;/code&gt;の中身である&lt;code&gt;nuxt-build&lt;/code&gt;を実行するものですが、そのまま&lt;code&gt;npm run build&lt;/code&gt;を指定しておくとWebApps上で実行されるNode.jsのバージョンが古く、&lt;code&gt;async&lt;/code&gt;などの構文でエラーを起こしてしまい、&lt;code&gt;nuxt build&lt;/code&gt;が上手くいかない模様です。なので&lt;code&gt;/opt/nodejs/9.4.0/bin/node&lt;/code&gt;でバージョンを指定してあげると上手くビルドしてくれます。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;async ready() {
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>azure on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/series/azure/</link><description>Recent content in azure on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Mon, 03 Sep 2018 08:46:35 +0900</lastBuildDate><atom:link href="/series/azure/" rel="self" type="application/rss+xml"/><item><title>Azure WebApps on LinuxでNuxt.js+Expressの環境をデプロイする</title><link>https://dotstud.io/blog/azure-webapps-nuxt-express/</link><pubDate>Mon, 03 Sep 2018 08:46:35 +0900</pubDate><guid>https://dotstud.io/blog/azure-webapps-nuxt-express/</guid><description>&lt;p>こんにちは、代表の&lt;a href="https://dotstud.io/members/n0bisuke">n0bisuke&lt;/a>です。&lt;/p>
+&lt;p>Azure WebApps on Linuxの環境にNuxt.js+Expressの環境をデプロイしたときのメモです。&lt;/p>
+&lt;p>けっこうハマったので備忘録として残しておきます。知り合いのMSのサポートエンジニアさんに質問したら休日にも関わらずチャットで答えてくれてマジ感謝です。&lt;/p>
+&lt;p>ということで手順をおさらいしつつ紹介します。&lt;/p>
+&lt;p>ちなみにWebApps on Dockerはこちらにまとめました。&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;a href="https://qiita.com/n0bisuke/items/412f2fcc673513866e44">Azure WebAppsにNuxt.js+Expressの環境をDockerでデプロイしたときのメモ&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;h2 id="nuxtjsexpress">Nuxt.js+Expressのテンプレート&lt;/h2>
+&lt;p>↑のDocker記事にも書いたNuxt.js+Expressのテンプレートです。&lt;/p>
+&lt;pre>&lt;code>vue init nuxt-community/express-template .
+&lt;/code>&lt;/pre>&lt;p>これでテンプレートが作成されます。&lt;/p>
+&lt;h2 id="webapps-on-linux">WebApps on Linuxのアプリケーションを作成&lt;/h2>
+&lt;p>Azureのポータル画面から作成していきます。&lt;/p>
+&lt;p>2018年9月時点の画面なので画面は適宜読み替えてください。
+この手のサービス管理画面はよく変わります。&lt;/p>
+&lt;p>&lt;strong>OSの箇所をLinuxに選択&lt;/strong>します。&lt;/p>
+&lt;p>&lt;img src="https://i.gyazo.com/d647ff415a9b33eda5cd0cd3aabe1c4e.png" alt="">&lt;/p>
+&lt;p>&lt;strong>ランタイムスタックはNode.jsの最新&lt;/strong>にしましょう。&lt;/p>
+&lt;h2 id="heading">デプロイオプション&lt;/h2>
+&lt;p>デプロイ方法を選びます。&lt;/p>
+&lt;p>&lt;strong>ローカルGitリポジトリ&lt;/strong>を選択します。&lt;/p>
+&lt;p>&lt;img src="https://i.gyazo.com/b7ee5bf06243a6402cfd1f8f12bfc3a9.png" alt="">&lt;/p>
+&lt;p>概要に&lt;code>GitクローンURL&lt;/code>が表示されます。ここに対してpushすることでデプロイできるようになります。&lt;/p>
+&lt;p>&lt;img src="https://i.gyazo.com/701e1339df4dbf9ea0605a9ed5d717a7.png" alt="">&lt;/p>
+&lt;p>&lt;code>https://&amp;lt;ユーザー名&amp;gt;@&amp;lt;アプリ名&amp;gt;.scm.azurewebsites.net:443/&amp;lt;アプリ名&amp;gt;.git&lt;/code>的なURLです。&lt;/p>
+&lt;p>設定したユーザー名とパスワードを使ってGit Pushできます。&lt;/p>
+&lt;h2 id="heading-1">アプリケーション設定&lt;/h2>
+&lt;h3 id="heading-2">スタートアップファイル&lt;/h3>
+&lt;p>通常、Azure WebApps on LinuxはPM2というプロセス監視ツールを内部で使っていて、PM2で利用する&lt;code>process.json&lt;/code>というファイルを編集して起動スクリプトを指定します。&lt;/p>
+&lt;ul>
+&lt;li>&lt;a href="https://github.com/wbuchwalter/azure-content/blob/master/articles/app-service-web/app-service-linux-using-nodejs-pm2.md">WebAppsのドキュメント&lt;/a>&lt;/li>
+&lt;li>&lt;a href="http://pm2.keymetrics.io/docs/usage/application-declaration/">pm2のドキュメント&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;p>通常は特定のjsファイルを指定したりするのですがNuxt.jsの場合、Nuxtコマンドで起動するので&lt;/p>
+&lt;p>&lt;code>node_modules/nuxt/bin/nuxt-start&lt;/code>を指定します。&lt;/p>
+&lt;p>これでサーバーが再起動した際にNuxt.jsが起動します。&lt;/p>
+&lt;h3 id="host0000">HOSTを&lt;code>0.0.0.0&lt;/code>に&lt;/h3>
+&lt;p>また、設定でHOSTを&lt;code>0.0.0.0&lt;/code>に設定します。&lt;/p>
+&lt;p>これを指定しないと&lt;code>localhost&lt;/code>接続になってしまい、WebApps内部ではうまいこと動いてくれない模様です。&lt;/p>
+&lt;p>Keenさんの&lt;a href="https://keens.github.io/blog/2016/02/24/bind_addressnoimigayouyakuwakatta/">Bind Addressの意味がようやく分かった&lt;/a>の記事にもあるように&lt;code>0.0.0.0&lt;/code>はワイルドカードとして使えるので指定します。&lt;/p>
+&lt;p>&lt;img src="https://i.gyazo.com/00346583f202e15200e90ccea658a4ef.png" alt="">&lt;/p>
+&lt;h2 id="packagejsonpostinstallnuxt-build">package.jsonにpostinstallで&lt;code>nuxt build&lt;/code>させる&lt;/h2>
+&lt;p>まだこれでもうまくいかなかったです。&lt;/p>
+&lt;p>Nuxts.jsはnpm startすると&lt;code>nuxt build &amp;amp;&amp;amp; nuxt start&lt;/code>という形でビルド-&amp;gt;起動という順番になります。ビルドすると&lt;code>.nuxt&lt;/code>フォルダが作成され、その中のプログラムを使って起動します。&lt;/p>
+&lt;p>ということで、WebAppsにデプロイしたらデプロイ先でビルドを走らせる必要があります。通常デプロイすると&lt;code>npm start&lt;/code>が走り、その中で&lt;code>nuxt build &amp;amp;&amp;amp; nuxt start&lt;/code>が実行されるため、問題なさそうなのですが、なぜかこれだとビルドがうまくいかず&lt;code>postinstall&lt;/code>の箇所でビルドをさせるとうまく動いてくれました。&lt;/p>
+&lt;p>package.jsonのscriptsの箇所に&lt;code>&amp;quot;postinstall&amp;quot;: &amp;quot;cd /home/site/wwwroot &amp;amp;&amp;amp; /opt/nodejs/9.4.0/bin/node ./node_modules/nuxt/bin/nuxt-build&amp;quot;,&lt;/code>を入れてあげます。&lt;/p>
+&lt;p>WebApss側ではデプロイしたソースコードは&lt;code>/home/site/wwwroot&lt;/code>に保存されるのでそこに移動してビルドする形です。&lt;/p>
+&lt;p>ちなみに、&lt;code>/opt/nodejs/9.4.0/bin/node ./node_modules/nuxt/bin/nuxt-build&amp;quot;&lt;/code>の箇所は&lt;code>npm run build&lt;/code>や&lt;code>nuxt build&lt;/code>の中身である&lt;code>nuxt-build&lt;/code>を実行するものですが、そのまま&lt;code>npm run build&lt;/code>を指定しておくとWebApps上で実行されるNode.jsのバージョンが古く、&lt;code>async&lt;/code>などの構文でエラーを起こしてしまい、&lt;code>nuxt build&lt;/code>が上手くいかない模様です。なので&lt;code>/opt/nodejs/9.4.0/bin/node&lt;/code>でバージョンを指定してあげると上手くビルドしてくれます。&lt;/p>
+&lt;pre>&lt;code>async ready() {
 remote: ^^^^^
 remote: SyntaxError: Unexpected identifier
 ・
 ・
 ・
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&#34;git-pushしてビルド確認&#34;&gt;git pushしてビルド確認&lt;/h2&gt;
-&lt;p&gt;ここまで設定できるとgit pushしてビルドが成功すると思います。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;$ git push origin master
+&lt;/code>&lt;/pre>&lt;h2 id="git-push">git pushしてビルド確認&lt;/h2>
+&lt;p>ここまで設定できるとgit pushしてビルドが成功すると思います。&lt;/p>
+&lt;pre>&lt;code>$ git push origin master
 ・
 ・
 結構長い
@@ -68,121 +65,110 @@ remote: Finished successfully.
 remote: Running post deployment command(s)...
 remote: Deployment successful.
 remote: App container will begin restart within 10 seconds.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;という形で&lt;code&gt;Finished successfully&lt;/code&gt;や&lt;code&gt;Deployment successful.&lt;/code&gt;のメッセージが出ればデプロイ成功です。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://camo.qiitausercontent.com/3bec96ccb48cf22dd880982f9ca1a6d938bd5c38/68747470733a2f2f692e6779617a6f2e636f6d2f36383163646639613562366266386161623935626138386537326665313431652e706e67&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;こんな感じのサイトが&lt;code&gt;https://&amp;lt;アプリ名&amp;gt;.azurewebsites.net&lt;/code&gt;にアクセスすると表示されると思います。&lt;/p&gt;
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;&lt;code&gt;nuxt build&lt;/code&gt;がWebApps上でなかなか動作してくれない&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;HOSTの&lt;code&gt;0.0.0.0&lt;/code&gt;の指定&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;この二点を気をつければWebApps on LinuxでNuxt.jsの環境を整えられました。&lt;/p&gt;
-&lt;p&gt;参考になれば幸いです。&lt;/p&gt;
-&lt;p&gt;やさしいMSのサポートエンジニアさんマジでありがとう&amp;hellip;&amp;hellip;&lt;/p&gt;</description></item><item><title>Azure WebAppsでカスタムドメイン&#43;SSL対応するメモ</title><link>https://dotstud.io/blog/webapps-custom-domain-ssl/</link><pubDate>Tue, 21 Aug 2018 15:51:00 +0900</pubDate><guid>https://dotstud.io/blog/webapps-custom-domain-ssl/</guid><description>
-&lt;p&gt;こんにちは、代表の&lt;a href=&#34;https://dotstud.io/members/n0bisuke&#34;&gt;n0bisuke&lt;/a&gt;です。&lt;/p&gt;
-&lt;p&gt;うちの会社では&lt;strong&gt;Azure&lt;/strong&gt;をよく使ってます。僕個人だとAzureのPaaSサービスの&lt;strong&gt;WebApps&lt;/strong&gt;（Heroku的なやつです）をよく使うのですが、カスタムドメインでの運用とSSL対応で詰まったので手順を紹介していきます。&lt;/p&gt;
-&lt;p&gt;この手のサービスはUIがガンガン変わるので、2018年8月版って感じですね。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;ちなみに今日は甲子園決勝で大阪桐蔭高校VS秋田県立金足農業高校の試合を見ながら記事を書いてます。&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;金足頑張れ〜！&lt;/p&gt;
-&lt;p&gt;&lt;center&gt;
-&lt;blockquote class=&#34;twitter-tweet&#34; data-lang=&#34;ja&#34;&gt;&lt;p lang=&#34;ja&#34; dir=&#34;ltr&#34;&gt;「さすがに見るでしょ」と言いながら甲子園観戦し始める東北出身のしゃちょー &lt;a href=&#34;https://twitter.com/hashtag/%E3%82%B9%E3%82%BF%E3%82%B8%E3%82%AA%E6%97%A5%E8%AA%8C?src=hash&amp;amp;ref_src=twsrc%5Etfw&#34;&gt;#スタジオ日誌&lt;/a&gt; &lt;a href=&#34;https://twitter.com/hashtag/dotstudio?src=hash&amp;amp;ref_src=twsrc%5Etfw&#34;&gt;#dotstudio&lt;/a&gt; &lt;a href=&#34;https://t.co/hg89N055o2&#34;&gt;pic.twitter.com/hg89N055o2&lt;/a&gt;&lt;/p&gt; ドットスタジオ (@dotstud_io) &lt;a href=&#34;https://twitter.com/dotstud_io/status/1031780753850265600?ref_src=twsrc%5Etfw&#34;&gt;2018年8月21日&lt;/a&gt;&lt;/blockquote&gt;
-&lt;script async src=&#34;https://platform.twitter.com/widgets.js&#34; charset=&#34;utf-8&#34;&gt;&lt;/script&gt;
-&lt;/center&gt;&lt;/p&gt;
-&lt;h2 id=&#34;azure-web-apps&#34;&gt;Azure Web Apps&lt;/h2&gt;
-&lt;p&gt;Web Appsでは有料プラン以上でカスタムドメインを使える模様です。&lt;/p&gt;
-&lt;p&gt;通常はWeb Appsにアプリケーションをデプロイすると&lt;code&gt;https://xxxxxxx.azurewebsites.net/&lt;/code&gt; といったURLが付与されます。&lt;/p&gt;
-&lt;p&gt;デフォルトでSSL使えるし結構便利です。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/3500760306fa71fc507d80ecfa376c1d.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;h2 id=&#34;web-appsでカスタムドメイン&#34;&gt;Web Appsでカスタムドメイン&lt;/h2&gt;
-&lt;h3 id=&#34;web-apps側の設定&#34;&gt;Web Apps側の設定&lt;/h3&gt;
-&lt;p&gt;&lt;code&gt;カスタムドメイン&lt;/code&gt;のメニューを選択します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/1.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;今回利用する&lt;code&gt;graspin.studio&lt;/code&gt;というドメインを入力して検証します。&lt;/p&gt;
-&lt;p&gt;ホスト名レコードタイプの選択はAレコードとCNAMEがありますが、今回はAレコードにします。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/2.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;下の方に&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;ホスト名の利用可否&lt;/li&gt;
-&lt;li&gt;ドメイン所有権&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;の情報がありますが、たぶんこの時点でドメイン所有権の欄が×になってると思います。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/3.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;TXTとAレコードをドメイン事業者の管理画面で設定していきます。&lt;/p&gt;
-&lt;p&gt;設定する値はAタイプにIPアドレス、TXTタイプにWebAppsのドメインです。
-この画面を開いたままで次のドメイン事業者のサイトにいきましょう。&lt;/p&gt;
-&lt;h3 id=&#34;お名前-com側での設定&#34;&gt;お名前.com側での設定&lt;/h3&gt;
-&lt;p&gt;むーむードメインやValueドメインなど色々なサイトがありますが、今回僕は&lt;a href=&#34;https://www.onamae.com/&#34;&gt;お名前.com&lt;/a&gt;を利用してドメインを取得したのでお名前.comでの設定を紹介します。&lt;/p&gt;
-&lt;p&gt;Azureの管理画面で表示されたIPアドレスをAタイプに、WebAppsのドメインをTXTタイプに設定して保存します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/4.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;浸透するまで少し時間がかかるので10分程度待ちます。（場合によってはもっとかかる時もあります）&lt;/p&gt;
-&lt;h3 id=&#34;web-apps側で再度確認&#34;&gt;Web Apps側で再度確認&lt;/h3&gt;
-&lt;p&gt;もう一度Web Apps側で検証ボタンを押すと認証が成功していることがわかります。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/5.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;ホスト名の追加&lt;/code&gt;ボタンがアクティブになるので、追加しましょう。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;追加されました。&lt;/p&gt;
-&lt;p&gt;これで&lt;code&gt;http://graspin.studio&lt;/code&gt;でアクセスできるようになりました。&lt;/p&gt;
-&lt;p&gt;Web Apps のカスタムドメイン設定は完了です。&lt;/p&gt;
-&lt;h2 id=&#34;let-s-encryptでssl対応する&#34;&gt;Let&amp;rsquo;s EncryptでSSL対応する&lt;/h2&gt;
-&lt;p&gt;カスタムドメインではSSL対応の設定をしないとHTTPSは使えないので、無料SSLサーバ証明書のLet&amp;rsquo;s Encryptを利用して設定してみます。&lt;/p&gt;
-&lt;p&gt;手元の環境はmacOS High Sierraです。&lt;/p&gt;
-&lt;h3 id=&#34;certbotインストール&#34;&gt;certbotインストール&lt;/h3&gt;
-&lt;p&gt;certbotというコマンドで証明書を作るのですが、&lt;/p&gt;
-&lt;p&gt;通常手順だと最初からmacOSだと厳しいみたいなエラーを言われました。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;WARNING: certbot-auto support for this macOS is DEPRECATED!
+&lt;/code>&lt;/pre>&lt;p>という形で&lt;code>Finished successfully&lt;/code>や&lt;code>Deployment successful.&lt;/code>のメッセージが出ればデプロイ成功です。&lt;/p>
+&lt;p>&lt;img src="https://camo.qiitausercontent.com/3bec96ccb48cf22dd880982f9ca1a6d938bd5c38/68747470733a2f2f692e6779617a6f2e636f6d2f36383163646639613562366266386161623935626138386537326665313431652e706e67" alt="">&lt;/p>
+&lt;p>こんな感じのサイトが&lt;code>https://&amp;lt;アプリ名&amp;gt;.azurewebsites.net&lt;/code>にアクセスすると表示されると思います。&lt;/p>
+&lt;h2 id="heading-3">まとめ&lt;/h2>
+&lt;ul>
+&lt;li>&lt;strong>&lt;code>nuxt build&lt;/code>がWebApps上でなかなか動作してくれない&lt;/strong>&lt;/li>
+&lt;li>&lt;strong>HOSTの&lt;code>0.0.0.0&lt;/code>の指定&lt;/strong>&lt;/li>
+&lt;/ul>
+&lt;p>この二点を気をつければWebApps on LinuxでNuxt.jsの環境を整えられました。&lt;/p>
+&lt;p>参考になれば幸いです。&lt;/p>
+&lt;p>やさしいMSのサポートエンジニアさんマジでありがとう&amp;hellip;&amp;hellip;&lt;/p></description></item><item><title>Azure WebAppsでカスタムドメイン+SSL対応するメモ</title><link>https://dotstud.io/blog/webapps-custom-domain-ssl/</link><pubDate>Tue, 21 Aug 2018 15:51:00 +0900</pubDate><guid>https://dotstud.io/blog/webapps-custom-domain-ssl/</guid><description>&lt;p>こんにちは、代表の&lt;a href="https://dotstud.io/members/n0bisuke">n0bisuke&lt;/a>です。&lt;/p>
+&lt;p>うちの会社では&lt;strong>Azure&lt;/strong>をよく使ってます。僕個人だとAzureのPaaSサービスの&lt;strong>WebApps&lt;/strong>（Heroku的なやつです）をよく使うのですが、カスタムドメインでの運用とSSL対応で詰まったので手順を紹介していきます。&lt;/p>
+&lt;p>この手のサービスはUIがガンガン変わるので、2018年8月版って感じですね。&lt;/p>
+&lt;p>&lt;strong>ちなみに今日は甲子園決勝で大阪桐蔭高校VS秋田県立金足農業高校の試合を見ながら記事を書いてます。&lt;/strong>&lt;/p>
+&lt;p>金足頑張れ〜！&lt;/p>
+&lt;!-- raw HTML omitted -->
+&lt;h2 id="azure-web-apps">Azure Web Apps&lt;/h2>
+&lt;p>Web Appsでは有料プラン以上でカスタムドメインを使える模様です。&lt;/p>
+&lt;p>通常はWeb Appsにアプリケーションをデプロイすると&lt;code>https://xxxxxxx.azurewebsites.net/&lt;/code> といったURLが付与されます。&lt;/p>
+&lt;p>デフォルトでSSL使えるし結構便利です。&lt;/p>
+&lt;p>&lt;img src="https://i.gyazo.com/3500760306fa71fc507d80ecfa376c1d.png" alt="">&lt;/p>
+&lt;h2 id="web-apps">Web Appsでカスタムドメイン&lt;/h2>
+&lt;h3 id="web-apps-1">Web Apps側の設定&lt;/h3>
+&lt;p>&lt;code>カスタムドメイン&lt;/code>のメニューを選択します。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/209/1.png" alt="">&lt;/p>
+&lt;p>今回利用する&lt;code>graspin.studio&lt;/code>というドメインを入力して検証します。&lt;/p>
+&lt;p>ホスト名レコードタイプの選択はAレコードとCNAMEがありますが、今回はAレコードにします。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/209/2.png" alt="">&lt;/p>
+&lt;p>下の方に&lt;/p>
+&lt;ul>
+&lt;li>ホスト名の利用可否&lt;/li>
+&lt;li>ドメイン所有権&lt;/li>
+&lt;/ul>
+&lt;p>の情報がありますが、たぶんこの時点でドメイン所有権の欄が×になってると思います。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/209/3.png" alt="">&lt;/p>
+&lt;p>TXTとAレコードをドメイン事業者の管理画面で設定していきます。&lt;/p>
+&lt;p>設定する値はAタイプにIPアドレス、TXTタイプにWebAppsのドメインです。
+この画面を開いたままで次のドメイン事業者のサイトにいきましょう。&lt;/p>
+&lt;h3 id="com">お名前.com側での設定&lt;/h3>
+&lt;p>むーむードメインやValueドメインなど色々なサイトがありますが、今回僕は&lt;a href="https://www.onamae.com/">お名前.com&lt;/a>を利用してドメインを取得したのでお名前.comでの設定を紹介します。&lt;/p>
+&lt;p>Azureの管理画面で表示されたIPアドレスをAタイプに、WebAppsのドメインをTXTタイプに設定して保存します。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/209/4.png" alt="">&lt;/p>
+&lt;p>浸透するまで少し時間がかかるので10分程度待ちます。（場合によってはもっとかかる時もあります）&lt;/p>
+&lt;h3 id="web-apps-2">Web Apps側で再度確認&lt;/h3>
+&lt;p>もう一度Web Apps側で検証ボタンを押すと認証が成功していることがわかります。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/209/5.png" alt="">&lt;/p>
+&lt;p>&lt;code>ホスト名の追加&lt;/code>ボタンがアクティブになるので、追加しましょう。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/209/6.png" alt="">&lt;/p>
+&lt;p>追加されました。&lt;/p>
+&lt;p>これで&lt;code>http://graspin.studio&lt;/code>でアクセスできるようになりました。&lt;/p>
+&lt;p>Web Apps のカスタムドメイン設定は完了です。&lt;/p>
+&lt;h2 id="lets-encryptssl">Let's EncryptでSSL対応する&lt;/h2>
+&lt;p>カスタムドメインではSSL対応の設定をしないとHTTPSは使えないので、無料SSLサーバ証明書のLet's Encryptを利用して設定してみます。&lt;/p>
+&lt;p>手元の環境はmacOS High Sierraです。&lt;/p>
+&lt;h3 id="certbot">certbotインストール&lt;/h3>
+&lt;p>certbotというコマンドで証明書を作るのですが、&lt;/p>
+&lt;p>通常手順だと最初からmacOSだと厳しいみたいなエラーを言われました。&lt;/p>
+&lt;pre>&lt;code>WARNING: certbot-auto support for this macOS is DEPRECATED!
 Please visit certbot.eff.org to learn how to download a version of
 Certbot that is packaged for your system. While an existing version
 of certbot-auto may work currently, we have stopped supporting updating
 system packages for your system. Please switch to a packaged version
 as soon as possible.
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;a href=&#34;https://certbot.eff.org/lets-encrypt/osx-other&#34;&gt;https://certbot.eff.org/lets-encrypt/osx-other&lt;/a&gt; をみるとbrewで入れて欲しいらしいです。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;brew install certbot
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&#34;証明書pemファイルの作成&#34;&gt;証明書pemファイルの作成&lt;/h3&gt;
-&lt;p&gt;色々と調べたのですが、&lt;a href=&#34;https://blog.shibayan.jp/entry/20151111/1447172124&#34;&gt;しばやんさんの記事&lt;/a&gt;が分かりやすかったです。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;sudo certbot certonly -a manual -d 利用するドメイン --server https://acme-v01.api.letsencrypt.org/directory --agree-dev-preview&lt;/code&gt;という形でコマンドをmacから実行します。今回は&lt;code&gt;graspin.studio&lt;/code&gt;を利用するので以下の内容になります。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;sudo certbot certonly -a manual -d graspin.studio --server https://acme-v01.api.letsencrypt.org/directory --agree-dev-preview
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;コマンドを実行すると対話式のターミナルでYesとかAgreeとかの入力を求められますが適宜入力して進めます。&lt;/p&gt;
-&lt;p&gt;以下のような表示が出て来ます。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+&lt;/code>&lt;/pre>&lt;p>&lt;a href="https://certbot.eff.org/lets-encrypt/osx-other">https://certbot.eff.org/lets-encrypt/osx-other&lt;/a> をみるとbrewで入れて欲しいらしいです。&lt;/p>
+&lt;pre>&lt;code>brew install certbot
+&lt;/code>&lt;/pre>&lt;h3 id="pem">証明書pemファイルの作成&lt;/h3>
+&lt;p>色々と調べたのですが、&lt;a href="https://blog.shibayan.jp/entry/20151111/1447172124">しばやんさんの記事&lt;/a>が分かりやすかったです。&lt;/p>
+&lt;p>&lt;code>sudo certbot certonly -a manual -d 利用するドメイン --server https://acme-v01.api.letsencrypt.org/directory --agree-dev-preview&lt;/code>という形でコマンドをmacから実行します。今回は&lt;code>graspin.studio&lt;/code>を利用するので以下の内容になります。&lt;/p>
+&lt;pre>&lt;code>sudo certbot certonly -a manual -d graspin.studio --server https://acme-v01.api.letsencrypt.org/directory --agree-dev-preview
+&lt;/code>&lt;/pre>&lt;p>コマンドを実行すると対話式のターミナルでYesとかAgreeとかの入力を求められますが適宜入力して進めます。&lt;/p>
+&lt;p>以下のような表示が出て来ます。&lt;/p>
+&lt;pre>&lt;code>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Create a file containing just this data:
 JQwu2TQUGdwCz5yApVx2SL5WpQOi5L2dwogABs6N6IU.XWM53woMKdjZiJrQHxBvqVcPSSUQPf1wfTUxo2e6d-g
 And make it available on your web server at this URL:
 http://graspin.studio/.well-known/acme-challenge/JQwu2TQUGdwCz5yApVx2SL5WpQOi5L2dwogABs6N6IU
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Press Enter to Continue
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;strong&gt;ここで一度作業を止めましょう。&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;これはドメインを所持してるか確認するためのフローで、&lt;code&gt;Let&#39;s Encrypt&lt;/code&gt;側から指定したエンドポイントに指定したレスポンスがあるようなサーバーを作ってね、という確認フローです。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;http://graspin.studio/.well-known/acme-challenge/JQwu2TQUGdwCz5yApVx2SL5WpQOi5L2dwogABs6N6IU&lt;/code&gt;というエンドポイントを用意して、&lt;code&gt;JQwu2TQUGdwCz5yApVx2SL5WpQOi5L2dwogABs6N6IU.XWM53woMKdjZiJrQHxBvqVcPSSUQPf1wfTUxo2e6d-g&lt;/code&gt;という表示がされるようにしてね、という意味です。&lt;/p&gt;
-&lt;p&gt;ちなみにこの文字列たちは毎回変わるので適宜読み変えます。&lt;/p&gt;
-&lt;p&gt;Node.js/Expressでサーバーを立ててましたが、以下のように設定しました。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;&#39;use strict&#39;;
-const express = require(&#39;express&#39;);
+&lt;/code>&lt;/pre>&lt;p>&lt;strong>ここで一度作業を止めましょう。&lt;/strong>&lt;/p>
+&lt;p>これはドメインを所持してるか確認するためのフローで、&lt;code>Let's Encrypt&lt;/code>側から指定したエンドポイントに指定したレスポンスがあるようなサーバーを作ってね、という確認フローです。&lt;/p>
+&lt;p>&lt;code>http://graspin.studio/.well-known/acme-challenge/JQwu2TQUGdwCz5yApVx2SL5WpQOi5L2dwogABs6N6IU&lt;/code>というエンドポイントを用意して、&lt;code>JQwu2TQUGdwCz5yApVx2SL5WpQOi5L2dwogABs6N6IU.XWM53woMKdjZiJrQHxBvqVcPSSUQPf1wfTUxo2e6d-g&lt;/code>という表示がされるようにしてね、という意味です。&lt;/p>
+&lt;p>ちなみにこの文字列たちは毎回変わるので適宜読み変えます。&lt;/p>
+&lt;p>Node.js/Expressでサーバーを立ててましたが、以下のように設定しました。&lt;/p>
+&lt;pre>&lt;code>'use strict';
+const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3000;
-const bodyParser = require(&#39;body-parser&#39;);
+const bodyParser = require('body-parser');
 app.use(bodyParser());
-app.use(express.static(__dirname+&#39;/src/public&#39;));
+app.use(express.static(__dirname+'/src/public'));
 //ここが今回の設定箇所
-app.get(&#39;/.well-known/acme-challenge/JQwu2TQUGdwCz5yApVx2SL5WpQOi5L2dwogABs6N6IU&#39;, (req,res)=&amp;gt;{
+app.get('/.well-known/acme-challenge/JQwu2TQUGdwCz5yApVx2SL5WpQOi5L2dwogABs6N6IU', (req,res)=&amp;gt;{
 res.send(`JQwu2TQUGdwCz5yApVx2SL5WpQOi5L2dwogABs6N6IU.XWM53woMKdjZiJrQHxBvqVcPSSUQPf1wfTUxo2e6d-g`);
 });
 app.listen(PORT);
 console.log(`listening on *: ${PORT}`);
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Web Appsにデプロイしなおして、サーバーを更新します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/7.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;アクセスするとこのような感じで指定された文字列が表示されるようにします。
-設定が完了したら、ターミナルの&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;Press Enter to Continue
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;で止めていた入力を再開し、Enterを押しましょう。&lt;/p&gt;
-&lt;p&gt;すると認証が始まり、問題なければ以下のように&lt;code&gt;Congratulations!&lt;/code&gt;と表示されます。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;Waiting for verification...
+&lt;/code>&lt;/pre>&lt;p>Web Appsにデプロイしなおして、サーバーを更新します。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/209/7.png" alt="">&lt;/p>
+&lt;p>アクセスするとこのような感じで指定された文字列が表示されるようにします。
+設定が完了したら、ターミナルの&lt;/p>
+&lt;pre>&lt;code>Press Enter to Continue
+&lt;/code>&lt;/pre>&lt;p>で止めていた入力を再開し、Enterを押しましょう。&lt;/p>
+&lt;p>すると認証が始まり、問題なければ以下のように&lt;code>Congratulations!&lt;/code>と表示されます。&lt;/p>
+&lt;pre>&lt;code>Waiting for verification...
 Cleaning up challenges
 Use of --agree-dev-preview is deprecated.
 IMPORTANT NOTES:
@@ -195,157 +181,152 @@ version of this certificate in the future, simply run certbot
 again. To non-interactively renew *all* of your certificates, run
 &amp;quot;certbot renew&amp;quot;
 - If you like Certbot, please consider supporting our work by:
-Donating to ISRG / Let&#39;s Encrypt: https://letsencrypt.org/donate
+Donating to ISRG / Let's Encrypt: https://letsencrypt.org/donate
 Donating to EFF: https://eff.org/donate-le
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;デフォルトで以下の場所にpemファイルが作成されます。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;/etc/letsencrypt/live/ドメイン名/fullchain.pem&lt;/li&gt;
-&lt;li&gt;/etc/letsencrypt/live/ドメイン名/privkey.pem&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;pemファイルからpfxファイルを作成&#34;&gt;pemファイルからpfxファイルを作成&lt;/h3&gt;
-&lt;p&gt;Web Appsではpfxファイルを読み込ませてSSLの設定をします。&lt;/p&gt;
-&lt;p&gt;pemファイルのあるディレクトリで以下を実行します。(この手順なくても良いかも)&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;mv privkey.pem privkey.key
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;code&gt;privkey.pem&lt;/code&gt;を&lt;code&gt;privkey.key&lt;/code&gt;ファイルにリネームしました。&lt;/p&gt;
-&lt;p&gt;以下で&lt;code&gt;pfx&lt;/code&gt;ファイルを作成します。パスワード設定を求められるので適当なものを設定します。設定しないとWebApps側で認識できないので設定しましょう。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;openssl pkcs12 -export -in fullchain.pem -inkey privkey.key -out sample.pfx
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Permissionなどのエラーが出る場合は&lt;code&gt;sudo&lt;/code&gt;実行しましょう。&lt;/p&gt;
-&lt;h3 id=&#34;web-appsで設定&#34;&gt;Web Appsで設定&lt;/h3&gt;
-&lt;p&gt;SSL設定メニューの&lt;code&gt;証明書アップロード&lt;/code&gt;からpfxファイルをアップロードします。このとき先ほどのパスワードの入力します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/8.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;あとはバインディング追加からホスト名を選択し、証明書を選択すればOKです。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/9.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;h3 id=&#34;確認&#34;&gt;確認&lt;/h3&gt;
-&lt;p&gt;浸透するまでに時間がかかるのですが、少ししたら&lt;code&gt;https://graspin.studio&lt;/code&gt;にアクセスできるようになってました。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.gyazo.com/7b48e9f2c1c4a91e2a543359f8ebe5c6.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;h2 id=&#34;おまけ&#34;&gt;おまけ&lt;/h2&gt;
-&lt;p&gt;追加で設定した内容です。簡単！&lt;/p&gt;
-&lt;h3 id=&#34;httpにアクセスがあってもhttpsにリダイレクトさせる&#34;&gt;HTTPにアクセスがあってもHTTPSにリダイレクトさせる&lt;/h3&gt;
-&lt;p&gt;SSL設定の&lt;code&gt;HTTPSのみ&lt;/code&gt;をオンにするだけです。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;h3 id=&#34;http2対応&#34;&gt;HTTP2対応&lt;/h3&gt;
-&lt;p&gt;アプリケーション設定の&lt;code&gt;HTTPバージョン&lt;/code&gt;を&lt;code&gt;2.0&lt;/code&gt;にするだけです。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/209/11.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;h2 id=&#34;まとめ&#34;&gt;まとめ&lt;/h2&gt;
-&lt;p&gt;Web Appsの最近っぽい情報がなかったのでまとめてみました。&lt;/p&gt;
-&lt;p&gt;備忘録ですが他の誰かの参考にもなれば幸いです！&lt;/p&gt;</description></item><item><title>AzureでMySQLのセットアップと接続方法</title><link>https://dotstud.io/blog/howto-setup-azure-mysql/</link><pubDate>Mon, 02 Jan 2017 15:00:53 +0900</pubDate><guid>https://dotstud.io/blog/howto-setup-azure-mysql/</guid><description>
-&lt;p&gt;明けましておめでとうございます。今年もよろしくお願いします。&lt;/p&gt;
-&lt;p&gt;ゆったりした時間の流れている実家から記事を書いています。&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;@n0bisuke&lt;/a&gt;です。&lt;/p&gt;
-&lt;p&gt;今日はAzureでのMySQLの使い方を紹介します。&lt;/p&gt;
-&lt;p&gt;新年一発目の記事は何か抱負的なこと書いた方がいいんじゃないかって声もありそうですがそういうのはモチベーションが上がったら書きますね。&lt;/p&gt;
-&lt;h2 id=&#34;新規にmysqlデータベースを作成する&#34;&gt;新規にMySQLデータベースを作成する&lt;/h2&gt;
-&lt;p&gt;AzureポータルでのMySQLデータベース作成の方法を紹介していきます。
-まずは&lt;a href=&#34;https://portal.azure.com/&#34;&gt;ポータル&lt;/a&gt;にログインしましょう。&lt;/p&gt;
-&lt;p&gt;&amp;ldquo;&lt;strong&gt;+(新規) &amp;gt; Marketplaceを検索&lt;/strong&gt;&amp;ldquo;から&amp;rdquo;&lt;strong&gt;MySQL Database&lt;/strong&gt;&amp;ldquo;と検索しましょう。
-&lt;img src=&#34;https://dotstud.io/img/blog/067/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;&amp;ldquo;&lt;strong&gt;MySQL データベース&lt;/strong&gt;&amp;ldquo;を選択して&amp;rdquo;&lt;strong&gt;作成&lt;/strong&gt;&amp;ldquo;します。
-&lt;img src=&#34;https://dotstud.io/img/blog/067/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;（&lt;a href=&#34;https://docs.microsoft.com/ja-jp/azure/store-php-create-mysql-database&#34;&gt;Azure で MySQL データベースを作成して接続する&lt;/a&gt;の記事を参考に進めようとしたら何故か表示が変わっていて
-&amp;ldquo;Data + Strage&amp;rdquo;という項目が出てきませんでした。）&lt;/p&gt;
-&lt;p&gt;僕はここに行き着くまでで詰まってました……&lt;/p&gt;
-&lt;h2 id=&#34;初期情報の入力&#34;&gt;初期情報の入力&lt;/h2&gt;
-&lt;p&gt;データベースの情報を入力していきます。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;データベース名&lt;/strong&gt;: 任意の名前をつけましょう&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;サブスクリプション&lt;/strong&gt;: 利用するサブスクリプションを指定します。通常はデフォルト設定のままで大丈夫です。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;データベースの種類&lt;/strong&gt;: 共有か専用かを選択します。安く済ませる場合は共有にしましょう。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;リソースグループ&lt;/strong&gt;: 利用するリソースグループを指定します。無い場合は新規で作成しましょう。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;場所&lt;/strong&gt;: 日本からの利用なら東日本もしくは西日本を選択しましょう。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;価格レベル&lt;/strong&gt;: 利用する状況に合わせて選択します。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;法律条項&lt;/strong&gt;: 利用許諾のようなものです。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;価格レベルの設定は惑星の名前になっています。
-&lt;img src=&#34;https://dotstud.io/img/blog/067/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;法律条項の箇所では購入ボタンを押すことで同意したものとされるようです。
-&lt;strong&gt;Azureクレジットとは別にお金がかかるらしい&lt;/strong&gt;ので注意してください。
-同意して購入ボタンを押しましょう。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/067/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;最後に作成を選択してしばらく待つとデータベースが作成されます。&lt;/p&gt;
-&lt;h2 id=&#34;クライアントアプリから接続してみる&#34;&gt;クライアントアプリから接続してみる&lt;/h2&gt;
-&lt;p&gt;実際にクライアントアプリから試してみましょう。
-僕はMacを利用しているので&lt;a href=&#34;https://www.sequelpro.com/&#34;&gt;Sequel Pro&lt;/a&gt;を使っています。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/067/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;データベースが作成されたらプロパティから以下の情報を確認します。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;ホスト名&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;ポート&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;ユーザー名&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;パスワード&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;データベース名&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;を確認しましょう。データベース名は設定したデータベース名だとアクセスできない場合があるので&lt;strong&gt;接続文字列&lt;/strong&gt;の&lt;strong&gt;Database=xxxx&lt;/strong&gt;の部分で確認しましょう。
-僕の環境の場合は&amp;rdquo;acsm_xxxxx&amp;rdquo;というデータベース名が設定されていました。
-&lt;img src=&#34;https://dotstud.io/img/blog/067/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;それではSequel Proで先ほどの情報を入力して、&lt;strong&gt;接続をテスト&lt;/strong&gt;を押しましょう。
-接続情報に問題がなければ&lt;strong&gt;接続が成功しました&lt;/strong&gt;と表示されます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/067/07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;Sequel Proの操作でテーブル追加なども可能です。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/067/08.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;他のクライアントでも同じような操作で接続確認を出来ると思います。&lt;/p&gt;
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-&lt;p&gt;いかがでしたでしょうか。&lt;/p&gt;
-&lt;p&gt;AzureでMySQLを利用する方法を紹介しました。&lt;/p&gt;
-&lt;p&gt;ポータルのUIや仕様が調べて見つけたページと少し異なる部分がありましたが今回の内容と合わせて参考になれば幸いです。&lt;/p&gt;
-&lt;p&gt;それでは。&lt;/p&gt;</description></item><item><title>Azure WebAppsにGitLab連携でデプロイしてみよう</title><link>https://dotstud.io/blog/azure-webapps-gitlab-connect/</link><pubDate>Tue, 18 Oct 2016 10:00:30 +0900</pubDate><guid>https://dotstud.io/blog/azure-webapps-gitlab-connect/</guid><description>
-&lt;p&gt;こんにちは、dotstudio代表の&lt;a href=&#34;https://twitter.com/n0bisuke&#34;&gt;のびすけ&lt;/a&gt;です。&lt;/p&gt;
-&lt;p&gt;最近&lt;a href=&#34;https://azure.microsoft.com/ja-jp/documentation/articles/app-service-web-overview/&#34;&gt;Azure WebApps&lt;/a&gt;を使って開発をしています。dotstudioではGitLabを利用してソースコード管理をしているのでGitLabとWebAppsを連携し自動デプロイをする方法を紹介します。&lt;/p&gt;
-&lt;p&gt;「&lt;a href=&#34;https://christianliebel.com/2016/05/auto-deploying-to-azure-app-services-from-gitlab/&#34;&gt;Auto-Deploying to Azure App Services from GitLab&lt;/a&gt;」を参考にしましたが、調べても英語記事しかなかったので日本語記事は初めてだと思います！&lt;/p&gt;
-&lt;h2 id=&#34;今回やること&#34;&gt;今回やること&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&#34;https://gitlab.com/&#34;&gt;GitLab&lt;/a&gt;はGitHubやBitbucketのようなGitのホスティングサービスです。
-GitHubとBitbucketはWebAppsが公式対応しているため簡単に設定できますが、GitLabは公式対応していないため少しやり方が特殊です。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/01.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;やりたいことはこの図の通りで、作業者がGitLabにPushしたら自動的にWebAppsにデプロイされる仕組みを作ります。&lt;/p&gt;
-&lt;h2 id=&#34;事前準備&#34;&gt;事前準備&lt;/h2&gt;
-&lt;p&gt;以下の内容を事前に済ませておきましょう。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;WebAppsのアプリケーションを作成しておく&lt;/li&gt;
-&lt;li&gt;GitLabでリポジトリを作成しておく&lt;/li&gt;
-&lt;li&gt;GitLabに手元のマシンからPushできる状態にしておく&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;設定してみよう&#34;&gt;設定してみよう&lt;/h2&gt;
-&lt;h3 id=&#34;1-webappsにgitlabのurlを紐付ける&#34;&gt;1. WebAppsにGitLabのURLを紐付ける&lt;/h3&gt;
-&lt;p&gt;WebAppsのデプロイ設定をします。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/02.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;アプリのデプロイ &amp;gt; デプロイオプション &amp;gt; ソースの選択 &amp;gt; 外部リポジトリ&lt;/strong&gt;を選択します。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/03.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;GitLabのリポジトリURLを入力しましょう。 https形式とSSH形式のどちらでも大丈夫です。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/04.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;無事に設定が完了すると、メニューの &lt;strong&gt;概要 &amp;gt; 外部リポジトリプロジェクト&lt;/strong&gt;にリポジトリのURLが設定されます。&lt;/p&gt;
-&lt;h3 id=&#34;2-webappsのデプロイ用ssh公開鍵を取得する&#34;&gt;2. WebAppsのデプロイ用SSH公開鍵を取得する&lt;/h3&gt;
-&lt;p&gt;WebAppsに外部からアクセスするためにWebAppsのSSH公開鍵を取得します。&lt;/p&gt;
-&lt;p&gt;通常WebAppsの公開URLにアクセスする場合&lt;code&gt;http://アプリケーション名.azurewebsites.net&lt;/code&gt;というドメインにアクセスしますが、ここでは通常のURLに&lt;code&gt;.scm&lt;/code&gt;が追加されたドメインにアクセスします。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;https://アプリケーション名.scm.azurewebsites.net/api/sshkey?ensurePublicKey=1&lt;/code&gt; にアクセスしてみましょう。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/05.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;このssh-rsaから始まるダブルクォートで囲まれている部分が公開鍵になります。&lt;/p&gt;
-&lt;p&gt;ちなみに、アプリケーション名がn0bisukeの場合は&lt;code&gt;https://n0bisuke.scm.azurewebsites.net/api/sshkey?ensurePublicKey=1&lt;/code&gt;になります。&lt;/p&gt;
-&lt;h3 id=&#34;3-gitlabの対象リポジトリにデプロイ用ssh公開鍵を設定する&#34;&gt;3. GitLabの対象リポジトリにデプロイ用SSH公開鍵を設定する&lt;/h3&gt;
-&lt;p&gt;先ほどのSSH公開鍵をGitLabに設定します。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;https://gitlab.com/ユーザー名/リポジトリ名/deploy_keys&lt;/code&gt;にアクセスしましょう。
-リポジトリの &lt;strong&gt;設定(歯車マーク) &amp;gt; Deploy Keys&lt;/strong&gt;からもアクセスできます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/06.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;Titleの項目に任意の名前を入力し、Keyの項目に先ほどのSSH公開鍵を貼りましょう。&lt;/p&gt;
-&lt;p&gt;これでGitLabのリポジトリに鍵を紐付けられ、GitLabからWebAppsにデプロイすることが出来るようになります。&lt;/p&gt;
-&lt;h3 id=&#34;4-webappsのwebhookアドレスをgitlabに紐付ける&#34;&gt;4. WebAppsのWebhookアドレスをGitLabに紐付ける&lt;/h3&gt;
-&lt;p&gt;ここまでの作業でWebAppsとGitLabの連携は出来ているのですが、今回は作業者がGitLabにPushしたらデプロイされる仕組みにしたいため、Pushを検知するための設定をします。&lt;/p&gt;
-&lt;p&gt;WebAppsのメニューから &lt;strong&gt;設定 &amp;gt; プロパティ &amp;gt; デプロイ開始のURL&lt;/strong&gt;の項目にあるURLをコピーしましょう。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/07.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;https://$アプリケーション名:パスワード@アプリケーション名.scm.azurewebsites.net/deploy&lt;/code&gt;というURLが設定されているはずです。&lt;/p&gt;
-&lt;p&gt;GitLab側に移動し、 &lt;code&gt;https://gitlab.com/ユーザー名/リポジトリ名/hooks&lt;/code&gt;にアクセスしましょう。
-リポジトリの &lt;strong&gt;設定(歯車マーク) &amp;gt; Webhooks&lt;/strong&gt;からもアクセスできます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/08.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;URLの項目に先ほどのWebAppsのWebHookアドレス(&lt;code&gt;https://$アプリケーション名:パスワード@アプリケーション名.scm.azurewebsites.net/deploy&lt;/code&gt;)を貼り付けます。 他の項目は特に変更せずに&lt;code&gt;Add Webhook&lt;/code&gt;で追加します。&lt;/p&gt;
-&lt;p&gt;これで設定は完了です。&lt;/p&gt;
-&lt;h3 id=&#34;5-試してみる&#34;&gt;5. 試してみる&lt;/h3&gt;
-&lt;p&gt;Gitで適当にPushしてみましょう。するとWebAppsのデプロイオプションの項目で同期が確認できます。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/09.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;http://アプリケーション名.azurewebsites.net&lt;/code&gt;にアクセスしてみるとソースコードが反映されていることが分かると思います。&lt;/p&gt;
-&lt;p&gt;お疲れ様でした！&lt;/p&gt;
-&lt;h2 id=&#34;おわりに&#34;&gt;おわりに&lt;/h2&gt;
-&lt;p&gt;イメージのしやすさから「GitLabからWebAppsにデプロイ」という表現を使いましたが、実際には「WebAppsがGitLab上のソースコードをPullしている」という表現の方が正しいと思います。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://dotstud.io/img/blog/038/10.png&#34; alt=&#34;&#34; /&gt;&lt;/p&gt;
-&lt;p&gt;GitLab側はPushがあったことをWebhookでWebAppsに声を掛けてあげて、WebApps側はGitLabから声が掛かったらPullしにいく、という流れです。&lt;/p&gt;
-&lt;p&gt;ちなみに今回はWebhookの設定でかなりハマって、「&lt;a href=&#34;https://github.com/projectkudu/kudu/wiki/Continuous-deployment&#34;&gt;projectkudu/kudu&lt;/a&gt;」や「&lt;a href=&#34;http://stackoverflow.com/questions/31538152/publishing-to-azure-web-apps-from-gitlab-repository-on-trigger&#34;&gt;Publishing to Azure Web Apps from GitLab repository on trigger&lt;/a&gt;」に&lt;code&gt;https://$mysite:BigRandomPassword@mysite.scm.azurewebsites.net/deploy&lt;/code&gt;がWebhookのURLだという記載があるのですが、&lt;code&gt;BigRandomPassword&lt;/code&gt;が謎すぎてかなり詰んでました。 WebApps側で「デプロイ開始のURL」という表現になってるのも分かりにくい気がしますね（苦笑）。&lt;/p&gt;
-&lt;p&gt;WebAppsとGitLabの仕様が変わるまではしばらくこの手順が生きるはずですので、参考になれば幸いです。&lt;/p&gt;</description></item></channel></rss>
+&lt;/code>&lt;/pre>&lt;p>デフォルトで以下の場所にpemファイルが作成されます。&lt;/p>
+&lt;ul>
+&lt;li>/etc/letsencrypt/live/ドメイン名/fullchain.pem&lt;/li>
+&lt;li>/etc/letsencrypt/live/ドメイン名/privkey.pem&lt;/li>
+&lt;/ul>
+&lt;h3 id="pempfx">pemファイルからpfxファイルを作成&lt;/h3>
+&lt;p>Web Appsではpfxファイルを読み込ませてSSLの設定をします。&lt;/p>
+&lt;p>pemファイルのあるディレクトリで以下を実行します。(この手順なくても良いかも)&lt;/p>
+&lt;pre>&lt;code>mv privkey.pem privkey.key
+&lt;/code>&lt;/pre>&lt;p>&lt;code>privkey.pem&lt;/code>を&lt;code>privkey.key&lt;/code>ファイルにリネームしました。&lt;/p>
+&lt;p>以下で&lt;code>pfx&lt;/code>ファイルを作成します。パスワード設定を求められるので適当なものを設定します。設定しないとWebApps側で認識できないので設定しましょう。&lt;/p>
+&lt;pre>&lt;code>openssl pkcs12 -export -in fullchain.pem -inkey privkey.key -out sample.pfx
+&lt;/code>&lt;/pre>&lt;p>Permissionなどのエラーが出る場合は&lt;code>sudo&lt;/code>実行しましょう。&lt;/p>
+&lt;h3 id="web-apps-3">Web Appsで設定&lt;/h3>
+&lt;p>SSL設定メニューの&lt;code>証明書アップロード&lt;/code>からpfxファイルをアップロードします。このとき先ほどのパスワードの入力します。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/209/8.png" alt="">&lt;/p>
+&lt;p>あとはバインディング追加からホスト名を選択し、証明書を選択すればOKです。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/209/9.png" alt="">&lt;/p>
+&lt;h3 id="heading">確認&lt;/h3>
+&lt;p>浸透するまでに時間がかかるのですが、少ししたら&lt;code>https://graspin.studio&lt;/code>にアクセスできるようになってました。&lt;/p>
+&lt;p>&lt;img src="https://i.gyazo.com/7b48e9f2c1c4a91e2a543359f8ebe5c6.png" alt="">&lt;/p>
+&lt;h2 id="heading-1">おまけ&lt;/h2>
+&lt;p>追加で設定した内容です。簡単！&lt;/p>
+&lt;h3 id="httphttps">HTTPにアクセスがあってもHTTPSにリダイレクトさせる&lt;/h3>
+&lt;p>SSL設定の&lt;code>HTTPSのみ&lt;/code>をオンにするだけです。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/209/10.png" alt="">&lt;/p>
+&lt;h3 id="http2">HTTP2対応&lt;/h3>
+&lt;p>アプリケーション設定の&lt;code>HTTPバージョン&lt;/code>を&lt;code>2.0&lt;/code>にするだけです。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/209/11.png" alt="">&lt;/p>
+&lt;h2 id="heading-2">まとめ&lt;/h2>
+&lt;p>Web Appsの最近っぽい情報がなかったのでまとめてみました。&lt;/p>
+&lt;p>備忘録ですが他の誰かの参考にもなれば幸いです！&lt;/p></description></item><item><title>AzureでMySQLのセットアップと接続方法</title><link>https://dotstud.io/blog/howto-setup-azure-mysql/</link><pubDate>Mon, 02 Jan 2017 15:00:53 +0900</pubDate><guid>https://dotstud.io/blog/howto-setup-azure-mysql/</guid><description>&lt;p>明けましておめでとうございます。今年もよろしくお願いします。&lt;/p>
+&lt;p>ゆったりした時間の流れている実家から記事を書いています。&lt;a href="https://twitter.com/n0bisuke">@n0bisuke&lt;/a>です。&lt;/p>
+&lt;p>今日はAzureでのMySQLの使い方を紹介します。&lt;/p>
+&lt;p>新年一発目の記事は何か抱負的なこと書いた方がいいんじゃないかって声もありそうですがそういうのはモチベーションが上がったら書きますね。&lt;/p>
+&lt;h2 id="mysql">新規にMySQLデータベースを作成する&lt;/h2>
+&lt;p>AzureポータルでのMySQLデータベース作成の方法を紹介していきます。
+まずは&lt;a href="https://portal.azure.com/">ポータル&lt;/a>にログインしましょう。&lt;/p>
+&lt;p>&amp;ldquo;&lt;strong>+(新規) &amp;gt; Marketplaceを検索&lt;/strong>&amp;ldquo;から&amp;rdquo;&lt;strong>MySQL Database&lt;/strong>&amp;ldquo;と検索しましょう。
+&lt;img src="https://dotstud.io/img/blog/067/01.png" alt="">&lt;/p>
+&lt;p>&amp;ldquo;&lt;strong>MySQL データベース&lt;/strong>&amp;ldquo;を選択して&amp;rdquo;&lt;strong>作成&lt;/strong>&amp;ldquo;します。
+&lt;img src="https://dotstud.io/img/blog/067/02.png" alt="">&lt;/p>
+&lt;p>（&lt;a href="https://docs.microsoft.com/ja-jp/azure/store-php-create-mysql-database">Azure で MySQL データベースを作成して接続する&lt;/a>の記事を参考に進めようとしたら何故か表示が変わっていて
+&amp;ldquo;Data + Strage&amp;quot;という項目が出てきませんでした。）&lt;/p>
+&lt;p>僕はここに行き着くまでで詰まってました……&lt;/p>
+&lt;h2 id="heading">初期情報の入力&lt;/h2>
+&lt;p>データベースの情報を入力していきます。&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>データベース名&lt;/strong>: 任意の名前をつけましょう&lt;/li>
+&lt;li>&lt;strong>サブスクリプション&lt;/strong>: 利用するサブスクリプションを指定します。通常はデフォルト設定のままで大丈夫です。&lt;/li>
+&lt;li>&lt;strong>データベースの種類&lt;/strong>: 共有か専用かを選択します。安く済ませる場合は共有にしましょう。&lt;/li>
+&lt;li>&lt;strong>リソースグループ&lt;/strong>: 利用するリソースグループを指定します。無い場合は新規で作成しましょう。&lt;/li>
+&lt;li>&lt;strong>場所&lt;/strong>: 日本からの利用なら東日本もしくは西日本を選択しましょう。&lt;/li>
+&lt;li>&lt;strong>価格レベル&lt;/strong>: 利用する状況に合わせて選択します。&lt;/li>
+&lt;li>&lt;strong>法律条項&lt;/strong>: 利用許諾のようなものです。&lt;/li>
+&lt;/ul>
+&lt;p>価格レベルの設定は惑星の名前になっています。
+&lt;img src="https://dotstud.io/img/blog/067/03.png" alt="">&lt;/p>
+&lt;p>法律条項の箇所では購入ボタンを押すことで同意したものとされるようです。
+&lt;strong>Azureクレジットとは別にお金がかかるらしい&lt;/strong>ので注意してください。
+同意して購入ボタンを押しましょう。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/067/04.png" alt="">&lt;/p>
+&lt;p>最後に作成を選択してしばらく待つとデータベースが作成されます。&lt;/p>
+&lt;h2 id="heading-1">クライアントアプリから接続してみる&lt;/h2>
+&lt;p>実際にクライアントアプリから試してみましょう。
+僕はMacを利用しているので&lt;a href="https://www.sequelpro.com/">Sequel Pro&lt;/a>を使っています。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/067/05.png" alt="">&lt;/p>
+&lt;p>データベースが作成されたらプロパティから以下の情報を確認します。&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>ホスト名&lt;/strong>&lt;/li>
+&lt;li>&lt;strong>ポート&lt;/strong>&lt;/li>
+&lt;li>&lt;strong>ユーザー名&lt;/strong>&lt;/li>
+&lt;li>&lt;strong>パスワード&lt;/strong>&lt;/li>
+&lt;li>&lt;strong>データベース名&lt;/strong>&lt;/li>
+&lt;/ul>
+&lt;p>を確認しましょう。データベース名は設定したデータベース名だとアクセスできない場合があるので&lt;strong>接続文字列&lt;/strong>の&lt;strong>Database=xxxx&lt;/strong>の部分で確認しましょう。
+僕の環境の場合は&amp;quot;acsm_xxxxx&amp;quot;というデータベース名が設定されていました。
+&lt;img src="https://dotstud.io/img/blog/067/06.png" alt="">&lt;/p>
+&lt;p>それではSequel Proで先ほどの情報を入力して、&lt;strong>接続をテスト&lt;/strong>を押しましょう。
+接続情報に問題がなければ&lt;strong>接続が成功しました&lt;/strong>と表示されます。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/067/07.png" alt="">&lt;/p>
+&lt;p>Sequel Proの操作でテーブル追加なども可能です。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/067/08.png" alt="">&lt;/p>
+&lt;p>他のクライアントでも同じような操作で接続確認を出来ると思います。&lt;/p>
+&lt;h2 id="heading-2">おわりに&lt;/h2>
+&lt;p>いかがでしたでしょうか。&lt;/p>
+&lt;p>AzureでMySQLを利用する方法を紹介しました。&lt;/p>
+&lt;p>ポータルのUIや仕様が調べて見つけたページと少し異なる部分がありましたが今回の内容と合わせて参考になれば幸いです。&lt;/p>
+&lt;p>それでは。&lt;/p></description></item><item><title>Azure WebAppsにGitLab連携でデプロイしてみよう</title><link>https://dotstud.io/blog/azure-webapps-gitlab-connect/</link><pubDate>Tue, 18 Oct 2016 10:00:30 +0900</pubDate><guid>https://dotstud.io/blog/azure-webapps-gitlab-connect/</guid><description>&lt;p>こんにちは、dotstudio代表の&lt;a href="https://twitter.com/n0bisuke">のびすけ&lt;/a>です。&lt;/p>
+&lt;p>最近&lt;a href="https://azure.microsoft.com/ja-jp/documentation/articles/app-service-web-overview/">Azure WebApps&lt;/a>を使って開発をしています。dotstudioではGitLabを利用してソースコード管理をしているのでGitLabとWebAppsを連携し自動デプロイをする方法を紹介します。&lt;/p>
+&lt;p>「&lt;a href="https://christianliebel.com/2016/05/auto-deploying-to-azure-app-services-from-gitlab/">Auto-Deploying to Azure App Services from GitLab&lt;/a>」を参考にしましたが、調べても英語記事しかなかったので日本語記事は初めてだと思います！&lt;/p>
+&lt;h2 id="heading">今回やること&lt;/h2>
+&lt;p>&lt;a href="https://gitlab.com/">GitLab&lt;/a>はGitHubやBitbucketのようなGitのホスティングサービスです。
+GitHubとBitbucketはWebAppsが公式対応しているため簡単に設定できますが、GitLabは公式対応していないため少しやり方が特殊です。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/038/01.png" alt="">&lt;/p>
+&lt;p>やりたいことはこの図の通りで、作業者がGitLabにPushしたら自動的にWebAppsにデプロイされる仕組みを作ります。&lt;/p>
+&lt;h2 id="heading-1">事前準備&lt;/h2>
+&lt;p>以下の内容を事前に済ませておきましょう。&lt;/p>
+&lt;ul>
+&lt;li>WebAppsのアプリケーションを作成しておく&lt;/li>
+&lt;li>GitLabでリポジトリを作成しておく&lt;/li>
+&lt;li>GitLabに手元のマシンからPushできる状態にしておく&lt;/li>
+&lt;/ul>
+&lt;h2 id="heading-2">設定してみよう&lt;/h2>
+&lt;h3 id="1-webappsgitlaburl">1. WebAppsにGitLabのURLを紐付ける&lt;/h3>
+&lt;p>WebAppsのデプロイ設定をします。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/038/02.png" alt="">&lt;/p>
+&lt;p>&lt;strong>アプリのデプロイ &amp;gt; デプロイオプション &amp;gt; ソースの選択 &amp;gt; 外部リポジトリ&lt;/strong>を選択します。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/038/03.png" alt="">&lt;/p>
+&lt;p>GitLabのリポジトリURLを入力しましょう。 https形式とSSH形式のどちらでも大丈夫です。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/038/04.png" alt="">&lt;/p>
+&lt;p>無事に設定が完了すると、メニューの &lt;strong>概要 &amp;gt; 外部リポジトリプロジェクト&lt;/strong>にリポジトリのURLが設定されます。&lt;/p>
+&lt;h3 id="2-webappsssh">2. WebAppsのデプロイ用SSH公開鍵を取得する&lt;/h3>
+&lt;p>WebAppsに外部からアクセスするためにWebAppsのSSH公開鍵を取得します。&lt;/p>
+&lt;p>通常WebAppsの公開URLにアクセスする場合&lt;code>http://アプリケーション名.azurewebsites.net&lt;/code>というドメインにアクセスしますが、ここでは通常のURLに&lt;code>.scm&lt;/code>が追加されたドメインにアクセスします。&lt;/p>
+&lt;p>&lt;code>https://アプリケーション名.scm.azurewebsites.net/api/sshkey?ensurePublicKey=1&lt;/code> にアクセスしてみましょう。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/038/05.png" alt="">&lt;/p>
+&lt;p>このssh-rsaから始まるダブルクォートで囲まれている部分が公開鍵になります。&lt;/p>
+&lt;p>ちなみに、アプリケーション名がn0bisukeの場合は&lt;code>https://n0bisuke.scm.azurewebsites.net/api/sshkey?ensurePublicKey=1&lt;/code>になります。&lt;/p>
+&lt;h3 id="3-gitlabssh">3. GitLabの対象リポジトリにデプロイ用SSH公開鍵を設定する&lt;/h3>
+&lt;p>先ほどのSSH公開鍵をGitLabに設定します。&lt;/p>
+&lt;p>&lt;code>https://gitlab.com/ユーザー名/リポジトリ名/deploy_keys&lt;/code>にアクセスしましょう。
+リポジトリの &lt;strong>設定(歯車マーク) &amp;gt; Deploy Keys&lt;/strong>からもアクセスできます。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/038/06.png" alt="">&lt;/p>
+&lt;p>Titleの項目に任意の名前を入力し、Keyの項目に先ほどのSSH公開鍵を貼りましょう。&lt;/p>
+&lt;p>これでGitLabのリポジトリに鍵を紐付けられ、GitLabからWebAppsにデプロイすることが出来るようになります。&lt;/p>
+&lt;h3 id="4-webappswebhookgitlab">4. WebAppsのWebhookアドレスをGitLabに紐付ける&lt;/h3>
+&lt;p>ここまでの作業でWebAppsとGitLabの連携は出来ているのですが、今回は作業者がGitLabにPushしたらデプロイされる仕組みにしたいため、Pushを検知するための設定をします。&lt;/p>
+&lt;p>WebAppsのメニューから &lt;strong>設定 &amp;gt; プロパティ &amp;gt; デプロイ開始のURL&lt;/strong>の項目にあるURLをコピーしましょう。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/038/07.png" alt="">&lt;/p>
+&lt;p>&lt;code>https://$アプリケーション名:パスワード@アプリケーション名.scm.azurewebsites.net/deploy&lt;/code>というURLが設定されているはずです。&lt;/p>
+&lt;p>GitLab側に移動し、 &lt;code>https://gitlab.com/ユーザー名/リポジトリ名/hooks&lt;/code>にアクセスしましょう。
+リポジトリの &lt;strong>設定(歯車マーク) &amp;gt; Webhooks&lt;/strong>からもアクセスできます。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/038/08.png" alt="">&lt;/p>
+&lt;p>URLの項目に先ほどのWebAppsのWebHookアドレス(&lt;code>https://$アプリケーション名:パスワード@アプリケーション名.scm.azurewebsites.net/deploy&lt;/code>)を貼り付けます。 他の項目は特に変更せずに&lt;code>Add Webhook&lt;/code>で追加します。&lt;/p>
+&lt;p>これで設定は完了です。&lt;/p>
+&lt;h3 id="5-">5. 試してみる&lt;/h3>
+&lt;p>Gitで適当にPushしてみましょう。するとWebAppsのデプロイオプションの項目で同期が確認できます。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/038/09.png" alt="">&lt;/p>
+&lt;p>&lt;code>http://アプリケーション名.azurewebsites.net&lt;/code>にアクセスしてみるとソースコードが反映されていることが分かると思います。&lt;/p>
+&lt;p>お疲れ様でした！&lt;/p>
+&lt;h2 id="heading-3">おわりに&lt;/h2>
+&lt;p>イメージのしやすさから「GitLabからWebAppsにデプロイ」という表現を使いましたが、実際には「WebAppsがGitLab上のソースコードをPullしている」という表現の方が正しいと思います。&lt;/p>
+&lt;p>&lt;img src="https://dotstud.io/img/blog/038/10.png" alt="">&lt;/p>
+&lt;p>GitLab側はPushがあったことをWebhookでWebAppsに声を掛けてあげて、WebApps側はGitLabから声が掛かったらPullしにいく、という流れです。&lt;/p>
+&lt;p>ちなみに今回はWebhookの設定でかなりハマって、「&lt;a href="https://github.com/projectkudu/kudu/wiki/Continuous-deployment">projectkudu/kudu&lt;/a>」や「&lt;a href="http://stackoverflow.com/questions/31538152/publishing-to-azure-web-apps-from-gitlab-repository-on-trigger">Publishing to Azure Web Apps from GitLab repository on trigger&lt;/a>」に&lt;code>https://$mysite:BigRandomPassword@mysite.scm.azurewebsites.net/deploy&lt;/code>がWebhookのURLだという記載があるのですが、&lt;code>BigRandomPassword&lt;/code>が謎すぎてかなり詰んでました。 WebApps側で「デプロイ開始のURL」という表現になってるのも分かりにくい気がしますね（苦笑）。&lt;/p>
+&lt;p>WebAppsとGitLabの仕様が変わるまではしばらくこの手順が生きるはずですので、参考になれば幸いです。&lt;/p></description></item></channel></rss>
