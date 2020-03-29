@@ -1,4 +1,4 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>network on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/doctype/network/</link><description>Recent content in network on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Thu, 03 Aug 2017 01:02:41 +0900</lastBuildDate><atom:link href="/doctype/network/" rel="self" type="application/rss+xml"/><item><title>ネットワーク</title><link>https://dotstud.io/docs/network/</link><pubDate>Fri, 26 May 2017 01:02:41 +0900</pubDate><guid>https://dotstud.io/docs/network/</guid><description>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>network on dotstudio（ドットスタジオ）</title><link>https://dotstud.io/doctype/network/</link><description>Recent content in network on dotstudio（ドットスタジオ）</description><generator>Hugo -- gohugo.io</generator><language>ja</language><copyright>© 2018 dotstudio inc.</copyright><lastBuildDate>Sun, 29 Mar 2020 01:02:41 +0900</lastBuildDate><atom:link href="/doctype/network/" rel="self" type="application/rss+xml"/><item><title>ネットワーク</title><link>https://dotstud.io/docs/network/</link><pubDate>Fri, 26 May 2017 01:02:41 +0900</pubDate><guid>https://dotstud.io/docs/network/</guid><description>
 &lt;p&gt;IT用語におけるネットワークとは、&lt;strong&gt;端末同士が繋がる仕組み&lt;/strong&gt;を指します。&lt;/p&gt;
 &lt;p&gt;LANやWAN、アクセスポイントやWi-Fiモジュールなど重要な言葉がたくさんありますので整理しておきましょう。&lt;/p&gt;
 &lt;h2 id=&#34;インターネットとは&#34;&gt;インターネットとは&lt;/h2&gt;
@@ -76,4 +76,41 @@
 &lt;p&gt;携帯で支払いができる「おサイフケータイ」は、携帯電話の中にFelicaが入ってるため、Suicaと同じような機能を持たせることができます。&lt;/p&gt;</description></item><item><title>RFID</title><link>https://dotstud.io/docs/rfid/</link><pubDate>Thu, 03 Aug 2017 01:02:41 +0900</pubDate><guid>https://dotstud.io/docs/rfid/</guid><description>&lt;p&gt;RFIDとはRadio Frequency IDentificationの略で、無線を用いた通信技術です。リーダーから数cm〜数m範囲のタグを自動認識でき、商品管理などに使われています。&lt;/p&gt;
 &lt;p&gt;バーコードなどの従来の識別タグでは難しかった複数のタグの一括読み込みができ、少し距離が離れていたり、汚れや障害物が間にあっても読み取ることができます。&lt;/p&gt;</description></item><item><title>QRコード</title><link>https://dotstud.io/docs/qr/</link><pubDate>Thu, 03 Aug 2017 01:02:41 +0900</pubDate><guid>https://dotstud.io/docs/qr/</guid><description>&lt;p&gt;QRとはQuick Responseの略で、QRコードは株式会社デンソーウェーブによって開発され商標となっています。&lt;/p&gt;
 &lt;p&gt;最大7,089文字のデータを収納する二次元コードで、在庫や工程管理などからデータ入力、入場管理、URL配布など様々な用途に使われています。&lt;/p&gt;
-&lt;p&gt;従来のバーコードは横方向にのみしか情報を持たないので、20桁程度の情報量しか格納できませんでした。それに対しQRコードは縦横方向に情報を持つため、圧倒的に多い情報量を格納できます。&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;従来のバーコードは横方向にのみしか情報を持たないので、20桁程度の情報量しか格納できませんでした。それに対しQRコードは縦横方向に情報を持つため、圧倒的に多い情報量を格納できます。&lt;/p&gt;</description></item><item><title>MQTT</title><link>https://dotstud.io/docs/mqtt/</link><pubDate>Sun, 29 Mar 2020 01:02:41 +0900</pubDate><guid>https://dotstud.io/docs/mqtt/</guid><description>
+&lt;h2 id=&#34;iotに適した通信方式&#34;&gt;IoTに適した通信方式&lt;/h2&gt;
+&lt;p&gt;MQTTは、IBMが開発した通信方式でMessage Queue Telemetry Transportの略です。&lt;br /&gt;
+現在一般的であるHTTP通信と比べ、以下の点で&lt;strong&gt;IoTに適した通信方式&lt;/strong&gt;であります。
+* 通信データ量が少ない
+* 非同期通信
+* パブリッシュ・サブスクライブモデルの通信方式&lt;/p&gt;
+&lt;p&gt;一つづつ説明していきます。&lt;/p&gt;
+&lt;h3 id=&#34;通信データ量が少ない&#34;&gt;通信データ量が少ない&lt;/h3&gt;
+&lt;p&gt;通信を行うために、実際に送るデータ以外にも情報が必要です。&lt;br /&gt;
+その情報量がとても少ないのが特徴で、そのことにより 処理するための&lt;strong&gt;メモリも軽減&lt;/strong&gt;されますし、&lt;strong&gt;消費電力も軽減&lt;/strong&gt;されます。&lt;br /&gt;
+IoT分野ではバッテリーで動作させる場合もあるので、嬉しいですね。&lt;/p&gt;
+&lt;h3 id=&#34;非同期的に通信&#34;&gt;非同期的に通信&lt;/h3&gt;
+&lt;p&gt;同期的な通信とは、通信の最中に他の処理ができないことをいいます。&lt;br /&gt;
+すぐに通信が成功して、データを取得できればいいのですが、持ち歩くようなデバイスが通信しようとした場合、必ずしも安定した通信ではないため、通信時間が長くなることも多いと思います。&lt;br /&gt;
+その場合に、その他の処理ができる非同期通信はIoT分野には適しています。&lt;/p&gt;
+&lt;h3 id=&#34;パブリッシュ-サブスクライブモデルの通信方式&#34;&gt;パブリッシュ・サブスクライブモデルの通信方式&lt;/h3&gt;
+&lt;p&gt;HTTP通信では、基本的に情報が欲しい方（クライアント）が&lt;strong&gt;欲しいとき&lt;/strong&gt;に通信を開始し、情報を持っている方（サーバ）が情報を返す方式です。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://gyazo.com/38b525f65bc06078b9284ab15d7b3c16&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/38b525f65bc06078b9284ab15d7b3c16.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;MQTTなどのパブリッシュ・サブスクライブモデルの通信方式では、情報を持っている方が&lt;strong&gt;情報を与えたいとき&lt;/strong&gt;に、情報を与えられることができます。&lt;br /&gt;
+情報を与える方を&lt;strong&gt;パブリッシャー&lt;/strong&gt;、受け取る方を&lt;strong&gt;サブスクライバー&lt;/strong&gt;といい、それらを中継するものを&lt;strong&gt;ブローカー&lt;/strong&gt;と言います。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://gyazo.com/10bcaff6b9672fe2efaaee8d7235e61f&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/10bcaff6b9672fe2efaaee8d7235e61f.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;また、それらは複数で繋げることもできます。&lt;br /&gt;
+例えば、温度計がパブリッシャーである時、スマートフォンやPCなど複数の端末をサブスクライバーとすることが可能ですし、同じスマートフォンでスピーカーに対し送信するパブリッシャーになることもできます。&lt;br /&gt;
+これらを可能とするために、どの端末に向けて送信するかという情報を&lt;strong&gt;トピック&lt;/strong&gt;というものを使って振り分けています。&lt;br /&gt;
+このトピックはデータ送信時にスラッシュ（/）でデータと区切り送ります。&lt;br /&gt;
+例えば、PCで温度を取得したい場合、ブローカーへ&lt;code&gt;/tenp&lt;/code&gt;というトピックを登録しておき、温度センサーが&lt;code&gt;/temp/22&lt;/code&gt;というデータを送ることで、tempのトピックを登録してるPCに対して22というデータを送ることができます。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://gyazo.com/c84ab97db40fae2ae28d99cf47a89e6c&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/c84ab97db40fae2ae28d99cf47a89e6c.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;</description></item><item><title>5G</title><link>https://dotstud.io/docs/fivegeneration/</link><pubDate>Sun, 29 Mar 2020 01:02:41 +0900</pubDate><guid>https://dotstud.io/docs/fivegeneration/</guid><description>&lt;p&gt;5Gとは、第5世代移動通信システムのことで英語では5Generationのことで、略して5Gと呼ばれています。&lt;br /&gt;
+皆さんのご存知の通り、スマートフォンの通信などで使われる新しい通信システムのことです。&lt;br /&gt;
+5Gは今までの通信システムよりも&lt;strong&gt;たくさんのデータ&lt;/strong&gt;を&lt;strong&gt;早く&lt;/strong&gt;、&lt;strong&gt;多く&lt;/strong&gt;の人に送ることが可能です。&lt;br /&gt;
+理論上で10Gbpsという速度で、これは1秒間に10Gバイトのデータを通信できるとうことです。&lt;br /&gt;
+どのくらい早いかというと、2時間の映画を3秒でダウンロードできるそうです。&lt;/p&gt;
+&lt;p&gt;5Gには&lt;strong&gt;ミリ波&lt;/strong&gt;と&lt;strong&gt;Sub6&lt;/strong&gt;という種類があります。&lt;br /&gt;
+ミリ波とは、日本では28GHz（ヘルツ：電波の周波数の単位）帯を使用した電波のことで、Sub6は、6GHz（ヘルツ）未満のことで、日本では4.5、3.7GHz帯を使用します。&lt;br /&gt;
+周波数とは値が高いほど多くのデータを送ることができますが、障害物に遮られやすく、遠くまで届きません。&lt;br /&gt;
+なので、今までの電波を発信する基地局よりたくさんの基地局が必要になっています。&lt;br /&gt;
+大手通信会社は、まずSub6を利用したサービスを展開していくようです。&lt;br /&gt;
+ミリ波は今後、混雑エリアにスポット的に利用されることが予想されています。&lt;/p&gt;</description></item></channel></rss>
