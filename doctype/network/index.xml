@@ -79,11 +79,11 @@
 &lt;p&gt;従来のバーコードは横方向にのみしか情報を持たないので、20桁程度の情報量しか格納できませんでした。それに対しQRコードは縦横方向に情報を持つため、圧倒的に多い情報量を格納できます。&lt;/p&gt;</description></item><item><title>MQTT</title><link>https://dotstud.io/docs/mqtt/</link><pubDate>Sun, 29 Mar 2020 01:02:41 +0900</pubDate><guid>https://dotstud.io/docs/mqtt/</guid><description>
 &lt;h2 id=&#34;iotに適した通信方式&#34;&gt;IoTに適した通信方式&lt;/h2&gt;
 &lt;p&gt;MQTTは、IBMが開発した通信方式でMessage Queue Telemetry Transportの略です。&lt;br /&gt;
-現在一般的であるHTTP通信と比べ、以下の点で&lt;strong&gt;IoTに適した通信方式&lt;/strong&gt;であります。
-* 通信データ量が少ない
-* 非同期通信
+現在一般的であるHTTP通信と比べ、以下の点で&lt;strong&gt;IoTに適した通信方式&lt;/strong&gt;であります。&lt;br /&gt;
+* 通信データ量が少ない&lt;br /&gt;
+* 非同期通信&lt;br /&gt;
 * パブリッシュ・サブスクライブモデルの通信方式&lt;/p&gt;
-&lt;p&gt;一つづつ説明していきます。&lt;/p&gt;
+&lt;p&gt;1つづつ説明していきます。&lt;/p&gt;
 &lt;h3 id=&#34;通信データ量が少ない&#34;&gt;通信データ量が少ない&lt;/h3&gt;
 &lt;p&gt;通信を行うために、実際に送るデータ以外にも情報が必要です。&lt;br /&gt;
 その情報量がとても少ないのが特徴で、そのことにより 処理するための&lt;strong&gt;メモリも軽減&lt;/strong&gt;されますし、&lt;strong&gt;消費電力も軽減&lt;/strong&gt;されます。&lt;br /&gt;
@@ -96,14 +96,21 @@ IoT分野ではバッテリーで動作させる場合もあるので、嬉し�
 &lt;p&gt;HTTP通信では、基本的に情報が欲しい方（クライアント）が&lt;strong&gt;欲しいとき&lt;/strong&gt;に通信を開始し、情報を持っている方（サーバ）が情報を返す方式です。&lt;/p&gt;
 &lt;p&gt;&lt;a href=&#34;https://gyazo.com/38b525f65bc06078b9284ab15d7b3c16&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/38b525f65bc06078b9284ab15d7b3c16.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;MQTTなどのパブリッシュ・サブスクライブモデルの通信方式では、情報を持っている方が&lt;strong&gt;情報を与えたいとき&lt;/strong&gt;に、情報を与えられることができます。&lt;br /&gt;
-情報を与える方を&lt;strong&gt;パブリッシャー&lt;/strong&gt;、受け取る方を&lt;strong&gt;サブスクライバー&lt;/strong&gt;といい、それらを中継するものを&lt;strong&gt;ブローカー&lt;/strong&gt;と言います。&lt;/p&gt;
+情報を与える方を&lt;strong&gt;パブリッシャー&lt;/strong&gt;、受け取る方を&lt;strong&gt;サブスクライバー&lt;/strong&gt;といい、それらを中継するものを&lt;strong&gt;ブローカー&lt;/strong&gt;と言います。&lt;br /&gt;
+MQTTをベースとした通信を採用しているサービスとして、&lt;code&gt;Facebook Messenger&lt;/code&gt;が有名です。&lt;br /&gt;
+&lt;code&gt;Facebook Messenger&lt;/code&gt;では、メッセージを送ったタイミングで、受信者がそのメッセージを受け取ることが可能です。&lt;br /&gt;
+この場合では、メッセージ送信者がパブリッシャー、Facebookのサーバがブローカー、受信者がサブスクライバーになります。&lt;/p&gt;
 &lt;p&gt;&lt;a href=&#34;https://gyazo.com/10bcaff6b9672fe2efaaee8d7235e61f&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/10bcaff6b9672fe2efaaee8d7235e61f.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;また、それらは複数で繋げることもできます。&lt;br /&gt;
-例えば、温度計がパブリッシャーである時、スマートフォンやPCなど複数の端末をサブスクライバーとすることが可能ですし、同じスマートフォンでスピーカーに対し送信するパブリッシャーになることもできます。&lt;br /&gt;
-これらを可能とするために、どの端末に向けて送信するかという情報を&lt;strong&gt;トピック&lt;/strong&gt;というものを使って振り分けています。&lt;br /&gt;
+例えば、下図のようにMQTT通信が可能な温度センサーが定期的に温度をブローカーへ送ったり、スピーカーがMQTT通信によりブザー音を鳴らすことが可能で、それらにPCやスマートフォンのアプリから通信できる環境があるとします。&lt;br /&gt;
+温度センサーは温度を送信するパブリッシャーであり、スマートフォンやPCなど複数の端末でその温度の情報を受取るサブスクライバーになることが可能ですし、同じスマートフォンでスピーカーに対し情報を送信するパブリッシャーになることもできます。&lt;br /&gt;
+この温度情報はブローカーに繋がっている全ての端末に対して送っているわけではないです。&lt;br /&gt;
+この例の場合では、PCやスマートフォンには送りますが、スピーカーはその情報は必要ないので、受け取りません。&lt;br /&gt;
+これらを可能とするために、どの端末がどのような情報を受け取るかということを示している&lt;strong&gt;トピック&lt;/strong&gt;というものを使っています。&lt;br /&gt;
 このトピックはデータ送信時にスラッシュ（/）でデータと区切り送ります。&lt;br /&gt;
-例えば、PCで温度を取得したい場合、ブローカーへ&lt;code&gt;/tenp&lt;/code&gt;というトピックを登録しておき、温度センサーが&lt;code&gt;/temp/22&lt;/code&gt;というデータを送ることで、tempのトピックを登録してるPCに対して22というデータを送ることができます。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://gyazo.com/c84ab97db40fae2ae28d99cf47a89e6c&#34;&gt;&lt;img src=&#34;https://i.gyazo.com/c84ab97db40fae2ae28d99cf47a89e6c.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;</description></item><item><title>5G</title><link>https://dotstud.io/docs/fivegeneration/</link><pubDate>Sun, 29 Mar 2020 01:02:41 +0900</pubDate><guid>https://dotstud.io/docs/fivegeneration/</guid><description>&lt;p&gt;5Gとは、第5世代移動通信システムのことで英語では5Generationのことで、略して5Gと呼ばれています。&lt;br /&gt;
+例えば、PCで温度を取得したい場合、ブローカーへ&lt;code&gt;tenp&lt;/code&gt;というトピックを待ち受けます。&lt;br /&gt;
+温度センサーが&lt;code&gt;temp/22&lt;/code&gt;というデータを送ることで、&lt;code&gt;temp&lt;/code&gt;のトピックで待ち受けているPCに対して&lt;code&gt;22&lt;/code&gt;というデータを送ることができます。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://gyazo.com/8a0e9eb67db4f8e5e03ebd1e9f008a18&#34;&gt;&lt;img src=&#34;https://gyazo.com/8a0e9eb67db4f8e5e03ebd1e9f008a18.png&#34; alt=&#34;&#34; /&gt;&lt;/a&gt;&lt;/p&gt;</description></item><item><title>5G</title><link>https://dotstud.io/docs/fivegeneration/</link><pubDate>Sun, 29 Mar 2020 01:02:41 +0900</pubDate><guid>https://dotstud.io/docs/fivegeneration/</guid><description>&lt;p&gt;5Gとは、第5世代移動通信システムのことで英語では5Generationのことで、略して5Gと呼ばれています。&lt;br /&gt;
 皆さんのご存知の通り、スマートフォンの通信などで使われる新しい通信システムのことです。&lt;br /&gt;
 5Gは今までの通信システムよりも&lt;strong&gt;たくさんのデータ&lt;/strong&gt;を&lt;strong&gt;早く&lt;/strong&gt;、&lt;strong&gt;多く&lt;/strong&gt;の人に送ることが可能です。&lt;br /&gt;
 理論上で10Gbpsという速度で、これは1秒間に10Gバイトのデータを通信できるとうことです。&lt;br /&gt;
